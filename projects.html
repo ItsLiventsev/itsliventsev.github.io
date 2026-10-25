@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>проекты · itsliventsev</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #ffffff;
+      color: #0a0a0a;
+      margin: 0;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Глобальный UI: шапка, док, прогресс */
+    body.theme-light {
+      --ui-fg: #0a0a0a;
+      --ui-muted: #525252;
+      --ui-accent: #0071e3;
+      --ui-border: rgba(0, 0, 0, 0.12);
+      --ui-hover: rgba(0, 0, 0, 0.05);
+      --ui-surface: rgba(128, 128, 128, 0.04);
+    }
+
+    body.theme-dark {
+      --ui-fg: #fafafa;
+      --ui-muted: #a3a3a3;
+      --ui-accent: #60a5fa;
+      --ui-border: rgba(255, 255, 255, 0.16);
+      --ui-hover: rgba(255, 255, 255, 0.08);
+      --ui-surface: rgba(255, 255, 255, 0.07);
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0;
+      z-index: 70;
+      background: var(--ui-accent);
+      transition: background 0.25s ease;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 80rem;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .wrap {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .wrap {
+        padding-left: 3rem;
+        padding-right: 3rem;
+      }
+    }
+
+    /* Шапка */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      background: var(--ui-surface);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border-bottom: 1px solid var(--ui-border);
+      transition:
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.35s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+      will-change: transform, opacity;
+    }
+
+    .site-header.scrolled {
+      transform: translateY(-120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .logo {
+      color: var(--ui-fg);
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.25s ease;
+    }
+
+    .logo:hover {
+      color: var(--ui-accent);
+    }
+
+    .logo-arrow {
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .logo:hover .logo-arrow {
+      transform: translateX(-3px);
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .nav-link {
+      color: var(--ui-muted);
+      text-decoration: none;
+      transition: color 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      color: var(--ui-fg);
+    }
+
+    .nav-link.is-active {
+      color: var(--ui-accent);
+      font-weight: 700;
+    }
+
+    /* Нижнее меню */
+    .bottom-dock {
+      position: fixed;
+      left: 50%;
+      bottom: -140px;
+      transform: translateX(-50%);
+      z-index: 65;
+      max-width: calc(100vw - 2rem);
+      padding: 0.5rem;
+      border-radius: 999px;
+      background: var(--ui-surface);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid var(--ui-border);
+      box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      transition:
+        bottom 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .bottom-dock::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bottom-dock.visible {
+      bottom: 24px;
+    }
+
+    .dock-item {
+      color: var(--ui-muted);
+      text-decoration: none;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 0.5rem 0.875rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dock-item:hover {
+      color: var(--ui-fg);
+      background: var(--ui-hover);
+      transform: translateY(-2px);
+    }
+
+    .dock-item.is-active {
+      color: var(--ui-accent);
+      font-weight: 700;
+    }
+
+    /* Светлая зона */
+    .zone-light {
+      --text: #0a0a0a;
+      --muted: #525252;
+      --border: rgba(0, 0, 0, 0.1);
+      --accent: #0071e3;
+      --dot: rgba(0, 0, 0, 0.07);
+      background: #ffffff;
+      color: var(--text);
+      background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+
+    .hero {
+      padding-top: 8rem;
+      padding-bottom: 4.5rem;
+    }
+
+    .hero-title {
+      color: var(--text);
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.92;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.25rem;
+    }
+
+    #title-mark {
+      color: var(--accent);
+      display: inline-block;
+      width: 2ch;
+      user-select: none;
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 0.9375rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-lead {
+      color: var(--muted);
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      max-width: 48rem;
+      font-weight: 500;
+    }
+
+    @media (min-width: 768px) {
+      .hero-sub {
+        font-size: 1rem;
+      }
+
+      .hero-lead {
+        font-size: 1.125rem;
+      }
+    }
+
+    /* Тёмная зона */
+    .zone-dark {
+      --bg: #0a0a0a;
+      --text: #fafafa;
+      --muted: #a3a3a3;
+      --border: rgba(255, 255, 255, 0.12);
+      --card: #141414;
+      --card-hover: #1b1b1b;
+      --accent: #60a5fa;
+      --tag-bg: rgba(255, 255, 255, 0.06);
+      --dot: rgba(255, 255, 255, 0.05);
+
+      --c-green: #4ade80;
+      --c-green-bg: rgba(74, 222, 128, 0.13);
+      --c-green-bd: rgba(74, 222, 128, 0.34);
+
+      --c-blue: #60a5fa;
+      --c-blue-bg: rgba(96, 165, 250, 0.13);
+      --c-blue-bd: rgba(96, 165, 250, 0.34);
+
+      --c-purple: #c084fc;
+      --c-purple-bg: rgba(192, 132, 252, 0.13);
+      --c-purple-bd: rgba(192, 132, 252, 0.34);
+
+      --c-orange: #fb923c;
+      --c-orange-bg: rgba(251, 146, 60, 0.13);
+      --c-orange-bd: rgba(251, 146, 60, 0.34);
+
+      --c-pink: #fb7185;
+      --c-pink-bg: rgba(251, 113, 133, 0.13);
+      --c-pink-bd: rgba(251, 113, 133, 0.34);
+
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
+      background-size: 26px 26px;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .zone-dark::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 96px;
+      height: 3px;
+      background: var(--c-blue);
+      z-index: 3;
+    }
+
+    .zone-dark::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 104px;
+      width: 40px;
+      height: 3px;
+      background: var(--c-purple);
+      z-index: 3;
+    }
+
+    .deco {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .deco-line {
+      position: absolute;
+      left: -5%;
+      width: 110%;
+      height: 1px;
+    }
+
+    .deco-block {
+      position: absolute;
+      border: 1px solid;
+    }
+
+    .catalog {
+      padding-top: 4.5rem;
+      padding-bottom: 5rem;
+    }
+
+    .catalog-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      color: var(--text);
+      font-size: clamp(1.875rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .catalog-note {
+      color: var(--muted);
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .project-card {
+      display: block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition:
+        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.45s ease,
+        border-color 0.45s ease,
+        background 0.25s ease;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s ease;
+    }
+
+    .project-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      background: var(--card-hover);
+      border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 45%, var(--border));
+      box-shadow: 0 22px 46px -22px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-num {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .card-title {
+      color: var(--text);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      color: var(--muted);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+    }
+
+    .status-badge,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .status-badge {
+      font-size: 0.625rem;
+      padding: 0.25rem 0.6875rem;
+    }
+
+    .status-ready {
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 700;
+    }
+
+    .status-soon {
+      background: var(--tag-bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .tag {
+      font-size: 0.625rem;
+      padding: 0.1875rem 0.625rem;
+      border: 1px solid transparent;
+    }
+
+    .tag-green {
+      color: var(--c-green);
+      background: var(--c-green-bg);
+      border-color: var(--c-green-bd);
+    }
+
+    .tag-blue {
+      color: var(--c-blue);
+      background: var(--c-blue-bg);
+      border-color: var(--c-blue-bd);
+    }
+
+    .tag-purple {
+      color: var(--c-purple);
+      background: var(--c-purple-bg);
+      border-color: var(--c-purple-bd);
+    }
+
+    .tag-orange {
+      color: var(--c-orange);
+      background: var(--c-orange-bg);
+      border-color: var(--c-orange-bd);
+    }
+
+    .tag-pink {
+      color: var(--c-pink);
+      background: var(--c-pink-bg);
+      border-color: var(--c-pink-bd);
+    }
+
+    .tag-plain {
+      color: var(--muted);
+      background: var(--tag-bg);
+      border-color: var(--border);
+    }
+
+    .nav-badge {
+      font-size: 0.625rem;
+      padding: 0.1875rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      text-transform: none;
+    }
+
+    .badge-red {
+      color: #e11d48;
+      background: rgba(225, 29, 72, 0.1);
+      border-color: rgba(225, 29, 72, 0.28);
+    }
+
+    .badge-orange {
+      color: #ea580c;
+      background: rgba(234, 88, 12, 0.1);
+      border-color: rgba(234, 88, 12, 0.28);
+    }
+
+    .is-soon {
+      border-style: dashed;
+    }
+
+    .is-soon .card-title {
+      color: var(--muted);
+    }
+
+    .is-more {
+      grid-column: 1 / -1;
+      border-style: dashed;
+      background: transparent;
+      min-height: 132px;
+      display: flex;
+      align-items: center;
+    }
+
+    .is-more:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .more-label {
+      color: var(--muted);
+      font-size: 0.8125rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .more-text {
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      max-width: 56rem;
+      font-weight: 500;
+    }
+
+    .page-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (min-width: 640px) {
+      .page-footer {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .footer-text {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .footer-link {
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.25s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .footer-arrow {
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .footer-link:hover .footer-arrow {
+      transform: translateX(-3px);
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-enabled .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .js-enabled .reveal.active {
+      opacity: 1;
+      transform: none;
+    }
+
+    .stagger > * {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-enabled .stagger > * {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .js-enabled .stagger.active > * {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.04s; }
+    .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.08s; }
+    .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.12s; }
+    .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.16s; }
+    .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.2s; }
+    .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.24s; }
+  </style>
+</head>
+<body class="theme-light overflow-x-hidden">
+
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo mono">
+        <span class="logo-arrow">←</span>
+        itsliventsev
+      </a>
+
+      <nav class="main-nav hidden lg:flex" aria-label="Основная навигация">
+        <a href="index.html#stack" class="nav-link">стек</a>
+        <a href="index.html#resources" class="nav-link">материалы</a>
+        <a href="index.html#cv" class="nav-link">опыт</a>
+
+        <a href="blog.html" class="nav-link">
+          блог
+          <span class="nav-badge badge-red">когда-то?</span>
+        </a>
+
+        <a href="articles.html" class="nav-link">
+          статьи
+          <span class="nav-badge badge-orange">новое</span>
+        </a>
+
+        <a href="archive.html" class="nav-link">архив</a>
+        <a href="projects.html" class="nav-link is-active">проекты</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="bottom-dock" id="bottom-dock" aria-label="Нижняя навигация">
+    <a href="index.html" class="dock-item mono">главная</a>
+    <a href="index.html#stack" class="dock-item mono">стек</a>
+    <a href="index.html#resources" class="dock-item mono">материалы</a>
+    <a href="index.html#cv" class="dock-item mono">опыт</a>
+    <a href="blog.html" class="dock-item mono">блог</a>
+    <a href="articles.html" class="dock-item mono">статьи</a>
+    <a href="archive.html" class="dock-item mono">архив</a>
+    <a href="projects.html" class="dock-item mono is-active">проекты</a>
+  </nav>
+
+  <main>
+    <section class="zone-light">
+      <div class="wrap hero reveal">
+        <h1 class="hero-title mono">
+          проекты<span id="title-mark">&gt;</span>
+        </h1>
+
+        <p class="hero-sub mono">
+          // готовые материалы · лабораторные · промпты · конфигурации · скрипты
+        </p>
+
+        <p class="hero-lead">
+          Пока в разделе доступен один готовый материал — глоссарий. Остальные направления постепенно собираются: скрипты, промпты, конфигурации и интерактивные стенды.
+        </p>
+      </div>
+    </section>
+
+    <section class="zone-dark" id="zone-dark">
+      <div class="deco" aria-hidden="true">
+        <div class="deco-line" style="top: 14%; background: rgba(96, 165, 250, 0.10);"></div>
+        <div class="deco-line" style="top: 38%; height: 2px; background: rgba(192, 132, 252, 0.10);"></div>
+        <div class="deco-line" style="top: 64%; background: rgba(251, 146, 60, 0.08);"></div>
+        <div class="deco-line" style="top: 86%; background: rgba(96, 165, 250, 0.08);"></div>
+
+        <div class="deco-block" style="top: 8%; right: -60px; width: 340px; height: 420px; border-color: rgba(96, 165, 250, 0.07); background: rgba(96, 165, 250, 0.025); border-radius: 24px; transform: rotate(18deg);"></div>
+        <div class="deco-block" style="bottom: 12%; left: -80px; width: 300px; height: 300px; border-color: rgba(192, 132, 252, 0.07); background: rgba(192, 132, 252, 0.025); border-radius: 50%;"></div>
+        <div class="deco-block" style="top: 46%; left: 50%; width: 240px; height: 240px; border-color: rgba(251, 146, 60, 0.06); background: rgba(251, 146, 60, 0.02); transform: translateX(-50%) rotate(45deg);"></div>
+      </div>
+
+      <div class="wrap catalog">
+        <div class="catalog-head reveal">
+          <div>
+            <div class="section-label mono">каталог</div>
+            <h2 class="section-title">пока доступно</h2>
+          </div>
+          <div class="catalog-note mono">глоссарий · скоро больше</div>
+        </div>
+
+        <div class="projects-grid stagger">
+          <a href="glossary.html" class="project-card" style="--card-accent: var(--c-blue);">
+            <div class="card-top">
+              <span class="card-num mono">01</span>
+              <span class="status-badge status-ready">готово</span>
+            </div>
+
+            <h3 class="card-title">Глоссарий IT</h3>
+            <p class="card-desc">
+              Базовые определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.
+            </p>
+
+            <div class="card-tags">
+              <span class="tag tag-blue">сети</span>
+              <span class="tag tag-green">ос</span>
+              <span class="tag tag-purple">бд</span>
+            </div>
+          </a>
+
+          <div class="project-card is-soon" style="--card-accent: var(--c-purple);">
+            <div class="card-top">
+              <span class="card-num mono">02</span>
+              <span class="status-badge status-soon">скоро</span>
+            </div>
+
+            <h3 class="card-title">Промпты для ИИ</h3>
+            <p class="card-desc">
+              Коллекция проверенных промптов для генерации кода, анализа данных и подготовки учебных материалов.
+            </p>
+
+            <div class="card-tags">
+              <span class="tag tag-plain">ии</span>
+              <span class="tag tag-plain">промпты</span>
+            </div>
+          </div>
+
+          <div class="project-card is-soon" style="--card-accent: var(--c-orange);">
+            <div class="card-top">
+              <span class="card-num mono">03</span>
+              <span class="status-badge status-soon">скоро</span>
+            </div>
+
+            <h3 class="card-title">Bash-скрипты</h3>
+            <p class="card-desc">
+              Готовые скрипты для бэкапа, мониторинга, настройки сети и работы с пользователями.
+            </p>
+
+            <div class="card-tags">
+              <span class="tag tag-plain">bash</span>
+              <span class="tag tag-plain">автоматизация</span>
+            </div>
+          </div>
+
+          <div class="project-card is-soon" style="--card-accent: var(--c-green);">
+            <div class="card-top">
+              <span class="card-num mono">04</span>
+              <span class="status-badge status-soon">скоро</span>
+            </div>
+
+            <h3 class="card-title">Виртуальные стенды</h3>
+            <p class="card-desc">
+              Интерактивные лабораторные работы с пошаговой проверкой и практическими сценариями.
+            </p>
+
+            <div class="card-tags">
+              <span class="tag tag-plain">лаборатория</span>
+              <span class="tag tag-plain">практика</span>
+            </div>
+          </div>
+
+          <div class="project-card is-soon" style="--card-accent: var(--c-pink);">
+            <div class="card-top">
+              <span class="card-num mono">05</span>
+              <span class="status-badge status-soon">скоро</span>
+            </div>
+
+            <h3 class="card-title">Конфигурации серверов</h3>
+            <p class="card-desc">
+              Шаблоны и заметки по настройке Windows Server, ALT Linux, DNS, DHCP и сетевых служб.
+            </p>
+
+            <div class="card-tags">
+              <span class="tag tag-plain">windows</span>
+              <span class="tag tag-plain">linux</span>
+            </div>
+          </div>
+
+          <div class="project-card is-more">
+            <div>
+              <div class="more-label mono">// скоро больше</div>
+              <p class="more-text">
+                Раздел будет пополняться. Если нужен конкретный материал — напиши, добавлю его в ближайший апдейт.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="page-footer reveal">
+          <div class="footer-text mono">© 2026 itsliventsev · проекты</div>
+
+          <a href="index.html" class="footer-link">
+            <span class="footer-arrow">←</span>
+            <span class="mono text-xs">вернуться на главную</span>
+          </a>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.documentElement.classList.add('js-enabled');
+
+    const body = document.body;
+    const header = document.getElementById('site-header');
+    const dock = document.getElementById('bottom-dock');
+    const darkZone = document.getElementById('zone-dark');
+    const progress = document.getElementById('scroll-progress');
+    const mark = document.getElementById('title-mark');
+
+    let headerHeight = header.offsetHeight || 56;
+
+    function updateMetrics() {
+      headerHeight = header.offsetHeight || 56;
+    }
+
+    function onScroll() {
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+
+      progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+
+      // Меню улетает вверх, когда тёмная зона подходит к нижней границе шапки.
+      const threshold = darkZone.offsetTop - headerHeight;
+      const overDark = y >= threshold;
+
+      body.classList.toggle('theme-dark', overDark);
+      body.classList.toggle('theme-light', !overDark);
+
+      header.classList.toggle('scrolled', overDark);
+      dock.classList.toggle('visible', overDark);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      updateMetrics();
+      onScroll();
+    });
+
+    updateMetrics();
+    onScroll();
+
+    // Плавное появление секций и карточек
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.01,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.reveal, .stagger').forEach((el) => observer.observe(el));
+
+    setTimeout(() => {
+      document.querySelectorAll('.reveal, .stagger').forEach((el) => el.classList.add('active'));
+    }, 250);
+
+    // Анимация курсора в заголовке
+    const frames = ['>', '>_', '>__', '>___'];
+    let frameIndex = 0;
+
+    setInterval(() => {
+      frameIndex = (frameIndex + 1) % frames.length;
+      mark.textContent = frames[frameIndex];
+    }, 600);
+  </script>
+</body>
+</html>
