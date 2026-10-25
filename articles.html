@@ -1,24 +1,395 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>articles · itsliventsev</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>статьи · itsliventsev</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Scroll progress - multi-color */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #f97316, #a855f7, #10b981, #ec4899);
+    background-size: 300% 100%;
+    z-index: 100; transition: width 0.1s ease;
+    animation: gradient-flow 4s ease infinite;
+  }
+  @keyframes gradient-flow {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+
+  /* Dot grid */
+  .bg-grid {
+    background-size: 24px 24px;
+    background-image: radial-gradient(circle, rgba(249, 115, 22, 0.12) 1px, transparent 1px);
+  }
+
+  /* Reveal */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+
+  /* Hover glow */
+  .hover-glow { transition: all 0.3s ease; }
+  .hover-glow:hover {
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+  }
+
+  /* Float emoji */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(3deg); }
+  }
+  .float-emoji { animation: float 3s ease-in-out infinite; display: inline-block; }
+
+  /* Tag badge */
+  .tag-badge { transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .tag-badge:hover { transform: scale(1.05) translateY(-1px); }
+
+  /* Stagger */
+  .stagger > * {
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .stagger.active > * { opacity: 1; transform: translateY(0); }
+  .stagger.active > *:nth-child(1) { transition-delay: 0.05s; }
+  .stagger.active > *:nth-child(2) { transition-delay: 0.1s; }
+  .stagger.active > *:nth-child(3) { transition-delay: 0.15s; }
+
+  /* Clickable title - subtle underline */
+  .article-link {
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+  .article-link:hover {
+    color: #ea580c;
+  }
+
+  /* Featured badge pulse */
+  @keyframes soft-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(249, 115, 22, 0); }
+  }
+  .featured-badge { animation: soft-pulse 2.5s infinite; }
+
+  /* Crab tooltip - appears to the right in empty space */
+  .crab-tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  .crab-tooltip {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 16px);
+    transform: translateY(-50%);
+    width: 220px;
+    background: #1e1b4b;
+    color: #e0e7ff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    font-family: 'Inter', sans-serif;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 20;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+  }
+  .crab-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: #1e1b4b;
+  }
+  .crab-tooltip-wrapper:hover .crab-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .crab-tooltip {
+      left: 50%;
+      top: calc(100% + 12px);
+      transform: translateX(-50%);
+    }
+    .crab-tooltip::before {
+      top: 0;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: #1e1b4b;
+    }
+    .crab-tooltip-wrapper:hover .crab-tooltip {
+      transform: translateX(-50%) translateY(4px);
+    }
+  }
+</style>
 </head>
-<body class="bg-zinc-50 text-zinc-900 min-h-screen flex items-center justify-center">
-  <div class="text-center px-6">
-    <div class="mono text-sm text-orange-600 mb-3">// status: coming soon</div>
-    <h1 class="mono text-4xl font-bold mb-4">статьи и публикации 📚</h1>
-    <p class="text-zinc-600 mb-6">умные мысли, публикации в книгах, методические материалы</p>
-    <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-zinc-200 hover:border-zinc-400 transition-colors mono text-sm">
-      ← вернуться
+<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<div class="max-w-6xl mx-auto px-6 md:px-12 py-10 md:py-16">
+
+  <!-- Header -->
+  <header class="reveal flex justify-between items-center mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-3 px-5 rounded-2xl border border-zinc-200 shadow-sm">
+    <a href="index.html" class="mono font-semibold text-zinc-900 hover:text-orange-600 transition-colors flex items-center gap-2 group">
+      <span class="transition-transform group-hover:-translate-x-1">←</span> itsliventsev
     </a>
-  </div>
+    <nav class="flex items-center gap-5 text-sm font-medium">
+      <span class="mono text-xs text-orange-600 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 shadow-sm">
+        статьи
+      </span>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="reveal mb-12">
+    <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+      <div>
+        <h1 class="mono text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
+          статьи<span class="text-orange-600">.</span>
+        </h1>
+        <p class="mono text-sm md:text-base text-zinc-500">// публикации · методички · размышления</p>
+      </div>
+      <div class="flex flex-col items-end gap-2">
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-zinc-200 text-xs text-zinc-700 mono shadow-sm">
+          📚 <span>всего статей: <strong class="text-orange-600">1</strong></span>
+        </span>
+      </div>
+    </div>
+    
+    <p class="text-lg md:text-xl leading-relaxed text-zinc-700 max-w-3xl">
+      Здесь собираются мои публикации: от методических материалов до статей в сборниках конференций. Всё, чем хочу поделиться с коллегами и студентами.
+    </p>
+  </section>
+
+  <!-- Categories filter -->
+  <section class="reveal mb-10">
+    <div class="flex flex-wrap gap-2">
+      <button class="tag-badge px-4 py-2 rounded-full bg-orange-500 text-white text-xs mono font-medium border border-orange-600 shadow-md shadow-orange-200">
+        все
+      </button>
+      <button class="tag-badge px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-xs mono font-medium hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50">
+        методички
+      </button>
+      <button class="tag-badge px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-xs mono font-medium hover:border-indigo-300 hover:text-indigo-700 hover:bg-indigo-50">
+        конференции
+      </button>
+      <button class="tag-badge px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-xs mono font-medium hover:border-rose-300 hover:text-rose-700 hover:bg-rose-50">
+        книги
+      </button>
+    </div>
+  </section>
+
+  <!-- Articles list -->
+  <section class="reveal mb-12">
+    <div class="space-y-4 stagger">
+      
+      <!-- FEATURED ARTICLE -->
+      <article class="group relative bg-gradient-to-br from-orange-50 to-white border-2 border-orange-200 rounded-2xl p-6 md:p-8 hover-glow">
+        <!-- Featured Badge -->
+        <div class="absolute -top-3 -right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs mono font-bold shadow-lg featured-badge flex items-center gap-1.5">
+          ⭐ рекомендую
+        </div>
+        
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1">
+            <!-- Tags with different colors -->
+            <div class="flex flex-wrap items-center gap-2 mb-4">
+              <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs mono font-medium border border-indigo-200">
+                конференция
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-cyan-50 text-cyan-700 text-xs mono font-medium border border-cyan-200">
+                2024
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs mono font-medium border border-emerald-200 animate-pulse">
+                 новое
+              </span>
+            </div>
+            
+            <!-- Clickable Title with Tooltip -->
+            <div class="crab-tooltip-wrapper mb-3">
+              <a href="#" class="article-link">
+                <h2 class="text-xl md:text-2xl font-bold text-zinc-900 leading-tight">
+                  Практикоориентированное формирование знаний и навыков и их влияние на качественное трудоустройство обучающихся
+                </h2>
+              </a>
+              <div class="crab-tooltip">
+                🦀 Моя первая совместная публикация о практике!
+              </div>
+            </div>
+            
+            <!-- Abstract -->
+            <p class="text-zinc-600 text-sm leading-relaxed mb-4">
+              Статья о необходимости повышения практикоориентированности в системе СПО и её влиянии на рынок труда. Анализ новых стандартов 2023-2024 гг., статистика трудоустройства и прогнозы развития.
+            </p>
+            
+            <!-- Meta info -->
+            <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 mono">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
+                 2024
+              </span>
+              <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                 ~10 мин чтения
+              </span>
+              <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200">
+                ️ СПО, трудоустройство
+              </span>
+            </div>
+          </div>
+          
+          <div class="flex flex-col items-end justify-between gap-3">
+            <div class="text-xs text-zinc-400 mono text-right">
+              <div>сборник:</div>
+              <div class="font-medium text-zinc-700">Актуальные вопросы образования</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 
+      ============================================
+      ШАБЛОН ДЛЯ НОВОЙ СТАТЬИ
+      ============================================
+      <article class="group relative bg-white border border-zinc-200 rounded-2xl p-6 md:p-8 hover-glow">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1">
+            <div class="flex flex-wrap items-center gap-2 mb-4">
+              <span class="px-2.5 py-1 rounded-lg bg-[color]-50 text-[color]-700 text-xs mono font-medium border border-[color]-200">
+                [категория]
+              </span>
+              <span class="px-2.5 py-1 rounded-lg bg-[color]-50 text-[color]-700 text-xs mono font-medium border border-[color]-200">
+                [год]
+              </span>
+            </div>
+            
+            <div class="crab-tooltip-wrapper mb-3">
+              <a href="#" class="article-link">
+                <h2 class="text-xl md:text-2xl font-bold text-zinc-900 leading-tight">
+                  [Заголовок]
+                </h2>
+              </a>
+              <div class="crab-tooltip">
+                🦀 [Комментарий крабика]
+              </div>
+            </div>
+            
+            <p class="text-zinc-600 text-sm leading-relaxed mb-4">
+              [Краткое описание]
+            </p>
+            
+            <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 mono">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[color]-50 text-[color]-700 border border-[color]-200">
+                📅 [дата]
+              </span>
+              <span class="w-1 h-1 rounded-full bg-zinc-300"></span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[color]-50 text-[color]-700 border border-[color]-200">
+                📖 [время]
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+      -->
+
+      <!-- Placeholder -->
+      <div class="relative bg-zinc-100/50 border border-dashed border-zinc-300 rounded-xl p-5 text-center hover:border-orange-300 hover:bg-orange-50/30 transition-all group cursor-default">
+        <div class="mono text-sm text-zinc-400 mb-2 group-hover:text-orange-600 transition-colors">// здесь скоро появятся новые статьи</div>
+        <div class="text-xs text-zinc-500 flex items-center justify-center gap-1">
+          следите за обновлениями <span class="float-emoji text-sm">🦀</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="reveal mb-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="group bg-white border border-zinc-200 rounded-xl p-5 text-center hover-glow cursor-default">
+        <div class="mono text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-1">1</div>
+        <div class="text-xs text-zinc-500 mono">статей</div>
+      </div>
+      <div class="group bg-white border border-zinc-200 rounded-xl p-5 text-center hover-glow cursor-default">
+        <div class="mono text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1">1</div>
+        <div class="text-xs text-zinc-500 mono">конференций</div>
+      </div>
+      <div class="group bg-white border border-zinc-200 rounded-xl p-5 text-center hover-glow cursor-default">
+        <div class="mono text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-1">6</div>
+        <div class="text-xs text-zinc-500 mono">мин чтения</div>
+      </div>
+      <div class="group bg-white border border-zinc-200 rounded-xl p-5 text-center hover-glow cursor-default">
+        <div class="mono text-3xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent mb-1">2024</div>
+        <div class="text-xs text-zinc-500 mono">год начала</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to main -->
+  <section class="reveal text-center py-8">
+    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-zinc-200 hover:border-orange-300 hover:text-orange-600 transition-colors mono text-sm font-medium shadow-sm hover-glow group">
+      <span class="transition-transform group-hover:-translate-x-1">←</span> вернуться на главную
+    </a>
+  </section>
+
+  <footer class="reveal flex justify-center items-center pt-8 border-t border-zinc-200 text-xs text-zinc-500 mono">
+    <span>© 2026 itsliventsev · статьи</span>
+  </footer>
+
+</div>
+
+<script>
+  // Scroll progress
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // Reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  
+  document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+  // Category filter
+  document.querySelectorAll('.tag-badge').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tag-badge').forEach(b => {
+        b.className = 'tag-badge px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-xs mono font-medium hover:shadow-md transition-all';
+        const text = b.textContent.trim();
+        if (text === 'методички') b.classList.add('hover:border-emerald-300', 'hover:text-emerald-700', 'hover:bg-emerald-50');
+        else if (text === 'конференции') b.classList.add('hover:border-indigo-300', 'hover:text-indigo-700', 'hover:bg-indigo-50');
+        else if (text === 'книги') b.classList.add('hover:border-rose-300', 'hover:text-rose-700', 'hover:bg-rose-50');
+        else b.classList.add('hover:border-orange-300', 'hover:text-orange-700', 'hover:bg-orange-50');
+      });
+      
+      this.className = 'tag-badge px-4 py-2 rounded-full bg-orange-500 text-white text-xs mono font-medium border border-orange-600 shadow-md shadow-orange-200 transition-all';
+    });
+  });
+</script>
+
 </body>
 </html>
