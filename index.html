@@ -30,12 +30,11 @@
   .cursor-blink { animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
-  /* ===== ИСПРАВЛЕНО: по умолчанию всё видимо ===== */
+  /* Reveal: по умолчанию видимо, анимация только при работающем JS */
   .reveal {
     opacity: 1;
     transform: translateY(0);
   }
-  /* Анимация включается только когда JS работает */
   .js-enabled .reveal {
     opacity: 0;
     transform: translateY(20px);
@@ -62,22 +61,6 @@
   }
   .marquee:hover .marquee-content { animation-play-state: paused; }
   @keyframes scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
-
-  /* Link underline */
-  .link-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-position: 0% 100%;
-    background-repeat: no-repeat;
-    background-size: 0% 1px;
-    transition: background-size 0.3s ease;
-  }
-  .link-underline:hover { background-size: 100% 1px; }
-
-  /* Details */
-  details > summary { list-style: none; }
-  details > summary::-webkit-details-marker { display: none; }
-  details[open] .chevron { transform: rotate(90deg); }
-  .chevron { transition: transform 0.3s ease; }
 
   /* Hover glow */
   .hover-glow { transition: all 0.3s ease; }
@@ -133,13 +116,6 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Float emoji */
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-6px) rotate(3deg); }
-  }
-  .float-emoji { animation: float 3s ease-in-out infinite; display: inline-block; }
-
   /* Bounce click */
   @keyframes bounce-click {
     0% { transform: scale(1); }
@@ -156,7 +132,6 @@
   .section-alt {
     background: linear-gradient(135deg, #fafafa 0%, #f4f4f5 100%);
     border-radius: 20px;
-    padding: 1.5rem;
   }
 
   /* Party mode */
@@ -167,31 +142,10 @@
   .secret-msg { opacity: 0; transition: opacity 0.5s ease; }
   .secret-msg.visible { opacity: 1; }
 
-  /* Pulse ring */
-  .pulse-ring {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .pulse-ring::before {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #10b981;
-    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  @keyframes pulse-ring {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0; transform: scale(1.5); }
-  }
-
   /* Magnetic button */
   .magnetic { transition: transform 0.2s ease; }
 
-  /* ===== ИСПРАВЛЕНО: stagger тоже с прогрессивным улучшением ===== */
+  /* Stagger */
   .stagger > * {
     opacity: 1;
     transform: translateY(0);
@@ -211,6 +165,43 @@
 
   /* Counter */
   .counter { font-variant-numeric: tabular-nums; }
+
+  /* Mobile menu */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    background: white;
+    z-index: 999;
+    transition: right 0.3s ease;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+  }
+  .mobile-menu.open { right: 0; }
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .mobile-menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* Burger */
+  .burger-line {
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    transition: all 0.3s ease;
+  }
+  .burger.open .burger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .burger.open .burger-line:nth-child(2) { opacity: 0; }
+  .burger.open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 </style>
 </head>
 <body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
@@ -218,63 +209,93 @@
 <!-- Scroll progress -->
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-6xl mx-auto px-6 md:px-12 py-10 md:py-16">
+<!-- Mobile menu overlay -->
+<div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+<!-- Mobile menu -->
+<nav class="mobile-menu p-6 flex flex-col gap-1" id="mobile-menu">
+  <div class="flex justify-between items-center mb-6">
+    <span class="mono font-semibold text-zinc-900">~/itsliventsev</span>
+    <button id="close-menu" class="p-2 text-zinc-500 hover:text-zinc-900">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <a href="#stack" class="text-base font-medium text-zinc-700 hover:text-zinc-900 py-2.5 border-b border-zinc-100" data-i18n="nav_stack">стек</a>
+  <a href="#resources" class="text-base font-medium text-zinc-700 hover:text-zinc-900 py-2.5 border-b border-zinc-100" data-i18n="nav_materials">материалы</a>
+  <a href="#cv" class="text-base font-medium text-zinc-700 hover:text-zinc-900 py-2.5 border-b border-zinc-100" data-i18n="nav_cv">опыт</a>
+  <a href="blog.html" class="text-base font-medium text-zinc-400 py-2.5 border-b border-zinc-100 flex items-center gap-2">
+    <span data-i18n="nav_blog">блог</span>
+    <span class="px-1.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/30 text-[10px] mono text-red-600 font-medium">когда-то?</span>
+  </a>
+  <a href="articles.html" class="text-base font-medium text-zinc-700 hover:text-zinc-900 py-2.5 border-b border-zinc-100 flex items-center gap-2">
+    <span data-i18n="nav_articles">статьи</span>
+    <span class="px-1.5 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-[10px] mono text-orange-600 font-medium">новое</span>
+  </a>
+  <a href="archive.html" class="text-base font-medium text-zinc-700 hover:text-zinc-900 py-2.5 border-b border-zinc-100" data-i18n="nav_archive">архив</a>
+  <button onclick="toggleLang()" class="mt-4 mono text-zinc-500 hover:text-zinc-900 transition-colors border border-zinc-200 px-4 py-2 rounded-md hover:bg-zinc-100 text-center">
+    <span id="lang-indicator-mobile">EN</span>
+  </button>
+</nav>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-14 lg:py-16">
 
   <!-- Header -->
-  <header class="reveal flex justify-between items-center mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-3 px-5 rounded-2xl border border-zinc-200 shadow-sm">
-    <span class="mono font-semibold text-zinc-900 cursor-pointer magnetic" id="logo" title="Click me!">~/itsliventsev</span>
-    <nav class="flex items-center gap-5 md:gap-6 text-sm font-medium">
-      <a href="#stack" class="hidden sm:inline text-zinc-600 hover:text-zinc-900 transition-colors " data-i18n="nav_stack">стек</a>
-      <a href="#resources" class="text-zinc-600 hover:text-zinc-900 transition-colors " data-i18n="nav_materials">материалы</a>
-      <a href="#cv" class="text-zinc-600 hover:text-zinc-900 transition-colors " data-i18n="nav_cv">опыт</a>
-      <a href="blog.html" class="relative inline-flex items-center gap-1 group text-zinc-400 hover:text-zinc-500 transition-colors ">
-  <span class="blur-[2px] select-none pointer-events-none" data-i18n="nav_blog">блог</span>
-  <span class="px-1.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/30 text-[9px] mono text-red-600 font-medium tracking-wider">
-    когда-то?
-  </span>
-</a>
-<a href="articles.html" class="relative inline-flex items-center gap-1 group text-zinc-600 hover:text-orange-600 transition-colors ">
-  <span data-i18n="nav_articles">статьи</span>
-  <span class="px-1.5 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-[9px] mono text-orange-600 font-medium animate-pulse tracking-wider">
-    новое
-  </span>
-</a>
-      <a href="archive.html" class="relative inline-flex items-center gap-1 group text-zinc-600 hover:text-purple-600 transition-colors">
-  <span>архив</span>
-  <span class="px-1.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-[9px] mono text-purple-600 font-medium tracking-wider">
-    archive
-  </span>
-</a>
-      <button onclick="toggleLang()" class="mono text-zinc-500 hover:text-zinc-900 transition-colors border border-zinc-200 px-2 py-1 rounded-md hover:bg-zinc-100 magnetic">
+  <header class="reveal flex justify-between items-center mb-8 sm:mb-10 md:mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 sm:py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl border border-zinc-200 shadow-sm">
+    <span class="mono text-sm sm:text-base font-semibold text-zinc-900 cursor-pointer magnetic" id="logo" title="Click me!">~/itsliventsev</span>
+
+        <!-- Desktop menu -->
+    <nav class="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium">
+      <a href="#stack" class="text-zinc-600 hover:text-zinc-900 transition-colors" data-i18n="nav_stack">стек</a>
+      <a href="#resources" class="text-zinc-600 hover:text-zinc-900 transition-colors" data-i18n="nav_materials">материалы</a>
+      <a href="#cv" class="text-zinc-600 hover:text-zinc-900 transition-colors" data-i18n="nav_cv">опыт</a>
+      <a href="blog.html" class="relative inline-flex items-center gap-1 group text-zinc-400 hover:text-zinc-500 transition-colors">
+        <span data-i18n="nav_blog">блог</span>
+        <span class="px-1.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/30 text-[9px] mono text-red-600 font-medium tracking-wider">когда-то?</span>
+      </a>
+      <a href="articles.html" class="relative inline-flex items-center gap-1 group text-zinc-600 hover:text-zinc-900 transition-colors">
+        <span data-i18n="nav_articles">статьи</span>
+        <span class="px-1.5 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-[9px] mono text-orange-600 font-medium animate-pulse tracking-wider">новое</span>
+      </a>
+      <a href="archive.html" class="text-zinc-600 hover:text-zinc-900 transition-colors" data-i18n="nav_archive">архив</a>
+      <button onclick="toggleLang()" class="mono text-zinc-500 hover:text-zinc-900 transition-colors border border-zinc-200 px-2.5 py-1 rounded-md hover:bg-zinc-100 magnetic">
         <span id="lang-indicator">EN</span>
       </button>
     </nav>
+
+    <!-- Burger -->
+    <button id="burger" class="lg:hidden p-2 text-zinc-700 burger" aria-label="меню">
+      <div class="burger-line mb-1"></div>
+      <div class="burger-line mb-1"></div>
+      <div class="burger-line"></div>
+    </button>
   </header>
 
   <!-- Hero -->
-  <section class="reveal mb-12">
-    <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
-      <div>
-        <h1 class="mono text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
+  <section class="reveal mb-8 sm:mb-10 md:mb-12">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4 sm:mb-5">
+      <div class="flex-1">
+        <h1 class="mono text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 mb-2 sm:mb-3">
           itsliventsev<span class="text-blue-600 cursor-blink">_</span>
         </h1>
-        <p class="mono text-sm md:text-base text-zinc-500" data-i18n="subtitle">// преподаватель it · сетевой и системный администратор</p>
+        <p class="mono text-xs sm:text-sm md:text-base text-zinc-500" data-i18n="subtitle">// преподаватель it · сетевой и системный администратор</p>
       </div>
-      <div class="flex flex-col items-end gap-2">
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-zinc-200 text-xs text-zinc-700 mono shadow-sm">
+      <div class="flex flex-col items-start sm:items-end gap-2">
+        <span class="inline-flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-white border border-zinc-200 text-xs text-zinc-700 mono shadow-sm">
           🎓 <span data-i18n="learning">получаю высшее: управление в образовании</span>
         </span>
       </div>
     </div>
-    
-    <p class="text-lg md:text-xl leading-relaxed text-zinc-700 max-w-3xl" data-i18n="bio">
+
+    <p class="text-base sm:text-lg md:text-xl leading-relaxed text-zinc-700 max-w-3xl" data-i18n="bio">
       Преподаю, готовлю сетевых и системных администраторов. Веду учебную и производственную практику. <span class="font-semibold text-zinc-900 counter" data-target="5">0</span> лет в обучении, параллельно работаю с реальной инфраструктурой.
     </p>
   </section>
 
   <!-- Marquee -->
-  <section class="reveal mb-12 py-4 border-y border-zinc-200 bg-white/50">
-    <div class="marquee mono text-sm text-zinc-500">
+  <section class="reveal mb-8 sm:mb-10 md:mb-12 py-3 sm:py-4 border-y border-zinc-200 bg-white/50">
+    <div class="marquee mono text-xs sm:text-sm text-zinc-500">
       <div class="marquee-content">
         <span>🐍 Python</span><span>•</span>
         <span>🐧 Linux</span><span>•</span>
@@ -307,151 +328,130 @@
   </section>
 
   <!-- Stack -->
-  <section id="stack" class="reveal mb-12">
-    <div class="section-alt">
-      <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2" data-i18n="stack_title">
-        <span class="float-emoji"></span> технический стек
+  <section id="stack" class="reveal mb-8 sm:mb-10 md:mb-12">
+    <div class="section-alt p-4 sm:p-5 md:p-6">
+      <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-4 sm:mb-5 md:mb-6" data-i18n="stack_title">
+        технический стек
       </h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 text-xs sm:text-sm">
         <div class="group">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="float-emoji text-lg" style="animation-delay: 0s"></span>
-            <div class="mono text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider" data-i18n="cat_languages">языки программирования</div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="основной язык обучения">Python</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="быстрый как акула">Bash</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="мощность и скорость">C++</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="старый, но надёжный">PHP</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="основа веба">HTML</span>
+          <div class="mono text-[10px] sm:text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider mb-2 sm:mb-3" data-i18n="cat_languages">языки программирования</div>
+          <div class="flex flex-wrap gap-1.5 sm:gap-2">
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="основной язык обучения">Python</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="быстрый как акула">Bash</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="мощность и скорость">C++</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="старый, но надёжный">PHP</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="основа веба">HTML</span>
           </div>
         </div>
 
         <div class="group">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="float-emoji text-lg" style="animation-delay: 0.5s"></span>
-            <div class="mono text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider" data-i18n="cat_infrastructure">инфраструктура</div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="свобода и контроль">Linux</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="контейнеризация">Docker</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="оркестрация">Kubernetes</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="корпоративный стандарт">Windows Server</span>
+          <div class="mono text-[10px] sm:text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider mb-2 sm:mb-3" data-i18n="cat_infrastructure">инфраструктура</div>
+          <div class="flex flex-wrap gap-1.5 sm:gap-2">
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="свобода и контроль">Linux</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="контейнеризация">Docker</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="оркестрация">Kubernetes</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="корпоративный стандарт">Windows Server</span>
           </div>
         </div>
 
         <div class="group">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="float-emoji text-lg" style="animation-delay: 1s"></span>
-            <div class="mono text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider" data-i18n="cat_network">сети и базы данных</div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="сетевое оборудование">Cisco</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="маршрутизация">EcoRouter</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="мощная СУБД">PostgreSQL</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="быстрая и лёгкая">MySQL</span>
+          <div class="mono text-[10px] sm:text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider mb-2 sm:mb-3" data-i18n="cat_network">сети и базы данных</div>
+          <div class="flex flex-wrap gap-1.5 sm:gap-2">
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="сетевое оборудование">Cisco</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="маршрутизация">EcoRouter</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="мощная СУБД">PostgreSQL</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="быстрая и лёгкая">MySQL</span>
           </div>
         </div>
 
         <div class="group">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="float-emoji text-lg" style="animation-delay: 1.5s"></span>
-            <div class="mono text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider" data-i18n="cat_tools">инструменты</div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="редактор кода">VS Code</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="для настоящих самураев">Vim</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="железо и код">Arduino</span>
-            <span class="tech-tag px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-sm font-medium shadow-sm" data-tooltip="графика">Photoshop</span>
+          <div class="mono text-[10px] sm:text-xs text-zinc-500 group-hover:text-blue-600 transition-colors uppercase tracking-wider mb-2 sm:mb-3" data-i18n="cat_tools">инструменты</div>
+          <div class="flex flex-wrap gap-1.5 sm:gap-2">
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="редактор кода">VS Code</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="для настоящих самураев">Vim</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="железо и код">Arduino</span>
+            <span class="tech-tag px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-zinc-200 rounded-md text-zinc-800 text-xs sm:text-sm font-medium shadow-sm" data-tooltip="графика">Photoshop</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Resources + Contact grid -->
-  <section id="resources" class="reveal mb-12">
-    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2" data-i18n="res_title">
-      <span class="float-emoji"></span> материалы для студентов
+  <!-- Resources -->
+  <section id="resources" class="reveal mb-8 sm:mb-10 md:mb-12">
+    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-4 sm:mb-5 md:mb-6" data-i18n="res_title">
+      материалы для студентов
     </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 stagger">
-      <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_1">база знаний</span>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 stagger">
+      <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_1">база знаний</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_2">учебная практика</span>
+      <a href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_2">учебная практика</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_3">производственная</span>
+      <a href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_3">производственная</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_4">демоэкзамен</span>
+      <a href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_4">демоэкзамен</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">buildin →</span>
       </a>
-      <a href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_5">доска · демоэкзамен</span>
+      <a href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_5">доска · демоэкзамен</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">yandex →</span>
       </a>
-      <a href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" class="group flex justify-between items-center p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="font-medium text-zinc-800 group-hover:text-blue-600 transition-colors" data-i18n="res_6">доска · уп.01</span>
+      <a href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" class="group flex justify-between items-center p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="font-medium text-zinc-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors" data-i18n="res_6">доска · уп.01</span>
         <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">yandex →</span>
       </a>
     </div>
   </section>
 
-  <!-- CV / Achievements — compact grid -->
-  <section id="cv" class="reveal mb-12">
-    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2" data-i18n="cv_title">
-      <span class="float-emoji"></span> опыт и образование
+  <!-- CV -->
+  <section id="cv" class="reveal mb-8 sm:mb-10 md:mb-12">
+    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-4 sm:mb-5 md:mb-6" data-i18n="cv_title">
+      опыт и образование
     </h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+
       <!-- Work -->
-      <div class="group bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="float-emoji text-lg"></span>
-          <span class="mono text-xs uppercase tracking-wider text-zinc-500 group-hover:text-amber-600 transition-colors" data-i18n="work_title">работа</span>
-        </div>
-        <div class="text-base font-semibold text-zinc-900 mb-2" data-i18n="work_1">мастер производственного обучения</div>
-        <div class="text-sm text-zinc-600 leading-relaxed mb-3" data-i18n="work_2">подготовка сетевых и системных администраторов, руководство учебной и производственной практикой</div>
-        <div class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs mono text-amber-700">
+      <div class="group bg-white border border-zinc-200 rounded-xl p-4 sm:p-5 hover-glow">
+        <div class="mono text-[10px] sm:text-xs uppercase tracking-wider text-zinc-500 group-hover:text-amber-600 transition-colors mb-2 sm:mb-3" data-i18n="work_title">работа</div>
+        <div class="text-sm sm:text-base font-semibold text-zinc-900 mb-1.5 sm:mb-2" data-i18n="work_1">мастер производственного обучения</div>
+        <div class="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-2 sm:mb-3" data-i18n="work_2">подготовка сетевых и системных администраторов, руководство учебной и производственной практикой</div>
+        <div class="inline-flex items-center gap-1 px-2 py-0.5 sm:py-1 rounded-full bg-amber-50 border border-amber-200 text-[10px] sm:text-xs mono text-amber-700">
           <span class="counter" data-target="5">0</span>+ <span data-i18n="work_years">лет</span>
         </div>
       </div>
 
       <!-- Achievements -->
-      <div class="group bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="float-emoji text-lg" style="animation-delay: 0.3s"></span>
-          <span class="mono text-xs uppercase tracking-wider text-zinc-500 group-hover:text-blue-600 transition-colors" data-i18n="ach_title">достижения</span>
-        </div>
-        <ul class="space-y-2 text-sm text-zinc-700">
+      <div class="group bg-white border border-zinc-200 rounded-xl p-4 sm:p-5 hover-glow">
+        <div class="mono text-[10px] sm:text-xs uppercase tracking-wider text-zinc-500 group-hover:text-blue-600 transition-colors mb-2 sm:mb-3" data-i18n="ach_title">достижения</div>
+        <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-zinc-700">
           <li class="flex gap-2">
             <span class="text-blue-600 shrink-0">◆</span>
-            <span data-i18n="ach_1">наставник победителя (1 место) · финал "мастерята" · системы умного дома</span>
+            <span data-i18n="ach_1">наставник победителя (1 место) · финал «мастерята» · системы умного дома</span>
           </li>
           <li class="flex gap-2">
             <span class="text-blue-600 shrink-0">◆</span>
-            <span data-i18n="ach_2">победитель регионального этапа "московские профессионалы" · системы умного дома · юниоры</span>
+            <span data-i18n="ach_2">победитель регионального этапа «московские профессионалы» · системы умного дома · юниоры</span>
           </li>
         </ul>
       </div>
 
       <!-- Education -->
-      <div class="group bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="float-emoji text-lg" style="animation-delay: 0.6s"></span>
-          <span class="mono text-xs uppercase tracking-wider text-zinc-500 group-hover:text-emerald-600 transition-colors" data-i18n="edu_title">квалификация</span>
-        </div>
-        <ul class="space-y-2 text-sm text-zinc-700">
+      <div class="group bg-white border border-zinc-200 rounded-xl p-4 sm:p-5 hover-glow">
+        <div class="mono text-[10px] sm:text-xs uppercase tracking-wider text-zinc-500 group-hover:text-emerald-600 transition-colors mb-2 sm:mb-3" data-i18n="edu_title">квалификация</div>
+        <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-zinc-700">
           <li class="flex gap-2">
-            <span class="text-emerald-600 shrink-0"></span>
+            <span class="text-emerald-600 shrink-0">◆</span>
             <span data-i18n="edu_1">разработка оценочных материалов · ирпо</span>
           </li>
           <li class="flex gap-2">
@@ -477,53 +477,76 @@
   </section>
 
   <!-- Contact -->
-  <section class="reveal mb-10">
-    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2" data-i18n="contact_title">
-      <span class="float-emoji"></span> контакты
+  <section class="reveal mb-8 sm:mb-10">
+    <h2 class="mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-4 sm:mb-5 md:mb-6" data-i18n="contact_title">
+      контакты
     </h2>
-    
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-      <a href="mailto:livencev01@ya.ru" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1">email</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600 truncate">livencev01@ya.ru</span>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+      <a href="mailto:livencev01@ya.ru" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1">email</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600 truncate">livencev01@ya.ru</span>
       </a>
-      <a href="mailto:liventsevka@edu.mos.ru" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1">edu email</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600 truncate">liventsevka@edu.mos.ru</span>
+      <a href="mailto:liventsevka@edu.mos.ru" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1">edu email</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600 truncate">liventsevka@edu.mos.ru</span>
       </a>
-      <a href="https://t.me/itsliventsev" target="_blank" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1">telegram</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600">@itsliventsev →</span>
+      <a href="https://t.me/itsliventsev" target="_blank" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1">telegram</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600">@itsliventsev →</span>
       </a>
-      <a href="https://vk.com/itsliventsev" target="_blank" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1">vk</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600">itsliventsev →</span>
+      <a href="https://vk.com/itsliventsev" target="_blank" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1">vk</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600">itsliventsev →</span>
       </a>
-      <a href="https://github.com/ItsLiventsev" target="_blank" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1">github</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600">itsliventsev →</span>
+      <a href="https://github.com/ItsLiventsev" target="_blank" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1">github</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600">itsliventsev →</span>
       </a>
-      <a href="https://hh.ru" target="_blank" class="group flex flex-col p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
-        <span class="text-xs text-zinc-500 mb-1" data-i18n="portfolio">портфолио</span>
-        <span class="mono text-sm text-zinc-800 group-hover:text-blue-600">hh.ru →</span>
+      <a href="https://hh.ru" target="_blank" class="group flex flex-col p-3 sm:p-4 rounded-lg bg-white border border-zinc-200 hover-glow">
+        <span class="text-[10px] sm:text-xs text-zinc-500 mb-0.5 sm:mb-1" data-i18n="portfolio">портфолио</span>
+        <span class="mono text-xs sm:text-sm text-zinc-800 group-hover:text-blue-600">hh.ru →</span>
       </a>
     </div>
   </section>
 
   <!-- Secret -->
-  <div id="secret-message" class="secret-msg text-center py-4 mb-4">
-    <p class="mono text-xs text-zinc-500">🎉 <span data-i18n="secret">вы нашли секретное сообщение!</span></p>
+  <div id="secret-message" class="secret-msg text-center py-3 sm:py-4 mb-3 sm:mb-4">
+    <p class="mono text-[10px] sm:text-xs text-zinc-500">🎉 <span data-i18n="secret">вы нашли секретное сообщение!</span></p>
   </div>
 
-  <footer class="reveal flex justify-center items-center pt-8 border-t border-zinc-200 text-xs text-zinc-500 mono">
+  <footer class="reveal flex justify-center items-center pt-6 sm:pt-8 border-t border-zinc-200 text-[10px] sm:text-xs text-zinc-500 mono">
     <span>© 2026 itsliventsev</span>
   </footer>
 
 </div>
 
 <script>
-  // ===== ВАЖНО: включаем прогрессивное улучшение =====
   document.documentElement.classList.add('js-enabled');
+
+  // Mobile menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+  const closeMenuBtn = document.getElementById('close-menu');
+
+  function openMobileMenu() {
+    mobileMenu.classList.add('open');
+    mobileMenuOverlay.classList.add('open');
+    burger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    mobileMenuOverlay.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  burger.addEventListener('click', openMobileMenu);
+  closeMenuBtn.addEventListener('click', closeMobileMenu);
+  mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+  mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
 
   // Scroll progress
   const progressBar = document.getElementById('scroll-progress');
@@ -532,7 +555,7 @@
     progressBar.style.width = scrolled + '%';
   });
 
-  // Reveal — с гарантированным показом для элементов в viewport при загрузке
+  // Reveal
   const revealTargets = document.querySelectorAll('.reveal, .stagger');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -542,15 +565,10 @@
       }
     });
   }, { threshold: 0.01, rootMargin: '0px 0px -30px 0px' });
-  
   revealTargets.forEach(el => observer.observe(el));
+  setTimeout(() => revealTargets.forEach(el => el.classList.add('active')), 200);
 
-  // Fallback: если observer не сработал за 200мс — показать всё принудительно
-  setTimeout(() => {
-    revealTargets.forEach(el => el.classList.add('active'));
-  }, 200);
-
-  // Counter animation
+  // Counter
   const counters = document.querySelectorAll('.counter');
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -572,7 +590,6 @@
       }
     });
   }, { threshold: 0.5 });
-  
   counters.forEach(c => counterObserver.observe(c));
 
   // Tech tag click
@@ -583,7 +600,7 @@
     });
   });
 
-  // Magnetic effect
+  // Magnetic
   document.querySelectorAll('.magnetic').forEach(el => {
     el.addEventListener('mousemove', (e) => {
       const rect = el.getBoundingClientRect();
@@ -591,9 +608,7 @@
       const y = e.clientY - rect.top - rect.height / 2;
       el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
     });
-    el.addEventListener('mouseleave', () => {
-      el.style.transform = '';
-    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
   });
 
   // Logo easter egg
@@ -610,7 +625,6 @@
   // Konami code
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
   let konamiIndex = 0;
-  
   document.addEventListener('keydown', (e) => {
     if (e.code === konamiCode[konamiIndex]) {
       konamiIndex++;
@@ -628,10 +642,8 @@
     }
   });
 
-  // Console easter egg
   console.log('%c🦀 Привет, разработчик!', 'font-size: 18px; color: #3b82f6; font-weight: bold;');
   console.log('%cПопробуй Konami Code: ↑↑↓↓←→←→BA', 'font-size: 12px; color: #71717a;');
-  console.log('%cИли кликни 5 раз на логотип ~/itsliventsev', 'font-size: 12px; color: #71717a;');
 
   // Language Toggle
   const T = {
@@ -640,6 +652,7 @@
       nav_materials: "материалы",
       nav_blog: "блог",
       nav_articles: "статьи",
+      nav_archive: "архив",
       nav_cv: "опыт",
       subtitle: "// преподаватель it · сетевой и системный администратор",
       bio: "Преподаю в колледже, готовлю сетевых и системных администраторов. Веду учебную и производственную практику. 5 лет в обучении, параллельно работаю с реальной инфраструктурой.",
@@ -679,6 +692,7 @@
       nav_materials: "materials",
       nav_blog: "blog",
       nav_articles: "articles",
+      nav_archive: "archive",
       nav_cv: "experience",
       subtitle: "// it teacher · network and system administrator",
       bio: "Teaching at a vocational college, training future network and system administrators. Supervising academic and industrial practice. 5 years in education, while keeping my hands on real infrastructure.",
@@ -714,12 +728,14 @@
       secret: "you found the secret message!"
     }
   };
-  
+
   let lang = 'ru';
-  
+
   function toggleLang() {
     lang = lang === 'ru' ? 'en' : 'ru';
-    document.getElementById('lang-indicator').textContent = lang === 'ru' ? 'EN' : 'RU';
+    const newLang = lang === 'ru' ? 'EN' : 'RU';
+    document.getElementById('lang-indicator').textContent = newLang;
+    document.getElementById('lang-indicator-mobile').textContent = newLang;
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const k = el.getAttribute('data-i18n');
