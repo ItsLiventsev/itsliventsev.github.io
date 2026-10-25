@@ -4,192 +4,182 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Информация. Кодирование · itsliventsev</title>
+<meta name="description" content="Информация и её кодирование: двоичная система, единицы измерения, ASCII, RGB, дискретизация и квест «Шифр неисправности».">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">теория</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">теория</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      Информация. Кодирование<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      Информация. Кодирование<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
+    <span class="pill pill-neutral">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Definition -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">1. Что такое информация?</h3>
-      <p class="text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Что такое информация?</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Информация</strong> (от лат. <em>informatio</em> — разъяснение, изложение) — это сведения об окружающем мире и протекающих в нем процессах, которые воспринимаются живыми организмами, электронными машинами и другими системами.
       </p>
-      <div class="bg-blue-50/50 border border-blue-200 rounded-lg p-3 mb-3">
-        <div class="mono text-xs text-blue-700 mb-2">Ключевые свойства информации:</div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-zinc-700">
-          <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Объективность</div>
-          <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Достоверность</div>
-          <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Актуальность</div>
-          <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Понятность</div>
-          <div class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Полнота</div>
+      <div class="notice notice-info mb-3">
+        <div class="mono text-xs mb-2" style="color:var(--accent);">Ключевые свойства информации:</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-[var(--text-2)]">
+          <div class="flex items-center gap-1"><span class="mat-dot"></span>Объективность</div>
+          <div class="flex items-center gap-1"><span class="mat-dot"></span>Достоверность</div>
+          <div class="flex items-center gap-1"><span class="mat-dot"></span>Актуальность</div>
+          <div class="flex items-center gap-1"><span class="mat-dot"></span>Понятность</div>
+          <div class="flex items-center gap-1"><span class="mat-dot"></span>Полнота</div>
         </div>
       </div>
-      <p class="text-xs text-zinc-600 italic">
+      <p class="text-xs text-[var(--muted)] italic mb-0">
         Для специалистов по ремонту: недостоверная информация (искаженный сигнал из-за плохого контакта) приводит к сбоям в работе электронного устройства.
       </p>
     </div>
 
     <!-- Encoding -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">2. Кодирование информации</h3>
-      <p class="text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Кодирование информации</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Кодирование</strong> — процесс преобразования информации из одной формы представления в другую, удобную для хранения, передачи или обработки.
       </p>
-      <p class="text-sm text-zinc-700 mb-3">
+      <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Декодирование</strong> — обратный процесс преобразования закодированной информации в исходную форму.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-1">Светофор</div>
-          <div class="text-zinc-600">Красный = "Стой!", Зеленый = "Иди!"</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-1">Светофор</div>
+          <div class="text-[var(--muted)]">Красный = "Стой!", Зеленый = "Иди!"</div>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-1">Азбука Морзе</div>
-          <div class="text-zinc-600">Точки и тире = буквы</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-1">Азбука Морзе</div>
+          <div class="text-[var(--muted)]">Точки и тире = буквы</div>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-1">Дорожные знаки</div>
-          <div class="text-zinc-600">Фигуры и символы = правила</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-1">Дорожные знаки</div>
+          <div class="text-[var(--muted)]">Фигуры и символы = правила</div>
         </div>
       </div>
     </div>
 
     <!-- Binary -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">3. Двоичное кодирование</h3>
-      <p class="text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">3. Двоичное кодирование</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">
         Практически все современные электронные приборы являются <strong>цифровыми</strong>. Они работают с дискретными сигналами, используя двоичное кодирование.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-zinc-500 mb-2">Почему двоичная система?</div>
-          <ul class="text-xs text-zinc-700 space-y-1">
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--muted)] mb-2">Почему двоичная система?</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1">
             <li>• Элементы электроники (транзисторы) проще всего находятся в двух состояниях</li>
             <li>• Есть напряжение / Нет напряжения</li>
             <li>• Ток течет / Ток не течет</li>
             <li>• Магнитное поле есть / Нет поля</li>
           </ul>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-zinc-500 mb-2">Соответствие</div>
-          <ul class="text-xs text-zinc-700 space-y-1">
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--muted)] mb-2">Соответствие</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1">
             <li>• <strong>1</strong> — есть сигнал (истина, да, высокий уровень)</li>
             <li>• <strong>0</strong> — нет сигнала (ложь, нет, низкий уровень)</li>
           </ul>
         </div>
       </div>
-      <div class="bg-blue-50/50 border border-blue-200 rounded-lg p-3">
-        <div class="text-sm text-zinc-700">
+      <div class="notice notice-info">
+        <div class="text-sm text-[var(--text-2)] m-0">
           <strong>Бит</strong> (от англ. <em>binary digit</em> — двоичная цифра) — минимальная единица измерения количества информации и наименьшая единица представления данных в компьютере.
         </div>
       </div>
     </div>
 
     <!-- Units -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">4. Единицы измерения информации</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="text-xs text-zinc-500 uppercase bg-zinc-50 border-b border-zinc-200">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Единицы измерения информации</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
             <tr>
-              <th class="px-4 py-2">Единица</th>
-              <th class="px-4 py-2">Размер</th>
-              <th class="px-4 py-2">Чему равна</th>
+              <th>Единица</th>
+              <th>Размер</th>
+              <th>Чему равна</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-100">
+          <tbody>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">1 байт</td>
-              <td class="px-4 py-3">8 бит</td>
-              <td class="px-4 py-3 text-xs text-zinc-600">Минимальная адресуемая единица памяти</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">1 байт</td>
+              <td>8 бит</td>
+              <td class="text-xs">Минимальная адресуемая единица памяти</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">1 Килобайт (КБ)</td>
-              <td class="px-4 py-3">2¹⁰ байт</td>
-              <td class="px-4 py-3 text-xs text-zinc-600">1024 байта</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">1 Килобайт (КБ)</td>
+              <td>2¹⁰ байт</td>
+              <td class="text-xs">1024 байта</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">1 Мегабайт (МБ)</td>
-              <td class="px-4 py-3">2²⁰ байт</td>
-              <td class="px-4 py-3 text-xs text-zinc-600">1024 КБ</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">1 Мегабайт (МБ)</td>
+              <td>2²⁰ байт</td>
+              <td class="text-xs">1024 КБ</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">1 Гигабайт (ГБ)</td>
-              <td class="px-4 py-3">2³⁰ байт</td>
-              <td class="px-4 py-3 text-xs text-zinc-600">1024 МБ</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">1 Гигабайт (ГБ)</td>
+              <td>2³⁰ байт</td>
+              <td class="text-xs">1024 МБ</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">1 Терабайт (ТБ)</td>
-              <td class="px-4 py-3">2⁴⁰ байт</td>
-              <td class="px-4 py-3 text-xs text-zinc-600">1024 ГБ</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">1 Терабайт (ТБ)</td>
+              <td>2⁴⁰ байт</td>
+              <td class="text-xs">1024 ГБ</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-zinc-600 mt-3 italic">
+      <p class="text-xs text-[var(--muted)] mt-3 italic mb-0">
         Важно: производители жестких дисков используют десятичную систему (1 КБ = 1000 байт), но в программировании — двоичную (1 КБ = 1024 байта). Поэтому реальная емкость диска меньше заявленной.
       </p>
     </div>
 
     <!-- Encoding types -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">5. Как кодируется разная информация?</h3>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">5. Как кодируется разная информация?</h3>
       <div class="space-y-4">
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-2">А) Числовая информация</div>
-          <p class="text-xs text-zinc-700">Числа хранятся в двоичном виде. Существуют специальные форматы для целых и вещественных чисел, положительных и отрицательных.</p>
-          <div class="mt-2 p-2 bg-zinc-50 rounded text-xs mono text-zinc-700">Пример: 5₁₀ = 101₂</div>
+          <div class="text-sm font-medium text-[var(--text)] mb-2">А) Числовая информация</div>
+          <p class="text-xs text-[var(--text-2)]">Числа хранятся в двоичном виде. Существуют специальные форматы для целых и вещественных чисел, положительных и отрицательных.</p>
+          <div class="mt-2 p-2 bg-[var(--surface-2)] rounded text-xs mono text-[var(--text-2)]">Пример: 5₁₀ = 101₂</div>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-2">Б) Текстовая информация</div>
-          <p class="text-xs text-zinc-700">Каждому символу присваивается уникальный двоичный код. Стандарт ASCII использует 7 бит (128 символов), расширенная — 1 байт (256 символов).</p>
-          <div class="mt-2 p-2 bg-zinc-50 rounded text-xs mono text-zinc-700">A = 65 (01000001), a = 97</div>
+          <div class="text-sm font-medium text-[var(--text)] mb-2">Б) Текстовая информация</div>
+          <p class="text-xs text-[var(--text-2)]">Каждому символу присваивается уникальный двоичный код. Стандарт ASCII использует 7 бит (128 символов), расширенная — 1 байт (256 символов).</p>
+          <div class="mt-2 p-2 bg-[var(--surface-2)] rounded text-xs mono text-[var(--text-2)]">A = 65 (01000001), a = 97</div>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-2">В) Графическая информация</div>
-          <p class="text-xs text-zinc-700">Изображение состоит из пикселей. Каждый пиксель имеет цвет, который кодируется числом.</p>
-          <ul class="text-xs text-zinc-700 mt-2 space-y-1">
+          <div class="text-sm font-medium text-[var(--text)] mb-2">В) Графическая информация</div>
+          <p class="text-xs text-[var(--text-2)]">Изображение состоит из пикселей. Каждый пиксель имеет цвет, который кодируется числом.</p>
+          <ul class="text-xs text-[var(--text-2)] mt-2 space-y-1">
             <li>• Черно-белое: 1 бит на пиксель (0 – белый, 1 – черный)</li>
             <li>• Цветное (RGB): 3 байта на пиксель (Red, Green, Blue от 0 до 255)</li>
           </ul>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-2">Г) Звуковая информация</div>
-          <p class="text-xs text-zinc-700">Звук — аналоговый сигнал. Для цифровой обработки производится дискретизация и квантование.</p>
-          <ul class="text-xs text-zinc-700 mt-2 space-y-1">
+          <div class="text-sm font-medium text-[var(--text)] mb-2">Г) Звуковая информация</div>
+          <p class="text-xs text-[var(--text-2)]">Звук — аналоговый сигнал. Для цифровой обработки производится дискретизация и квантование.</p>
+          <ul class="text-xs text-[var(--text-2)] mt-2 space-y-1">
             <li>• <strong>Дискретизация</strong> — измерение амплитуды через равные промежутки времени (частота дискретизации, Гц)</li>
             <li>• <strong>Квантование</strong> — присвоение каждому значению определенного уровня (глубина кодирования, бит)</li>
           </ul>
@@ -198,40 +188,30 @@
     </div>
 
     <!-- Quest -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3">🎮 Ситуационная задача-квест: "Диагностика: Шифр неисправности"</h3>
-      <div class="text-sm text-zinc-700 space-y-3">
-        <p><strong>Легенда:</strong> Вы — команда инженеров-электронщиков. К вам поступил ПЛК от промышленного станка. Перед поломкой ПЛК должен был вывести код ошибки, но индикатор показывает лишь беспорядочные двоичные последовательности.</p>
-        <p><strong>Задача:</strong> Расшифровать код ошибки и определить неисправный блок.</p>
-        <div class="bg-white rounded-lg p-3 border border-blue-200">
-          <div class="mono text-xs text-zinc-500 mb-2">Дамп памяти (расшифровать 4 символа):</div>
-          <ul class="text-xs text-zinc-700 space-y-1">
+    <div class="notice notice-quest">
+      <h3 class="mono text-sm font-semibold mb-3">🎮 Ситуационная задача-квест: "Диагностика: Шифр неисправности"</h3>
+      <div class="text-sm text-[var(--text-2)] space-y-3">
+        <p class="mb-0"><strong>Легенда:</strong> Вы — команда инженеров-электронщиков. К вам поступил ПЛК от промышленного станка. Перед поломкой ПЛК должен был вывести код ошибки, но индикатор показывает лишь беспорядочные двоичные последовательности.</p>
+        <p class="mb-0"><strong>Задача:</strong> Расшифровать код ошибки и определить неисправный блок.</p>
+        <div class="bg-[var(--surface)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--muted)] mb-2">Дамп памяти (расшифровать 4 символа):</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 mb-0">
             <li>• Символ 1: 100 1001 (двоичный → ASCII)</li>
             <li>• Символ 2: 0x45 (hex → decimal → ASCII)</li>
             <li>• Символ 3: 51 (decimal → ASCII)</li>
             <li>• Символ 4: 0100 0010 (двоичный → ASCII)</li>
           </ul>
         </div>
-        <p class="text-xs text-zinc-600"><strong>Формат ответа:</strong> Код ошибки IE-XY, где X — буква (функциональный блок), Y — цифра (тип неисправности).</p>
+        <p class="text-xs text-[var(--muted)] mb-0"><strong>Формат ответа:</strong> Код ошибки IE-XY, где X — буква (функциональный блок), Y — цифра (тип неисправности).</p>
       </div>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

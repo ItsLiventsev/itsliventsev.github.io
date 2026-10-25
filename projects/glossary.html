@@ -4,215 +4,193 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>глоссарий · itsliventsev</title>
+<meta name="description" content="Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 100; transition: width .1s ease; background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(16, 185, 129, 0.06) 1px, transparent 1px); }
-
-  .reveal { opacity: 1; transform: none; }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all .7s cubic-bezier(.16,1,.3,1); }
-  .js-enabled .reveal.active { opacity: 1; transform: none; }
-
-  .stagger > * { opacity: 1; transform: none; }
-  .js-enabled .stagger > * { opacity: 0; transform: translateY(10px); transition: all .5s cubic-bezier(.16,1,.3,1); }
-  .js-enabled .stagger.active > * { opacity: 1; transform: none; }
-  .js-enabled .stagger.active > *:nth-child(1){transition-delay:.04s}
-  .js-enabled .stagger.active > *:nth-child(2){transition-delay:.08s}
-  .js-enabled .stagger.active > *:nth-child(3){transition-delay:.12s}
-  .js-enabled .stagger.active > *:nth-child(4){transition-delay:.16s}
-
-  .hover-glow { transition: all .3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); transform: translateY(-2px); }
-
-  .pill { display: inline-flex; align-items: center; padding: .125rem .625rem; border-radius: 999px; border: 1px solid; font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.5; }
-  
-  .filter-btn { transition: all .25s cubic-bezier(.34,1.56,.64,1); }
-  .filter-btn:hover { transform: translateY(-1px); }
-  .filter-btn.active { background-color: #10b981; border-color: #059669; color: white; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="emerald">
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-14">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12" data-filter-root>
 
   <!-- Header -->
-  <header class="reveal flex justify-between items-center mb-10 sm:mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/index.html" class="mono text-sm font-semibold text-zinc-900 hover:text-emerald-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> itsliventsev
-    </a>
-    <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">глоссарий</span>
+  <header class="site-header reveal">
+    <a href="../projects.html" class="logo"><span class="arrow">←</span> проекты</a>
+    <span class="pill pill-emerald">глоссарий</span>
   </header>
 
   <!-- Hero -->
-  <section class="reveal mb-8 sm:mb-10">
-    <h1 class="mono text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
-      глоссарий<span class="text-emerald-600">.</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
+      глоссарий<span class="title-mark">.</span>
     </h1>
-    <p class="mono text-xs sm:text-sm md:text-base text-zinc-500 max-w-2xl leading-relaxed">
+    <p class="hero-sub text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed">
       // фундаментальные определения, термины и концепции. база, необходимая для уверенной работы в it-инфраструктуре и понимания технической документации.
     </p>
   </section>
 
   <!-- Filters -->
   <section class="reveal mb-8 flex flex-wrap gap-2">
-    <button class="filter-btn active pill bg-emerald-500 border-emerald-600 text-white" data-filter="all">все</button>
-    <button class="filter-btn pill bg-white border-zinc-200 text-zinc-600 hover:border-emerald-300 hover:text-emerald-600" data-filter="network">сети</button>
-    <button class="filter-btn pill bg-white border-zinc-200 text-zinc-600 hover:border-emerald-300 hover:text-emerald-600" data-filter="os">ос и инфраструктура</button>
-    <button class="filter-btn pill bg-white border-zinc-200 text-zinc-600 hover:border-emerald-300 hover:text-emerald-600" data-filter="db">базы данных</button>
-    <button class="filter-btn pill bg-white border-zinc-200 text-zinc-600 hover:border-emerald-300 hover:text-emerald-600" data-filter="security">безопасность</button>
+    <button class="pill filter-btn is-active px-4 py-1.5 text-xs" data-filter-btn="all">все</button>
+    <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="network">сети</button>
+    <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="os">ос и инфраструктура</button>
+    <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="db">базы данных</button>
+    <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="security">безопасность</button>
   </section>
+
+  <!-- Empty state -->
+  <div class="filter-empty mb-8" data-filter-empty hidden>// термины в этой категории появятся позже</div>
 
   <!-- Grid -->
   <section class="reveal mb-10">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 stagger" id="glossary-grid">
 
       <!-- СЕТИ -->
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="network">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">DHCP</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">сети</span>
+      <article class="card hoverable p-5" data-filter-item data-category="network">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">DHCP</h3>
+          <span class="pill pill-emerald shrink-0">сети</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Dynamic Host Configuration Protocol.</strong> Сетевой протокол, позволяющий устройствам автоматически получать IP-адрес, маску подсети, шлюз и параметры DNS при подключении к сети.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">аналогия</div>
-          <p class="text-xs text-zinc-600 italic">Как администратор общежития, который при заселении выдает каждому студенту уникальный номер комнаты, чтобы почтальон знал, куда нести письма.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">аналогия</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Как администратор общежития, который при заселении выдает каждому студенту уникальный номер комнаты, чтобы почтальон знал, куда нести письма.</p>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="network">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">DNS</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">сети</span>
+      <article class="card hoverable p-5" data-filter-item data-category="network">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">DNS</h3>
+          <span class="pill pill-emerald shrink-0">сети</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Domain Name System.</strong> Компьютерная распределенная система для получения информации о доменах. Чаще всего используется для сопоставления IP-адресов с читаемыми человеком доменными именами.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">аналогия</div>
-          <p class="text-xs text-zinc-600 italic">Телефонная книга: вы ищете имя (домен), а система выдает вам номер телефона (IP-адрес).</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">аналогия</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Телефонная книга: вы ищете имя (домен), а система выдает вам номер телефона (IP-адрес).</p>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="network">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">VLAN</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">сети</span>
+      <article class="card hoverable p-5" data-filter-item data-category="network">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">VLAN</h3>
+          <span class="pill pill-emerald shrink-0">сети</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Virtual Local Area Network.</strong> Технология, позволяющая логически разделить один физический коммутатор на несколько независимых широковещательных доменов.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">аналогия</div>
-          <p class="text-xs text-zinc-600 italic">Как звукоизолирующие перегородки в опенспейсе: физически все в одной комнате, но функционально разделены и не мешают друг другу.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">аналогия</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Как звукоизолирующие перегородки в опенспейсе: физически все в одной комнате, но функционально разделены и не мешают друг другу.</p>
         </div>
       </article>
 
       <!-- ОС И ИНФРАСТРУКТУРА -->
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="os">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">SSH</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">ос</span>
+      <article class="card hoverable p-5" data-filter-item data-category="os">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">SSH</h3>
+          <span class="pill pill-emerald shrink-0">ос</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Secure Shell.</strong> Сетевой протокол прикладного уровня, позволяющий производить удаленное управление операционной системой и туннелирование TCP-соединений с обязательным шифрованием всего трафика.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">пример</div>
-          <code class="text-xs text-zinc-800 mono">ssh admin@192.168.1.10 -p 22</code>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">пример</div>
+          <code class="text-xs">ssh admin@192.168.1.10 -p 22</code>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="os">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">Active Directory (AD)</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">ос</span>
+      <article class="card hoverable p-5" data-filter-item data-category="os">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">Active Directory (AD)</h3>
+          <span class="pill pill-emerald shrink-0">ос</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           Служба каталогов от Microsoft для сетей Windows. Обеспечивает централизованное управление учетными записями пользователей, компьютеров и применение групповых политик (GPO).
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">ключевая функция</div>
-          <p class="text-xs text-zinc-600 italic">Единый вход (Single Sign-On): пользователь вводит пароль один раз и получает доступ ко всем разрешенным ресурсам домена.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">ключевая функция</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Единый вход (Single Sign-On): пользователь вводит пароль один раз и получает доступ ко всем разрешенным ресурсам домена.</p>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="os">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">Контейнеризация</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">ос</span>
+      <article class="card hoverable p-5" data-filter-item data-category="os">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">Контейнеризация</h3>
+          <span class="pill pill-emerald shrink-0">ос</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           Технология виртуализации на уровне операционной системы, позволяющая запускать изолированные пользовательские пространства (контейнеры) с собственными процессами и сетью, использующие ядро хост-системы (например, Docker).
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">отличие от ВМ</div>
-          <p class="text-xs text-zinc-600 italic">Виртуальная машина эмулирует целое "железо" и свою ОС. Контейнер делит ядро с хостом, что делает его легковесным и быстрым в запуске.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">отличие от ВМ</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Виртуальная машина эмулирует целое "железо" и свою ОС. Контейнер делит ядро с хостом, что делает его легковесным и быстрым в запуске.</p>
         </div>
       </article>
 
       <!-- БАЗЫ ДАННЫХ -->
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="db">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">СУБД</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">бд</span>
+      <article class="card hoverable p-5" data-filter-item data-category="db">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">СУБД</h3>
+          <span class="pill pill-emerald shrink-0">бд</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Система Управления Базами Данных.</strong> Программное обеспечение, предназначенное для создания, ведения и совместного использования базы данных неопределенным кругом пользователей (например, PostgreSQL, MySQL).
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">аналогия</div>
-          <p class="text-xs text-zinc-600 italic">Если База Данных — это библиотека с книгами, то СУБД — это библиотекарь, который организует хранение, поиск и выдачу данных.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">аналогия</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Если База Данных — это библиотека с книгами, то СУБД — это библиотекарь, который организует хранение, поиск и выдачу данных.</p>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="db">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">Первичный ключ (PK)</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">бд</span>
+      <article class="card hoverable p-5" data-filter-item data-category="db">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">Первичный ключ (PK)</h3>
+          <span class="pill pill-emerald shrink-0">бд</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Primary Key.</strong> Поле (или набор полей) в реляционной таблице, которое однозначно идентифицирует каждую запись. Не может содержать пустые (NULL) или повторяющиеся значения.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">пример</div>
-          <p class="text-xs text-zinc-600 italic">ID_Сотрудника или номер зачетной книжки студента.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">пример</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">ID_Сотрудника или номер зачетной книжки студента.</p>
         </div>
       </article>
 
       <!-- БЕЗОПАСНОСТЬ -->
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="security">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">Firewall</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">безопасность</span>
+      <article class="card hoverable p-5" data-filter-item data-category="security">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">Firewall</h3>
+          <span class="pill pill-emerald shrink-0">безопасность</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Межсетевой экран.</strong> Программный или аппаратный элемент компьютерной сети, осуществляющий контроль и фильтрацию проходящих через него сетевых пакетов в соответствии с заданными правилами безопасности.
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">аналогия</div>
-          <p class="text-xs text-zinc-600 italic">Охрана на проходной предприятия, которая проверяет пропуска и решает, кому можно войти, а кому нет.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">аналогия</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Охрана на проходной предприятия, которая проверяет пропуска и решает, кому можно войти, а кому нет.</p>
         </div>
       </article>
 
-      <article class="glossary-card group bg-white border border-zinc-200 rounded-xl p-5 hover-glow" data-category="security">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="mono text-lg font-bold text-zinc-900">VPN</h3>
-          <span class="pill bg-emerald-50 border-emerald-200 text-emerald-700">безопасность</span>
+      <article class="card hoverable p-5" data-filter-item data-category="security">
+        <div class="flex items-start justify-between mb-3 gap-2">
+          <h3 class="mono text-lg font-bold text-[var(--text)]">VPN</h3>
+          <span class="pill pill-emerald shrink-0">безопасность</span>
         </div>
-        <p class="text-sm text-zinc-700 leading-relaxed mb-3">
+        <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
           <strong>Virtual Private Network.</strong> Технология, позволяющая создать защищенную (зашифрованную) логическую сеть поверх публичной или ненадежной сети (например, Интернета).
         </p>
-        <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-3">
-          <div class="mono text-[10px] text-zinc-400 uppercase mb-1">применение</div>
-          <p class="text-xs text-zinc-600 italic">Безопасный удаленный доступ сотрудника к внутренним ресурсам компании из дома.</p>
+        <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
+          <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">применение</div>
+          <p class="text-xs text-[var(--muted)] italic m-0">Безопасный удаленный доступ сотрудника к внутренним ресурсам компании из дома.</p>
         </div>
       </article>
 
@@ -221,70 +199,20 @@
 
   <!-- Bottom -->
   <section class="reveal text-center mb-8">
-    <p class="mono text-xs text-zinc-400 mb-6">
+    <p class="mono text-xs text-[var(--faint)] mb-6">
       🦀 не нашел нужный термин? напиши - добавим его в эту базу знаний.
     </p>
-    <a href="https://itsliventsev.github.io/index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 hover:text-emerald-600 transition-colors mono text-xs sm:text-sm font-medium shadow-sm hover-glow group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> вернуться на главную
+    <a href="../projects.html" class="btn group">
+      <span class="arrow">←</span> назад к проектам
     </a>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-6 border-t border-zinc-200 mono text-[10px] sm:text-xs text-zinc-400">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · глоссарий</span>
   </footer>
 
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-
-  // Scroll progress
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => {
-    progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%';
-  });
-
-  // Reveal animations
-  const revealTargets = document.querySelectorAll('.reveal, .stagger');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.01, rootMargin: '0px 0px -30px 0px' });
-  revealTargets.forEach(el => observer.observe(el));
-  setTimeout(() => revealTargets.forEach(el => el.classList.add('active')), 200);
-
-  // Category filtering
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.glossary-card');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Update active button state
-      filterBtns.forEach(b => b.classList.remove('active', 'bg-emerald-500', 'border-emerald-600', 'text-white'));
-      filterBtns.forEach(b => b.classList.add('bg-white', 'border-zinc-200', 'text-zinc-600'));
-      btn.classList.add('active', 'bg-emerald-500', 'border-emerald-600', 'text-white');
-      btn.classList.remove('bg-white', 'border-zinc-200', 'text-zinc-600');
-
-      const filter = btn.getAttribute('data-filter');
-
-      // Filter cards with a subtle fade effect
-      cards.forEach(card => {
-        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-          card.style.display = 'block';
-          setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(10px)';
-          setTimeout(() => { card.style.display = 'none'; }, 300);
-        }
-      });
-    });
-  });
-</script>
-
+<script src="../assets/site.js"></script>
 </body>
 </html>

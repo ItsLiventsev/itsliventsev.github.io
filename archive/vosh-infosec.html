@@ -4,125 +4,106 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ВОШ: Информационная безопасность · itsliventsev</title>
+<meta name="description" content="Муниципальный этап Всероссийской олимпиады школьников 2024/25 по информационной безопасности: даты, регламент и чек-лист участника.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; } .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">олимпиада</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">олимпиада</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      ВОШ: Информационная безопасность<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      ВОШ: Информационная безопасность<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
-    <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       Муниципальный этап Всероссийской олимпиады школьников в Москве 2024/25 учебного года по профилю «Информационная безопасность».
     </p>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Key Info -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="bg-white border border-zinc-200 rounded-xl p-4 hover-glow">
-        <div class="mono text-xs text-zinc-500 uppercase mb-1">Дата и время</div>
-        <div class="text-lg font-semibold text-zinc-900">7 ноября 2024 года</div>
-        <div class="text-sm text-zinc-600">Начало в 16:00</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger">
+      <div class="card hoverable p-4">
+        <div class="mono text-xs text-[var(--muted)] uppercase mb-1">Дата и время</div>
+        <div class="text-lg font-semibold text-[var(--text)]">7 ноября 2024 года</div>
+        <div class="text-sm text-[var(--muted)]">Начало в 16:00</div>
       </div>
-      <div class="bg-white border border-zinc-200 rounded-xl p-4 hover-glow">
-        <div class="mono text-xs text-zinc-500 uppercase mb-1">Продолжительность</div>
-        <div class="text-lg font-semibold text-zinc-900">180 минут</div>
-        <div class="text-sm text-zinc-600">Для 7–11 классов</div>
+      <div class="card hoverable p-4">
+        <div class="mono text-xs text-[var(--muted)] uppercase mb-1">Продолжительность</div>
+        <div class="text-lg font-semibold text-[var(--text)]">180 минут</div>
+        <div class="text-sm text-[var(--muted)]">Для 7–11 классов</div>
       </div>
     </div>
 
     <!-- Checklist -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-4 flex items-center gap-2">
-        <span class="text-blue-600">✓</span> Что необходимо взять с собой
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-4 flex items-center gap-2">
+        <span style="color:var(--accent);">✓</span> Что необходимо взять с собой
       </h3>
-      <ul class="space-y-3 text-sm text-zinc-700">
+      <ul class="space-y-3 text-sm text-[var(--text-2)] list-none p-0 m-0">
         <li class="flex items-start gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+          <span class="mat-dot mt-1.5"></span>
           <span><strong>Документ, подтверждающий личность:</strong> социальная карта, паспорт или справка из школы с фотографией.</span>
         </li>
         <li class="flex items-start gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+          <span class="mat-dot mt-1.5"></span>
           <span><strong>Логин и пароль</strong> для входа в Личный кабинет Московской электронной школы (МЭШ).</span>
         </li>
         <li class="flex items-start gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+          <span class="mat-dot mt-1.5"></span>
           <span><strong>Листок участника</strong> или логин ВОШ из него (можно взять в школе).</span>
         </li>
         <li class="flex items-start gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+          <span class="mat-dot mt-1.5"></span>
           <span><strong>Калькулятор</strong> (непрограммируемый).</span>
         </li>
         <li class="flex items-start gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+          <span class="mat-dot mt-1.5"></span>
           <span><strong>Сменная обувь</strong>.</span>
         </li>
       </ul>
     </div>
 
     <!-- Important Note -->
-    <div class="p-4 rounded-xl bg-amber-50/50 border border-dashed border-amber-300">
-      <div class="mono text-xs text-amber-700 uppercase tracking-wider mb-1">важное уточнение по формату</div>
-      <p class="text-sm text-zinc-700">
-        В этом году практический тур по профилю «Информационная безопасность» <strong>проводиться не будет</strong>. Итоги муниципального этапа по данному профилю подводятся <strong>только по результатам теоретического тура</strong>. 
+    <div class="notice notice-warn">
+      <div class="notice-label">важное уточнение по формату</div>
+      <p class="text-sm text-[var(--text-2)]">
+        В этом году практический тур по профилю «Информационная безопасность» <strong>проводиться не будет</strong>. Итоги муниципального этапа по данному профилю подводятся <strong>только по результатам теоретического тура</strong>.
       </p>
-      <p class="text-sm text-zinc-700 mt-2">
+      <p class="text-sm text-[var(--text-2)] mt-2 mb-0">
         <em>(Для справки: практические туры состоятся 30 ноября для «Робототехники» и 7 декабря для «Культуры дома» и «Техники и технологий», где итоги суммируются).</em>
       </p>
     </div>
 
     <!-- Tools mention -->
-    <div class="bg-zinc-100/50 border border-zinc-200 rounded-xl p-4">
-      <div class="mono text-xs text-zinc-500 mb-2">упомянутые инструменты</div>
+    <div class="p-4 rounded-2xl border border-[var(--border)]" style="background:var(--surface-2);">
+      <div class="mono text-xs text-[var(--muted)] mb-2">упомянутые инструменты</div>
       <div class="flex flex-wrap gap-2">
-        <a href="https://www.wireshark.org/download.html" class="px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-xs mono text-zinc-700 hover:border-blue-300 hover:text-blue-600 transition-colors">Wireshark ↗</a>
-        <span class="px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-xs mono text-zinc-400">PDF теория</span>
-        <span class="px-3 py-1.5 bg-white border border-zinc-200 rounded-md text-xs mono text-zinc-400">PDF практика (архив)</span>
+        <a href="https://www.wireshark.org/download.html" class="chip no-underline">Wireshark ↗</a>
+        <span class="chip text-[var(--faint)]">PDF теория</span>
+        <span class="chip text-[var(--faint)]">PDF практика (архив)</span>
       </div>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

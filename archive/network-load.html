@@ -4,74 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Устранение паразитирующей нагрузки · itsliventsev</title>
+<meta name="description" content="7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">практикум</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">практикум</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      Устранение паразитирующей нагрузки<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      Устранение паразитирующей нагрузки<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
-    <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       План практических занятий по диагностике и устранению фоновой сетевой нагрузки. Формат: дистанционно через VK Мессенджер (7 академических часов).
     </p>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Game mechanics -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3">🎮 Игровая механика курса</h3>
+    <div class="notice notice-quest">
+      <h3 class="mono text-sm font-semibold mb-3">🎮 Игровая механика курса</h3>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-        <div class="text-center p-3 bg-white rounded-lg border border-blue-200">
+        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
           <div class="text-2xl mb-1">🥉</div>
-          <div class="text-xs font-medium text-zinc-900">Стажёр</div>
-          <div class="text-[10px] text-zinc-600">0-20 баллов</div>
+          <div class="text-xs font-medium text-[var(--text)]">Стажёр</div>
+          <div class="text-[10px] text-[var(--muted)]">0-20 баллов</div>
         </div>
-        <div class="text-center p-3 bg-white rounded-lg border border-blue-200">
-          <div class="text-2xl mb-1"></div>
-          <div class="text-xs font-medium text-zinc-900">Специалист</div>
-          <div class="text-[10px] text-zinc-600">21-40 баллов</div>
+        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+          <div class="text-2xl mb-1">🥈</div>
+          <div class="text-xs font-medium text-[var(--text)]">Специалист</div>
+          <div class="text-[10px] text-[var(--muted)]">21-40 баллов</div>
         </div>
-        <div class="text-center p-3 bg-white rounded-lg border border-blue-200">
-          <div class="text-2xl mb-1"></div>
-          <div class="text-xs font-medium text-zinc-900">Эксперт</div>
-          <div class="text-[10px] text-zinc-600">41-60 баллов</div>
+        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+          <div class="text-2xl mb-1">🥇</div>
+          <div class="text-xs font-medium text-[var(--text)]">Эксперт</div>
+          <div class="text-[10px] text-[var(--muted)]">41-60 баллов</div>
         </div>
-        <div class="text-center p-3 bg-white rounded-lg border border-blue-200">
+        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
           <div class="text-2xl mb-1">💎</div>
-          <div class="text-xs font-medium text-zinc-900">Сетевой детектив</div>
-          <div class="text-[10px] text-zinc-600">61+ баллов</div>
+          <div class="text-xs font-medium text-[var(--text)]">Сетевой детектив</div>
+          <div class="text-[10px] text-[var(--muted)]">61+ баллов</div>
         </div>
       </div>
-      <div class="text-xs text-zinc-700 space-y-1">
+      <div class="text-xs text-[var(--text-2)] space-y-1">
         <div><strong>Как заработать баллы:</strong></div>
-        <ul class="ml-4 space-y-0.5">
+        <ul class="ml-4 space-y-0.5 mb-0">
           <li>• Индивидуальное задание: 5-8 баллов</li>
           <li>• Командное задание: 8-12 баллов (делятся на команду)</li>
           <li>• Отчёт через VK: 2 балла</li>
@@ -81,14 +71,14 @@
     </div>
 
     <!-- Lesson 1 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Урок 1: "Охота на невидимок"</h3>
-      <div class="text-xs text-zinc-500 mb-3">⏰ 1 акад. час | 🎯 до 10 баллов | 👤 Индивидуальный</div>
-      <div class="space-y-3 text-sm text-zinc-700">
-        <p><strong>Ситуация:</strong> На компьютере пользователя интернет "тормозит", хотя скорость по тарифу 100 Мбит/с. Браузер закрыт, но трафик куда-то уходит.</p>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 1: Разведка (15 мин, 3 балла)</div>
-          <ol class="text-xs text-zinc-700 space-y-1 ml-4">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 1: "Охота на невидимок"</h3>
+      <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | 🎯 до 10 баллов | 👤 Индивидуальный</div>
+      <div class="space-y-3 text-sm text-[var(--text-2)]">
+        <p class="mb-0"><strong>Ситуация:</strong> На компьютере пользователя интернет "тормозит", хотя скорость по тарифу 100 Мбит/с. Браузер закрыт, но трафик куда-то уходит.</p>
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Разведка (15 мин, 3 балла)</div>
+          <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
             <li>1. Откройте Task Manager (Ctrl+Shift+Esc)</li>
             <li>2. Перейдите на вкладку "Процессы" → добавьте столбец "Сеть"</li>
             <li>3. Отсортируйте по потреблению сети</li>
@@ -96,9 +86,9 @@
             <li>5. Для каждого запишите: имя, PID, объём трафика</li>
           </ol>
         </div>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 2: Глубокий анализ (20 мин, 5 баллов)</div>
-          <ol class="text-xs text-zinc-700 space-y-1 ml-4">
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Глубокий анализ (20 мин, 5 баллов)</div>
+          <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
             <li>1. Откройте Resource Monitor (resmon.exe)</li>
             <li>2. Перейдите на вкладку Network</li>
             <li>3. Изучите: Processes with Network Activity, Network Activity, TCP Connections, Listening Ports</li>
@@ -110,39 +100,39 @@
     </div>
 
     <!-- Lesson 2 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Урок 2: "Следы в сети"</h3>
-      <div class="text-xs text-zinc-500 mb-3">⏰ 1 акад. час | 🎯 до 12 баллов | 👤 Индивидуальный</div>
-      <div class="space-y-3 text-sm text-zinc-700">
-        <p><strong>Ситуация:</strong> Администратор заметил подозрительные соединения с неизвестными IP-адресами из разных стран.</p>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 1: Командная строка — ваш друг (25 мин, 6 баллов)</div>
-          <div class="text-xs text-zinc-700 space-y-2">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 2: "Следы в сети"</h3>
+      <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | 🎯 до 12 баллов | 👤 Индивидуальный</div>
+      <div class="space-y-3 text-sm text-[var(--text-2)]">
+        <p class="mb-0"><strong>Ситуация:</strong> Администратор заметил подозрительные соединения с неизвестными IP-адресами из разных стран.</p>
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Командная строка — ваш друг (25 мин, 6 баллов)</div>
+          <div class="text-xs text-[var(--text-2)] space-y-2">
             <div>
               <div class="font-medium mb-1">ШАГ 1: Обучение с ИИ</div>
-              <p class="text-zinc-600">Спросите у ИИ: "Объясни команду 'netstat -ano' в Windows: что означает каждый ключ (-a, -n, -o), как читать вывод, что означают столбцы Proto, Local Address, Foreign Address, State, PID?"</p>
+              <p class="text-[var(--muted)] mb-0">Спросите у ИИ: "Объясни команду 'netstat -ano' в Windows: что означает каждый ключ (-a, -n, -o), как читать вывод, что означают столбцы Proto, Local Address, Foreign Address, State, PID?"</p>
             </div>
             <div>
               <div class="font-medium mb-1">ШАГ 2: Практика</div>
-              <ol class="ml-4 space-y-1">
+              <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте CMD от имени администратора</li>
-                <li>• Выполните: <code class="mono text-xs bg-zinc-100 px-1 py-0.5 rounded">netstat -ano &gt; C:\netstat_full.txt</code></li>
-                <li>• Выполните: <code class="mono text-xs bg-zinc-100 px-1 py-0.5 rounded">netstat -ano | findstr ESTABLISHED &gt; C:\netstat_established.txt</code></li>
+                <li>• Выполните: <code>netstat -ano &gt; C:\netstat_full.txt</code></li>
+                <li>• Выполните: <code>netstat -ano | findstr ESTABLISHED &gt; C:\netstat_established.txt</code></li>
               </ol>
             </div>
             <div>
               <div class="font-medium mb-1">ШАГ 3: Анализ</div>
-              <p class="text-zinc-600">Откройте netstat_established.txt и найдите 5 разных внешних IP-адресов и соответствующие PID процессов.</p>
+              <p class="text-[var(--muted)] mb-0">Откройте netstat_established.txt и найдите 5 разных внешних IP-адресов и соответствующие PID процессов.</p>
             </div>
             <div>
               <div class="font-medium mb-1">ШАГ 4: Идентификация</div>
-              <p class="text-zinc-600">Для каждого PID выполните: <code class="mono text-xs bg-zinc-100 px-1 py-0.5 rounded">tasklist | findstr "[PID]"</code></p>
+              <p class="text-[var(--muted)] mb-0">Для каждого PID выполните: <code>tasklist | findstr "[PID]"</code></p>
             </div>
           </div>
         </div>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 2: Географический анализ (15 мин, 4 балла)</div>
-          <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Географический анализ (15 мин, 4 балла)</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
             <li>• Спросите у ИИ: "Как узнать географическое расположение IP-адреса?"</li>
             <li>• Проверьте 5 IP-адресов через: https://www.ip2location.com/ или who.is/</li>
             <li>• Добавьте в таблицу: Страна, Город, Организация (ISP/Company), ASN</li>
@@ -153,15 +143,15 @@
     </div>
 
     <!-- Lesson 3 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Урок 3: "Командное сражение: Пожиратели трафика"</h3>
-      <div class="text-xs text-zinc-500 mb-3">⏰ 1 акад. час |  до 15 баллов | 👥 Групповая работа</div>
-      <div class="space-y-3 text-sm text-zinc-700">
-        <p><strong>Новый формат:</strong> Сессионные залы VK. 11 человек → 2 команды (Blue Team и Red Team).</p>
-        <div class="bg-blue-50/50 border border-blue-200 rounded-lg p-3">
-          <div class="font-medium text-zinc-900 mb-2">Миссия для обеих команд:</div>
-          <p class="text-xs text-zinc-700 mb-2">Ваша компания обнаружила, что за последний месяц расход трафика вырос на 200%. Руководство требует найти причины и предложить решения.</p>
-          <div class="text-xs text-zinc-700 space-y-2">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 3: "Командное сражение: Пожиратели трафика"</h3>
+      <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | до 15 баллов | 👥 Групповая работа</div>
+      <div class="space-y-3 text-sm text-[var(--text-2)]">
+        <p class="mb-0"><strong>Новый формат:</strong> Сессионные залы VK. 11 человек → 2 команды (Blue Team и Red Team).</p>
+        <div class="notice notice-info">
+          <div class="font-medium text-[var(--text)] mb-2">Миссия для обеих команд:</div>
+          <p class="text-xs text-[var(--text-2)] mb-2">Ваша компания обнаружила, что за последний месяц расход трафика вырос на 200%. Руководство требует найти причины и предложить решения.</p>
+          <div class="text-xs text-[var(--text-2)] space-y-2 mb-0">
             <div><strong>1. Диагностика (10 мин):</strong> Каждый участник запускает Task Manager → Performance → Ethernet, Resource Monitor → Network, netstat -ano | findstr ESTABLISHED</div>
             <div><strong>2. Централизация (10 мин):</strong> Создайте общую Google Таблицу с листами: ПРОЦЕССЫ, СОЕДИНЕНИЯ, СТАТИСТИКА</div>
             <div><strong>3. Анализ (10 мин):</strong> Ответьте на вопросы: Какой процесс чаще всего встречается? Какие страны доминируют? Есть ли подозрительные соединения?</div>
@@ -172,17 +162,17 @@
     </div>
 
     <!-- Lesson 4 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Урок 4: "Укротитель обновлений"</h3>
-      <div class="text-xs text-zinc-500 mb-3"> 1 акад. час |  до 14 баллов | 👤 Индивидуальный</div>
-      <div class="space-y-3 text-sm text-zinc-700">
-        <p><strong>Ситуация:</strong> Windows Update загружает обновления в рабочее время, парализуя работу. Облачные сервисы синхронизируются без разрешения.</p>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 1: Анатомия автообновлений (25 мин, 7 баллов)</div>
-          <div class="text-xs text-zinc-700 space-y-2">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 4: "Укротитель обновлений"</h3>
+      <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 14 баллов | 👤 Индивидуальный</div>
+      <div class="space-y-3 text-sm text-[var(--text-2)]">
+        <p class="mb-0"><strong>Ситуация:</strong> Windows Update загружает обновления в рабочее время, парализуя работу. Облачные сервисы синхронизируются без разрешения.</p>
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Анатомия автообновлений (25 мин, 7 баллов)</div>
+          <div class="text-xs text-[var(--text-2)] space-y-2">
             <div>
               <div class="font-medium mb-1">ШАГ 1: Исследование служб</div>
-              <ol class="ml-4 space-y-1">
+              <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте services.msc (Win+R → services.msc)</li>
                 <li>• Найдите службы, связанные с обновлениями: wuauserv, UsoSvc, WaaSMedicSvc, DoSvc</li>
                 <li>• Создайте таблицу: Служба, Display Name, Status, Startup Type, Dependencies</li>
@@ -190,7 +180,7 @@
             </div>
             <div>
               <div class="font-medium mb-1">ШАГ 2: Групповые политики</div>
-              <ol class="ml-4 space-y-1">
+              <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте gpedit.msc (Win+R)</li>
                 <li>• Путь: Computer Configuration → Administrative Templates → Windows Components → Windows Update</li>
                 <li>• Настройте: Configure Automatic Updates → "2 - Notify for download and auto install"</li>
@@ -199,9 +189,9 @@
             </div>
           </div>
         </div>
-        <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-          <div class="font-medium text-zinc-900 mb-2">Этап 2: Облачные синхронизации (15 мин, 5 баллов)</div>
-          <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Облачные синхронизации (15 мин, 5 баллов)</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
             <li>• Откройте Task Manager → вкладка Startup</li>
             <li>• Найдите облачные клиенты: OneDrive, Google Drive, Dropbox, Yandex.Disk</li>
             <li>• Для каждого настройте ограничение скорости синхронизации</li>
@@ -213,43 +203,31 @@
     </div>
 
     <!-- Final note -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3">📚 Дополнительные уроки</h3>
-      <p class="text-sm text-zinc-700 mb-3">
-        Курс также включает:
-      </p>
-      <ul class="text-sm text-zinc-700 space-y-2">
+    <div class="notice notice-quest">
+      <h3 class="mono text-sm font-semibold mb-3">📚 Дополнительные уроки</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">Курс также включает:</p>
+      <ul class="text-sm text-[var(--text-2)] space-y-2 mb-0">
         <li class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">5.</span>
+          <span style="color:var(--accent);" class="mt-0.5">5.</span>
           <span><strong>Урок 5:</strong> "Битва за HOSTS: Командное противостояние" (PvP: Defenders vs Attackers)</span>
         </li>
         <li class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">6.</span>
+          <span style="color:var(--accent);" class="mt-0.5">6.</span>
           <span><strong>Урок 6:</strong> "Автоматизация: Скрипты-помощники" (PowerShell + Peer Review)</span>
         </li>
         <li class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">7.</span>
+          <span style="color:var(--accent);" class="mt-0.5">7.</span>
           <span><strong>Урок 7:</strong> "Финальный босс: Корпоративный кейс" (Командный проект)</span>
         </li>
       </ul>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

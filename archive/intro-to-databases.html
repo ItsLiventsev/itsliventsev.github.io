@@ -4,90 +4,81 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Введение в базы данных · itsliventsev</title>
+<meta name="description" content="Введение в реляционные базы данных: БД, СУБД, информационная система, таблицы, ключи и практикум по проектированию.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; } .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">теория</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">теория</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      Введение в реляционные БД<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      Введение в реляционные БД<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
+    <span class="pill pill-neutral">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Definitions Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white border border-zinc-200 rounded-xl p-4 hover-glow">
-        <div class="mono text-xs text-blue-600 uppercase tracking-wider mb-2">База Данных (БД)</div>
-        <p class="text-sm text-zinc-700 mb-2">Упорядоченная совокупность структурированных данных.</p>
-        <p class="text-xs text-zinc-500 italic">Аналогия: библиотечный каталог или записная книжка.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 stagger">
+      <div class="card hoverable p-4">
+        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">База Данных (БД)</div>
+        <p class="text-sm text-[var(--text-2)] mb-2">Упорядоченная совокупность структурированных данных.</p>
+        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: библиотечный каталог или записная книжка.</p>
       </div>
-      <div class="bg-white border border-zinc-200 rounded-xl p-4 hover-glow">
-        <div class="mono text-xs text-blue-600 uppercase tracking-wider mb-2">СУБД</div>
-        <p class="text-sm text-zinc-700 mb-2">Программное обеспечение для создания и управления БД.</p>
-        <p class="text-xs text-zinc-500 italic">Аналогия: библиотекарь, который расставляет книги и ищет их по запросу (MySQL, PostgreSQL, Access).</p>
+      <div class="card hoverable p-4">
+        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">СУБД</div>
+        <p class="text-sm text-[var(--text-2)] mb-2">Программное обеспечение для создания и управления БД.</p>
+        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: библиотекарь, который расставляет книги и ищет их по запросу (MySQL, PostgreSQL, Access).</p>
       </div>
-      <div class="bg-white border border-zinc-200 rounded-xl p-4 hover-glow">
-        <div class="mono text-xs text-blue-600 uppercase tracking-wider mb-2">Информационная Система</div>
-        <p class="text-sm text-zinc-700 mb-2">Вся система целиком: Данные + Программы + Люди + Процедуры.</p>
-        <p class="text-xs text-zinc-500 italic">Аналогия: работа библиотеки в целом, включая читателей и устав.</p>
+      <div class="card hoverable p-4">
+        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">Информационная Система</div>
+        <p class="text-sm text-[var(--text-2)] mb-2">Вся система целиком: Данные + Программы + Люди + Процедуры.</p>
+        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: работа библиотеки в целом, включая читателей и устав.</p>
       </div>
     </div>
 
     <!-- Relational DB -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">Реляционная база данных</h3>
-      <p class="text-sm text-zinc-700 mb-4">Информация организована в виде взаимосвязанных таблиц (от англ. <em>relation</em> — отношение). Это самый распространенный тип БД.</p>
-      
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left text-zinc-700">
-          <thead class="text-xs text-zinc-500 uppercase bg-zinc-50 border-b border-zinc-200">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">Реляционная база данных</h3>
+      <p class="text-sm text-[var(--text-2)] mb-4">Информация организована в виде взаимосвязанных таблиц (от англ. <em>relation</em> — отношение). Это самый распространенный тип БД.</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
             <tr>
-              <th class="px-4 py-2">Элемент</th>
-              <th class="px-4 py-2">Роль</th>
-              <th class="px-4 py-2">Пример</th>
+              <th>Элемент</th>
+              <th>Роль</th>
+              <th>Пример</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-100">
+          <tbody>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">Поле (Столбец)</td>
-              <td class="px-4 py-3">Атрибут, определяет, что мы храним.</td>
-              <td class="px-4 py-3 mono text-xs">Фамилия, Зарплата</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">Поле (Столбец)</td>
+              <td>Атрибут, определяет, что мы храним.</td>
+              <td class="mono text-xs">Фамилия, Зарплата</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">Запись (Строка)</td>
-              <td class="px-4 py-3">Набор данных об одном объекте.</td>
-              <td class="px-4 py-3 mono text-xs">(1, Иванов, 50000)</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">Запись (Строка)</td>
+              <td>Набор данных об одном объекте.</td>
+              <td class="mono text-xs">(1, Иванов, 50000)</td>
             </tr>
             <tr>
-              <td class="px-4 py-3 font-medium mono text-xs text-blue-700">Первичный ключ (PK)</td>
-              <td class="px-4 py-3">Уникальная идентификация записи. Не может быть пустым.</td>
-              <td class="px-4 py-3 mono text-xs">ID_Сотрудник, № зачетки</td>
+              <td class="font-medium mono text-xs" style="color:var(--accent);">Первичный ключ (PK)</td>
+              <td>Уникальная идентификация записи. Не может быть пустым.</td>
+              <td class="mono text-xs">ID_Сотрудник, № зачетки</td>
             </tr>
           </tbody>
         </table>
@@ -95,25 +86,25 @@
     </div>
 
     <!-- Practical Task -->
-    <div class="bg-blue-50/50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3 flex items-center gap-2">
+    <div class="notice notice-info">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:#1e40af;">
         <span>📝</span> Практикум: Журнал учета приборов
       </h3>
-      <p class="text-sm text-zinc-700 mb-4">Необходимо вести учет измерительных приборов и графика их поверки. Спроектируйте две связанные таблицы:</p>
-      
+      <p class="text-sm text-[var(--text-2)] mb-4">Необходимо вести учет измерительных приборов и графика их поверки. Спроектируйте две связанные таблицы:</p>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div class="bg-white rounded-lg p-3 border border-blue-100">
-          <div class="mono text-xs font-bold text-zinc-900 mb-2">Таблица: Приборы</div>
-          <ul class="text-xs text-zinc-600 space-y-1 mono">
+        <div class="bg-[var(--surface)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="mono text-xs font-bold text-[var(--text)] mb-2">Таблица: Приборы</div>
+          <ul class="text-xs text-[var(--muted)] space-y-1 mono mb-0">
             <li>• ID_Прибора (PK, Счетчик)</li>
             <li>• Наименование (Текстовый)</li>
             <li>• Заводской_номер (Текстовый)</li>
             <li>• Тип (Текстовый)</li>
           </ul>
         </div>
-        <div class="bg-white rounded-lg p-3 border border-blue-100">
-          <div class="mono text-xs font-bold text-zinc-900 mb-2">Таблица: Поверки</div>
-          <ul class="text-xs text-zinc-600 space-y-1 mono">
+        <div class="bg-[var(--surface)] rounded-lg p-3 border border-[var(--border)]">
+          <div class="mono text-xs font-bold text-[var(--text)] mb-2">Таблица: Поверки</div>
+          <ul class="text-xs text-[var(--muted)] space-y-1 mono mb-0">
             <li>• ID_Поверки (PK, Счетчик)</li>
             <li>• ID_Прибора (Внешний ключ)</li>
             <li>• Дата_поверки (Дата/время)</li>
@@ -122,25 +113,15 @@
           </ul>
         </div>
       </div>
-      <p class="text-xs text-zinc-600"><strong>Вопрос для анализа:</strong> Почему <code>ID_Прибора</code> лучше подходит на роль первичного ключа, чем <code>Заводской_номер</code>? (Ответ: цифровые ID проще для ссылок, уникальны и не содержат лишних символов).</p>
+      <p class="text-xs text-[var(--muted)] mb-0"><strong>Вопрос для анализа:</strong> Почему <code>ID_Прибора</code> лучше подходит на роль первичного ключа, чем <code>Заводской_номер</code>? (Ответ: цифровые ID проще для ссылок, уникальны и не содержат лишних символов).</p>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

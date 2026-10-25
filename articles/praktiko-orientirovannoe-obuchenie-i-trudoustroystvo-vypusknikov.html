@@ -4,112 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Практикоориентированное формирование знаний · itsliventsev</title>
+<meta name="description" content="Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-
-  .scroll-progress {
-    position: fixed; top: 0; left: 0; height: 2px;
-    background: #f97316;
-    z-index: 100; transition: width 0.1s ease;
-  }
-
-  .bg-grid {
-    background-size: 24px 24px;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
-  }
-
-  .reveal {
-    opacity: 0; transform: translateY(14px);
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.active { opacity: 1; transform: translateY(0); }
-
-  /* Оглавление */
-  .toc-link { transition: color 0.2s ease, border-color 0.2s ease; }
-  .toc-link.current { color: #ea580c; border-color: #f97316; }
-
-  /* Графики */
-  .bar { height: 0; transition: height 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s; }
-  .reveal.active .bar { height: var(--h); }
-  .bar-label { opacity: 0; transition: opacity 0.2s ease; }
-  .bar-group:hover .bar-label { opacity: 1; }
-  .range-seg { width: 0; transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s; }
-  .reveal.active .range-seg { width: var(--w); }
-
-  /* Наверх */
-  #to-top {
-    opacity: 0; transform: translateY(12px);
-    pointer-events: none;
-    transition: all 0.3s ease;
-  }
-  #to-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  #to-top:hover { transform: translateY(-2px); }
-
-  /* Текст статьи */
-  .prose-p { margin-bottom: 1.1em; line-height: 1.8; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="orange">
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<button id="to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="наверх"
-  class="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-white border border-zinc-200 shadow-sm text-base flex items-center justify-center hover:border-orange-300 transition-colors">
-  🦀
-</button>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
 
-<div class="max-w-5xl mx-auto px-6 md:px-10 py-10 md:py-14">
+<div class="max-w-5xl mx-auto px-5 md:px-10 py-8 sm:py-12">
 
   <!-- Header -->
-  <header class="reveal flex justify-between items-center mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-5 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/articles.html" class="mono text-sm font-medium text-zinc-900 hover:text-orange-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> статьи
-    </a>
-    <span id="read-percent" class="mono text-xs text-zinc-400">0%</span>
+  <header class="site-header reveal">
+    <a href="../articles.html" class="logo"><span class="arrow">←</span> статьи</a>
+    <span id="read-percent" class="mono text-xs text-[var(--faint)]">0%</span>
   </header>
 
   <!-- Шапка статьи -->
   <div class="reveal mb-10">
-    <nav class="mono text-xs text-zinc-400 mb-5 flex items-center gap-2 flex-wrap">
-      <a href="https://itsliventsev.github.io/index.html" class="hover:text-orange-600 transition-colors">главная</a>
+    <nav class="mono text-xs text-[var(--faint)] mb-5 flex items-center gap-2 flex-wrap">
+      <a href="../index.html" class="hover:text-[var(--accent)] transition-colors">главная</a>
       <span>/</span>
-      <a href="https://itsliventsev.github.io/articles.html" class="hover:text-orange-600 transition-colors">статьи</a>
+      <a href="../articles.html" class="hover:text-[var(--accent)] transition-colors">статьи</a>
     </nav>
 
-    <p class="mono text-xs text-zinc-500 mb-4">конференция · 2024 · сборник «Актуальные вопросы образования»</p>
+    <p class="mono text-xs text-[var(--muted)] mb-4">конференция · 2024 · сборник «Актуальные вопросы образования»</p>
 
-    <h1 class="text-2xl md:text-[34px] font-bold text-zinc-900 leading-snug mb-6">
+    <h1 class="text-2xl md:text-[34px] font-bold text-[var(--text)] leading-snug mb-6">
       Практикоориентированное формирование знаний и навыков и их влияние на качественное трудоустройство обучающихся и выпускников по специальности на современном рынке труда
     </h1>
 
-    <div class="text-sm text-zinc-600 space-y-1 mb-5">
+    <div class="text-sm text-[var(--muted)] space-y-1 mb-5">
       <div class="flex flex-wrap items-baseline gap-x-2">
-        <span class="font-semibold text-zinc-900">В. Г. Цветков</span>
-        <span class="text-zinc-500 whitespace-nowrap">— и. о. заведующего практикой</span>
+        <span class="font-semibold text-[var(--text)]">В. Г. Цветков</span>
+        <span class="text-[var(--faint)] whitespace-nowrap">— и. о. заведующего практикой</span>
       </div>
       <div class="flex flex-wrap items-baseline gap-x-2">
-        <span class="font-semibold text-zinc-900">С. В. Градобойнов</span>
-        <span class="text-zinc-500 whitespace-nowrap">— мастер производственного обучения</span>
+        <span class="font-semibold text-[var(--text)]">С. В. Градобойнов</span>
+        <span class="text-[var(--faint)] whitespace-nowrap">— мастер производственного обучения</span>
       </div>
       <div class="flex flex-wrap items-baseline gap-x-2">
-        <span class="font-semibold text-zinc-900">К. А. Ливенцев</span>
-        <span class="text-zinc-500 whitespace-nowrap">— мастер производственного обучения</span>
+        <span class="font-semibold text-[var(--text)]">К. А. Ливенцев</span>
+        <span class="text-[var(--faint)] whitespace-nowrap">— мастер производственного обучения</span>
       </div>
     </div>
 
-    <p class="mono text-xs text-zinc-400">≈10 мин чтения · 8 разделов</p>
+    <p class="mono text-xs text-[var(--faint)]">≈10 мин чтения · 8 разделов</p>
   </div>
 
   <!-- Аннотация -->
-  <div class="reveal mb-10 pb-10 border-b border-zinc-200">
-    <p class="text-[15px] md:text-base text-zinc-600 leading-relaxed italic mb-4">
+  <div class="reveal mb-10 pb-10 border-b border-[var(--border)]">
+    <p class="text-[15px] md:text-base text-[var(--muted)] leading-relaxed italic mb-4">
       В статье изложены тезисы о необходимости повышения практикоориентированности в современной системе среднего профессионального образования и о том, как это влияет на рынок труда. Поднимается вопрос о проблемах, преимуществах и недостатках форсированного освоения практического обучения на примере новых стандартов 2023–2024 гг. Работа приводит статистические данные в форме динамики трудоустройства обучающихся по специальности, а также личные прогнозы авторов на ближайшие несколько лет.
     </p>
-    <p class="text-sm text-zinc-500">
-      <span class="mono text-xs text-zinc-400">ключевые слова:</span>
+    <p class="text-sm text-[var(--muted)] m-0">
+      <span class="mono text-xs text-[var(--faint)]">ключевые слова:</span>
       востребованность, качество образования, производственная практика, рынок труда, трудоустройство, учебная практика, практикоориентированность
     </p>
   </div>
@@ -120,31 +75,31 @@
     <!-- Оглавление -->
     <aside class="mb-10 lg:mb-0">
       <div class="lg:sticky lg:top-24">
-        <div class="mono text-xs text-zinc-400 mb-3">содержание</div>
+        <div class="mono text-xs text-[var(--faint)] mb-3">содержание</div>
         <nav class="flex flex-wrap gap-x-4 gap-y-1.5 lg:flex-col lg:gap-0" id="toc">
-          <a href="#s1" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">01</span>Трудоустройство как показатель</a>
-          <a href="#s2" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">02</span>Профессиональные пробы</a>
-          <a href="#s3" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">03</span>Изменения ФГОС СПО</a>
-          <a href="#s4" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">04</span>Недостатки стандартов</a>
-          <a href="#s5" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">05</span>Преимущества и динамика</a>
-          <a href="#s6" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">06</span>Техники против ИТ</a>
-          <a href="#s7" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">07</span>Прогноз</a>
-          <a href="#s8" class="toc-link block text-[13px] text-zinc-500 hover:text-zinc-900 lg:py-1.5 lg:border-l-2 lg:border-zinc-200 lg:pl-3"><span class="mono text-xs text-zinc-400 mr-1.5">08</span>Литература</a>
+          <a href="#s1" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">01</span>Трудоустройство как показатель</a>
+          <a href="#s2" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">02</span>Профессиональные пробы</a>
+          <a href="#s3" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">03</span>Изменения ФГОС СПО</a>
+          <a href="#s4" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">04</span>Недостатки стандартов</a>
+          <a href="#s5" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">05</span>Преимущества и динамика</a>
+          <a href="#s6" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">06</span>Техники против ИТ</a>
+          <a href="#s7" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">07</span>Прогноз</a>
+          <a href="#s8" class="toc-link block text-[13px] text-[var(--muted)] hover:text-[var(--text)] lg:py-1.5 lg:border-l-2 lg:pl-3"><span class="mono text-xs text-[var(--faint)] mr-1.5">08</span>Литература</a>
         </nav>
       </div>
     </aside>
 
     <!-- Текст статьи -->
-    <article class="text-zinc-700 text-[15px] md:text-[16px]">
+    <article class="text-[var(--text-2)] text-[15px] md:text-[16px]">
 
       <section id="s1" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">01</span>Трудоустройство как ключевой показатель
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">01</span>Трудоустройство как ключевой показатель
         </h2>
         <p class="prose-p">
-          В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="mono text-xs text-orange-600 hover:underline">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
+          В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="mono text-xs text-[var(--accent)] hover:underline">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
         </p>
-        <blockquote class="border-l-2 border-orange-400 pl-4 my-6 italic text-zinc-600">
+        <blockquote class="border-l-2 border-[var(--accent)] pl-4 my-6 italic text-[var(--muted)]">
           Показатель трудоустройства выпускников и обучающихся — один из ключевых факторов качественного освоения образовательного процесса и отличительный признак организации.
         </blockquote>
         <p class="prose-p">
@@ -153,48 +108,48 @@
       </section>
 
       <section id="s2" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">02</span>Профессиональные пробы: три этапа
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">02</span>Профессиональные пробы: три этапа
         </h2>
         <p class="prose-p">
-          Профессиональные пробы — нынешняя основа быстрого повышения квалификации обучающихся колледжей предвыпускных и выпускных групп. Процесс проходит в три этапа <a href="#ref2" class="mono text-xs text-orange-600 hover:underline">[2]</a>:
+          Профессиональные пробы — нынешняя основа быстрого повышения квалификации обучающихся колледжей предвыпускных и выпускных групп. Процесс проходит в три этапа <a href="#ref2" class="mono text-xs text-[var(--accent)] hover:underline">[2]</a>:
         </p>
-        <ol class="space-y-3 mb-2">
+        <ol class="space-y-3 mb-2 list-none p-0">
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 w-7 shrink-0">I.</span>
+            <span class="mono text-sm text-[var(--accent)] w-7 shrink-0">I.</span>
             <span class="leading-relaxed">Тестирование на базе образовательной организации — проверка знаний освоения обучающимися общеобразовательных дисциплин.</span>
           </li>
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 w-7 shrink-0">II.</span>
+            <span class="mono text-sm text-[var(--accent)] w-7 shrink-0">II.</span>
             <span class="leading-relaxed">Выполнение практического задания на базе предприятия при наблюдении экспертов и мастеров учебно-производственного центра: проверяются общепрофессиональные дисциплины и профессиональные навыки.</span>
           </li>
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 w-7 shrink-0">III.</span>
+            <span class="mono text-sm text-[var(--accent)] w-7 shrink-0">III.</span>
             <span class="leading-relaxed">Трудоустройство по результатам выполненных работ: образовательная организация и предприятие совместно выводят обучающегося на рабочее место с параллельным обучением по индивидуальному учебному плану.</span>
           </li>
         </ol>
       </section>
 
       <section id="s3" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">03</span>Изменения ФГОС СПО
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">03</span>Изменения ФГОС СПО
         </h2>
         <p class="prose-p">
           Эти мероприятия параллельно вытекают из изменений в федеральных государственных образовательных стандартах СПО (ФГОС) по специальностям группы наук «Инженерное дело, технологии и технические науки»: снижаются сроки освоения программы, вводится «многопрофильность» (освоение нескольких профессий), повышается количество часов на учебные и производственные практики. К основным изменениям стоит отнести:
         </p>
-        <ol class="list-decimal pl-5 space-y-1.5 marker:text-zinc-400 marker:mono marker:text-sm mb-2">
+        <ol class="list-decimal pl-5 space-y-1.5 marker:text-[var(--faint)] marker:mono marker:text-sm mb-2">
           <li>сокращение курса общеобразовательных дисциплин;</li>
-          <li>введение курса практической подготовки — не менее <strong class="font-semibold text-zinc-900">600 часов</strong>;</li>
-          <li>увеличение количества учебных и производственных практик — не менее <strong class="font-semibold text-zinc-900">1512 часов</strong>.</li>
+          <li>введение курса практической подготовки — не менее <strong class="font-semibold text-[var(--text)]">600 часов</strong>;</li>
+          <li>увеличение количества учебных и производственных практик — не менее <strong class="font-semibold text-[var(--text)]">1512 часов</strong>.</li>
         </ol>
       </section>
 
       <section id="s4" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">04</span>Недостатки новых стандартов
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">04</span>Недостатки новых стандартов
         </h2>
         <p class="prose-p">
-          Одним из основных недостатков является сокращение курса общеобразовательных дисциплин, что сказывается на качественном обучении студентов (в том числе имеющих только оценки «4» и «5»). Такая система снижает и качество освоения теоретического материала: в учебном плане приоритет по академическим часам отдаётся практическим курсам — даже в рамках дисциплин теоретической направленности, например в междисциплинарных курсах <a href="#ref3" class="mono text-xs text-orange-600 hover:underline">[3]</a>.
+          Одним из основных недостатков является сокращение курса общеобразовательных дисциплин, что сказывается на качественном обучении студентов (в том числе имеющих только оценки «4» и «5»). Такая система снижает и качество освоения теоретического материала: в учебном плане приоритет по академическим часам отдаётся практическим курсам — даже в рамках дисциплин теоретической направленности, например в междисциплинарных курсах <a href="#ref3" class="mono text-xs text-[var(--accent)] hover:underline">[3]</a>.
         </p>
         <p class="prose-p">
           В пример стоит отметить новые стандарты ФГОС по специальностям <span class="mono text-[13px]">15.01.29</span> «Контролёр качества в машиностроении», <span class="mono text-[13px]">27.02.06</span> «Метрологический контроль средств измерений», <span class="mono text-[13px]">27.02.07</span> «Управление качеством продукции, процессов и услуг (по отраслям)»: по учебному плану образовательные организации закладывают практические часы в соотношении минимум 40–60% выполнения лабораторных и практических работ.
@@ -202,64 +157,64 @@
       </section>
 
       <section id="s5" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">05</span>Преимущества и динамика практик
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">05</span>Преимущества и динамика практик
         </h2>
         <p class="prose-p">
           Одним из основных преимуществ является снижение сроков освоения программы СПО — такие сроки помогают обучающимся быстрее выходить на рабочие места в качестве специалистов. Увеличение часов на учебные и производственные практики позволяет студентам с большей мотивацией трудоустраиваться ещё в процессе обучения.
         </p>
 
-        <div class="mono text-[13px] text-zinc-600 space-y-1.5 border-y border-zinc-200 py-4 my-6">
+        <div class="mono text-[13px] text-[var(--muted)] space-y-1.5 border-y border-[var(--border)] py-4 my-6">
           <div class="flex flex-wrap items-baseline gap-x-3">
-            <span class="w-36 text-zinc-400">база 9 классов</span>
-            <span class="line-through text-zinc-400">3 г. 10 мес.</span>
-            <span class="text-orange-600">→</span>
-            <span class="font-medium text-zinc-900">2 г. 10 мес.</span>
+            <span class="w-36 text-[var(--faint)]">база 9 классов</span>
+            <span class="line-through text-[var(--faint)]">3 г. 10 мес.</span>
+            <span class="text-[var(--accent)]">→</span>
+            <span class="font-medium text-[var(--text)]">2 г. 10 мес.</span>
           </div>
           <div class="flex flex-wrap items-baseline gap-x-3">
-            <span class="w-36 text-zinc-400">база 11 классов</span>
-            <span class="line-through text-zinc-400">2 г. 10 мес.</span>
-            <span class="text-orange-600">→</span>
-            <span class="font-medium text-zinc-900">1 г. 10 мес.</span>
+            <span class="w-36 text-[var(--faint)]">база 11 классов</span>
+            <span class="line-through text-[var(--faint)]">2 г. 10 мес.</span>
+            <span class="text-[var(--accent)]">→</span>
+            <span class="font-medium text-[var(--text)]">1 г. 10 мес.</span>
           </div>
         </div>
 
         <figure class="my-8">
-          <div class="mono text-xs text-zinc-500 mb-4 flex flex-wrap gap-x-4 gap-y-1">
+          <div class="mono text-xs text-[var(--muted)] mb-4 flex flex-wrap gap-x-4 gap-y-1">
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-orange-500"></span>профильные предприятия</span>
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-orange-300"></span>непрофильные</span>
-            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-zinc-200"></span>база колледжа</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-zinc-300"></span>база колледжа</span>
           </div>
-          <div class="flex items-end justify-between gap-4 h-40 border-b border-zinc-300 px-1">
+          <div class="flex items-end justify-between gap-4 h-40 border-b border-[var(--border-strong)] px-1">
             <div class="bar-group flex-1 flex items-end justify-center gap-1.5 h-full relative">
-              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-zinc-500">30/45/25</span>
+              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-[var(--muted)]">30/45/25</span>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-500" style="--h:30%"></div>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-300" style="--h:45%"></div>
-              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-200" style="--h:25%"></div>
+              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-300" style="--h:25%"></div>
             </div>
             <div class="bar-group flex-1 flex items-end justify-center gap-1.5 h-full relative">
-              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-zinc-500">40/38/22</span>
+              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-[var(--muted)]">40/38/22</span>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-500" style="--h:40%"></div>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-300" style="--h:38%"></div>
-              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-200" style="--h:22%"></div>
+              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-300" style="--h:22%"></div>
             </div>
             <div class="bar-group flex-1 flex items-end justify-center gap-1.5 h-full relative">
-              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-zinc-500">55/28/17</span>
+              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-[var(--muted)]">55/28/17</span>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-500" style="--h:55%"></div>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-300" style="--h:28%"></div>
-              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-200" style="--h:17%"></div>
+              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-300" style="--h:17%"></div>
             </div>
             <div class="bar-group flex-1 flex items-end justify-center gap-1.5 h-full relative">
-              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-zinc-500">70/20/10</span>
+              <span class="bar-label absolute -top-1 left-1/2 -translate-x-1/2 mono text-[10px] text-[var(--muted)]">70/20/10</span>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-500" style="--h:70%"></div>
               <div class="bar w-5 md:w-6 rounded-t-sm bg-orange-300" style="--h:20%"></div>
-              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-200" style="--h:10%"></div>
+              <div class="bar w-5 md:w-6 rounded-t-sm bg-zinc-300" style="--h:10%"></div>
             </div>
           </div>
-          <div class="flex justify-between px-1 mt-2 mono text-xs text-zinc-400">
+          <div class="flex justify-between px-1 mt-2 mono text-xs text-[var(--faint)]">
             <span>2021</span><span>2022</span><span>2023</span><span>2024</span>
           </div>
-          <figcaption class="mt-4 text-xs text-zinc-500 leading-relaxed">
+          <figcaption class="mt-4 text-xs text-[var(--muted)] leading-relaxed">
             Рисунок 1 — Распределение обучающихся на профильных предприятиях в соотношении с практикой на непрофильных предприятиях и на базе колледжа за 2021–2024 гг. Схема по данным статьи.
           </figcaption>
         </figure>
@@ -270,8 +225,8 @@
       </section>
 
       <section id="s6" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">06</span>Востребованность: технические специальности против ИТ
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">06</span>Востребованность: технические специальности против ИТ
         </h2>
         <p class="prose-p">
           Востребованность технических специалистов в 2023–2024 году выходит на высокий уровень: это связано с изменением стандартов ФГОС и популяризацией технических специальностей — у них меньший порог вхождения при поступлении. На фоне ИТ-специальностей со средним баллом при поступлении от 4,3 до 4,7 (высокая конкуренция), в технических специальностях балл колеблется от 3,3 до 4,5.
@@ -281,27 +236,27 @@
           <div class="space-y-4">
             <div>
               <div class="flex justify-between mono text-xs mb-1.5">
-                <span class="text-zinc-600">ИТ-специальности</span>
-                <span class="text-zinc-400">4,3 – 4,7</span>
+                <span class="text-[var(--muted)]">ИТ-специальности</span>
+                <span class="text-[var(--faint)]">4,3 – 4,7</span>
               </div>
-              <div class="relative h-2.5 bg-zinc-100 rounded-full border border-zinc-200">
+              <div class="relative h-2.5 bg-[var(--surface-2)] rounded-full border border-[var(--border)]">
                 <div class="range-seg absolute top-0 h-full rounded-full bg-zinc-400" style="left:86%; --w:8%"></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between mono text-xs mb-1.5">
-                <span class="text-zinc-600">технические специальности</span>
-                <span class="text-zinc-400">3,3 – 4,5</span>
+                <span class="text-[var(--muted)]">технические специальности</span>
+                <span class="text-[var(--faint)]">3,3 – 4,5</span>
               </div>
-              <div class="relative h-2.5 bg-zinc-100 rounded-full border border-zinc-200">
+              <div class="relative h-2.5 bg-[var(--surface-2)] rounded-full border border-[var(--border)]">
                 <div class="range-seg absolute top-0 h-full rounded-full bg-orange-500" style="left:66%; --w:24%"></div>
               </div>
             </div>
           </div>
-          <div class="flex justify-between mono text-[10px] text-zinc-400 mt-3">
+          <div class="flex justify-between mono text-[10px] text-[var(--faint)] mt-3">
             <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
           </div>
-          <figcaption class="mt-4 text-xs text-zinc-500 leading-relaxed">
+          <figcaption class="mt-4 text-xs text-[var(--muted)] leading-relaxed">
             Средний балл при поступлении в колледжи по группам специальностей, 2023–2024 гг.
           </figcaption>
         </figure>
@@ -311,87 +266,87 @@
         </p>
 
         <figure class="my-8">
-          <div class="mono text-xs text-zinc-500 mb-4 flex flex-wrap gap-x-4 gap-y-1">
+          <div class="mono text-xs text-[var(--muted)] mb-4 flex flex-wrap gap-x-4 gap-y-1">
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-zinc-300"></span>ИТ-профили</span>
             <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-orange-500"></span>технические профили</span>
           </div>
-          <div class="flex items-end justify-around gap-6 h-40 border-b border-zinc-300 px-1">
+          <div class="flex items-end justify-around gap-6 h-40 border-b border-[var(--border-strong)] px-1">
             <div class="bar-group flex flex-col items-center justify-end h-full relative flex-1">
-              <span class="bar-label absolute top-0 mono text-[10px] text-zinc-500">АДМс</span>
+              <span class="bar-label absolute top-0 mono text-[10px] text-[var(--muted)]">АДМс</span>
               <div class="bar w-8 md:w-11 rounded-t-sm bg-zinc-300" style="--h:52%"></div>
             </div>
             <div class="bar-group flex flex-col items-center justify-end h-full relative flex-1">
-              <span class="bar-label absolute top-0 mono text-[10px] text-zinc-500">АДМ</span>
+              <span class="bar-label absolute top-0 mono text-[10px] text-[var(--muted)]">АДМ</span>
               <div class="bar w-8 md:w-11 rounded-t-sm bg-zinc-300" style="--h:48%"></div>
             </div>
             <div class="bar-group flex flex-col items-center justify-end h-full relative flex-1">
-              <span class="bar-label absolute top-0 mono text-[10px] text-zinc-500">УКП</span>
+              <span class="bar-label absolute top-0 mono text-[10px] text-[var(--muted)]">УКП</span>
               <div class="bar w-8 md:w-11 rounded-t-sm bg-orange-500" style="--h:85%"></div>
             </div>
             <div class="bar-group flex flex-col items-center justify-end h-full relative flex-1">
-              <span class="bar-label absolute top-0 mono text-[10px] text-zinc-500">КИП</span>
+              <span class="bar-label absolute top-0 mono text-[10px] text-[var(--muted)]">КИП</span>
               <div class="bar w-8 md:w-11 rounded-t-sm bg-orange-400" style="--h:68%"></div>
             </div>
           </div>
-          <div class="flex justify-around px-1 mt-2 mono text-xs text-zinc-400">
+          <div class="flex justify-around px-1 mt-2 mono text-xs text-[var(--faint)]">
             <span>АДМс</span><span>АДМ</span><span>УКП</span><span>КИП</span>
           </div>
-          <figcaption class="mt-4 text-xs text-zinc-500 leading-relaxed">
+          <figcaption class="mt-4 text-xs text-[var(--muted)] leading-relaxed">
             Рисунок 2 — Статистика трудоустройства выпускных групп по ИТ (АДМс, АДМ) и техническим профилям (УКП, КИП) за 2023–2024 гг. Схема по данным статьи.
           </figcaption>
         </figure>
 
         <p class="prose-p">
-          Группа УКП имеет высокий процент трудоустройства на фоне сотрудничества образовательной организации и ГК «РОСТЕХ» с 2023 года — этим объясняется больший процент в сравнении с ИТ-профилями, которые пока находят отклик преимущественно у частных предприятий <a href="#ref4" class="mono text-xs text-orange-600 hover:underline">[4]</a>.
+          Группа УКП имеет высокий процент трудоустройства на фоне сотрудничества образовательной организации и ГК «РОСТЕХ» с 2023 года — этим объясняется больший процент в сравнении с ИТ-профилями, которые пока находят отклик преимущественно у частных предприятий <a href="#ref4" class="mono text-xs text-[var(--accent)] hover:underline">[4]</a>.
         </p>
       </section>
 
       <section id="s7" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">07</span>Прогноз на ближайшие годы
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">07</span>Прогноз на ближайшие годы
         </h2>
         <p class="prose-p">
           Исходя из динамики трудоустройства технических специальностей по профилю и активного наращивания базы кадров у государственных корпораций из числа молодых специалистов, можно сформировать предварительный прогноз на следующие несколько лет:
         </p>
-        <ul class="space-y-2.5 mb-2">
+        <ul class="space-y-2.5 mb-2 list-none p-0">
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 shrink-0">→</span>
+            <span class="mono text-sm text-[var(--accent)] shrink-0">→</span>
             <span class="leading-relaxed">из-за расширения материально-технической базы и филиалов государственных предприятий в ближайшие два года планируется дальнейшее привлечение кадров из числа студентов на рабочие места;</span>
           </li>
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 shrink-0">→</span>
+            <span class="mono text-sm text-[var(--accent)] shrink-0">→</span>
             <span class="leading-relaxed">изменения во ФГОС СПО в дальнейшем могут коснуться возвращения в большем количестве формы НПО (начального профессионального образования);</span>
           </li>
           <li class="flex gap-3">
-            <span class="mono text-sm text-orange-600 shrink-0">→</span>
-            <span class="leading-relaxed">популяризация системы СПО среди школьников вызовет приток абитуриентов, желающих за короткий срок освоить профессию и быстрее начать карьерный путь <a href="#ref5" class="mono text-xs text-orange-600 hover:underline">[5]</a>.</span>
+            <span class="mono text-sm text-[var(--accent)] shrink-0">→</span>
+            <span class="leading-relaxed">популяризация системы СПО среди школьников вызовет приток абитуриентов, желающих за короткий срок освоить профессию и быстрее начать карьерный путь <a href="#ref5" class="mono text-xs text-[var(--accent)] hover:underline">[5]</a>.</span>
           </li>
         </ul>
       </section>
 
       <section id="s8" class="reveal mb-12 scroll-mt-24">
-        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-zinc-900 mb-4">
-          <span class="mono text-xs font-medium text-zinc-400">08</span>Литература
+        <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
+          <span class="mono text-xs font-medium text-[var(--faint)]">08</span>Литература
         </h2>
-        <ol class="text-[13px] md:text-sm text-zinc-600">
-          <li id="ref1" class="flex gap-3 py-2 border-t border-zinc-200 first:border-t-0">
-            <span class="mono text-xs text-orange-600 shrink-0 pt-0.5">[1]</span>
+        <ol class="text-[13px] md:text-sm text-[var(--muted)] list-none p-0">
+          <li id="ref1" class="flex gap-3 py-2 border-t border-[var(--border)]">
+            <span class="mono text-xs text-[var(--accent)] shrink-0 pt-0.5">[1]</span>
             Резинкина, Л. В. Трудоустройство выпускников системы СПО: факторы и эффективные инструменты / Л. В. Резинкина // Профессиональное образование в России и за рубежом. — 2022. — № 4. — С. 33–39.
           </li>
-          <li id="ref2" class="flex gap-3 py-2 border-t border-zinc-200">
-            <span class="mono text-xs text-orange-600 shrink-0 pt-0.5">[2]</span>
+          <li id="ref2" class="flex gap-3 py-2 border-t border-[var(--border)]">
+            <span class="mono text-xs text-[var(--accent)] shrink-0 pt-0.5">[2]</span>
             Белобордова, Н. Как РОСТЕХ формирует экосистему для профессионалов / Н. Белобордова // Федеральный бизнес. — 2024. — № 2. — С. 40–49.
           </li>
-          <li id="ref3" class="flex gap-3 py-2 border-t border-zinc-200">
-            <span class="mono text-xs text-orange-600 shrink-0 pt-0.5">[3]</span>
+          <li id="ref3" class="flex gap-3 py-2 border-t border-[var(--border)]">
+            <span class="mono text-xs text-[var(--accent)] shrink-0 pt-0.5">[3]</span>
             Апокин, А. Ю. Анализ студенческой занятости в контексте российского рынка труда / А. Ю. Апокин, М. М. Юдкевич // Вопросы экономики. — 2008. — № 6. — С. 98–110.
           </li>
-          <li id="ref4" class="flex gap-3 py-2 border-t border-zinc-200">
-            <span class="mono text-xs text-orange-600 shrink-0 pt-0.5">[4]</span>
+          <li id="ref4" class="flex gap-3 py-2 border-t border-[var(--border)]">
+            <span class="mono text-xs text-[var(--accent)] shrink-0 pt-0.5">[4]</span>
             Угольнова, Л. Е. Трудоустройство выпускников учреждений профессионального образования (по данным Мониторинга экономики образования 2010 г.) / Л. Е. Угольнова // Вопросы образования / Educational Studies Moscow. — 2011. — № 3. — С. 244–260.
           </li>
-          <li id="ref5" class="flex gap-3 py-2 border-t border-zinc-200">
-            <span class="mono text-xs text-orange-600 shrink-0 pt-0.5">[5]</span>
+          <li id="ref5" class="flex gap-3 py-2 border-t border-[var(--border)]">
+            <span class="mono text-xs text-[var(--accent)] shrink-0 pt-0.5">[5]</span>
             Селиверстова, И. В. Трудоустройство выпускников СПО: в чём специфика? / И. В. Селиверстова // Научен вектор на Балканите. — 2020. — Т. 4, № 4. — С. 24–29.
           </li>
         </ol>
@@ -401,54 +356,23 @@
   </div>
 
   <!-- Низ страницы -->
-  <div class="reveal mt-14 pt-6 border-t border-zinc-200">
-    <p class="text-sm text-zinc-500 italic mb-8">
-      🦀 Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="https://itsliventsev.github.io/" class="text-orange-600 hover:underline not-italic">контакты на главной странице</a>.
+  <div class="reveal mt-14 pt-6 border-t border-[var(--border)]">
+    <p class="text-sm text-[var(--muted)] italic mb-8">
+      🦀 Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="../index.html" class="text-[var(--accent)] hover:underline not-italic">контакты на главной странице</a>.
     </p>
-    <div class="flex justify-between items-center text-sm mb-10">
-      <a href="https://itsliventsev.github.io/articles.html" class="mono text-zinc-600 hover:text-orange-600 transition-colors flex items-center gap-2 group">
-        <span class="transition-transform group-hover:-translate-x-0.5">←</span> все статьи
+    <div class="flex justify-between items-center text-sm mb-10 gap-4 flex-wrap">
+      <a href="../articles.html" class="mono text-[var(--muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2 group">
+        <span class="arrow transition-transform group-hover:-translate-x-0.5">←</span> все статьи
       </a>
-      <span class="mono text-zinc-400">следующая статья скоро</span>
+      <span class="mono text-[var(--faint)]">следующая статья скоро</span>
     </div>
-    <footer class="pt-6 border-t border-zinc-200 text-center mono text-xs text-zinc-400">
+    <footer class="site-footer mt-0">
       © 2026 itsliventsev · статьи
     </footer>
   </div>
 
 </div>
 
-<script>
-  const progressBar = document.getElementById('scroll-progress');
-  const readPercent = document.getElementById('read-percent');
-  const toTop = document.getElementById('to-top');
-  window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const scrolled = (window.scrollY / max) * 100;
-    progressBar.style.width = scrolled + '%';
-    readPercent.textContent = Math.round(scrolled) + '%';
-    toTop.classList.toggle('show', window.scrollY > 600);
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('active');
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  const tocLinks = document.querySelectorAll('.toc-link');
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tocLinks.forEach(l => l.classList.remove('current'));
-        const link = document.querySelector('.toc-link[href="#' + entry.target.id + '"]');
-        if (link) link.classList.add('current');
-      }
-    });
-  }, { rootMargin: '-30% 0px -60% 0px' });
-  document.querySelectorAll('section[id^="s"]').forEach(s => spy.observe(s));
-</script>
-
+<script src="../assets/site.js"></script>
 </body>
 </html>

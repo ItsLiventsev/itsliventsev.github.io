@@ -4,114 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IT-документооборот и мониторинг · itsliventsev</title>
+<meta name="description" content="Комплексный практикум для оператора IT-отдела: инвентаризация, мониторинг сети, OCR, Excel, презентация и простой сайт.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; } .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-  code { background: #f4f4f5; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #c2410c; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">практикум</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">практикум</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      IT-документооборот и мониторинг<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      IT-документооборот и мониторинг<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
-    <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       Комплексная практическая задача для оператора IT-отдела компании «IT-Ресурс» (100+ рабочих мест). Выполняется на ПК под управлением Windows 10/11 с использованием стандартного и свободного ПО.
     </p>
   </section>
 
   <section class="reveal space-y-4">
     <!-- Module 1 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2"><span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs">1</span> База данных IT-оборудования</h3>
-      <p class="text-sm text-zinc-700 mb-3">Создать БД «IT_Inventory» в MS Access или LibreOffice Base. Таблица <strong>Оборудование</strong> должна содержать поля:</p>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">1</span> База данных IT-оборудования</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">Создать БД «IT_Inventory» в MS Access или LibreOffice Base. Таблица <strong>Оборудование</strong> должна содержать поля:</p>
       <div class="flex flex-wrap gap-2 mb-3">
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">ID (PK, автоинкремент)</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">Тип</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">Модель</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">Инв. номер</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">MAC / IP</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">Местонахождение</span>
-        <span class="px-2 py-1 bg-zinc-100 rounded text-xs mono text-zinc-700">Статус</span>
+        <span class="chip chip-sm">ID (PK, автоинкремент)</span>
+        <span class="chip chip-sm">Тип</span>
+        <span class="chip chip-sm">Модель</span>
+        <span class="chip chip-sm">Инв. номер</span>
+        <span class="chip chip-sm">MAC / IP</span>
+        <span class="chip chip-sm">Местонахождение</span>
+        <span class="chip chip-sm">Статус</span>
       </div>
-      <p class="text-xs text-zinc-500">Задача: ввести 15 записей, создать форму для ввода, запрос для кабинета 301 и отчет «Список по типам».</p>
+      <p class="text-xs text-[var(--muted)] mb-0">Задача: ввести 15 записей, создать форму для ввода, запрос для кабинета 301 и отчет «Список по типам».</p>
     </div>
 
     <!-- Module 2 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2"><span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs">2</span> Мониторинг сетевой инфраструктуры</h3>
-      <ul class="space-y-2 text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">2</span> Мониторинг сетевой инфраструктуры</h3>
+      <ul class="space-y-2 text-sm text-[var(--text-2)] mb-3">
         <li>• <code>ipconfig /all</code> → сохранить IPv4, MAC, шлюз, DNS.</li>
         <li>• <code>tracert 8.8.8.8</code> → определить количество хопов.</li>
         <li>• <code>ping</code> шлюза и yandex.ru → зафиксировать среднее время отклика.</li>
         <li>• <code>netstat -an | findstr :80</code> → проверка открытых портов HTTP.</li>
         <li>• Монитор ресурсов → скриншоты загрузки сети и активных процессов.</li>
       </ul>
-      <p class="text-xs text-zinc-500">Дополнительно: построить логическую схему сети (ПК, коммутаторы, шлюз, сервер, принтер, интернет) в Draw.io или Visio с IP-адресами из диапазона 192.168.10.0/24.</p>
+      <p class="text-xs text-[var(--muted)] mb-0">Дополнительно: построить логическую схему сети (ПК, коммутаторы, шлюз, сервер, принтер, интернет) в Draw.io или Visio с IP-адресами из диапазона 192.168.10.0/24.</p>
     </div>
 
     <!-- Module 3 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2"><span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs">3</span> Работа со сканированными документами</h3>
-      <p class="text-sm text-zinc-700">Распознать текст (OCR) из JPEG-скана договора с помощью Adobe Acrobat Reader DC или FineReader Online. Сохранить в DOCX. Применить стили заголовков, создать автоматическое оглавление, колонтитулы, гиперссылку и добавить 3 комментария в режиме рецензирования.</p>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">3</span> Работа со сканированными документами</h3>
+      <p class="text-sm text-[var(--text-2)] mb-0">Распознать текст (OCR) из JPEG-скана договора с помощью Adobe Acrobat Reader DC или FineReader Online. Сохранить в DOCX. Применить стили заголовков, создать автоматическое оглавление, колонтитулы, гиперссылку и добавить 3 комментария в режиме рецензирования.</p>
     </div>
 
     <!-- Module 4 -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2"><span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs">4</span> Анализ табличных данных (Excel)</h3>
-      <p class="text-sm text-zinc-700 mb-2">Создать таблицу «Учет заявок» (30-40 строк). Применить «Умную таблицу» (Ctrl+T).</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-600">
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-100"><strong class="text-zinc-900">Формулы:</strong> СУММЕСЛИ (время по отделу «Бухгалтерия»), СРЗНАЧЕСЛИ (среднее время сетевых проблем).</div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-100"><strong class="text-zinc-900">Визуализация:</strong> Условное форматирование (красный > 8 часов), сводная таблица, круговая диаграмма, гистограмма и график динамики.</div>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">4</span> Анализ табличных данных (Excel)</h3>
+      <p class="text-sm text-[var(--text-2)] mb-2">Создать таблицу «Учет заявок» (30-40 строк). Применить «Умную таблицу» (Ctrl+T).</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[var(--muted)]">
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]"><strong class="text-[var(--text)]">Формулы:</strong> СУММЕСЛИ (время по отделу «Бухгалтерия»), СРЗНАЧЕСЛИ (среднее время сетевых проблем).</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]"><strong class="text-[var(--text)]">Визуализация:</strong> Условное форматирование (красный &gt; 8 часов), сводная таблица, круговая диаграмма, гистограмма и график динамики.</div>
       </div>
     </div>
 
-    <!-- Module 5 & 6 combined for brevity -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-blue-700 mb-3 flex items-center gap-2"><span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs">5-6</span> Презентация и простой IT-сайт</h3>
-      <p class="text-sm text-zinc-700 mb-2"><strong>PowerPoint (8-10 слайдов):</strong> Титульный, содержание с гиперссылками, статистика, схема сети, планы, SmartArt, резюме со звуком. Настроить слайд-шоу (15 сек, переходы, сохранение в PPTX и PDF).</p>
-      <p class="text-sm text-zinc-700"><strong>Одностраничный сайт (HTML/CSS или конструктор):</strong> Заголовок H1, описание, таблица дежурств, изображение схемы сети, список полезных ссылок, контактная форма. Требуется базовая CSS-стилизация.</p>
+    <!-- Module 5-6 -->
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">5-6</span> Презентация и простой IT-сайт</h3>
+      <p class="text-sm text-[var(--text-2)] mb-2"><strong>PowerPoint (8-10 слайдов):</strong> Титульный, содержание с гиперссылками, статистика, схема сети, планы, SmartArt, резюме со звуком. Настроить слайд-шоу (15 сек, переходы, сохранение в PPTX и PDF).</p>
+      <p class="text-sm text-[var(--text-2)] mb-0"><strong>Одностраничный сайт (HTML/CSS или конструктор):</strong> Заголовок H1, описание, таблица дежурств, изображение схемы сети, список полезных ссылок, контактная форма. Требуется базовая CSS-стилизация.</p>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>
