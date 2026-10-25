@@ -30,13 +30,21 @@
   .cursor-blink { animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
-  /* Reveal */
+  /* ===== ИСПРАВЛЕНО: по умолчанию всё видимо ===== */
   .reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Анимация включается только когда JS работает */
+  .js-enabled .reveal {
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal.active { opacity: 1; transform: translateY(0); }
+  .js-enabled .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   /* Marquee */
   .marquee {
@@ -159,7 +167,7 @@
   .secret-msg { opacity: 0; transition: opacity 0.5s ease; }
   .secret-msg.visible { opacity: 1; }
 
-  /* Pulse ring - FIXED for proper circle */
+  /* Pulse ring */
   .pulse-ring {
     position: relative;
     display: inline-flex;
@@ -183,19 +191,23 @@
   /* Magnetic button */
   .magnetic { transition: transform 0.2s ease; }
 
-  /* Stagger reveal */
+  /* ===== ИСПРАВЛЕНО: stagger тоже с прогрессивным улучшением ===== */
   .stagger > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .js-enabled .stagger > * {
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .stagger.active > * { opacity: 1; transform: translateY(0); }
-  .stagger.active > *:nth-child(1) { transition-delay: 0.05s; }
-  .stagger.active > *:nth-child(2) { transition-delay: 0.1s; }
-  .stagger.active > *:nth-child(3) { transition-delay: 0.15s; }
-  .stagger.active > *:nth-child(4) { transition-delay: 0.2s; }
-  .stagger.active > *:nth-child(5) { transition-delay: 0.25s; }
-  .stagger.active > *:nth-child(6) { transition-delay: 0.3s; }
+  .js-enabled .stagger.active > * { opacity: 1; transform: translateY(0); }
+  .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.05s; }
+  .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.1s; }
+  .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.15s; }
+  .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.2s; }
+  .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.25s; }
+  .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.3s; }
 
   /* Counter */
   .counter { font-variant-numeric: tabular-nums; }
@@ -504,6 +516,9 @@
 </div>
 
 <script>
+  // ===== ВАЖНО: включаем прогрессивное улучшение =====
+  document.documentElement.classList.add('js-enabled');
+
   // Scroll progress
   const progressBar = document.getElementById('scroll-progress');
   window.addEventListener('scroll', () => {
@@ -511,16 +526,23 @@
     progressBar.style.width = scrolled + '%';
   });
 
-  // Reveal
+  // Reveal — с гарантированным показом для элементов в viewport при загрузке
+  const revealTargets = document.querySelectorAll('.reveal, .stagger');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('active');
+        observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  }, { threshold: 0.01, rootMargin: '0px 0px -30px 0px' });
   
-  document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+  revealTargets.forEach(el => observer.observe(el));
+
+  // Fallback: если observer не сработал за 200мс — показать всё принудительно
+  setTimeout(() => {
+    revealTargets.forEach(el => el.classList.add('active'));
+  }, 200);
 
   // Counter animation
   const counters = document.querySelectorAll('.counter');
@@ -634,8 +656,8 @@
       work_2: "подготовка сетевых и системных администраторов, руководство учебной и производственной практикой",
       work_years: "лет",
       ach_title: "достижения",
-      ach_1: "наставник победителя (1 место) · финал "мастерята" · системы умного дома",
-      ach_2: "победитель регионального этапа "московские профессионалы" · системы умного дома · юниоры",
+      ach_1: "наставник победителя (1 место) · финал «мастерята» · системы умного дома",
+      ach_2: "победитель регионального этапа «московские профессионалы» · системы умного дома · юниоры",
       edu_title: "квалификация",
       edu_1: "разработка оценочных материалов · ирпо",
       edu_2: "эксперт-разработчик демоэкзамена · ирпо",
