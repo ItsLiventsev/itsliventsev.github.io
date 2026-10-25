@@ -1,1 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>архив · itsliventsev</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
 
+  /* Scroll progress — синий, под страницу */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+    z-index: 100; transition: width 0.1s ease;
+  }
+
+  /* Сетка фона — с синим оттенком */
+  .bg-grid {
+    background-size: 24px 24px;
+    background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+  }
+
+  /* Reveal: прогрессивное улучшение, как на главной */
+  .reveal { opacity: 1; transform: translateY(0); }
+  .js-enabled .reveal {
+    opacity: 0; transform: translateY(16px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
+
+  .stagger > * { opacity: 1; transform: translateY(0); }
+  .js-enabled .stagger > * {
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-enabled .stagger.active > * { opacity: 1; transform: translateY(0); }
+  .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.04s; }
+  .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.08s; }
+  .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.12s; }
+  .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.16s; }
+  .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.2s; }
+  .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.24s; }
+  .js-enabled .stagger.active > *:nth-child(7) { transition-delay: 0.28s; }
+  .js-enabled .stagger.active > *:nth-child(8) { transition-delay: 0.32s; }
+
+  /* Hover glow — синее свечение */
+  .hover-glow { transition: all 0.3s ease; }
+  .hover-glow:hover {
+    box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18);
+    border-color: rgba(59, 130, 246, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .arrow-hover { transition: transform 0.3s ease; }
+  .group:hover .arrow-hover { transform: translateX(4px); }
+
+  /* Метка заголовка: # / */
+  #title-mark { transition: color 0.2s ease; }
+  #title-mark:hover { color: #2563eb; }
+  #title-mark.spin { animation: none; }
+</style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-14">
+
+  <!-- Header -->
+  <header class="reveal flex justify-between items-center mb-10 sm:mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 sm:py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl border border-zinc-200 shadow-sm">
+    <a href="index.html" class="mono text-sm sm:text-base font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
+      <span class="transition-transform group-hover:-translate-x-0.5">←</span> itsliventsev
+    </a>
+    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">
+      архив
+    </span>
+  </header>
+
+  <!-- Hero -->
+  <section class="reveal mb-8 sm:mb-10">
+    <h1 class="mono text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
+      архив<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;" title="крутится само, но можно помочь">#</span>
+    </h1>
+    <p class="mono text-xs sm:text-sm md:text-base text-zinc-500">// старые материалы · черновики · то, что жалко удалить</p>
+  </section>
+
+  <!-- Дисклеймер архива -->
+  <section class="reveal mb-8 sm:mb-10">
+    <div class="p-4 md:p-5 rounded-xl bg-blue-50/50 border border-dashed border-blue-300">
+      <div class="mono text-xs text-blue-700 uppercase tracking-wider mb-2">дисклеймер</div>
+      <p class="text-sm text-zinc-600 leading-relaxed">
+        Это архив, а не витрина: здесь лежат материалы прошлых лет — старые методички, черновики, ранние версии конспектов и публикации. Часть файлов не оптимизирована и весит сколько весит, часть выглядит устаревшей, а некоторые ссылки могут просто не открыться — внешние хранилища живут своей жизнью.
+      </p>
+      <div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 mono text-[10px] text-zinc-500">
+        <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>открывается стабильно</span>
+        <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>как повезёт · формат или ссылка могли устареть</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Архивная сетка: 3–4 в ряд -->
+  <section class="reveal mb-10 sm:mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 stagger">
+
+      <!-- ПРИМЕР 1: замени href и название на свои -->
+      <a href="#" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">методичка</span>
+          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2022</span>
+        </div>
+        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
+          Ранние конспекты по Linux: первые версии лекций
+        </div>
+        <div class="mt-auto flex items-center justify-between pt-1">
+          <span class="mono text-[10px] text-zinc-400">pdf · архивная копия</span>
+          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
+        </div>
+      </a>
+
+      <!-- ПРИМЕР 2 -->
+      <a href="#" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">черновик</span>
+          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>2021</span>
+        </div>
+        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
+          Заметки к курсу по сетям: черновые редакции
+        </div>
+        <div class="mt-auto flex items-center justify-between pt-1">
+          <span class="mono text-[10px] text-zinc-400">doc · без вычитки</span>
+          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
+        </div>
+      </a>
+
+      <!-- ПРИМЕР 3 -->
+      <a href="#" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">презентация</span>
+          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>2023</span>
+        </div>
+        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
+          Слайды открытых занятий прошлых наборов
+        </div>
+        <div class="mt-auto flex items-center justify-between pt-1">
+          <span class="mono text-[10px] text-zinc-400">pptx · тяжёлый файл</span>
+          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
+        </div>
+      </a>
+
+      <!-- ПРИМЕР 4 -->
+      <a href="#" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">статья</span>
+          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>2020</span>
+        </div>
+        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
+          Ранние тезисы до основного сборника
+        </div>
+        <div class="mt-auto flex items-center justify-between pt-1">
+          <span class="mono text-[10px] text-zinc-400">pdf · скан</span>
+          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
+        </div>
+      </a>
+
+      <!--
+      ============================================
+      ШАБЛОН НОВОЙ КАРТОЧКИ АРХИВА
+      Скопируй блок <a>...</a>, подставь ссылку, тип, год и название.
+      Точка у года: bg-blue-500 = открывается стабильно,
+                     bg-zinc-300 = как повезёт.
+      ============================================
+      <a href="[ссылка]" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
+        <div class="flex items-center justify-between gap-2">
+          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">[тип]</span>
+          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>[год]</span>
+        </div>
+        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
+          [название материала]
+        </div>
+        <div class="mt-auto flex items-center justify-between pt-1">
+          <span class="mono text-[10px] text-zinc-400">[формат · примечание]</span>
+          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
+        </div>
+      </a>
+      -->
+
+    </div>
+  </section>
+
+  <!-- Низ -->
+  <section class="reveal text-center mb-8">
+    <p class="mono text-xs text-zinc-400 mb-6">
+      🦀 если ссылка не открылась — значит, материал совсем старый. это тоже часть истории.
+    </p>
+    <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-zinc-200 hover:border-blue-300 hover:text-blue-600 transition-colors mono text-sm font-medium shadow-sm hover-glow group">
+      <span class="transition-transform group-hover:-translate-x-0.5">←</span> вернуться на главную
+    </a>
+  </section>
+
+  <footer class="reveal flex justify-center items-center pt-6 sm:pt-8 border-t border-zinc-200 text-[10px] sm:text-xs text-zinc-400 mono">
+    <span>© 2026 itsliventsev · архив</span>
+  </footer>
+
+</div>
+
+<script>
+  document.documentElement.classList.add('js-enabled');
+
+  // Scroll progress
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (window.scrollY / max) * 100 + '%';
+  });
+
+  // Reveal
+  const revealTargets = document.querySelectorAll('.reveal, .stagger');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -30px 0px' });
+  revealTargets.forEach(el => observer.observe(el));
+  setTimeout(() => revealTargets.forEach(el => el.classList.add('active')), 200);
+
+  // Метка заголовка: цикл # / и пары — «терминал печатает»
+  const mark = document.getElementById('title-mark');
+  const frames = ['#', '/', '#', '/', '#/', '/#'];
+  let i = 0;
+  let timer = setInterval(() => {
+    i = (i + 1) % frames.length;
+    mark.textContent = frames[i];
+  }, 500);
+
+  // Пасхалка: клик по метке — короткая «перемотка»
+  mark.addEventListener('click', () => {
+    clearInterval(timer);
+    let n = 0;
+    const fast = setInterval(() => {
+      mark.textContent = frames[n % frames.length];
+      n++;
+      if (n > 11) {
+        clearInterval(fast);
+        timer = setInterval(() => {
+          i = (i + 1) % frames.length;
+          mark.textContent = frames[i];
+        }, 500);
+      }
+    }, 70);
+  });
+
+  console.log('%c# / — метка архива крутится сама. Кликни по ней, чтобы помочь.', 'font-size: 12px; color: #3b82f6;');
+</script>
+
+</body>
+</html>
