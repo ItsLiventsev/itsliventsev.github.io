@@ -1,970 +1,805 @@
 <!DOCTYPE html>
 <html lang="ru" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>проекты · itsliventsev</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      background: #ffffff;
-      color: #0a0a0a;
-      margin: 0;
-    }
-
-    .mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Глобальный UI: шапка, док, прогресс */
-    body.theme-light {
-      --ui-fg: #0a0a0a;
-      --ui-muted: #525252;
-      --ui-accent: #0071e3;
-      --ui-border: rgba(0, 0, 0, 0.12);
-      --ui-hover: rgba(0, 0, 0, 0.05);
-      --ui-surface: rgba(128, 128, 128, 0.04);
-    }
-
-    body.theme-dark {
-      --ui-fg: #fafafa;
-      --ui-muted: #a3a3a3;
-      --ui-accent: #60a5fa;
-      --ui-border: rgba(255, 255, 255, 0.16);
-      --ui-hover: rgba(255, 255, 255, 0.08);
-      --ui-surface: rgba(255, 255, 255, 0.07);
-    }
-
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 2px;
-      width: 0;
-      z-index: 70;
-      background: var(--ui-accent);
-      transition: background 0.25s ease;
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 2;
-      max-width: 80rem;
-      margin: 0 auto;
-      padding-left: 1.25rem;
-      padding-right: 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      .wrap {
-        padding-left: 2rem;
-        padding-right: 2rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .wrap {
-        padding-left: 3rem;
-        padding-right: 3rem;
-      }
-    }
-
-    /* Шапка */
-    .site-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 60;
-      background: var(--ui-surface);
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
-      border-bottom: 1px solid var(--ui-border);
-      transition:
-        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.35s ease,
-        border-color 0.25s ease,
-        background 0.25s ease;
-      will-change: transform, opacity;
-    }
-
-    .site-header.scrolled {
-      transform: translateY(-120%);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 56px;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-
-    .logo {
-      color: var(--ui-fg);
-      font-size: 0.875rem;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.25s ease;
-    }
-
-    .logo:hover {
-      color: var(--ui-accent);
-    }
-
-    .logo-arrow {
-      display: inline-block;
-      transition: transform 0.25s ease;
-    }
-
-    .logo:hover .logo-arrow {
-      transform: translateX(-3px);
-    }
-
-    .main-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .nav-link {
-      color: var(--ui-muted);
-      text-decoration: none;
-      transition: color 0.25s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      color: var(--ui-fg);
-    }
-
-    .nav-link.is-active {
-      color: var(--ui-accent);
-      font-weight: 700;
-    }
-
-    /* Нижнее меню */
-    .bottom-dock {
-      position: fixed;
-      left: 50%;
-      bottom: -140px;
-      transform: translateX(-50%);
-      z-index: 65;
-      max-width: calc(100vw - 2rem);
-      padding: 0.5rem;
-      border-radius: 999px;
-      background: var(--ui-surface);
-      backdrop-filter: blur(28px) saturate(180%);
-      -webkit-backdrop-filter: blur(28px) saturate(180%);
-      border: 1px solid var(--ui-border);
-      box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.45);
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-      transition:
-        bottom 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-        background 0.25s ease,
-        border-color 0.25s ease;
-    }
-
-    .bottom-dock::-webkit-scrollbar {
-      display: none;
-    }
-
-    .bottom-dock.visible {
-      bottom: 24px;
-    }
-
-    .dock-item {
-      color: var(--ui-muted);
-      text-decoration: none;
-      font-size: 0.6875rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      padding: 0.5rem 0.875rem;
-      border-radius: 999px;
-      white-space: nowrap;
-      transition:
-        color 0.25s ease,
-        background 0.25s ease,
-        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .dock-item:hover {
-      color: var(--ui-fg);
-      background: var(--ui-hover);
-      transform: translateY(-2px);
-    }
-
-    .dock-item.is-active {
-      color: var(--ui-accent);
-      font-weight: 700;
-    }
-
-    /* Светлая зона */
-    .zone-light {
-      --text: #0a0a0a;
-      --muted: #525252;
-      --border: rgba(0, 0, 0, 0.1);
-      --accent: #0071e3;
-      --dot: rgba(0, 0, 0, 0.07);
-      background: #ffffff;
-      color: var(--text);
-      background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
-      background-size: 26px 26px;
-    }
-
-    .hero {
-      padding-top: 8rem;
-      padding-bottom: 4.5rem;
-    }
-
-    .hero-title {
-      color: var(--text);
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: 0.92;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      margin-bottom: 1.25rem;
-    }
-
-    #title-mark {
-      color: var(--accent);
-      display: inline-block;
-      width: 2ch;
-      user-select: none;
-    }
-
-    .hero-sub {
-      color: var(--muted);
-      font-size: 0.9375rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-lead {
-      color: var(--muted);
-      font-size: 1.0625rem;
-      line-height: 1.7;
-      max-width: 48rem;
-      font-weight: 500;
-    }
-
-    @media (min-width: 768px) {
-      .hero-sub {
-        font-size: 1rem;
-      }
-
-      .hero-lead {
-        font-size: 1.125rem;
-      }
-    }
-
-    /* Тёмная зона */
-    .zone-dark {
-      --bg: #0a0a0a;
-      --text: #fafafa;
-      --muted: #a3a3a3;
-      --border: rgba(255, 255, 255, 0.12);
-      --card: #141414;
-      --card-hover: #1b1b1b;
-      --accent: #60a5fa;
-      --tag-bg: rgba(255, 255, 255, 0.06);
-      --dot: rgba(255, 255, 255, 0.05);
-
-      --c-green: #4ade80;
-      --c-green-bg: rgba(74, 222, 128, 0.13);
-      --c-green-bd: rgba(74, 222, 128, 0.34);
-
-      --c-blue: #60a5fa;
-      --c-blue-bg: rgba(96, 165, 250, 0.13);
-      --c-blue-bd: rgba(96, 165, 250, 0.34);
-
-      --c-purple: #c084fc;
-      --c-purple-bg: rgba(192, 132, 252, 0.13);
-      --c-purple-bd: rgba(192, 132, 252, 0.34);
-
-      --c-orange: #fb923c;
-      --c-orange-bg: rgba(251, 146, 60, 0.13);
-      --c-orange-bd: rgba(251, 146, 60, 0.34);
-
-      --c-pink: #fb7185;
-      --c-pink-bg: rgba(251, 113, 133, 0.13);
-      --c-pink-bd: rgba(251, 113, 133, 0.34);
-
-      position: relative;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--text);
-      background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
-      background-size: 26px 26px;
-      border-top: 1px solid rgba(255, 255, 255, 0.16);
-    }
-
-    .zone-dark::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 96px;
-      height: 3px;
-      background: var(--c-blue);
-      z-index: 3;
-    }
-
-    .zone-dark::after {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 104px;
-      width: 40px;
-      height: 3px;
-      background: var(--c-purple);
-      z-index: 3;
-    }
-
-    .deco {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .deco-line {
-      position: absolute;
-      left: -5%;
-      width: 110%;
-      height: 1px;
-    }
-
-    .deco-block {
-      position: absolute;
-      border: 1px solid;
-    }
-
-    .catalog {
-      padding-top: 4.5rem;
-      padding-bottom: 5rem;
-    }
-
-    .catalog-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .section-label {
-      color: var(--muted);
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      color: var(--text);
-      font-size: clamp(1.875rem, 4vw, 2.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-    }
-
-    .catalog-note {
-      color: var(--muted);
-      font-size: 0.75rem;
-      white-space: nowrap;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .projects-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .projects-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    .project-card {
-      display: block;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transition:
-        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.45s ease,
-        border-color 0.45s ease,
-        background 0.25s ease;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--card-accent, var(--accent));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.45s ease;
-    }
-
-    .project-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .project-card:hover {
-      transform: translateY(-5px);
-      background: var(--card-hover);
-      border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 45%, var(--border));
-      box-shadow: 0 22px 46px -22px rgba(0, 0, 0, 0.7);
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-num {
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .card-title {
-      color: var(--text);
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
-    }
-
-    .card-desc {
-      color: var(--muted);
-      font-size: 0.875rem;
-      line-height: 1.65;
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.375rem;
-    }
-
-    .status-badge,
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      text-transform: none;
-      white-space: nowrap;
-    }
-
-    .status-badge {
-      font-size: 0.625rem;
-      padding: 0.25rem 0.6875rem;
-    }
-
-    .status-ready {
-      background: #22c55e;
-      color: #052e16;
-      font-weight: 700;
-    }
-
-    .status-soon {
-      background: var(--tag-bg);
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
-    .tag {
-      font-size: 0.625rem;
-      padding: 0.1875rem 0.625rem;
-      border: 1px solid transparent;
-    }
-
-    .tag-green {
-      color: var(--c-green);
-      background: var(--c-green-bg);
-      border-color: var(--c-green-bd);
-    }
-
-    .tag-blue {
-      color: var(--c-blue);
-      background: var(--c-blue-bg);
-      border-color: var(--c-blue-bd);
-    }
-
-    .tag-purple {
-      color: var(--c-purple);
-      background: var(--c-purple-bg);
-      border-color: var(--c-purple-bd);
-    }
-
-    .tag-orange {
-      color: var(--c-orange);
-      background: var(--c-orange-bg);
-      border-color: var(--c-orange-bd);
-    }
-
-    .tag-pink {
-      color: var(--c-pink);
-      background: var(--c-pink-bg);
-      border-color: var(--c-pink-bd);
-    }
-
-    .tag-plain {
-      color: var(--muted);
-      background: var(--tag-bg);
-      border-color: var(--border);
-    }
-
-    .nav-badge {
-      font-size: 0.625rem;
-      padding: 0.1875rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      font-weight: 600;
-      text-transform: none;
-    }
-
-    .badge-red {
-      color: #e11d48;
-      background: rgba(225, 29, 72, 0.1);
-      border-color: rgba(225, 29, 72, 0.28);
-    }
-
-    .badge-orange {
-      color: #ea580c;
-      background: rgba(234, 88, 12, 0.1);
-      border-color: rgba(234, 88, 12, 0.28);
-    }
-
-    .is-soon {
-      border-style: dashed;
-    }
-
-    .is-soon .card-title {
-      color: var(--muted);
-    }
-
-    .is-more {
-      grid-column: 1 / -1;
-      border-style: dashed;
-      background: transparent;
-      min-height: 132px;
-      display: flex;
-      align-items: center;
-    }
-
-    .is-more:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .more-label {
-      color: var(--muted);
-      font-size: 0.8125rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .more-text {
-      color: var(--text);
-      font-size: 0.9375rem;
-      line-height: 1.65;
-      max-width: 56rem;
-      font-weight: 500;
-    }
-
-    .page-footer {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (min-width: 640px) {
-      .page-footer {
-        flex-direction: row;
-        align-items: center;
-      }
-    }
-
-    .footer-text {
-      color: var(--muted);
-      font-size: 0.75rem;
-    }
-
-    .footer-link {
-      color: var(--text);
-      font-size: 0.875rem;
-      font-weight: 500;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.25s ease;
-    }
-
-    .footer-link:hover {
-      color: var(--accent);
-    }
-
-    .footer-arrow {
-      display: inline-block;
-      transition: transform 0.25s ease;
-    }
-
-    .footer-link:hover .footer-arrow {
-      transform: translateX(-3px);
-    }
-
-    /* Reveal */
-    .reveal {
-      opacity: 1;
-      transform: none;
-    }
-
-    .js-enabled .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition:
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .js-enabled .reveal.active {
-      opacity: 1;
-      transform: none;
-    }
-
-    .stagger > * {
-      opacity: 1;
-      transform: none;
-    }
-
-    .js-enabled .stagger > * {
-      opacity: 0;
-      transform: translateY(14px);
-      transition:
-        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .js-enabled .stagger.active > * {
-      opacity: 1;
-      transform: none;
-    }
-
-    .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.04s; }
-    .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.08s; }
-    .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.12s; }
-    .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.16s; }
-    .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.2s; }
-    .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.24s; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>проекты · itsliventsev</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #030303;
+    --text: #fafafa;
+    --muted: #666666;
+    --border: rgba(255,255,255,0.06);
+    --card: #0a0a0a;
+    --card-hover: #0f0f0f;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59,130,246,0.15);
+    --grid-dot: rgba(255,255,255,0.02);
+    --tag-bg: rgba(255,255,255,0.04);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Dark dot grid background */
+  .bg-grid {
+    background-image: radial-gradient(circle, var(--grid-dot) 1.5px, transparent 1.5px);
+    background-size: 40px 40px;
+    position: relative;
+  }
+
+  /* Floating decorative elements */
+  .floating-elements {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .float-item {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.03);
+    animation: float 25s ease-in-out infinite;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+
+  .float-item.left { left: 3%; }
+  .float-item.right { right: 3%; text-align: right; }
+
+  .float-item:nth-child(1) { top: 8%; animation-delay: 0s; }
+  .float-item:nth-child(2) { top: 22%; animation-delay: -6s; }
+  .float-item:nth-child(3) { top: 36%; animation-delay: -12s; }
+  .float-item:nth-child(4) { top: 50%; animation-delay: -18s; }
+  .float-item:nth-child(5) { top: 64%; animation-delay: -8s; }
+  .float-item:nth-child(6) { top: 78%; animation-delay: -14s; }
+  .float-item:nth-child(7) { top: 92%; animation-delay: -4s; }
+  
+  .float-item:nth-child(8) { top: 15%; animation-delay: -10s; }
+  .float-item:nth-child(9) { top: 29%; animation-delay: -16s; }
+  .float-item:nth-child(10) { top: 43%; animation-delay: -22s; }
+  .float-item:nth-child(11) { top: 57%; animation-delay: -11s; }
+  .float-item:nth-child(12) { top: 71%; animation-delay: -17s; }
+  .float-item:nth-child(13) { top: 85%; animation-delay: -23s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.03; }
+    33% { transform: translateY(-25px) translateX(8px); opacity: 0.06; }
+    66% { transform: translateY(12px) translateX(-8px); opacity: 0.04; }
+  }
+
+  /* Vertical lines */
+  .vertical-line {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.04), transparent);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .vertical-line.left { left: 10%; }
+  .vertical-line.right { right: 10%; }
+
+  /* Corner brackets */
+  .corner-bracket {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(255,255,255,0.06);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .corner-bracket.top-left { top: 120px; left: 80px; border-right: none; border-bottom: none; }
+  .corner-bracket.top-right { top: 120px; right: 80px; border-left: none; border-bottom: none; }
+  .corner-bracket.bottom-left { bottom: 120px; left: 80px; border-right: none; border-top: none; }
+  .corner-bracket.bottom-right { bottom: 120px; right: 80px; border-left: none; border-top: none; }
+
+  /* Scroll progress */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  /* Header - minimal, transparent */
+  .site-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    background: rgba(3,3,3,0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+  }
+  .site-header.scrolled {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-link {
+    color: var(--muted);
+    transition: color 0.25s ease;
+    font-weight: 500;
+    font-size: 0.8125rem;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--accent); font-weight: 600; }
+
+  /* Enhanced Bottom Dock - BIGGER, with all navigation */
+  .bottom-dock {
+    position: fixed; bottom: -200px; left: 50%; transform: translateX(-50%);
+    z-index: 65;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(32px) saturate(200%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 25px 80px -30px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset;
+    transition: bottom 0.7s cubic-bezier(0.16,1,0.3,1);
+    min-width: 320px;
+  }
+  .bottom-dock.visible { bottom: 28px; }
+
+  .dock-main-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dock-item {
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+  .dock-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+  }
+  .dock-item.active { 
+    color: var(--accent);
+    background: rgba(59,130,246,0.1);
+    font-weight: 700;
+  }
+  .dock-sep { 
+    width: 1px; 
+    height: 28px; 
+    background: rgba(255,255,255,0.1); 
+    margin: 0 6px;
+  }
+
+  .dock-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dock-secondary .dock-item {
+    font-size: 0.6875rem;
+    padding: 8px 14px;
+    color: rgba(255,255,255,0.5);
+  }
+  .dock-secondary .dock-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Hero - SYSTEM/TERMINAL style */
+  .hero-title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: lowercase;
+  }
+  
+  #title-mark {
+    display: inline-block;
+    width: 2.5ch;
+    transition: all 0.3s ease;
+    color: var(--accent);
+  }
+  
+  .cursor-green { color: #10b981; }
+  .cursor-red { color: #ef4444; }
+  .cursor-blue { color: #3b82f6; }
+  .cursor-purple { color: #8b5cf6; }
+  .cursor-orange { color: #f59e0b; }
+
+  .hero-sub { 
+    color: var(--muted); 
+    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  
+  .hero-lead {
+    color: var(--muted);
+    font-size: clamp(0.9375rem, 1.3vw, 1.0625rem);
+    line-height: 1.7;
+    font-weight: 400;
+    max-width: 42rem;
+  }
+
+  .system-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.6875rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .system-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Bento grid - compact */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    grid-auto-flow: dense;
+  }
+  @media (max-width: 1024px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .bento-grid { grid-template-columns: 1fr; } }
+
+  /* Cards with variants */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--card-accent, var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover::before { transform: scaleX(1); }
+  
+  .card:hover {
+    transform: translateY(-3px);
+    background: var(--card-hover);
+    border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 30%, var(--border));
+    box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6);
+  }
+
+  /* Active card (Glossary) */
+  .card-active {
+    border-color: rgba(59,130,246,0.25);
+    background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, var(--card) 100%);
+  }
+  .card-active:hover {
+    border-color: rgba(59,130,246,0.5);
+    box-shadow: 0 20px 40px -20px rgba(59,130,246,0.15);
+  }
+
+  /* Placeholder cards */
+  .card-placeholder {
+    border-style: dashed;
+    border-color: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+    opacity: 0.45;
+    cursor: default;
+  }
+  .card-placeholder:hover {
+    opacity: 0.65;
+    background: rgba(255,255,255,0.03);
+    transform: none;
+    box-shadow: none;
+  }
+  .card-placeholder::before { display: none; }
+
+  .card-num {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .card-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0.625rem 0 0.5rem;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--muted);
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-arrow {
+    color: var(--card-accent, var(--accent));
+    font-size: 1.125rem;
+    transition: transform 0.3s ease;
+  }
+  .card:hover .card-arrow { transform: translateX(4px); }
+
+  /* Card sizes */
+  .card-wide { grid-column: span 2; }
+  @media (max-width: 640px) { .card-wide { grid-column: span 1; } }
+
+  /* Status badges */
+  .status {
+    font-size: 0.625rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .status-ready { background: #22c55e; color: #052e16; }
+  .status-soon { background: var(--tag-bg); color: var(--muted); border: 1px solid var(--border); }
+
+  /* Tags */
+  .tag {
+    font-size: 0.625rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tag-blue { color: #60a5fa; background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.2); }
+  .tag-green { color: #4ade80; background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.2); }
+  .tag-purple { color: #c084fc; background: rgba(192,132,252,0.08); border-color: rgba(192,132,252,0.2); }
+  .tag-orange { color: #fb923c; background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.2); }
+  .tag-pink { color: #fb7185; background: rgba(251,113,133,0.08); border-color: rgba(251,113,133,0.2); }
+  .tag-plain { color: var(--muted); background: var(--tag-bg); border-color: var(--border); }
+
+  /* Reveal animations */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .js-enabled .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .js-enabled .reveal.active { opacity: 1; transform: none; }
+
+  .stagger > * {
+    opacity: 1;
+    transform: none;
+  }
+  .js-enabled .stagger > * {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .js-enabled .stagger.active > * { opacity: 1; transform: none; }
+  .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.05s; }
+  .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.1s; }
+  .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.15s; }
+  .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.2s; }
+  .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.25s; }
+  .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.3s; }
+
+  .section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2.5rem 0;
+  }
+
+  .footer-link {
+    color: var(--text);
+    transition: color 0.25s ease;
+    text-decoration: none;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .badge {
+    font-size: 0.625rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .badge-red { color: #f87171; background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.2); }
+  .badge-orange { color: #fb923c; background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.2); }
+
+  /* Pixel emoji */
+  .pixel-emoji {
+    font-size: 0.875rem;
+    filter: grayscale(100%) brightness(1.2);
+    opacity: 0.6;
+  }
+
+  /* Counter badge */
+  .counter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.6875rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+  }
+</style>
 </head>
-<body class="theme-light overflow-x-hidden">
+<body class="bg-grid">
 
-  <div class="scroll-progress" id="scroll-progress"></div>
+<div class="scroll-progress" id="scroll-progress"></div>
 
-  <header class="site-header" id="site-header">
-    <div class="wrap header-inner">
-      <a href="index.html" class="logo mono">
-        <span class="logo-arrow">←</span>
-        itsliventsev
+<!-- Floating decorative elements -->
+<div class="floating-elements">
+  <div class="float-item left">sudo apt-get update && sudo apt-get upgrade</div>
+  <div class="float-item left">git commit -m "fix: critical bug"</div>
+  <div class="float-item left">docker run -it --rm ubuntu:latest</div>
+  <div class="float-item left">kubectl apply -f deployment.yaml</div>
+  <div class="float-item left">systemctl restart nginx</div>
+  <div class="float-item left">chmod +x script.sh && ./script.sh</div>
+  <div class="float-item left">ps aux | grep python</div>
+  
+  <div class="float-item right">ssh root@192.168.1.1</div>
+  <div class="float-item right">ping -c 4 google.com</div>
+  <div class="float-item right">netstat -tulpn</div>
+  <div class="float-item right">grep -r "error" /var/log</div>
+  <div class="float-item right">tail -f /var/log/syslog</div>
+  <div class="float-item right">nmap -sV 192.168.1.0/24</div>
+  <div class="float-item right">tcpdump -i eth0</div>
+</div>
+
+<!-- Vertical lines -->
+<div class="vertical-line left"></div>
+<div class="vertical-line right"></div>
+
+<!-- Corner brackets -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+
+<!-- Header - minimal -->
+<header class="site-header" id="site-header">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-3.5 flex justify-between items-center">
+    <a href="index.html" class="mono text-sm font-bold flex items-center gap-2 group" style="color: var(--text);">
+      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      itsliventsev
+    </a>
+    <nav class="hidden lg:flex items-center gap-6">
+      <a href="index.html#stack" class="nav-link">стек</a>
+      <a href="index.html#resources" class="nav-link">материалы</a>
+      <a href="index.html#cv" class="nav-link">опыт</a>
+      <a href="blog.html" class="nav-link inline-flex items-center gap-1.5">
+        <span>блог</span>
+        <span class="badge badge-red">когда-то?</span>
       </a>
+      <a href="articles.html" class="nav-link inline-flex items-center gap-1.5">
+        <span>статьи</span>
+        <span class="badge badge-orange">новое</span>
+      </a>
+      <a href="archive.html" class="nav-link">архив</a>
+      <a href="projects.html" class="nav-link active">проекты</a>
+    </nav>
+  </div>
+</header>
 
-      <nav class="main-nav hidden lg:flex" aria-label="Основная навигация">
-        <a href="index.html#stack" class="nav-link">стек</a>
-        <a href="index.html#resources" class="nav-link">материалы</a>
-        <a href="index.html#cv" class="nav-link">опыт</a>
-
-        <a href="blog.html" class="nav-link">
-          блог
-          <span class="nav-badge badge-red">когда-то?</span>
-        </a>
-
-        <a href="articles.html" class="nav-link">
-          статьи
-          <span class="nav-badge badge-orange">новое</span>
-        </a>
-
-        <a href="archive.html" class="nav-link">архив</a>
-        <a href="projects.html" class="nav-link is-active">проекты</a>
-      </nav>
-    </div>
-  </header>
-
-  <nav class="bottom-dock" id="bottom-dock" aria-label="Нижняя навигация">
+<!-- Enhanced Bottom Dock - BIGGER with all navigation -->
+<nav class="bottom-dock" id="bottom-dock">
+  <!-- Main navigation -->
+  <div class="dock-main-nav">
     <a href="index.html" class="dock-item mono">главная</a>
     <a href="index.html#stack" class="dock-item mono">стек</a>
     <a href="index.html#resources" class="dock-item mono">материалы</a>
     <a href="index.html#cv" class="dock-item mono">опыт</a>
+    <span class="dock-sep"></span>
+    <a href="#catalog" class="dock-item mono active">проекты</a>
+    <span class="dock-sep"></span>
     <a href="blog.html" class="dock-item mono">блог</a>
     <a href="articles.html" class="dock-item mono">статьи</a>
     <a href="archive.html" class="dock-item mono">архив</a>
-    <a href="projects.html" class="dock-item mono is-active">проекты</a>
-  </nav>
+  </div>
 
-  <main>
-    <section class="zone-light">
-      <div class="wrap hero reveal">
-        <h1 class="hero-title mono">
-          проекты<span id="title-mark">&gt;</span>
-        </h1>
+  <!-- Hero -->
+  <section class="reveal mb-14">
+    <div class="system-badge">system://projects</div>
+    <h1 class="hero-title mono mb-5">
+      проекты<span id="title-mark"><span class="cursor-green">>_</span></span>
+    </h1>
+    <p class="hero-sub mono mb-4">// готовые материалы · лабораторные · промпты · конфигурации</p>
+    <p class="hero-lead">
+      Всё, что можно использовать прямо сейчас. Не заметки и не черновики — готовые к работе материалы, промпты для ИИ и скрипты автоматизации.
+    </p>
+  </section>
 
-        <p class="hero-sub mono">
-          // готовые материалы · лабораторные · промпты · конфигурации · скрипты
-        </p>
+  <div class="divider"></div>
 
-        <p class="hero-lead">
-          Пока в разделе доступен один готовый материал — глоссарий. Остальные направления постепенно собираются: скрипты, промпты, конфигурации и интерактивные стенды.
-        </p>
+  <!-- Catalog -->
+  <section id="catalog" class="reveal mb-12">
+    <div class="flex items-end justify-between mb-7 flex-wrap gap-4">
+      <div>
+        <h2 class="section-title">материалы</h2>
       </div>
-    </section>
+      <div class="counter-badge mono">1 из 6 доступно <span class="pixel-emoji"></span></div>
+    </div>
 
-    <section class="zone-dark" id="zone-dark">
-      <div class="deco" aria-hidden="true">
-        <div class="deco-line" style="top: 14%; background: rgba(96, 165, 250, 0.10);"></div>
-        <div class="deco-line" style="top: 38%; height: 2px; background: rgba(192, 132, 252, 0.10);"></div>
-        <div class="deco-line" style="top: 64%; background: rgba(251, 146, 60, 0.08);"></div>
-        <div class="deco-line" style="top: 86%; background: rgba(96, 165, 250, 0.08);"></div>
+    <div class="bento-grid stagger">
 
-        <div class="deco-block" style="top: 8%; right: -60px; width: 340px; height: 420px; border-color: rgba(96, 165, 250, 0.07); background: rgba(96, 165, 250, 0.025); border-radius: 24px; transform: rotate(18deg);"></div>
-        <div class="deco-block" style="bottom: 12%; left: -80px; width: 300px; height: 300px; border-color: rgba(192, 132, 252, 0.07); background: rgba(192, 132, 252, 0.025); border-radius: 50%;"></div>
-        <div class="deco-block" style="top: 46%; left: 50%; width: 240px; height: 240px; border-color: rgba(251, 146, 60, 0.06); background: rgba(251, 146, 60, 0.02); transform: translateX(-50%) rotate(45deg);"></div>
-      </div>
-
-      <div class="wrap catalog">
-        <div class="catalog-head reveal">
-          <div>
-            <div class="section-label mono">каталог</div>
-            <h2 class="section-title">пока доступно</h2>
-          </div>
-          <div class="catalog-note mono">глоссарий · скоро больше</div>
+      <!-- 01: Glossary (Active, wide) -->
+      <a href="glossary.html" class="card card-wide card-active" style="--card-accent: #3b82f6;">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">01</span>
+          <span class="status status-ready">готово <span class="pixel-emoji">✓</span></span>
         </div>
-
-        <div class="projects-grid stagger">
-          <a href="glossary.html" class="project-card" style="--card-accent: var(--c-blue);">
-            <div class="card-top">
-              <span class="card-num mono">01</span>
-              <span class="status-badge status-ready">готово</span>
-            </div>
-
-            <h3 class="card-title">Глоссарий IT</h3>
-            <p class="card-desc">
-              Базовые определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.
-            </p>
-
-            <div class="card-tags">
-              <span class="tag tag-blue">сети</span>
-              <span class="tag tag-green">ос</span>
-              <span class="tag tag-purple">бд</span>
-            </div>
-          </a>
-
-          <div class="project-card is-soon" style="--card-accent: var(--c-purple);">
-            <div class="card-top">
-              <span class="card-num mono">02</span>
-              <span class="status-badge status-soon">скоро</span>
-            </div>
-
-            <h3 class="card-title">Промпты для ИИ</h3>
-            <p class="card-desc">
-              Коллекция проверенных промптов для генерации кода, анализа данных и подготовки учебных материалов.
-            </p>
-
-            <div class="card-tags">
-              <span class="tag tag-plain">ии</span>
-              <span class="tag tag-plain">промпты</span>
-            </div>
-          </div>
-
-          <div class="project-card is-soon" style="--card-accent: var(--c-orange);">
-            <div class="card-top">
-              <span class="card-num mono">03</span>
-              <span class="status-badge status-soon">скоро</span>
-            </div>
-
-            <h3 class="card-title">Bash-скрипты</h3>
-            <p class="card-desc">
-              Готовые скрипты для бэкапа, мониторинга, настройки сети и работы с пользователями.
-            </p>
-
-            <div class="card-tags">
-              <span class="tag tag-plain">bash</span>
-              <span class="tag tag-plain">автоматизация</span>
-            </div>
-          </div>
-
-          <div class="project-card is-soon" style="--card-accent: var(--c-green);">
-            <div class="card-top">
-              <span class="card-num mono">04</span>
-              <span class="status-badge status-soon">скоро</span>
-            </div>
-
-            <h3 class="card-title">Виртуальные стенды</h3>
-            <p class="card-desc">
-              Интерактивные лабораторные работы с пошаговой проверкой и практическими сценариями.
-            </p>
-
-            <div class="card-tags">
-              <span class="tag tag-plain">лаборатория</span>
-              <span class="tag tag-plain">практика</span>
-            </div>
-          </div>
-
-          <div class="project-card is-soon" style="--card-accent: var(--c-pink);">
-            <div class="card-top">
-              <span class="card-num mono">05</span>
-              <span class="status-badge status-soon">скоро</span>
-            </div>
-
-            <h3 class="card-title">Конфигурации серверов</h3>
-            <p class="card-desc">
-              Шаблоны и заметки по настройке Windows Server, ALT Linux, DNS, DHCP и сетевых служб.
-            </p>
-
-            <div class="card-tags">
-              <span class="tag tag-plain">windows</span>
-              <span class="tag tag-plain">linux</span>
-            </div>
-          </div>
-
-          <div class="project-card is-more">
-            <div>
-              <div class="more-label mono">// скоро больше</div>
-              <p class="more-text">
-                Раздел будет пополняться. Если нужен конкретный материал — напиши, добавлю его в ближайший апдейт.
-              </p>
-            </div>
-          </div>
+        <h3 class="card-title">Глоссарий IT</h3>
+        <p class="card-desc">Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД. Всё, что нужно знать, чтобы не плавать в терминах.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-blue"><span class="pixel-emoji">🌐</span>сети</span>
+          <span class="tag tag-green"><span class="pixel-emoji"></span>ос</span>
+          <span class="tag tag-purple"><span class="pixel-emoji">🐘</span>бд</span>
         </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">справочник · открыт</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
 
-        <footer class="page-footer reveal">
-          <div class="footer-text mono">© 2026 itsliventsev · проекты</div>
-
-          <a href="index.html" class="footer-link">
-            <span class="footer-arrow">←</span>
-            <span class="mono text-xs">вернуться на главную</span>
-          </a>
-        </footer>
+      <!-- 02: Databases (Placeholder) -->
+      <div class="card card-placeholder">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">02</span>
+          <span class="status status-soon">в разработке</span>
+        </div>
+        <h3 class="card-title" style="color: var(--muted);">Базы данных</h3>
+        <p class="card-desc">Теория и практикум по реляционным БД: проектирование таблиц, ключи, связи и типы данных.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-plain"><span class="pixel-emoji"></span>бд</span>
+          <span class="tag tag-plain"><span class="pixel-emoji"></span>sql</span>
+        </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
+        </div>
       </div>
-    </section>
-  </main>
 
-  <script>
-    document.documentElement.classList.add('js-enabled');
+      <!-- 03: Encoding (Placeholder) -->
+      <div class="card card-placeholder">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">03</span>
+          <span class="status status-soon">в разработке</span>
+        </div>
+        <h3 class="card-title" style="color: var(--muted);">Кодирование информации</h3>
+        <p class="card-desc">Двоичное кодирование, ASCII, RGB, дискретизация. Интерактивный квест «Шифр неисправности».</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-plain"><span class="pixel-emoji"></span>теория</span>
+          <span class="tag tag-plain"><span class="pixel-emoji">🎮</span>квест</span>
+        </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
+        </div>
+      </div>
 
-    const body = document.body;
-    const header = document.getElementById('site-header');
-    const dock = document.getElementById('bottom-dock');
-    const darkZone = document.getElementById('zone-dark');
-    const progress = document.getElementById('scroll-progress');
-    const mark = document.getElementById('title-mark');
+      <!-- 04: Networks (Placeholder, wide) -->
+      <div class="card card-wide card-placeholder">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">04</span>
+          <span class="status status-soon">в разработке</span>
+        </div>
+        <h3 class="card-title" style="color: var(--muted);">Компьютерные сети</h3>
+        <p class="card-desc">LAN, MAN, WAN, виды линий связи, сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-plain"><span class="pixel-emoji">🌐</span>сети</span>
+          <span class="tag tag-plain"><span class="pixel-emoji">📡</span>топология</span>
+        </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
+        </div>
+      </div>
 
-    let headerHeight = header.offsetHeight || 56;
+      <!-- 05: Network Load (Placeholder) -->
+      <div class="card card-placeholder">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">05</span>
+          <span class="status status-soon">в разработке</span>
+        </div>
+        <h3 class="card-title" style="color: var(--muted);">Паразитирующая нагрузка</h3>
+        <p class="card-desc">7-часовой курс: диагностика трафика, netstat, PowerShell, командные битвы и оптимизация.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-plain"><span class="pixel-emoji">🌐</span>сети</span>
+          <span class="tag tag-plain"><span class="pixel-emoji"></span>powershell</span>
+        </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
+        </div>
+      </div>
 
-    function updateMetrics() {
-      headerHeight = header.offsetHeight || 56;
+      <!-- 06: Virtual Stands (Placeholder) -->
+      <div class="card card-placeholder">
+        <div class="flex items-start justify-between mb-4">
+          <span class="card-num">06</span>
+          <span class="status status-soon">в разработке</span>
+        </div>
+        <h3 class="card-title" style="color: var(--muted);">Виртуальные стенды</h3>
+        <p class="card-desc">Интерактивные лабораторные работы в браузере с автоматической проверкой результатов и пошаговыми сценариями.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="tag tag-plain"><span class="pixel-emoji">🔬</span>лаборатория</span>
+          <span class="tag tag-plain"><span class="pixel-emoji">🎯</span>интерактив</span>
+        </div>
+        <div class="card-footer">
+          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="reveal flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="mono text-xs" style="color: var(--muted);">© 2026 itsliventsev · проекты <span class="pixel-emoji">🦀</span></div>
+    <a href="index.html" class="footer-link inline-flex items-center gap-2 text-sm font-medium group">
+      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      <span class="mono text-xs">вернуться на главную</span>
+    </a>
+  </footer>
+
+</main>
+
+<script>
+  document.documentElement.classList.add('js-enabled');
+
+  const header = document.getElementById('site-header');
+  const dock = document.getElementById('bottom-dock');
+  const progress = document.getElementById('scroll-progress');
+  const mark = document.getElementById('title-mark');
+
+  // Cursor animation with colors
+  const cursorFrames = [
+    '<span class="cursor-green">>_</span>',
+    '<span class="cursor-red">>__</span>',
+    '<span class="cursor-blue">>___</span>',
+    '<span class="cursor-purple">>____</span>',
+    '<span class="cursor-orange">>_____</span>'
+  ];
+  let cursorIndex = 0;
+  setInterval(() => {
+    cursorIndex = (cursorIndex + 1) % cursorFrames.length;
+    mark.innerHTML = cursorFrames[cursorIndex];
+  }, 800);
+
+  function onScroll() {
+    const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+
+    if (y > 120) {
+      header.classList.add('scrolled');
+      dock.classList.add('visible');
+    } else {
+      header.classList.remove('scrolled');
+      dock.classList.remove('visible');
     }
+  }
 
-    function onScroll() {
-      const y = window.scrollY;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
-      progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
-
-      // Меню улетает вверх, когда тёмная зона подходит к нижней границе шапки.
-      const threshold = darkZone.offsetTop - headerHeight;
-      const overDark = y >= threshold;
-
-      body.classList.toggle('theme-dark', overDark);
-      body.classList.toggle('theme-light', !overDark);
-
-      header.classList.toggle('scrolled', overDark);
-      dock.classList.toggle('visible', overDark);
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      updateMetrics();
-      onScroll();
+  // Reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
     });
+  }, {
+    threshold: 0.01,
+    rootMargin: '0px 0px -40px 0px'
+  });
 
-    updateMetrics();
-    onScroll();
+  document.querySelectorAll('.reveal, .stagger').forEach((el) => observer.observe(el));
 
-    // Плавное появление секций и карточек
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.01,
-      rootMargin: '0px 0px -40px 0px'
-    });
+  setTimeout(() => {
+    document.querySelectorAll('.reveal, .stagger').forEach((el) => el.classList.add('active'));
+  }, 250);
+</script>
 
-    document.querySelectorAll('.reveal, .stagger').forEach((el) => observer.observe(el));
-
-    setTimeout(() => {
-      document.querySelectorAll('.reveal, .stagger').forEach((el) => el.classList.add('active'));
-    }, 250);
-
-    // Анимация курсора в заголовке
-    const frames = ['>', '>_', '>__', '>___'];
-    let frameIndex = 0;
-
-    setInterval(() => {
-      frameIndex = (frameIndex + 1) % frames.length;
-      mark.textContent = frames[frameIndex];
-    }, 600);
-  </script>
 </body>
 </html>
