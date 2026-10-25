@@ -162,7 +162,7 @@
     <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
       <div>
         <h1 class="mono text-4xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
-          статьи<span class="text-orange-600">.</span>
+          статьи<span id="title-dots" class="text-orange-600" style="display:inline-block; width:3ch;">.</span>
         </h1>
         <p class="mono text-sm md:text-base text-zinc-500">// публикации · методички · размышления</p>
       </div>
@@ -391,5 +391,18 @@
   });
 </script>
 
+<script>
+(function () {
+  const el = document.getElementById('title-dots');
+  if (!el) return;
+  const frames = ['.', '..', '...', '...'];
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % frames.length;
+    el.textContent = frames[i];
+  }, 420);
+})();
+</script>
+  
 </body>
 </html>
