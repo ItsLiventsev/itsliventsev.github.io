@@ -10,20 +10,17 @@
   body { font-family: 'Inter', sans-serif; }
   .mono { font-family: 'JetBrains Mono', monospace; }
 
-  /* Scroll progress — синий, под страницу */
   .scroll-progress {
     position: fixed; top: 0; left: 0; height: 2px;
     background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
     z-index: 100; transition: width 0.1s ease;
   }
 
-  /* Сетка фона — с синим оттенком */
   .bg-grid {
     background-size: 24px 24px;
     background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
   }
 
-  /* Reveal: прогрессивное улучшение, как на главной */
   .reveal { opacity: 1; transform: translateY(0); }
   .js-enabled .reveal {
     opacity: 0; transform: translateY(16px);
@@ -43,10 +40,7 @@
   .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.16s; }
   .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.2s; }
   .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.24s; }
-  .js-enabled .stagger.active > *:nth-child(7) { transition-delay: 0.28s; }
-  .js-enabled .stagger.active > *:nth-child(8) { transition-delay: 0.32s; }
 
-  /* Hover glow — синее свечение */
   .hover-glow { transition: all 0.3s ease; }
   .hover-glow:hover {
     box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18);
@@ -54,13 +48,52 @@
     transform: translateY(-2px);
   }
 
-  .arrow-hover { transition: transform 0.3s ease; }
-  .group:hover .arrow-hover { transform: translateX(4px); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chevron { transform: rotate(90deg); }
+  .chevron { transition: transform 0.25s ease; }
 
-  /* Метка заголовка: # / */
+  .mat-row { transition: background 0.15s ease; }
+  .mat-row:hover { background: rgba(59, 130, 246, 0.04); }
+  .mat-link { transition: color 0.2s ease; }
+  .mat-link:hover { color: #2563eb; }
+
+  .status-badge {
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+  .status-active {
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+  .status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .status-new {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .status-archive {
+    background: rgba(113, 113, 122, 0.1);
+    color: #52525b;
+    border: 1px solid rgba(113, 113, 122, 0.3);
+  }
+  .status-missing {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
   #title-mark { transition: color 0.2s ease; }
   #title-mark:hover { color: #2563eb; }
-  #title-mark.spin { animation: none; }
 </style>
 </head>
 <body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
@@ -70,8 +103,8 @@
 <div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-14">
 
   <!-- Header -->
-  <header class="reveal flex justify-between items-center mb-10 sm:mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 sm:py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl border border-zinc-200 shadow-sm">
-    <a href="index.html" class="mono text-sm sm:text-base font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
+  <header class="reveal flex justify-between items-center mb-10 sm:mb-12 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
+    <a href="index.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
       <span class="transition-transform group-hover:-translate-x-0.5">←</span> itsliventsev
     </a>
     <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">
@@ -82,163 +115,449 @@
   <!-- Hero -->
   <section class="reveal mb-8 sm:mb-10">
     <h1 class="mono text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-3">
-      архив<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;" title="крутится само, но можно помочь">#</span>
+      архив<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
     </h1>
     <p class="mono text-xs sm:text-sm md:text-base text-zinc-500">// старые материалы · черновики · то, что жалко удалить</p>
   </section>
 
-  <!-- Дисклеймер архива -->
+  <!-- Дисклеймер -->
   <section class="reveal mb-8 sm:mb-10">
     <div class="p-4 md:p-5 rounded-xl bg-blue-50/50 border border-dashed border-blue-300">
       <div class="mono text-xs text-blue-700 uppercase tracking-wider mb-2">дисклеймер</div>
       <p class="text-sm text-zinc-600 leading-relaxed">
-        Это архив, а не витрина: здесь лежат материалы прошлых лет — старые методички, черновики, ранние версии конспектов и публикации. Часть файлов не оптимизирована и весит сколько весит, часть выглядит устаревшей, а некоторые ссылки могут просто не открыться.
+        Это архив, а не витрина: здесь лежат материалы прошлых лет — старые методички, черновики, ранние версии конспектов и публикации до основного сборника.
+        Часть файлов не оптимизирована и весит сколько весит, часть выглядит устаревшей, а некоторые ссылки могут просто не открыться —
+        внешние хранилища живут своей жизнью. Это нормально: они тут ради истории, а не ради красоты.
+        Если что-то нужно, но не открывается — напиши, достану из закромов.
       </p>
-      <div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 mono text-[10px] text-zinc-500">
-        <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>открывается стабильно</span>
-        <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>как повезёт · формат или ссылка могли устареть</span>
-      </div>
     </div>
   </section>
 
-  <!-- Архивная сетка: 3–4 в ряд -->
+  <!-- Бейджи-легенда -->
+  <section class="reveal mb-6">
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mono text-[11px]">
+      <span class="status-badge status-active">активное</span>
+      <span class="text-zinc-500">— активно пополняется</span>
+      <span class="status-badge status-pending">в разработке</span>
+      <span class="text-zinc-500">— в процессе</span>
+      <span class="status-badge status-new">новое</span>
+      <span class="text-zinc-500">— недавно добавлено</span>
+      <span class="status-badge status-archive">архив</span>
+      <span class="text-zinc-500">— старые материалы</span>
+      <span class="status-badge status-missing">не загружено</span>
+      <span class="text-zinc-500">— недоступно</span>
+    </div>
+  </section>
+
+  <!-- Сетка категорий -->
   <section class="reveal mb-10 sm:mb-12">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 stagger">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 stagger">
 
-            <!-- 1. ВОШ. Труд. Информационная безопасность -->
-      <a href="https://itsliventsev.github.io/archive/vosh-infosec.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">олимпиада</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
+      <!-- 1. Учебные программы и методика -->
+      <details class="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">учебные программы и методика</div>
+              <div class="mono text-[10px] text-zinc-400 mt-0.5">уп · пп · демоэкзамен · мэш · квалификация</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-archive">архив</span>
+            <span class="mono text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">20</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <a href="mesh-upload.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>загрузка сценариев в библиотеку мэш</span>
+          </a>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>42 адм/адмдо. уп.03 учебная практика</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>32 адм 1/2. пп.05 производственная практика (виртуализация)</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>32 адм 1/2. уп.05 учебная практика (виртуализация)</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>32 адм 1/2. пп.01 проектирование сетевой инфраструктуры</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>42 адм 1, 42 адм 2. пп.02 и пп.03</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>22 адм/адмсп. пп.02 организация сетевого администрирования ос</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>22 адм/адмсп. пп.01 настройка сетевой инфраструктуры</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>42 адм/адмдо. пм.02 организация сетевого администрирования</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>демонстрационный экзамен · записи по подготовке</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>квалификационный экзамен</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>профильная и инвариативная часть · 2025 уч. год</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>базовый уровень · 2023 и 2022 уч. год</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>цифровой куратор · 12 адм и 12 адмсп · 2024–2025</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>лабораторные работы на серверных стойках</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>практические задания</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>дополнительная учебная дисциплина</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>другие дисциплины</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>куг · диф. зачёты · учебные планы</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>архив (корневая страница)</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          ВОШ. Труд. Информационная безопасность
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · теория и практика</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
-      <!-- 2. Загрузка сценариев в библиотеку МЭШ -->
-      <a href="https://itsliventsev.github.io/archive/mesh-upload.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">инструкция</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2025</span>
+      <!-- 2. Технические дисциплины -->
+      <details class="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">технические дисциплины</div>
+              <div class="mono text-[10px] text-zinc-400 mt-0.5">виртуализация · docker · k8s · сети · windows server</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-archive">архив</span>
+            <span class="mono text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">58</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <a href="computer-networks.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>компьютерные сети, локальная сеть, адресация</span>
+          </a>
+          <a href="network-load.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>устранение паразитирующей нагрузки в сети</span>
+          </a>
+          <a href="intro-to-databases.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>введение в базы данных · реляционные бд</span>
+          </a>
+          <a href="info-encoding.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>информация · кодирование информации</span>
+          </a>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>концепции и принципы виртуализации</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>миграция вм · масштабирование · эксплуатация</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>гипервизоры · vdi · pxe-сервер · iventoy</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>резервное копирование вм esxi</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>systemd-nspawn · контейнеры · бэкап</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>docker: play with docker · образы · swarm · seccomp</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>kubernetes: play-with-kubernetes · pods · оркестрация</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>arcade hub · передача контейнеров между станциями</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>настройка dhcp · dns · управление зонами</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>маршрутизация ospf · eigrp · chap · dm vpn</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>alt linux роутер · наблюдение за трафиком</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>логическая топология · документирование сети</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>уязвимость ftp · диагностика неисправностей</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>radius · nps · nap · ipsec · права доступа</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>windows server: ad ds · домен · учётные записи</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>gpo: безопасность · рабочий стол · скрипты · gpp</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>bitlocker · efs · защита от вредоносных программ</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>rds · файловая служба · общие папки</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>управление дисками · пространства хранения</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>файловые системы · linux · мониторинг</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>виртуальный стенд · контроллеры домена</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>параллельные вычисления · микросервисы</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Загрузка сценариев в библиотеку МЭШ
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · методические указания</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
-      <!-- 3. Информация. Кодирование информации -->
-      <a href="https://itsliventsev.github.io/archive/info-encoding.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">конспект</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
+      <!-- 3. Практикумы и кейсы -->
+      <details class="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">практикумы и кейсы</div>
+              <div class="mono text-[10px] text-zinc-400 mt-0.5">ситуационные задачи · ролевые игры · проекты</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-archive">архив</span>
+            <span class="mono text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">10</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <a href="operation-migration.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>операция «миграция»: гибридная ит-экосистема</span>
+          </a>
+          <a href="it-docs-monitoring.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>ит-документооборот и мониторинг · «ит-ресурс»</span>
+          </a>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>операция «безопасная гавань»: реанимация после инцидента</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>цифровая трансформация сети кафе</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>киберспортивная арена «phoenix gaming hub»</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>киберспортивный фестиваль</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>кибербезопасность в образовательной среде</span>
+          </div>
+          <a href="vosh-infosec.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>вош · труд · информационная безопасность</span>
+          </a>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>спросили администрацию, узнали их хотелки</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>итоговая работа · руководство по айдентике</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Информация. Кодирование информации
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · лекция и практика</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
-      <!-- 4. Компьютерные сети, локальная сеть, адресация -->
-      <a href="https://itsliventsev.github.io/archive/computer-networks.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">конспект</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
+      <!-- 4. Цифровая грамотность и ИИ -->
+      <details class="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">цифровая грамотность и ии</div>
+              <div class="mono text-[10px] text-zinc-400 mt-0.5">медиа · аналитика · сайты · проекты</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-archive">архив</span>
+            <span class="mono text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">9</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>оптимизация коммуникации университета через ии</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>шаблон отчёта для этапа «анализ данных»</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>пример данных для анализа 1 · 2 · 3</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>проект повышения цифровой грамотности для пенсионеров</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>стратегии безопасности и конфиденциальности в медиа</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>консультирование граждан по применению икт</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>виртуальная галерея для музея современного искусства</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>анализ рынка веб-приложений, концепция и дизайн через ии</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>создание простых сайтов</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Компьютерные сети, локальная сеть, адресация
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · теория и задача</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
-      <!-- 5. Операция «Миграция» -->
-      <a href="https://itsliventsev.github.io/archive/operation-migration.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">практикум</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
+      <!-- 5. Публикации, конференции, ДПО -->
+      <details class="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">публикации, конференции, дпо</div>
+              <div class="mono text-[10px] text-zinc-400 mt-0.5">статьи · сборники · курсы повышения</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-archive">архив</span>
+            <span class="mono text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">4</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <a href="articles.html" class="mat-link mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <span>практикоориентированное формирование знаний (статья)</span>
+          </a>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>педагогическая инноватика · киров, 2024</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>фгбоу дпо ирпо · кандидат в эксперты-разработчики · 2024</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 shrink-0"></span>
+            <span>чоу дпо 1с-образование · новые ит в образовании · 2022</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Операция «Миграция»: Создание гибридной ИТ-экосистемы
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · ролевая игра</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
-      <!-- 6. Устранение паразитирующей нагрузки в сети -->
-      <a href="https://itsliventsev.github.io/archive/network-load.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">практикум</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
+      <!-- 6. Не загружено -->
+      <details class="group bg-white border border-red-200 rounded-xl overflow-hidden hover-glow">
+        <summary class="flex items-center justify-between p-4 sm:p-5">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <span class="chevron mono text-zinc-400 text-lg">▸</span>
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-zinc-900 truncate">не загружено</div>
+              <div class="mono text-[10px] text-red-600 mt-0.5">пустые разделы · недоступные материалы</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 ml-2">
+            <span class="status-badge status-missing">не загружено</span>
+            <span class="mono text-[10px] text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">4</span>
+          </div>
+        </summary>
+        <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 space-y-1.5 border-t border-zinc-100">
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>публикации и статьи (корневая)</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>классное руководство</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span>повышения квалификации</span>
+          </div>
+          <div class="mat-row flex items-center gap-2 py-1.5 text-sm text-zinc-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>
+            <span> архив (корневая)</span>
+          </div>
         </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Устранение паразитирующей нагрузки в сети
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · квест</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
-
-      <!-- 7. Введение в базы данных -->
-      <a href="https://itsliventsev.github.io/archive/intro-to-databases.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">конспект</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
-        </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Введение в базы данных: основные понятия и структура
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · теория и практика</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
-
-      <!-- 8. Ведение IT-документооборота -->
-      <a href="https://itsliventsev.github.io/archive/it-docs-monitoring.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">практикум</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
-        </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Ведение IT-документооборота и мониторинг в «IT-Ресурс»
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · сквозной кейс</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
-
-      <!-- 9. Восстановление пароля для почты owa.mos.ru -->
-      <a href="https://itsliventsev.github.io/archive/password-reset.html" class="group flex flex-col gap-2 p-4 rounded-xl bg-white border border-zinc-200 hover-glow">
-        <div class="flex items-center justify-between gap-2">
-          <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">инструкция</span>
-          <span class="flex items-center gap-1.5 mono text-[10px] text-zinc-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>2024</span>
-        </div>
-        <div class="text-sm font-medium text-zinc-800 group-hover:text-blue-600 transition-colors leading-snug">
-          Восстановление пароля для почты owa.mos.ru (@edu.mos.ru)
-        </div>
-        <div class="mt-auto flex items-center justify-between pt-1">
-          <span class="mono text-[10px] text-zinc-400">pdf · база знаний</span>
-          <span class="mono text-xs text-zinc-400 group-hover:text-blue-600 arrow-hover">→</span>
-        </div>
-      </a>
+      </details>
 
     </div>
   </section>
@@ -262,14 +581,11 @@
 <script>
   document.documentElement.classList.add('js-enabled');
 
-  // Scroll progress
   const progressBar = document.getElementById('scroll-progress');
   window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (window.scrollY / max) * 100 + '%';
+    progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%';
   });
 
-  // Reveal
   const revealTargets = document.querySelectorAll('.reveal, .stagger');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -282,33 +598,10 @@
   revealTargets.forEach(el => observer.observe(el));
   setTimeout(() => revealTargets.forEach(el => el.classList.add('active')), 200);
 
-  // Метка заголовка: цикл # / и пары — «терминал печатает»
   const mark = document.getElementById('title-mark');
   const frames = ['#', '/', '#', '/', '#/', '/#'];
   let i = 0;
-  let timer = setInterval(() => {
-    i = (i + 1) % frames.length;
-    mark.textContent = frames[i];
-  }, 500);
-
-  // Пасхалка: клик по метке — короткая «перемотка»
-  mark.addEventListener('click', () => {
-    clearInterval(timer);
-    let n = 0;
-    const fast = setInterval(() => {
-      mark.textContent = frames[n % frames.length];
-      n++;
-      if (n > 11) {
-        clearInterval(fast);
-        timer = setInterval(() => {
-          i = (i + 1) % frames.length;
-          mark.textContent = frames[i];
-        }, 500);
-      }
-    }, 70);
-  });
-
-  console.log('%c# / — метка архива крутится сама. Кликни по ней, чтобы помочь.', 'font-size: 12px; color: #3b82f6;');
+  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
 </script>
 
 </body>
