@@ -4,160 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Компьютерные сети · itsliventsev</title>
+<meta name="description" content="Компьютерные сети: типы сетей, линии связи, сетевое оборудование и ситуационная задача по проектированию сети цеха.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">теория</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">теория</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      Компьютерные сети<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      Компьютерные сети<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
+    <span class="pill pill-neutral">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Definition -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">1. Определение компьютерной сети</h3>
-      <p class="text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Определение компьютерной сети</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Компьютерная сеть</strong> — это система связи, объединяющая два и более компьютеров и периферийных устройств для совместного использования ресурсов (данных, программ, принтеров, интернета) и обмена информацией.
       </p>
-      <div class="bg-blue-50/50 border border-blue-200 rounded-lg p-3">
-        <div class="text-xs text-zinc-700">
+      <div class="notice notice-info">
+        <div class="text-xs text-[var(--text-2)] m-0">
           <strong>Для мехатроников:</strong> На современном производстве это не просто компьютеры, а целый комплекс: ПЛК (Программируемые Логические Контроллеры), промышленные компьютеры, сенсоры, роботы и ЧПУ-станки, объединенные в сеть для автоматизации технологического процесса.
         </div>
       </div>
     </div>
 
     <!-- Network types -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">2. Типы сетей (по масштабу)</h3>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Типы сетей (по масштабу)</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-blue-600 mb-1">PAN</div>
-          <div class="text-sm font-medium text-zinc-900">Персональная сеть</div>
-          <div class="text-xs text-zinc-600 mt-1">Personal Area Network</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--accent)] mb-1">PAN</div>
+          <div class="text-sm font-medium text-[var(--text)]">Персональная сеть</div>
+          <div class="text-xs text-[var(--muted)] mt-1">Personal Area Network</div>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-blue-600 mb-1">LAN</div>
-          <div class="text-sm font-medium text-zinc-900">Локальная сеть</div>
-          <div class="text-xs text-zinc-600 mt-1">Local Area Network</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--accent)] mb-1">LAN</div>
+          <div class="text-sm font-medium text-[var(--text)]">Локальная сеть</div>
+          <div class="text-xs text-[var(--muted)] mt-1">Local Area Network</div>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-blue-600 mb-1">MAN</div>
-          <div class="text-sm font-medium text-zinc-900">Городская/Региональная сеть</div>
-          <div class="text-xs text-zinc-600 mt-1">Metropolitan Area Network</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--accent)] mb-1">MAN</div>
+          <div class="text-sm font-medium text-[var(--text)]">Городская/Региональная сеть</div>
+          <div class="text-xs text-[var(--muted)] mt-1">Metropolitan Area Network</div>
         </div>
-        <div class="p-3 bg-zinc-50 rounded border border-zinc-200">
-          <div class="mono text-xs text-blue-600 mb-1">WAN</div>
-          <div class="text-sm font-medium text-zinc-900">Глобальная сеть</div>
-          <div class="text-xs text-zinc-600 mt-1">Wide Area Network</div>
+        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+          <div class="mono text-xs text-[var(--accent)] mb-1">WAN</div>
+          <div class="text-sm font-medium text-[var(--text)]">Глобальная сеть</div>
+          <div class="text-xs text-[var(--muted)] mt-1">Wide Area Network</div>
         </div>
       </div>
     </div>
 
     <!-- Connection types -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">3. Виды линий связи</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="text-xs text-zinc-500 uppercase bg-zinc-50 border-b border-zinc-200">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">3. Виды линий связи</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
             <tr>
-              <th class="px-3 py-2">Вид</th>
-              <th class="px-3 py-2">Особенности</th>
-              <th class="px-3 py-2">Применение</th>
+              <th>Вид</th>
+              <th>Особенности</th>
+              <th>Применение</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-100">
+          <tbody>
             <tr>
-              <td class="px-3 py-3 font-medium text-zinc-900">Витая пара</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Недорогая, гибкая, низкая помехозащищенность</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Основа офисных и цеховых LAN, подключение станков</td>
+              <td class="font-medium text-[var(--text)]">Витая пара</td>
+              <td class="text-xs">Недорогая, гибкая, низкая помехозащищенность</td>
+              <td class="text-xs">Основа офисных и цеховых LAN, подключение станков</td>
             </tr>
             <tr>
-              <td class="px-3 py-3 font-medium text-zinc-900">Коаксиальный кабель</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Защищен от помех, толще, менее гибкий</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Системы видеонаблюдения, устаревшие сети</td>
+              <td class="font-medium text-[var(--text)]">Коаксиальный кабель</td>
+              <td class="text-xs">Защищен от помех, толще, менее гибкий</td>
+              <td class="text-xs">Системы видеонаблюдения, устаревшие сети</td>
             </tr>
             <tr>
-              <td class="px-3 py-3 font-medium text-zinc-900">Оптоволокно</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Высокая скорость, помехозащищенность, дороже</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Магистральные каналы, роботизированные комплексы</td>
+              <td class="font-medium text-[var(--text)]">Оптоволокно</td>
+              <td class="text-xs">Высокая скорость, помехозащищенность, дороже</td>
+              <td class="text-xs">Магистральные каналы, роботизированные комплексы</td>
             </tr>
             <tr>
-              <td class="px-3 py-3 font-medium text-zinc-900">Wi-Fi</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Радиоканал, удобно, подвержен помехам</td>
-              <td class="px-3 py-3 text-xs text-zinc-600">Мобильные панели, беспроводные датчики</td>
+              <td class="font-medium text-[var(--text)]">Wi-Fi</td>
+              <td class="text-xs">Радиоканал, удобно, подвержен помехам</td>
+              <td class="text-xs">Мобильные панели, беспроводные датчики</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-zinc-600 mt-3 italic">
+      <p class="text-xs text-[var(--muted)] mt-3 italic mb-0">
         Важно: В критичных системах предпочтительны проводные соединения из-за надежности.
       </p>
     </div>
 
     <!-- LAN -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">4. Локальная сеть (LAN)</h3>
-      <p class="text-sm text-zinc-700 mb-3">
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Локальная сеть (LAN)</h3>
+      <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Локальная сеть</strong> — это сеть, объединяющая компьютеры и устройства на небольшой территории (офис, здание, учебный класс, цех).
       </p>
-      <div class="bg-blue-50/50 border border-blue-200 rounded-lg p-3">
-        <div class="text-sm text-zinc-700">
+      <div class="notice notice-info">
+        <div class="text-sm text-[var(--text-2)] m-0">
           <strong>Есть ли в нашем колледже локальная сеть?</strong> Да, конечно. Она объединяет все компьютеры в учебных классах и лабораториях, серверы колледжа, принтеры и МФУ, возможно, некоторые учебные стенды и ПЛК. Организована с помощью сетевых коммутаторов (свитчей), к которым кабелями ("витая пара") подключены все устройства.
         </div>
       </div>
     </div>
 
     <!-- Network equipment -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">5. Сетевое оборудование</h3>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">5. Сетевое оборудование</h3>
       <div class="space-y-3">
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-1">Базовое оборудование</div>
-          <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+          <div class="text-sm font-medium text-[var(--text)] mb-1">Базовое оборудование</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
             <li>• <strong>Сетевой адаптер (NIC)</strong> — устройство для подключения к сети (сетевая карта, Wi-Fi модуль)</li>
             <li>• <strong>Повторитель (Repeater)</strong> — усиливает сигнал (устарел)</li>
             <li>• <strong>Концентратор (Hub)</strong> — простой "разветвитель" (устарел)</li>
           </ul>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-1">Интеллектуальное оборудование</div>
-          <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+          <div class="text-sm font-medium text-[var(--text)] mb-1">Интеллектуальное оборудование</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
             <li>• <strong>Коммутатор (Switch)</strong> — "умный" концентратор, знает MAC-адреса, отправляет данные только нужному получателю. Основа современной LAN.</li>
             <li>• <strong>Маршрутизатор (Router)</strong> — соединяет разные сети (например, LAN с интернетом), определяет оптимальный маршрут</li>
             <li>• <strong>Точка доступа (Access Point)</strong> — устройство для создания Wi-Fi сети</li>
           </ul>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-1">Специализированное оборудование</div>
-          <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+          <div class="text-sm font-medium text-[var(--text)] mb-1">Специализированное оборудование</div>
+          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
             <li>• <strong>Межсетевой экран (Firewall)</strong> — фильтрует трафик, защищает от несанкционированного доступа</li>
             <li>• <strong>Промышленный коммутатор</strong> — усиленный свитч для цехов (защищен от пыли, влаги, вибраций, перепадов температур)</li>
           </ul>
@@ -166,27 +156,27 @@
     </div>
 
     <!-- Regional network -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">6. Региональная и корпоративная сеть</h3>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">6. Региональная и корпоративная сеть</h3>
       <div class="space-y-3">
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-1">Региональная сеть (MAN)</div>
-          <p class="text-xs text-zinc-700">Объединяет компьютеры и локальные сети в пределах города или региона. Преимущества: высокоскоростное соединение между филиалами, совместное использование дорогих ресурсов, видеоконференц-связь.</p>
+          <div class="text-sm font-medium text-[var(--text)] mb-1">Региональная сеть (MAN)</div>
+          <p class="text-xs text-[var(--text-2)] mb-0">Объединяет компьютеры и локальные сети в пределах города или региона. Преимущества: высокоскоростное соединение между филиалами, совместное использование дорогих ресурсов, видеоконференц-связь.</p>
         </div>
         <div>
-          <div class="text-sm font-medium text-zinc-900 mb-1">Корпоративная сеть</div>
-          <p class="text-xs text-zinc-700">Сеть крупной организации, объединяющая филиалы в разных городах и странах (частный случай WAN).</p>
+          <div class="text-sm font-medium text-[var(--text)] mb-1">Корпоративная сеть</div>
+          <p class="text-xs text-[var(--text-2)] mb-0">Сеть крупной организации, объединяющая филиалы в разных городах и странах (частный случай WAN).</p>
         </div>
       </div>
     </div>
 
     <!-- Quest -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3">🎮 Ситуационная задача: "Проектирование сетевой инфраструктуры цеха"</h3>
-      <div class="text-sm text-zinc-700 space-y-3">
-        <p><strong>Легенда:</strong> Вы — инженеры-проектировщики из компании "Мехатроник-Про". Вашей команде поручено разработать проект локальной сети для нового участка сборки автоматизированной линии.</p>
-        <p><strong>Оборудование на участке:</strong></p>
-        <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+    <div class="notice notice-quest">
+      <h3 class="mono text-sm font-semibold mb-3">🎮 Ситуационная задача: "Проектирование сетевой инфраструктуры цеха"</h3>
+      <div class="text-sm text-[var(--text-2)] space-y-3">
+        <p class="mb-0"><strong>Легенда:</strong> Вы — инженеры-проектировщики из компании "Мехатроник-Про". Вашей команде поручено разработать проект локальной сети для нового участка сборки автоматизированной линии.</p>
+        <p class="mb-0"><strong>Оборудование на участке:</strong></p>
+        <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
           <li>• 3 промышленных робота с ПЛК</li>
           <li>• 2 станка с ЧПУ</li>
           <li>• 1 система машинного зрения (камера высокого разрешения)</li>
@@ -194,26 +184,16 @@
           <li>• 1 промышленный принтер</li>
           <li>• Датчики температуры и вибрации</li>
         </ul>
-        <p><strong>Задача:</strong> Выбрать оптимальные типы линий связи и сетевое оборудование, рассчитать бюджет проекта, нарисовать схему подключения.</p>
+        <p class="mb-0"><strong>Задача:</strong> Выбрать оптимальные типы линий связи и сетевое оборудование, рассчитать бюджет проекта, нарисовать схему подключения.</p>
       </div>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>

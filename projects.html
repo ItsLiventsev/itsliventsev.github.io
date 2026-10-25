@@ -4,531 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>проекты · itsliventsev</title>
+<meta name="description" content="Готовые материалы, лабораторные, промпты и конфигурации: глоссарий, базы данных, сети и виртуальные стенды.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #030303;
-    --text: #fafafa;
-    --muted: #666666;
-    --border: rgba(255,255,255,0.06);
-    --card: #0a0a0a;
-    --card-hover: #0f0f0f;
-    --accent: #3b82f6;
-    --accent-glow: rgba(59,130,246,0.15);
-    --grid-dot: rgba(255,255,255,0.02);
-    --tag-bg: rgba(255,255,255,0.04);
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    background: var(--bg);
-    color: var(--text);
-    margin: 0;
-    overflow-x: hidden;
-  }
-
-  .mono { font-family: 'JetBrains Mono', monospace; }
-
-  /* Dark dot grid background */
-  .bg-grid {
-    background-image: radial-gradient(circle, var(--grid-dot) 1.5px, transparent 1.5px);
-    background-size: 40px 40px;
-    position: relative;
-  }
-
-  /* Floating decorative elements */
-  .floating-elements {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .float-item {
-    position: absolute;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.03);
-    animation: float 25s ease-in-out infinite;
-    white-space: nowrap;
-    letter-spacing: 0.05em;
-  }
-
-  .float-item.left { left: 3%; }
-  .float-item.right { right: 3%; text-align: right; }
-
-  .float-item:nth-child(1) { top: 8%; animation-delay: 0s; }
-  .float-item:nth-child(2) { top: 22%; animation-delay: -6s; }
-  .float-item:nth-child(3) { top: 36%; animation-delay: -12s; }
-  .float-item:nth-child(4) { top: 50%; animation-delay: -18s; }
-  .float-item:nth-child(5) { top: 64%; animation-delay: -8s; }
-  .float-item:nth-child(6) { top: 78%; animation-delay: -14s; }
-  .float-item:nth-child(7) { top: 92%; animation-delay: -4s; }
-  
-  .float-item:nth-child(8) { top: 15%; animation-delay: -10s; }
-  .float-item:nth-child(9) { top: 29%; animation-delay: -16s; }
-  .float-item:nth-child(10) { top: 43%; animation-delay: -22s; }
-  .float-item:nth-child(11) { top: 57%; animation-delay: -11s; }
-  .float-item:nth-child(12) { top: 71%; animation-delay: -17s; }
-  .float-item:nth-child(13) { top: 85%; animation-delay: -23s; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.03; }
-    33% { transform: translateY(-25px) translateX(8px); opacity: 0.06; }
-    66% { transform: translateY(12px) translateX(-8px); opacity: 0.04; }
-  }
-
-  /* Vertical lines */
-  .vertical-line {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.04), transparent);
-    z-index: 0;
-    pointer-events: none;
-  }
-  .vertical-line.left { left: 10%; }
-  .vertical-line.right { right: 10%; }
-
-  /* Corner brackets */
-  .corner-bracket {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    border: 1px solid rgba(255,255,255,0.06);
-    z-index: 0;
-    pointer-events: none;
-  }
-  .corner-bracket.top-left { top: 120px; left: 80px; border-right: none; border-bottom: none; }
-  .corner-bracket.top-right { top: 120px; right: 80px; border-left: none; border-bottom: none; }
-  .corner-bracket.bottom-left { bottom: 120px; left: 80px; border-right: none; border-top: none; }
-  .corner-bracket.bottom-right { bottom: 120px; right: 80px; border-left: none; border-top: none; }
-
-  /* Scroll progress */
-  .scroll-progress {
-    position: fixed; top: 0; left: 0; height: 2px; width: 0;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
-    z-index: 100;
-    transition: width 0.1s linear;
-  }
-
-  /* Header - minimal, transparent */
-  .site-header {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
-    background: rgba(3,3,3,0.7);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border-bottom: 1px solid var(--border);
-    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
-  }
-  .site-header.scrolled {
-    transform: translateY(-120%);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .nav-link {
-    color: var(--muted);
-    transition: color 0.25s ease;
-    font-weight: 500;
-    font-size: 0.8125rem;
-  }
-  .nav-link:hover { color: var(--text); }
-  .nav-link.active { color: var(--accent); font-weight: 600; }
-
-  /* Enhanced Bottom Dock - BIGGER, with all navigation */
-  .bottom-dock {
-    position: fixed; bottom: -200px; left: 50%; transform: translateX(-50%);
-    z-index: 65;
-    background: rgba(15,15,15,0.95);
-    backdrop-filter: blur(32px) saturate(200%);
-    -webkit-backdrop-filter: blur(32px) saturate(200%);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 25px 80px -30px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset;
-    transition: bottom 0.7s cubic-bezier(0.16,1,0.3,1);
-    min-width: 320px;
-  }
-  .bottom-dock.visible { bottom: 28px; }
-
-  .dock-main-nav {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .dock-item {
-    color: var(--muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 10px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
-    white-space: nowrap;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.02em;
-  }
-  .dock-item:hover {
-    color: var(--text);
-    background: rgba(255,255,255,0.06);
-    transform: translateY(-2px);
-  }
-  .dock-item.active { 
-    color: var(--accent);
-    background: rgba(59,130,246,0.1);
-    font-weight: 700;
-  }
-  .dock-sep { 
-    width: 1px; 
-    height: 28px; 
-    background: rgba(255,255,255,0.1); 
-    margin: 0 6px;
-  }
-
-  .dock-secondary {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    width: 100%;
-    justify-content: center;
-  }
-
-  .dock-secondary .dock-item {
-    font-size: 0.6875rem;
-    padding: 8px 14px;
-    color: rgba(255,255,255,0.5);
-  }
-  .dock-secondary .dock-item:hover {
-    color: var(--text);
-    background: rgba(255,255,255,0.04);
-  }
-
-  /* Hero - SYSTEM/TERMINAL style */
-  .hero-title {
-    font-size: clamp(2.5rem, 7vw, 5.5rem);
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: lowercase;
-  }
-  
-  #title-mark {
-    display: inline-block;
-    width: 2.5ch;
-    transition: all 0.3s ease;
-    color: var(--accent);
-  }
-  
-  .cursor-green { color: #10b981; }
-  .cursor-red { color: #ef4444; }
-  .cursor-blue { color: #3b82f6; }
-  .cursor-purple { color: #8b5cf6; }
-  .cursor-orange { color: #f59e0b; }
-
-  .hero-sub { 
-    color: var(--muted); 
-    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.05em;
-  }
-  
-  .hero-lead {
-    color: var(--muted);
-    font-size: clamp(0.9375rem, 1.3vw, 1.0625rem);
-    line-height: 1.7;
-    font-weight: 400;
-    max-width: 42rem;
-  }
-
-  .system-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.6875rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-  }
-
-  .system-badge::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: #10b981;
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* Bento grid - compact */
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    grid-auto-flow: dense;
-  }
-  @media (max-width: 1024px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) { .bento-grid { grid-template-columns: 1fr; } }
-
-  /* Cards with variants */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--card-accent, var(--accent));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease;
-  }
-
-  .card:hover::before { transform: scaleX(1); }
-  
-  .card:hover {
-    transform: translateY(-3px);
-    background: var(--card-hover);
-    border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 30%, var(--border));
-    box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6);
-  }
-
-  /* Active card (Glossary) */
-  .card-active {
-    border-color: rgba(59,130,246,0.25);
-    background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, var(--card) 100%);
-  }
-  .card-active:hover {
-    border-color: rgba(59,130,246,0.5);
-    box-shadow: 0 20px 40px -20px rgba(59,130,246,0.15);
-  }
-
-  /* Placeholder cards */
-  .card-placeholder {
-    border-style: dashed;
-    border-color: rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.02);
-    opacity: 0.45;
-    cursor: default;
-  }
-  .card-placeholder:hover {
-    opacity: 0.65;
-    background: rgba(255,255,255,0.03);
-    transform: none;
-    box-shadow: none;
-  }
-  .card-placeholder::before { display: none; }
-
-  .card-num {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .card-title {
-    font-size: 1.0625rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
-    margin: 0.625rem 0 0.5rem;
-    color: var(--text);
-  }
-
-  .card-desc {
-    font-size: 0.8125rem;
-    line-height: 1.6;
-    color: var(--muted);
-    flex-grow: 1;
-  }
-
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .card-arrow {
-    color: var(--card-accent, var(--accent));
-    font-size: 1.125rem;
-    transition: transform 0.3s ease;
-  }
-  .card:hover .card-arrow { transform: translateX(4px); }
-
-  /* Card sizes */
-  .card-wide { grid-column: span 2; }
-  @media (max-width: 640px) { .card-wide { grid-column: span 1; } }
-
-  /* Status badges */
-  .status {
-    font-size: 0.625rem;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .status-ready { background: #22c55e; color: #052e16; }
-  .status-soon { background: var(--tag-bg); color: var(--muted); border: 1px solid var(--border); }
-
-  /* Tags */
-  .tag {
-    font-size: 0.625rem;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    border: 1px solid transparent;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .tag-blue { color: #60a5fa; background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.2); }
-  .tag-green { color: #4ade80; background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.2); }
-  .tag-purple { color: #c084fc; background: rgba(192,132,252,0.08); border-color: rgba(192,132,252,0.2); }
-  .tag-orange { color: #fb923c; background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.2); }
-  .tag-pink { color: #fb7185; background: rgba(251,113,133,0.08); border-color: rgba(251,113,133,0.2); }
-  .tag-plain { color: var(--muted); background: var(--tag-bg); border-color: var(--border); }
-
-  /* Reveal animations */
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-  .js-enabled .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-  }
-  .js-enabled .reveal.active { opacity: 1; transform: none; }
-
-  .stagger > * {
-    opacity: 1;
-    transform: none;
-  }
-  .js-enabled .stagger > * {
-    opacity: 0; transform: translateY(18px);
-    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-  }
-  .js-enabled .stagger.active > * { opacity: 1; transform: none; }
-  .js-enabled .stagger.active > *:nth-child(1) { transition-delay: 0.05s; }
-  .js-enabled .stagger.active > *:nth-child(2) { transition-delay: 0.1s; }
-  .js-enabled .stagger.active > *:nth-child(3) { transition-delay: 0.15s; }
-  .js-enabled .stagger.active > *:nth-child(4) { transition-delay: 0.2s; }
-  .js-enabled .stagger.active > *:nth-child(5) { transition-delay: 0.25s; }
-  .js-enabled .stagger.active > *:nth-child(6) { transition-delay: 0.3s; }
-
-  .section-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .section-title {
-    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    color: var(--text);
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 2.5rem 0;
-  }
-
-  .footer-link {
-    color: var(--text);
-    transition: color 0.25s ease;
-    text-decoration: none;
-  }
-  .footer-link:hover { color: var(--accent); }
-
-  .badge {
-    font-size: 0.625rem;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-weight: 600;
-    border: 1px solid transparent;
-  }
-  .badge-red { color: #f87171; background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.2); }
-  .badge-orange { color: #fb923c; background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.2); }
-
-  /* Pixel emoji */
-  .pixel-emoji {
-    font-size: 0.875rem;
-    filter: grayscale(100%) brightness(1.2);
-    opacity: 0.6;
-  }
-
-  /* Counter badge */
-  .counter-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.6875rem;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--muted);
-  }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 </head>
-<body class="bg-grid">
+<body class="bg-grid" data-theme="dark" data-accent="blue">
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<!-- Floating decorative elements -->
-<div class="floating-elements">
+<!-- Плавающие терминальные команды -->
+<div class="floating-elements" aria-hidden="true">
   <div class="float-item left">sudo apt-get update && sudo apt-get upgrade</div>
   <div class="float-item left">git commit -m "fix: critical bug"</div>
   <div class="float-item left">docker run -it --rm ubuntu:latest</div>
@@ -536,7 +25,7 @@
   <div class="float-item left">systemctl restart nginx</div>
   <div class="float-item left">chmod +x script.sh && ./script.sh</div>
   <div class="float-item left">ps aux | grep python</div>
-  
+
   <div class="float-item right">ssh root@192.168.1.1</div>
   <div class="float-item right">ping -c 4 google.com</div>
   <div class="float-item right">netstat -tulpn</div>
@@ -546,72 +35,31 @@
   <div class="float-item right">tcpdump -i eth0</div>
 </div>
 
-<!-- Vertical lines -->
-<div class="vertical-line left"></div>
-<div class="vertical-line right"></div>
+<div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-8 sm:py-12 relative z-10">
 
-<!-- Corner brackets -->
-<div class="corner-bracket top-left"></div>
-<div class="corner-bracket top-right"></div>
-<div class="corner-bracket bottom-left"></div>
-<div class="corner-bracket bottom-right"></div>
-
-<!-- Header - minimal -->
-<header class="site-header" id="site-header">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-3.5 flex justify-between items-center">
-    <a href="index.html" class="mono text-sm font-bold flex items-center gap-2 group" style="color: var(--text);">
-      <span class="transition-transform group-hover:-translate-x-1">←</span>
-      itsliventsev
-    </a>
-    <nav class="hidden lg:flex items-center gap-6">
+  <!-- Header -->
+  <header class="site-header reveal">
+    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
+    <nav class="site-nav">
       <a href="index.html#stack" class="nav-link">стек</a>
       <a href="index.html#resources" class="nav-link">материалы</a>
       <a href="index.html#cv" class="nav-link">опыт</a>
-      <a href="blog.html" class="nav-link inline-flex items-center gap-1.5">
-        <span>блог</span>
-        <span class="badge badge-red">когда-то?</span>
-      </a>
-      <a href="articles.html" class="nav-link inline-flex items-center gap-1.5">
-        <span>статьи</span>
-        <span class="badge badge-orange">новое</span>
-      </a>
+      <a href="blog.html" class="nav-link">блог <span class="pill pill-red">когда-то?</span></a>
+      <a href="articles.html" class="nav-link">статьи <span class="pill pill-orange">обновлённое</span></a>
+      <a href="projects.html" class="nav-link active" aria-current="page">проекты <span class="pill pill-green">новое</span></a>
       <a href="archive.html" class="nav-link">архив</a>
-      <a href="projects.html" class="nav-link active">проекты</a>
     </nav>
-  </div>
-</header>
-
-<!-- Enhanced Bottom Dock - BIGGER with all navigation -->
-<nav class="bottom-dock" id="bottom-dock">
-  <!-- Main navigation -->
-  <div class="dock-main-nav">
-    <a href="index.html" class="dock-item mono">главная</a>
-    <a href="index.html#stack" class="dock-item mono">стек</a>
-    <a href="index.html#resources" class="dock-item mono">материалы</a>
-    <a href="index.html#cv" class="dock-item mono">опыт</a>
-    <span class="dock-sep"></span>
-    <a href="#catalog" class="dock-item mono active">материалы</a>
-    <span class="dock-sep"></span>
-    <a href="blog.html" class="dock-item mono">блог</a>
-    <a href="articles.html" class="dock-item mono">статьи</a>
-    <a href="archive.html" class="dock-item mono">архив</a>
-  </div>
-  
-  <!-- Secondary navigation -->
-  <div class="dock-secondary">
-    <a href="index.html" class="dock-item mono">← назад</a>
-  </div>
-</nav>
-
-<main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-16 relative z-10">
+  </header>
 
   <!-- Hero -->
   <section class="reveal mb-14">
     <div class="system-badge">system://projects</div>
-    <h1 class="hero-title mono mb-5">
-      проекты<span id="title-mark"><span class="cursor-green">>_</span></span>
+    <h1 class="dark-hero-title mono mb-5">
+      проекты<span id="title-mark"
+        data-mark-html='["<span class=\"cursor-green\">&gt;_</span>","<span class=\"cursor-red\">&gt;__</span>","<span class=\"cursor-blue\">&gt;___</span>","<span class=\"cursor-purple\">&gt;____</span>","<span class=\"cursor-orange\">&gt;_____</span>"]'
+        data-mark-interval="800"><span class="cursor-green">&gt;_</span></span>
     </h1>
-    <p class="hero-sub mono mb-4">// готовые материалы · лабораторные · промпты · конфигурации</p>
+    <p class="mono text-xs sm:text-sm mb-4" style="color: var(--muted);">// готовые материалы · лабораторные · промпты · конфигурации</p>
     <p class="hero-lead">
       Всё, что можно использовать прямо сейчас. Не заметки и не черновики — готовые к работе материалы, промпты для ИИ и скрипты автоматизации.
     </p>
@@ -620,118 +68,106 @@
   <div class="divider"></div>
 
   <!-- Catalog -->
-  <section id="catalog" class="reveal mb-12">
+  <section id="catalog" class="reveal mb-12 scroll-mt-24">
     <div class="flex items-end justify-between mb-7 flex-wrap gap-4">
-      <div>
-        <h2 class="section-title">материалы</h2>
-      </div>
-      <div class="counter-badge mono">1 из 6 доступно <span class="pixel-emoji"></span></div>
+      <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight" style="color: var(--text);">материалы</h2>
+      <div class="p-counter mono">1 из 6 доступно</div>
     </div>
 
     <div class="bento-grid stagger">
 
-      <!-- 01: Glossary (Active, wide) -->
-      <a href="https://itsliventsev.github.io/projects/glossary.html" class="card card-wide card-active" style="--card-accent: #3b82f6;">
+      <!-- 01: Glossary (active, wide) -->
+      <a href="projects/glossary.html" class="p-card wide is-active" style="--card-accent: #3b82f6;">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">01</span>
-          <span class="status status-ready">готово <span class="pixel-emoji">✓</span></span>
+          <span class="p-num">01</span>
+          <span class="p-status p-status-ready">готово ✓</span>
         </div>
-        <h3 class="card-title">Глоссарий</h3>
-        <p class="card-desc">Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД. Всё, что нужно знать, чтобы не плавать в терминах.</p>
+        <h3 class="p-title">Глоссарий</h3>
+        <p class="p-desc">Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД. Всё, что нужно знать, чтобы не плавать в терминах.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-blue"><span class="pixel-emoji">🌐</span>сети</span>
-          <span class="tag tag-green"><span class="pixel-emoji"></span>ос</span>
-          <span class="tag tag-purple"><span class="pixel-emoji">🐘</span>бд</span>
+          <span class="p-tag tag-blue">🌐 сети</span>
+          <span class="p-tag tag-green">ос</span>
+          <span class="p-tag tag-purple">🐘 бд</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">справочник · открыт</span>
-          <span class="card-arrow">→</span>
+        <div class="p-footer">
+          <span>справочник · открыт</span>
+          <span class="p-arrow">→</span>
         </div>
       </a>
 
-      <!-- 02: Databases (Placeholder) -->
-      <div class="card card-placeholder">
+      <!-- 02: Databases -->
+      <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">02</span>
-          <span class="status status-soon">в разработке</span>
+          <span class="p-num">02</span>
+          <span class="p-status p-status-soon">в разработке</span>
         </div>
-        <h3 class="card-title" style="color: var(--muted);">Базы данных</h3>
-        <p class="card-desc">Теория и практикум по реляционным БД: проектирование таблиц, ключи, связи и типы данных.</p>
+        <h3 class="p-title">Базы данных</h3>
+        <p class="p-desc">Теория и практикум по реляционным БД: проектирование таблиц, ключи, связи и типы данных.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-plain"><span class="pixel-emoji"></span>бд</span>
-          <span class="tag tag-plain"><span class="pixel-emoji"></span>sql</span>
+          <span class="p-tag tag-plain">бд</span>
+          <span class="p-tag tag-plain">sql</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
-        </div>
+        <div class="p-footer"><span>скоро</span></div>
       </div>
 
-      <!-- 03: Encoding (Placeholder) -->
-      <div class="card card-placeholder">
+      <!-- 03: Encoding -->
+      <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">03</span>
-          <span class="status status-soon">в разработке</span>
+          <span class="p-num">03</span>
+          <span class="p-status p-status-soon">в разработке</span>
         </div>
-        <h3 class="card-title" style="color: var(--muted);">Кодирование информации</h3>
-        <p class="card-desc">Двоичное кодирование, ASCII, RGB, дискретизация. Интерактивный квест «Шифр неисправности».</p>
+        <h3 class="p-title">Кодирование информации</h3>
+        <p class="p-desc">Двоичное кодирование, ASCII, RGB, дискретизация. Интерактивный квест «Шифр неисправности».</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-plain"><span class="pixel-emoji"></span>теория</span>
-          <span class="tag tag-plain"><span class="pixel-emoji">🎮</span>квест</span>
+          <span class="p-tag tag-plain">теория</span>
+          <span class="p-tag tag-plain">🎮 квест</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
-        </div>
+        <div class="p-footer"><span>скоро</span></div>
       </div>
 
-      <!-- 04: Networks (Placeholder, wide) -->
-      <div class="card card-wide card-placeholder">
+      <!-- 04: Networks (wide) -->
+      <div class="p-card wide is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">04</span>
-          <span class="status status-soon">в разработке</span>
+          <span class="p-num">04</span>
+          <span class="p-status p-status-soon">в разработке</span>
         </div>
-        <h3 class="card-title" style="color: var(--muted);">Компьютерные сети</h3>
-        <p class="card-desc">LAN, MAN, WAN, виды линий связи, сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
+        <h3 class="p-title">Компьютерные сети</h3>
+        <p class="p-desc">LAN, MAN, WAN, виды линий связи, сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-plain"><span class="pixel-emoji">🌐</span>сети</span>
-          <span class="tag tag-plain"><span class="pixel-emoji">📡</span>топология</span>
+          <span class="p-tag tag-plain">🌐 сети</span>
+          <span class="p-tag tag-plain">📡 топология</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
-        </div>
+        <div class="p-footer"><span>скоро</span></div>
       </div>
 
-      <!-- 05: Network Load (Placeholder) -->
-      <div class="card card-placeholder">
+      <!-- 05: Network load -->
+      <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">05</span>
-          <span class="status status-soon">в разработке</span>
+          <span class="p-num">05</span>
+          <span class="p-status p-status-soon">в разработке</span>
         </div>
-        <h3 class="card-title" style="color: var(--muted);">Паразитирующая нагрузка</h3>
-        <p class="card-desc">7-часовой курс: диагностика трафика, netstat, PowerShell, командные битвы и оптимизация.</p>
+        <h3 class="p-title">Паразитирующая нагрузка</h3>
+        <p class="p-desc">7-часовой курс: диагностика трафика, netstat, PowerShell, командные битвы и оптимизация.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-plain"><span class="pixel-emoji">🌐</span>сети</span>
-          <span class="tag tag-plain"><span class="pixel-emoji"></span>powershell</span>
+          <span class="p-tag tag-plain">🌐 сети</span>
+          <span class="p-tag tag-plain">powershell</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
-        </div>
+        <div class="p-footer"><span>скоро</span></div>
       </div>
 
-      <!-- 06: Virtual Stands (Placeholder) -->
-      <div class="card card-placeholder">
+      <!-- 06: Virtual stands -->
+      <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="card-num">06</span>
-          <span class="status status-soon">в разработке</span>
+          <span class="p-num">06</span>
+          <span class="p-status p-status-soon">в разработке</span>
         </div>
-        <h3 class="card-title" style="color: var(--muted);">Виртуальные стенды</h3>
-        <p class="card-desc">Интерактивные лабораторные работы в браузере с автоматической проверкой результатов и пошаговыми сценариями.</p>
+        <h3 class="p-title">Виртуальные стенды</h3>
+        <p class="p-desc">Интерактивные лабораторные работы в браузере с автоматической проверкой результатов и пошаговыми сценариями.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="tag tag-plain"><span class="pixel-emoji">🔬</span>лаборатория</span>
-          <span class="tag tag-plain"><span class="pixel-emoji">🎯</span>интерактив</span>
+          <span class="p-tag tag-plain">🔬 лаборатория</span>
+          <span class="p-tag tag-plain">🎯 интерактив</span>
         </div>
-        <div class="card-footer">
-          <span class="mono text-xs" style="color: var(--muted);">скоро</span>
-        </div>
+        <div class="p-footer"><span>скоро</span></div>
       </div>
 
     </div>
@@ -740,72 +176,15 @@
   <div class="divider"></div>
 
   <!-- Footer -->
-  <footer class="reveal flex flex-col sm:flex-row justify-between items-center gap-4">
-    <div class="mono text-xs" style="color: var(--muted);">© 2026 itsliventsev · проекты <span class="pixel-emoji">🦀</span></div>
-    <a href="index.html" class="footer-link inline-flex items-center gap-2 text-sm font-medium group">
+  <footer class="reveal flex flex-col sm:flex-row justify-between items-center gap-4 mono text-xs" style="color: var(--muted);">
+    <span>© 2026 itsliventsev · проекты 🦀</span>
+    <a href="index.html" class="nav-link group inline-flex items-center gap-2">
+      <span class="arrow transition-transform group-hover:-translate-x-0.5">←</span> на главную
     </a>
   </footer>
 
-</main>
+</div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-
-  const header = document.getElementById('site-header');
-  const dock = document.getElementById('bottom-dock');
-  const progress = document.getElementById('scroll-progress');
-  const mark = document.getElementById('title-mark');
-
-  // Cursor animation with colors
-  const cursorFrames = [
-    '<span class="cursor-green">>_</span>',
-    '<span class="cursor-red">>__</span>',
-    '<span class="cursor-blue">>___</span>',
-    '<span class="cursor-purple">>____</span>',
-    '<span class="cursor-orange">>_____</span>'
-  ];
-  let cursorIndex = 0;
-  setInterval(() => {
-    cursorIndex = (cursorIndex + 1) % cursorFrames.length;
-    mark.innerHTML = cursorFrames[cursorIndex];
-  }, 800);
-
-  function onScroll() {
-    const y = window.scrollY;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
-
-    if (y > 120) {
-      header.classList.add('scrolled');
-      dock.classList.add('visible');
-    } else {
-      header.classList.remove('scrolled');
-      dock.classList.remove('visible');
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // Reveal animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.01,
-    rootMargin: '0px 0px -40px 0px'
-  });
-
-  document.querySelectorAll('.reveal, .stagger').forEach((el) => observer.observe(el));
-
-  setTimeout(() => {
-    document.querySelectorAll('.reveal, .stagger').forEach((el) => el.classList.add('active'));
-  }, 250);
-</script>
-
+<script src="assets/site.js"></script>
 </body>
 </html>

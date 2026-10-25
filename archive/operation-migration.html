@@ -4,70 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Операция «Миграция» · itsliventsev</title>
+<meta name="description" content="Стратегический кейс по миграции на гибридную ИТ-инфраструктуру: Windows Server и ALT Linux, домен, DHCP, DNS, VPN и мониторинг.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); z-index: 100; transition: width 0.1s ease; }
-  .bg-grid { background-size: 24px 24px; background-image: radial-gradient(circle, rgba(59, 130, 246, 0.07) 1px, transparent 1px); }
-  .reveal { opacity: 1; transform: translateY(0); }
-  .js-enabled .reveal { opacity: 0; transform: translateY(16px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-enabled .reveal.active { opacity: 1; transform: translateY(0); }
-  .hover-glow { transition: all 0.3s ease; }
-  .hover-glow:hover { box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.35); transform: translateY(-2px); }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
-<body class="bg-zinc-50 text-zinc-900 antialiased bg-grid overflow-x-hidden">
+<body class="bg-grid" data-accent="blue">
+
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-14">
-  <header class="reveal flex justify-between items-center mb-8 sticky top-3 z-50 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-xl border border-zinc-200 shadow-sm">
-    <a href="https://itsliventsev.github.io/archive.html" class="mono text-sm font-semibold text-zinc-900 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-      <span class="transition-transform group-hover:-translate-x-0.5">←</span> архив
-    </a>
-    <span class="mono text-xs text-blue-600 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200">кейс</span>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+
+  <header class="site-header reveal">
+    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
+    <span class="pill pill-accent">кейс</span>
   </header>
 
-  <section class="reveal mb-6">
-    <h1 class="mono text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 mb-3">
-      Операция «Миграция»<span id="title-mark" class="text-blue-600 cursor-pointer select-none" style="display:inline-block; width:2ch;">#</span>
+  <section class="hero reveal">
+    <h1 class="hero-title text-3xl sm:text-4xl">
+      Операция «Миграция»<span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <div class="flex items-center gap-2 mb-6">
-      <span class="mono text-[10px] px-2 py-1 rounded bg-zinc-100 text-zinc-500 border border-zinc-200 flex items-center gap-1.5">
-        ⚙️ текст структурирован и оптимизирован с помощью ИИ
-      </span>
-    </div>
-    <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       Создание гибридной ИТ-экосистемы в компании «ВекторТех». Стратегический проект по обеспечению технологического суверенитета с интеграцией Windows Server и ALT Linux.
     </p>
   </section>
 
   <section class="reveal space-y-6">
     <!-- Context -->
-    <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-      <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📋 Контекст ситуации</h3>
-      <div class="space-y-3 text-sm text-zinc-700">
-        <p><strong>Компания:</strong> «ВекторТех» (развитие технологий для умных городов)</p>
-        <p><strong>Ваша роль:</strong> Ведущий системный администратор (Senior SysAdmin) Алексей</p>
-        <p><strong>Текущая инфраструктура:</strong></p>
-        <ul class="list-disc pl-5 space-y-1 text-xs text-zinc-600">
-          <li>50 компьютеров под Windows 10/11</li>
-          <li>5 физических серверов (старый парк)</li>
-          <li>Файловый NAS</li>
-          <li>Сети в режиме рабочих групп (хаос, нет централизованного управления)</li>
-        </ul>
-        <p><strong>Цель:</strong> Построить отказоустойчивую, безопасную и управляемую ИТ-инфраструктуру с интеграцией Windows Server и ALT Linux.</p>
+    <div class="card hoverable p-5">
+      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📋 Контекст ситуации</h3>
+      <div class="space-y-3 text-sm text-[var(--text-2)]">
+        <p class="mb-0"><strong>Компания:</strong> «ВекторТех» (развитие технологий для умных городов)</p>
+        <p class="mb-0"><strong>Ваша роль:</strong> Ведущий системный администратор (Senior SysAdmin) Алексей</p>
+        <div>
+          <p class="mb-1"><strong>Текущая инфраструктура:</strong></p>
+          <ul class="list-disc pl-5 space-y-1 text-xs text-[var(--muted)]">
+            <li>50 компьютеров под Windows 10/11</li>
+            <li>5 физических серверов (старый парк)</li>
+            <li>Файловый NAS</li>
+            <li>Сети в режиме рабочих групп (хаос, нет централизованного управления)</li>
+          </ul>
+        </div>
+        <p class="mb-0"><strong>Цель:</strong> Построить отказоустойчивую, безопасную и управляемую ИТ-инфраструктуру с интеграцией Windows Server и ALT Linux.</p>
       </div>
     </div>
 
     <!-- Timeline -->
     <div class="space-y-4">
-      <div class="bg-blue-50/50 border border-blue-200 rounded-xl p-5">
-        <h3 class="mono text-sm font-semibold text-blue-800 mb-3">📅 Неделя 1: Планирование и расчеты</h3>
-        <div class="text-sm text-zinc-700 space-y-2">
-          <p><strong>Задача 1.1:</strong> Расчет бюджета и планирование сети</p>
-          <ul class="list-disc pl-5 space-y-1 text-xs text-zinc-600">
+      <div class="notice notice-info">
+        <h3 class="mono text-sm font-semibold mb-3" style="color:#1e40af;">📅 Неделя 1: Планирование и расчеты</h3>
+        <div class="text-sm text-[var(--text-2)] space-y-2">
+          <p class="mb-0"><strong>Задача 1.1:</strong> Расчет бюджета и планирование сети</p>
+          <ul class="list-disc pl-5 space-y-1 text-xs text-[var(--muted)] mb-0">
             <li>Спроектировать логическую сеть с разделением на подсети: управление (серверы), пользователи (офис), гости (Wi-Fi), инженеры (лаборатория)</li>
             <li>Рассчитать стоимость оборудования (2 новых сервера для виртуализации, коммутаторы L3, ИБП)</li>
             <li>Рассчитать лицензии Windows Server 2022 Standard и CAL</li>
@@ -76,12 +68,12 @@
         </div>
       </div>
 
-      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <h3 class="mono text-sm font-semibold text-zinc-900 mb-3"> Недели 2-3: Развертывание базовой инфраструктуры</h3>
+      <div class="card hoverable p-5">
+        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">Недели 2-3: Развертывание базовой инфраструктуры</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="p-4 bg-zinc-50 rounded-lg border border-zinc-200">
-            <div class="mono text-xs text-blue-600 mb-2">Задача 2.1: Windows Server 2022</div>
-            <ul class="text-xs text-zinc-700 space-y-1">
+          <div class="p-4 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+            <div class="mono text-xs mb-2" style="color:var(--accent);">Задача 2.1: Windows Server 2022</div>
+            <ul class="text-xs text-[var(--text-2)] space-y-1 mb-0">
               <li>• Установить ОС с ролью AD DS</li>
               <li>• Создать лес домена vector.tech</li>
               <li>• Создать структуру OU</li>
@@ -89,9 +81,9 @@
               <li>• Настроить GPO (пароли, USB, принтеры)</li>
             </ul>
           </div>
-          <div class="p-4 bg-zinc-50 rounded-lg border border-zinc-200">
-            <div class="mono text-xs text-blue-600 mb-2">Задача 2.2: ALT Server</div>
-            <ul class="text-xs text-zinc-700 space-y-1">
+          <div class="p-4 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
+            <div class="mono text-xs mb-2" style="color:var(--accent);">Задача 2.2: ALT Server</div>
+            <ul class="text-xs text-[var(--text-2)] space-y-1 mb-0">
               <li>• Установить ALT WorkStation/Server</li>
               <li>• Обновить систему</li>
               <li>• Установить пакеты: dhcp-server, bind, chrony</li>
@@ -101,12 +93,12 @@
         </div>
       </div>
 
-      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Неделя 4: Организация сетевых сервисов и безопасности</h3>
+      <div class="card hoverable p-5">
+        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 4: Организация сетевых сервисов и безопасности</h3>
         <div class="space-y-3">
           <div>
-            <div class="text-sm font-medium text-zinc-900 mb-1">Задача 3.1: DHCP и DNS на ALT Server</div>
-            <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+            <div class="text-sm font-medium text-[var(--text)] mb-1">Задача 3.1: DHCP и DNS на ALT Server</div>
+            <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
               <li>• Настроить DHCP с динамическими пулами для пользовательской и гостевой подсети</li>
               <li>• Настроить резервации для критичных устройств</li>
               <li>• Настроить DNS (BIND) с прямой зоной vector.tech</li>
@@ -114,8 +106,8 @@
             </ul>
           </div>
           <div>
-            <div class="text-sm font-medium text-zinc-900 mb-1">Задача 3.2: Сетевая безопасность</div>
-            <ul class="text-xs text-zinc-700 space-y-1 ml-4">
+            <div class="text-sm font-medium text-[var(--text)] mb-1">Задача 3.2: Сетевая безопасность</div>
+            <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
               <li>• Windows Server: Remote Access Service (RAS) с VPN (SSTP/IKEv2)</li>
               <li>• Маршрутизатор: правила firewall, изоляция гостевой сети</li>
               <li>• ALT Server: firewalld (разрешить только DNS и DHCP)</li>
@@ -124,12 +116,12 @@
         </div>
       </div>
 
-      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover-glow">
-        <h3 class="mono text-sm font-semibold text-zinc-900 mb-3">📅 Неделя 5: Ввод в эксплуатацию и мониторинг</h3>
-        <div class="space-y-3 text-sm text-zinc-700">
+      <div class="card hoverable p-5">
+        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 5: Ввод в эксплуатацию и мониторинг</h3>
+        <div class="space-y-3">
           <div>
-            <div class="font-medium text-zinc-900">Задача 4.1: Подключение рабочих станций</div>
-            <ul class="text-xs text-zinc-600 space-y-1 ml-4 mt-1">
+            <div class="font-medium text-[var(--text)]">Задача 4.1: Подключение рабочих станций</div>
+            <ul class="text-xs text-[var(--muted)] space-y-1 ml-4 mt-1 mb-0">
               <li>• Присоединить 2-3 тестовые Windows 10/11 к домену vector.tech</li>
               <li>• Проверить вход под a.ivanov</li>
               <li>• Установить ALT Workstation в лаборатории</li>
@@ -137,8 +129,8 @@
             </ul>
           </div>
           <div>
-            <div class="font-medium text-zinc-900">Задача 4.2: Сбор данных и анализ</div>
-            <ul class="text-xs text-zinc-600 space-y-1 ml-4 mt-1">
+            <div class="font-medium text-[var(--text)]">Задача 4.2: Сбор данных и анализ</div>
+            <ul class="text-xs text-[var(--muted)] space-y-1 ml-4 mt-1 mb-0">
               <li>• Активировать Audit Policy на Windows Server</li>
               <li>• Performance Monitor: загрузка ЦП и памяти за 24 часа</li>
               <li>• Создать отчет (PowerPoint): схема сети, диаграммы, статистика</li>
@@ -149,44 +141,34 @@
     </div>
 
     <!-- Final deliverables -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5">
-      <h3 class="mono text-sm font-semibold text-blue-800 mb-3">🏆 Финальный отчет</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-700">
+    <div class="notice notice-quest">
+      <h3 class="mono text-sm font-semibold mb-3">🏆 Финальный отчет</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[var(--text-2)]">
         <div class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">1</span>
+          <span style="color:var(--accent);" class="mt-0.5">1</span>
           <span>Схема итоговой сети</span>
         </div>
         <div class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">2</span>
+          <span style="color:var(--accent);" class="mt-0.5">2</span>
           <span>Инструкция для пользователей (WiFi, VPN)</span>
         </div>
         <div class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">3</span>
+          <span style="color:var(--accent);" class="mt-0.5">3</span>
           <span>Техническая инструкция для junior-админа</span>
         </div>
         <div class="flex items-start gap-2">
-          <span class="text-blue-600 mt-0.5">4</span>
+          <span style="color:var(--accent);" class="mt-0.5">4</span>
           <span>Выводы и рекомендации по развитию</span>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="reveal flex justify-center items-center pt-8 mt-10 border-t border-zinc-200 text-xs text-zinc-400 mono">
+  <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
   </footer>
 </div>
 
-<script>
-  document.documentElement.classList.add('js-enabled');
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => { progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; });
-  const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.01 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 200);
-  const mark = document.getElementById('title-mark');
-  const frames = ['#', '/', '#', '/', '#/', '/#']; let i = 0;
-  setInterval(() => { i = (i + 1) % frames.length; mark.textContent = frames[i]; }, 500);
-</script>
+<script src="../assets/site.js"></script>
 </body>
 </html>
