@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>проекты · itsliventsev</title>
-<meta name="description" content="Готовые материалы, лабораторные, промпты и конфигурации: глоссарий, базы данных, сети и виртуальные стенды.">
+<meta name="description" content="Учебные материалы для студентов и личные проекты: глоссарий, сети, виртуальные стенды, киберспортивное направление ПК8.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,26 +52,30 @@
   </header>
 
   <!-- Hero -->
-  <section class="reveal mb-14">
+  <section class="reveal mb-12">
     <div class="system-badge">system://projects</div>
     <h1 class="dark-hero-title mono mb-5">
       проекты<span id="title-mark"
         data-mark-html='["<span class=\"cursor-green\">&gt;_</span>","<span class=\"cursor-red\">&gt;__</span>","<span class=\"cursor-blue\">&gt;___</span>","<span class=\"cursor-purple\">&gt;____</span>","<span class=\"cursor-orange\">&gt;_____</span>"]'
         data-mark-interval="800"><span class="cursor-green">&gt;_</span></span>
     </h1>
-    <p class="mono text-xs sm:text-sm mb-4" style="color: var(--muted);">// готовые материалы · лабораторные · промпты · конфигурации</p>
+    <p class="mono text-xs sm:text-sm mb-4" style="color: var(--muted);">// учебные материалы · личные проекты · завершённые практики</p>
     <p class="hero-lead">
-      Всё, что можно использовать прямо сейчас. Не заметки и не черновики — готовые к работе материалы, промпты для ИИ и скрипты автоматизации.
+      Две зоны: учебный процесс — материалы для студентов, и проекты — то, чем занимался и занимаюсь вне аудиторий. Готовое сразу открывается, остальное честно помечено как заглушка.
     </p>
   </section>
 
   <div class="divider"></div>
 
-  <!-- Catalog -->
-  <section id="catalog" class="reveal mb-12 scroll-mt-24">
-    <div class="flex items-end justify-between mb-7 flex-wrap gap-4">
-      <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight" style="color: var(--text);">материалы</h2>
-      <div class="p-counter mono">1 из 6 доступно</div>
+  <!-- ================= ZONE 01 · УЧЕБНЫЙ ПРОЦЕСС ================= -->
+  <section class="zone reveal" id="zone-edu">
+    <div class="zone-head">
+      <div>
+        <div class="zone-index">zone 01</div>
+        <h2 class="zone-title">учебный процесс</h2>
+        <p class="zone-desc">Материалы для студентов: справочники, курсы и лабораторные, которые можно использовать прямо на паре или дома.</p>
+      </div>
+      <div class="p-counter mono">1 из 5 доступно</div>
     </div>
 
     <div class="bento-grid stagger">
@@ -95,79 +99,131 @@
         </div>
       </a>
 
-      <!-- 02: Databases -->
+      <!-- 02: Networks -->
       <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
           <span class="p-num">02</span>
-          <span class="p-status p-status-soon">в разработке</span>
-        </div>
-        <h3 class="p-title">Базы данных</h3>
-        <p class="p-desc">Теория и практикум по реляционным БД: проектирование таблиц, ключи, связи и типы данных.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">бд</span>
-          <span class="p-tag tag-plain">sql</span>
-        </div>
-        <div class="p-footer"><span>скоро</span></div>
-      </div>
-
-      <!-- 03: Encoding -->
-      <div class="p-card is-soon">
-        <div class="flex items-start justify-between mb-4">
-          <span class="p-num">03</span>
-          <span class="p-status p-status-soon">в разработке</span>
-        </div>
-        <h3 class="p-title">Кодирование информации</h3>
-        <p class="p-desc">Двоичное кодирование, ASCII, RGB, дискретизация. Интерактивный квест «Шифр неисправности».</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">теория</span>
-          <span class="p-tag tag-plain">🎮 квест</span>
-        </div>
-        <div class="p-footer"><span>скоро</span></div>
-      </div>
-
-      <!-- 04: Networks (wide) -->
-      <div class="p-card wide is-soon">
-        <div class="flex items-start justify-between mb-4">
-          <span class="p-num">04</span>
-          <span class="p-status p-status-soon">в разработке</span>
+          <span class="flex gap-1.5 flex-wrap justify-end">
+            <span class="p-status p-status-new">новое</span>
+            <span class="p-status p-status-soon">в разработке</span>
+          </span>
         </div>
         <h3 class="p-title">Компьютерные сети</h3>
-        <p class="p-desc">LAN, MAN, WAN, виды линий связи, сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
+        <p class="p-desc">LAN, MAN, WAN, линии связи и сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
           <span class="p-tag tag-plain">🌐 сети</span>
           <span class="p-tag tag-plain">📡 топология</span>
         </div>
-        <div class="p-footer"><span>скоро</span></div>
+        <div class="p-footer"><span>черновик уже в архиве</span></div>
       </div>
 
-      <!-- 05: Network load -->
+      <!-- 03: Virtual stands -->
       <div class="p-card is-soon">
         <div class="flex items-start justify-between mb-4">
-          <span class="p-num">05</span>
-          <span class="p-status p-status-soon">в разработке</span>
-        </div>
-        <h3 class="p-title">Паразитирующая нагрузка</h3>
-        <p class="p-desc">7-часовой курс: диагностика трафика, netstat, PowerShell, командные битвы и оптимизация.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">🌐 сети</span>
-          <span class="p-tag tag-plain">powershell</span>
-        </div>
-        <div class="p-footer"><span>скоро</span></div>
-      </div>
-
-      <!-- 06: Virtual stands -->
-      <div class="p-card is-soon">
-        <div class="flex items-start justify-between mb-4">
-          <span class="p-num">06</span>
-          <span class="p-status p-status-soon">в разработке</span>
+          <span class="p-num">03</span>
+          <span class="flex gap-1.5 flex-wrap justify-end">
+            <span class="p-status p-status-new">новое</span>
+            <span class="p-status p-status-soon">в разработке</span>
+          </span>
         </div>
         <h3 class="p-title">Виртуальные стенды</h3>
-        <p class="p-desc">Интерактивные лабораторные работы в браузере с автоматической проверкой результатов и пошаговыми сценариями.</p>
+        <p class="p-desc">Интерактивные лабораторные в браузере с автоматической проверкой результатов и пошаговыми сценариями.</p>
         <div class="flex flex-wrap gap-1.5 mt-4">
           <span class="p-tag tag-plain">🔬 лаборатория</span>
           <span class="p-tag tag-plain">🎯 интерактив</span>
         </div>
-        <div class="p-footer"><span>скоро</span></div>
+        <div class="p-footer"><span>собираю прототип</span></div>
+      </div>
+
+      <!-- 04: honest stub -->
+      <div class="p-card is-stub">
+        <div class="flex items-start justify-between mb-4">
+          <span class="p-num">04</span>
+          <span class="p-status p-status-soon">скоро</span>
+        </div>
+        <div class="stub-mark mb-2">?</div>
+        <h3 class="p-title">Следующий модуль</h3>
+        <p class="p-desc">Место зарезервировано. Тема появится, как только дойдут руки и практика.</p>
+        <div class="p-footer"><span class="stub-note">// это заглушка, а не кнопка</span></div>
+      </div>
+
+      <!-- 05: honest stub -->
+      <div class="p-card is-stub">
+        <div class="flex items-start justify-between mb-4">
+          <span class="p-num">05</span>
+          <span class="p-status p-status-soon">когда-нибудь</span>
+        </div>
+        <div class="stub-mark mb-2">?</div>
+        <h3 class="p-title">Идея без названия</h3>
+        <p class="p-desc">Пока просто карточка. Однажды она станет ссылкой — если нет, так и останется частью истории.</p>
+        <div class="p-footer"><span class="stub-note">// честная заглушка</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================= ZONE 02 · ПРОЕКТЫ И ПРАКТИКИ ================= -->
+  <section class="zone reveal" id="zone-projects">
+    <div class="zone-head">
+      <div>
+        <div class="zone-index">zone 02</div>
+        <h2 class="zone-title">проекты и практики</h2>
+        <p class="zone-desc">Чем занимался вне аудиторий: направления, события и эксперименты. Завершённые проекты остаются здесь как опыт — даже если путь в них уже пройден.</p>
+      </div>
+      <div class="p-counter mono">1 из 3 доступно</div>
+    </div>
+
+    <div class="bento-grid stagger">
+
+      <!-- 01: Esports (completed, wide) -->
+      <a href="projects/esports.html" class="p-card wide" style="--card-accent: #8b5cf6;">
+        <div class="flex items-start justify-between mb-4">
+          <span class="p-num">01</span>
+          <span class="flex gap-1.5 flex-wrap justify-end">
+            <span class="p-status p-status-archive">завершён · 2020–2025</span>
+            <span class="p-status p-status-ready">опыт ✓</span>
+          </span>
+        </div>
+        <h3 class="p-title">🎮 Киберспортивное направление в ПК №8</h3>
+        <p class="p-desc">
+          С нуля собрал киберспортивную программу и сборные колледжа: 5 дисциплин, городские лиги МСКЛ и МШКЛ, внутренние чемпионаты и бронза Main Stage по CS:GO.
+          Проект завершён со сменой места работы — страница зафиксировала весь путь.
+        </p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="p-tag tag-purple">🕹️ киберспорт</span>
+          <span class="p-tag tag-pink">команды</span>
+          <span class="p-tag tag-orange">турниры</span>
+        </div>
+        <div class="p-footer">
+          <span>кейс · лендинг проекта</span>
+          <span class="p-arrow">→</span>
+        </div>
+      </a>
+
+      <!-- 02: stub -->
+      <div class="p-card is-stub">
+        <div class="flex items-start justify-between mb-4">
+          <span class="p-num">02</span>
+          <span class="p-status p-status-soon">скоро</span>
+        </div>
+        <div class="stub-mark mb-2">?</div>
+        <h3 class="p-title">Новый проект</h3>
+        <p class="p-desc">Слот под следующую историю. Уже вынашивается — детали появятся первыми здесь.</p>
+        <div class="p-footer"><span class="stub-note">// заглушка · будет ссылкой</span></div>
+      </div>
+
+      <!-- 03: stub -->
+      <div class="p-card is-stub">
+        <div class="flex items-start justify-between mb-4">
+          <span class="p-num">03</span>
+          <span class="p-status p-status-soon">идея</span>
+        </div>
+        <div class="stub-mark mb-2">?</div>
+        <h3 class="p-title">Без названия пока</h3>
+        <p class="p-desc">Резервная ячейка зоны проектов. Пусть будет — хорошие идеи любят готовые места.</p>
+        <div class="p-footer"><span class="stub-note">// честная заглушка</span></div>
       </div>
 
     </div>

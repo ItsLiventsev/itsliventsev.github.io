@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>киберспорт · проект ПК8 · itsliventsev</title>
+<meta name="description" content="Киберспортивное направление в Политехническом колледже №8: программа на 108 часов, сборные по 5 дисциплинам, лиги МСКЛ и МШКЛ, бронза Main Stage по CS:GO.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body class="bg-grid" data-theme="dark" data-accent="blue">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-8 sm:py-12 relative z-10">
+
+  <!-- Header -->
+  <header class="site-header reveal">
+    <a href="../projects.html" class="logo"><span class="arrow">←</span> проекты</a>
+    <nav class="site-nav">
+      <a href="#program" class="nav-link">программа</a>
+      <a href="#disciplines" class="nav-link">дисциплины</a>
+      <a href="#tournaments" class="nav-link">турниры</a>
+      <a href="#achievement" class="nav-link">награды</a>
+      <a href="../index.html" class="nav-link">на главную</a>
+    </nav>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="esp-hero reveal mb-14 pt-6">
+    <span class="float-emoji big" style="top:-10px; right:6%; animation-delay:-1s;">🎮</span>
+    <span class="float-emoji" style="top:40px; right:20%; animation-delay:-3s;">🕹️</span>
+    <span class="float-emoji" style="bottom:10px; right:34%; animation-delay:-5s;">🏆</span>
+    <span class="float-emoji" style="top:10px; right:42%; animation-delay:-2s;">⚡</span>
+    <span class="float-emoji" style="bottom:30px; right:12%; animation-delay:-4s;">👾</span>
+
+    <div class="flex flex-wrap gap-2 mb-6">
+      <span class="p-status p-status-archive">завершён · 2020–2025</span>
+      <span class="p-status" style="background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);">ГАПОУ ПК №8 им. И.Ф. Павлова</span>
+    </div>
+
+    <h1 class="dark-hero-title mono mb-5" style="font-size:clamp(3rem, 10vw, 6.5rem);">
+      <span class="text-gradient">кибер</span>спорт<span id="title-mark"
+        data-mark-html='["<span class=\"cursor-green\">_</span>","<span class=\"cursor-purple\">█</span>","<span class=\"cursor-orange\">_</span>","<span class=\"cursor-blue\">█</span>"]'
+        data-mark-interval="600"><span class="cursor-green">_</span></span>
+    </h1>
+
+    <p class="mono text-xs sm:text-sm mb-4" style="color: var(--muted);">// мскл+ · мшкл · внутренние чемпионаты · доп. образование · 5 дисциплин</p>
+    <p class="hero-lead mb-8">
+      История киберспортивного направления, собранного с нуля в колледже: учебная программа на 108 часов, живые сборные,
+      городские лиги и медаль Main Stage. Проект завершён вместе со сменой места работы — здесь он зафиксирован как опыт, к которому можно вернуться.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a href="#achievement" class="btn btn-primary" style="background:linear-gradient(92deg,#3b82f6,#8b5cf6);border:none;">🏆 смотреть результат</a>
+      <a href="#program" class="btn">📚 учебная программа</a>
+    </div>
+
+    <!-- Marquee -->
+    <div class="mt-12 py-3 border-y" style="border-color:var(--border);">
+      <div class="marquee mono text-xs sm:text-sm" style="color:var(--muted);">
+        <div class="marquee-content">
+          <span>🔫 CS:GO</span><span>•</span><span>⚔️ Dota 2</span><span>•</span><span>🪄 League of Legends</span><span>•</span>
+          <span>🎯 VALORANT</span><span>•</span><span>🃏 Hearthstone</span><span>•</span><span>🥇 МШКЛ</span><span>•</span><span>🥈 МСКЛ+</span><span>•</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span>🔫 CS:GO</span><span>•</span><span>⚔️ Dota 2</span><span>•</span><span>🪄 League of Legends</span><span>•</span>
+          <span>🎯 VALORANT</span><span>•</span><span>🃏 Hearthstone</span><span>•</span><span>🥇 МШКЛ</span><span>•</span><span>🥈 МСКЛ+</span><span>•</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STATS ================= -->
+  <section class="reveal mb-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 stagger">
+      <div class="esp-stat">
+        <div class="esp-stat-num"><span class="counter" data-target="5">0</span></div>
+        <div class="esp-stat-label">лет направления<br>2020–2025</div>
+      </div>
+      <div class="esp-stat">
+        <div class="esp-stat-num"><span class="counter" data-target="5">0</span></div>
+        <div class="esp-stat-label">киберспортивных<br>дисциплин</div>
+      </div>
+      <div class="esp-stat">
+        <div class="esp-stat-num"><span class="counter" data-target="10">0</span>+</div>
+        <div class="esp-stat-label">турниров<br>и чемпионатов</div>
+      </div>
+      <div class="esp-stat">
+        <div class="esp-stat-num"><span class="counter" data-target="108">0</span></div>
+        <div class="esp-stat-label">часов учебной<br>программы</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LIGHT BAND · О ПРОЕКТЕ ================= -->
+  <div class="light-band reveal" style="border-radius:20px; margin-bottom:4rem; overflow:hidden;">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-12">
+      <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase text-indigo-600 mb-2">// о проекте</div>
+      <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-6">что это было 🎓</h2>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="light-card">
+          <div class="mono text-xs text-zinc-400 uppercase tracking-wider mb-2">роль</div>
+          <p class="text-sm text-zinc-700 leading-relaxed mb-0">
+            Педагог дополнительного образования и куратор направления: написал общеразвивающую программу «Киберспорт»,
+            вёл занятия, собирал сборные и координировал участие колледжа в городских лигах.
+          </p>
+        </div>
+        <div class="light-card">
+          <div class="mono text-xs text-zinc-400 uppercase tracking-wider mb-2">формат</div>
+          <p class="text-sm text-zinc-700 leading-relaxed mb-0">
+            Студенты 1–2 курсов, 15–17 лет. Группы до 15 человек, занятия дважды в неделю по 2 академических часа —
+            очно, с возможностью дистанционного подключения.
+          </p>
+        </div>
+        <div class="light-card">
+          <div class="mono text-xs text-zinc-400 uppercase tracking-wider mb-2">направленность</div>
+          <p class="text-sm text-zinc-700 leading-relaxed mb-0">
+            Техническая и физкультурно-спортивная. Не только игра: железо и настройка, стратегия, командная коммуникация,
+            гигиена труда за ПК и правила безопасного интернета.
+          </p>
+        </div>
+        <div class="light-card" style="background:linear-gradient(135deg,#eef2ff,#faf5ff);">
+          <div class="mono text-xs text-indigo-500 uppercase tracking-wider mb-2">статус</div>
+          <p class="text-sm text-zinc-700 leading-relaxed mb-0">
+            <strong class="text-zinc-900">Проект завершён.</strong> Сменив место работы, я зафиксировал здесь методику, результаты и опыт —
+            это рабочий конспект для перезапуска на новой площадке.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ЦЕЛЬ И ЗАДАЧИ ================= -->
+  <section class="reveal mb-16">
+    <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// цель и задачи</div>
+    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-6" style="color:var(--text);">зачем всё затевалось 🎯</h2>
+
+    <div class="color-band mb-4">
+      <div class="mono text-[11px] uppercase tracking-widest mb-2" style="color:#a78bfa;">цель программы</div>
+      <p class="text-sm md:text-base leading-relaxed mb-0" style="color:var(--text-2);">
+        Дать первоначальные знания и навыки киберспорта, превратить досуг за компьютером в осмысленную практику
+        и собрать устойчивые киберспортивные команды колледжа — с дисциплиной, стратегией и спортивным характером.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-3 stagger">
+      <div class="p-card" style="--card-accent:#60a5fa;">
+        <div class="p-num mb-3">обучающие</div>
+        <ul class="text-sm space-y-2 mb-0" style="color:var(--muted);">
+          <li>▸ основы киберспорта и классы игр</li>
+          <li>▸ настройка железа и аксессуаров</li>
+          <li>▸ роли, правила и дисциплины</li>
+          <li>▸ Discord, TeamSpeak, Steam</li>
+        </ul>
+      </div>
+      <div class="p-card" style="--card-accent:#a78bfa;">
+        <div class="p-num mb-3">развивающие</div>
+        <ul class="text-sm space-y-2 mb-0" style="color:var(--muted);">
+          <li>▸ реакция и мелкая моторика</li>
+          <li>▸ стратегическое мышление</li>
+          <li>▸ коммуникация и работа в команде</li>
+          <li>▸ выход из нестандартных ситуаций</li>
+        </ul>
+      </div>
+      <div class="p-card" style="--card-accent:#f472b6;">
+        <div class="p-num mb-3">воспитательные</div>
+        <ul class="text-sm space-y-2 mb-0" style="color:var(--muted);">
+          <li>▸ дисциплина и воля к победе</li>
+          <li>▸ командный дух и уважение</li>
+          <li>▸ здоровый образ жизни</li>
+          <li>▸ правила игровые и социальные</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ПРОГРАММА ================= -->
+  <section class="reveal mb-16 scroll-mt-24" id="program">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-6">
+      <div>
+        <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// программа · 108 часов · 1 год</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight m-0" style="color:var(--text);">7 разделов обучения 📚</h2>
+      </div>
+      <span class="p-counter mono">2 раза в неделю · группа до 15</span>
+    </div>
+
+    <!-- теория / практика -->
+    <div class="p-card mb-6" style="padding:1.2rem 1.4rem;">
+      <div class="flex justify-between mono text-xs mb-2.5" style="color:var(--muted);">
+        <span>🔵 теория — 26 ч</span>
+        <span>практика — 94 ч 🟣</span>
+      </div>
+      <div class="split-bar">
+        <div class="seg-theory" style="width:21.7%;"></div>
+        <div class="seg-practice" style="width:78.3%;"></div>
+      </div>
+      <div class="mono text-[11px] mt-2.5 mb-0" style="color:var(--faint);">≈ 78% занятий — игровая и командная практика</div>
+      <p class="mono text-[11px] mt-2 mb-0" style="color:var(--faint);">// в паспорте программы указано 108 ч, а свод учебного плана в оригинале сходится на 120 ч (26 теория + 94 практика) — расхождение самого документа, привожу обе цифры как есть</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-3 stagger">
+      <div class="p-card" style="--card-accent:#3b82f6;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">введение</span><span class="p-tag tag-blue">4 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Инструктаж и охрана труда</h3>
+        <p class="p-desc">Организация места за ПК, безопасность в интернете, пароли и антивирусы.</p>
+      </div>
+      <div class="p-card" style="--card-accent:#3b82f6;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">раздел 1</span><span class="p-tag tag-blue">26 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Теоретическая подготовка</h3>
+        <p class="p-desc">Классы игр, требования к аппаратуре, аксессуары, VR, Steam и Battle.net.</p>
+      </div>
+      <div class="p-card" style="--card-accent:#8b5cf6;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">раздел 2</span><span class="p-tag tag-purple">12 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Киберспортивные дисциплины</h3>
+        <p class="p-desc">Симуляторы и головоломки, выбор своей дисциплины на следующие полгода.</p>
+      </div>
+      <div class="p-card" style="--card-accent:#8b5cf6;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">раздел 3</span><span class="p-tag tag-purple">10 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Специальная подготовка</h3>
+        <p class="p-desc">Правила, роли, разбор профессиональных матчей и тактических приёмов.</p>
+      </div>
+      <div class="p-card" style="--card-accent:#ec4899;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">раздел 4</span><span class="p-tag tag-pink">42 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Технико-тактическая подготовка</h3>
+        <p class="p-desc">Самый большой блок: командная игра, роли, стратегии против конкретного соперника.</p>
+      </div>
+      <div class="p-card" style="--card-accent:#f59e0b;">
+        <div class="flex items-start justify-between mb-2"><span class="p-num">разделы 5–7</span><span class="p-tag tag-orange">26 ч</span></div>
+        <h3 class="p-title" style="font-size:1rem;">Соревнования и чемпионат</h3>
+        <p class="p-desc">Подготовка к турниру, внутригрупповой чемпионат, итоговое занятие и награждение.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ДИСЦИПЛИНЫ ================= -->
+  <section class="reveal mb-16 scroll-mt-24" id="disciplines">
+    <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// дисциплины</div>
+    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3" style="color:var(--text);">пять игр — пять характеров 🕹️</h2>
+    <p class="text-sm mb-7" style="color:var(--muted);">По каждой дисциплине собирали 2–3 сборные, чтобы конкуренция за место была живой.</p>
+
+    <div class="flex flex-wrap gap-3 stagger mb-8">
+      <span class="game-tag game-cs">🔫 Counter-Strike: Global Offensive</span>
+      <span class="game-tag game-dota">⚔️ Dota 2</span>
+      <span class="game-tag game-lol">🪄 League of Legends</span>
+      <span class="game-tag game-val">🎯 VALORANT</span>
+      <span class="game-tag game-hs">🃏 Hearthstone</span>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div class="p-card">
+        <h3 class="p-title" style="font-size:.98rem;">🔫 CS:GO — флагман</h3>
+        <p class="p-desc">Тактический шутер 5×5: раунды, экономика, карты и сыгранность. Именно здесь взяли медаль МШКЛ.</p>
+      </div>
+      <div class="p-card">
+        <h3 class="p-title" style="font-size:.98rem;">⚔️ Dota 2 / 🪄 LoL</h3>
+        <p class="p-desc">Боевая арена: распределение ролей, драфты и длинные стратегические партии. Выбор дисциплины после практики.</p>
+      </div>
+      <div class="p-card">
+        <h3 class="p-title" style="font-size:.98rem;">🎯 VALORANT · 🃏 Hearthstone</h3>
+        <p class="p-desc">Тактика со способностями для командных игроков и карточная стратегия для одиночек-аналитиков.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= КАК ДЕЛАЛИ ================= -->
+  <section class="reveal mb-16">
+    <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// процесс</div>
+    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-7" style="color:var(--text);">как это работало ⚙️</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 stagger">
+      <div class="step-card">
+        <div class="step-card-num">шаг 01</div>
+        <h3 class="text-sm font-bold mb-1.5" style="color:var(--text);">Набор и отбор</h3>
+        <p class="text-xs leading-relaxed mb-0" style="color:var(--muted);">Группы до 15 человек, игровые пробы и выбор дисциплины.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">шаг 02</div>
+        <h3 class="text-sm font-bold mb-1.5" style="color:var(--text);">Техника и связь</h3>
+        <p class="text-xs leading-relaxed mb-0" style="color:var(--muted);">Железо, калибровка аксессуаров, Discord и TeamSpeak.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">шаг 03</div>
+        <h3 class="text-sm font-bold mb-1.5" style="color:var(--text);">Тренировки</h3>
+        <p class="text-xs leading-relaxed mb-0" style="color:var(--muted);">Роли, командные стратегии и разбор профессиональных матчей.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">шаг 04</div>
+        <h3 class="text-sm font-bold mb-1.5" style="color:var(--text);">Соревнования</h3>
+        <p class="text-xs leading-relaxed mb-0" style="color:var(--muted);">Внутренний чемпионат → отборы МСКЛ+ и МШКЛ.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">шаг 05</div>
+        <h3 class="text-sm font-bold mb-1.5" style="color:var(--text);">Разбор и зачёт</h3>
+        <p class="text-xs leading-relaxed mb-0" style="color:var(--muted);">Анализ реплеев, зачёт по турниру и награждение.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ТУРНИРЫ ================= -->
+  <section class="reveal mb-16 scroll-mt-24" id="tournaments">
+    <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// турниры и лиги</div>
+    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-8" style="color:var(--text);">хронология выхода на город 🏟️</h2>
+
+    <div class="esp-timeline">
+      <div class="esp-tl-item">
+        <div class="esp-tl-date">2020 · старт</div>
+        <div class="esp-tl-title">Первые сборные и внутренние чемпионаты</div>
+        <p class="esp-tl-desc">Направление выросло из обычных игровых встреч: отобрали сильнейших, ввели регулярные тренировки и внутренние турниры между отделениями.</p>
+      </div>
+      <div class="esp-tl-item">
+        <div class="esp-tl-date">2022 · программа</div>
+        <div class="esp-tl-title">Доп. программа «Киберспорт» и МСКЛ+</div>
+        <p class="esp-tl-desc">Оформил направление как общеразвивающую программу на 108 часов. Сборные вышли в Московскую студенческую киберспортивную лигу, сезон II: CS:GO, Dota 2, LoL, VALORANT, Hearthstone.</p>
+      </div>
+      <div class="esp-tl-item">
+        <div class="esp-tl-date">2023 · январь — апрель</div>
+        <div class="esp-tl-title">МШКЛ: отборочные матчи</div>
+        <p class="esp-tl-desc">Колледжный дивизион Московской школьной киберспортивной лиги. Готовили команды к очным этапам на арене Main Stage.</p>
+      </div>
+      <div class="esp-tl-item">
+        <div class="esp-tl-date">май 2023 · пик</div>
+        <div class="esp-tl-title">Финал МШКЛ на Main Stage 🥉</div>
+        <p class="esp-tl-desc">Финал за бронзу по CS:GO — уверенная победа 2:0. Первая медаль направления на городской арене.</p>
+      </div>
+      <div class="esp-tl-item">
+        <div class="esp-tl-date">2024–2025 · передача</div>
+        <div class="esp-tl-title">Развитие внутренней лиги и завершение проекта</div>
+        <p class="esp-tl-desc">Поддерживали чемпионаты и тренировочный цикл, после чего проект завершился со сменой места работы. Методика и наработки сохранены на этой странице.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ДОСТИЖЕНИЕ ================= -->
+  <section class="reveal mb-16 scroll-mt-24" id="achievement">
+    <div class="trophy-card">
+      <div class="mono text-[11px] font-bold tracking-[0.16em] uppercase mb-3" style="color:#fbbf24;">// май 2023 · мшкал · cs:go · main stage</div>
+      <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight mb-3" style="color:var(--text);">🥉 Бронза МШКЛ по CS:GO</h2>
+      <p class="text-sm md:text-base leading-relaxed max-w-2xl mb-5" style="color:var(--muted);">
+        Команда колледжа дошла до финала за третье место в колледжном дивизионе и закрыла матч со счётом 2:0.
+        Это была не разовая удача, а результат годового цикла: отбор, роли, тактика и разбор каждой карты.
+      </p>
+      <div class="flex flex-wrap gap-2 relative z-10">
+        <span class="p-tag tag-orange">колледжный дивизион</span>
+        <span class="p-tag tag-blue">Main Stage</span>
+        <span class="p-tag tag-green">счёт 2:0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ИТОГИ: СДЕЛАНО / НЕ УСПЕЛИ ================= -->
+  <section class="reveal mb-16" id="results">
+    <div class="mono text-[11px] font-semibold tracking-[0.16em] uppercase mb-2" style="color:var(--accent);">// честные итоги</div>
+    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-7" style="color:var(--text);">что получилось и что осталось на будущее ✅</h2>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="p-card" style="--card-accent:#10b981;">
+        <h3 class="p-title flex items-center gap-2" style="font-size:1.05rem;">✅ что сделали</h3>
+        <ul class="text-sm space-y-2.5 mb-0" style="color:var(--muted);">
+          <li>▸ написали и защитили программу «Киберспорт» — 108 часов, 7 разделов</li>
+          <li>▸ собрали 2–3 сборные на каждую из 5 дисциплин</li>
+          <li>▸ проводили внутренние чемпионаты каждый учебный год</li>
+          <li>▸ вышли на городские лиги МСКЛ+ и МШКЛ</li>
+          <li>▸ взяли бронзу МШКЛ по CS:GO на Main Stage</li>
+          <li>▸ выстроили тренировочный цикл: роли, стратегии, разбор реплеев</li>
+        </ul>
+      </div>
+      <div class="p-card" style="--card-accent:#f59e0b;">
+        <h3 class="p-title flex items-center gap-2" style="font-size:1.05rem;">⏳ точки роста</h3>
+        <ul class="text-sm space-y-2.5 mb-0" style="color:var(--muted);">
+          <li>▸ выход на всероссийский уровень лиг</li>
+          <li>▸ собственная киберарена и стриминг матчей</li>
+          <li>▸ новые дисциплины: консольный и мобильный киберспорт</li>
+          <li>▸ автоматизация турнирных сеток — тогда вели вручную</li>
+          <li>▸ медиаподдержка: контент, интервью с игроками</li>
+        </ul>
+        <p class="mono text-[11px] mt-4 mb-0" style="color:var(--faint);">// проект завершился со сменой работы — это задел для следующего запуска</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="reveal flex flex-col sm:flex-row justify-between items-center gap-4 mono text-xs" style="color:var(--muted);">
+    <span>© 2026 itsliventsev · киберспорт ПК8 · завершённый проект 🎮</span>
+    <a href="../projects.html" class="nav-link group inline-flex items-center gap-2">
+      <span class="arrow transition-transform group-hover:-translate-x-0.5">←</span> назад к проектам
+    </a>
+  </footer>
+
+</div>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>
