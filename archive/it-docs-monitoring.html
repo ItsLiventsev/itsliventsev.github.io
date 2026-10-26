@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/archive/it-docs-monitoring.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="IT-документооборот и мониторинг · itsliventsev">
+  <meta property="og:description" content="Комплексный практикум для оператора IT-отдела: инвентаризация, мониторинг сети, OCR, Excel, презентация и простой сайт.">
+  <meta property="og:url" content="https://itsliventsev.github.io/archive/it-docs-monitoring.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IT-документооборот и мониторинг · itsliventsev">
+  <meta name="twitter:description" content="Комплексный практикум для оператора IT-отдела: инвентаризация, мониторинг сети, OCR, Excel, презентация и простой сайт.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"IT-документооборот и мониторинг","description":"Комплексный практикум для оператора IT-отдела: инвентаризация, мониторинг сети, OCR, Excel, презентация и простой сайт.","url":"https://itsliventsev.github.io/archive/it-docs-monitoring.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/archive/it-docs-monitoring.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"IT-документооборот и мониторинг","item":"https://itsliventsev.github.io/archive/it-docs-monitoring.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,6 +73,10 @@
   <main class="prose-measure">
 
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">/</span>
+    </div>
     <h1 class="hero-title text-3xl sm:text-4xl">
       IT-документооборот и мониторинг <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
@@ -53,7 +89,7 @@
   <section class="reveal space-y-4">
     <!-- Module 1 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">1</span> База данных IT-оборудования</h3>
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">1</span> База данных IT-оборудования</h2>
       <p class="text-sm text-[var(--text-2)] mb-3">Создать БД «IT_Inventory» в MS Access или LibreOffice Base. Таблица <strong>Оборудование</strong> должна содержать поля:</p>
       <div class="flex flex-wrap gap-2 mb-3">
         <span class="chip chip-sm">ID (PK, автоинкремент)</span>
@@ -69,7 +105,7 @@
 
     <!-- Module 2 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">2</span> Мониторинг сетевой инфраструктуры</h3>
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">2</span> Мониторинг сетевой инфраструктуры</h2>
       <ul class="space-y-2 text-sm text-[var(--text-2)] mb-3">
         <li>• <code>ipconfig /all</code> → сохранить IPv4, MAC, шлюз, DNS.</li>
         <li>• <code>tracert 8.8.8.8</code> → определить количество хопов.</li>
@@ -82,13 +118,13 @@
 
     <!-- Module 3 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">3</span> Работа со сканированными документами</h3>
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">3</span> Работа со сканированными документами</h2>
       <p class="text-sm text-[var(--text-2)] mb-0">Распознать текст (OCR) из JPEG-скана договора с помощью Adobe Acrobat Reader DC или FineReader Online. Сохранить в DOCX. Применить стили заголовков, создать автоматическое оглавление, колонтитулы, гиперссылку и добавить 3 комментария в режиме рецензирования.</p>
     </div>
 
     <!-- Module 4 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">4</span> Анализ табличных данных (Excel)</h3>
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">4</span> Анализ табличных данных (Excel)</h2>
       <p class="text-sm text-[var(--text-2)] mb-2">Создать таблицу «Учет заявок» (30-40 строк). Применить «Умную таблицу» (Ctrl+T).</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[var(--muted)]">
         <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]"><strong class="text-[var(--text)]">Формулы:</strong> СУММЕСЛИ (время по отделу «Бухгалтерия»), СРЗНАЧЕСЛИ (среднее время сетевых проблем).</div>
@@ -98,7 +134,7 @@
 
     <!-- Module 5-6 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">5-6</span> Презентация и простой IT-сайт</h3>
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:var(--accent);"><span class="step-num">5-6</span> Презентация и простой IT-сайт</h2>
       <p class="text-sm text-[var(--text-2)] mb-2"><strong>PowerPoint (8-10 слайдов):</strong> Титульный, содержание с гиперссылками, статистика, схема сети, планы, SmartArt, резюме со звуком. Настроить слайд-шоу (15 сек, переходы, сохранение в PPTX и PDF).</p>
       <p class="text-sm text-[var(--text-2)] mb-0"><strong>Одностраничный сайт (HTML/CSS или конструктор):</strong> Заголовок H1, описание, таблица дежурств, изображение схемы сети, список полезных ссылок, контактная форма. Требуется базовая CSS-стилизация.</p>
     </div>
@@ -112,6 +148,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>

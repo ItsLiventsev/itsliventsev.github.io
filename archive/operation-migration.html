@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/archive/operation-migration.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Операция «Миграция» · itsliventsev">
+  <meta property="og:description" content="Стратегический кейс по миграции на гибридную ИТ-инфраструктуру: Windows Server и ALT Linux, домен, DHCP, DNS, VPN и мониторинг.">
+  <meta property="og:url" content="https://itsliventsev.github.io/archive/operation-migration.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Операция «Миграция» · itsliventsev">
+  <meta name="twitter:description" content="Стратегический кейс по миграции на гибридную ИТ-инфраструктуру: Windows Server и ALT Linux, домен, DHCP, DNS, VPN и мониторинг.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Операция «Миграция»","description":"Стратегический кейс по миграции на гибридную ИТ-инфраструктуру: Windows Server и ALT Linux, домен, DHCP, DNS, VPN и мониторинг.","url":"https://itsliventsev.github.io/archive/operation-migration.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/archive/operation-migration.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Операция «Миграция»","item":"https://itsliventsev.github.io/archive/operation-migration.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,6 +73,10 @@
   <main class="prose-measure">
 
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">/</span>
+    </div>
     <h1 class="hero-title text-3xl sm:text-4xl">
       Операция «Миграция» <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
@@ -53,7 +89,7 @@
   <section class="reveal space-y-6">
     <!-- Context -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📋 Контекст ситуации</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📋 Контекст ситуации</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Компания:</strong> «ВекторТех» (развитие технологий для умных городов)</p>
         <p class="mb-0"><strong>Ваша роль:</strong> Ведущий системный администратор (Senior SysAdmin) Алексей</p>
@@ -73,7 +109,7 @@
     <!-- Timeline -->
     <div class="space-y-4">
       <div class="notice notice-info">
-        <h3 class="mono text-sm font-semibold mb-3" style="color:#1e40af;">📅 Неделя 1: Планирование и расчеты</h3>
+        <h2 class="mono text-sm font-semibold mb-3" style="color:#1e40af;">📅 Неделя 1: Планирование и расчеты</h2>
         <div class="text-sm text-[var(--text-2)] space-y-2">
           <p class="mb-0"><strong>Задача 1.1:</strong> Расчет бюджета и планирование сети</p>
           <ul class="list-disc pl-5 space-y-1 text-xs text-[var(--muted)] mb-0">
@@ -86,7 +122,7 @@
       </div>
 
       <div class="card hoverable p-5">
-        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">Недели 2-3: Развертывание базовой инфраструктуры</h3>
+        <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">Недели 2-3: Развертывание базовой инфраструктуры</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
             <div class="mono text-xs mb-2" style="color:var(--accent);">Задача 2.1: Windows Server 2022</div>
@@ -111,7 +147,7 @@
       </div>
 
       <div class="card hoverable p-5">
-        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 4: Организация сетевых сервисов и безопасности</h3>
+        <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 4: Организация сетевых сервисов и безопасности</h2>
         <div class="space-y-3">
           <div>
             <div class="text-sm font-medium text-[var(--text)] mb-1">Задача 3.1: DHCP и DNS на ALT Server</div>
@@ -134,7 +170,7 @@
       </div>
 
       <div class="card hoverable p-5">
-        <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 5: Ввод в эксплуатацию и мониторинг</h3>
+        <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Неделя 5: Ввод в эксплуатацию и мониторинг</h2>
         <div class="space-y-3">
           <div>
             <div class="font-medium text-[var(--text)]">Задача 4.1: Подключение рабочих станций</div>
@@ -159,7 +195,7 @@
 
     <!-- Final deliverables -->
     <div class="notice notice-quest">
-      <h3 class="mono text-sm font-semibold mb-3">🏆 Финальный отчет</h3>
+      <h2 class="mono text-sm font-semibold mb-3">🏆 Финальный отчет</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[var(--text-2)]">
         <div class="flex items-start gap-2">
           <span style="color:var(--accent);" class="mt-0.5">1</span>
@@ -189,6 +225,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>

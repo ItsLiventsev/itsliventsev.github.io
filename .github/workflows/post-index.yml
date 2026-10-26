@@ -1,7 +1,8 @@
 name: post-index
 
-# Автоматически пересобирает posts.json для блога и статей,
-# когда в папках blog/ или articles/ появляется/меняется HTML-страница.
+# Автоматически пересобирает posts.json, feed-counts.json, sitemap.xml и feed.xml,
+# когда в контентных папках появляется/меняется HTML-страница,
+# а также освежает SEO-блоки (canonical, OG, JSON-LD) во всех страницах.
 on:
   push:
     paths:
@@ -9,7 +10,9 @@ on:
       - 'articles/**.html'
       - 'projects/**.html'
       - 'archive/**.html'
+      - '*.html'
       - 'scripts/build-post-index.js'
+      - 'scripts/build-seo.js'
       - '.github/workflows/post-index.yml'
   workflow_dispatch:
 
@@ -27,17 +30,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build post indexes
+      - name: Build post indexes and feed counts
         run: node scripts/build-post-index.js
 
-      - name: Commit updated manifests
+      - name: Build SEO artifacts (sitemap, RSS, meta blocks)
+        run: node scripts/build-seo.js
+
+      - name: Commit updated manifests and SEO artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog/posts.json articles/posts.json feed-counts.json
+          git add blog/posts.json articles/posts.json feed-counts.json sitemap.xml feed.xml
+          git add '*.html' 'blog/*.html' 'articles/*.html' 'projects/*.html' 'archive/*.html'
           if git diff --staged --quiet; then
-            echo "Индексы не изменились — коммит не нужен"
+            echo "Изменений для коммита нет"
           else
-            git commit -m "chore: авто-обновление индексов блога и статей"
+            git commit -m "chore: авто-обновление индексов, sitemap и SEO-разметки"
             git push
           fi

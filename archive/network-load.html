@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/archive/network-load.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Устранение паразитирующей нагрузки · itsliventsev">
+  <meta property="og:description" content="7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.">
+  <meta property="og:url" content="https://itsliventsev.github.io/archive/network-load.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Устранение паразитирующей нагрузки · itsliventsev">
+  <meta name="twitter:description" content="7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Устранение паразитирующей нагрузки","description":"7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.","url":"https://itsliventsev.github.io/archive/network-load.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/archive/network-load.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Устранение паразитирующей нагрузки","item":"https://itsliventsev.github.io/archive/network-load.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,6 +73,10 @@
   <main class="prose-measure">
 
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">/</span>
+    </div>
     <h1 class="hero-title text-3xl sm:text-4xl">
       Устранение паразитирующей нагрузки <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
@@ -53,7 +89,7 @@
   <section class="reveal space-y-6">
     <!-- Game mechanics -->
     <div class="notice notice-quest">
-      <h3 class="mono text-sm font-semibold mb-3">🎮 Игровая механика курса</h3>
+      <h2 class="mono text-sm font-semibold mb-3">🎮 Игровая механика курса</h2>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
         <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
           <div class="text-2xl mb-1">🥉</div>
@@ -89,7 +125,7 @@
 
     <!-- Lesson 1 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 1: "Охота на невидимок"</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 1: "Охота на невидимок"</h2>
       <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | 🎯 до 10 баллов | 👤 Индивидуальный</div>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Ситуация:</strong> На компьютере пользователя интернет "тормозит", хотя скорость по тарифу 100 Мбит/с. Браузер закрыт, но трафик куда-то уходит.</p>
@@ -118,7 +154,7 @@
 
     <!-- Lesson 2 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 2: "Следы в сети"</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 2: "Следы в сети"</h2>
       <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | 🎯 до 12 баллов | 👤 Индивидуальный</div>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Ситуация:</strong> Администратор заметил подозрительные соединения с неизвестными IP-адресами из разных стран.</p>
@@ -161,7 +197,7 @@
 
     <!-- Lesson 3 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 3: "Командное сражение: Пожиратели трафика"</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 3: "Командное сражение: Пожиратели трафика"</h2>
       <div class="text-xs text-[var(--muted)] mb-3">⏰ 1 акад. час | до 15 баллов | 👥 Групповая работа</div>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Новый формат:</strong> Сессионные залы VK. 11 человек → 2 команды (Blue Team и Red Team).</p>
@@ -180,7 +216,7 @@
 
     <!-- Lesson 4 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 4: "Укротитель обновлений"</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">📅 Урок 4: "Укротитель обновлений"</h2>
       <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 14 баллов | 👤 Индивидуальный</div>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Ситуация:</strong> Windows Update загружает обновления в рабочее время, парализуя работу. Облачные сервисы синхронизируются без разрешения.</p>
@@ -221,7 +257,7 @@
 
     <!-- Final note -->
     <div class="notice notice-quest">
-      <h3 class="mono text-sm font-semibold mb-3">📚 Дополнительные уроки</h3>
+      <h2 class="mono text-sm font-semibold mb-3">📚 Дополнительные уроки</h2>
       <p class="text-sm text-[var(--text-2)] mb-3">Курс также включает:</p>
       <ul class="text-sm text-[var(--text-2)] space-y-2 mb-0">
         <li class="flex items-start gap-2">
@@ -248,6 +284,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>
