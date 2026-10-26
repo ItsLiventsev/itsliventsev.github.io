@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /assets/admin.js
+Disallow: /assets/admin-config.js

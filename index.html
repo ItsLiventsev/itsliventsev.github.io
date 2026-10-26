@@ -6,22 +6,22 @@
 <meta name="theme-color" content="#fafafa">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>itsliventsev</title>
-<meta name="description" content="Преподаватель IT, сетевой и системный администратор. Учебные материалы, технический стек, опыт и проекты.">
+<meta name="description" content="Заметки, статьи, проекты и учебные материалы: сети, системное администрирование и IT-образование.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="itsliventsev">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:title" content="itsliventsev · преподаватель IT">
-<meta property="og:description" content="Учебные материалы, технический стек, опыт и проекты.">
+<meta property="og:title" content="itsliventsev · заметки, статьи, проекты">
+<meta property="og:description" content="Заметки, статьи, проекты и учебные материалы по сетям и IT-образованию.">
 <meta property="og:url" content="https://itsliventsev.github.io/">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="itsliventsev · преподаватель IT">
-<meta name="twitter:description" content="Учебные материалы, технический стек, опыт и проекты.">
+<meta name="twitter:title" content="itsliventsev · заметки, статьи, проекты">
+<meta name="twitter:description" content="Заметки, статьи, проекты и учебные материалы по сетям и IT-образованию.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026e">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261026f">
 </head>
 <body class="bg-grid" data-accent="blue">
 
@@ -36,20 +36,10 @@
       <a href="#stack" class="nav-link" data-i18n="nav_stack">стек</a>
       <a href="#resources" class="nav-link" data-i18n="nav_materials">материалы</a>
       <a href="#cv" class="nav-link" data-i18n="nav_cv">опыт</a>
-      <a href="blog.html" class="nav-link">
-        <span data-i18n="nav_blog">блог</span>
-        <span class="pill pill-red">когда-то?</span>
-      </a>
-      <a href="articles.html" class="nav-link">
-        <span data-i18n="nav_articles">статьи</span>
-        <span class="pill pill-orange pill-pulse" data-i18n="badge_updated">обновлённое</span>
-      </a>
-      <a href="projects.html" class="nav-link">
-        <span data-i18n="nav_projects">проекты</span>
-        <span class="pill pill-green pill-pulse" data-i18n="badge_new">новое</span>
-      </a>
+      <a href="blog.html" class="nav-link"><span data-i18n="nav_blog">блог</span></a>
+      <a href="articles.html" class="nav-link"><span data-i18n="nav_articles">статьи</span></a>
+      <a href="projects.html" class="nav-link"><span data-i18n="nav_projects">проекты</span></a>
       <a href="archive.html" class="nav-link" data-i18n="nav_archive">архив</a>
-      
     </nav>
   
     <div class="header-actions">
@@ -65,22 +55,8 @@
 
   <!-- Hero -->
   <section class="hero reveal">
-    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-      <div class="flex-1">
-        <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
-          itsliventsev<span class="title-mark blink">_</span>
-        </h1>
-        <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="subtitle">// преподаватель it · сетевой и системный администратор</p>
-      </div>
-      <span class="pill pill-neutral self-start shadow-sm">
-        🎓 <span data-i18n="learning">получаю высшее: управление в образовании</span>
-      </span>
-    </div>
-    <p class="text-sm md:text-base leading-relaxed text-[var(--text-2)] max-w-3xl">
-      <span data-i18n="bio_a">Преподаю, готовлю сетевых и системных администраторов. Веду учебную и производственную практику.</span>
-      <span class="font-semibold text-[var(--text)]"><span class="counter" data-target="5">0</span> <span data-i18n="work_years">лет</span></span>
-      <span data-i18n="bio_b">в обучении, параллельно работаю с реальной инфраструктурой.</span>
-    </p>
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">itsliventsev</h1>
+    <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="tagline">// заметки · статьи · проекты · учебные материалы</p>
   </section>
 
   <!-- Marquee -->
@@ -238,11 +214,12 @@
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev</span>
+    <a href="admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 
 </div>
 
-<script src="assets/site.js?v=20261026e"></script>
+<script src="assets/site.js?v=20261026f"></script>
 <script>
   /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami */
   document.querySelectorAll('.tech-tag').forEach(tag => {
@@ -287,11 +264,7 @@
     ru: {
       nav_stack: "стек", nav_materials: "материалы", nav_blog: "блог", nav_articles: "статьи",
       nav_projects: "проекты", nav_archive: "архив", nav_cv: "опыт",
-      badge_updated: "обновлённое", badge_new: "новое",
-      subtitle: "// преподаватель it · сетевой и системный администратор",
-      bio_a: "Преподаю, готовлю сетевых и системных администраторов. Веду учебную и производственную практику.",
-      bio_b: "в обучении, параллельно работаю с реальной инфраструктурой.",
-      learning: "получаю высшее: управление в образовании",
+      tagline: "// заметки · статьи · проекты · учебные материалы",
       stack_title: "технический стек", cat_languages: "языки программирования", cat_infrastructure: "инфраструктура",
       cat_network: "сети и базы данных", cat_tools: "инструменты",
       res_title: "материалы для студентов", res_1: "база знаний", res_2: "учебная практика", res_3: "производственная",
@@ -308,11 +281,7 @@
     en: {
       nav_stack: "stack", nav_materials: "materials", nav_blog: "blog", nav_articles: "articles",
       nav_projects: "projects", nav_archive: "archive", nav_cv: "experience",
-      badge_updated: "updated", badge_new: "new",
-      subtitle: "// it teacher · network and system administrator",
-      bio_a: "Teaching, training future network and system administrators. Supervising academic and industrial practice.",
-      bio_b: "years in education, while keeping my hands on real infrastructure.",
-      learning: "pursuing bachelor's: educational management",
+      tagline: "// notes · articles · projects · learning materials",
       stack_title: "tech stack", cat_languages: "programming languages", cat_infrastructure: "infrastructure",
       cat_network: "network & databases", cat_tools: "tools",
       res_title: "materials for students", res_1: "knowledge base", res_2: "academic practice", res_3: "industrial practice",
