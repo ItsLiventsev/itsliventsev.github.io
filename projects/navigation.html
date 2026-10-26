@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>навигация отделения · первый дизайн-опыт · itsliventsev</title>
+<meta name="description" content="Проба пера в графическом дизайне: система навигационных знаков для отделения колледжа ПК №8. Бумажные таблички, которые приняли, напечатали и смонтировали. 2023–2024.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css?v=20261026c">
+</head>
+<body class="bg-grid nav-project" data-accent="blue">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
+
+<div class="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-8 sm:py-12 relative z-10">
+
+  <!-- Header -->
+  <header class="site-header reveal">
+    <a href="../projects.html" class="logo"><span class="arrow">←</span> проекты</a>
+    <nav class="site-nav">
+      <a href="#context" class="nav-link">контекст</a>
+      <a href="#process" class="nav-link">процесс</a>
+      <a href="#palette" class="nav-link">палитра</a>
+      <a href="#stairs" class="nav-link">лестницы</a>
+      <a href="#signs" class="nav-link">знаки</a>
+      <a href="#verdict" class="nav-link">оценка</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="nav-hero reveal" id="top">
+    <span class="nav-kicker">первые шаги в дизайне · 2023–2024</span>
+    <h1 class="nav-hero-title">Оформление навигации<br><strong>отделения колледжа</strong></h1>
+    <p class="nav-hero-sub">
+      // проба пера, а не авторский продукт. Не дизайнер — преподаватель, которому между парами поставили задачу.
+      Знаки приняли, распечатали на бумаге и смонтировали в корпусе. Здесь — как это устроено и честный разбор.
+    </p>
+    <div class="flex flex-wrap gap-2.5">
+      <span class="pill pill-blue">проба пера</span>
+      <span class="pill pill-emerald">реализовано · бумага</span>
+      <span class="pill pill-neutral">ГАПОУ ПК №8</span>
+      <span class="pill pill-neutral">7 типов знаков</span>
+    </div>
+  </section>
+
+  <!-- ================= КОНТЕКСТ ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="context">
+    <div class="esp-label">// как появилась задача</div>
+    <h2 class="esp-title">Контекст без прикрас</h2>
+    <div class="grid md:grid-cols-2 gap-4 stagger">
+      <div class="glass">
+        <h3 class="text-base font-bold mb-2.5" style="color:var(--text);">Что требовалось</h3>
+        <p class="text-sm leading-relaxed mb-0" style="color:var(--text-2);">
+          В корпусе появились новые кабинеты и лаборатории, а старая навигация не объясняла, как к ним пройти.
+          Нужна была система указателей: поэтажные таблички у лестниц и дверные знаки кабинетов — чтобы студент
+          или гость корпуса мог сориентироваться без вопросов «где это?».
+        </p>
+      </div>
+      <div class="glass">
+        <h3 class="text-base font-bold mb-2.5" style="color:var(--text);">В каких условиях делалось</h3>
+        <p class="text-sm leading-relaxed mb-0" style="color:var(--text-2);">
+          Между парами, без дизайн-образования и брифа. За референс взяли Стандарт «Московская школа 2.0»
+          и студийные работы по школьной навигации. Вёрстка в векторном редакторе, печать на обычной бумаге,
+          ламинация и монтаж своими руками. Это черновой по сути вариант — но он дошёл до стен.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= ПРОЦЕСС ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="process">
+    <div class="esp-label">// четыре шага</div>
+    <h2 class="esp-title">От задачи до монтажа</h2>
+    <div class="flow-steps stagger">
+      <div class="flow-step">
+        <div class="flow-step-num">шаг 01</div>
+        <h3>Разведка</h3>
+        <p>Прошёл по этажам, зафиксировал номера кабинетов, лестничные узлы и тупики маршрутов.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">шаг 02</div>
+        <h3>Референсы</h3>
+        <p>Изучил Стандарт МШ 2.0 и кейсы студий навигации: единая графика, приглушённая гамма, зонирование.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">шаг 03</div>
+        <h3>Вёрстка</h3>
+        <p>Собрал модульную сетку «синий кант + белые карточки», шрифты Aqum и Golos Text, иконки и стрелки.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">шаг 04</div>
+        <h3>Печать и монтаж</h3>
+        <p>Печать, ламинация, нарезка. Знаки приняли, развесили у лестниц и на дверях — система заработала.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= ПАЛИТРА ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="palette">
+    <div class="esp-label">// цвета и их осмысление</div>
+    <h2 class="esp-title">Палитра из трёх цветов</h2>
+    <p class="text-sm mb-7 max-w-2xl" style="color:var(--muted);">
+      Никаких ярких красок: по логике Стандарта МШ 2.0 навигация не должна спорить со средой. Каждый цвет получил свою роль,
+      а не взят «потому что нравится».
+    </p>
+    <div class="grid sm:grid-cols-3 gap-4 stagger">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#6b8ec8;"><span class="hex">#6B8EC8</span></div>
+        <div class="swatch-body">
+          <h3 class="swatch-name">Синий</h3>
+          <p class="swatch-role">Несущая основа: фоновые канты, номера лестниц, стрелки. Спокойный ориентир, который видно в любом коридоре.</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#4e5658;"><span class="hex" style="background:rgba(255,255,255,.9);">  #4E5658</span></div>
+        <div class="swatch-body">
+          <h3 class="swatch-name">Графит</h3>
+          <p class="swatch-role">Текст на белых карточках. Мягче чистого чёрного — не «кричит», но держит контраст для чтения издалека.</p>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#4abea0;"><span class="hex">#4ABEA0</span></div>
+        <div class="swatch-body">
+          <h3 class="swatch-name">Мятный</h3>
+          <p class="swatch-role">Единственный акцент: лаборатории, мастерские и практики. Глаз сразу выхватывает «руки» среди кабинетов.</p>
+        </div>
+      </div>
+    </div>
+    <p class="mono text-[11px] mt-5 mb-0" style="color:var(--faint);">// типографика: Aqum — крупные округлые цифры и заголовки, Golos Text — подписи и перечни</p>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= ЛЕСТНИЦЫ ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="stairs">
+    <div class="esp-label">// самая запутанная часть</div>
+    <h2 class="esp-title">Система лестниц: буквы и цифры</h2>
+    <p class="text-sm mb-7 max-w-2xl" style="color:var(--muted);">
+      В корпусе три лестничных узла, и у них разная топология. Чтобы не объяснять это словами каждый раз,
+      знаки дублируют одну и ту же лестницу и буквой, и цифрой.
+    </p>
+    <div class="stair-scheme">
+      <div class="stair-row">
+        <div class="stair-badges">
+          <span class="stair-badge letter">А</span>
+          <span class="stair-badge num">1</span>
+        </div>
+        <p class="stair-text"><strong>Лестница 1 (левая), литера «А».</strong> Ведёт с 1 на 2 этаж. На 1–2 этажах у лестниц есть переход между половинами корпуса.</p>
+      </div>
+      <div class="stair-row">
+        <div class="stair-badges">
+          <span class="stair-badge letter">В</span>
+          <span class="stair-badge num">2</span>
+        </div>
+        <p class="stair-text"><strong>Лестница 2 (правая), литера «В».</strong> Симметрична первой на 1–2 этажах — поэтому таблички для этих этажей одинаковые по структуре.</p>
+      </div>
+      <div class="stair-row">
+        <div class="stair-badges">
+          <span class="stair-badge num">3</span>
+          <span class="stair-badge ghost">3–4</span>
+        </div>
+        <p class="stair-text"><strong>Лестница 3 (центральная).</strong> Со 2 этажа поднимается на 3 и 4. На верхних этажах лестницы уже разные и перехода между ними нет — это прямо показано на знаках.</p>
+      </div>
+      <div class="stair-row">
+        <div class="stair-badges">
+          <span class="stair-badge ghost" style="width:auto;padding:0 .8rem;font-size:.8rem;">33..42</span>
+        </div>
+        <p class="stair-text"><strong>Кабинеты 33–42.</strong> Отдельная история: к ним ведут только лестницы 2 и 3, поэтому на каждом этаже видна подсказка-напоминание с иконками этих лестниц.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= ГАЛЕРЕЯ ЗНАКОВ ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="signs">
+    <div class="esp-label">// что в итоге напечатано</div>
+    <h2 class="esp-title">Сами знаки</h2>
+    <p class="text-sm mb-7 max-w-2xl" style="color:var(--muted);">
+      Два формата: крупные указатели A1 у лестниц и альбомные A4 на дверях кабинетов. Ниже — реальные макеты,
+      которые и ушли в печать.
+    </p>
+    <div class="sign-grid stagger">
+      <figure class="sign-card tall">
+        <img src="img/nav/floor-1-stairs-1.png" alt="Поэтажный указатель у лестницы 1 на первом этаже: столовая, гардероб, администрация, спортивный зал, библиотека, музей" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">указатель · A1</div>
+          <h3 class="sign-title">1 этаж · лестница 1</h3>
+          <p class="sign-note">Три зоны-карточки и подсказка про кабинеты 33–42 в нижней синей полосе.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card tall">
+        <img src="img/nav/floor-2-left.png" alt="Указатель второго этажа у левой лестницы: психолог, администрация, учительская, лаборатории и мастерские" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">указатель · A1</div>
+          <h3 class="sign-title">2 этаж · левая лестница</h3>
+          <p class="sign-note">Стрелки направлений, мятным выделены лаборатории и мастерские с иконками.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card tall">
+        <img src="img/nav/floor-2-center.png" alt="Центральный указатель второго этажа: кабинеты 20–22 и 23–25, учительская, психолог, проход к кабинетам 33–42" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">указатель · A1</div>
+          <h3 class="sign-title">2 этаж · центр</h3>
+          <p class="sign-note">Диапазоны кабинетов крупно, иконка лестницы с номером рядом с направлением.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card">
+        <img src="img/nav/floor-3-stairs-1.png" alt="Указатель третьего этажа у лестницы 1: кабинеты 30–32, педагог-организатор, советник директора, библиотека, музей" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">указатель · A4</div>
+          <h3 class="sign-title">3 этаж · лестница 1</h3>
+          <p class="sign-note">Компактный вариант у двери: диагональная стрелка и иконка лестницы.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card">
+        <img src="img/nav/door-26a.png" alt="Дверная табличка кабинета 26А: заведующий практикой" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">дверь · A4</div>
+          <h3 class="sign-title">Кабинет 26А</h3>
+          <p class="sign-note">Заведующий практикой. Номер — главный элемент, текст вторичен.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card">
+        <img src="img/nav/door-29.png" alt="Дверная табличка кабинета 29: лаборатория программного обеспечения компьютерных сетей, баз данных и сетевой инфраструктуры" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">дверь · A4</div>
+          <h3 class="sign-title">Кабинет 29</h3>
+          <p class="sign-note">Лаборатория сетей и БД с иконками серверной стойки и монитора.</p>
+        </figcaption>
+      </figure>
+      <figure class="sign-card">
+        <img src="img/nav/door-30-1-2.png" alt="Дверная табличка мастерской 30-1-2: монтаж, наладка и регулировка средств измерений, лаборатория метрологии" loading="lazy">
+        <figcaption class="sign-meta">
+          <div class="sign-kind">дверь · A4</div>
+          <h3 class="sign-title">Мастерская 30-1-2</h3>
+          <p class="sign-note">Метрология: иконка штангенциркуля сразу выдаёт профиль помещения.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= РЕФЕРЕНСЫ ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="refs">
+    <div class="esp-label">// что взято у референсов</div>
+    <h2 class="esp-title">Источники и заимствования</h2>
+    <div class="grid md:grid-cols-2 gap-4 stagger">
+      <div class="glass">
+        <h3 class="text-base font-bold mb-2.5" style="color:var(--text);">Стандарт «Московская школа 2.0»</h3>
+        <ul class="text-sm space-y-2 mb-0" style="color:var(--text-2);">
+          <li>▸ принцип <strong>единой графической навигации</strong> для всего здания — один язык знаков от входа до кабинета;</li>
+          <li>▸ <strong>приглушённая гамма без ярких красок</strong>, насыщенный акцент только точечно — отсюда мятный цвет;</li>
+          <li>▸ функциональное <strong>зонирование</strong>: сначала крупные блоки, внутри — детализация.</li>
+        </ul>
+      </div>
+      <div class="glass">
+        <h3 class="text-base font-bold mb-2.5" style="color:var(--text);">Студийные кейсы: D4S, EduDesign, Wunderpark</h3>
+        <ul class="text-sm space-y-2 mb-0" style="color:var(--text-2);">
+          <li>▸ <strong>крупная типографика номеров</strong> как главный навигационный элемент — номер читается раньше текста;</li>
+          <li>▸ <strong>цветовое кодирование зон</strong> вместо длинных объяснений;</li>
+          <li>▸ простая <strong>иконочная система</strong>: человек, лестница, техника — без слов понятно, что внутри.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="mono text-[11px] mt-5 mb-0" style="color:var(--faint);">// прямого копирования не было: принципы переложены на бюджетную бумажную реализацию без подрядчиков</p>
+  </section>
+
+  <hr class="flow-rule my-14">
+
+  <!-- ================= ЧЕСТНАЯ ОЦЕНКА ================= -->
+  <section class="esp-section reveal scroll-mt-28" id="verdict">
+    <div class="esp-label">// без самолюбования</div>
+    <h2 class="esp-title">Честный разбор</h2>
+    <div class="grid md:grid-cols-3 gap-4 stagger">
+      <div class="glass verdict-col">
+        <h3>✅ Что получилось</h3>
+        <ul>
+          <li>система реально работает: напечатана, смонтирована, по ней ориентируются;</li>
+          <li>единая модульная сетка «синий кант + белые карточки» держит все знаки вместе;</li>
+          <li>крупные номера считываются за секунды — главное в навигации;</li>
+          <li>мятный акцент отделяет практики от обычных кабинетов без лишних слов.</li>
+        </ul>
+      </div>
+      <div class="glass verdict-col is-growth">
+        <h3>⚠️ Что вышло слабо</h3>
+        <ul>
+          <li>гайдлайна не было: отступы и кегли подбирались на глаз, между знаками есть разнобой;</li>
+          <li>часть дверных табличек перегружена текстом — перечни через запятую трудно читать;</li>
+          <li>иконки собраны из разных наборов, единого стиля линий у них нет;</li>
+          <li>не проверялась читаемость для слабовидящих и реальные маршруты гостей корпуса.</li>
+        </ul>
+      </div>
+      <div class="glass verdict-col is-future">
+        <h3>🎯 Куда стремиться</h3>
+        <ul>
+          <li>свести всё в дизайн-токены: фиксированные размеры, отступы, шрифты;</li>
+          <li>нарисовать собственную иконочную систему в одном штрихе;</li>
+          <li>провести аудит маршрутов со студентами, добавить контраст и вариант для слабовидящих;</li>
+          <li>продолжить систему: напольные указатели и планы эвакуации в том же языке.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Итог -->
+  <section class="reveal mb-10">
+    <div class="glass" style="background:linear-gradient(135deg, color-mix(in srgb, var(--nav-blue) 12%, var(--surface)), color-mix(in srgb, var(--nav-mint) 8%, var(--surface)));">
+      <div class="mono text-[11px] font-bold tracking-[0.16em] uppercase mb-3" style="color:var(--nav-blue);">// итог</div>
+      <p class="text-base md:text-lg leading-relaxed mb-0 max-w-3xl" style="color:var(--text-2);">
+        Это не портфолио дизайнера, а история о том, как рабочая задача между парами превратилась в систему,
+        которая <strong style="color:var(--text);">дожила до печати и стен</strong>. Черновой характер виден,
+        но именно здесь появились первые насмотренность, понимание иерархии и уважение к чужой навигационной работе.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <footer class="reveal flex flex-col sm:flex-row justify-between items-center gap-4 mono text-xs" style="color:var(--muted);">
+    <span>© 2026 itsliventsev · навигация ПК8 · первый дизайн-опыт</span>
+    <a href="../projects.html" class="nav-link group inline-flex items-center gap-2">
+      <span class="arrow transition-transform group-hover:-translate-x-0.5">←</span> назад к проектам
+    </a>
+  </footer>
+
+  <div class="dock-spacer"></div>
+</div>
+
+<!-- Плавающий нижний док-меню -->
+<nav class="bottom-dock reveal" aria-label="быстрая навигация по странице">
+  <a href="#context">контекст</a>
+  <a href="#process">процесс</a>
+  <a href="#palette">палитра</a>
+  <a href="#stairs">лестницы</a>
+  <a href="#signs">знаки</a>
+  <a href="#verdict">оценка</a>
+  <a href="#top">наверх ↑</a>
+</nav>
+
+<script src="../assets/site.js?v=20261026c"></script>
+</body>
+</html>
