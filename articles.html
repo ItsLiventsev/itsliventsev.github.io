@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>статьи · itsliventsev</title>
 <meta name="description" content="Публикации, методические материалы и статьи в сборниках конференций: практикоориентированное обучение и трудоустройство выпускников.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -10,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026">
+<link rel="stylesheet" href="assets/site.css?v=20261026b">
 </head>
 <body class="bg-grid" data-accent="orange">
 
@@ -30,6 +31,13 @@
       <a href="projects.html" class="nav-link">проекты <span class="pill pill-green">новое</span></a>
       <a href="archive.html" class="nav-link">архив</a>
     </nav>
+  
+    <div class="header-actions">
+    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    </div>
   </header>
 
   <!-- Hero -->
@@ -65,10 +73,14 @@
     <article class="card group relative p-5 md:p-6 hoverable">
       <span class="pill pill-accent absolute -top-2.5 right-5 shadow-md" style="background:var(--accent);color:#fff;border-color:var(--accent);">рекомендую</span>
 
-      <div class="flex flex-wrap items-center gap-2 mb-4">
+      <div class="article-meta mb-4">
         <span class="pill pill-indigo">конференция</span>
-        <span class="pill pill-blue">2024</span>
-        <span class="pill pill-neutral">архив</span>
+        <span class="dot"></span>
+        <span>2024</span>
+        <span class="dot"></span>
+        <span>≈ 10 мин чтения</span>
+        <span class="dot"></span>
+        <span>сборник «Актуальные вопросы образования»</span>
       </div>
 
       <div class="has-tip inline-block mb-3" data-tip="🦀 моя первая совместная публикация о практике!">
@@ -79,19 +91,18 @@
         </a>
       </div>
 
-      <p class="text-sm text-[var(--muted)] leading-relaxed mb-4 max-w-3xl">
-        Статья о необходимости повышения практикоориентированности в системе СПО и её влиянии на рынок труда. Анализ новых стандартов 2023-2024 гг., статистика трудоустройства и прогнозы развития.
+      <p class="text-sm text-[var(--muted)] leading-relaxed mb-5 max-w-3xl">
+        Статья о необходимости повышения практикоориентированности в системе СПО и её влиянии на рынок труда. Анализ новых стандартов 2023–2024 гг., статистика трудоустройства и прогнозы развития.
       </p>
 
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="pill pill-blue">2024</span>
-          <span class="pill pill-purple">~10 мин чтения</span>
-          <span class="pill pill-amber">спо, трудоустройство</span>
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="hash-row">
+          <span class="tag-hash">спо</span>
+          <span class="tag-hash">трудоустройство</span>
+          <span class="tag-hash">фгос</span>
+          <span class="tag-hash">практика</span>
         </div>
-        <div class="mono text-[10px] text-[var(--faint)] text-left md:text-right">
-          сборник: <span class="text-[var(--muted)]">актуальные вопросы образования</span>
-        </div>
+        <a href="articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html" class="arrow-link">читать статью <span>→</span></a>
       </div>
     </article>
   </section>
@@ -103,9 +114,10 @@
 
   <!-- Placeholder -->
   <section class="reveal mb-10">
-    <div class="card card-dashed p-6 text-center cursor-default" style="border-color:var(--border-strong);">
-      <div class="mono text-xs text-[var(--faint)] mb-1">// здесь скоро появятся новые статьи</div>
-      <div class="mono text-[10px] text-[var(--faint)]">следите за обновлениями</div>
+    <div class="slot-card text-center items-center">
+      <span class="slot-plus">+</span>
+      <h3 class="slot-title">Здесь скоро появятся новые статьи</h3>
+      <p class="slot-note">// следите за обновлениями — следующий материал уже в работе</p>
     </div>
   </section>
 
@@ -144,6 +156,6 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026"></script>
+<script src="assets/site.js?v=20261026b"></script>
 </body>
 </html>

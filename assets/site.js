@@ -6,6 +6,90 @@
 
 document.documentElement.classList.add('js-enabled');
 
+/* ---------- Тема: переключатель светлая/тёмная + запоминание ---------- */
+(function () {
+  const STORAGE_KEY = 'itsliventsev-theme';
+  const root = document.documentElement;
+
+  function currentTheme() {
+    return root.dataset.theme === 'dark' ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme, animate) {
+    if (theme === 'dark') root.dataset.theme = 'dark';
+    else delete root.dataset.theme;
+    try { localStorage.setItem(STORAGE_KEY, theme); } catch (e) { /* приватный режим */ }
+    document.querySelectorAll('.theme-toggle').forEach((btn) => {
+      btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      btn.setAttribute('title', theme === 'dark' ? 'включить светлую тему' : 'включить тёмную тему');
+      btn.setAttribute('aria-label', theme === 'dark' ? 'включить светлую тему' : 'включить тёмную тему');
+      if (animate) {
+        btn.classList.remove('swap');
+        void btn.offsetWidth; // рестарт анимации иконки
+        btn.classList.add('swap');
+      }
+    });
+  }
+
+  // Стартовая синхронизация (атрибут уже проставлен head-скриптом)
+  applyTheme(currentTheme(), false);
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-toggle');
+    if (!btn) return;
+    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true);
+  });
+
+  // Синхронизация между вкладками
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY && e.newValue) applyTheme(e.newValue, true);
+  });
+})();
+
+/* ---------- Мобильное меню и состояние шапки при скролле ---------- */
+(function () {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  // Бургер: создаётся из JS только если на странице есть навигация
+  const nav = header.querySelector('.site-nav');
+  if (nav) {
+    const burger = document.createElement('button');
+    burger.className = 'icon-btn nav-burger';
+    burger.setAttribute('aria-label', 'открыть меню');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.innerHTML = '<span class="sr-only">меню</span><span><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>';
+    const actions = header.querySelector('.header-actions');
+    if (actions) actions.prepend(burger);
+    else header.appendChild(burger);
+
+    burger.addEventListener('click', () => {
+      const open = header.classList.toggle('nav-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'закрыть меню' : 'открыть меню');
+    });
+    // Закрытие после клика по ссылке
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('.nav-link') && header.classList.contains('nav-open')) {
+        header.classList.remove('nav-open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Закрытие по Esc
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.classList.contains('nav-open')) {
+        header.classList.remove('nav-open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Тень шапки при скролле
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
 /* ---------- Прогресс прокрутки + процент чтения + кнопка «наверх» ---------- */
 (function () {
   const progress = document.getElementById('scroll-progress');
