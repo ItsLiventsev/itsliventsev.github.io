@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>Загрузка сценариев в МЭШ · itsliventsev</title>
 <meta name="description" content="Пошаговая инструкция по загрузке сценариев уроков в библиотеку Московской электронной школы (МЭШ).">
@@ -12,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+<link rel="stylesheet" href="../assets/site.css?v=20261026i">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/mesh-upload.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -38,6 +39,8 @@
   <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -49,12 +52,13 @@
 </div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <div class="page-wrap">
 
   <header class="site-header reveal">
     <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
       <a href="../index.html" class="nav-link">главная</a>
       <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
       <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
@@ -70,7 +74,7 @@
     </div>
   </header>
 
-  <main class="prose-measure">
+  <main id="main-content" class="prose-measure">
 
   <section class="hero reveal">
     <div class="bg-glyphs" aria-hidden="true">
@@ -80,7 +84,7 @@
     <h1 class="hero-title text-3xl sm:text-4xl">
       Загрузка сценариев в МЭШ <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <span class="pill pill-neutral mb-4"><span class="mono" style="color:var(--accent);margin-right:.35rem;">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
     <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       Пошаговая инструкция по загрузке сценариев уроков в библиотеку Московской электронной школы (МЭШ).
     </p>
@@ -89,9 +93,9 @@
   <section class="reveal space-y-6">
     <!-- Role -->
     <div class="notice notice-warn">
-      <div class="notice-label">⚠️ Важно</div>
+      <div class="notice-label"><span class="h2-glyph">!</span>Важно</div>
       <p class="text-sm text-[var(--text-2)] m-0">
-        Для работы с загрузкой сценариев используйте роль <strong>"Методист СПО"</strong>. Проверьте, что выбрали её в всплывающем окне профиля на сайте библиотеки — <a href="https://uchebnik.mos.ru/main" class="text-[var(--accent)] underline underline-offset-2 hover:opacity-80">uchebnik.mos.ru/main</a>
+        Для работы с загрузкой сценариев используйте роль <strong>«Методист СПО»</strong>. Проверьте, что выбрали её в всплывающем окне профиля на сайте библиотеки — <a href="https://uchebnik.mos.ru/main" class="text-[var(--accent)] underline underline-offset-2 hover:opacity-80">uchebnik.mos.ru/main</a>
       </p>
     </div>
 
@@ -99,7 +103,7 @@
     <div class="card hoverable p-5">
       <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Добавление нового материала</h2>
       <p class="text-sm text-[var(--text-2)] mb-0">
-        На главной странице библиотеки выберите кнопку <strong>"+ Добавить материал"</strong>. Для загрузки сценариев используется тип материала — <strong>"Сценарий урока"</strong>.
+        На главной странице библиотеки выберите кнопку <strong>«+ Добавить материал»</strong>. Для загрузки сценариев используется тип материала — <strong>«Сценарий урока»</strong>.
       </p>
     </div>
 
@@ -107,8 +111,8 @@
     <div class="card hoverable p-5">
       <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Свойства урока</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0">Открывается окно "Свойство урока" в новой вкладке браузера. Заполняйте ИСКЛЮЧИТЕЛЬНО по презентации/сценарию:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <p class="mb-0">Открывается окно «Свойство урока» в новой вкладке браузера. Заполняйте ИСКЛЮЧИТЕЛЬНО по презентации/сценарию:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 stagger">
           <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
             <div class="mono text-xs mb-1" style="color:var(--accent);">Название</div>
             <div class="text-xs text-[var(--text-2)]">Название предмета и темы из презентации</div>
@@ -127,7 +131,7 @@
           </div>
           <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
             <div class="mono text-xs mb-1" style="color:var(--accent);">Курс</div>
-            <div class="text-xs text-[var(--text-2)]">Загружаем всё по первому курсу ("1")</div>
+            <div class="text-xs text-[var(--text-2)]">Загружаем всё по первому курсу («1»)</div>
           </div>
           <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
             <div class="mono text-xs mb-1" style="color:var(--accent);">Дисциплина</div>
@@ -149,7 +153,7 @@
     <div class="card hoverable p-5">
       <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Работа в конструкторе</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0">Нажмите кнопку <strong>"Создать сценарий"</strong>. В выборе шаблона выберите <strong>"Без шаблона"</strong>.</p>
+        <p class="mb-0">Нажмите кнопку <strong>«Создать сценарий»</strong>. В выборе шаблона выберите <strong>«Без шаблона»</strong>.</p>
         <div class="notice notice-info">
           <div class="mono text-xs mb-2" style="color:var(--accent);">Структура конструктора:</div>
           <ul class="text-xs text-[var(--text-2)] space-y-1 mb-0">
@@ -171,7 +175,7 @@
         <strong>Фрагмент сценария урока</strong> — структурная единица сценария, представленная отдельной горизонтальной линейкой слайдов. Под каждый вид оборудования разрабатывается отдельный слайд.
       </p>
       <p class="text-sm text-[var(--text-2)] mb-0">
-        Для добавления фрагмента нажмите на кнопку <strong>"+ Добавить фрагмент"</strong>.
+        Для добавления фрагмента нажмите на кнопку <strong>«+ Добавить фрагмент»</strong>.
       </p>
     </div>
 
@@ -182,7 +186,7 @@
         <div class="notice notice-info">
           <div class="font-medium text-[var(--text)] mb-2">Принцип:</div>
           <p class="text-xs text-[var(--text-2)] mb-0">
-            Оформление презентации берем из PowerPoint (всё, кроме текста) — загружаем как изображение и используем как <strong>"фон"</strong> слайда. Текст добавляем отдельными блоками.
+            Оформление презентации берем из PowerPoint (всё, кроме текста) — загружаем как изображение и используем как <strong>«фон»</strong> слайда. Текст добавляем отдельными блоками.
           </p>
         </div>
         <div>
@@ -190,21 +194,21 @@
           <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4">
             <li>1. Откройте презентацию, найдите титульный лист</li>
             <li>2. Удалите все блоки текста на слайде (предварительно сохраните копию с текстом)</li>
-            <li>3. Сохраните слайд как рисунок (PNG или JPEG) — "Только этот"</li>
+            <li>3. Сохраните слайд как рисунок (PNG или JPEG) — «Только этот»</li>
           </ol>
         </div>
         <div>
           <div class="font-medium text-[var(--text)] mb-2">Шаг 2: Загрузка фона в МЭШ</div>
           <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4">
-            <li>1. В меню выберите "Медиа" → "Изображение" → "Загрузить своё"</li>
+            <li>1. В меню выберите «Медиа» → «Изображение» → «Загрузить своё»</li>
             <li>2. Загрузите файл с компьютера</li>
-            <li>3. Нажмите по изображению ЛКМ → справа найдите "Сделать фоном" → поставьте галочку</li>
+            <li>3. Нажмите по изображению ЛКМ → справа найдите «Сделать фоном» → поставьте галочку</li>
           </ol>
         </div>
         <div>
           <div class="font-medium text-[var(--text)] mb-2">Шаг 3: Добавление текста</div>
           <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4">
-            <li>1. В меню выберите "Текст" → "Пользовательский текст"</li>
+            <li>1. В меню выберите «Текст» → «Пользовательский текст»</li>
             <li>2. Подведите блок на необходимое место и добавьте текст</li>
             <li>3. Требования: размер шрифта для заголовка — 24-54 пт (жирный), для текстовых блоков — 22-36 пт</li>
             <li>4. Для выбора цвета используйте корпоративный цвет колледжа: <code>#0070c0</code></li>
@@ -239,6 +243,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026h"></script>
+<script src="../assets/site.js?v=20261026i"></script>
 </body>
 </html>

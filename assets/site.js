@@ -75,10 +75,12 @@ document.documentElement.classList.add('js-enabled');
 
   // Бургер: создаётся из JS только если на странице есть навигация
   const nav = header.querySelector('.site-nav');
+  let burger = null;
   if (nav) {
     // nav получает id, чтобы бургер мог ссылаться на него через aria-controls
     if (!nav.id) nav.id = 'site-nav';
-    const burger = document.createElement('button');
+    if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', 'Основная навигация');
+    burger = document.createElement('button');
     burger.className = 'icon-btn nav-burger';
     burger.type = 'button';
     burger.setAttribute('aria-label', 'открыть меню');
@@ -92,29 +94,54 @@ document.documentElement.classList.add('js-enabled');
     if (actions) actions.prepend(burger);
     else header.appendChild(burger);
 
-    burger.addEventListener('click', () => {
-      const open = header.classList.toggle('nav-open');
+    function setMenu(open) {
+      header.classList.toggle('nav-open', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       burger.setAttribute('aria-label', open ? 'закрыть меню' : 'открыть меню');
+      if (open) {
+        // Фокус первой ссылке — клавиатура сразу внутри меню
+        const first = nav.querySelector('.nav-link');
+        if (first) first.focus();
+      }
+    }
+
+    burger.addEventListener('click', () => {
+      const open = !header.classList.contains('nav-open');
+      setMenu(open);
+      if (!open) burger.focus(); // фокус возвращается на кнопку
     });
     // Закрытие после клика по ссылке
     nav.addEventListener('click', (e) => {
       if (e.target.closest('.nav-link') && header.classList.contains('nav-open')) {
-        header.classList.remove('nav-open');
-        burger.setAttribute('aria-expanded', 'false');
+        setMenu(false);
       }
     });
-    // Закрытие по Esc
+    // Закрытие по Esc с возвратом фокуса
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && header.classList.contains('nav-open')) {
-        header.classList.remove('nav-open');
-        burger.setAttribute('aria-expanded', 'false');
+        setMenu(false);
+        burger.focus();
       }
     });
+    // На десктопной ширине открытое меню не должно залипать
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 880 && header.classList.contains('nav-open')) setMenu(false);
+    }, { passive: true });
   }
 
-  // Тень шапки при скролле
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
+  // Тень шапки при скролле + «умное» скрытие: вниз — уезжает, вверх — возвращается.
+  // Без анимаций (reduced-motion) шапка не прячется; не прячется и при открытом меню.
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 24);
+    if (!reduceMotion && burger && !(header.classList.contains('nav-open'))) {
+      if (y > 160 && y > lastY + 4) header.classList.add('header-hidden');
+      else if (y < lastY - 4 || y < 80) header.classList.remove('header-hidden');
+    }
+    lastY = y;
+  };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
@@ -272,7 +299,9 @@ document.querySelectorAll('.magnetic').forEach((el) => {
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
   spyLinks.forEach((l) => {
-    const target = document.querySelector(l.getAttribute('href'));
+    const href = l.getAttribute('href');
+    if (!href || href === '#') return;
+    const target = document.querySelector(href);
     if (target) spy.observe(target);
   });
 })();

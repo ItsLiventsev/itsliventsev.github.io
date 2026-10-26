@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>глоссарий · itsliventsev</title>
 <meta name="description" content="Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.">
@@ -12,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+<link rel="stylesheet" href="../assets/site.css?v=20261026i">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/projects/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -38,6 +39,8 @@
   <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="emerald">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -49,13 +52,14 @@
 </div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <div class="page-wrap" data-filter-root>
 
   <!-- Header -->
   <header class="site-header reveal">
     <a href="../projects.html" class="logo"><span class="arrow">←</span> проекты</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
       <a href="../index.html" class="nav-link">главная</a>
       <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
       <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
@@ -70,6 +74,8 @@
     </button>
     </div>
   </header>
+
+  <main id="main-content">
 
   <!-- Hero -->
   <section class="hero reveal">
@@ -183,7 +189,7 @@
         </p>
         <div class="bg-[var(--surface-2)] border border-[var(--border)] rounded-lg p-3">
           <div class="mono text-[10px] text-[var(--faint)] uppercase mb-1">отличие от ВМ</div>
-          <p class="text-xs text-[var(--muted)] italic m-0">Виртуальная машина эмулирует целое "железо" и свою ОС. Контейнер делит ядро с хостом, что делает его легковесным и быстрым в запуске.</p>
+          <p class="text-xs text-[var(--muted)] italic m-0">Виртуальная машина эмулирует целое «железо» и свою ОС. Контейнер делит ядро с хостом, что делает его легковесным и быстрым в запуске.</p>
         </div>
       </article>
 
@@ -251,20 +257,22 @@
   <!-- Bottom -->
   <section class="reveal text-center mb-8">
     <p class="mono text-xs text-[var(--faint)] mb-6">
-      🦀 не нашел нужный термин? напиши - добавим его в эту базу знаний.
+      <span class="h2-glyph">?</span>не нашел нужный термин? напиши — добавим его в эту базу знаний.
     </p>
     <a href="../projects.html" class="btn group">
       <span class="arrow">←</span> назад к проектам
     </a>
   </section>
 
-  <footer class="site-footer">
+    </main>
+
+<footer class="site-footer">
     <span>© 2026 itsliventsev · глоссарий</span>
     <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 
 </div>
 
-<script src="../assets/site.js?v=20261026h"></script>
+<script src="../assets/site.js?v=20261026i"></script>
 </body>
 </html>

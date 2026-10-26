@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>IT-документооборот и мониторинг · itsliventsev</title>
 <meta name="description" content="Комплексный практикум для оператора IT-отдела: инвентаризация, мониторинг сети, OCR, Excel, презентация и простой сайт.">
@@ -12,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+<link rel="stylesheet" href="../assets/site.css?v=20261026i">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/it-docs-monitoring.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -38,6 +39,8 @@
   <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -49,12 +52,13 @@
 </div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <div class="page-wrap">
 
   <header class="site-header reveal">
     <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
       <a href="../index.html" class="nav-link">главная</a>
       <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
       <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
@@ -70,7 +74,7 @@
     </div>
   </header>
 
-  <main class="prose-measure">
+  <main id="main-content" class="prose-measure">
 
   <section class="hero reveal">
     <div class="bg-glyphs" aria-hidden="true">
@@ -80,7 +84,7 @@
     <h1 class="hero-title text-3xl sm:text-4xl">
       IT-документооборот и мониторинг <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
-    <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
+    <span class="pill pill-neutral mb-4"><span class="mono" style="color:var(--accent);margin-right:.35rem;">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
     <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
       Комплексная практическая задача для оператора IT-отдела компании «IT-Ресурс» (100+ рабочих мест). Выполняется на ПК под управлением Windows 10/11 с использованием стандартного и свободного ПО.
     </p>
@@ -148,6 +152,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026h"></script>
+<script src="../assets/site.js?v=20261026i"></script>
 </body>
 </html>

@@ -316,10 +316,12 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .nav-burger[aria-expanded="true"] .burger-bar:nth-child(2) { opacity: 0; transform: scaleX(.2); }
 .nav-burger[aria-expanded="true"] .burger-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-/* Мобильная навигация: выезжает под шапкой */
+/* Мобильная навигация: выезжает под шапкой.
+   Сворачивание только при наличии JS (js-enabled): без JS бургера нет,
+   а меню должно оставаться полностью видимым и доступным. */
 @media (max-width: 880px) {
-  .nav-burger { display: inline-flex; }
-  .site-nav {
+  .js-enabled .nav-burger { display: inline-flex; }
+  .js-enabled .site-nav {
     order: 3;
     flex-basis: 100%;
     flex-direction: column;
@@ -2638,3 +2640,117 @@ body[data-accent="emerald"] .ambient .orb { background: #10b981; }
 
 /* 27.8 Позиционный контекст для водяных глифов вне стандартного .hero */
 .glyph-scope { position: relative; isolation: isolate; }
+
+/* ==========================================================================
+   28. КАЧЕСТВО И ДОСТУПНОСТЬ: умная шапка, skip-link, типографика, печать
+   ========================================================================== */
+
+/* 28.1 Умная шапка: уезжает вверх при скролле вниз, возвращается при скролле вверх.
+   Не прячется, пока открыто мобильное меню или фокус внутри шапки. */
+.site-header { transition: box-shadow .3s ease, border-color .3s ease, background-color .35s ease, transform .38s var(--ease); }
+.site-header.header-hidden { transform: translateY(calc(-100% - 22px)); }
+.site-header.nav-open.header-hidden,
+.site-header:focus-within.header-hidden { transform: none; }
+
+/* 28.2 Skip-link: невидим, пока не получит фокус с клавиатуры */
+.skip-link {
+  position: fixed;
+  top: .7rem;
+  left: 50%;
+  transform: translate(-50%, -160%);
+  z-index: 200;
+  padding: .6rem 1.15rem;
+  border-radius: 12px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-hover);
+  transition: transform .3s var(--ease);
+}
+.skip-link:focus, .skip-link:focus-visible { transform: translate(-50%, 0); outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 28.3 Точки статуса: самостоятельный компонент (раньше .dot жил только в article-meta) */
+.dot {
+  display: inline-block;
+  width: .5rem;
+  height: .5rem;
+  border-radius: 999px;
+  background: var(--faint);
+  flex: 0 0 auto;
+}
+.dot-green { background: #10b981; }
+.dot-amber { background: #d97706; }
+.dot-red   { background: #dc2626; }
+[data-theme="dark"] .dot-amber { background: #fbbf24; }
+
+/* 28.4 Моно-глиф в заголовке секции вместо эмодзи */
+.h2-glyph {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: .5rem;
+  user-select: none;
+}
+
+/* 28.5 Ранговые значки вместо медалей-эмодзи */
+.rank-glyph {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: .25rem;
+}
+.rank-glyph.rg-1 { color: #b45309; }
+.rank-glyph.rg-2 { color: #71717a; }
+.rank-glyph.rg-3 { color: #9a3412; }
+.rank-glyph.rg-top { color: var(--accent); }
+[data-theme="dark"] .rank-glyph.rg-1 { color: #fbbf24; }
+[data-theme="dark"] .rank-glyph.rg-3 { color: #fdba74; }
+
+/* 28.6 Носрипт-плашка */
+.noscript-bar {
+  position: relative;
+  z-index: 100;
+  max-width: 72rem;
+  margin: 0 auto 1.2rem;
+  padding: .7rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(217, 119, 6, .4);
+  background: rgba(217, 119, 6, .07);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+/* 28.7 Типографика: баланс заголовков, аккуратные последние строки */
+h1, h2, h3, .hero-title, .zone-title, .esp-title { text-wrap: balance; }
+.prose-p, .hero-lead, .p-desc, .callout p, .notice p { text-wrap: pretty; }
+
+/* 28.8 Кнопка «наверх»: единый SVG-вид вместо эмодзи */
+#to-top svg { width: 1.05rem; height: 1.05rem; stroke: var(--text-2); transition: stroke .25s ease; }
+#to-top:hover svg { stroke: var(--accent); }
+
+/* 28.9 Печать: только контент, без декора и навигации */
+@media print {
+  .site-header, .ambient, .scroll-progress, #scroll-progress, #to-top,
+  .nav-burger, .quick-bubbles, .bg-glyphs, .noscript-bar, .filter-btn,
+  .theme-toggle, .lang-btn, .admin-link, .feed-note { display: none !important; }
+  body { background: #fff !important; }
+  .page-wrap { max-width: none; padding: 0; margin: 0; }
+  .card, .p-card, .notice, .callout, .glass, .esp-stat, .tint-panel {
+    box-shadow: none !important; break-inside: avoid;
+  }
+  a { color: #000 !important; text-decoration: none; }
+  .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
+}
+
+/* 28.10 reduced-motion: умная шапка не уезжает */
+@media (prefers-reduced-motion: reduce) {
+  .site-header.header-hidden { transform: none; }
+  .skip-link { transition: none; }
+}
