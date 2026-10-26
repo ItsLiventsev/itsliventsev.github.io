@@ -201,9 +201,9 @@ document.querySelectorAll('.magnetic').forEach((el) => {
   el.addEventListener('mouseleave', () => { el.style.transform = ''; });
 });
 
-/* ---------- Scrollspy для якорных ссылок в шапке ---------- */
+/* ---------- Scrollspy для якорных ссылок в шапке и нижнем доке ---------- */
 (function () {
-  const spyLinks = document.querySelectorAll('a.nav-link[href^="#"]');
+  const spyLinks = document.querySelectorAll('a.nav-link[href^="#"], .bottom-dock a[href^="#"]');
   if (!spyLinks.length) return;
   const spy = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
