@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>DHCP на ALT Server · виртуальный стенд · itsliventsev</title>
+<meta name="description" content="Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css?v=20261026j">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026j">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/dhcp-alt.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="DHCP на ALT Server · виртуальный стенд · itsliventsev">
+  <meta property="og:description" content="Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/dhcp-alt.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DHCP на ALT Server · виртуальный стенд · itsliventsev">
+  <meta name="twitter:description" content="Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"DHCP на ALT Server · виртуальный стенд","description":"Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале.","url":"https://itsliventsev.github.io/stands/dhcp-alt.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/dhcp-alt.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"DHCP на ALT Server · виртуальный стенд","item":"https://itsliventsev.github.io/stands/dhcp-alt.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="bg-grid flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторный стенд работает только с включённым JavaScript.</div></noscript>
+
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<div class="page-wrap">
+
+  <header class="site-header reveal">
+    <a href="../index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
+    <nav class="site-nav" aria-label="Основная навигация">
+      <a href="../index.html" class="nav-link">главная</a>
+      <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="../projects.html" class="nav-link active" aria-current="page">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="../archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
+    </nav>
+    <div class="header-actions">
+    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);" aria-label="Хлебные крошки">
+      <a href="../index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
+      <span>/</span>
+      <a href="../projects.html" class="nav-link" style="padding:.2rem .4rem;">проекты</a>
+      <span>/</span>
+      <a href="index.html" class="nav-link" style="padding:.2rem .4rem;">стенды</a>
+      <span>/</span>
+      <span>DHCP · ALT</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn" href="index.html">к каталогу</a>
+    </div>
+
+    <div class="flat-head">
+      <span class="flat-index">01</span>
+      <div>
+        <p class="flat-kicker">stand / dhcp-alt · ALT Server + ALT Workstation</p>
+        <h1>Конфигурация DHCP-сервера</h1>
+      </div>
+    </div>
+
+    <div class="callout callout-idea" data-icon="»" style="max-width:56rem;">
+      <p class="m-0"><strong>Легенда.</strong> Вы — администратор компании. Новый отдел получает сеть
+      <code>192.168.10.0/24</code>. Нужно поднять на ALT Server раздачу адресов, а рабочие станции ALT
+      Workstation настроить на автоматическое получение IP. Сетевой принтер должен всегда получать
+      <code>192.168.10.50</code>.</p>
+    </div>
+
+    <!-- Схема сети -->
+    <p class="flat-kicker" style="margin-top:1.8rem;">схема стенда</p>
+    <div class="lab-schema mb-8">
+      <pre class="mermaid">
+graph TD
+  WAN["Внешняя сеть · WAN (NAT enp0s3)"]
+  SRV["ALT Server<br/>DHCP + NAT · 192.168.10.1"]
+  WS1["ALT Workstation 1<br/>DHCP-клиент enp0s8"]
+  WS2["ALT Workstation 2<br/>статический IP"]
+  PRN["Сетевой принтер<br/>резерв 192.168.10.50"]
+  WAN --> SRV
+  SRV -->|LAN 192.168.10.0/24| WS1
+  SRV -->|LAN 192.168.10.0/24| WS2
+  SRV -->|host printer · MAC 00:11:22:33:44:55| PRN
+      </pre>
+      <pre id="schema-fallback" hidden>WAN (NAT, enp0s3) → ALT Server (DHCP+NAT, 192.168.10.1)
+  ├─ LAN 192.168.10.0/24 → ALT Workstation 1 (DHCP-клиент)
+  ├─ LAN 192.168.10.0/24 → ALT Workstation 2 (статический IP)
+  └─ host printer: MAC 00:11:22:33:44:55 → 192.168.10.50</pre>
+    </div>
+
+    <!-- Задания и прогресс -->
+    <p class="flat-kicker">план работ</p>
+    <div class="lab-progress"><i id="lab-progress-bar" style="width:0%"></i></div>
+    <ol class="lab-steps" id="lab-steps"></ol>
+
+    <div class="lab-layout">
+
+      <!-- Левая колонка: редактор + терминал -->
+      <div>
+        <section class="lab-panel mb-5">
+          <div class="lp-head">
+            <span>/etc/dhcp/dhcpd.conf</span>
+            <span class="mono" style="opacity:.7;">редактор</span>
+          </div>
+          <textarea class="lab-editor" id="cfg-editor" spellcheck="false" aria-label="Конфигурация dhcpd.conf"></textarea>
+          <div class="lp-body flex flex-wrap gap-2">
+            <button class="flat-btn" id="btn-validate" type="button">проверить конфиг</button>
+            <button class="flat-btn ghost" id="btn-bug" type="button">загрузить bug-report</button>
+            <button class="flat-btn ghost" id="btn-reset" type="button">сбросить прогресс</button>
+          </div>
+        </section>
+
+        <section class="lab-panel">
+          <div class="lp-head"><span>терминал · ALT</span><span class="mono" style="opacity:.7;">help</span></div>
+          <div class="lab-terminal">
+            <div class="lt-screen" id="term-screen"></div>
+            <div class="lt-input-row">
+              <span class="lt-prompt">student@alt:~$</span>
+              <input id="term-input" type="text" autocomplete="off" spellcheck="false" aria-label="команда терминала" placeholder="введите команду…">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Правая колонка: проверки и сдача -->
+      <div>
+        <section class="lab-panel mb-5">
+          <div class="lp-head"><span>CI · проверки</span><span id="lab-score" class="lab-score">0<small>/0</small></span></div>
+          <div class="lp-body">
+            <div class="lab-checks" id="lab-checks"></div>
+          </div>
+        </section>
+
+        <section class="lab-panel">
+          <div class="lp-head"><span>сдача работы</span></div>
+          <div class="lp-body">
+            <p class="text-sm m-0 mb-3" style="color:var(--muted);line-height:1.6;">
+              При сдаче формируется JSON с ФИО, группой, конфигом, журналом терминала и действий.
+              Скачанный файл отправьте преподавателю — он откроет его в админ-панели.
+            </p>
+            <div class="lab-submit" style="border-top:none;padding-top:0;margin-top:0;">
+              <button class="flat-btn" id="lab-submit" type="button">сдать работу ↓</button>
+              <span class="mono text-xs" id="lab-status" style="color:var(--faint);">// автосохранение включено</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="lab-panel mt-5">
+          <div class="lp-head"><span>ситуационные задачи</span></div>
+          <div class="lp-body text-sm" style="color:var(--text-2);line-height:1.7;">
+            <p class="m-0 mb-2"><strong>Bug report.</strong> Пользователи не получают IP, в логах
+            <code>No subnet declaration for enp0s8</code>. Кнопка «загрузить bug-report» подставит
+            сломанный конфиг — найдите и устраните причину.</p>
+            <p class="m-0"><strong>Feature request.</strong> Принтер с MAC
+            <code>00:11:22:33:44:55</code> должен всегда получать <code>192.168.10.50</code>
+            (директива <code>host printer { … }</code>).</p>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 itsliventsev · стенды</span>
+    <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
+  </footer>
+
+</div>
+
+<script src="../assets/stands-dhcp.js?v=20261026j"></script>
+<script src="../assets/stands.js?v=20261026j"></script>
+<script src="../assets/site.js?v=20261026j"></script>
+</body>
+</html>

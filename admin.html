@@ -14,7 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026i">
+<link rel="stylesheet" href="assets/site.css?v=20261026j">
+<link rel="stylesheet" href="assets/stands.css?v=20261026j">
 </head>
 <body class="bg-grid" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -54,6 +55,58 @@
 
   <h1 class="hero-title text-3xl sm:text-4xl mb-2 reveal">админ-панель</h1>
   <p class="hero-sub reveal mb-10">// публикация постов через GitHub API · токен не покидает вкладку</p>
+
+  <!-- Приём работ виртуальных стендов (работает без токена: импорт JSON) -->
+  <section id="submissions-card" class="card p-5 sm:p-7 reveal mb-8">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div>
+        <p class="section-label">работы студентов · виртуальные стенды</p>
+        <h2 class="text-lg font-bold m-0 mt-1">Журнал сдачи лабораторных</h2>
+      </div>
+      <span class="flat-badge is-ready">работ: <strong id="sub-count">0</strong></span>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <label class="flat-btn" for="sub-import" style="cursor:pointer;">импорт JSON ↥
+        <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
+      </label>
+      <button class="flat-btn ghost" id="sub-repo" type="button">загрузить из репозитория</button>
+      <button class="flat-btn ghost" id="sub-export" type="button">экспорт всех</button>
+      <button class="flat-btn ghost" id="sub-clear" type="button">очистить</button>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-2 mb-4">
+      <input id="sub-search" class="flat-input" type="search" placeholder="поиск по ФИО, группе, стенду…">
+      <select id="sub-filter-group" class="flat-input"><option value="">все группы</option></select>
+      <select id="sub-filter-stand" class="flat-input"><option value="">все стенды</option></select>
+    </div>
+
+    <div class="sub-table-wrap">
+      <table class="sub-table">
+        <thead>
+          <tr>
+            <th>№</th><th>ФИО</th><th>группа</th><th>стенд</th><th>результат</th><th>сдано</th><th>действия</th>
+          </tr>
+        </thead>
+        <tbody id="sub-tbody"></tbody>
+      </table>
+    </div>
+    <p class="admin-hint mt-3 mb-0" id="sub-msg" role="status">
+      Студент скачивает JSON на странице стенда — импортируйте один или несколько файлов сразу.
+      При активном входе по токену можно подтянуть работы из папки <code>submissions/</code> репозитория.
+    </p>
+  </section>
+
+  <!-- Модальное окно детализации работы -->
+  <div id="sub-modal" class="sub-modal" hidden>
+    <div class="sub-modal-box" role="dialog" aria-modal="true" aria-labelledby="sub-modal-title">
+      <div class="sub-modal-head">
+        <h2 id="sub-modal-title" class="text-base font-bold m-0">детализация работы</h2>
+        <button class="icon-btn" id="sub-modal-close" type="button" aria-label="закрыть">✕</button>
+      </div>
+      <div id="sub-modal-body" class="sub-modal-body"></div>
+    </div>
+  </div>
 
   <!-- Вход -->
   <section id="auth-card" class="card p-5 sm:p-7 reveal" style="max-width:42rem;">
@@ -183,8 +236,9 @@
 
 </div>
 
-<script src="assets/admin-config.js?v=20261026i"></script>
-<script src="assets/admin.js?v=20261026i"></script>
-<script src="assets/site.js?v=20261026i"></script>
+<script src="assets/admin-config.js?v=20261026j"></script>
+<script src="assets/admin.js?v=20261026j"></script>
+<script src="assets/submissions.js?v=20261026j"></script>
+<script src="assets/site.js?v=20261026j"></script>
 </body>
 </html>
