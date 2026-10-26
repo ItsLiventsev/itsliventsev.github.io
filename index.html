@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>itsliventsev</title>
 <meta name="description" content="Преподаватель IT, сетевой и системный администратор. Учебные материалы, технический стек, опыт и проекты.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -10,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026">
+<link rel="stylesheet" href="assets/site.css?v=20261026b">
 </head>
 <body class="bg-grid" data-accent="blue">
 
@@ -38,10 +39,18 @@
         <span class="pill pill-green pill-pulse" data-i18n="badge_new">новое</span>
       </a>
       <a href="archive.html" class="nav-link" data-i18n="nav_archive">архив</a>
+      
+    </nav>
+  
+    <div class="header-actions">
       <button onclick="toggleLang()" class="lang-btn magnetic" aria-label="switch language">
         <span id="lang-indicator">EN</span>
       </button>
-    </nav>
+    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    </div>
   </header>
 
   <!-- Hero -->
@@ -124,33 +133,41 @@
         </div>
       </div>
     </div>
+    <div class="hash-row mt-5">
+      <a class="tag-hash" href="#stack">admin</a>
+      <a class="tag-hash" href="#stack">networking</a>
+      <a class="tag-hash" href="#stack">devops</a>
+      <a class="tag-hash" href="#stack">teaching</a>
+      <a class="tag-hash" href="#stack">spo</a>
+      <a class="tag-hash" href="#stack">smart-home</a>
+    </div>
   </section>
 
   <!-- Materials -->
   <section id="resources" class="reveal mb-10 sm:mb-12 scroll-mt-24">
     <p class="section-label" data-i18n="res_title">материалы для студентов</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 stagger">
-      <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_1">база знаний</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_2">учебная практика</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_3">производственная</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">buildin →</span>
       </a>
-      <a href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_4">демоэкзамен</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">buildin →</span>
       </a>
-      <a href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_5">доска · демоэкзамен</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">yandex →</span>
       </a>
-      <a href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" rel="noopener" class="card group flex justify-between items-center p-3.5">
+      <a href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_6">доска · уп.01</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">yandex →</span>
       </a>
@@ -161,7 +178,7 @@
   <section id="cv" class="reveal mb-10 sm:mb-12 scroll-mt-24">
     <p class="section-label" data-i18n="cv_title">опыт и образование</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 stagger">
-      <div class="card hoverable p-4 sm:p-5">
+      <div class="card sheen hoverable p-4 sm:p-5">
         <div class="mono text-xs text-[var(--faint)] mb-2" data-i18n="work_title">работа</div>
         <div class="text-sm font-semibold text-[var(--text)] mb-1.5" data-i18n="work_1">мастер производственного обучения</div>
         <div class="text-xs text-[var(--muted)] leading-relaxed mb-3" data-i18n="work_2">подготовка сетевых и системных администраторов, руководство учебной и производственной практикой</div>
@@ -169,14 +186,14 @@
           <span class="counter" data-target="5">0</span>+ <span data-i18n="work_years">лет</span>
         </span>
       </div>
-      <div class="card hoverable p-4 sm:p-5">
+      <div class="card sheen hoverable p-4 sm:p-5">
         <div class="mono text-xs text-[var(--faint)] mb-2" data-i18n="ach_title">достижения</div>
         <ul class="space-y-2 text-xs text-[var(--text-2)]">
           <li class="flex gap-2"><span class="text-[var(--accent)] shrink-0">◆</span><span data-i18n="ach_1">наставник победителя (1 место) · финал «мастерята» · системы умного дома</span></li>
           <li class="flex gap-2"><span class="text-[var(--accent)] shrink-0">◆</span><span data-i18n="ach_2">победитель регионального этапа «московские профессионалы» · системы умного дома · юниоры</span></li>
         </ul>
       </div>
-      <div class="card hoverable p-4 sm:p-5">
+      <div class="card sheen hoverable p-4 sm:p-5">
         <div class="mono text-xs text-[var(--faint)] mb-2" data-i18n="edu_title">квалификация</div>
         <ul class="space-y-2 text-xs text-[var(--text-2)]">
           <li class="flex gap-2"><span class="text-emerald-600 shrink-0">◆</span><span data-i18n="edu_1">разработка оценочных материалов · ирпо</span></li>
@@ -193,27 +210,27 @@
   <section class="reveal mb-10">
     <p class="section-label" data-i18n="contact_title">контакты</p>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 stagger">
-      <a href="mailto:livencev01@ya.ru" class="card group block p-3.5">
+      <a href="mailto:livencev01@ya.ru" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">email</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors truncate block">livencev01@ya.ru</span>
       </a>
-      <a href="mailto:liventsevka@edu.mos.ru" class="card group block p-3.5">
+      <a href="mailto:liventsevka@edu.mos.ru" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">edu email</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors truncate block">liventsevka@edu.mos.ru</span>
       </a>
-      <a href="https://t.me/itsliventsev" target="_blank" rel="noopener" class="card group block p-3.5">
+      <a href="https://t.me/itsliventsev" target="_blank" rel="noopener" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">telegram</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors">@itsliventsev →</span>
       </a>
-      <a href="https://vk.com/itsliventsev" target="_blank" rel="noopener" class="card group block p-3.5">
+      <a href="https://vk.com/itsliventsev" target="_blank" rel="noopener" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">vk</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors">itsliventsev →</span>
       </a>
-      <a href="https://github.com/ItsLiventsev" target="_blank" rel="noopener" class="card group block p-3.5">
+      <a href="https://github.com/ItsLiventsev" target="_blank" rel="noopener" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">github</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors">itsLiventsev →</span>
       </a>
-      <a href="https://hh.ru" target="_blank" rel="noopener" class="card group block p-3.5">
+      <a href="https://hh.ru" target="_blank" rel="noopener" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block" data-i18n="portfolio">портфолио</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors">hh.ru →</span>
       </a>
@@ -231,7 +248,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026"></script>
+<script src="assets/site.js?v=20261026b"></script>
 <script>
   /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami */
   document.querySelectorAll('.tech-tag').forEach(tag => {

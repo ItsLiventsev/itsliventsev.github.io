@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>Практикоориентированное формирование знаний · itsliventsev</title>
 <meta name="description" content="Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -10,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026">
+<link rel="stylesheet" href="../assets/site.css?v=20261026b">
 </head>
 <body class="bg-grid" data-accent="orange">
 
@@ -24,6 +25,13 @@
   <header class="site-header reveal">
     <a href="../articles.html" class="logo"><span class="arrow">←</span> статьи</a>
     <span id="read-percent" class="mono text-xs text-[var(--faint)]">0%</span>
+  
+    <div class="header-actions">
+    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    </div>
   </header>
 
   <!-- Шапка статьи -->
@@ -34,7 +42,15 @@
       <a href="../articles.html" class="hover:text-[var(--accent)] transition-colors">статьи</a>
     </nav>
 
-    <p class="mono text-xs text-[var(--muted)] mb-4">конференция · 2024 · сборник «Актуальные вопросы образования»</p>
+    <div class="article-meta mb-5">
+      <span class="pill pill-orange">конференция · 2024</span>
+      <span class="dot"></span>
+      <span>сборник «Актуальные вопросы образования»</span>
+      <span class="dot"></span>
+      <span>≈ 10 мин чтения</span>
+      <span class="dot"></span>
+      <span>8 разделов</span>
+    </div>
 
     <h1 class="text-2xl md:text-[34px] font-bold text-[var(--text)] leading-snug mb-6">
       Практикоориентированное формирование знаний и навыков и их влияние на качественное трудоустройство обучающихся и выпускников по специальности на современном рынке труда
@@ -55,7 +71,6 @@
       </div>
     </div>
 
-    <p class="mono text-xs text-[var(--faint)]">≈10 мин чтения · 8 разделов</p>
   </div>
 
   <!-- Аннотация -->
@@ -63,10 +78,14 @@
     <p class="text-[15px] md:text-base text-[var(--muted)] leading-relaxed italic mb-4">
       В статье изложены тезисы о необходимости повышения практикоориентированности в современной системе среднего профессионального образования и о том, как это влияет на рынок труда. Поднимается вопрос о проблемах, преимуществах и недостатках форсированного освоения практического обучения на примере новых стандартов 2023–2024 гг. Работа приводит статистические данные в форме динамики трудоустройства обучающихся по специальности, а также личные прогнозы авторов на ближайшие несколько лет.
     </p>
-    <p class="text-sm text-[var(--muted)] m-0">
-      <span class="mono text-xs text-[var(--faint)]">ключевые слова:</span>
-      востребованность, качество образования, производственная практика, рынок труда, трудоустройство, учебная практика, практикоориентированность
-    </p>
+    <div class="hash-row">
+      <span class="tag-hash">практикоориентированность</span>
+      <span class="tag-hash">трудоустройство</span>
+      <span class="tag-hash">спо</span>
+      <span class="tag-hash">рынок-труда</span>
+      <span class="tag-hash">фгос</span>
+      <span class="tag-hash">производственная-практика</span>
+    </div>
   </div>
 
   <!-- Сетка: оглавление слева + текст -->
@@ -96,10 +115,10 @@
         <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
           <span class="mono text-xs font-medium text-[var(--faint)]">01</span>Трудоустройство как ключевой показатель
         </h2>
-        <p class="prose-p">
-          В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="mono text-xs text-[var(--accent)] hover:underline">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
+        <p class="prose-p drop-cap">
+          В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="fn-ref">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
         </p>
-        <blockquote class="border-l-2 border-[var(--accent)] pl-4 my-6 italic text-[var(--muted)]">
+        <blockquote class="pull-quote">
           Показатель трудоустройства выпускников и обучающихся — один из ключевых факторов качественного освоения образовательного процесса и отличительный признак организации.
         </blockquote>
         <p class="prose-p">
@@ -112,7 +131,7 @@
           <span class="mono text-xs font-medium text-[var(--faint)]">02</span>Профессиональные пробы: три этапа
         </h2>
         <p class="prose-p">
-          Профессиональные пробы — нынешняя основа быстрого повышения квалификации обучающихся колледжей предвыпускных и выпускных групп. Процесс проходит в три этапа <a href="#ref2" class="mono text-xs text-[var(--accent)] hover:underline">[2]</a>:
+          Профессиональные пробы — нынешняя основа быстрого повышения квалификации обучающихся колледжей предвыпускных и выпускных групп. Процесс проходит в три этапа <a href="#ref2" class="fn-ref">[2]</a>:
         </p>
         <ol class="space-y-3 mb-2 list-none p-0">
           <li class="flex gap-3">
@@ -149,7 +168,7 @@
           <span class="mono text-xs font-medium text-[var(--faint)]">04</span>Недостатки новых стандартов
         </h2>
         <p class="prose-p">
-          Одним из основных недостатков является сокращение курса общеобразовательных дисциплин, что сказывается на качественном обучении студентов (в том числе имеющих только оценки «4» и «5»). Такая система снижает и качество освоения теоретического материала: в учебном плане приоритет по академическим часам отдаётся практическим курсам — даже в рамках дисциплин теоретической направленности, например в междисциплинарных курсах <a href="#ref3" class="mono text-xs text-[var(--accent)] hover:underline">[3]</a>.
+          Одним из основных недостатков является сокращение курса общеобразовательных дисциплин, что сказывается на качественном обучении студентов (в том числе имеющих только оценки «4» и «5»). Такая система снижает и качество освоения теоретического материала: в учебном плане приоритет по академическим часам отдаётся практическим курсам — даже в рамках дисциплин теоретической направленности, например в междисциплинарных курсах <a href="#ref3" class="fn-ref">[3]</a>.
         </p>
         <p class="prose-p">
           В пример стоит отметить новые стандарты ФГОС по специальностям <span class="mono text-[13px]">15.01.29</span> «Контролёр качества в машиностроении», <span class="mono text-[13px]">27.02.06</span> «Метрологический контроль средств измерений», <span class="mono text-[13px]">27.02.07</span> «Управление качеством продукции, процессов и услуг (по отраслям)»: по учебному плану образовательные организации закладывают практические часы в соотношении минимум 40–60% выполнения лабораторных и практических работ.
@@ -297,7 +316,7 @@
         </figure>
 
         <p class="prose-p">
-          Группа УКП имеет высокий процент трудоустройства на фоне сотрудничества образовательной организации и ГК «РОСТЕХ» с 2023 года — этим объясняется больший процент в сравнении с ИТ-профилями, которые пока находят отклик преимущественно у частных предприятий <a href="#ref4" class="mono text-xs text-[var(--accent)] hover:underline">[4]</a>.
+          Группа УКП имеет высокий процент трудоустройства на фоне сотрудничества образовательной организации и ГК «РОСТЕХ» с 2023 года — этим объясняется больший процент в сравнении с ИТ-профилями, которые пока находят отклик преимущественно у частных предприятий <a href="#ref4" class="fn-ref">[4]</a>.
         </p>
       </section>
 
@@ -319,7 +338,7 @@
           </li>
           <li class="flex gap-3">
             <span class="mono text-sm text-[var(--accent)] shrink-0">→</span>
-            <span class="leading-relaxed">популяризация системы СПО среди школьников вызовет приток абитуриентов, желающих за короткий срок освоить профессию и быстрее начать карьерный путь <a href="#ref5" class="mono text-xs text-[var(--accent)] hover:underline">[5]</a>.</span>
+            <span class="leading-relaxed">популяризация системы СПО среди школьников вызовет приток абитуриентов, желающих за короткий срок освоить профессию и быстрее начать карьерный путь <a href="#ref5" class="fn-ref">[5]</a>.</span>
           </li>
         </ul>
       </section>
@@ -360,6 +379,15 @@
     <p class="text-sm text-[var(--muted)] italic mb-8">
       🦀 Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="../index.html" class="text-[var(--accent)] hover:underline not-italic">контакты на главной странице</a>.
     </p>
+
+    <div class="cta-card mb-10">
+      <div>
+        <h3>Хотите так же в своей образовательной организации?</h3>
+        <p>Методики практикоориентированного обучения, демоэкзамен и связка с предприятиями — разберём на практике.</p>
+      </div>
+      <a href="../index.html" class="btn btn-primary btn-sm">обсудить →</a>
+    </div>
+
     <div class="flex justify-between items-center text-sm mb-10 gap-4 flex-wrap">
       <a href="../articles.html" class="mono text-[var(--muted)] hover:text-[var(--accent)] transition-colors flex items-center gap-2 group">
         <span class="arrow transition-transform group-hover:-translate-x-0.5">←</span> все статьи
@@ -373,6 +401,6 @@
 
 </div>
 
-<script src="../assets/site.js?v=20261026"></script>
+<script src="../assets/site.js?v=20261026b"></script>
 </body>
 </html>
