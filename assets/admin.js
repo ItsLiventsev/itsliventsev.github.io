@@ -141,9 +141,18 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026f">
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026g">
 </head>
 <body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 <button id="to-top" title="наверх" aria-label="наверх">🦀</button>
@@ -192,11 +201,12 @@ ${bodyHtml}
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · ${section === 'blog' ? 'блог' : 'статьи'}</span>
+    <a href="${prefix}admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261026f"></script>
+<script src="${prefix}assets/site.js?v=20261026g"></script>
 </body>
 </html>
 `;

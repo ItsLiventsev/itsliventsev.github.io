@@ -187,17 +187,48 @@ document.documentElement.classList.add('js-enabled');
 /* ---------- Анимированные «метки» в заголовках ----------
    data-mark='[".","..","..."]'            — текстовые кадры
    data-mark-html='["<span> >_</span>"]'  — HTML-кадры
-   data-mark-interval="450"                — скорость */
-document.querySelectorAll('[data-mark], [data-mark-html]').forEach((el) => {
-  const frames = el.dataset.mark ? JSON.parse(el.dataset.mark) : JSON.parse(el.dataset.markHtml);
-  const interval = parseInt(el.dataset.markInterval || '450', 10);
-  let i = 0;
-  setInterval(() => {
-    i = (i + 1) % frames.length;
-    if (el.dataset.markHtml !== undefined) el.innerHTML = frames[i];
-    else el.textContent = frames[i];
-  }, interval);
-});
+   data-mark-interval="450"                — скорость
+   При prefers-reduced-motion остаётся статичный первый кадр. */
+(function () {
+  const marks = document.querySelectorAll('[data-mark], [data-mark-html]');
+  if (!marks.length) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return; // первый кадр из разметки остаётся как есть
+  marks.forEach((el) => {
+    const frames = el.dataset.mark ? JSON.parse(el.dataset.mark) : JSON.parse(el.dataset.markHtml);
+    const interval = parseInt(el.dataset.markInterval || '450', 10);
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % frames.length;
+      if (el.dataset.markHtml !== undefined) el.innerHTML = frames[i];
+      else el.textContent = frames[i];
+    }, interval);
+  });
+})();
+
+/* ---------- Автосчётчики разделов: баблы в меню и быстрых ссылках ----------
+   Данные лежат в /feed-counts.json (пересобирает build-post-index.js).
+   Элементы: <span class="nav-bubble" data-feed-count="blog"></span>.
+   Путь к манифесту считается от глубины текущей страницы. */
+(function () {
+  const bubbles = document.querySelectorAll('[data-feed-count]');
+  if (!bubbles.length) return;
+  if (typeof fetch !== 'function') return; // старые браузеры/file:// — баблы останутся скрытыми
+  const depth = location.pathname.split('/').filter(Boolean).length;
+  const manifest = (depth > 1 ? '../' : './') + 'feed-counts.json';
+  fetch(manifest)
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((counts) => {
+      bubbles.forEach((b) => {
+        const n = counts[b.dataset.feedCount];
+        if (typeof n !== 'number') return;
+        b.textContent = n;
+        b.classList.add('is-filled');
+        b.title = 'записей в разделе: ' + n;
+      });
+    })
+    .catch(() => { /* манифест недоступен (file://, офлайн) — баблы просто скрыты */ });
+})();
 
 /* ---------- Универсальные фильтры (data-filter-root) ---------- */
 document.querySelectorAll('[data-filter-root]').forEach((root) => {

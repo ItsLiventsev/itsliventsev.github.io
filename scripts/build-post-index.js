@@ -79,4 +79,30 @@ for (const section of SECTIONS) {
     console.log(`${section.out}: без изменений (${posts.length} запис(ь/и))`);
   }
 }
+
+/* ---------- Сводный счётчик разделов для баблов навигации ---------- */
+function countHtml(dir, { exclude = [] } = {}) {
+  const full = path.join(ROOT, dir);
+  if (!fs.existsSync(full)) return 0;
+  return fs.readdirSync(full)
+    .filter((f) => f.endsWith('.html') && !exclude.includes(f)).length;
+}
+
+const counts = {
+  blog: collect(path.join(ROOT, 'blog')).length,
+  articles: collect(path.join(ROOT, 'articles')).length,
+  // глоссарий — служебная страница, в счётчик проектов не идёт
+  projects: countHtml('projects', { exclude: ['glossary.html'] }),
+  archive: countHtml('archive'),
+};
+const countsPath = path.join(ROOT, 'feed-counts.json');
+const countsJson = JSON.stringify(counts, null, 2) + '\n';
+const countsOld = fs.existsSync(countsPath) ? fs.readFileSync(countsPath, 'utf8') : '';
+if (countsOld !== countsJson) {
+  fs.writeFileSync(countsPath, countsJson);
+  changed++;
+  console.log('обновлён feed-counts.json:', JSON.stringify(counts));
+} else {
+  console.log('feed-counts.json: без изменений', JSON.stringify(counts));
+}
 console.log(changed ? `Готово: обновлено файлов — ${changed}.` : 'Готово: всё актуально.');

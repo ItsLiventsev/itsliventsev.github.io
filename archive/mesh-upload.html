@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026f">
+<link rel="stylesheet" href="../assets/site.css?v=20261026g">
 </head>
 <body class="bg-grid" data-accent="blue">
 
@@ -24,10 +24,10 @@
     <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
     <nav class="site-nav">
       <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link">блог</a>
-      <a href="../articles.html" class="nav-link">статьи</a>
-      <a href="../projects.html" class="nav-link">проекты</a>
-      <a href="../archive.html" class="nav-link active" aria-current="page">архив</a>
+      <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="../projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="../archive.html" class="nav-link active" aria-current="page">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </nav>
   
     <div class="header-actions">
@@ -42,7 +42,7 @@
 
   <section class="hero reveal">
     <h1 class="hero-title text-3xl sm:text-4xl">
-      Загрузка сценариев в МЭШ
+      Загрузка сценариев в МЭШ <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
     <span class="pill pill-neutral mb-4">⚙️ текст структурирован и оптимизирован с помощью ИИ</span>
     <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
@@ -199,9 +199,10 @@
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
+    <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026f"></script>
+<script src="../assets/site.js?v=20261026g"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@ on:
     paths:
       - 'blog/**.html'
       - 'articles/**.html'
+      - 'projects/**.html'
+      - 'archive/**.html'
       - 'scripts/build-post-index.js'
       - '.github/workflows/post-index.yml'
   workflow_dispatch:
@@ -32,7 +34,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog/posts.json articles/posts.json
+          git add blog/posts.json articles/posts.json feed-counts.json
           if git diff --staged --quiet; then
             echo "Индексы не изменились — коммит не нужен"
           else

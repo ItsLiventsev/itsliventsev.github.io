@@ -17,9 +17,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026f">
+<link rel="stylesheet" href="../assets/site.css?v=20261026g">
 </head>
 <body class="bg-grid" data-accent="orange">
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
+
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -32,10 +41,10 @@
     <a href="../articles.html" class="logo"><span class="arrow">←</span> статьи</a>
     <nav class="site-nav">
       <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link">блог</a>
-      <a href="../articles.html" class="nav-link active" aria-current="page">статьи</a>
-      <a href="../projects.html" class="nav-link">проекты</a>
-      <a href="../archive.html" class="nav-link">архив</a>
+      <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="../articles.html" class="nav-link active" aria-current="page">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="../projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="../archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </nav>
     
   
@@ -48,10 +57,10 @@
     </div>
   </header>
 
-  <main class="prose-measure">
+  <main>
 
   <!-- Шапка статьи -->
-  <div class="reveal mb-10">
+  <div class="reveal mb-10 prose-measure">
     <nav class="mono text-xs text-[var(--faint)] mb-5 flex items-center gap-2 flex-wrap">
       <a href="../index.html" class="hover:text-[var(--accent)] transition-colors">главная</a>
       <span>/</span>
@@ -90,7 +99,7 @@
   </div>
 
   <!-- Аннотация -->
-  <div class="reveal mb-10 pb-10 border-b border-[var(--border)]">
+  <div class="reveal mb-10 pb-10 border-b border-[var(--border)] prose-measure">
     <p class="text-[15px] md:text-base text-[var(--muted)] leading-relaxed italic mb-4">
       В статье изложены тезисы о необходимости повышения практикоориентированности в современной системе среднего профессионального образования и о том, как это влияет на рынок труда. Поднимается вопрос о проблемах, преимуществах и недостатках форсированного освоения практического обучения на примере новых стандартов 2023–2024 гг. Работа приводит статистические данные в форме динамики трудоустройства обучающихся по специальности, а также личные прогнозы авторов на ближайшие несколько лет.
     </p>
@@ -125,7 +134,7 @@
     </aside>
 
     <!-- Текст статьи -->
-    <article class="text-[var(--text-2)] text-[15px] md:text-[16px]">
+    <article class="prose-measure text-[var(--text-2)] text-[15px] md:text-[16px]">
 
       <section id="s1" class="reveal mb-12 scroll-mt-24">
         <h2 class="flex items-baseline gap-3 text-lg md:text-xl font-bold text-[var(--text)] mb-4">
@@ -134,9 +143,9 @@
         <p class="prose-p drop-cap">
           В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="fn-ref">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
         </p>
-        <blockquote class="pull-quote">
-          Показатель трудоустройства выпускников и обучающихся — один из ключевых факторов качественного освоения образовательного процесса и отличительный признак организации.
-        </blockquote>
+        <div class="callout callout-idea" data-icon="💡">
+          <p class="m-0"><strong>Ключевая мысль.</strong> Показатель трудоустройства выпускников и обучающихся — один из ключевых факторов качественного освоения образовательного процесса и отличительный признак организации.</p>
+        </div>
         <p class="prose-p">
           Так, к примеру, в ведущих компаниях ГК «РОСТЕХ» в настоящий момент ощущается заметная нехватка квалифицированных кадров из-за расширения филиалов и обновления материально-технической базы предприятий. Это видно по внутренним мероприятиям корпорации, направленным на форсированное обучение и вывод на рабочее место молодых специалистов.
         </p>
@@ -391,10 +400,10 @@
   </div>
 
   <!-- Низ страницы -->
-  <div class="reveal mt-14 pt-6 border-t border-[var(--border)]">
-    <p class="text-sm text-[var(--muted)] italic mb-8">
-      🦀 Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="../index.html" class="text-[var(--accent)] hover:underline not-italic">контакты на главной странице</a>.
-    </p>
+  <div class="reveal mt-14 pt-6 border-t border-[var(--border)] prose-measure">
+    <div class="callout callout-warn" data-icon="🦀">
+      <p class="m-0 text-sm" style="color:var(--muted);">Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="../index.html" class="text-[var(--accent)] hover:underline">контакты на главной странице</a>.</p>
+    </div>
 
     <div class="cta-card mb-10">
       <div>
@@ -413,12 +422,13 @@
     </main>
 
   <footer class="site-footer mt-0">
-      © 2026 itsliventsev · статьи
-    </footer>
+    <span>© 2026 itsliventsev · статьи</span>
+    <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
+  </footer>
   </div>
 
 </div>
 
-<script src="../assets/site.js?v=20261026f"></script>
+<script src="../assets/site.js?v=20261026g"></script>
 </body>
 </html>
