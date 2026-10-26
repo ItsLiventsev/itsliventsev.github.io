@@ -112,7 +112,13 @@ body,
 }
 
 /* ---------- 3. База ---------- */
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* резерв под скроллбар: страница не «прыгает» при смене высоты */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
 
 body {
   font-family: var(--font-sans);
@@ -125,9 +131,29 @@ body {
 
 .mono { font-family: var(--font-mono); }
 
+/* Типографика: баланс заголовков и отсутствие висячих строк (2023+ практика,
+   старые браузеры просто игнорируют) */
+h1, h2, h3, h4 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Якоря не прячутся под липкую шапку */
+section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
+
 ::selection { background: var(--accent-soft); color: var(--text); }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* Локальный sr-only: доступность не зависит от Tailwind CDN */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* Тонкий скроллбар */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -266,20 +292,29 @@ body {
 }
 .lang-btn:hover { color: var(--accent); border-color: var(--accent-border); transform: translateY(-1px); }
 
-/* Бургер: скрыт на десктопе */
+/* Бургер: скрыт на десктопе, появляется на мобильных (см. media ниже).
+   Собственные классы .burger-* — никаких пересечений с другими системами. */
 .nav-burger { display: none; }
-.nav-burger .bar {
-  display: block;
-  width: 16px;
-  height: 1.7px;
-  border-radius: 2px;
-  background: currentColor;
-  margin: 3.2px 0;
-  transition: transform .3s var(--ease), opacity .2s ease;
+.burger-bars {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
-.nav-burger[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(4.9px) rotate(45deg); }
-.nav-burger[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
-.nav-burger[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-4.9px) rotate(-45deg); }
+.burger-bar {
+  display: block;
+  width: 17px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text-2);
+  transition: transform .3s var(--ease), opacity .2s ease, background-color .2s ease;
+}
+.nav-burger:hover .burger-bar,
+.nav-burger[aria-expanded="true"] .burger-bar { background: var(--accent); }
+.nav-burger[aria-expanded="true"] .burger-bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] .burger-bar:nth-child(2) { opacity: 0; transform: scaleX(.2); }
+.nav-burger[aria-expanded="true"] .burger-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 /* Мобильная навигация: выезжает под шапкой */
 @media (max-width: 880px) {
@@ -294,15 +329,37 @@ body {
     overflow: hidden;
     opacity: 0;
     padding: 0;
+    border-top: 1px solid transparent;
     transition: max-height .4s var(--ease), opacity .3s ease, padding .3s ease;
   }
   .site-header.nav-open .site-nav {
     max-height: 460px;
     opacity: 1;
     padding-top: .55rem;
+    border-top-color: var(--border);
   }
   .nav-link { padding: .6rem .75rem; border-radius: 12px; }
   .header-actions { margin-left: auto; }
+  /* Пункты меню проявляются каскадом при открытии */
+  .site-header.nav-open .nav-link { animation: nav-link-in .4s var(--ease) both; }
+  .site-header.nav-open .nav-link:nth-child(1) { animation-delay: .04s; }
+  .site-header.nav-open .nav-link:nth-child(2) { animation-delay: .08s; }
+  .site-header.nav-open .nav-link:nth-child(3) { animation-delay: .12s; }
+  .site-header.nav-open .nav-link:nth-child(4) { animation-delay: .16s; }
+  .site-header.nav-open .nav-link:nth-child(5) { animation-delay: .2s; }
+  .site-header.nav-open .nav-link:nth-child(6) { animation-delay: .24s; }
+  .site-header.nav-open .nav-link:nth-child(n+7) { animation-delay: .28s; }
+}
+@keyframes nav-link-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Узкие экраны: компактнее шапка, чтобы ряд не распирался */
+@media (max-width: 480px) {
+  .site-header { padding: .45rem .5rem .45rem .85rem; gap: .45rem .55rem; margin-bottom: 2rem; }
+  .logo { font-size: .82rem; gap: .38rem; }
+  .header-actions { gap: .32rem; }
 }
 
 /* ---------- 6. Hero и заголовки ---------- */
@@ -781,10 +838,12 @@ code, .code {
 .toc-link { transition: color .2s ease, border-color .2s ease; border-color: var(--border) !important; }
 .toc-link.current { color: var(--accent) !important; border-color: var(--accent) !important; }
 
-.bar { height: 0; transition: height .9s var(--ease) .2s; }
-.reveal.active .bar { height: var(--h); }
-.bar-label { opacity: 0; transition: opacity .2s ease; }
-.bar-group:hover .bar-label { opacity: 1; }
+/* Отдельный неймспейс .chart-*: класс .bar намеренно не используется,
+   чтобы никогда не пересекаться с палочками бургера .burger-bar */
+.chart-bar { height: 0; transition: height .9s var(--ease) .2s; }
+.reveal.active .chart-bar { height: var(--h); }
+.chart-label { opacity: 0; transition: opacity .2s ease; }
+.chart-group:hover .chart-label { opacity: 1; }
 .range-seg { width: 0; transition: width 1s var(--ease) .3s; }
 .reveal.active .range-seg { width: var(--w); }
 .prose-p { margin-bottom: 1.1em; line-height: 1.8; }
@@ -1850,10 +1909,34 @@ body { animation: page-in .5s var(--ease); }
 .flow-step h3 { font-size: .92rem; font-weight: 750; margin: 0 0 .4rem; color: var(--text); }
 .flow-step p { font-size: .78rem; line-height: 1.55; color: var(--muted); margin: 0; }
 
-/* ---------- 18. Доступность ---------- */
+/* ---------- 21. Полировка 2026: тач-таргеты, View Transitions, док ---------- */
+
+/* Убираем серую вспышку тапа по ссылкам и кнопкам на мобильных */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* Тач-устройства: цели нажатия крупнее (рекомендация WCAG/Apple ~40–44px) */
+@media (pointer: coarse) {
+  .icon-btn { width: 2.4rem; height: 2.4rem; }
+  .lang-btn { padding: .55rem .85rem; }
+  .bottom-dock a { padding: .68rem .95rem; font-size: .76rem; }
+  #to-top { width: 2.8rem; height: 2.8rem; }
+}
+
+/* View Transitions API: гасим дефолтный кросс-фейд — новая тема
+   раскрывается кругом от кнопки (клип-анимация задаётся в site.js).
+   Старые браузеры эти правила игнорируют и переключают тему мгновенно. */
+::view-transition-old(root) { animation: none; z-index: 1; }
+::view-transition-new(root) { animation: none; z-index: 9999; }
+
+/* Где есть нижний док, кнопка «наверх» встаёт выше него, а не под него */
+body:has(.bottom-dock) #to-top { bottom: 6rem; }
+
+/* ---------- 22. Доступность ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .js-enabled .reveal, .js-enabled .stagger > * { opacity: 1; transform: none; }
   body { animation: none; }
   .sheen::after { display: none; }
+  /* Без анимаций мобильное меню просто видимо/скрыто */
+  .site-header.nav-open .nav-link { animation: none; }
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fafafa">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>404 · страница не найдена · itsliventsev</title>
+<meta name="description" content="Запрашиваемая страница не найдена. Вернитесь на главную или загляните в проекты и статьи.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261026d">
+</head>
+<body class="bg-grid" data-accent="blue">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 min-h-[92vh] flex flex-col">
+
+  <!-- Header -->
+  <header class="site-header reveal">
+    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Терминал с ошибкой -->
+  <main class="flex-1 flex items-center py-10">
+    <div class="w-full">
+      <section class="card reveal p-0 overflow-hidden">
+        <!-- Окно терминала: «светофор» + заголовок -->
+        <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color:var(--border); background:var(--surface-2);">
+          <span class="w-3 h-3 rounded-full" style="background:#ff5f57;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#febc2e;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#28c840;"></span>
+          <span class="mono text-xs ml-2" style="color:var(--muted);">~/itsliventsev — 404</span>
+        </div>
+
+        <div class="p-6 sm:p-9 mono text-sm sm:text-base leading-8">
+          <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> curl -s https://itsliventsev.ru/this-page</p>
+          <p style="color:var(--danger-text);">HTTP/1.1 404 Not Found</p>
+          <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> echo $EXCEPTION</p>
+          <p style="color:var(--text-2);">Страница переехала, не существовала или была удалена при уборке.</p>
+          <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> ls /suggestions <span class="title-mark blink" aria-hidden="true">▌</span></p>
+        </div>
+      </section>
+
+      <!-- Крупный код и ссылки -->
+      <section class="reveal mt-10 text-center">
+        <div class="mono font-extrabold leading-none mb-3" style="font-size:clamp(4rem,16vw,8rem); color:var(--accent); letter-spacing:-.05em;">404</div>
+        <h1 class="text-xl sm:text-2xl font-bold mb-2" style="color:var(--text);">Такой страницы нет</h1>
+        <p class="text-sm max-w-md mx-auto mb-7" style="color:var(--muted);">
+          Зато есть рабочие разделы — скорее всего, вы искали что-то из них.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="index.html" class="btn btn-primary">← на главную</a>
+          <a href="projects.html" class="btn">проекты</a>
+          <a href="articles.html" class="btn btn-ghost">статьи</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 itsliventsev · even 404 gets a clean page</span>
+  </footer>
+</div>
+
+<script src="assets/site.js?v=20261026d"></script>
+</body>
+</html>
