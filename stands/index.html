@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fafafa">
-<meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark">
 <title>виртуальные стенды · itsliventsev</title>
 <meta name="description" content="Учебные виртуальные стенды в браузере: идентификация по ФИО и группе, автосохранение прогресса, лабораторная по настройке DHCP на ALT Server с автоматической проверкой.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -13,8 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026j">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026j">
+<link rel="stylesheet" href="../assets/site.css?v=20261026k">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026k">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/index.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -39,68 +38,57 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="bg-grid flat-scope" data-accent="blue">
+<body class="flat-scope" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: стенды — это интерактивные лабораторные, для работы нужен включённый JavaScript.</div></noscript>
 
-<!-- Ambient-фон -->
-<div class="ambient" aria-hidden="true">
-  <span class="orb orb-1"></span>
-  <span class="orb orb-2"></span>
-  <span class="ambient-glyph">#</span>
-  <span class="ambient-glyph">/</span>
-  <span class="ambient-glyph">&gt;_</span>
-</div>
-
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <header class="site-header reveal">
-    <a href="../index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-      <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
-      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="../projects.html" class="nav-link active" aria-current="page">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="../archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">виртуальные стенды</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="index.html" aria-current="page">каталог</a>
+      <a href="../projects.html">проекты</a>
+      <a href="../admin.html" rel="nofollow">admin</a>
     </nav>
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
+  </div>
+</header>
 
+<div class="st-wrap">
   <main id="main-content">
 
-    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);" aria-label="Хлебные крошки">
-      <a href="../index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
-      <span>/</span>
-      <a href="../projects.html" class="nav-link" style="padding:.2rem .4rem;">проекты</a>
-      <span>/</span>
-      <span>виртуальные стенды</span>
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">виртуальные стенды</span>
     </nav>
 
-    <div class="flat-head">
-      <span class="flat-index">00</span>
+    <div class="st-hero">
+      <span class="st-hero-index">00</span>
       <div>
         <p class="flat-kicker">учебный процесс · лабораторные в браузере</p>
         <h1>виртуальные стенды</h1>
       </div>
     </div>
 
-    <p class="text-sm md:text-base mb-8" style="color:var(--text-2);max-width:52rem;line-height:1.7;">
+    <p class="st-lede">
       Браузерная лаборатория без установки VirtualBox и образов машин: терминал, конфигурации и
       автоматическая проверка как в CI. Профиль сохраняется локально — можно прерваться и продолжить
       с того же места, а готовую работу выгрузить файлом и отправить преподавателю.
     </p>
 
     <!-- Идентификация -->
-    <section id="profile-gate" class="lab-panel mb-8" style="max-width:42rem;">
-      <div class="lp-head"><span>шаг 01 · идентификация</span><span class="flat-badge is-run">профиль</span></div>
+    <section id="profile-gate" class="lab-panel" style="max-width:44rem;">
+      <div class="lp-head">
+        <span>шаг 01 · идентификация</span>
+        <span class="flat-badge is-run">профиль</span>
+      </div>
       <div class="lp-body">
         <form class="flat-form" id="profile-form">
           <div class="flat-field">
@@ -117,7 +105,7 @@
             </datalist>
           </div>
           <button class="flat-btn" type="submit">войти на стенды →</button>
-          <p class="admin-hint m-0" id="profile-msg" role="status" style="color:#dc2626;"></p>
+          <p class="m-0" id="profile-msg" role="status" style="color:var(--st-bad);font-family:var(--st-mono);font-size:.78rem;min-height:1em;"></p>
         </form>
       </div>
     </section>
@@ -127,17 +115,22 @@
       <span class="fp-name" id="fp-name">—</span>
       <span class="fp-group" id="fp-group">—</span>
       <span class="fp-spacer"></span>
-      <button class="flat-btn" id="profile-change" type="button">сменить профиль</button>
+      <button class="flat-btn ghost" id="profile-change" type="button">сменить профиль</button>
     </div>
 
     <!-- Каталог стендов -->
     <section id="stands-catalog" hidden>
-      <p class="flat-kicker">шаг 02 · выбор стенда</p>
+      <div class="st-section-head">
+        <span class="st-section-num">02</span>
+        <h2>каталог стендов</h2>
+        <span class="st-section-tag">выбор модуля</span>
+      </div>
+
       <div class="flat-grid">
 
         <a class="flat-module" href="dhcp-alt.html">
           <span class="fm-num">STAND / 01</span>
-          <h2 style="margin:0;font-size:1.05rem;font-weight:700;">Конфигурация DHCP на ALT Server</h2>
+          <h3>Конфигурация DHCP на ALT Server</h3>
           <p>Подсеть и пул адресов, шлюз, DNS, резервирование принтера по MAC. Терминал-симулятор, проверка конфига в стиле CI, ситуационная задача с логом ошибки.</p>
           <span class="flat-badge is-ready" style="align-self:flex-start;">готов</span>
           <span class="fm-foot">открыть стенд →</span>
@@ -145,7 +138,7 @@
 
         <div class="flat-module is-soon" aria-disabled="true">
           <span class="fm-num">STAND / 02</span>
-          <h2 style="margin:0;font-size:1.05rem;font-weight:700;">VLAN и коммутация</h2>
+          <h3>VLAN и коммутация</h3>
           <p>Создание VLAN, trunk-порты и проверка изоляции сегментов на управляемом коммутаторе.</p>
           <span class="flat-badge is-soon" style="align-self:flex-start;">в разработке</span>
           <span class="fm-foot">// место зарезервировано</span>
@@ -153,7 +146,7 @@
 
         <div class="flat-module is-soon" aria-disabled="true">
           <span class="fm-num">STAND / 03</span>
-          <h2 style="margin:0;font-size:1.05rem;font-weight:700;">Маршрутизация и NAT</h2>
+          <h3>Маршрутизация и NAT</h3>
           <p>ip route, маскарадинг между LAN и WAN, диагностика через ip и journalctl.</p>
           <span class="flat-badge is-soon" style="align-self:flex-start;">в разработке</span>
           <span class="fm-foot">// место зарезервировано</span>
@@ -161,7 +154,7 @@
 
         <div class="flat-module is-soon" aria-disabled="true">
           <span class="fm-num">STAND / 04</span>
-          <h2 style="margin:0;font-size:1.05rem;font-weight:700;">Контроль доступа (SSH, sudo)</h2>
+          <h3>Контроль доступа (SSH, sudo)</h3>
           <p>Ключи вместо паролей, sudoers, разграничение прав администраторов.</p>
           <span class="flat-badge is-soon" style="align-self:flex-start;">в разработке</span>
           <span class="fm-foot">// место зарезервировано</span>
@@ -170,42 +163,44 @@
       </div>
 
       <!-- Как устроено -->
-      <p class="flat-kicker" style="margin-top:2.2rem;">как это работает</p>
+      <div class="st-section-head">
+        <span class="st-section-num">03</span>
+        <h2>как это работает</h2>
+        <span class="st-section-tag">процесс</span>
+      </div>
       <div class="flat-grid" style="grid-template-columns:repeat(auto-fill,minmax(13rem,1fr));">
-        <div class="lab-panel"><div class="lp-body">
-          <p class="mono text-xs" style="color:var(--faint);margin:0 0 .4rem;">01</p>
+        <div class="st-mini">
+          <p class="st-mini-num">// 01</p>
           <strong>идентификация</strong>
-          <p class="text-sm m-0 mt-1" style="color:var(--muted);">ФИО и группа прикрепляются ко всем действиям и логам.</p>
-        </div></div>
-        <div class="lab-panel"><div class="lp-body">
-          <p class="mono text-xs" style="color:var(--faint);margin:0 0 .4rem;">02</p>
+          <p>ФИО и группа прикрепляются ко всем действиям и логам.</p>
+        </div>
+        <div class="st-mini">
+          <p class="st-mini-num">// 02</p>
           <strong>работа в стенде</strong>
-          <p class="text-sm m-0 mt-1" style="color:var(--muted);">Терминал и конфиг, прогресс сохраняется автоматически.</p>
-        </div></div>
-        <div class="lab-panel"><div class="lp-body">
-          <p class="mono text-xs" style="color:var(--faint);margin:0 0 .4rem;">03</p>
+          <p>Терминал и конфиг, прогресс сохраняется автоматически.</p>
+        </div>
+        <div class="st-mini">
+          <p class="st-mini-num">// 03</p>
           <strong>автопроверка</strong>
-          <p class="text-sm m-0 mt-1" style="color:var(--muted);">Каждая директива проверяется, ошибки объясняются подсказкой.</p>
-        </div></div>
-        <div class="lab-panel"><div class="lp-body">
-          <p class="mono text-xs" style="color:var(--faint);margin:0 0 .4rem;">04</p>
+          <p>Каждая директива проверяется, ошибки объясняются подсказкой.</p>
+        </div>
+        <div class="st-mini">
+          <p class="st-mini-num">// 04</p>
           <strong>сдача</strong>
-          <p class="text-sm m-0 mt-1" style="color:var(--muted);">Экспорт JSON с логами и ответами — файл отправляется преподавателю.</p>
-        </div></div>
+          <p>Экспорт JSON с логами и ответами — файл отправляется преподавателю.</p>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <span>© 2026 itsliventsev · стенды</span>
-    <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · виртуальные стенды</span>
+    <span>runtime: browser · backend: none · storage: localStorage</span>
   </footer>
-
 </div>
 
-<script src="../assets/stands-dhcp.js?v=20261026j"></script>
-<script src="../assets/stands.js?v=20261026j"></script>
-<script src="../assets/site.js?v=20261026j"></script>
+<script src="../assets/stands-dhcp.js?v=20261026k"></script>
+<script src="../assets/stands.js?v=20261026k"></script>
 </body>
 </html>

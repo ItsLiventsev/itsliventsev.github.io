@@ -124,12 +124,35 @@
     }
     termHistory.forEach(function (h) { printTerm(h.prompt, h.line, h.out, h.err); });
 
-    // Mermaid-схема (CDN; если не загрузился — остаётся текстовый fallback)
+    // Mermaid-схема (CDN; если не загрузился или упал — остаётся текстовый fallback)
     if (window.mermaid) {
+      var schemaNode = document.querySelector('.mermaid');
       try {
-        window.mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose', flowchart: { curve: 'linear' } });
-        var fb = document.getElementById('schema-fallback');
-        if (fb) fb.hidden = true;
+        window.mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          securityLevel: 'loose',
+          flowchart: { curve: 'linear', htmlLabels: true },
+          themeVariables: {
+            darkMode: true,
+            background: '#12161b',
+            primaryColor: '#171d23',
+            primaryBorderColor: '#5b9dff',
+            primaryTextColor: '#e7ecf2',
+            lineColor: '#8a95a1',
+            secondaryColor: '#171d23',
+            tertiaryColor: '#0c1014',
+            edgeLabelBackground: '#171d23',
+            fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+            fontSize: '13px'
+          }
+        });
+        window.mermaid.run({ nodes: schemaNode ? [schemaNode] : [] })
+          .then(function () {
+            var fb = document.getElementById('schema-fallback');
+            if (fb) fb.hidden = true;
+          })
+          .catch(function () { /* fallback остаётся видимым */ });
       } catch (e) { /* остаётся fallback */ }
     }
 
