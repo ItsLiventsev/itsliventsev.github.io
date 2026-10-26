@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /admin.html
 Disallow: /assets/admin.js
 Disallow: /assets/admin-config.js
+
+Sitemap: https://itsliventsev.github.io/sitemap.xml

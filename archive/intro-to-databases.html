@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/archive/intro-to-databases.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Введение в базы данных · itsliventsev">
+  <meta property="og:description" content="Введение в реляционные базы данных: БД, СУБД, информационная система, таблицы, ключи и практикум по проектированию.">
+  <meta property="og:url" content="https://itsliventsev.github.io/archive/intro-to-databases.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Введение в базы данных · itsliventsev">
+  <meta name="twitter:description" content="Введение в реляционные базы данных: БД, СУБД, информационная система, таблицы, ключи и практикум по проектированию.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Введение в базы данных","description":"Введение в реляционные базы данных: БД, СУБД, информационная система, таблицы, ключи и практикум по проектированию.","url":"https://itsliventsev.github.io/archive/intro-to-databases.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/archive/intro-to-databases.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Введение в базы данных","item":"https://itsliventsev.github.io/archive/intro-to-databases.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,6 +73,10 @@
   <main class="prose-measure">
 
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">/</span>
+    </div>
     <h1 class="hero-title text-3xl sm:text-4xl">
       Введение в реляционные БД <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
@@ -69,7 +105,7 @@
 
     <!-- Relational DB -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">Реляционная база данных</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">Реляционная база данных</h2>
       <p class="text-sm text-[var(--text-2)] mb-4">Информация организована в виде взаимосвязанных таблиц (от англ. <em>relation</em> — отношение). Это самый распространенный тип БД.</p>
 
       <div class="table-wrap">
@@ -104,9 +140,9 @@
 
     <!-- Practical Task -->
     <div class="notice notice-info">
-      <h3 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:#1e40af;">
+      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:#1e40af;">
         <span>📝</span> Практикум: Журнал учета приборов
-      </h3>
+      </h2>
       <p class="text-sm text-[var(--text-2)] mb-4">Необходимо вести учет измерительных приборов и графика их поверки. Спроектируйте две связанные таблицы:</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -142,6 +178,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>

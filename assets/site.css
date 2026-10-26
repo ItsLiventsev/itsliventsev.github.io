@@ -2581,3 +2581,60 @@ textarea.admin-input { resize: vertical; line-height: 1.6; }
 @media (prefers-reduced-motion: reduce) {
   .bg-glyph, .ambient .orb, .ambient .ambient-glyph { animation: none; }
 }
+
+/* ==========================================================================
+   27. ДИЗАЙН-СИСТЕМА 2.0 — СКВОЗНАЯ УНИФИКАЦИЯ
+   Единый глоу-токен, семантические заголовки, общее семейство плашек
+   notice/callout, ambient и водяные глифы на всех типах страниц.
+   ========================================================================== */
+
+/* 27.1 Один источник акцентного свечения для всех интерактивных поверхностей */
+:root { --glow-accent: 0 12px 30px -14px var(--accent-border); }
+:root[data-theme="dark"] { --glow-accent: 0 14px 38px -14px rgba(96, 165, 250, .5); }
+
+.btn-primary:hover,
+.btn-gradient:hover { box-shadow: var(--shadow-hover), var(--glow-accent); }
+.quick-bubble:hover { box-shadow: var(--shadow-hover), var(--glow-accent); }
+.nav-link:hover .nav-bubble.is-filled { box-shadow: var(--glow-accent); }
+.pill-pulse.is-filled, .nav-bubble.is-filled { transition: transform .22s var(--ease), box-shadow .22s ease, background-color .22s ease; }
+a.card:hover, a.p-card:hover, .card.hoverable:hover { box-shadow: var(--shadow-hover), var(--glow-accent); }
+
+/* 27.2 Семантические заголовки: .section-label теперь h2, вид не меняется
+   (Tailwind preflight и так сбрасывает UA-стили, страхуемся явно) */
+h1.section-label, h2.section-label, h3.section-label {
+  margin: 0; font-size: .6875rem; line-height: 1.5; font-weight: 500;
+}
+/* После замены h3→h2 в архиве и глоссарии классы утилит сохраняют вид —
+   этот сброс нужен только при отключённом Tailwind */
+h2.mono { margin: 0; }
+
+/* 27.3 Единое семейство плашек: notice подтягивается к callout */
+.notice {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.notice:hover { box-shadow: var(--shadow-hover); }
+/* Колауты и notice делят радиус и ритм отступов */
+.callout { border-radius: var(--radius); }
+
+/* 27.4 Ambient на сервисных и проектных страницах: тот же слой,
+   на тесных экранах орбы мягче (базовое правило уже в секции 26) */
+body[data-accent="emerald"] .ambient .orb { background: #10b981; }
+
+/* 27.5 Водяные глифы в hero подстраниц: чуть компактнее, чем на лентах */
+.prose-measure .hero .bg-glyph:nth-child(1) { font-size: clamp(4.5rem, 12vw, 8rem); top: -1.5rem; }
+.prose-measure .hero .bg-glyph:nth-child(2) { font-size: clamp(3.2rem, 8vw, 5.5rem); }
+
+/* 27.6 Курсор-метка на брендовом заголовке главной */
+.brand-cursor {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-weight: 700;
+  animation: blink 1.1s step-end infinite;
+}
+@media (prefers-reduced-motion: reduce) { .brand-cursor { animation: none; } }
+
+
+/* 27.8 Позиционный контекст для водяных глифов вне стандартного .hero */
+.glyph-scope { position: relative; isolation: isolate; }

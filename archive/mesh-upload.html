@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/archive/mesh-upload.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Загрузка сценариев в МЭШ · itsliventsev">
+  <meta property="og:description" content="Пошаговая инструкция по загрузке сценариев уроков в библиотеку Московской электронной школы (МЭШ).">
+  <meta property="og:url" content="https://itsliventsev.github.io/archive/mesh-upload.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Загрузка сценариев в МЭШ · itsliventsev">
+  <meta name="twitter:description" content="Пошаговая инструкция по загрузке сценариев уроков в библиотеку Московской электронной школы (МЭШ).">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Загрузка сценариев в МЭШ","description":"Пошаговая инструкция по загрузке сценариев уроков в библиотеку Московской электронной школы (МЭШ).","url":"https://itsliventsev.github.io/archive/mesh-upload.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/archive/mesh-upload.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Загрузка сценариев в МЭШ","item":"https://itsliventsev.github.io/archive/mesh-upload.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="blue">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,6 +73,10 @@
   <main class="prose-measure">
 
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">/</span>
+    </div>
     <h1 class="hero-title text-3xl sm:text-4xl">
       Загрузка сценариев в МЭШ <span class="title-mark" data-mark='["#","/","#/","/#"]' data-mark-interval="500" style="min-width:2ch;">#</span>
     </h1>
@@ -61,7 +97,7 @@
 
     <!-- 1 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Добавление нового материала</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Добавление нового материала</h2>
       <p class="text-sm text-[var(--text-2)] mb-0">
         На главной странице библиотеки выберите кнопку <strong>"+ Добавить материал"</strong>. Для загрузки сценариев используется тип материала — <strong>"Сценарий урока"</strong>.
       </p>
@@ -69,7 +105,7 @@
 
     <!-- 2 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Свойства урока</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Свойства урока</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0">Открывается окно "Свойство урока" в новой вкладке браузера. Заполняйте ИСКЛЮЧИТЕЛЬНО по презентации/сценарию:</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -103,7 +139,7 @@
 
     <!-- 3 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">3. Загрузка обложки</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">3. Загрузка обложки</h2>
       <p class="text-sm text-[var(--text-2)] mb-0">
         В качестве обложки используйте титульный лист из презентации — сделайте качественный скриншот или сохраните титульный слайд как PNG/JPEG.
       </p>
@@ -111,7 +147,7 @@
 
     <!-- 4 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Работа в конструкторе</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Работа в конструкторе</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <p class="mb-0">Нажмите кнопку <strong>"Создать сценарий"</strong>. В выборе шаблона выберите <strong>"Без шаблона"</strong>.</p>
         <div class="notice notice-info">
@@ -130,7 +166,7 @@
 
     <!-- 5 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">5. Добавление фрагментов</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">5. Добавление фрагментов</h2>
       <p class="text-sm text-[var(--text-2)] mb-3">
         <strong>Фрагмент сценария урока</strong> — структурная единица сценария, представленная отдельной горизонтальной линейкой слайдов. Под каждый вид оборудования разрабатывается отдельный слайд.
       </p>
@@ -141,7 +177,7 @@
 
     <!-- 6 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">6. Перенос презентации из PowerPoint в МЭШ</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">6. Перенос презентации из PowerPoint в МЭШ</h2>
       <div class="space-y-3 text-sm text-[var(--text-2)]">
         <div class="notice notice-info">
           <div class="font-medium text-[var(--text)] mb-2">Принцип:</div>
@@ -179,7 +215,7 @@
 
     <!-- 7 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">7. Комментарии для преподавателя</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">7. Комментарии для преподавателя</h2>
       <p class="text-sm text-[var(--text-2)] mb-0">
         Для ввода комментария (подстрочника) для преподавателей перейдите на <strong>второй вариант слайда</strong> (устройство учителя). Этот слайд будет виден только преподавателю. Разместите на нём текст из комментария в презентации.
       </p>
@@ -187,7 +223,7 @@
 
     <!-- 8 -->
     <div class="card hoverable p-5">
-      <h3 class="mono text-sm font-semibold text-[var(--text)] mb-3">8. Название фрагментов и время</h3>
+      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">8. Название фрагментов и время</h2>
       <div class="space-y-2 text-sm text-[var(--text-2)]">
         <p class="mb-0"><strong>Название фрагмента:</strong> прописывайте название темы или раздела.</p>
         <p class="mb-0"><strong>Время на слайд:</strong> прописывайте в соответствии с комментарием из презентации.</p>
@@ -203,6 +239,6 @@
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>

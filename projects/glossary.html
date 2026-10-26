@@ -12,9 +12,41 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026g">
+<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/projects/glossary.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="глоссарий · itsliventsev">
+  <meta property="og:description" content="Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.">
+  <meta property="og:url" content="https://itsliventsev.github.io/projects/glossary.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="глоссарий · itsliventsev">
+  <meta name="twitter:description" content="Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"глоссарий","description":"Фундаментальные определения для администраторов: DHCP, DNS, SSH, VLAN, Active Directory, контейнеризация и СУБД.","url":"https://itsliventsev.github.io/projects/glossary.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/projects/glossary.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"глоссарий","item":"https://itsliventsev.github.io/projects/glossary.html"}]}</script>
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="emerald">
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -41,8 +73,12 @@
 
   <!-- Hero -->
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">{</span>
+      <span class="bg-glyph">}</span>
+    </div>
     <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
-      глоссарий<span class="title-mark">.</span>
+      глоссарий<span class="title-mark" data-mark='[".","..","...","...."]' data-mark-interval="450">.</span>
     </h1>
     <p class="hero-sub text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed">
       // фундаментальные определения, термины и концепции. база, необходимая для уверенной работы в it-инфраструктуре и понимания технической документации.
@@ -68,7 +104,7 @@
       <!-- СЕТИ -->
       <article class="card hoverable p-5" data-filter-item data-category="network">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">DHCP</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">DHCP</h2>
           <span class="pill pill-emerald shrink-0">сети</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -82,7 +118,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="network">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">DNS</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">DNS</h2>
           <span class="pill pill-emerald shrink-0">сети</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -96,7 +132,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="network">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">VLAN</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">VLAN</h2>
           <span class="pill pill-emerald shrink-0">сети</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -111,7 +147,7 @@
       <!-- ОС И ИНФРАСТРУКТУРА -->
       <article class="card hoverable p-5" data-filter-item data-category="os">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">SSH</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">SSH</h2>
           <span class="pill pill-emerald shrink-0">ос</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -125,7 +161,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="os">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">Active Directory (AD)</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">Active Directory (AD)</h2>
           <span class="pill pill-emerald shrink-0">ос</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -139,7 +175,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="os">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">Контейнеризация</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">Контейнеризация</h2>
           <span class="pill pill-emerald shrink-0">ос</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -154,7 +190,7 @@
       <!-- БАЗЫ ДАННЫХ -->
       <article class="card hoverable p-5" data-filter-item data-category="db">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">СУБД</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">СУБД</h2>
           <span class="pill pill-emerald shrink-0">бд</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -168,7 +204,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="db">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">Первичный ключ (PK)</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">Первичный ключ (PK)</h2>
           <span class="pill pill-emerald shrink-0">бд</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -183,7 +219,7 @@
       <!-- БЕЗОПАСНОСТЬ -->
       <article class="card hoverable p-5" data-filter-item data-category="security">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">Firewall</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">Firewall</h2>
           <span class="pill pill-emerald shrink-0">безопасность</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -197,7 +233,7 @@
 
       <article class="card hoverable p-5" data-filter-item data-category="security">
         <div class="flex items-start justify-between mb-3 gap-2">
-          <h3 class="mono text-lg font-bold text-[var(--text)]">VPN</h3>
+          <h2 class="mono text-lg font-bold text-[var(--text)]">VPN</h2>
           <span class="pill pill-emerald shrink-0">безопасность</span>
         </div>
         <p class="text-sm text-[var(--text-2)] leading-relaxed mb-3">
@@ -229,6 +265,6 @@
 
 </div>
 
-<script src="../assets/site.js?v=20261026g"></script>
+<script src="../assets/site.js?v=20261026h"></script>
 </body>
 </html>
