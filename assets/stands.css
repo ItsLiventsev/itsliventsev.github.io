@@ -1,391 +1,581 @@
 /* ==========================================================================
-   Виртуальные стенды — «квадратная» flat-система.
-   Включается классом .flat-scope на <body>: строгие линии, нулевые радиусы,
-   без теней и градиентов, прямоугольные блоки, моно-акценты.
-   Остальной сайт эти правила не задевают.
+   ВИРТУАЛЬНЫЕ СТЕНДЫ · отдельная тёмная дизайн-система «STAND//LAB»
+   Включается классом .flat-scope на <body>.
+   Принципы: тёмная консоль, квадратные блоки (radius 2px), жёсткие 1px
+   линии, никаких теней и градиентов, моно-типографика, структурная сетка.
+   Система самодостаточна: базовые блоки сайта (шапка, ambient, карточки)
+   на страницах стендов не используются, палитра от темы сайта не зависит.
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   0. Токены стендов (фиксированные, не реагируют на data-theme сайта)
+   -------------------------------------------------------------------------- */
 .flat-scope {
-  --flat-radius: 2px;
-  --flat-line: 1.5px solid var(--text);
-  --flat-line-soft: 1px solid var(--border-strong);
-  --flat-gap: 1.1rem;
+  --st-bg: #0b0e11;
+  --st-bg-2: #0e1216;
+  --st-panel: #12161b;
+  --st-panel-2: #171d23;
+  --st-inset: #0c1014;
+  --st-line: #232b34;
+  --st-line-strong: #35414e;
+  --st-text: #e7ecf2;
+  --st-text-2: #b8c2cc;
+  --st-muted: #8a95a1;
+  --st-faint: #5d6875;
+  --st-accent: #5b9dff;
+  --st-accent-2: #86b6ff;
+  --st-accent-soft: rgba(91, 157, 255, .1);
+  --st-ok: #34d399;
+  --st-ok-soft: rgba(52, 211, 153, .09);
+  --st-bad: #f87171;
+  --st-bad-soft: rgba(248, 113, 113, .08);
+  --st-warn: #fbbf24;
+  --st-cyan: #4cc2ff;
+  --st-radius: 2px;
+  --st-gap: 1.1rem;
+  --st-mono: var(--font-mono, ui-monospace, monospace);
+  --st-sans: var(--font-sans, system-ui, sans-serif);
+  color-scheme: dark;
 }
 
-/* 1. Среда: убираем мягкость общей системы на страницах стендов */
-.flat-scope .site-header,
-.flat-scope .card,
-.flat-scope .p-card,
-.flat-scope .btn,
-.flat-scope .pill,
-.flat-scope .notice,
-.flat-scope .callout,
-.flat-scope input,
-.flat-scope textarea,
-.flat-scope select {
-  border-radius: var(--flat-radius) !important;
-  box-shadow: none !important;
+/* --------------------------------------------------------------------------
+   1. Среда страницы: тёмный фон с инженерной сеткой, базовая типографика
+   -------------------------------------------------------------------------- */
+body.flat-scope {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--st-bg);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+  background-size: 36px 36px;
+  color: var(--st-text);
+  font-family: var(--st-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
-.flat-scope .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--surface); }
-.flat-scope .card,
-.flat-scope .p-card { border: var(--flat-line-soft); }
-.flat-scope .ambient .orb { border-radius: 0; filter: none; opacity: .06; }
-.flat-scope .ambient .ambient-glyph { border-radius: 0; }
-.flat-scope .reveal { transform: none; opacity: 1; transition: none; }
-.flat-scope .stagger > * { transform: none; opacity: 1; transition: none; }
+body.flat-scope::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+  background-size: 180px 180px;
+  z-index: 0;
+}
+.flat-scope ::selection { background: var(--st-accent); color: var(--st-bg); }
+.flat-scope a { color: var(--st-accent-2); }
+.flat-scope a:hover { color: var(--st-accent); }
+.flat-scope h1, .flat-scope h2, .flat-scope h3 { color: var(--st-text); }
+.flat-scope p { color: var(--st-text-2); }
+.flat-scope code {
+  font-family: var(--st-mono);
+  font-size: .82em;
+  padding: .12rem .4rem;
+  background: var(--st-panel-2);
+  border: 1px solid var(--st-line);
+  color: var(--st-accent-2);
+  border-radius: var(--st-radius);
+}
+.flat-scope :focus-visible { outline: 2px solid var(--st-accent); outline-offset: 2px; }
 
-/* 2. Типографика стендов: жёсткие моно-заголовки с квадратными индексами */
-.flat-head {
-  display: flex;
-  align-items: stretch;
-  gap: .8rem;
-  margin: 0 0 1.25rem;
+/* Контейнер */
+.st-wrap { position: relative; z-index: 1; width: min(1180px, calc(100% - 2.4rem)); margin: 0 auto; padding: 1.6rem 0 3rem; }
+
+/* Пропуск ссылки и noscript — в языке стендов */
+.flat-scope .skip-link {
+  position: fixed; top: -4rem; left: .8rem; z-index: 200;
+  padding: .6rem 1rem; background: var(--st-accent); color: var(--st-bg);
+  font-family: var(--st-mono); font-size: .78rem; font-weight: 700;
+  text-decoration: none; border-radius: 0;
 }
-.flat-head .flat-index {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.6rem;
-  padding: .35rem .55rem;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: .95rem;
-  letter-spacing: .04em;
+.flat-scope .skip-link:focus { top: .8rem; color: var(--st-bg); }
+.flat-scope .noscript-bar {
+  display: block; padding: .8rem 1rem; margin: 0;
+  background: var(--st-bad-soft); border-bottom: 1px solid var(--st-bad);
+  color: var(--st-bad); font-family: var(--st-mono); font-size: .8rem;
 }
-.flat-head h1, .flat-head h2 { margin: 0; align-self: center; }
-.flat-head h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -.02em; }
-.flat-head h2 { font-size: 1.15rem; font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   2. Собственная топ-панель стендов (не базовый site-header)
+   -------------------------------------------------------------------------- */
+.st-topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(11, 14, 17, .94);
+  border-bottom: 1px solid var(--st-line-strong);
+}
+.st-topbar-in {
+  width: min(1180px, calc(100% - 2.4rem)); margin: 0 auto;
+  min-height: 3.4rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; padding: .55rem 0;
+}
+.st-brand {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-family: var(--st-mono); font-weight: 700; font-size: .9rem;
+  color: var(--st-text); text-decoration: none; letter-spacing: .01em;
+}
+.st-brand:hover { color: var(--st-text); }
+.st-brand-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.7rem; height: 1.7rem;
+  border: 1px solid var(--st-line-strong); background: var(--st-panel-2);
+  color: var(--st-accent); font-weight: 700;
+}
+.st-brand-sep { color: var(--st-faint); }
+.st-brand-sub { color: var(--st-accent-2); font-weight: 500; }
+.st-topnav { display: flex; flex-wrap: wrap; gap: .25rem; }
+.st-topnav a {
+  padding: .4rem .75rem;
+  font-family: var(--st-mono); font-size: .74rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--st-muted); text-decoration: none;
+  border: 1px solid transparent;
+}
+.st-topnav a:hover { color: var(--st-text); border-color: var(--st-line); background: var(--st-panel); }
+.st-topnav a[aria-current] { color: var(--st-accent-2); border-color: var(--st-line-strong); background: var(--st-panel); }
+
+/* Хлебные крошки */
+.st-crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .45rem;
+  margin: 1.4rem 0 1.6rem;
+  font-family: var(--st-mono); font-size: .72rem; letter-spacing: .06em;
+  color: var(--st-faint);
+}
+.st-crumbs a { color: var(--st-muted); text-decoration: none; padding: .15rem .35rem; }
+.st-crumbs a:hover { color: var(--st-accent-2); background: var(--st-panel); }
+.st-crumbs span[aria-hidden], .st-crumbs > span { color: var(--st-line-strong); }
+.st-crumbs [aria-current] { color: var(--st-text-2); }
+
+/* --------------------------------------------------------------------------
+   3. Заголовки-терминалы: квадратный индекс + моно-кикер
+   -------------------------------------------------------------------------- */
+.st-hero, .flat-head {
+  display: flex; align-items: stretch; gap: .9rem;
+  margin: 0 0 1.3rem;
+}
+.st-hero-index, .flat-index {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 3.2rem; padding: .4rem .6rem;
+  background: var(--st-panel-2);
+  border: 1px solid var(--st-line-strong);
+  color: var(--st-accent);
+  font-family: var(--st-mono); font-weight: 700; font-size: 1.05rem;
+}
+.st-hero h1, .flat-head h1 {
+  margin: 0; align-self: center;
+  font-size: clamp(1.55rem, 4vw, 2.3rem); font-weight: 800;
+  letter-spacing: -.02em; line-height: 1.15; color: var(--st-text);
+}
+.flat-head h2 { margin: 0; align-self: center; font-size: 1.15rem; font-weight: 700; }
 .flat-kicker {
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 700;
-  margin: 0 0 .5rem;
+  font-family: var(--st-mono); font-size: .72rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--st-accent); margin: 0 0 .45rem;
+}
+.flat-kicker::before { content: '// '; color: var(--st-faint); }
+.st-lede { max-width: 54rem; margin: 0 0 2rem; font-size: .95rem; line-height: 1.75; color: var(--st-text-2); }
+
+/* Заголовок секции с номером */
+.st-section-head {
+  display: flex; align-items: center; gap: .7rem;
+  margin: 2.2rem 0 1rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--st-line);
+}
+.st-section-head .st-section-num {
+  font-family: var(--st-mono); font-weight: 700; font-size: .78rem;
+  color: var(--st-accent);
+  padding: .15rem .4rem; border: 1px solid var(--st-line-strong); background: var(--st-panel);
+}
+.st-section-head h2 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: .01em; }
+.st-section-head .st-section-tag {
+  margin-left: auto; font-family: var(--st-mono); font-size: .68rem;
+  color: var(--st-faint); letter-spacing: .1em; text-transform: uppercase;
 }
 
-/* 3. Сетка-каталог: прямоугольные модули без скруглений */
-.flat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--flat-gap); }
+/* Легенда стенда — собственная панель, не базовый callout */
+.st-legend {
+  position: relative;
+  margin: 0 0 2rem; padding: 1.1rem 1.25rem 1.1rem 1.4rem;
+  background: var(--st-panel);
+  border: 1px solid var(--st-line);
+  border-left: 3px solid var(--st-accent);
+}
+.st-legend .st-legend-label {
+  display: block; margin-bottom: .5rem;
+  font-family: var(--st-mono); font-size: .7rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--st-accent);
+}
+.st-legend p { margin: 0; font-size: .92rem; line-height: 1.75; color: var(--st-text-2); }
+.st-legend strong { color: var(--st-text); }
+
+/* --------------------------------------------------------------------------
+   4. Каталог: прямоугольные модули, жёсткая сетка
+   -------------------------------------------------------------------------- */
+.flat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--st-gap); }
 .flat-module {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: .7rem;
-  padding: 1.25rem;
-  background: var(--surface);
-  border: var(--flat-line-soft);
-  border-left: 4px solid var(--text);
-  text-decoration: none;
-  color: var(--text);
+  display: flex; flex-direction: column; gap: .7rem;
+  padding: 1.3rem;
+  background: var(--st-panel);
+  border: 1px solid var(--st-line);
+  border-left: 3px solid var(--st-line-strong);
+  text-decoration: none; color: var(--st-text);
   transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
 }
-.flat-module:hover { border-left-color: var(--accent); transform: translate(-2px, -2px); background: var(--surface-2); }
-.flat-module.is-soon { opacity: .62; pointer-events: none; }
-.flat-module .fm-num { font-family: var(--font-mono); font-size: .72rem; color: var(--faint); font-weight: 700; }
-.flat-module h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
-.flat-module p { margin: 0; font-size: .85rem; line-height: 1.6; color: var(--muted); }
+a.flat-module:hover, a.flat-module:focus-visible {
+  border-color: var(--st-line-strong);
+  border-left-color: var(--st-accent);
+  background: var(--st-panel-2);
+  transform: translate(-2px, -2px);
+}
+.flat-module.is-soon { opacity: .55; pointer-events: none; }
+.flat-module .fm-num {
+  font-family: var(--st-mono); font-size: .7rem; font-weight: 700;
+  letter-spacing: .12em; color: var(--st-faint);
+}
+.flat-module h2, .flat-module h3 { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--st-text); }
+.flat-module p { margin: 0; font-size: .85rem; line-height: 1.65; color: var(--st-muted); }
 .flat-module .fm-foot {
-  margin-top: auto;
-  padding-top: .6rem;
-  border-top: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  color: var(--accent);
-  font-weight: 600;
+  margin-top: auto; padding-top: .65rem;
+  border-top: 1px solid var(--st-line);
+  font-family: var(--st-mono); font-size: .72rem; font-weight: 600;
+  color: var(--st-accent-2);
 }
-.flat-module.is-soon .fm-foot { color: var(--faint); }
+.flat-module.is-soon .fm-foot { color: var(--st-faint); }
 
-/* 4. Статусные бейджи: квадратные плашки вместо пилюль */
+/* Статусные бейджи — квадратные плашки */
 .flat-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .22rem .55rem;
-  font-family: var(--font-mono);
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  border: 1px solid var(--border-strong);
-  background: var(--surface-2);
-  color: var(--text-2);
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .24rem .6rem;
+  font-family: var(--st-mono); font-size: .66rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border: 1px solid var(--st-line-strong);
+  background: var(--st-panel-2); color: var(--st-text-2);
+  border-radius: var(--st-radius); white-space: nowrap;
 }
-.flat-badge::before { content: ''; width: .45rem; height: .45rem; background: currentColor; }
-.flat-badge.is-ready { color: #047857; border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.08); }
-.flat-badge.is-soon { color: var(--muted); }
-.flat-badge.is-run { color: #1d4ed8; border-color: rgba(37,99,235,.4); background: rgba(37,99,235,.07); }
-[data-theme="dark"] .flat-badge.is-ready { color: #34d399; }
-[data-theme="dark"] .flat-badge.is-run { color: #60a5fa; }
+.flat-badge::before { content: ''; width: .42rem; height: .42rem; background: currentColor; }
+.flat-badge.is-ready { color: var(--st-ok); border-color: rgba(52, 211, 153, .4); background: var(--st-ok-soft); }
+.flat-badge.is-run { color: var(--st-accent-2); border-color: rgba(91, 157, 255, .4); background: var(--st-accent-soft); }
+.flat-badge.is-soon { color: var(--st-muted); }
 
-/* 5. Формы идентификации: строгие прямоугольники */
-.flat-form { display: grid; gap: .9rem; max-width: 34rem; }
+/* --------------------------------------------------------------------------
+   5. Формы идентификации
+   -------------------------------------------------------------------------- */
+.flat-form { display: grid; gap: 1rem; max-width: 34rem; }
 .flat-field label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--text-2);
-  margin-bottom: .35rem;
+  display: block; margin-bottom: .4rem;
+  font-family: var(--st-mono); font-size: .7rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--st-text-2);
 }
 .flat-input {
-  width: 100%;
-  padding: .75rem .9rem;
-  background: var(--surface);
-  border: var(--flat-line);
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: .95rem;
+  width: 100%; padding: .8rem .95rem;
+  background: var(--st-inset);
+  border: 1px solid var(--st-line-strong);
+  border-radius: var(--st-radius);
+  color: var(--st-text);
+  font-family: var(--st-sans); font-size: .95rem;
   outline: none;
+  transition: border-color .15s ease, background-color .15s ease;
 }
-.flat-input:focus { border-color: var(--accent); background: var(--accent-soft); }
+.flat-input::placeholder { color: var(--st-faint); }
+.flat-input:focus { border-color: var(--st-accent); background: var(--st-accent-soft); }
 .flat-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  padding: .75rem 1.4rem;
-  background: var(--text);
-  color: var(--bg);
-  border: var(--flat-line);
-  font-family: var(--font-mono);
-  font-size: .82rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .8rem 1.5rem;
+  background: var(--st-accent); color: var(--st-bg);
+  border: 1px solid var(--st-accent);
+  border-radius: var(--st-radius);
+  font-family: var(--st-mono); font-size: .8rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
   cursor: pointer;
-  transition: background-color .18s ease, color .18s ease, transform .18s ease;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, color .18s ease;
 }
-.flat-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(-2px, -2px); }
+.flat-btn:hover, .flat-btn:focus-visible { background: var(--st-accent-2); border-color: var(--st-accent-2); color: var(--st-bg); transform: translate(-2px, -2px); }
 .flat-btn:active { transform: translate(0, 0); }
-.flat-btn.ghost { background: transparent; color: var(--text); }
-.flat-btn.ghost:hover { background: var(--surface-2); color: var(--text); }
-.flat-btn:disabled { opacity: .45; pointer-events: none; }
+.flat-btn.ghost { background: transparent; color: var(--st-text-2); border-color: var(--st-line-strong); }
+.flat-btn.ghost:hover, .flat-btn.ghost:focus-visible { background: var(--st-panel-2); border-color: var(--st-accent); color: var(--st-accent-2); transform: translate(-2px, -2px); }
+.flat-btn:disabled { opacity: .4; pointer-events: none; }
 
-/* 6. Профиль студента: жёсткая панель */
+/* Профиль студента — тёмная панель с акцентной кромкой */
 .flat-profile {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .8rem 1.2rem;
-  padding: .9rem 1.1rem;
-  background: var(--text);
-  color: var(--bg);
-  margin-bottom: 1.6rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: .7rem 1.1rem;
+  padding: .9rem 1.15rem; margin-bottom: 1.8rem;
+  background: var(--st-panel);
+  border: 1px solid var(--st-line);
+  border-left: 3px solid var(--st-accent);
 }
-.flat-profile .fp-name { font-weight: 800; font-size: 1rem; }
-.flat-profile .fp-group { font-family: var(--font-mono); font-size: .8rem; opacity: .8; }
+.flat-profile .fp-name { font-weight: 800; font-size: 1rem; color: var(--st-text); }
+.flat-profile .fp-group {
+  font-family: var(--st-mono); font-size: .74rem; font-weight: 700;
+  letter-spacing: .08em; color: var(--st-accent-2);
+  padding: .22rem .55rem; border: 1px solid var(--st-line-strong); background: var(--st-panel-2);
+}
 .flat-profile .fp-spacer { margin-left: auto; }
-.flat-profile .flat-btn { background: var(--bg); color: var(--text); border-color: var(--bg); padding: .45rem .9rem; font-size: .7rem; }
-.flat-profile .flat-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.flat-profile .flat-btn { padding: .5rem 1rem; font-size: .7rem; }
 
-/* 7. Лаборатория: двухзонная сетка */
-.lab-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--flat-gap); align-items: start; }
-@media (max-width: 980px) { .lab-layout { grid-template-columns: 1fr; } }
-.lab-panel { background: var(--surface); border: var(--flat-line-soft); }
+/* --------------------------------------------------------------------------
+   6. Лабораторные панели: единый жёсткий контейнер
+   -------------------------------------------------------------------------- */
+.lab-panel {
+  background: var(--st-panel);
+  border: 1px solid var(--st-line);
+  border-radius: var(--st-radius);
+  overflow: hidden;
+}
 .lab-panel > .lp-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .6rem;
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem;
   padding: .65rem 1rem;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: .74rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
+  background: var(--st-panel-2);
+  border-bottom: 1px solid var(--st-line);
+  color: var(--st-text-2);
+  font-family: var(--st-mono); font-size: .72rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
 }
-.lab-panel > .lp-body { padding: 1rem; }
+.lab-panel > .lp-body { padding: 1.05rem 1.1rem; }
 
-/* Редактор конфига */
-.lab-editor {
-  width: 100%;
-  min-height: 360px;
-  padding: .9rem 1rem;
-  background: var(--surface-2);
-  border: none;
-  border-top: var(--flat-line-soft);
-  font-family: var(--font-mono);
-  font-size: .82rem;
-  line-height: 1.65;
-  color: var(--text);
-  tab-size: 2;
-  resize: vertical;
-  outline: none;
-}
-.lab-editor:focus { background: var(--accent-soft); }
-
-/* Проверки CI: квадратные строки статуса */
-.lab-checks { display: grid; gap: .5rem; }
-.lab-check {
+/* Двухзонная сетка лаборатории */
+.lab-layout {
   display: grid;
-  grid-template-columns: 1.6rem 1fr;
-  gap: .55rem;
-  padding: .6rem .7rem;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  font-size: .82rem;
-  line-height: 1.45;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--st-gap); align-items: start;
+}
+@media (max-width: 980px) { .lab-layout { grid-template-columns: 1fr; } }
+
+/* Редактор конфига — тёмная кодовая поверхность */
+.lab-editor {
+  display: block; width: 100%;
+  min-height: 360px; padding: 1rem 1.1rem;
+  background: var(--st-inset);
+  border: none; border-top: 1px solid var(--st-line);
+  color: var(--st-text);
+  font-family: var(--st-mono); font-size: .82rem; line-height: 1.7;
+  tab-size: 2; resize: vertical; outline: none;
+}
+.lab-editor:focus { background: #0d1217; box-shadow: inset 0 0 0 1px var(--st-accent); }
+.lab-panel > .lp-body + .flat-btn,
+.lab-editor + .lp-body { border-top: 1px solid var(--st-line); }
+
+/* CI-проверки: строки статуса с квадратными маркерами */
+.lab-checks { display: grid; gap: .55rem; }
+.lab-check {
+  display: grid; grid-template-columns: 1.6rem 1fr; gap: .6rem;
+  padding: .65rem .75rem;
+  border: 1px solid var(--st-line);
+  background: var(--st-inset);
+  font-size: .82rem; line-height: 1.45;
 }
 .lab-check .lc-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.4rem;
-  height: 1.4rem;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: .8rem;
-  border: 1px solid var(--border-strong);
-  color: var(--faint);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.45rem; height: 1.45rem;
+  font-family: var(--st-mono); font-weight: 800; font-size: .8rem;
+  border: 1px solid var(--st-line-strong); color: var(--st-faint);
+  background: var(--st-panel-2);
 }
-.lab-check.is-ok { border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.06); }
-.lab-check.is-ok .lc-mark { background: #059669; border-color: #059669; color: #fff; }
-.lab-check.is-bad .lc-mark { background: var(--surface); color: #dc2626; border-color: #dc2626; }
-.lab-check .lc-title { font-weight: 600; color: var(--text); }
-.lab-check .lc-hint { display: block; margin-top: .15rem; font-size: .74rem; color: var(--muted); font-family: var(--font-mono); }
-.lab-check.is-ok .lc-hint { color: #047857; }
-[data-theme="dark"] .lab-check.is-ok .lc-hint { color: #34d399; }
+.lab-check.is-ok { border-color: rgba(52, 211, 153, .35); background: var(--st-ok-soft); }
+.lab-check.is-ok .lc-mark { background: var(--st-ok); border-color: var(--st-ok); color: var(--st-bg); }
+.lab-check.is-bad .lc-mark { border-color: var(--st-bad); color: var(--st-bad); }
+.lab-check .lc-title { font-weight: 600; color: var(--st-text); }
+.lab-check .lc-hint { display: block; margin-top: .2rem; font-family: var(--st-mono); font-size: .73rem; color: var(--st-muted); }
+.lab-check.is-ok .lc-hint { color: var(--st-ok); }
+.lab-check.is-bad .lc-hint { color: var(--st-bad); }
 
-/* Терминал */
+/* Терминал — самая тёмная зона страницы */
 .lab-terminal {
-  background: #101014;
-  color: #d4d4d8;
-  border: var(--flat-line);
-  font-family: var(--font-mono);
-  font-size: .8rem;
-  line-height: 1.6;
+  background: var(--st-inset);
+  color: var(--st-text-2);
+  border-top: 1px solid var(--st-line);
+  font-family: var(--st-mono); font-size: .8rem; line-height: 1.65;
 }
-.lab-terminal .lt-screen { min-height: 220px; max-height: 340px; overflow-y: auto; padding: .9rem 1rem; white-space: pre-wrap; word-break: break-word; }
+.lab-terminal .lt-screen {
+  min-height: 230px; max-height: 360px; overflow-y: auto;
+  padding: 1rem 1.1rem; white-space: pre-wrap; word-break: break-word;
+}
 .lab-terminal .lt-line { display: flex; gap: .5rem; }
-.lab-terminal .lt-prompt { color: #38bdf8; font-weight: 700; flex: 0 0 auto; }
+.lab-terminal .lt-prompt { color: var(--st-cyan); font-weight: 700; flex: 0 0 auto; }
+.lab-terminal .lt-input-row { display: flex; gap: .55rem; align-items: center; padding: .65rem 1.1rem; border-top: 1px solid var(--st-line); }
 .lab-terminal input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fafafa;
-  font-family: var(--font-mono);
-  font-size: .8rem;
-  padding: 0;
+  width: 100%; background: transparent; border: none; outline: none;
+  color: var(--st-text); font-family: var(--st-mono); font-size: .8rem; padding: 0;
 }
-.lab-terminal .lt-input-row { display: flex; gap: .5rem; padding: .55rem 1rem; border-top: 1px solid #27272a; }
-.lab-terminal .lt-err { color: #fb7185; }
-.lab-terminal .lt-ok { color: #34d399; }
+.lab-terminal input::placeholder { color: var(--st-faint); }
+.lab-terminal .lt-err { color: var(--st-bad); }
+.lab-terminal .lt-ok { color: var(--st-ok); }
+.lt-screen::-webkit-scrollbar { width: 10px; height: 10px; }
+.lt-screen::-webkit-scrollbar-track { background: var(--st-bg-2); }
+.lt-screen::-webkit-scrollbar-thumb { background: var(--st-line-strong); border: 2px solid var(--st-bg-2); }
 
-/* Схема Mermaid в квадратной рамке */
-.lab-schema { border: var(--flat-line-soft); padding: 1rem; background: var(--surface); overflow-x: auto; }
-.lab-schema pre { margin: 0; font-family: var(--font-mono); font-size: .76rem; line-height: 1.6; color: var(--muted); }
+/* Схема стенда */
+.lab-schema {
+  margin-bottom: 2rem; padding: 1.2rem;
+  background: var(--st-panel); border: 1px solid var(--st-line);
+  border-radius: var(--st-radius); overflow-x: auto;
+}
+.lab-schema .mermaid { display: flex; justify-content: center; margin: 0; background: transparent; }
+.lab-schema pre { margin: 0; font-family: var(--st-mono); font-size: .76rem; line-height: 1.7; color: var(--st-muted); }
 
-/* Прогресс заданий: жёсткая полоса */
-.lab-progress { height: 10px; background: var(--surface-2); border: 1px solid var(--border); position: relative; margin: .8rem 0 1.4rem; }
-.lab-progress > i { display: block; height: 100%; background: var(--accent); transition: width .35s var(--ease); }
-.lab-steps { display: grid; gap: .45rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
+/* План работ: жёсткая полоса и шаги */
+.lab-progress {
+  height: 10px; margin: .8rem 0 1.4rem;
+  background: var(--st-inset); border: 1px solid var(--st-line-strong);
+  position: relative;
+}
+.lab-progress > i { display: block; height: 100%; background: var(--st-accent); transition: width .35s cubic-bezier(.16, 1, .3, 1); }
+.lab-steps { display: grid; gap: .5rem; margin: 0 0 1.6rem; padding: 0; list-style: none; }
 .lab-step {
-  display: grid;
-  grid-template-columns: 1.8rem 1fr auto;
-  align-items: center;
-  gap: .7rem;
-  padding: .55rem .7rem;
-  border: 1px solid var(--border);
-  font-size: .84rem;
+  display: grid; grid-template-columns: 2rem 1fr auto; align-items: center; gap: .75rem;
+  padding: .6rem .8rem;
+  border: 1px solid var(--st-line);
+  background: var(--st-panel);
+  font-size: .85rem; color: var(--st-text-2);
 }
-.lab-step .ls-num { font-family: var(--font-mono); font-weight: 700; color: var(--faint); }
-.lab-step.is-done { border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.06); }
-.lab-step.is-done .ls-num { color: #059669; }
-.lab-step .ls-state { font-family: var(--font-mono); font-size: .7rem; color: var(--faint); }
-.lab-step.is-done .ls-state { color: #059669; font-weight: 700; }
+.lab-step .ls-num { font-family: var(--st-mono); font-weight: 700; color: var(--st-faint); }
+.lab-step .ls-state { font-family: var(--st-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--st-faint); }
+.lab-step.is-done { border-color: rgba(52, 211, 153, .35); background: var(--st-ok-soft); }
+.lab-step.is-done .ls-num, .lab-step.is-done .ls-state { color: var(--st-ok); }
+.lab-step.is-done .ls-state { font-weight: 700; }
 
-/* Панель сдачи */
-.lab-submit { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 1.2rem; padding-top: 1.1rem; border-top: var(--flat-line); }
-.lab-score { font-family: var(--font-mono); font-weight: 800; font-size: 1.1rem; }
-.lab-score small { font-size: .7rem; color: var(--muted); font-weight: 500; }
+/* Панель сдачи и счётчик */
+.lab-submit { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--st-line); }
+.lab-score { font-family: var(--st-mono); font-weight: 800; font-size: 1.05rem; color: var(--st-text); }
+.lab-score small { font-size: .68rem; color: var(--st-muted); font-weight: 500; }
+#lab-status { color: var(--st-faint); }
 
-/* reduced-motion: плоский дизайн и так статичен, страхуем сдвиги */
+/* Мини-панели «как это работает» */
+.st-mini { padding: 1.1rem; background: var(--st-panel); border: 1px solid var(--st-line); height: 100%; }
+.st-mini .st-mini-num { font-family: var(--st-mono); font-size: .72rem; font-weight: 700; color: var(--st-accent); margin: 0 0 .5rem; }
+.st-mini strong { display: block; color: var(--st-text); font-size: .92rem; margin-bottom: .3rem; }
+.st-mini p { margin: 0; font-size: .82rem; line-height: 1.6; color: var(--st-muted); }
+
+/* Футер стендов */
+.st-footer {
+  position: relative; z-index: 1;
+  width: min(1180px, calc(100% - 2.4rem)); margin: 3rem auto 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--st-line);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem;
+  font-family: var(--st-mono); font-size: .7rem; letter-spacing: .06em;
+  color: var(--st-faint);
+}
+.st-footer a { color: var(--st-muted); text-decoration: none; }
+.st-footer a:hover { color: var(--st-accent-2); }
+
+/* --------------------------------------------------------------------------
+   7. Адаптив
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .st-topbar-in { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .st-hero, .flat-head { flex-direction: row; }
+  .st-hero-index, .flat-index { min-width: 2.6rem; }
+  .flat-profile .fp-spacer { margin-left: 0; width: 100%; }
+  .lab-step { grid-template-columns: 1.8rem 1fr; }
+  .lab-step .ls-state { grid-column: 2; }
+}
+
+/* reduced-motion: никаких сдвигов и анимаций */
 @media (prefers-reduced-motion: reduce) {
-  .flat-module:hover, .flat-btn:hover { transform: none; }
+  .flat-scope *, .flat-scope *::before, .flat-scope *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  a.flat-module:hover, .flat-btn:hover, .flat-btn.ghost:hover { transform: none; }
   .lab-progress > i { transition: none; }
 }
 
 /* ==========================================================================
-   Админка · таблица и модалка приёма работ (квадратная система)
+   АДМИН-ПАНЕЛЬ · приём работ.
+   Живёт на странице admin.html без .flat-scope, поэтому токены стендов
+   здесь отображаются на сайт-переменные: те же компоненты (кнопки, поля,
+   бейджи), но палитра следует светлой/тёмной теме всего сайта.
    ========================================================================== */
-.sub-table-wrap { overflow-x: auto; border: 1px solid var(--border); }
+#submissions-card,
+.sub-modal {
+  --st-bg: var(--surface);
+  --st-panel: var(--surface);
+  --st-panel-2: var(--surface-2);
+  --st-inset: var(--surface-2);
+  --st-line: var(--border);
+  --st-line-strong: var(--border-strong);
+  --st-text: var(--text);
+  --st-text-2: var(--text-2);
+  --st-muted: var(--muted);
+  --st-faint: var(--faint);
+  --st-accent: var(--accent);
+  --st-accent-2: var(--accent-hover);
+  --st-accent-soft: var(--accent-soft);
+  --st-ok: #059669;
+  --st-ok-soft: rgba(16, 185, 129, .08);
+  --st-bad: #dc2626;
+  --st-bad-soft: rgba(220, 38, 38, .06);
+  --st-cyan: var(--accent);
+  --st-radius: 2px;
+}
+[data-theme="dark"] #submissions-card,
+[data-theme="dark"] .sub-modal {
+  --st-ok: #34d399;
+  --st-ok-soft: rgba(52, 211, 153, .09);
+  --st-bad: #f87171;
+  --st-bad-soft: rgba(248, 113, 113, .08);
+}
+
+.sub-table-wrap { overflow-x: auto; border: 1px solid var(--border-strong); border-radius: 2px; }
 .sub-table { width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 720px; }
-.sub-table th, .sub-table td { padding: .6rem .7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.sub-table th, .sub-table td { padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .sub-table th {
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: .68rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  font-weight: 700;
-  white-space: nowrap;
+  background: var(--text); color: var(--bg);
+  font-family: var(--font-mono); font-size: .68rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
 }
 .sub-table tbody tr:hover { background: var(--surface-2); }
+.sub-table .sub-student { font-weight: 700; }
+.sub-table .sub-group { font-family: var(--font-mono); font-size: .76rem; color: var(--muted); }
 .sub-actions { white-space: nowrap; }
+.sub-actions .btn { padding: .35rem .7rem; font-size: .74rem; }
 .sub-score {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 3rem;
-  padding: .2rem .5rem;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: .8rem;
-  border: 1px solid var(--border-strong);
-  background: var(--surface-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 3rem; padding: .22rem .5rem;
+  font-family: var(--font-mono); font-weight: 800; font-size: .8rem;
+  border: 1px solid var(--border-strong); background: var(--surface-2); border-radius: 2px;
 }
-.sub-score.is-ok { color: #047857; border-color: rgba(5,150,105,.5); background: rgba(16,185,129,.08); }
-.sub-score.is-bad { color: #dc2626; border-color: rgba(220,38,38,.45); background: rgba(220,38,38,.06); }
+.sub-score.is-ok { color: #047857; border-color: rgba(5, 150, 105, .5); background: rgba(16, 185, 129, .08); }
+.sub-score.is-bad { color: #dc2626; border-color: rgba(220, 38, 38, .45); background: rgba(220, 38, 38, .06); }
 [data-theme="dark"] .sub-score.is-ok { color: #34d399; }
 
 .sub-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  background: rgba(12, 12, 14, .55);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 4vh 1rem;
-  overflow-y: auto;
+  position: fixed; inset: 0; z-index: 120;
+  background: rgba(8, 8, 10, .65);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 4vh 1rem; overflow-y: auto;
 }
 .sub-modal[hidden] { display: none; }
 .sub-modal-box {
-  width: 100%;
-  max-width: 56rem;
+  width: 100%; max-width: 56rem;
   background: var(--surface);
-  border: var(--flat-line, 2px solid var(--text));
-  border-radius: 2px;
+  border: 2px solid var(--text); border-radius: 2px;
 }
 .sub-modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: .8rem 1.1rem;
-  background: var(--text);
-  color: var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .85rem 1.1rem; background: var(--text); color: var(--bg);
 }
-.sub-modal-head .icon-btn { background: transparent; border: 1px solid rgba(255,255,255,.35); color: var(--bg); }
+.sub-modal-head h3 { margin: 0; font-size: .95rem; color: var(--bg); }
+.sub-modal-head .icon-btn { background: transparent; border: 1px solid rgba(255, 255, 255, .35); color: var(--bg); border-radius: 2px; }
 .sub-modal-body { padding: 1.1rem; max-height: 76vh; overflow-y: auto; }
 .sub-detail-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .6rem; }
+.sub-detail-meta { font-family: var(--font-mono); font-size: .76rem; color: var(--muted); line-height: 1.7; }
 .sub-code {
-  margin: .4rem 0 0;
-  padding: .9rem 1rem;
-  background: #101014;
-  color: #d4d4d8;
-  font-family: var(--font-mono);
-  font-size: .76rem;
-  line-height: 1.6;
-  border-radius: 2px;
-  overflow-x: auto;
-  white-space: pre;
+  margin: .4rem 0 0; padding: .95rem 1rem;
+  background: #101014; color: #d4d4d8;
+  font-family: var(--font-mono); font-size: .76rem; line-height: 1.65;
+  border-radius: 2px; overflow-x: auto; white-space: pre;
 }
+.sub-checks-list { display: grid; gap: .4rem; margin: .5rem 0; }
+.sub-check-row {
+  display: flex; gap: .55rem; align-items: baseline;
+  padding: .45rem .6rem; border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: .76rem;
+}
+.sub-check-row.is-ok { border-color: rgba(5, 150, 105, .4); background: rgba(16, 185, 129, .06); }
+.sub-check-row.is-bad { border-color: rgba(220, 38, 38, .35); background: rgba(220, 38, 38, .05); }
