@@ -132,6 +132,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>${esc(d.title)} · itsliventsev</title>
 <meta name="description" content="${desc}">
@@ -141,9 +142,11 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026h">
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026i">
 </head>
 <body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -155,13 +158,13 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 </div>
 
 <div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <div class="page-wrap">
 
   <header class="site-header reveal">
     <a href="${prefix}${section}.html" class="logo"><span class="arrow">←</span> ${section === 'blog' ? 'блог' : 'статьи'}</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
 ${navItems}
     </nav>
 
@@ -173,9 +176,9 @@ ${navItems}
     </div>
   </header>
 
-  <main class="prose-measure">
+  <main id="main-content" class="prose-measure">
 
-    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);">
+    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);" aria-label="Хлебные крошки">
       <a href="${prefix}index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
       <span>/</span>
       <a href="${prefix}${section}.html" class="nav-link" style="padding:.2rem .4rem;">${section === 'blog' ? 'блог' : 'статьи'}</a>
@@ -206,7 +209,7 @@ ${bodyHtml}
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261026h"></script>
+<script src="${prefix}assets/site.js?v=20261026i"></script>
 </body>
 </html>
 `;

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>Практикоориентированное формирование знаний · itsliventsev</title>
 <meta name="description" content="Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.">
@@ -17,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026h">
+<link rel="stylesheet" href="../assets/site.css?v=20261026i">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -48,6 +49,8 @@
   <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="orange">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
   <span class="orb orb-1"></span>
@@ -60,14 +63,14 @@
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <div class="page-wrap">
 
   <!-- Header -->
   <header class="site-header reveal">
     <a href="../articles.html" class="logo"><span class="arrow">←</span> статьи</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
       <a href="../index.html" class="nav-link">главная</a>
       <a href="../blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
       <a href="../articles.html" class="nav-link active" aria-current="page">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
@@ -85,11 +88,11 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
 
   <!-- Шапка статьи -->
   <div class="reveal mb-10 prose-measure">
-    <nav class="mono text-xs text-[var(--faint)] mb-5 flex items-center gap-2 flex-wrap">
+    <nav aria-label="Хлебные крошки" class="mono text-xs text-[var(--faint)] mb-5 flex items-center gap-2 flex-wrap">
       <a href="../index.html" class="hover:text-[var(--accent)] transition-colors">главная</a>
       <span>/</span>
       <a href="../articles.html" class="hover:text-[var(--accent)] transition-colors">статьи</a>
@@ -171,7 +174,7 @@
         <p class="prose-p drop-cap">
           В современной системе среднего профессионального образования (далее — СПО) в Российской Федерации одним из ключевых факторов качественного освоения образовательного процесса и отличительным показателем в отношении других организаций является показатель трудоустройства выпускников и обучающихся <a href="#ref1" class="fn-ref">[1]</a>. Нынешняя система СПО позволяет отвечать качественным и количественным запросам современного производства — особенно это касается промышленной отрасли (ВПК, машиностроение).
         </p>
-        <div class="callout callout-idea" data-icon="💡">
+        <div class="callout callout-idea" data-icon="»">
           <p class="m-0"><strong>Ключевая мысль.</strong> Показатель трудоустройства выпускников и обучающихся — один из ключевых факторов качественного освоения образовательного процесса и отличительный признак организации.</p>
         </div>
         <p class="prose-p">
@@ -429,7 +432,7 @@
 
   <!-- Низ страницы -->
   <div class="reveal mt-14 pt-6 border-t border-[var(--border)] prose-measure">
-    <div class="callout callout-warn" data-icon="🦀">
+    <div class="callout callout-warn" data-icon="!">
       <p class="m-0 text-sm" style="color:var(--muted);">Прогноз в разделе 07 — личная оценка авторов. Вопросы и сотрудничество — <a href="../index.html" class="text-[var(--accent)] hover:underline">контакты на главной странице</a>.</p>
     </div>
 
@@ -449,6 +452,6 @@
 
 </div>
 
-<script src="../assets/site.js?v=20261026h"></script>
+<script src="../assets/site.js?v=20261026i"></script>
 </body>
 </html>

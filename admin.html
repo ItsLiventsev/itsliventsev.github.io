@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>админка · itsliventsev</title>
@@ -13,9 +14,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026h">
+<link rel="stylesheet" href="assets/site.css?v=20261026i">
 </head>
 <body class="bg-grid" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -32,7 +35,7 @@
 
   <header class="site-header reveal">
     <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Основная навигация">
       <a href="index.html" class="nav-link">главная</a>
       <a href="blog.html" class="nav-link">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
       <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
@@ -46,6 +49,8 @@
       </button>
     </div>
   </header>
+
+  <main id="main-content">
 
   <h1 class="hero-title text-3xl sm:text-4xl mb-2 reveal">админ-панель</h1>
   <p class="hero-sub reveal mb-10">// публикация постов через GitHub API · токен не покидает вкладку</p>
@@ -66,13 +71,13 @@
         Права: только этот репозиторий · <strong>Contents: Read and write</strong> · срок 7–30 дней.
         Токен хранится только в <strong>sessionStorage</strong> и исчезает при закрытии вкладки.
       </p>
-      <button class="btn btn-primary" id="pat-login" type="button">Войти</button>
+      <button class="btn btn-primary" id="pat-login" type="button">войти</button>
     </div>
 
     <!-- Device Flow -->
     <div class="admin-pane" data-pane="device" hidden>
       <p class="text-sm mb-4" style="color:var(--text-2);">Нажмите кнопку, затем введите показанный код на странице GitHub и подтвердите доступ.</p>
-      <button class="btn btn-primary" id="device-start" type="button">Получить код</button>
+      <button class="btn btn-primary" id="device-start" type="button">получить код</button>
       <div id="device-box" class="admin-device" hidden>
         <div class="admin-code mono" id="device-usercode">——————</div>
         <a class="btn" id="device-link" href="https://github.com/login/device" target="_blank" rel="noopener">открыть github.com/login/device →</a>
@@ -170,14 +175,16 @@
     </div>
   </section>
 
-  <footer class="site-footer">
+    </main>
+
+<footer class="site-footer">
     <span>© 2026 itsliventsev · служебная страница</span>
   </footer>
 
 </div>
 
-<script src="assets/admin-config.js?v=20261026h"></script>
-<script src="assets/admin.js?v=20261026h"></script>
-<script src="assets/site.js?v=20261026h"></script>
+<script src="assets/admin-config.js?v=20261026i"></script>
+<script src="assets/admin.js?v=20261026i"></script>
+<script src="assets/site.js?v=20261026i"></script>
 </body>
 </html>
