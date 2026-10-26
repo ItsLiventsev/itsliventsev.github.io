@@ -6,19 +6,20 @@
 <meta name="theme-color" content="#fafafa">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>статьи · itsliventsev</title>
-<meta name="description" content="Публикации, методические материалы и статьи в сборниках конференций: практикоориентированное обучение и трудоустройство выпускников.">
+<meta name="description" content="Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026d">
+<link rel="stylesheet" href="assets/site.css?v=20261026e">
 </head>
 <body class="bg-grid" data-accent="orange">
 
 <div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
 
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12" data-filter-root>
+<div class="page-wrap">
 
   <!-- Header -->
   <header class="site-header reveal">
@@ -27,12 +28,12 @@
       <a href="index.html#stack" class="nav-link">стек</a>
       <a href="index.html#resources" class="nav-link">материалы</a>
       <a href="index.html#cv" class="nav-link">опыт</a>
-      <a href="blog.html" class="nav-link">блог <span class="pill pill-red">когда-то?</span></a>
-      <a href="articles.html" class="nav-link active" aria-current="page">статьи <span class="pill pill-orange pill-pulse">обновлённое</span></a>
+      <a href="blog.html" class="nav-link">блог</a>
+      <a href="articles.html" class="nav-link active" aria-current="page">статьи</a>
       <a href="projects.html" class="nav-link">проекты <span class="pill pill-green">новое</span></a>
       <a href="archive.html" class="nav-link">архив</a>
     </nav>
-  
+
     <div class="header-actions">
     <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -48,108 +49,60 @@
         <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
           статьи<span class="title-mark" data-mark='[".","..","...","..."]' data-mark-interval="450">.</span>
         </h1>
-        <p class="hero-sub text-xs sm:text-sm md:text-base">// публикации · методички · размышления</p>
+        <p class="hero-sub text-xs sm:text-sm md:text-base">// завершённые тексты · публикации · методички</p>
       </div>
       <span class="pill pill-neutral self-start shadow-sm">
-        всего статей: <strong class="text-[var(--accent)]">1</strong>
+        всего статей: <strong id="pub-count" style="color:var(--accent);">…</strong>
       </span>
     </div>
-    <p class="text-sm md:text-base leading-relaxed text-[var(--text-2)] max-w-3xl">
-      Здесь собираются мои публикации: от методических материалов до статей в сборниках конференций. Всё, чем хочу поделиться с коллегами и студентами.
+    <p class="text-sm md:text-base leading-relaxed max-w-3xl" style="color:var(--text-2);">
+      В отличие от <a href="blog.html" class="nav-link" style="padding:.1rem .35rem;">блога</a>, сюда попадают только готовые тексты:
+      методические материалы, статьи конференций и сборников. То, что прошло редактуру, опубликовано и работает.
     </p>
   </section>
 
   <!-- Filters -->
   <section class="reveal mb-8">
-    <div class="flex flex-wrap gap-2">
-      <button class="pill filter-btn is-active px-4 py-1.5 text-xs" data-filter-btn="all">все</button>
-      <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="methodical">методички</button>
-      <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="conference">конференции</button>
-      <button class="pill pill-neutral filter-btn px-4 py-1.5 text-xs" data-filter-btn="books">книги</button>
+    <div class="feed-filters" id="pub-filters">
+      <button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>
     </div>
   </section>
 
-  <!-- Featured article -->
-  <section class="reveal mb-10" data-filter-item data-category="conference">
-    <article class="card group relative p-5 md:p-6 hoverable">
-      <span class="pill pill-accent absolute -top-2.5 right-5 shadow-md" style="background:var(--accent);color:#fff;border-color:var(--accent);">рекомендую</span>
-
-      <div class="article-meta mb-4">
-        <span class="pill pill-indigo">конференция</span>
-        <span class="dot"></span>
-        <span>2024</span>
-        <span class="dot"></span>
-        <span>≈ 10 мин чтения</span>
-        <span class="dot"></span>
-        <span>сборник «Актуальные вопросы образования»</span>
+  <!-- Лента публикаций: рендер из articles/posts.json -->
+  <section class="mb-10">
+    <div id="pub-list" class="pub-list" aria-live="polite">
+      <div class="feed-empty">
+        <strong>лента подгружается…</strong><br>
+        если это сообщение зависло — откройте страницу с включённым JavaScript
       </div>
-
-      <div class="has-tip inline-block mb-3" data-tip="🦀 моя первая совместная публикация о практике!">
-        <a href="articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html" class="block no-underline">
-          <h2 class="text-lg md:text-xl font-bold text-[var(--text)] leading-snug group-hover:text-[var(--accent)] transition-colors">
-            Практикоориентированное формирование знаний и навыков и их влияние на качественное трудоустройство обучающихся
-          </h2>
-        </a>
-      </div>
-
-      <p class="text-sm text-[var(--muted)] leading-relaxed mb-5 max-w-3xl">
-        Статья о необходимости повышения практикоориентированности в системе СПО и её влиянии на рынок труда. Анализ новых стандартов 2023–2024 гг., статистика трудоустройства и прогнозы развития.
-      </p>
-
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div class="hash-row">
-          <span class="tag-hash">спо</span>
-          <span class="tag-hash">трудоустройство</span>
-          <span class="tag-hash">фгос</span>
-          <span class="tag-hash">практика</span>
-        </div>
-        <a href="articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html" class="arrow-link">читать статью <span>→</span></a>
-      </div>
-    </article>
-  </section>
-
-  <!-- Empty state -->
-  <div class="filter-empty mb-10" data-filter-empty hidden>
-    // в этой категории пока пусто · загляните в раздел «все»
-  </div>
-
-  <!-- Placeholder -->
-  <section class="reveal mb-10">
-    <div class="slot-card text-center items-center">
-      <span class="slot-plus">+</span>
-      <h3 class="slot-title">Здесь скоро появятся новые статьи</h3>
-      <p class="slot-note">// следите за обновлениями — следующий материал уже в работе</p>
     </div>
   </section>
 
-  <!-- Stats -->
+  <!-- Статистика -->
   <section class="reveal mb-10">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 stagger">
       <div class="card hoverable p-4 text-center cursor-default">
-        <div class="mono text-2xl font-bold text-[var(--accent)] mb-1">1</div>
-        <div class="mono text-[10px] text-[var(--faint)]">статей</div>
+        <div class="mono text-2xl font-bold mb-1" style="color:var(--accent);" id="stat-articles">—</div>
+        <div class="mono text-[10px]" style="color:var(--faint);">статей</div>
       </div>
       <div class="card hoverable p-4 text-center cursor-default">
-        <div class="mono text-2xl font-bold text-blue-600 mb-1">1</div>
-        <div class="mono text-[10px] text-[var(--faint)]">конференций</div>
+        <div class="mono text-2xl font-bold mb-1 text-blue-600" id="stat-conf">—</div>
+        <div class="mono text-[10px]" style="color:var(--faint);">конференций</div>
       </div>
       <div class="card hoverable p-4 text-center cursor-default">
-        <div class="mono text-2xl font-bold text-emerald-600 mb-1">10</div>
-        <div class="mono text-[10px] text-[var(--faint)]">мин. чтения</div>
+        <div class="mono text-2xl font-bold mb-1 text-emerald-600" id="stat-minutes">—</div>
+        <div class="mono text-[10px]" style="color:var(--faint);">мин. чтения</div>
       </div>
       <div class="card hoverable p-4 text-center cursor-default">
-        <div class="mono text-2xl font-bold text-rose-600 mb-1">2024</div>
-        <div class="mono text-[10px] text-[var(--faint)]">год начала</div>
+        <div class="mono text-2xl font-bold mb-1 text-rose-600" id="stat-year">—</div>
+        <div class="mono text-[10px]" style="color:var(--faint);">год начала</div>
       </div>
     </div>
   </section>
 
-  <!-- Back -->
-  <section class="reveal text-center mb-8">
-    <a href="index.html" class="btn group">
-      <span class="arrow">←</span> вернуться на главную
-    </a>
-  </section>
+  <p class="feed-note reveal mb-10">
+    // индекс публикаций собирается автоматически: новый .html в папке articles/ после пуша сам станет строкой ленты
+  </p>
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · статьи</span>
@@ -157,6 +110,92 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026d"></script>
+<script>
+/* ---------- Лента статей: рендер из articles/posts.json ---------- */
+(function () {
+  const TYPE_LABELS = { conference: 'конференция', methodical: 'методичка', book: 'книга/сборник' };
+  const TYPE_PILL = { conference: 'pill-indigo', methodical: 'pill-amber', book: 'pill-purple' };
+  const list = document.getElementById('pub-list');
+  const filters = document.getElementById('pub-filters');
+  let posts = [];
+
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = (n) => String(n).padStart(2, '0');
+
+  function fmtDate(d) {
+    if (!d) return '';
+    if (/^\d{4}$/.test(d)) return d;
+    const dt = new Date(d + 'T00:00:00');
+    return isNaN(dt) ? d : dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function row(p, i) {
+    const meta = [];
+    meta.push('<span class="pill ' + (TYPE_PILL[p.type] || 'pill-neutral') + '">' + esc(TYPE_LABELS[p.type] || p.type) + '</span>');
+    if (p.date) meta.push('<span class="dot"></span><span>' + esc(fmtDate(p.date)) + '</span>');
+    if (p.readtime) meta.push('<span class="dot"></span><span>≈ ' + esc(p.readtime) + ' чтения</span>');
+    if (p.source) meta.push('<span class="dot"></span><span>' + esc(p.source) + '</span>');
+    const tags = (p.tags || []).map((t) => '<span class="tag-hash">' + esc(t) + '</span>').join('');
+    return '<a class="pub-card" data-type="' + esc(p.type) + '" href="articles/' + esc(p.file) + '">'
+      + '<div class="pub-index">' + pad(i + 1) + '</div>'
+      + '<div>'
+      + '<div class="article-meta">' + meta.join('') + '</div>'
+      + '<h2 class="pub-title">' + esc(p.title) + '</h2>'
+      + (p.excerpt ? '<p class="pub-abstract">' + esc(p.excerpt) + '</p>' : '')
+      + '<div class="pub-foot">'
+      + '<div class="hash-row">' + tags + '</div>'
+      + '<span class="arrow-link">читать статью <span>→</span></span>'
+      + '</div></div></a>';
+  }
+
+  function render(type) {
+    const items = type === 'all' ? posts : posts.filter((p) => p.type === type);
+    list.innerHTML = items.length
+      ? items.map(row).join('')
+      : '<div class="feed-empty">// в этой категории пока пусто · загляните в раздел «все»</div>';
+  }
+
+  function fillStats() {
+    document.getElementById('pub-count').textContent = posts.length;
+    document.getElementById('stat-articles').textContent = posts.length;
+    document.getElementById('stat-conf').textContent = posts.filter((p) => p.type === 'conference').length;
+    const minutes = posts.reduce((sum, p) => sum + (parseInt(String(p.readtime || '').match(/\d+/) || 0, 10) || 0), 0);
+    document.getElementById('stat-minutes').textContent = minutes || '—';
+    const years = posts.map((p) => String(p.date || '').match(/\d{4}/)).filter(Boolean).map((m) => m[0]);
+    document.getElementById('stat-year').textContent = years.length ? Math.min.apply(null, years) : '—';
+  }
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-type-filter]');
+    if (!btn) return;
+    filters.querySelectorAll('.filter-btn').forEach((b) => {
+      b.classList.remove('is-active');
+      b.classList.add('pill-neutral');
+    });
+    btn.classList.add('is-active');
+    btn.classList.remove('pill-neutral');
+    render(btn.dataset.typeFilter);
+  });
+
+  fetch('articles/posts.json')
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((data) => {
+      posts = Array.isArray(data) ? data : [];
+      fillStats();
+      const types = [...new Set(posts.map((p) => p.type))];
+      filters.innerHTML = '<button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>'
+        + types.map((t) => '<button class="pill pill-neutral filter-btn" type="button" data-type-filter="'
+          + esc(t) + '">' + esc(TYPE_LABELS[t] || t) + '</button>').join('');
+      render('all');
+    })
+    .catch(() => {
+      document.getElementById('pub-count').textContent = '0';
+      list.innerHTML = '<div class="feed-empty"><strong>публикаций пока нет</strong><br>'
+        + 'новый html-файл в папке articles/ после пуша сам появится этой лентой</div>';
+    });
+})();
+</script>
+<script src="assets/site.js?v=20261026e"></script>
 </body>
 </html>

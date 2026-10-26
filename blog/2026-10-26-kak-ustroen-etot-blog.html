@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fafafa">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>Как устроен этот блог · itsliventsev</title>
+<meta name="description" content="Первая заметка: чем блог отличается от статей и проектов, какие бывают типы записей и как новая страница сама появляется в ленте.">
+<meta name="post-date" content="2026-10-26">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="блог,как это устроено">
+<meta name="post-readtime" content="2 мин">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css?v=20261026e">
+</head>
+<body class="bg-grid" data-accent="rose">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<div class="page-wrap">
+
+  <!-- Header -->
+  <header class="site-header reveal">
+    <a href="../blog.html" class="logo"><span class="arrow">←</span> блог</a>
+    <nav class="site-nav">
+      <a href="../blog.html" class="nav-link active" aria-current="page">блог</a>
+      <a href="../articles.html" class="nav-link">статьи</a>
+      <a href="../projects.html" class="nav-link">проекты</a>
+      <a href="../archive.html" class="nav-link">архив</a>
+    </nav>
+
+    <div class="header-actions">
+    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    </div>
+  </header>
+
+  <main class="prose-measure">
+
+    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);">
+      <a href="../index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
+      <span>/</span>
+      <a href="../blog.html" class="nav-link" style="padding:.2rem .4rem;">блог</a>
+      <span>/</span>
+      <span>заметка</span>
+    </nav>
+
+    <article class="reveal">
+      <div class="article-meta">
+        <span class="pill pill-rose">заметка</span>
+        <span class="dot"></span>
+        <span>26 октября 2026</span>
+        <span class="dot"></span>
+        <span>≈ 2 мин чтения</span>
+      </div>
+
+      <h1 class="hero-title text-3xl sm:text-4xl mb-6">Как устроен этот блог</h1>
+
+      <p class="prose-p">Привет. Это первая запись в блоге — и она о том, как тут всё работает, чтобы дальше было проще.</p>
+
+      <p class="prose-p">На сайте три уровня контента. <strong>Блог</strong> — самое быстрое и короткое: заметки с пар, мысли на полях, подборки, мемы из лаборатории, мини-дополнения к материалам. Что угодно, лишь бы это было небольшим и живым. <strong>Статьи</strong> — завершённые большие тексты, которые не стыдно положить в сборник конференции. <strong>Проекты</strong> — то, что сделано руками и работает.</p>
+
+      <p class="prose-p">Заметка может со временем «вырасти»: если мысль разовьётся, она переедет в статью, а наработка — в проект. Лента блога остаётся журналом коротких моментов.</p>
+
+      <p class="prose-p">Типы записей различаются цветной кромкой на карточке:</p>
+
+      <div class="grid sm:grid-cols-2 gap-2.5 my-6">
+        <div class="card p-3.5"><strong style="color:#f43f5e;">заметка</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">короткая запись на одну-две минуты</p></div>
+        <div class="card p-3.5"><strong style="color:#8b5cf6;">мысль</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">идея без формы и выводов</p></div>
+        <div class="card p-3.5"><strong style="color:#3b82f6;">подборка</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">ссылки, инструменты, списки</p></div>
+        <div class="card p-3.5"><strong style="color:#f59e0b;">мем</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">студенческий и преподавательский юмор</p></div>
+      </div>
+
+      <p class="prose-p">И техническая деталь: новый HTML-файл в папке <code>blog/</code> сам попадает в ленту — индекс собирается скриптом после каждого пуша, руками карточки добавлять не нужно. Об этом — следующие заметки, когда появятся реальные истории с пар.</p>
+
+      <div class="notice notice-rose mt-8">
+        <div class="notice-label">статус</div>
+        <p class="text-sm m-0" style="color:var(--text-2);">Блог открыт, но записи появляются медленно: сначала практика — потом тексты.</p>
+      </div>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="../blog.html" class="btn"><span class="arrow">←</span> ко всем заметкам</a>
+        <a href="../articles.html" class="btn btn-ghost">статьи →</a>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 itsliventsev · блог</span>
+  </footer>
+
+</div>
+
+<script src="../assets/site.js?v=20261026e"></script>
+</body>
+</html>

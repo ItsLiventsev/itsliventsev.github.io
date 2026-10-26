@@ -6,19 +6,20 @@
 <meta name="theme-color" content="#fafafa">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>блог · itsliventsev</title>
-<meta name="description" content="Блог в разработке: заметки с пар и лабораторных, разборы ошибок студентов, мысли про IT-образование.">
+<meta name="description" content="Блог itsliventsev: короткие заметки с пар, мысли на полях, подборки, мемы и мини-дополнения. Лента собирается автоматически из папки blog/.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026d">
+<link rel="stylesheet" href="assets/site.css?v=20261026e">
 </head>
 <body class="bg-grid" data-accent="rose">
 
 <div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх">🦀</button>
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
+<div class="page-wrap">
 
   <!-- Header -->
   <header class="site-header reveal">
@@ -27,12 +28,12 @@
       <a href="index.html#stack" class="nav-link">стек</a>
       <a href="index.html#resources" class="nav-link">материалы</a>
       <a href="index.html#cv" class="nav-link">опыт</a>
-      <a href="blog.html" class="nav-link active" aria-current="page">блог <span class="pill pill-red">когда-то?</span></a>
+      <a href="blog.html" class="nav-link active" aria-current="page">блог</a>
       <a href="articles.html" class="nav-link">статьи <span class="pill pill-orange">обновлённое</span></a>
       <a href="projects.html" class="nav-link">проекты <span class="pill pill-green">новое</span></a>
       <a href="archive.html" class="nav-link">архив</a>
     </nav>
-  
+
     <div class="header-actions">
     <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -43,61 +44,58 @@
 
   <!-- Hero -->
   <section class="hero reveal">
-    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
-      блог<span class="title-mark" data-mark='["|","/","–","\\"]' data-mark-interval="350" style="min-width:1ch;">|</span>
-    </h1>
-    <p class="hero-sub text-xs sm:text-sm md:text-base">// записи · заметки · размышления — когда-нибудь</p>
-  </section>
-
-  <!-- Status -->
-  <section class="reveal mb-8">
-    <div class="notice notice-rose">
-      <div class="notice-label">статус: under construction</div>
-      <p class="text-sm text-[var(--text-2)] leading-relaxed m-0">
-        Блог в разработке. Здесь появятся записи о преподавании, разбор типовых ошибок студентов,
-        заметки с лабораторных и мысли про ит-образование — но не раньше, чем до них дойдут руки.
-        Это осознанно медленный проект: сначала практика, потом тексты.
-      </p>
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+      <div class="flex-1">
+        <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
+          блог<span class="title-mark" data-mark='["|","/","–","\\"]' data-mark-interval="350" style="min-width:1ch;">|</span>
+        </h1>
+        <p class="hero-sub text-xs sm:text-sm md:text-base">// заметки на полях · короткое и живое</p>
+      </div>
+      <span class="pill pill-neutral self-start shadow-sm">
+        записей: <strong id="feed-count" style="color:var(--accent);">…</strong>
+      </span>
     </div>
-  </section>
-
-  <!-- Planned -->
-  <section class="reveal mb-10">
-    <p class="section-label">в планах</p>
-    <div class="space-y-2 stagger">
-      <div class="card card-dashed flex items-center justify-between gap-3 p-3.5">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="mat-dot" style="background:#fb7185;"></span>
-          <span class="text-sm text-[var(--muted)] truncate">заметки с пар и лабораторных</span>
-        </div>
-        <span class="pill pill-neutral shrink-0">когда-то?</span>
-      </div>
-      <div class="card card-dashed flex items-center justify-between gap-3 p-3.5">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="mat-dot" style="background:#fb7185;"></span>
-          <span class="text-sm text-[var(--muted)] truncate">разборы типовых ошибок студентов</span>
-        </div>
-        <span class="pill pill-neutral shrink-0">когда-то?</span>
-      </div>
-      <div class="card card-dashed flex items-center justify-between gap-3 p-3.5">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="mat-dot" style="background:#fb7185;"></span>
-          <span class="text-sm text-[var(--muted)] truncate">мысли про преподавание и ит</span>
-        </div>
-        <span class="pill pill-neutral shrink-0">когда-то?</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Bottom -->
-  <section class="reveal text-center mb-8">
-    <p class="mono text-[10px] sm:text-xs text-[var(--faint)] mb-6">
-      🦀 блог спит, но проснётся. всё хорошее пишется медленно.
+    <p class="text-sm md:text-base leading-relaxed max-w-3xl" style="color:var(--text-2);">
+      Сюда попадает всё короткое: заметки с пар и лабораторных, разборы ошибок студентов, мысли про IT-образование,
+      подборки и иногда мемы. Если заметка вырастет — она переедет в <a href="articles.html" class="nav-link" style="padding:.1rem .35rem;">статьи</a>
+      или <a href="projects.html" class="nav-link" style="padding:.1rem .35rem;">проекты</a>. Здесь — журнал моментов.
     </p>
-    <a href="index.html" class="btn group">
-      <span class="arrow">←</span> вернуться на главную
-    </a>
   </section>
+
+  <!-- Filters (кнопки достраиваются скриптом под реальные типы) -->
+  <section class="reveal mb-7">
+    <div class="feed-filters" id="note-filters">
+      <button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>
+    </div>
+  </section>
+
+  <!-- Лента заметок: карточки рендерятся из blog/posts.json -->
+  <section class="mb-8">
+    <div id="note-grid" class="note-grid" aria-live="polite">
+      <!-- Статический фолбэк, если JS не выполнился -->
+      <div class="feed-empty">
+        <strong>лента подгружается…</strong><br>
+        если это сообщение зависло — откройте страницу с включённым JavaScript
+      </div>
+    </div>
+  </section>
+
+  <!-- Типы записей -->
+  <section class="reveal mb-10">
+    <p class="section-label">какие бывают записи</p>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 stagger">
+      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#f43f5e;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">заметка</div></div>
+      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#8b5cf6;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">мысль</div></div>
+      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#3b82f6;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">подборка</div></div>
+      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#f59e0b;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">мем</div></div>
+      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#10b981;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">доп. материал</div></div>
+    </div>
+  </section>
+
+  <p class="feed-note reveal mb-10">
+    // индекс ленты собирается автоматически: новый .html в папке blog/ после пуша сам станет карточкой
+    (<span class="note-type-label" style="color:var(--faint);">scripts/build-post-index.js</span> + GitHub Actions)
+  </p>
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · блог</span>
@@ -105,6 +103,76 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026d"></script>
+<script>
+/* ---------- Лента блога: рендер из blog/posts.json ---------- */
+(function () {
+  const TYPE_LABELS = { note: 'заметка', thought: 'мысль', digest: 'подборка', meme: 'мем', extra: 'доп. материал' };
+  const grid = document.getElementById('note-grid');
+  const filters = document.getElementById('note-filters');
+  const counter = document.getElementById('feed-count');
+  let posts = [];
+
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function fmtDate(d) {
+    if (!d) return '';
+    if (/^\d{4}$/.test(d)) return d;
+    const dt = new Date(d + 'T00:00:00');
+    if (isNaN(dt)) return d;
+    return dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function card(p) {
+    const tags = (p.tags || []).slice(0, 3).map((t) => '<span class="note-tag">#' + esc(t) + '</span>').join('');
+    return '<a class="note-card" data-type="' + esc(p.type) + '" href="blog/' + esc(p.file) + '">'
+      + '<div class="note-meta"><span class="note-type-dot"></span>'
+      + '<span class="note-type-label">' + esc(TYPE_LABELS[p.type] || p.type) + '</span>'
+      + '<span class="note-date">' + esc(fmtDate(p.date)) + '</span></div>'
+      + '<h3 class="note-title">' + esc(p.title) + '</h3>'
+      + (p.excerpt ? '<p class="note-excerpt">' + esc(p.excerpt) + '</p>' : '')
+      + (tags ? '<div class="note-tags">' + tags + '</div>' : '')
+      + '</a>';
+  }
+
+  function render(type) {
+    const list = type === 'all' ? posts : posts.filter((p) => p.type === type);
+    grid.innerHTML = list.length
+      ? list.map(card).join('')
+      : '<div class="feed-empty">// в этой категории пока пусто · загляните в «все»</div>';
+  }
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-type-filter]');
+    if (!btn) return;
+    filters.querySelectorAll('.filter-btn').forEach((b) => {
+      b.classList.remove('is-active');
+      b.classList.add('pill-neutral');
+    });
+    btn.classList.add('is-active');
+    btn.classList.remove('pill-neutral');
+    render(btn.dataset.typeFilter);
+  });
+
+  fetch('blog/posts.json')
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((data) => {
+      posts = Array.isArray(data) ? data : [];
+      counter.textContent = posts.length;
+      // фильтры только под реально существующие типы
+      const types = [...new Set(posts.map((p) => p.type))];
+      filters.innerHTML = '<button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>'
+        + types.map((t) => '<button class="pill pill-neutral filter-btn" type="button" data-type-filter="'
+          + esc(t) + '">' + esc(TYPE_LABELS[t] || t) + '</button>').join('');
+      render('all');
+    })
+    .catch(() => {
+      counter.textContent = '0';
+      grid.innerHTML = '<div class="feed-empty"><strong>здесь пока пусто</strong><br>'
+        + 'новый html-файл в папке blog/ после пуша сам появится этой лентой</div>';
+    });
+})();
+</script>
+<script src="assets/site.js?v=20261026e"></script>
 </body>
 </html>
