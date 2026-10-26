@@ -11,8 +11,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026e">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261026f">
 </head>
 <body class="bg-grid" data-accent="blue">
 
@@ -23,13 +23,11 @@
   <!-- Header -->
   <header class="site-header reveal">
     <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-    <nav class="site-nav">
-      <a href="index.html#stack" class="nav-link">стек</a>
-      <a href="index.html#resources" class="nav-link">материалы</a>
-      <a href="index.html#cv" class="nav-link">опыт</a>
-      <a href="blog.html" class="nav-link">блог <span class="pill pill-red">когда-то?</span></a>
-      <a href="articles.html" class="nav-link">статьи <span class="pill pill-orange">обновлённое</span></a>
-      <a href="projects.html" class="nav-link">проекты <span class="pill pill-green">новое</span></a>
+        <nav class="site-nav">
+      <a href="index.html" class="nav-link">главная</a>
+      <a href="blog.html" class="nav-link">блог</a>
+      <a href="articles.html" class="nav-link">статьи</a>
+      <a href="projects.html" class="nav-link">проекты</a>
       <a href="archive.html" class="nav-link active" aria-current="page">архив</a>
     </nav>
   
@@ -65,8 +63,7 @@
   <section class="reveal mb-6">
     <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mono text-[11px] text-[var(--muted)]">
       <span class="pill pill-blue">активное</span><span>— активно пополняется</span>
-      <span class="pill pill-amber">в разработке</span><span>— в процессе</span>
-      <span class="pill pill-emerald">новое</span><span>— недавно добавлено</span>
+      <span class="pill pill-amber">в разработке</span><span>— в процессе</span><span>— недавно добавлено</span>
       <span class="pill pill-neutral">архив</span><span>— старые материалы</span>
       <span class="pill pill-red">не загружено</span><span>— недоступно</span>
     </div>
@@ -282,7 +279,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026e"></script>
+<script src="assets/site.js?v=20261026f"></script>
 <script>
   /* Метка # в заголовке: автопрокрутка + ускорение по клику */
   const mark = document.getElementById('title-mark');

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fafafa">
+<meta name="robots" content="noindex, nofollow">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>админка · itsliventsev</title>
+<meta name="description" content="Панель публикации постов. Страница не индексируется.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261026f">
+</head>
+<body class="bg-grid" data-accent="blue">
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<div class="page-wrap">
+
+  <header class="site-header reveal">
+    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
+    <nav class="site-nav">
+      <a href="index.html" class="nav-link">главная</a>
+      <a href="blog.html" class="nav-link">блог</a>
+      <a href="articles.html" class="nav-link">статьи</a>
+      <a href="projects.html" class="nav-link">проекты</a>
+      <a href="archive.html" class="nav-link">архив</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <h1 class="hero-title text-3xl sm:text-4xl mb-2 reveal">админ-панель</h1>
+  <p class="hero-sub reveal mb-10">// публикация постов через GitHub API · токен не покидает вкладку</p>
+
+  <!-- Вход -->
+  <section id="auth-card" class="card p-5 sm:p-7 reveal" style="max-width:42rem;">
+    <div class="admin-tabs" role="tablist">
+      <button type="button" class="admin-tab is-active" data-tab="pat" role="tab">по токену (PAT)</button>
+      <button type="button" class="admin-tab" data-tab="device" role="tab" id="device-tab" hidden>через GitHub (Device Flow)</button>
+    </div>
+
+    <!-- PAT -->
+    <div class="admin-pane" data-pane="pat">
+      <label class="admin-label" for="pat-input">Fine-grained personal access token</label>
+      <input id="pat-input" class="admin-input mono" type="password" autocomplete="off" spellcheck="false"
+             placeholder="github_pat_…">
+      <p class="admin-hint">
+        Права: только этот репозиторий · <strong>Contents: Read and write</strong> · срок 7–30 дней.
+        Токен хранится только в <strong>sessionStorage</strong> и исчезает при закрытии вкладки.
+      </p>
+      <button class="btn btn-primary" id="pat-login" type="button">Войти</button>
+    </div>
+
+    <!-- Device Flow -->
+    <div class="admin-pane" data-pane="device" hidden>
+      <p class="text-sm mb-4" style="color:var(--text-2);">Нажмите кнопку, затем введите показанный код на странице GitHub и подтвердите доступ.</p>
+      <button class="btn btn-primary" id="device-start" type="button">Получить код</button>
+      <div id="device-box" class="admin-device" hidden>
+        <div class="admin-code mono" id="device-usercode">——————</div>
+        <a class="btn" id="device-link" href="https://github.com/login/device" target="_blank" rel="noopener">открыть github.com/login/device →</a>
+        <p class="admin-hint" id="device-status">ожидаю подтверждения…</p>
+      </div>
+    </div>
+
+    <p class="admin-msg" id="auth-msg" role="status"></p>
+  </section>
+
+  <!-- Рабочая область -->
+  <section id="workspace" hidden>
+    <div class="admin-bar reveal">
+      <div class="mono text-sm">вошли как <strong id="gh-login" style="color:var(--accent);">—</strong></div>
+      <button class="btn btn-sm" id="logout" type="button">выйти</button>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-5">
+      <!-- Форма -->
+      <form class="card p-5 sm:p-6 reveal" id="post-form">
+        <p class="section-label">новый пост</p>
+
+        <div class="admin-row">
+          <div>
+            <label class="admin-label" for="f-section">раздел</label>
+            <select id="f-section" class="admin-input">
+              <option value="blog">блог — короткая заметка</option>
+              <option value="articles">статьи — завершённый текст</option>
+            </select>
+          </div>
+          <div>
+            <label class="admin-label" for="f-type">тип</label>
+            <select id="f-type" class="admin-input"></select>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div>
+            <label class="admin-label" for="f-date">дата</label>
+            <input id="f-date" class="admin-input" type="date">
+          </div>
+          <div>
+            <label class="admin-label" for="f-readtime">время чтения</label>
+            <input id="f-readtime" class="admin-input" type="text" placeholder="2 мин">
+          </div>
+        </div>
+
+        <label class="admin-label" for="f-title">заголовок</label>
+        <input id="f-title" class="admin-input" type="text" placeholder="Заголовок поста" required>
+
+        <div class="admin-slug">
+          <div style="flex:1;min-width:0;">
+            <label class="admin-label" for="f-slug">slug (имя файла)</label>
+            <input id="f-slug" class="admin-input mono" type="text" spellcheck="false">
+          </div>
+          <button class="btn btn-sm" id="slug-gen" type="button">сгенерировать</button>
+        </div>
+
+        <label class="admin-label" for="f-desc">описание / аннотация</label>
+        <textarea id="f-desc" class="admin-input" rows="2" placeholder="Одна-две фразы для карточки в ленте"></textarea>
+
+        <label class="admin-label" for="f-tags">теги через запятую</label>
+        <input id="f-tags" class="admin-input" type="text" placeholder="пары, сети, практика">
+
+        <div id="source-wrap" hidden>
+          <label class="admin-label" for="f-source">источник публикации</label>
+          <input id="f-source" class="admin-input" type="text" placeholder="сборник «Актуальные вопросы образования»">
+        </div>
+
+        <label class="admin-label" for="f-body">текст (Markdown)</label>
+        <textarea id="f-body" class="admin-input admin-md" rows="12" spellcheck="false"
+          placeholder="## Подзаголовок&#10;&#10;Обычный абзац. **Жирный**, *курсив*, `код`.&#10;&#10;- пункт списка&#10;- ещё пункт&#10;&#10;[ссылка](https://example.com)"></textarea>
+
+        <label class="admin-check"><input type="checkbox" id="f-draft"> черновик (в ленте не показывается)</label>
+
+        <div class="admin-actions">
+          <button class="btn btn-primary" id="publish" type="button">опубликовать в репозиторий</button>
+          <span class="admin-msg" id="pub-msg" role="status"></span>
+        </div>
+      </form>
+
+      <!-- Превью -->
+      <div class="card p-5 sm:p-6 reveal">
+        <p class="section-label">превью</p>
+        <article class="prose-measure admin-preview" id="preview">
+          <p class="admin-hint">начните писать — здесь появится вёрстка</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Существующие посты -->
+    <div class="card p-5 sm:p-6 mt-5 reveal">
+      <p class="section-label">файлы в репозитории</p>
+      <div id="post-list" class="admin-postlist"><p class="admin-hint">загрузка…</p></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>© 2026 itsliventsev · служебная страница</span>
+  </footer>
+
+</div>
+
+<script src="assets/admin-config.js?v=20261026f"></script>
+<script src="assets/admin.js?v=20261026f"></script>
+<script src="assets/site.js?v=20261026f"></script>
+</body>
+</html>

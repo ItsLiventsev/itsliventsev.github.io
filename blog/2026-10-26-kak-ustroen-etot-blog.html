@@ -15,8 +15,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026e">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css?v=20261026f">
 </head>
 <body class="bg-grid" data-accent="rose">
 
@@ -27,7 +27,8 @@
   <!-- Header -->
   <header class="site-header reveal">
     <a href="../blog.html" class="logo"><span class="arrow">←</span> блог</a>
-    <nav class="site-nav">
+        <nav class="site-nav">
+      <a href="../index.html" class="nav-link">главная</a>
       <a href="../blog.html" class="nav-link active" aria-current="page">блог</a>
       <a href="../articles.html" class="nav-link">статьи</a>
       <a href="../projects.html" class="nav-link">проекты</a>
@@ -65,7 +66,7 @@
 
       <p class="prose-p">Привет. Это первая запись в блоге — и она о том, как тут всё работает, чтобы дальше было проще.</p>
 
-      <p class="prose-p">На сайте три уровня контента. <strong>Блог</strong> — самое быстрое и короткое: заметки с пар, мысли на полях, подборки, мемы из лаборатории, мини-дополнения к материалам. Что угодно, лишь бы это было небольшим и живым. <strong>Статьи</strong> — завершённые большие тексты, которые не стыдно положить в сборник конференции. <strong>Проекты</strong> — то, что сделано руками и работает.</p>
+      <p class="prose-p">На сайте три уровня контента. <strong>Блог</strong> — самое быстрое и короткое: заметки с пар, мысли на полях, подборки, находки из лаборатории, мини-дополнения к материалам. Что угодно, лишь бы это было небольшим и живым. <strong>Статьи</strong> — завершённые большие тексты, которые не стыдно положить в сборник конференции. <strong>Проекты</strong> — то, что сделано руками и работает.</p>
 
       <p class="prose-p">Заметка может со временем «вырасти»: если мысль разовьётся, она переедет в статью, а наработка — в проект. Лента блога остаётся журналом коротких моментов.</p>
 
@@ -75,7 +76,7 @@
         <div class="card p-3.5"><strong style="color:#f43f5e;">заметка</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">короткая запись на одну-две минуты</p></div>
         <div class="card p-3.5"><strong style="color:#8b5cf6;">мысль</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">идея без формы и выводов</p></div>
         <div class="card p-3.5"><strong style="color:#3b82f6;">подборка</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">ссылки, инструменты, списки</p></div>
-        <div class="card p-3.5"><strong style="color:#f59e0b;">мем</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">студенческий и преподавательский юмор</p></div>
+        <div class="card p-3.5"><strong style="color:#10b981;">доп. материал</strong><p class="text-sm m-0 mt-1" style="color:var(--muted);">мини-дополнение к учебным материалам</p></div>
       </div>
 
       <p class="prose-p">И техническая деталь: новый HTML-файл в папке <code>blog/</code> сам попадает в ленту — индекс собирается скриптом после каждого пуша, руками карточки добавлять не нужно. Об этом — следующие заметки, когда появятся реальные истории с пар.</p>
@@ -99,6 +100,6 @@
 
 </div>
 
-<script src="../assets/site.js?v=20261026e"></script>
+<script src="../assets/site.js?v=20261026f"></script>
 </body>
 </html>

@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#fafafa">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>блог · itsliventsev</title>
-<meta name="description" content="Блог itsliventsev: короткие заметки с пар, мысли на полях, подборки, мемы и мини-дополнения. Лента собирается автоматически из папки blog/.">
+<meta name="description" content="Блог itsliventsev: короткие заметки с пар, мысли на полях, подборки и мини-дополнения. Лента собирается автоматически из папки blog/.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026e">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261026f">
 </head>
 <body class="bg-grid" data-accent="rose">
 
@@ -24,13 +24,11 @@
   <!-- Header -->
   <header class="site-header reveal">
     <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-    <nav class="site-nav">
-      <a href="index.html#stack" class="nav-link">стек</a>
-      <a href="index.html#resources" class="nav-link">материалы</a>
-      <a href="index.html#cv" class="nav-link">опыт</a>
+        <nav class="site-nav">
+      <a href="index.html" class="nav-link">главная</a>
       <a href="blog.html" class="nav-link active" aria-current="page">блог</a>
-      <a href="articles.html" class="nav-link">статьи <span class="pill pill-orange">обновлённое</span></a>
-      <a href="projects.html" class="nav-link">проекты <span class="pill pill-green">новое</span></a>
+      <a href="articles.html" class="nav-link">статьи</a>
+      <a href="projects.html" class="nav-link">проекты</a>
       <a href="archive.html" class="nav-link">архив</a>
     </nav>
 
@@ -47,7 +45,7 @@
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
       <div class="flex-1">
         <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
-          блог<span class="title-mark" data-mark='["|","/","–","\\"]' data-mark-interval="350" style="min-width:1ch;">|</span>
+          блог
         </h1>
         <p class="hero-sub text-xs sm:text-sm md:text-base">// заметки на полях · короткое и живое</p>
       </div>
@@ -57,7 +55,7 @@
     </div>
     <p class="text-sm md:text-base leading-relaxed max-w-3xl" style="color:var(--text-2);">
       Сюда попадает всё короткое: заметки с пар и лабораторных, разборы ошибок студентов, мысли про IT-образование,
-      подборки и иногда мемы. Если заметка вырастет — она переедет в <a href="articles.html" class="nav-link" style="padding:.1rem .35rem;">статьи</a>
+      подборки и мини-дополнения. Если заметка вырастет — она переедет в <a href="articles.html" class="nav-link" style="padding:.1rem .35rem;">статьи</a>
       или <a href="projects.html" class="nav-link" style="padding:.1rem .35rem;">проекты</a>. Здесь — журнал моментов.
     </p>
   </section>
@@ -83,11 +81,10 @@
   <!-- Типы записей -->
   <section class="reveal mb-10">
     <p class="section-label">какие бывают записи</p>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5 stagger">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 stagger">
       <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#f43f5e;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">заметка</div></div>
       <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#8b5cf6;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">мысль</div></div>
       <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#3b82f6;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">подборка</div></div>
-      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#f59e0b;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">мем</div></div>
       <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#10b981;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">доп. материал</div></div>
     </div>
   </section>
@@ -106,7 +103,7 @@
 <script>
 /* ---------- Лента блога: рендер из blog/posts.json ---------- */
 (function () {
-  const TYPE_LABELS = { note: 'заметка', thought: 'мысль', digest: 'подборка', meme: 'мем', extra: 'доп. материал' };
+  const TYPE_LABELS = { note: 'заметка', thought: 'мысль', digest: 'подборка', extra: 'доп. материал' };
   const grid = document.getElementById('note-grid');
   const filters = document.getElementById('note-filters');
   const counter = document.getElementById('feed-count');
@@ -173,6 +170,6 @@
     });
 })();
 </script>
-<script src="assets/site.js?v=20261026e"></script>
+<script src="assets/site.js?v=20261026f"></script>
 </body>
 </html>

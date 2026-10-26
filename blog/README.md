@@ -1,6 +1,6 @@
 # blog/ — короткие заметки
 
-Сюда складываются небольшие записи: заметки с пар, мысли, подборки, мемы,
+Сюда складываются небольшие записи: заметки с пар, мысли, подборки,
 мини-дополнения. Большие завершённые тексты живут в `../articles/`,
 сделанные руками проекты — в `../projects/`.
 
@@ -15,7 +15,7 @@
 
 ```html
 <meta name="post-date"     content="2026-11-02">   <!-- или просто год: 2026 -->
-<meta name="post-type"     content="note">         <!-- note | thought | digest | meme | extra -->
+<meta name="post-type"     content="note">         <!-- note | thought | digest | extra -->
 <meta name="post-tags"     content="пары,сети">    <!-- через запятую -->
 <meta name="post-readtime" content="3 мин">
 <!-- <meta name="post-status" content="draft"> --> <!-- черновик не попадёт в ленту -->
@@ -41,5 +41,4 @@ node scripts/build-post-index.js
 | note      | заметка        | розовый     |
 | thought   | мысль          | фиолетовый  |
 | digest    | подборка       | синий       |
-| meme      | мем            | янтарный    |
 | extra     | доп. материал  | изумрудный  |
