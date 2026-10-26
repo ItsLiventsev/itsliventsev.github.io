@@ -1,0 +1,41 @@
+name: post-index
+
+# Автоматически пересобирает posts.json для блога и статей,
+# когда в папках blog/ или articles/ появляется/меняется HTML-страница.
+on:
+  push:
+    paths:
+      - 'blog/**.html'
+      - 'articles/**.html'
+      - 'scripts/build-post-index.js'
+      - '.github/workflows/post-index.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build post indexes
+        run: node scripts/build-post-index.js
+
+      - name: Commit updated manifests
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog/posts.json articles/posts.json
+          if git diff --staged --quiet; then
+            echo "Индексы не изменились — коммит не нужен"
+          else
+            git commit -m "chore: авто-обновление индексов блога и статей"
+            git push
+          fi
