@@ -19,6 +19,9 @@ document.documentElement.classList.add('js-enabled');
     if (theme === 'dark') root.dataset.theme = 'dark';
     else delete root.dataset.theme;
     try { localStorage.setItem(STORAGE_KEY, theme); } catch (e) { /* приватный режим */ }
+    // Браузерный хром мобильных подстраивается под активную тему
+    const metaColor = document.querySelector('meta[name="theme-color"]');
+    if (metaColor) metaColor.setAttribute('content', theme === 'dark' ? '#08080a' : '#fafafa');
     document.querySelectorAll('.theme-toggle').forEach((btn) => {
       btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
       btn.setAttribute('title', theme === 'dark' ? 'включить светлую тему' : 'включить тёмную тему');
@@ -37,7 +40,26 @@ document.documentElement.classList.add('js-enabled');
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.theme-toggle');
     if (!btn) return;
-    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true);
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // View Transitions: круговое раскрытие новой темы от кнопки.
+    // Браузеры без API (или с reduced-motion) получают мгновенное переключение.
+    if (!reduceMotion && document.startViewTransition) {
+      const rect = btn.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const maxRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+      const transition = document.startViewTransition(() => applyTheme(next, true));
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`] },
+          { duration: 460, easing: 'cubic-bezier(.16, 1, .3, 1)', pseudoElement: '::view-transition-new(root)' }
+        );
+      }).catch(() => {});
+    } else {
+      applyTheme(next, true);
+    }
   });
 
   // Синхронизация между вкладками
@@ -54,11 +76,18 @@ document.documentElement.classList.add('js-enabled');
   // Бургер: создаётся из JS только если на странице есть навигация
   const nav = header.querySelector('.site-nav');
   if (nav) {
+    // nav получает id, чтобы бургер мог ссылаться на него через aria-controls
+    if (!nav.id) nav.id = 'site-nav';
     const burger = document.createElement('button');
     burger.className = 'icon-btn nav-burger';
+    burger.type = 'button';
     burger.setAttribute('aria-label', 'открыть меню');
     burger.setAttribute('aria-expanded', 'false');
-    burger.innerHTML = '<span class="sr-only">меню</span><span><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>';
+    burger.setAttribute('aria-controls', nav.id);
+    burger.innerHTML = '<span class="sr-only">меню</span>'
+      + '<span class="burger-bars" aria-hidden="true">'
+      + '<span class="burger-bar"></span><span class="burger-bar"></span><span class="burger-bar"></span>'
+      + '</span>';
     const actions = header.querySelector('.header-actions');
     if (actions) actions.prepend(burger);
     else header.appendChild(burger);
