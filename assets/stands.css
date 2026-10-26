@@ -1,0 +1,391 @@
+/* ==========================================================================
+   Виртуальные стенды — «квадратная» flat-система.
+   Включается классом .flat-scope на <body>: строгие линии, нулевые радиусы,
+   без теней и градиентов, прямоугольные блоки, моно-акценты.
+   Остальной сайт эти правила не задевают.
+   ========================================================================== */
+
+.flat-scope {
+  --flat-radius: 2px;
+  --flat-line: 1.5px solid var(--text);
+  --flat-line-soft: 1px solid var(--border-strong);
+  --flat-gap: 1.1rem;
+}
+
+/* 1. Среда: убираем мягкость общей системы на страницах стендов */
+.flat-scope .site-header,
+.flat-scope .card,
+.flat-scope .p-card,
+.flat-scope .btn,
+.flat-scope .pill,
+.flat-scope .notice,
+.flat-scope .callout,
+.flat-scope input,
+.flat-scope textarea,
+.flat-scope select {
+  border-radius: var(--flat-radius) !important;
+  box-shadow: none !important;
+}
+.flat-scope .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--surface); }
+.flat-scope .card,
+.flat-scope .p-card { border: var(--flat-line-soft); }
+.flat-scope .ambient .orb { border-radius: 0; filter: none; opacity: .06; }
+.flat-scope .ambient .ambient-glyph { border-radius: 0; }
+.flat-scope .reveal { transform: none; opacity: 1; transition: none; }
+.flat-scope .stagger > * { transform: none; opacity: 1; transition: none; }
+
+/* 2. Типографика стендов: жёсткие моно-заголовки с квадратными индексами */
+.flat-head {
+  display: flex;
+  align-items: stretch;
+  gap: .8rem;
+  margin: 0 0 1.25rem;
+}
+.flat-head .flat-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  padding: .35rem .55rem;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .04em;
+}
+.flat-head h1, .flat-head h2 { margin: 0; align-self: center; }
+.flat-head h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -.02em; }
+.flat-head h2 { font-size: 1.15rem; font-weight: 700; }
+.flat-kicker {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0 0 .5rem;
+}
+
+/* 3. Сетка-каталог: прямоугольные модули без скруглений */
+.flat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--flat-gap); }
+.flat-module {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: var(--flat-line-soft);
+  border-left: 4px solid var(--text);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+.flat-module:hover { border-left-color: var(--accent); transform: translate(-2px, -2px); background: var(--surface-2); }
+.flat-module.is-soon { opacity: .62; pointer-events: none; }
+.flat-module .fm-num { font-family: var(--font-mono); font-size: .72rem; color: var(--faint); font-weight: 700; }
+.flat-module h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.flat-module p { margin: 0; font-size: .85rem; line-height: 1.6; color: var(--muted); }
+.flat-module .fm-foot {
+  margin-top: auto;
+  padding-top: .6rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+.flat-module.is-soon .fm-foot { color: var(--faint); }
+
+/* 4. Статусные бейджи: квадратные плашки вместо пилюль */
+.flat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .22rem .55rem;
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+.flat-badge::before { content: ''; width: .45rem; height: .45rem; background: currentColor; }
+.flat-badge.is-ready { color: #047857; border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.08); }
+.flat-badge.is-soon { color: var(--muted); }
+.flat-badge.is-run { color: #1d4ed8; border-color: rgba(37,99,235,.4); background: rgba(37,99,235,.07); }
+[data-theme="dark"] .flat-badge.is-ready { color: #34d399; }
+[data-theme="dark"] .flat-badge.is-run { color: #60a5fa; }
+
+/* 5. Формы идентификации: строгие прямоугольники */
+.flat-form { display: grid; gap: .9rem; max-width: 34rem; }
+.flat-field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: .35rem;
+}
+.flat-input {
+  width: 100%;
+  padding: .75rem .9rem;
+  background: var(--surface);
+  border: var(--flat-line);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: .95rem;
+  outline: none;
+}
+.flat-input:focus { border-color: var(--accent); background: var(--accent-soft); }
+.flat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1.4rem;
+  background: var(--text);
+  color: var(--bg);
+  border: var(--flat-line);
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease;
+}
+.flat-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(-2px, -2px); }
+.flat-btn:active { transform: translate(0, 0); }
+.flat-btn.ghost { background: transparent; color: var(--text); }
+.flat-btn.ghost:hover { background: var(--surface-2); color: var(--text); }
+.flat-btn:disabled { opacity: .45; pointer-events: none; }
+
+/* 6. Профиль студента: жёсткая панель */
+.flat-profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .8rem 1.2rem;
+  padding: .9rem 1.1rem;
+  background: var(--text);
+  color: var(--bg);
+  margin-bottom: 1.6rem;
+}
+.flat-profile .fp-name { font-weight: 800; font-size: 1rem; }
+.flat-profile .fp-group { font-family: var(--font-mono); font-size: .8rem; opacity: .8; }
+.flat-profile .fp-spacer { margin-left: auto; }
+.flat-profile .flat-btn { background: var(--bg); color: var(--text); border-color: var(--bg); padding: .45rem .9rem; font-size: .7rem; }
+.flat-profile .flat-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* 7. Лаборатория: двухзонная сетка */
+.lab-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--flat-gap); align-items: start; }
+@media (max-width: 980px) { .lab-layout { grid-template-columns: 1fr; } }
+.lab-panel { background: var(--surface); border: var(--flat-line-soft); }
+.lab-panel > .lp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .65rem 1rem;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.lab-panel > .lp-body { padding: 1rem; }
+
+/* Редактор конфига */
+.lab-editor {
+  width: 100%;
+  min-height: 360px;
+  padding: .9rem 1rem;
+  background: var(--surface-2);
+  border: none;
+  border-top: var(--flat-line-soft);
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  line-height: 1.65;
+  color: var(--text);
+  tab-size: 2;
+  resize: vertical;
+  outline: none;
+}
+.lab-editor:focus { background: var(--accent-soft); }
+
+/* Проверки CI: квадратные строки статуса */
+.lab-checks { display: grid; gap: .5rem; }
+.lab-check {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: .55rem;
+  padding: .6rem .7rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+.lab-check .lc-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: .8rem;
+  border: 1px solid var(--border-strong);
+  color: var(--faint);
+}
+.lab-check.is-ok { border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.06); }
+.lab-check.is-ok .lc-mark { background: #059669; border-color: #059669; color: #fff; }
+.lab-check.is-bad .lc-mark { background: var(--surface); color: #dc2626; border-color: #dc2626; }
+.lab-check .lc-title { font-weight: 600; color: var(--text); }
+.lab-check .lc-hint { display: block; margin-top: .15rem; font-size: .74rem; color: var(--muted); font-family: var(--font-mono); }
+.lab-check.is-ok .lc-hint { color: #047857; }
+[data-theme="dark"] .lab-check.is-ok .lc-hint { color: #34d399; }
+
+/* Терминал */
+.lab-terminal {
+  background: #101014;
+  color: #d4d4d8;
+  border: var(--flat-line);
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  line-height: 1.6;
+}
+.lab-terminal .lt-screen { min-height: 220px; max-height: 340px; overflow-y: auto; padding: .9rem 1rem; white-space: pre-wrap; word-break: break-word; }
+.lab-terminal .lt-line { display: flex; gap: .5rem; }
+.lab-terminal .lt-prompt { color: #38bdf8; font-weight: 700; flex: 0 0 auto; }
+.lab-terminal input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fafafa;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  padding: 0;
+}
+.lab-terminal .lt-input-row { display: flex; gap: .5rem; padding: .55rem 1rem; border-top: 1px solid #27272a; }
+.lab-terminal .lt-err { color: #fb7185; }
+.lab-terminal .lt-ok { color: #34d399; }
+
+/* Схема Mermaid в квадратной рамке */
+.lab-schema { border: var(--flat-line-soft); padding: 1rem; background: var(--surface); overflow-x: auto; }
+.lab-schema pre { margin: 0; font-family: var(--font-mono); font-size: .76rem; line-height: 1.6; color: var(--muted); }
+
+/* Прогресс заданий: жёсткая полоса */
+.lab-progress { height: 10px; background: var(--surface-2); border: 1px solid var(--border); position: relative; margin: .8rem 0 1.4rem; }
+.lab-progress > i { display: block; height: 100%; background: var(--accent); transition: width .35s var(--ease); }
+.lab-steps { display: grid; gap: .45rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
+.lab-step {
+  display: grid;
+  grid-template-columns: 1.8rem 1fr auto;
+  align-items: center;
+  gap: .7rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  font-size: .84rem;
+}
+.lab-step .ls-num { font-family: var(--font-mono); font-weight: 700; color: var(--faint); }
+.lab-step.is-done { border-color: rgba(5,150,105,.45); background: rgba(16,185,129,.06); }
+.lab-step.is-done .ls-num { color: #059669; }
+.lab-step .ls-state { font-family: var(--font-mono); font-size: .7rem; color: var(--faint); }
+.lab-step.is-done .ls-state { color: #059669; font-weight: 700; }
+
+/* Панель сдачи */
+.lab-submit { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 1.2rem; padding-top: 1.1rem; border-top: var(--flat-line); }
+.lab-score { font-family: var(--font-mono); font-weight: 800; font-size: 1.1rem; }
+.lab-score small { font-size: .7rem; color: var(--muted); font-weight: 500; }
+
+/* reduced-motion: плоский дизайн и так статичен, страхуем сдвиги */
+@media (prefers-reduced-motion: reduce) {
+  .flat-module:hover, .flat-btn:hover { transform: none; }
+  .lab-progress > i { transition: none; }
+}
+
+/* ==========================================================================
+   Админка · таблица и модалка приёма работ (квадратная система)
+   ========================================================================== */
+.sub-table-wrap { overflow-x: auto; border: 1px solid var(--border); }
+.sub-table { width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 720px; }
+.sub-table th, .sub-table td { padding: .6rem .7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.sub-table th {
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.sub-table tbody tr:hover { background: var(--surface-2); }
+.sub-actions { white-space: nowrap; }
+.sub-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  padding: .2rem .5rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: .8rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+}
+.sub-score.is-ok { color: #047857; border-color: rgba(5,150,105,.5); background: rgba(16,185,129,.08); }
+.sub-score.is-bad { color: #dc2626; border-color: rgba(220,38,38,.45); background: rgba(220,38,38,.06); }
+[data-theme="dark"] .sub-score.is-ok { color: #34d399; }
+
+.sub-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(12, 12, 14, .55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4vh 1rem;
+  overflow-y: auto;
+}
+.sub-modal[hidden] { display: none; }
+.sub-modal-box {
+  width: 100%;
+  max-width: 56rem;
+  background: var(--surface);
+  border: var(--flat-line, 2px solid var(--text));
+  border-radius: 2px;
+}
+.sub-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .8rem 1.1rem;
+  background: var(--text);
+  color: var(--bg);
+}
+.sub-modal-head .icon-btn { background: transparent; border: 1px solid rgba(255,255,255,.35); color: var(--bg); }
+.sub-modal-body { padding: 1.1rem; max-height: 76vh; overflow-y: auto; }
+.sub-detail-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .6rem; }
+.sub-code {
+  margin: .4rem 0 0;
+  padding: .9rem 1rem;
+  background: #101014;
+  color: #d4d4d8;
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  line-height: 1.6;
+  border-radius: 2px;
+  overflow-x: auto;
+  white-space: pre;
+}

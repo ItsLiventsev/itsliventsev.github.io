@@ -75,12 +75,19 @@ function pageInfo(rel, html) {
   if (dir === 'blog') { type = 'article'; schema = 'BlogPosting'; }
   else if (dir === 'articles' || dir === 'archive' || rel.startsWith('projects/')) {
     type = 'article'; schema = 'Article';
+  } else if (dir === 'stands' && rel !== 'stands/index.html') {
+    type = 'article'; schema = 'Article'; // лабораторный стенд — материал-инструкция
   } else if (rel === 'index.html') { schema = 'Home'; }
 
   // Хлебные крошки
   const sectionNames = { blog: 'блог', articles: 'статьи', archive: 'архив', projects: 'проекты' };
   const crumbs = [{ name: 'главная', url: SITE_URL + '/' }];
-  if (dir) {
+  if (dir === 'stands') {
+    // стенды — подраздел проектов: главная → проекты → каталог стендов → стенд
+    crumbs.push({ name: 'проекты', url: SITE_URL + '/projects.html' });
+    crumbs.push({ name: 'виртуальные стенды', url: SITE_URL + '/stands/index.html' });
+    if (rel !== 'stands/index.html') crumbs.push({ name: headline, url: abs(rel) });
+  } else if (dir) {
     crumbs.push({ name: sectionNames[dir] || dir, url: SITE_URL + '/' + dir + '.html' });
     crumbs.push({ name: headline, url: abs(rel) });
   }
