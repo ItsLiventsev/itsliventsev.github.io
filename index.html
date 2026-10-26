@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026f">
+<link rel="stylesheet" href="assets/site.css?v=20261026g">
 </head>
 <body class="bg-grid" data-accent="blue">
 
@@ -36,10 +36,10 @@
       <a href="#stack" class="nav-link" data-i18n="nav_stack">стек</a>
       <a href="#resources" class="nav-link" data-i18n="nav_materials">материалы</a>
       <a href="#cv" class="nav-link" data-i18n="nav_cv">опыт</a>
-      <a href="blog.html" class="nav-link"><span data-i18n="nav_blog">блог</span></a>
-      <a href="articles.html" class="nav-link"><span data-i18n="nav_articles">статьи</span></a>
-      <a href="projects.html" class="nav-link"><span data-i18n="nav_projects">проекты</span></a>
-      <a href="archive.html" class="nav-link" data-i18n="nav_archive">архив</a>
+      <a href="blog.html" class="nav-link"><span data-i18n="nav_blog">блог</span> <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="articles.html" class="nav-link"><span data-i18n="nav_articles">статьи</span> <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="projects.html" class="nav-link"><span data-i18n="nav_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="archive.html" class="nav-link" data-i18n="nav_archive">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </nav>
   
     <div class="header-actions">
@@ -55,8 +55,19 @@
 
   <!-- Hero -->
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">/</span>
+      <span class="bg-glyph">#</span>
+      <span class="bg-glyph">{ }</span>
+    </div>
     <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">itsliventsev</h1>
     <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="tagline">// заметки · статьи · проекты · учебные материалы</p>
+    <div class="quick-bubbles">
+      <a href="blog.html" class="quick-bubble"><span class="qb-glyph">~</span> <span data-i18n="qb_blog">блог</span> <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="articles.html" class="quick-bubble"><span class="qb-glyph">/</span> <span data-i18n="qb_articles">статьи</span> <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="projects.html" class="quick-bubble"><span class="qb-glyph">#</span> <span data-i18n="qb_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="archive.html" class="quick-bubble"><span class="qb-glyph">~</span> <span data-i18n="qb_archive">архив</span> <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
+    </div>
   </section>
 
   <!-- Stack -->
@@ -201,7 +212,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261026f"></script>
+<script src="assets/site.js?v=20261026g"></script>
 <script>
   /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami */
   document.querySelectorAll('.tech-tag').forEach(tag => {
@@ -246,6 +257,7 @@
     ru: {
       nav_stack: "стек", nav_materials: "материалы", nav_blog: "блог", nav_articles: "статьи",
       nav_projects: "проекты", nav_archive: "архив", nav_cv: "опыт",
+      qb_blog: "блог", qb_articles: "статьи", qb_projects: "проекты", qb_archive: "архив",
       tagline: "// заметки · статьи · проекты · учебные материалы",
       stack_title: "технический стек", cat_languages: "языки программирования", cat_infrastructure: "инфраструктура",
       cat_network: "сети и базы данных", cat_tools: "инструменты",
@@ -263,6 +275,7 @@
     en: {
       nav_stack: "stack", nav_materials: "materials", nav_blog: "blog", nav_articles: "articles",
       nav_projects: "projects", nav_archive: "archive", nav_cv: "experience",
+      qb_blog: "blog", qb_articles: "articles", qb_projects: "projects", qb_archive: "archive",
       tagline: "// notes · articles · projects · learning materials",
       stack_title: "tech stack", cat_languages: "programming languages", cat_infrastructure: "infrastructure",
       cat_network: "network & databases", cat_tools: "tools",

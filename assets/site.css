@@ -2391,3 +2391,193 @@ textarea.admin-input { resize: vertical; line-height: 1.6; }
   .admin-row { grid-template-columns: 1fr; }
   .admin-slug { flex-direction: column; align-items: stretch; }
 }
+
+/* ==========================================================================
+   26. Живая дизайн-система 2.0: баблы, глифы, ambient, колауты
+   ========================================================================== */
+
+/* --- Баблы-счётчики в навигации --- */
+.nav-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.18rem;
+  height: 1.18rem;
+  padding: 0 .36rem;
+  margin-left: .22rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--ghost-bg-strong);
+  border: 1px solid var(--ghost-border);
+  color: var(--faint);
+  transition: transform .25s var(--ease), background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+.nav-bubble:empty { display: none; }
+.nav-link:hover .nav-bubble.is-filled { transform: translateY(-1px) scale(1.08); }
+.nav-bubble.bubble-rose.is-filled    { background: rgba(244, 63, 94, .1);  border-color: rgba(244, 63, 94, .3);  color: #e11d48; }
+.nav-bubble.bubble-orange.is-filled  { background: rgba(234, 88, 12, .1);  border-color: rgba(234, 88, 12, .3);  color: #ea580c; }
+.nav-bubble.bubble-green.is-filled   { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .32); color: #059669; }
+.nav-bubble.bubble-blue.is-filled    { background: rgba(37, 99, 235, .1);  border-color: rgba(37, 99, 235, .3);  color: #2563eb; }
+:root[data-theme="dark"] .nav-bubble.bubble-rose.is-filled   { color: #fb7185; }
+:root[data-theme="dark"] .nav-bubble.bubble-orange.is-filled { color: #fb923c; }
+:root[data-theme="dark"] .nav-bubble.bubble-green.is-filled  { color: #34d399; }
+:root[data-theme="dark"] .nav-bubble.bubble-blue.is-filled   { color: #60a5fa; }
+@media (max-width: 880px) {
+  .nav-bubble { min-width: 1.35rem; height: 1.35rem; font-size: .68rem; }
+}
+
+/* --- Вращающаяся метка в заголовке: единый стиль --- */
+.title-mark, #title-mark {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+}
+.title-mark.blink { animation: blink 1.1s step-end infinite; }
+
+/* --- Гигантские водяные глифы в hero (/#, {}, >_) --- */
+.hero { position: relative; isolation: isolate; }
+.bg-glyphs {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-glyph {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  opacity: .07;
+  user-select: none;
+  animation: glyph-drift 16s ease-in-out infinite;
+}
+.bg-glyph:nth-child(1) { font-size: clamp(7rem, 18vw, 15rem); top: -2.5rem; right: 4%; }
+.bg-glyph:nth-child(2) { font-size: clamp(5rem, 12vw, 10rem); bottom: -2rem; right: 16%; animation-delay: -5s; animation-duration: 20s; opacity: .05; }
+.bg-glyph:nth-child(3) { font-size: clamp(3.5rem, 8vw, 6.5rem); top: 8%; right: 26%; animation-delay: -9s; animation-duration: 24s; opacity: .045; }
+@keyframes glyph-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
+  50% { transform: translate3d(-14px, 18px, 0) rotate(-2deg); }
+}
+
+/* --- Ambient-слой: размытые орбы и парящие моно-глифы на фоне --- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient .orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: .16;
+  animation: orb-drift 22s ease-in-out infinite;
+}
+.ambient .orb-1 { width: 420px; height: 420px; top: -120px; right: -80px; background: var(--accent); }
+.ambient .orb-2 { width: 340px; height: 340px; bottom: 8%; left: -120px; background: var(--accent); opacity: .1; animation-delay: -8s; animation-direction: reverse; }
+.ambient .ambient-glyph {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--accent);
+  opacity: .1;
+  animation: glyph-float 14s ease-in-out infinite;
+}
+.ambient .ambient-glyph:nth-child(3) { top: 18%; left: 6%; }
+.ambient .ambient-glyph:nth-child(4) { top: 46%; right: 7%; animation-delay: -4s; }
+.ambient .ambient-glyph:nth-child(5) { bottom: 14%; left: 12%; animation-delay: -9s; }
+@keyframes glyph-float {
+  0%, 100% { transform: translateY(0) rotate(-4deg); opacity: .08; }
+  50% { transform: translateY(-22px) rotate(3deg); opacity: .16; }
+}
+@media (max-width: 640px) {
+  .ambient .orb { opacity: .1; filter: blur(70px); }
+  .ambient .ambient-glyph { display: none; }
+}
+
+/* --- Колауты-баблы внутри текстов --- */
+.callout {
+  position: relative;
+  margin: 1.6rem 0;
+  padding: 1.15rem 1.35rem 1.15rem 3.4rem;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: .92rem;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+.callout::before {
+  content: attr(data-icon);
+  position: absolute;
+  left: 1.15rem;
+  top: 1.05rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: .95rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+}
+.callout strong { color: var(--text); }
+.callout-idea { border-color: var(--accent-border); background: color-mix(in srgb, var(--accent) 4%, var(--surface)); }
+.callout-warn { border-color: rgba(217, 119, 6, .3); background: rgba(217, 119, 6, .05); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Сноска-ссылка как мягкий бабл */
+.fn-ref {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35em;
+  height: 1.35em;
+  padding: 0 .3em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  transition: transform .2s var(--ease);
+}
+.fn-ref:hover { transform: translateY(-2px); text-decoration: none; }
+
+/* --- Ряд быстрых пузырей-разделов на главной --- */
+.quick-bubbles { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.4rem; }
+.quick-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  transition: transform .25s var(--ease), border-color .25s ease, box-shadow .25s ease;
+}
+.quick-bubble:hover { transform: translateY(-2px); border-color: var(--accent-border); box-shadow: var(--shadow-hover); }
+.quick-bubble .qb-glyph { font-family: var(--font-mono); color: var(--accent); font-weight: 700; }
+
+/* --- admin-ссылка: только строчными, без капители --- */
+.admin-link {
+  text-transform: none;
+  letter-spacing: .04em;
+  font-size: .68rem;
+}
+
+/* reduced-motion: новые анимации тоже замирают */
+@media (prefers-reduced-motion: reduce) {
+  .bg-glyph, .ambient .orb, .ambient .ambient-glyph { animation: none; }
+}

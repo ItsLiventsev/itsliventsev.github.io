@@ -12,9 +12,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261026f">
+<link rel="stylesheet" href="assets/site.css?v=20261026g">
 </head>
 <body class="bg-grid" data-accent="rose">
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
+
 
 <div class="scroll-progress" id="scroll-progress"></div>
 <button id="to-top" title="наверх" aria-label="наверх">🦀</button>
@@ -26,10 +35,10 @@
     <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
         <nav class="site-nav">
       <a href="index.html" class="nav-link">главная</a>
-      <a href="blog.html" class="nav-link active" aria-current="page">блог</a>
-      <a href="articles.html" class="nav-link">статьи</a>
-      <a href="projects.html" class="nav-link">проекты</a>
-      <a href="archive.html" class="nav-link">архив</a>
+      <a href="blog.html" class="nav-link active" aria-current="page">блог <span class="nav-bubble bubble-rose" data-feed-count="blog"></span></a>
+      <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </nav>
 
     <div class="header-actions">
@@ -42,10 +51,14 @@
 
   <!-- Hero -->
   <section class="hero reveal">
+    <div class="bg-glyphs" aria-hidden="true">
+      <span class="bg-glyph">/</span>
+      <span class="bg-glyph">#</span>
+    </div>
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
       <div class="flex-1">
         <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">
-          блог
+          блог<span class="title-mark" data-mark='["|","/","–","\\"]' data-mark-interval="350" style="min-width:1ch;">|</span>
         </h1>
         <p class="hero-sub text-xs sm:text-sm md:text-base">// заметки на полях · короткое и живое</p>
       </div>
@@ -96,6 +109,7 @@
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · блог</span>
+    <a href="admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 
 </div>
@@ -170,6 +184,6 @@
     });
 })();
 </script>
-<script src="assets/site.js?v=20261026f"></script>
+<script src="assets/site.js?v=20261026g"></script>
 </body>
 </html>
