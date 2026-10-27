@@ -464,6 +464,116 @@ a.flat-module:hover, a.flat-module:focus-visible {
 .st-footer a:hover { color: var(--st-accent-2); }
 
 /* --------------------------------------------------------------------------
+   6.1 Учебные цели — квадратный чек-лист
+   -------------------------------------------------------------------------- */
+.st-goals { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .6rem; margin: 0 0 2rem; padding: 0; list-style: none; }
+.st-goal {
+  display: grid; grid-template-columns: 1.5rem 1fr; gap: .7rem; align-items: start;
+  padding: .8rem .9rem;
+  background: var(--st-panel); border: 1px solid var(--st-line);
+  font-size: .86rem; line-height: 1.6; color: var(--st-text-2);
+}
+.st-goal::before {
+  content: ''; width: .85rem; height: .85rem; margin-top: .25rem;
+  border: 1px solid var(--st-accent); background: var(--st-accent-soft);
+}
+
+/* Теоретическая часть — аккордеоны в стиле стенда */
+.st-theory { display: grid; gap: .7rem; margin-bottom: 2rem; }
+.st-details { background: var(--st-panel); border: 1px solid var(--st-line); }
+.st-details[open] { border-color: var(--st-line-strong); }
+.st-details > summary {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .85rem 1.05rem; cursor: pointer; list-style: none;
+  font-family: var(--st-mono); font-size: .8rem; font-weight: 700;
+  letter-spacing: .06em; color: var(--st-text);
+  user-select: none;
+}
+.st-details > summary::-webkit-details-marker { display: none; }
+.st-details > summary::before {
+  content: '+'; color: var(--st-accent); font-size: 1.05rem; font-weight: 700;
+  width: 1rem; text-align: center;
+}
+.st-details[open] > summary::before { content: '–'; }
+.st-details > summary:hover { background: var(--st-panel-2); }
+.st-details .st-details-body {
+  padding: 0 1.05rem 1.05rem 2.75rem;
+  font-size: .88rem; line-height: 1.75; color: var(--st-text-2);
+}
+.st-details .st-details-body p { margin: 0 0 .7rem; }
+.st-details .st-details-body p:last-child { margin-bottom: 0; }
+.st-details .st-details-body strong { color: var(--st-text); }
+.st-details .st-details-body ul { margin: .3rem 0 .7rem; padding-left: 1.1rem; }
+.st-details .st-details-body li { margin-bottom: .3rem; }
+.st-details .st-details-body code { font-size: .78em; }
+
+/* Справка команд — жёсткая моно-таблица */
+.st-cmd-wrap { overflow-x: auto; border: 1px solid var(--st-line); margin-bottom: 2rem; }
+.st-cmd-table { width: 100%; border-collapse: collapse; min-width: 36rem; font-size: .82rem; }
+.st-cmd-table th, .st-cmd-table td { padding: .65rem .85rem; text-align: left; border-bottom: 1px solid var(--st-line); vertical-align: top; }
+.st-cmd-table tr:last-child td { border-bottom: none; }
+.st-cmd-table th {
+  background: var(--st-panel-2); color: var(--st-text-2);
+  font-family: var(--st-mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+}
+.st-cmd-table td:first-child { font-family: var(--st-mono); color: var(--st-accent-2); white-space: nowrap; }
+.st-cmd-table td:last-child { color: var(--st-muted); }
+
+/* --------------------------------------------------------------------------
+   6.2 Контрольный мини-тест
+   -------------------------------------------------------------------------- */
+.st-quiz { margin-top: var(--st-gap); }
+.q-item {
+  padding: .95rem 1.05rem; margin-bottom: .7rem;
+  background: var(--st-inset); border: 1px solid var(--st-line);
+}
+.q-title { display: flex; gap: .6rem; margin: 0 0 .7rem; font-weight: 700; font-size: .9rem; color: var(--st-text); line-height: 1.55; }
+.q-num { font-family: var(--st-mono); color: var(--st-accent); font-size: .8rem; padding-top: .1rem; }
+.q-opts { display: grid; gap: .4rem; }
+.q-opt {
+  display: flex; gap: .6rem; align-items: baseline;
+  padding: .55rem .7rem; border: 1px solid var(--st-line);
+  background: var(--st-panel); cursor: pointer;
+  font-size: .84rem; color: var(--st-text-2);
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.q-opt:hover { border-color: var(--st-line-strong); background: var(--st-panel-2); }
+.q-opt input { margin: 0; accent-color: var(--st-accent); }
+.q-opt.is-ok { border-color: rgba(52, 211, 153, .5); background: var(--st-ok-soft); color: var(--st-ok); }
+.q-opt.is-bad { border-color: rgba(248, 113, 113, .5); background: var(--st-bad-soft); color: var(--st-bad); }
+.q-explain { margin: .6rem 0 0; padding: .55rem .7rem; border-left: 2px solid var(--st-accent); background: var(--st-panel-2); font-family: var(--st-mono); font-size: .74rem; line-height: 1.65; color: var(--st-muted); }
+.q-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-top: .9rem; }
+.q-score { font-family: var(--st-mono); font-size: .76rem; color: var(--st-faint); }
+.q-score.is-ok { color: var(--st-ok); }
+.q-score.is-bad { color: var(--st-bad); }
+
+/* --------------------------------------------------------------------------
+   6.3 OVS: живая панель состояния коммутатора
+   -------------------------------------------------------------------------- */
+.ovs-status {
+  display: inline-block; padding: .3rem .7rem;
+  font-family: var(--st-mono); font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+  border: 1px solid var(--st-line-strong); color: var(--st-muted); background: var(--st-panel-2);
+}
+.ovs-status.is-ok { color: var(--st-ok); border-color: rgba(52, 211, 153, .45); background: var(--st-ok-soft); }
+.ovs-status.is-bad { color: var(--st-warn); border-color: rgba(251, 191, 36, .4); background: rgba(251, 191, 36, .07); }
+.st-port-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.st-port-table th, .st-port-table td { padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--st-line); vertical-align: middle; }
+.st-port-table th {
+  font-family: var(--st-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--st-faint); font-weight: 700;
+}
+.st-port-table tbody tr:last-child td { border-bottom: none; }
+.st-port-table tr.is-ok td { background: var(--st-ok-soft); }
+.st-port-table .ovs-na { color: var(--st-faint); font-family: var(--st-mono); font-size: .76rem; }
+.st-port-table .ovs-mark { font-family: var(--st-mono); font-weight: 800; color: var(--st-bad); }
+.st-port-table tr.is-ok .ovs-mark { color: var(--st-ok); }
+
+/* Двухзонная панель схемы/состояния */
+.ovs-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--st-gap); align-items: start; }
+@media (max-width: 980px) { .ovs-grid { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------------------------------------
    7. Адаптив
    -------------------------------------------------------------------------- */
 @media (max-width: 640px) {
