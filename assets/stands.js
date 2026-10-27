@@ -743,7 +743,7 @@
 
   /* ----------------------------- Появление блоков при скролле ----------------------------- */
   function initReveal() {
-    var blocks = document.querySelectorAll('.st-section-head, .lab-panel, .topo, .quiz-launch, .greet-card, .st-goals, .st-skills');
+    var blocks = document.querySelectorAll('.st-section-head, .lab-panel, .topo, .quiz-launch, .greet-card, .st-goals, .st-skills, .quest-card, .id-card, .flat-module, .skills-details, .flat-profile');
     if (!blocks.length) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var i = 0;
@@ -790,7 +790,7 @@
         '<p>Стенды прогреты, журнал открыт. Правило преподавателя Кирилла Александровича простое: ' +
         'сначала понять, что должно произойти, — потом вводить команду. Ошиблись? Разберитесь и сделайте снова — это и есть практика.</p>' +
         '<div class="greet-actions">' +
-          '<a class="flat-btn" href="#lp-stands">к рабочим задачам →</a>' +
+          '<a class="flat-btn" href="#cab-dashboard">к рабочим задачам →</a>' +
           '<button class="flat-btn ghost greet-close" type="button">свернуть</button>' +
         '</div>' +
       '</div>';

@@ -83,10 +83,13 @@
 
   /* ----------------------------- 02 · лестница ----------------------------- */
   function renderLadder() {
-    var xp = LEAGUE.totals(profile.id).xp;
+    var totals = LEAGUE.totals(profile.id);
+    var xp = totals.xp;
+    var currentLevel = totals.level.level;
     $('lg-ladder').innerHTML = LEAGUE.LEVELS.map(function (l) {
       var reached = xp >= l.need;
-      return '<div class="lg-step ' + (reached ? 'is-reached' : '') + '">' +
+      var isCurrent = l.level === currentLevel;
+      return '<div class="lg-step ' + (reached ? 'is-reached' : '') + (isCurrent ? ' is-current' : '') + '">' +
         '<span class="lg-step-lv">L' + l.level + '</span>' +
         '<span class="lg-step-name">' + esc(l.title) + '</span>' +
         '<span class="lg-step-need">' + l.need + ' XP</span>' +
