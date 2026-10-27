@@ -3,7 +3,7 @@
    SEO-сборщик статического сайта.
    Идемпотентно обогащает <head> всех индексируемых HTML и генерирует:
      - sitemap.xml  (абсолютные URL, приоритеты, lastmod из дат постов)
-     - feed.xml     (RSS 2.0: блог + статьи)
+     - feed.xml     (RSS 2.0: заметки + статьи)
    Встраиваемый блок помечен маркерами SEO:AUTO — повторный запуск
    заменяет блок, а не дублирует теги. Ручные og:/twitter: meta удаляются
    и пересобираются внутри блока.
@@ -80,7 +80,7 @@ function pageInfo(rel, html) {
   } else if (rel === 'index.html') { schema = 'Home'; }
 
   // Хлебные крошки
-  const sectionNames = { blog: 'блог', articles: 'статьи', archive: 'архив', projects: 'проекты' };
+  const sectionNames = { blog: 'заметки', articles: 'статьи', archive: 'архив', projects: 'проекты' };
   const crumbs = [{ name: 'главная', url: SITE_URL + '/' }];
   if (dir === 'stands') {
     // стенды — подраздел проектов: главная → проекты → каталог стендов → стенд
@@ -148,7 +148,7 @@ function buildBlock(rel, info) {
   lines.push('<link rel="icon" type="image/png" sizes="192x192" href="' + SITE_URL + '/assets/icon-192.png">');
   lines.push('<link rel="apple-touch-icon" href="' + SITE_URL + '/assets/apple-touch-icon.png">');
   lines.push('<link rel="manifest" href="' + SITE_URL + '/site.webmanifest">');
-  lines.push('<link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="' + SITE_URL + '/feed.xml">');
+  lines.push('<link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="' + SITE_URL + '/feed.xml">');
 
   // Open Graph
   lines.push(`<meta property="og:type" content="${info.type}">`);
@@ -265,7 +265,7 @@ feedItems.sort((a, b) => b.date.localeCompare(a.date));
 const rss = ['<?xml version="1.0" encoding="UTF-8"?>',
   '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
   '  <channel>',
-  '    <title>itsliventsev — блог и статьи</title>',
+  '    <title>itsliventsev — заметки и статьи</title>',
   `    <link>${SITE_URL}/</link>`,
   '    <description>Заметки, статьи и учебные материалы по сетям, системному администрированию и IT-образованию.</description>',
   '    <language>ru-RU</language>',
@@ -276,7 +276,7 @@ const rss = ['<?xml version="1.0" encoding="UTF-8"?>',
     `      <link>${esc(i.url)}</link>`,
     `      <guid isPermaLink="true">${esc(i.url)}</guid>`,
     `      <pubDate>${rfc822(i.date)}</pubDate>`,
-    `      <category>${esc(i.dir === 'blog' ? 'блог' : 'статьи')}</category>`,
+    `      <category>${esc(i.dir === 'blog' ? 'заметки' : 'статьи')}</category>`,
     `      <description>${esc(i.desc)}</description>`,
     '    </item>',
   ].join('\n')),
