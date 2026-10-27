@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>ДатаПолис · сервисный центр · учебная вселенная itsliventsev</title>
+<meta name="description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/site.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261026v">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/index.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="ДатаПолис · сервисный центр · учебная вселенная itsliventsev">
+  <meta property="og:description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/ops/index.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ДатаПолис · сервисный центр · учебная вселенная itsliventsev">
+  <meta name="twitter:description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ДатаПолис · сервисный центр · учебная вселенная itsliventsev","description":"Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.","url":"https://itsliventsev.github.io/stands/ops/index.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/ops/index.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"ДатаПолис · сервисный центр · учебная вселенная itsliventsev","item":"https://itsliventsev.github.io/stands/ops/index.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope ops-scope" data-accent="teal">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: сервисный центр работает только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">ДатаПолис · сервисный центр</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация сервисного центра">
+      <a href="../index.html">вселенные</a>
+      <a href="../setpolis.html" rel="nofollow">СетьПолис</a>
+      <a href="index.html" aria-current="page">консоль</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="переключить тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">учебные вселенные</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">ДатаПолис</span>
+    </nav>
+
+    <div class="st-hero">
+      <span class="st-hero-index">02</span>
+      <div>
+        <p class="ops-kicker">учебная вселенная · эксплуатация и администрирование</p>
+        <h1>сервисный центр «ДатаПолис»</h1>
+        <p class="st-hero-lead">Если СетьПолис — это про построить сеть, то ДатаПолис — про то, чтобы она работала каждый день: заявки пользователей, инциденты, изменения с планом отката, дежурства, мониторинг и честный разбор без поиска виноватых.</p>
+        <div class="st-hero-meta">
+          <span>платформа: <strong>ALT Server / Workstation ~70%</strong></span>
+          <span><strong>Windows Server / 10–11 ~30%</strong></span>
+          <span>хранение: <strong>изолировано от СетьПолиса</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Гейт профиля -->
+    <section id="gate" class="lab-panel" hidden style="max-width:46rem;">
+      <div class="lp-head"><span>выход на смену · пропуск инженера</span><span class="kind-badge">профиль</span></div>
+      <div class="lp-body">
+        <form class="flat-form" id="gate-form">
+          <div class="flat-field">
+            <label for="p-name">ФИО</label>
+            <input class="flat-input" id="p-name" type="text" autocomplete="name" placeholder="Иванов Иван Иванович" required>
+          </div>
+          <div class="flat-field">
+            <label for="p-group">учебная группа</label>
+            <input class="flat-input" id="p-group" type="text" placeholder="ИС-21, СА-22…" list="group-list" required>
+            <datalist id="group-list"><option value="ИС-21"></option><option value="ИС-22"></option><option value="СА-21"></option></datalist>
+          </div>
+          <div class="flat-field">
+            <label>маскот-инженер (можно сменить позже)</label>
+            <div id="mascot-host"></div>
+            <p style="margin:0;font-size:.76rem;color:var(--st-muted);">Хэндл вида «волк #7» — ваше имя в тикетах и разборах.</p>
+          </div>
+          <button class="flat-btn" type="submit">выйти на смену →</button>
+          <p id="gate-msg" role="status" style="color:var(--st-bad);font-family:var(--st-mono);font-size:.78rem;min-height:1em;margin:0;"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Кабинет -->
+    <div id="dash" hidden>
+      <div class="flat-profile" id="lab-profile">
+        <span class="fp-name" id="fp-name">—</span>
+        <span class="fp-group" id="fp-group">—</span>
+        <span class="fp-spacer"></span>
+        <button class="flat-btn ghost" id="profile-change" type="button">изменить ФИО / группу</button>
+      </div>
+
+      <div class="cab-grid" style="margin-top:1rem;">
+        <aside>
+          <div id="id-card"></div>
+        </aside>
+        <section>
+          <div class="role-ribbon" id="role-ribbon"></div>
+          <div class="ops-statusbar">
+            <span><span class="ops-dot"></span>сервис <b>в работе</b></span>
+            <span>смена: <b id="duty-day">—</b></span>
+            <span>экипаж закреплён за профилем</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="st-section-head">
+        <span class="st-section-num">01</span>
+        <h2>метрики сервиса</h2>
+        <span class="st-section-tag">SLA без штрафов</span>
+      </div>
+      <div class="sla-grid" id="sla-grid"></div>
+
+      <div class="st-section-head" style="margin-top:2rem;">
+        <span class="st-section-num">02</span>
+        <h2>доска заявок и инцидентов</h2>
+        <span class="st-section-tag">kanban</span>
+      </div>
+      <div class="ops-board" id="board"></div>
+
+      <div class="st-section-head" style="margin-top:2rem;">
+        <span class="st-section-num">03</span>
+        <h2>роадмап эксплуатации</h2>
+        <span class="st-section-tag">5 спринтов · 14 работ</span>
+      </div>
+      <div id="roadmap"></div>
+
+      <div class="st-section-head" style="margin-top:2rem;">
+        <span class="st-section-num">04</span>
+        <h2>обмен артефактами</h2>
+        <span class="st-section-tag">без сервера</span>
+      </div>
+      <section class="lab-panel">
+        <div class="lp-body">
+          <p style="margin:0 0 .7rem;font-size:.85rem;color:var(--st-text-2);">
+            Коды <code>ITS-SD1</code> (заявка), <code>ITS-INC1</code> (инцидент), <code>ITS-CHG1</code> (изменение),
+            <code>ITS-RCA1</code> (postmortem), <code>ITS-RUN1</code> (runbook). Вставьте один или несколько по строке.
+          </p>
+          <div class="exchange-grid">
+            <textarea class="flat-input" id="code-input" rows="3" placeholder="ITS-INC1.…&#10;ITS-RUN1.…"></textarea>
+            <div class="exchange-row">
+              <p class="exchange-msg" id="code-msg" role="status"></p>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                <button class="flat-btn" id="code-go" type="button">принять коды</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="st-section-head" style="margin-top:2rem;">
+        <span class="st-section-num">05</span>
+        <h2>лента смены</h2>
+        <span class="st-section-tag">последние награды</span>
+      </div>
+      <section class="lab-panel"><div id="feed"></div></section>
+
+      <p class="uni-footnote mono" style="margin-top:1.4rem;">
+        Пасхалка для своих: коллеги из СетьПолиса — лис Итан и краб Клешня — уже строили здесь сеть.
+        В ДатаПолисе вы принимаете её на сопровождение: их конфиги встретятся в заявках и runbook.
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · ДатаПолис</span>
+    <span>runtime: browser · backend: none · storage: localStorage (ops-*)</span>
+  </footer>
+</div>
+
+<script src="../../assets/mascots.js?v=20261026v"></script>
+<script src="../../assets/ops-engine.js?v=20261026v"></script>
+<script src="../../assets/stands.js?v=20261026v"></script>
+<script src="../../assets/ops-hub.js?v=20261026v"></script>
+</body>
+</html>

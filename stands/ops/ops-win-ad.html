@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>Windows AD · подразделения и групповые политики · ДатаПолис · itsliventsev</title>
+<meta name="description" content="AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/site.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261026v">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-win-ad.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Windows AD · подразделения и групповые политики · ДатаПолис · itsliventsev">
+  <meta property="og:description" content="AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/ops/ops-win-ad.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Windows AD · подразделения и групповые политики · ДатаПолис · itsliventsev">
+  <meta name="twitter:description" content="AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Windows AD · подразделения и групповые политики · ДатаПолис","description":"AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.","url":"https://itsliventsev.github.io/stands/ops/ops-win-ad.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/ops/ops-win-ad.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Windows AD · подразделения и групповые политики · ДатаПолис","item":"https://itsliventsev.github.io/stands/ops/ops-win-ad.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope ops-scope" data-accent="teal">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторная сервисного центра работает только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html"><span class="st-brand-mark">←</span><span>itsliventsev</span><span class="st-brand-sep">/</span><span class="st-brand-sub">ДатаПолис</span></a>
+    <nav class="st-topnav" aria-label="Навигация сервисного центра">
+      <a href="index.html">консоль</a>
+      <a href="../index.html">вселенные</a>
+      <a href="../setpolis.html" rel="nofollow">СетьПолис</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="переключить тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">вселенные</a><span aria-hidden="true">/</span>
+      <a href="index.html">ДатаПолис</a><span aria-hidden="true">/</span>
+      <span aria-current="page">Windows AD · подразделения и групповые политик</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к консоли</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">2</span>
+      <div>
+        <p class="ops-kicker">спринт 2 · Учёт</p>
+        <h1>Windows AD · подразделения и групповые политики</h1>
+        <p class="st-hero-lead">AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.</p>
+        <div class="st-hero-meta">
+          <span>формат: <strong>индивидуально · сравнение каталогов</strong></span>
+          <span>примерно <strong>5 ч</strong></span>
+          <span>начисление: <strong>80 неткоинов</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="ops-root"></div>
+  </main>
+  <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span><span>lab: ops-win-ad · autosave: on</span></footer>
+</div>
+
+<script src="../../assets/mascots.js?v=20261026v"></script>
+<script src="../../assets/ops-engine.js?v=20261026v"></script>
+<script src="../../assets/stands.js?v=20261026v"></script>
+<script type="application/json" id="ops-data">{"id": "ops-win-ad", "sprint": 2, "hours": "5 ч", "coins": "80", "mascot": "cat", "who": "кот Мурр — про гибридный каталог", "title": "Windows AD · подразделения и групповые политики", "lead": "AD DS, организационные подразделения и GPO: тот же каталог глазами Windows-инженера.", "story": "Часть заказчиков работает на Windows AD. Чтобы поддерживать обе платформы, нужно понимать «родной» Active Directory: организационные подразделения (OU), групповые политики (GPO) и наследование. Вы сравните логику с Samba AD и поймёте, почему концепции одни, а инструменты разные.", "theory": [{"h": "OU и структура каталога", "p": "Организационные подразделения структурируют объекты по отделам и локациям — это контейнеры для применения политик и делегирования. OU — не группа безопасности: группа выдаёт права, OU организует объекты.", "code": "New-ADOrganizationalUnit -Name \"NOC\" -Path \"DC=datapolis,DC=local\"\nNew-ADUser -Name \"Petrov\" -Path \"OU=NOC,DC=datapolis,DC=local\""}, {"h": "Групповые политики GPO", "p": "GPO централизованно настраивает клиентов: требования к паролю, запреты, скрипты входа, аудит. Политики привязываются к сайтам, доменам или OU и наследуются.", "code": "Get-GPO -All\nNew-GPO -Name \"NOC-Baseline\" | New-GPLink -Target \"OU=NOC,DC=datapolis,DC=local\""}, {"h": "Гибридность с Samba AD", "p": "Samba AD понимает протоколы AD, поэтому концепции OU, групп и Kerberos переносятся между платформами. Различаются инструменты и часть тонких настроек GPO.", "note": "Сравнение — ключ к профессии: работодатели ценят тех, кто видит общую модель, а не заучивает кнопки."}], "commands": [{"linux": "samba-tool ou list", "windows": "Get-ADOrganizationalUnit -Filter *", "what": "список подразделений"}, {"linux": "samba-tool user add --ou", "windows": "New-ADUser -Path OU=...", "what": "создание пользователя в OU"}, {"linux": "через групповые политики Samba GPO", "windows": "New-GPO / New-GPLink", "what": "создание и привязка политики"}, {"linux": "samba-tool gpo listall", "windows": "Get-GPO -All", "what": "перечень политик"}, {"linux": "samba-tool user setexpiry", "windows": "Set-ADAccountExpiration", "what": "срок действия учётки"}, {"linux": "journalctl -u samba", "windows": "Get-EventLog Directory Service", "what": "журналы каталога"}], "tasks": [{"id": "t1", "text": "Поднимите роль AD DS и создайте лес datapolis.local на Windows Server"}, {"id": "t2", "text": "Создайте OU под четыре экипажа и разместите в них тестовые учётки"}, {"id": "t3", "text": "Создайте GPO базовой линии: сложность пароля, блокировка экрана, аудит входа"}, {"id": "t4", "text": "Привяжите политику к OU и проверьте применение gpresult /r на клиенте"}, {"id": "t5", "text": "Настройте делегирование: старший дежурный может сбрасывать пароли в своей OU"}, {"id": "t6", "text": "Составьте таблицу соответствия команд Samba AD и PowerShell AD"}, {"id": "t7", "text": "Опишите порядок отката ошибочной GPO (отключение ссылки)"}], "ticket": {"type": "change", "priority": "P2", "title": "Ввести OU и базовые GPO в Windows AD", "text": "Упорядочить каталог заказчика: подразделения по экипажам и базовые политики безопасности. Изменение применяется к рабочим станциям, поэтому обязателен план отката через отключение ссылки GPO.", "deliverables": ["Структура OU и тестовые пользователи", "Рабочая GPO с подтверждением gpresult", "Таблица соответствия Samba/Windows и план отката"]}, "runbook": {"title": "Ввод групповой политики", "steps": ["Создать GPO и привязать к тестовому OU", "Проверить применение на пилотной станции", "Развернуть на боевой OU с окном работ", "Откатить отключением ссылки при проблеме"]}, "quiz": [{"q": "Чем OU отличается от группы безопасности?", "options": ["Ничем", "OU организует объекты и применяет политики, группа выдаёт права", "Группа только для почты", "OU нельзя удалить"], "answer": 1, "explain": "OU — контейнер структуры и GPO, группа — средство авторизации."}, {"q": "Как быстро откатить неудачную GPO?", "options": ["Переустановить сервер", "Отключить ссылку GPO на OU", "Удалить всех пользователей", "Очистить корзину"], "answer": 1, "explain": "Unlink/Disable GPO мгновенно прекращает применение политики."}, {"q": "Какая команда показывает применённые политики на клиенте?", "options": ["gpresult /r", "ipconfig /gpo", "whoami /all only", "dir gpo"], "answer": 0, "explain": "gpresult /r отображает применённые GPO и членство в группах."}, {"q": "Что общего у Samba AD и Windows AD?", "options": ["Только цвет иконок", "Протоколы LDAP/Kerberos, OU, группы, единая модель каталога", "Ничего, это несовместимо", "Samba не знает про OU"], "answer": 1, "explain": "Samba AD реализует протоколы Active Directory, модели совместимы."}], "reflection": ["Когда GPO мощнее ручной настройки каждой станции?", "Чем опасна политика, привязанная к корню домена?", "Как объяснить разницу OU и группы новичку одним примером?"], "sprintTitle": "Учёт"}</script>
+<script src="../../assets/ops-kit.js?v=20261026v"></script>
+</body>
+</html>

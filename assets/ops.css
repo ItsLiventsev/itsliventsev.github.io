@@ -1,0 +1,128 @@
+/* ==========================================================================
+   OPS · вселенная «ДатаПолис»: эксплуатационная console-эстетика
+   Поверх site.css + stands.css. Сдержаннее и «взрослее» СетьПолиса:
+   тикеты, SLA, дежурные роли, статус-строки как в сервисной компании.
+   ========================================================================== */
+
+/* Акцент вселенной — teal вместо синего, плюс служебные цвета приоритетов */
+.flat-scope.ops-scope { --st-accent: #0d9488; --st-accent-2: #2dd4bf; --st-accent-soft: rgba(13, 148, 136, .1); }
+
+.ops-kicker { font-family: var(--st-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--st-accent-2); }
+
+/* Лента-статус сервисного центра */
+.ops-statusbar {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; align-items: center;
+  border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-panel-2); padding: .7rem 1rem; margin: 1rem 0 1.4rem;
+  font-family: var(--st-mono); font-size: .74rem; color: var(--st-muted);
+}
+.ops-statusbar b { color: var(--st-text); font-weight: 700; }
+.ops-dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: var(--st-ok); margin-right: .35rem; box-shadow: 0 0 0 3px rgba(52,211,153,.15); }
+.ops-dot.is-warn { background: var(--st-warn); box-shadow: 0 0 0 3px rgba(251,191,36,.15); }
+
+/* Бейджи приоритета и типа */
+.sev { font-family: var(--st-mono); font-size: .68rem; font-weight: 700; padding: .18rem .55rem; border-radius: 6px; border: 1px solid transparent; white-space: nowrap; }
+.sev-P1 { color: #fca5a5; background: rgba(248,113,113,.12); border-color: rgba(248,113,113,.4); }
+.sev-P2 { color: #fdba74; background: rgba(251,146,60,.12); border-color: rgba(251,146,60,.38); }
+.sev-P3 { color: #fde68a; background: rgba(250,204,21,.1); border-color: rgba(250,204,21,.34); }
+.sev-P4 { color: var(--st-muted); background: var(--st-panel-2); border-color: var(--st-line); }
+.kind-badge { font-family: var(--st-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--st-accent-2); border: 1px solid var(--st-line); border-radius: 6px; padding: .18rem .5rem; background: var(--st-panel-2); }
+
+/* Роль дежурного */
+.role-ribbon {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  border: 1px solid color-mix(in srgb, var(--st-accent) 35%, var(--st-line));
+  background: linear-gradient(180deg, var(--st-accent-soft), var(--st-panel));
+  border-radius: var(--st-radius); padding: .9rem 1.1rem; margin-bottom: 1.2rem;
+}
+.role-ribbon .rr-label { font-family: var(--st-mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--st-muted); }
+.role-ribbon .rr-name { font-weight: 800; color: var(--st-text); font-size: 1.02rem; }
+.role-ribbon .rr-note { color: var(--st-muted); font-size: .82rem; flex: 1 1 100%; }
+.role-ribbon .flat-btn { margin-left: auto; }
+
+/* Карточка тикета */
+.ticket-card { border-left: 3px solid var(--st-accent); }
+.ticket-card.tk-incident { border-left-color: #f87171; }
+.ticket-card.tk-change { border-left-color: #fbbf24; }
+.ticket-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .7rem; }
+.ticket-head h3 { margin: 0; font-size: .98rem; color: var(--st-text); }
+.ticket-meta { display: flex; flex-wrap: wrap; gap: .4rem .9rem; font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); margin: .6rem 0; }
+.ticket-state { font-family: var(--st-mono); font-size: .72rem; font-weight: 700; padding: .2rem .6rem; border-radius: 6px; }
+.ticket-state.is-open { color: #fca5a5; background: rgba(248,113,113,.1); }
+.ticket-state.is-progress { color: #fde68a; background: rgba(250,204,21,.1); }
+.ticket-state.is-resolved { color: var(--st-ok); background: var(--st-ok-soft); }
+
+/* SLA-метр */
+.sla-meter { display: flex; align-items: center; gap: .8rem; margin-top: .7rem; }
+.sla-meter .xp-bar { flex: 1 1 auto; margin: 0; }
+.sla-meter span.sla-num { font-family: var(--st-mono); font-size: .74rem; color: var(--st-text-2); white-space: nowrap; }
+
+/* Доска заявок на хабе */
+.ops-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
+@media (max-width: 900px) { .ops-board { grid-template-columns: 1fr; } }
+.ops-column { border: 1px solid var(--st-line); border-radius: var(--st-radius); background: var(--st-panel); overflow: hidden; }
+.ops-column-head { display: flex; justify-content: space-between; align-items: center; padding: .7rem .9rem; background: var(--st-panel-2); border-bottom: 1px solid var(--st-line); font-family: var(--st-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--st-text-2); }
+.ops-column-head .count { background: var(--st-panel); border: 1px solid var(--st-line); border-radius: 999px; padding: .05rem .5rem; }
+.ops-column-body { padding: .7rem; display: grid; gap: .6rem; min-height: 4rem; }
+.ops-ticket-mini { border: 1px solid var(--st-line); border-radius: 8px; padding: .65rem .75rem; background: var(--st-panel-2); font-size: .8rem; }
+.ops-ticket-mini h4 { margin: .35rem 0 .3rem; font-size: .84rem; color: var(--st-text); }
+.ops-ticket-mini p { margin: 0; font-size: .74rem; color: var(--st-muted); line-height: 1.5; }
+.ops-empty { border: 1px dashed var(--st-line-strong); border-radius: 8px; padding: 1.1rem; text-align: center; color: var(--st-muted); font-size: .78rem; }
+
+/* Метрики SLA */
+.sla-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .8rem; }
+.sla-stat { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .9rem 1rem; background: var(--st-panel-2); }
+.sla-stat b { display: block; font-family: var(--st-mono); font-size: 1.5rem; color: var(--st-accent-2); margin-bottom: .25rem; }
+.sla-stat span { font-size: .74rem; color: var(--st-muted); }
+
+/* Runbook-шаги */
+.runbook-editor textarea { font-family: var(--st-sans); line-height: 1.6; }
+.runbook-step { display: flex; gap: .7rem; align-items: flex-start; padding: .55rem 0; border-bottom: 1px dashed var(--st-line); }
+.runbook-step:last-child { border-bottom: none; }
+.runbook-step .rs-num { font-family: var(--st-mono); color: var(--st-accent-2); font-size: .76rem; min-width: 2.2rem; }
+.runbook-step p { margin: 0; font-size: .82rem; color: var(--st-text-2); line-height: 1.55; }
+
+/* Блок blameless postmortem */
+.rca-box { border-left: 3px solid #fbbf24; }
+.rca-fields { display: grid; gap: .8rem; }
+.rca-fields label { font-size: .8rem; font-weight: 600; color: var(--st-text-2); }
+.blameless-note { display: flex; gap: .6rem; align-items: flex-start; background: var(--st-accent-soft); border: 1px solid color-mix(in srgb, var(--st-accent) 30%, var(--st-line)); border-radius: var(--st-radius); padding: .7rem .9rem; font-size: .8rem; color: var(--st-text-2); }
+
+/* Windows/Linux маркеры в шпаргалке */
+.os-tag { font-family: var(--st-mono); font-size: .64rem; padding: .1rem .45rem; border-radius: 5px; letter-spacing: .06em; }
+.os-tag.linux { color: #2dd4bf; background: rgba(45,212,191,.1); }
+.os-tag.windows { color: #93c5fd; background: rgba(147,197,253,.1); }
+
+/* Карточки экипажей на хабе */
+.crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem; }
+.crew-card { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: 1rem; background: var(--st-panel-2); position: relative; overflow: hidden; }
+.crew-card.is-mine { border-color: color-mix(in srgb, var(--st-accent) 45%, var(--st-line)); background: linear-gradient(180deg, var(--st-accent-soft), var(--st-panel-2)); }
+.crew-card .crew-glyph { font-family: var(--st-mono); font-weight: 800; font-size: .8rem; letter-spacing: .08em; }
+.crew-card h3 { margin: .5rem 0 .35rem; font-size: .95rem; color: var(--st-text); }
+.crew-card p { margin: 0; font-size: .78rem; color: var(--st-muted); line-height: 1.55; }
+
+/* Две кнопки-портала вселенных уже в stands.css (.uni-*); здесь только спокойный hover для консоли */
+.ops-scope .flat-btn { letter-spacing: .02em; }
+
+/* Пикер маскота в гейте хаба (ДатаПолис использует свой класс .mascot-picker) */
+.mascot-picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: .5rem 0 .8rem; }
+.mascot-opt {
+  display: flex; align-items: center; justify-content: center;
+  padding: .55rem .3rem; border-radius: var(--st-radius);
+  border: 1px solid var(--st-line); background: var(--st-panel-2);
+  cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+.mascot-opt:hover { border-color: var(--st-accent); }
+.mascot-opt:focus-visible { outline: 2px solid var(--st-accent-2); outline-offset: 2px; }
+.mascot-opt.is-selected { border-color: var(--st-accent); background: var(--st-accent-soft); }
+.mascot-opt .mc-svg { width: 40px; height: 40px; }
+.mascot-opt .mc-float { animation: none; }
+
+/* Подписи полей и контейнер теории лабораторной */
+.flat-label { display: block; margin: 0 0 .35rem; font-family: var(--st-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--st-text-2); }
+.lab-theory { display: flex; flex-direction: column; gap: .2rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ops-dot { box-shadow: none; }
+  .p-card, .crew-card, .ops-ticket-mini, .mascot-opt { transition: none; }
+}
