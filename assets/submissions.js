@@ -168,7 +168,7 @@
         '<td class="mono" style="font-size:.78rem;">' +
           (s.autotests ? 'АТ ' + esc(s.autotests.passed + '/' + s.autotests.total) + ' · ' : '') +
           (s.quiz && s.quiz.done ? 'тест ' + esc(s.quiz.correct) : 'тест —') +
-          '<br><span style="color:var(--muted);">пиринг ' + peer + ' · эксперт ' + expert + '</span></td>' +
+          '<br><span style="color:var(--muted);">взаимная оценка ' + peer + ' · эксперт ' + expert + '</span></td>' +
         '<td class="mono" style="color:var(--muted);">' + fmtDate(s.submittedAt) + '</td>' +
         '<td class="sub-actions">' +
           '<button class="btn btn-sm" type="button" data-open="' + esc(s.id) + '">открыть</button> ' +

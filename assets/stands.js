@@ -1,7 +1,7 @@
 /* ==========================================================================
    Виртуальные стенды · клиентское приложение (v3)
    Кабинет студента вселенной «СетьПолис»: профиль с маскотом-хэндлом,
-   квесты-стенды, обмен кодами ITS-LAB1/ITS-REV1 без сервера, пиринг с
+   квесты-стенды, обмен кодами ITS-LAB1/ITS-REV1 без сервера, взаимные проверки с
    PRP-очками, светлая/тёмная тема, онбординг, presence, автосейв ВМ.
    ========================================================================== */
 (function () {
@@ -207,7 +207,7 @@
     strip.className = 'xp-strip';
     strip.id = 'xp-strip';
     strip.innerHTML =
-      '<span class="xp-handle" title="ваш хэндл в пиринге">' + mascotSvg(profile.mascotId, 22, false) + ' ' + esc(handle) + '</span>' +
+      '<span class="xp-handle" title="ваш хэндл во взаимных оценках">' + mascotSvg(profile.mascotId, 22, false) + ' ' + esc(handle) + '</span>' +
       '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
       '<div class="xp-bar" title="опыт до следующего уровня"><i style="width:' + t.level.progress + '%"></i></div>' +
       '<span class="xp-meta">' + t.xp + ' XP</span>' +
@@ -229,17 +229,20 @@
     if (!box || !hasFgos()) return;
     var spec = window.FGOS.STANDS[standId];
     if (!spec) return;
-    function chips(codes) {
-      return '<div class="st-code-chips">' + codes.map(function (code) {
+    function cards(codes) {
+      return '<div class="skill-grid">' + codes.map(function (code) {
         var c = window.FGOS.byCode(code);
-        return '<span class="st-code" title="' + esc(c ? c.title : code) + '"><b>' + esc(code) + '</b></span>';
+        var task = c && c.title ? c.title : code;
+        return '<div class="skill-card"><div class="skill-card-head">' +
+          '<span class="skill-task">' + esc(task) + '</span>' +
+          '<span class="skill-bubble">' + esc(code) + '</span></div></div>';
       }).join('') + '</div>';
     }
     box.innerHTML =
       '<div class="st-skill-group"><h3>профессиональные компетенции · ФГОС СПО ' + esc(window.FGOS.SPECIALTY.split(' ')[0]) + '</h3>' +
-      chips(spec.pk) +
+      cards(spec.pk) +
       '<ul class="st-practical">' + spec.skills.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>' +
-      '<div class="st-skill-group"><h3>общие компетенции</h3>' + chips(spec.ok) +
+      '<div class="st-skill-group"><h3>общие компетенции</h3>' + cards(spec.ok) +
       '<p style="margin:.4rem 0 0;font-size:.78rem;color:var(--st-muted);">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден в личном кабинете.</p></div>';
   }
 
@@ -261,7 +264,7 @@
       }).join('');
   }
 
-  /* ----------------------------- Обмен кодами (ядро пиринга без сервера) ----------------------------- */
+  /* ----------------------------- Обмен кодами (ядро взаимных проверок без сервера) ----------------------------- */
   function processCodes(text) {
     var L = window.LEAGUE;
     var report = { subs: 0, reviews: 0, errors: [] };
@@ -402,7 +405,7 @@
                   return '<button type="button" data-n="' + n + '" aria-label="' + n + ' из 5">★</button>';
                 }).join('') + '</div></div>';
             }).join('') + '</div>' +
-            '<textarea class="flat-input rv-comment" placeholder="Доброжелательный конструктивный комментарий: что хорошо, что улучшить (по методике «равный равному»)"></textarea>' +
+            '<textarea class="flat-input rv-comment" placeholder="Доброжелательный конструктивный комментарий: что хорошо, что можно улучшить"></textarea>' +
             '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">' +
             '<button class="flat-btn rv-save" type="button">отправить оценку</button>' +
             '<button class="flat-btn ghost rv-cancel" type="button">отмена</button></div></div>';
@@ -581,6 +584,7 @@
     function renderDashboard(profile) {
       gate.hidden = true;
       dashboard.hidden = false;
+      initGreeting(profile);
       var L = window.LEAGUE;
       L.dailyLogin(profile.id);
       var t = L.totals(profile.id);
@@ -602,7 +606,7 @@
           '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
           '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;">' +
           '<a class="flat-btn ghost" href="league.html" style="text-decoration:none;">моя лига и достижения →</a>' +
-          '<a class="flat-btn ghost" href="teams.html" style="text-decoration:none;">трайн и турниры</a>' +
+          '<a class="flat-btn ghost" href="teams.html" style="text-decoration:none;">трайн и команды</a>' +
           '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div>';
 
       $('cab-quests').innerHTML = QUESTS.map(function (q) {
@@ -737,26 +741,201 @@
     Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
   }
 
-  /* ----------------------------- Mermaid ----------------------------- */
-  function initMermaid() {
-    if (!window.mermaid || !document.querySelector('.mermaid')) return;
-    try {
-      window.mermaid.initialize({
-        startOnLoad: false,
-        theme: 'base',
-        securityLevel: 'loose',
-        flowchart: { curve: 'linear', htmlLabels: true },
-        themeVariables: {
-          darkMode: true, background: '#12161b', primaryColor: '#171d23', primaryBorderColor: '#5b9dff',
-          primaryTextColor: '#e7ecf2', lineColor: '#8a95a1', secondaryColor: '#171d23',
-          tertiaryColor: '#0c1014',
-          fontFamily: 'JetBrains Mono, ui-monospace, monospace', fontSize: '13px'
-        }
+  /* ----------------------------- Появление блоков при скролле ----------------------------- */
+  function initReveal() {
+    var blocks = document.querySelectorAll('.st-section-head, .lab-panel, .topo, .quiz-launch, .greet-card, .st-goals, .st-skills');
+    if (!blocks.length) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i = 0;
+    blocks.forEach(function (el) {
+      if (el.classList.contains('reveal')) return;
+      el.classList.add('reveal');
+      if (i % 4) el.classList.add('d' + ((i % 4) + 1));
+      i++;
+    });
+    if (typeof IntersectionObserver === 'undefined') {
+      blocks.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
       });
-      window.mermaid.run({ nodes: [document.querySelector('.mermaid')] })
-        .then(function () { var fb = $('schema-fallback'); if (fb) fb.hidden = true; })
-        .catch(function () {});
-    } catch (e) {}
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    blocks.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ----------------------------- Приветствие маскота в кабинете ----------------------------- */
+  function dayGreeting() {
+    var h = new Date().getHours();
+    if (h < 6) return 'доброй ночи';
+    if (h < 12) return 'доброе утро';
+    if (h < 18) return 'добрый день';
+    return 'добрый вечер';
+  }
+
+  function initGreeting(profile) {
+    var dashboard = $('cab-dashboard');
+    if (!dashboard || !profile) return;
+    if (dashboard.previousElementSibling && dashboard.previousElementSibling.classList.contains('greet-card')) return;
+    var today = new Date().toISOString().slice(0, 10);
+    var flag = Store.get('stands-greet');
+    var mascotId = profile.mascotId || (window.LEAGUE && window.LEAGUE.MASCOTS[0].id) || 'raccoon';
+    var card = document.createElement('section');
+    card.className = 'greet-card' + (flag && flag.date === today ? ' is-dismissed' : '');
+    card.innerHTML =
+      '<div class="greet-mascot" aria-hidden="true">' + mascotSvg(mascotId, 56, true) + '</div>' +
+      '<div class="greet-body">' +
+        '<h2>' + esc(dayGreeting()) + ', ' + esc(profile.name.split(' ')[0]) + '!</h2>' +
+        '<p>Стенды прогреты, журнал открыт. Правило преподавателя Кирилла Александровича простое: ' +
+        'сначала понять, что должно произойти, — потом вводить команду. Ошиблись? Разберитесь и сделайте снова — это и есть практика.</p>' +
+        '<div class="greet-actions">' +
+          '<a class="flat-btn" href="#lp-stands">к рабочим задачам →</a>' +
+          '<button class="flat-btn ghost greet-close" type="button">свернуть</button>' +
+        '</div>' +
+      '</div>';
+    dashboard.parentNode.insertBefore(card, dashboard);
+    card.querySelector('.greet-close').addEventListener('click', function () {
+      card.classList.add('is-dismissed');
+      Store.set('stands-greet', { date: today });
+    });
+  }
+
+  /* ----------------------------- Модальное окно контрольного теста ----------------------------- */
+  function initQuizModal(getQuizState) {
+    var modal = $('quiz-modal');
+    var openBtn = $('btn-quiz-open');
+    var closeBtn = $('quiz-modal-close');
+    var hint = $('quiz-launch-hint');
+    if (!modal || !openBtn) return;
+
+    var lore = modal.querySelector('.quiz-modal-lore');
+    if (!lore) {
+      lore = document.createElement('p');
+      lore.className = 'quiz-modal-lore';
+      lore.innerHTML = 'Самопроверка, а не экзамен: ошиблись — вернитесь к стенду, разберитесь и пройдите ещё раз.';
+      modal.querySelector('#lab-quiz').parentNode.insertBefore(lore, modal.querySelector('#lab-quiz'));
+    }
+
+    function syncHint() {
+      if (!hint || !getQuizState) return;
+      var st = getQuizState();
+      if (st && st.done) {
+        hint.textContent = 'Прошлое прохождение: ' + st.correct + '/5. Откройте тест, чтобы разобрать ответы или пройти заново.';
+      }
+    }
+    function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
+    function close() { modal.hidden = true; document.body.style.overflow = ''; }
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+    var quizBox = modal.querySelector('#lab-quiz');
+    if (quizBox && typeof MutationObserver !== 'undefined') {
+      var mo = new MutationObserver(function () { syncHint(); });
+      mo.observe(quizBox, { childList: true, subtree: true });
+    }
+    syncHint();
+    return { syncHint: syncHint };
+  }
+
+  /* ----------------------------- Интерактивная топология стендов ----------------------------- */
+  var TOPO = {
+    'dhcp-alt': {
+      build: function () {
+        return '<div class="topo-grid">' +
+          '<div class="topo-row"><span class="topo-plate" data-node="wan"><b>WAN</b><small>внешняя сеть · NAT enp0s3</small></span></div>' +
+          '<div class="topo-row"><span class="topo-link" data-link="wan-srv"></span></div>' +
+          '<div class="topo-row"><span class="topo-plate" data-node="srv"><b>ALT Server</b><small>DHCP + NAT · 192.168.10.1</small></span></div>' +
+          '<div class="topo-row topo-fan"><span class="topo-link" data-link="srv-ws1"></span><span class="topo-link" data-link="srv-ws2"></span><span class="topo-link" data-link="srv-prn"></span></div>' +
+          '<div class="topo-row topo-fan">' +
+            '<span class="topo-plate" data-node="ws1"><b>WS 1</b><small>ALT Workstation · DHCP-клиент</small></span>' +
+            '<span class="topo-plate" data-node="ws2"><b>WS 2</b><small>статический IP</small></span>' +
+            '<span class="topo-plate" data-node="prn"><b>Принтер</b><small>резерв .50 по MAC</small></span>' +
+          '</div></div>' +
+          '<div class="topo-legend"><span><i class="dot is-on"></i>узел активен</span><span><i class="dot is-done"></i>настроен верно</span><span><i class="dot"></i>ожидает настройки</span></div>';
+      },
+      update: function (host, result) {
+        var ok = function (id) { var c = result.checks.find(function (x) { return x.id === id; }); return !!(c && c.ok); };
+        var states = {
+          wan: { on: true, done: ok('subnet') },
+          srv: { on: ok('subnet') || ok('range'), done: ok('subnet') && ok('range') && ok('routers') && ok('dns') },
+          ws1: { on: ok('range'), done: !!result.ready },
+          ws2: { on: ok('routers'), done: ok('authoritative') },
+          prn: { on: ok('reservation'), done: ok('reservation') && !!result.ready }
+        };
+        var links = {
+          'wan-srv': states.srv.on,
+          'srv-ws1': states.srv.on,
+          'srv-ws2': states.srv.on && states.ws2.on,
+          'srv-prn': states.prn.on
+        };
+        Object.keys(states).forEach(function (n) {
+          var el = host.querySelector('[data-node="' + n + '"]');
+          if (!el) return;
+          el.classList.toggle('is-on', states[n].on);
+          el.classList.toggle('is-done', states[n].done);
+        });
+        Object.keys(links).forEach(function (l) {
+          var el = host.querySelector('[data-link="' + l + '"]');
+          if (el) el.classList.toggle('is-on', links[l]);
+        });
+      }
+    },
+    'switch-ovs': {
+      build: function () {
+        return '<div class="topo-grid">' +
+          '<div class="topo-row"><span class="topo-plate" data-node="up"><b>Вышестоящий коммутатор</b><small>магистральная сеть</small></span></div>' +
+          '<div class="topo-row"><span class="topo-link" data-link="up-br"></span></div>' +
+          '<div class="topo-row"><span class="topo-plate" data-node="br"><b>Open vSwitch · br0</b><small>ovs-vswitchd · OVSDB</small></span></div>' +
+          '<div class="topo-row topo-fan"><span class="topo-link" data-link="br-e1"></span><span class="topo-link" data-link="br-e2"></span><span class="topo-link" data-link="br-e3"></span></div>' +
+          '<div class="topo-row topo-fan">' +
+            '<span class="topo-plate" data-node="e1"><b>eth1</b><small>ПК продаж · access VLAN 10</small></span>' +
+            '<span class="topo-plate" data-node="e2"><b>eth2</b><small>бухгалтерия · access VLAN 20</small></span>' +
+            '<span class="topo-plate" data-node="e3"><b>eth3</b><small>аплинк · trunk 10,20</small></span>' +
+          '</div></div>' +
+          '<div class="topo-legend"><span><i class="dot is-on"></i>порт поднят</span><span><i class="dot is-done"></i>настроен по заданию</span><span><i class="dot"></i>порт свободен</span></div>';
+      },
+      update: function (host, result, world) {
+        var st = world.state();
+        var SPEC = OVS.SPEC;
+        var brOn = !!st.bridge;
+        var brDone = brOn && st.enabled;
+        var nodeStates = { up: { on: true, done: brDone }, br: { on: brOn, done: brDone } };
+        var linkStates = { 'up-br': brOn };
+        SPEC.ifaces.forEach(function (name, i) {
+          var key = 'e' + (i + 1);
+          var p = st.ports[name];
+          var want = SPEC.ports[name];
+          var on = !!p;
+          var done = false;
+          if (p && p.trunks) done = want.role === 'trunk' && want.vlans.every(function (v) { return p.trunks.indexOf(v) !== -1; });
+          else if (p && p.tag != null) done = want.role === 'access' && want.vlan === p.tag;
+          nodeStates[key] = { on: on, done: done };
+          linkStates['br-' + key] = on;
+        });
+        Object.keys(nodeStates).forEach(function (n) {
+          var el = host.querySelector('[data-node="' + n + '"]');
+          if (!el) return;
+          el.classList.toggle('is-on', nodeStates[n].on);
+          el.classList.toggle('is-done', nodeStates[n].done);
+        });
+        Object.keys(linkStates).forEach(function (l) {
+          var el = host.querySelector('[data-link="' + l + '"]');
+          if (el) el.classList.toggle('is-on', linkStates[l]);
+        });
+      }
+    }
+  };
+
+  function mountTopology(standId) {
+    var host = $('lab-topo');
+    if (!host || !TOPO[standId]) return null;
+    host.innerHTML = TOPO[standId].build();
+    return host;
+  }
+  function updateTopology(standId, host, result, world) {
+    if (host && TOPO[standId]) TOPO[standId].update(host, result, world);
   }
 
   /* ----------------------------- Общий каркас стенда ----------------------------- */
@@ -839,12 +1018,16 @@
 
     editor.value = world.getConfig();
     var quizApi = mountQuiz($('lab-quiz'), DHCP.QUIZ, saved && saved.quiz, autosave);
+    var topoHost = mountTopology('dhcp-alt');
+    var quizModal = initQuizModal(function () { return quizApi ? quizApi.getState() : null; });
 
     var lastResult = null;
     function runValidation(quiet) {
       world.setConfig(editor.value);
       var result = world.validate();
       lastResult = result;
+      updateTopology('dhcp-alt', topoHost, result, world);
+      if (quizModal) quizModal.syncHint();
       checkBox.innerHTML = result.checks.map(function (c) {
         return '<div class="lab-check ' + (c.ok ? 'is-ok' : 'is-bad') + '">' +
           '<span class="lc-mark">' + (c.ok ? '✓' : '×') + '</span>' +
@@ -958,7 +1141,7 @@
       };
       if (hasLeague()) {
         window.LEAGUE.addSubmission(submission);
-        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на пиринг: ' + standId);
+        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на взаимную проверку: ' + standId);
         grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
         refreshXpStrip();
         renderReviewArea(standId);
@@ -1019,6 +1202,9 @@
     else term.print('help', 'введите help — покажем список команд виртуальной машины', false);
 
     var quizApi = mountQuiz($('lab-quiz'), OVS.QUIZ, saved && saved.quiz, autosave);
+    var topoHost = mountTopology('switch-ovs');
+    var quizModal = initQuizModal(function () { return quizApi ? quizApi.getState() : null; });
+    var prevPortOk = {};
 
     function renderState() {
       var state = world.state();
@@ -1038,17 +1224,33 @@
           fact = 'access · VLAN ' + p.tag;
           ok = want.role === 'access' && want.vlan === p.tag;
         } else fact = 'порт без VLAN';
-        return '<tr class="' + (ok ? 'is-ok' : '') + '">' +
+        var justCameAlive = ok && !prevPortOk[name];
+        return '<tr class="' + (ok ? 'is-ok' : '') + (justCameAlive ? ' ovs-port-flash' : '') + '" data-port="' + name + '">' +
           '<td class="mono">' + esc(name) + '</td><td>' + esc(want.label) + '</td>' +
           '<td class="mono">' + want.role + ' · ' + (want.vlans ? want.vlans.join(',') : want.vlan) + '</td>' +
           '<td class="mono">' + fact + '</td><td class="ovs-mark">' + (ok ? '✓' : '×') + '</td></tr>';
       }).join('');
+      OVS.SPEC.ifaces.forEach(function (name) {
+        var row = portsBody.querySelector('tr[data-port="' + name + '"]');
+        if (row && row.classList.contains('ovs-port-flash')) {
+          setTimeout(function () { row.classList.remove('ovs-port-flash'); }, 1200);
+        }
+        var p = state.ports[name];
+        prevPortOk[name] = !!(p && (function () {
+          var want = OVS.SPEC.ports[name];
+          if (p.trunks) return want.role === 'trunk' && want.vlans.every(function (v) { return p.trunks.indexOf(v) !== -1; });
+          if (p.tag != null) return want.role === 'access' && want.vlan === p.tag;
+          return false;
+        })());
+      });
     }
 
     var lastResult = null;
     function runValidation(quiet) {
       var result = world.validate();
       lastResult = result;
+      updateTopology('switch-ovs', topoHost, result, world);
+      if (quizModal) quizModal.syncHint();
       checkBox.innerHTML = result.checks.map(function (c) {
         return '<div class="lab-check ' + (c.ok ? 'is-ok' : 'is-bad') + '">' +
           '<span class="lc-mark">' + (c.ok ? '✓' : '×') + '</span>' +
@@ -1156,7 +1358,7 @@
       };
       if (hasLeague()) {
         window.LEAGUE.addSubmission(submission);
-        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на пиринг: ' + standId);
+        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на взаимную проверку: ' + standId);
         grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
         refreshXpStrip();
         renderReviewArea(standId);
@@ -1184,7 +1386,7 @@
     initCabinet();
     initDhcpLab();
     initOvsLab();
-    initMermaid();
+    initReveal();
     initStepSpy();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
