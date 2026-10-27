@@ -468,15 +468,18 @@ a.flat-module:hover, a.flat-module:focus-visible {
    -------------------------------------------------------------------------- */
 .st-goals { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .6rem; margin: 0 0 2rem; padding: 0; list-style: none; }
 .st-goal {
-  display: grid; grid-template-columns: 1.5rem 1fr; gap: .7rem; align-items: start;
+  display: flex; gap: .7rem; align-items: flex-start;
   padding: .8rem .9rem;
   background: var(--st-panel); border: 1px solid var(--st-line);
   font-size: .86rem; line-height: 1.6; color: var(--st-text-2);
 }
 .st-goal::before {
-  content: ''; width: .85rem; height: .85rem; margin-top: .25rem;
+  content: ''; flex: 0 0 auto;
+  width: .85rem; height: .85rem; margin-top: .25rem;
   border: 1px solid var(--st-accent); background: var(--st-accent-soft);
 }
+/* внутри flex-строки code остаётся инлайновым и переносится по словам, а не по буквам */
+.st-goal code { white-space: normal; overflow-wrap: break-word; }
 
 /* Теоретическая часть — аккордеоны в стиле стенда */
 .st-theory { display: grid; gap: .7rem; margin-bottom: 2rem; }
