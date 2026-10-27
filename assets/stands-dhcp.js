@@ -1,16 +1,16 @@
 /* ==========================================================================
    Виртуальные стенды · стенд DHCP (ALT Server / ALT Workstation)
-   Чистая логика без DOM: задания, проверка конфига dhcpd.conf, эмулятор
-   терминала. UMD-обёртка: работает и в браузере (window.DHCP), и в Node
-   (module.exports) — поэтому покрывается юнит-тестами без jsdom.
+   Логика без DOM. Терминал исполняется виртуальной машиной os-engine.js:
+   ФС (/etc/dhcp/dhcpd.conf, leases, resolv.conf), пакеты, служба dhcp-server,
+   динамические journalctl-логи, аренды dhclient, коды возврата, sudo опционален.
+   UMD: браузер (window.DHCP) и Node (юнит-тесты).
    ========================================================================== */
 (function (root, factory) {
-  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
-  else root.DHCP = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory(require('./os-engine.js'));
+  else root.DHCP = factory(root.OSEngine);
+})(typeof self !== 'undefined' ? self : this, function (OSEngine) {
   'use strict';
 
-  // Параметры сети стенда (легенда: новый отдел, сеть 192.168.10.0/24)
   var NET = {
     subnet: '192.168.10.0',
     netmask: '255.255.255.0',
@@ -19,10 +19,12 @@
     rangeEnd: '192.168.10.200',
     printerMac: '00:11:22:33:44:55',
     printerIp: '192.168.10.50',
-    iface: 'enp0s8'
+    iface: 'enp0s8',
+    dns: ['8.8.8.8', '1.1.1.1']
   };
+  var UNIT = 'dhcp-server';
+  var PKG = 'dhcp-server';
 
-  // Шаблон «сломанного» конфига для ситуационной задачи (bug report)
   var BROKEN_CONFIG = [
     '# /etc/dhcp/dhcpd.conf — версия с ошибкой',
     'default-lease-time 600;',
@@ -36,7 +38,6 @@
     '}'
   ].join('\n');
 
-  // Стартовый шаблон для студента
   var STARTER_CONFIG = [
     '# /etc/dhcp/dhcpd.conf',
     '# Заполните блоки по заданиям 02–05. Кнопка «проверить» подскажет, чего не хватает.',
@@ -48,6 +49,25 @@
     '',
     '# TODO задание 05: резервирование принтера (host printer)',
     ''
+  ].join('\n');
+
+  /* Эталонный валидный конфиг — на нём строятся автотесты и подсказки */
+  var GOOD_CONFIG = [
+    '# /etc/dhcp/dhcpd.conf — эталонная конфигурация стенда',
+    'default-lease-time 600;',
+    'max-lease-time 7200;',
+    'authoritative;',
+    '',
+    'subnet ' + NET.subnet + ' netmask ' + NET.netmask + ' {',
+    '  range ' + NET.rangeStart + ' ' + NET.rangeEnd + ';',
+    '  option routers ' + NET.gateway + ';',
+    '  option domain-name-servers ' + NET.dns.join(', ') + ';',
+    '}',
+    '',
+    'host printer {',
+    '  hardware ethernet ' + NET.printerMac + ';',
+    '  fixed-address ' + NET.printerIp + ';',
+    '}'
   ].join('\n');
 
   function normMac(s) { return String(s || '').toLowerCase().replace(/[^0-9a-f]/g, ''); }
@@ -68,8 +88,6 @@
     return (a & m) === (n & m);
   }
 
-  /* Проверки конфигурации. Каждая возвращает {ok, hint} — обратная связь
-     в духе логов CI: зелёная галочка или конкретная причина отказа. */
   var CHECKS = [
     {
       id: 'syntax', title: 'Синтаксис: фигурные скобки сбалансированы, строки завершаются «;»',
@@ -173,103 +191,263 @@
     };
   }
 
-  /* Эмулятор терминала. Только whitelist-команды — безопасно и предсказуемо.
-     Возвращает {out, ok, event}. event пишется в журнал действий студента. */
-  var TERMINAL = {
-    welcome: 'ALT Server (стенд Codespaces) · введите «help» для списка команд',
-    commands: {
-      help: function () {
-        return { out: [
-          'доступные команды стенда:',
-          '  sudo apt-get install <пакет>   установка пакета',
-          '  sudo systemctl <действие> <служба>',
-          '  mcedit /etc/dhcp/dhcpd.conf    редактор конфига (на стенде — поле выше)',
-          '  dhclient -v ' + NET.iface + '          запрос адреса на клиенте',
-          '  ip -c a                        список интерфейсов и адресов',
-          '  journalctl -u dhcp-server      логи службы DHCP',
-          '  clear                          очистить терминал'
-        ].join('\n') };
+  /* ----------------------------- Виртуальная машина ----------------------------- */
+  function createWorld(snapshot) {
+    var os = OSEngine.createOS({
+      hostname: 'alt',
+      user: 'student',
+      editorMessage: 'на этом стенде конфиг правится в панели «редактор» (/etc/dhcp/dhcpd.conf синхронизирован с ней)',
+      helpExtra: [
+        '  стенд DHCP:  mcedit /etc/dhcp/dhcpd.conf, dhclient -v ' + NET.iface,
+        '               systemctl status ' + UNIT + ', journalctl -u ' + UNIT
+      ],
+      initFs: function (vfs) {
+        vfs.mkdirp('/etc/dhcp');
+        vfs.mkdirp('/var/lib/dhcpd');
+        vfs.write('/etc/dhcp/dhcpd.conf', STARTER_CONFIG);
+        vfs.write('/etc/hostname', 'alt-server\n');
+        vfs.write('/etc/hosts', '127.0.0.1 localhost\n' + NET.gateway + ' alt-server\n');
+        vfs.write('/etc/resolv.conf', 'nameserver ' + NET.dns[0] + '\nnameserver ' + NET.dns[1] + '\n');
+        vfs.write('/var/lib/dhcpd/dhcpd.leases', '# формат ISC dhcpd.leases — аренды появляются после dhclient\n');
       },
-      'sudo apt-get install isc-dhcp-server': function () { return install(); },
-      'sudo apt-get install dhcp-server': function () { return install(); },
-      'apt-get install isc-dhcp-server': function () { return { out: 'нужен sudo: операция требует прав root', ok: false }; },
-      'sudo systemctl start isc-dhcp-server': function () { return svc('start', 'isc-dhcp-server'); },
-      'sudo systemctl start dhcp-server': function () { return svc('start', 'dhcp-server'); },
-      'sudo systemctl enable --now dhcp-server': function () { return svc('enable', 'dhcp-server'); },
-      'sudo systemctl status dhcp-server': function () { return status(); },
-      'journalctl -u dhcp-server': function () { return logs(); },
-      'ip -c a': function () { return ipAddr(); },
-      'ip a': function () { return ipAddr(); },
-      ['dhclient -v ' + NET.iface]: function (ctx) { return dhclient(ctx); },
-      clear: function () { return { clear: true }; }
-    }
-  };
+      resolvePackage: function (pkg) {
+        if (/dhcp/.test(pkg)) return { package: PKG, service: UNIT, version: '4.4.3-alt1', hint: 'подсказка: ' + UNIT + ' настраивается в /etc/dhcp/dhcpd.conf' };
+        if (pkg === 'nano' || pkg === 'mc') return { package: pkg, service: pkg, version: 'alt1', hint: '' };
+        return { package: pkg, service: pkg, version: '1.0-alt1', hint: '' };
+      },
+      journal: journal,
+      renderIp: renderIp,
+      ping: ping,
+      dns: dns,
+      commands: {
+        dhclient: { usage: 'dhclient [-v] ' + NET.iface, help: 'запросить адрес по DHCP на клиенте', run: cmdDhclient },
+        mcedit: { usage: 'mcedit /etc/dhcp/dhcpd.conf', help: 'редактор (на стенде — панель редактора)', run: editorCmd },
+        nano: { usage: 'nano /etc/dhcp/dhcpd.conf', help: 'редактор (на стенде — панель редактора)', run: editorCmd },
+        vim: { usage: 'vim /etc/dhcp/dhcpd.conf', help: 'редактор (на стенде — панель редактора)', run: editorCmd },
+        vi: { usage: 'vi /etc/dhcp/dhcpd.conf', help: 'редактор (на стенде — панель редактора)', run: editorCmd }
+      }
+    }, snapshot);
 
-  function install() {
-    return { out: 'Чтение списков пакетов… Готово\n' +
-      'dhcp-server (ISC Kea/legacy isc-dhcp) установлен\n' +
-      'подсказка: включите службу — sudo systemctl enable --now dhcp-server',
-      event: { type: 'terminal', msg: 'установлен пакет DHCP-сервера' } };
-  }
-  function svc(action, name) {
-    return {
-      out: action === 'enable'
-        ? 'Created symlink → dhcp-server.service; служба запущена'
-        : 'Служба ' + name + ' запущена (см. journalctl -u dhcp-server)',
-      event: { type: 'terminal', msg: 'служба ' + name + ': ' + action }
-    };
-  }
-  function status() {
-    return { out: '● dhcp-server.service — active (running)\n   Loaded: loaded; Main PID: 2048 (dhcpd)\n   Listening on ' + NET.iface + '/0.0.0.0:67' };
-  }
-  function logs() {
-    return { out: [
-      'dhcpd: Internet Systems Consortium DHCP Server',
-      'dhcpd: For consistency, lease file was parsed',
-      'dhcpd: Listening on LPF/' + NET.iface + '/0a:00:27:00:00:08/24',
-      'dhcpd: Sending on   LPF/' + NET.iface + '/192.168.10.0/24',
-      'dhcpd: Server starting service.'
-    ].join('\n') };
-  }
-  function ipAddr() {
-    return { out: [
-      '1: lo: <LOOPBACK,UP> mtu 65536',
-      '    inet 127.0.0.1/8',
-      '2: ' + NET.iface + ': <BROADCAST,MULTICAST,UP,UPLOWER_UP> mtu 1500',
-      '    inet ' + NET.gateway + '/24 brd 192.168.10.255 scope global ' + NET.iface,
-      '3: enp0s3: <BROADCAST,MULTICAST,UP> mtu 1500',
-      '    inet 10.0.2.15/24 (NAT/WAN)'
-    ].join('\n') };
-  }
-  function dhclient(ctx) {
-    // Успех выдачи адреса зависит от готовности конфига (если контекст передан)
-    var ready = ctx && ctx.ready === true;
-    if (!ready) {
+    os.service(UNIT).installed = false;
+
+    function svc() { return os.service(UNIT); }
+    function currentConfig() { return os.vfs.read('/etc/dhcp/dhcpd.conf') || ''; }
+    function setConfig(text) { os.vfs.write('/etc/dhcp/dhcpd.conf', String(text)); }
+    function validation() { return validateDhcpConfig(currentConfig()); }
+
+    function journal(state, unit, mode) {
+      var s = svc();
+      if (unit && unit !== UNIT) return { out: '-- No entries -- для ' + unit, code: 0 };
+      if (!s.installed) return { out: 'Unit ' + UNIT + '.service could not be found.', code: 5, isErr: true };
+      if (!s.active) {
+        return {
+          out: '○ ' + UNIT + '.service — DHCPv4 Server Daemon\n   Loaded: loaded (/lib/systemd/system/' + UNIT + '.service; disabled)\n   Active: inactive (dead)',
+          code: 0
+        };
+      }
+      var v = validation();
+      if (!v.ready) {
+        var failed = v.checks.filter(function (c) { return !c.ok; }).slice(0, 3);
+        var lines = [
+          'dhcpd[812]: Internet Systems Consortium DHCP Server 4.4.3',
+          'dhcpd[812]: /etc/dhcp/dhcpd.conf:'
+        ];
+        failed.forEach(function (c, i) { lines.push('dhcpd[812]:   ошибка: ' + c.hint); });
+        lines.push('dhcpd[812]: Configuration file errors encountered -- exiting');
+        lines.push('systemd[1]: ' + UNIT + '.service: Failed with result \'exit-code\'.');
+        return { out: lines.join('\n'), code: 0 };
+      }
+      var lines = [
+        'dhcpd[942]: Internet Systems Consortium DHCP Server 4.4.3',
+        'dhcpd[942]: For consistency, lease file was parsed',
+        'dhcpd[942]: Listening on LPF/' + NET.iface + '/0a:00:27:00:00:08/24',
+        'dhcpd[942]: Sending on   LPF/' + NET.iface + '/' + NET.subnet + '/24',
+        'dhcpd[942]: Server starting service.'
+      ];
+      state.leases.forEach(function (l) {
+        lines.push('dhcpd[942]: DHCPACK on ' + l.ip + ' to ' + l.mac + ' (' + (l.hostname || 'client') + ') via ' + NET.iface);
+      });
+      if (mode === 'status') {
+        return {
+          out: '● ' + UNIT + '.service — active (running)\n   Loaded: loaded; Main PID: 942 (dhcpd)\n   Active: active since ' + new Date(state.bootAt).toLocaleString('ru-RU') + '\n   Listening on ' + NET.iface + '/0.0.0.0:67\n\n' + lines.slice(-5).join('\n'),
+          code: 0
+        };
+      }
+      return { out: lines.join('\n'), code: 0 };
+    }
+
+    function renderIp(state, kind) {
+      if (kind === 'route') {
+        return {
+          out: [
+            'default via ' + NET.gateway + ' dev ' + NET.iface,
+            NET.subnet + '/24 dev ' + NET.iface + ' proto kernel scope link',
+            '10.0.2.0/24 dev enp0s3 proto kernel scope link'
+          ].join('\n'), code: 0
+        };
+      }
+      if (kind === 'link') {
+        return {
+          out: ['1: lo: <LOOPBACK,UP>', '2: enp0s3: <BROADCAST,MULTICAST,UP> mtu 1500', '3: ' + NET.iface + ': <BROADCAST,MULTICAST,UP> mtu 1500'].join('\n'), code: 0
+        };
+      }
+      var rows = [
+        '1: lo: <LOOPBACK,UP> mtu 65536',
+        '    inet 127.0.0.1/8',
+        '2: enp0s3: <BROADCAST,MULTICAST,UP> mtu 1500',
+        '    inet 10.0.2.15/24 (NAT/WAN)',
+        '3: ' + NET.iface + ': <BROADCAST,MULTICAST,UP,UPLOWER_UP> mtu 1500',
+        '    inet ' + NET.gateway + '/24 brd 192.168.10.255 scope global ' + NET.iface
+      ];
+      state.leases.forEach(function (l) {
+        rows.push('    inet ' + l.ip + '/24 scope global secondary ' + NET.iface + '  # dhcp lease ' + l.mac);
+      });
+      return { out: rows.join('\n'), code: 0 };
+    }
+
+    function ping(host, n) {
+      if (/\.local$/.test(host) || host === 'printer.offline') {
+        return { out: 'ping: ' + host + ': Name or service not known', code: 2, isErr: true };
+      }
+      var ip = /^[0-9.]+$/.test(host) ? host : '192.168.10.1';
+      var rows = [];
+      for (var i = 0; i < n; i++) rows.push('64 bytes from ' + ip + ': icmp_seq=' + (i + 1) + ' ttl=64 time=0.4' + i + ' ms');
+      rows.push('--- ' + host + ' ping statistics ---\n' + n + ' packets transmitted, ' + n + ' received, 0% packet loss');
+      return { out: rows.join('\n'), code: 0 };
+    }
+
+    function dns(host) {
+      if (/\.local$/.test(host)) return { out: ';; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN', code: 1, isErr: true };
+      var ip = host === 'google.com' ? '8.8.8.8' : '192.168.10.20';
+      return { out: ';; ANSWER SECTION:\n' + host + '. 300 IN A ' + ip + '\n;; status: NOERROR', code: 0 };
+    }
+
+    function editorCmd(a) {
+      var file = a.positionals[0] || '/etc/dhcp/dhcpd.conf';
+      return { out: '[' + file + '] ' + (a.name || 'редактор') + ': ' +
+        (file === '/etc/dhcp/dhcpd.conf'
+          ? 'файл синхронизирован с панелью «редактор» — правьте конфиг там'
+          : 'используйте панель редактора на стенде') };
+    }
+
+    function cmdDhclient(a, state) {
+      var iface = a.positionals.filter(function (p) { return p.charAt(0) !== '-'; })[0] || NET.iface;
+      if (iface !== NET.iface) return { out: 'dhclient: интерфейс ' + iface + ' не найден (доступен ' + NET.iface + ')', code: 1, isErr: true };
+      var s = svc();
+      if (!s.installed) return { out: 'dhclient: DHCP-сервер стенда ещё не установлен (apt-get install ' + PKG + ')', code: 1, isErr: true };
+      var v = validation();
+      if (!s.active || !v.ready) {
+        return {
+          code: 1, isErr: true,
+          out: 'Internet Systems Consortium DHCP Client 4.4.3\nDHCPDISCOVER on ' + NET.iface + ' to 255.255.255.255 port 67 interval 3\nDHCPDISCOVER on ' + NET.iface + ' to 255.255.255.255 port 67 interval 7\nNo DHCPOFFERS received.\nпохоже, сервер ещё не раздаёт адреса — проверьте dhcpd.conf и службу',
+          event: { type: 'terminal', msg: 'dhclient: попытка без готового конфига' }
+        };
+      }
+      var mac = '08:00:27:ab:1c:' + (10 + state.leases.length).toString(16);
+      var lease = { ip: NET.rangeStart, mac: mac, hostname: 'alt-ws-' + (state.leases.length + 1), at: new Date().toISOString() };
+      state.leases = state.leases || [];
+      state.leases.push(lease);
+      os.vfs.write('/var/lib/dhcpd/dhcpd.leases',
+        'lease ' + lease.ip + ' {\n  starts 2 ' + new Date().toUTCString() + ';\n  hardware ethernet ' + mac + ';\n  client-hostname "' + lease.hostname + '";\n}\n', true);
       return {
-        ok: false,
-        out: 'dhclient: DHCPDISCOVER on ' + NET.iface + ' … no DHCPOFFERS received.\n' +
-             'похоже, сервер ещё не раздаёт адреса — проверьте dhcpd.conf и службу',
-        event: { type: 'terminal', msg: 'dhclient: попытка без готового конфига' }
+        out: 'Internet Systems Consortium DHCP Client 4.4.3\n' +
+          'DHCPDISCOVER on ' + NET.iface + ' to 255.255.255.255 port 67\n' +
+          'DHCPOFFER of ' + NET.rangeStart + ' from ' + NET.gateway + '\n' +
+          'DHCPREQUEST for ' + NET.rangeStart + ' on ' + NET.iface + '\n' +
+          'DHCPACK  of ' + NET.rangeStart + ' from ' + NET.gateway + ' — lease bound',
+        event: { type: 'terminal', msg: 'клиент получил ' + NET.rangeStart }
       };
     }
+
     return {
-      out: 'DHCPDISCOVER on ' + NET.iface + ' to 255.255.255.255\n' +
-        'DHCPOFFER of ' + NET.rangeStart + ' from ' + NET.gateway + '\n' +
-        'DHCPREQUEST for ' + NET.rangeStart + '\n' +
-        'DHCPACK  of ' + NET.rangeStart + ' — lease bound',
-      event: { type: 'terminal', msg: 'клиент получил ' + NET.rangeStart }
+      os: os,
+      run: function (line) { return os.run(line); },
+      setConfig: setConfig,
+      getConfig: currentConfig,
+      validate: validation,
+      snapshot: function () { return os.serialize(); },
+      leases: function () { return os.state.leases || (os.state.leases = []); }
     };
   }
 
+  /* Совместимость: старый вызов DHCP.runCommand на эфемерной машине */
+  var legacy = null;
   function runCommand(line, ctx) {
-    var key = String(line || '').trim().replace(/\s+/g, ' ');
-    if (!key) return { out: '' };
-    if (TERMINAL.commands[key]) return TERMINAL.commands[key](ctx || {}) || { out: '' };
-    var bin = key.split(' ')[0];
-    return { ok: false, out: 'bash: ' + bin + ': команда не найдена в стенде (введите help)' };
+    if (!legacy) legacy = createWorld();
+    if (ctx && ctx.config != null) legacy.setConfig(ctx.config);
+    return legacy.run(line);
   }
 
-  // Задания стенда (для прогресс-бара и журнала)
+  /* ----------------------------- Автотесты стенда ----------------------------- */
+  function runAutotests() {
+    var results = [];
+    function t(id, title, fn) {
+      var world = createWorld();
+      var actual, expected, ok = false;
+      try { var r = fn(world) || {}; ok = !!r.ok; actual = r.actual || ''; expected = r.expected || ''; }
+      catch (e) { actual = 'исключение: ' + e.message; expected = 'без исключений'; }
+      results.push({ id: id, title: title, ok: ok, actual: actual, expected: expected });
+    }
+
+    t('at-01', 'Установка DHCP-службы с sudo', function (w) {
+      var r = w.run('sudo apt-get install isc-dhcp-server');
+      var again = w.run('sudo apt-get install isc-dhcp-server');
+      return { ok: r.code === 0 && /уже установлен/i.test(again.out), actual: again.out.slice(0, 60), expected: 'код 0, повторный вызов: уже установлен' };
+    });
+    t('at-02', 'Установка без sudo тоже работает', function (w) {
+      var r = w.run('apt-get install isc-dhcp-server');
+      return { ok: r.code === 0, actual: 'код ' + r.code, expected: 'код 0' };
+    });
+    t('at-03', 'Неизвестная команда возвращает 127', function (w) {
+      var r = w.run('ifconfig');
+      return { ok: r.code === 127, actual: 'код ' + r.code, expected: 'код 127' };
+    });
+    t('at-04', 'cat стартового dhcpd.conf показывает шаблон', function (w) {
+      var r = w.run('cat /etc/dhcp/dhcpd.conf');
+      return { ok: /dhcpd\.conf/.test(r.out), actual: r.out.split('\n')[0], expected: 'шапка конфига' };
+    });
+    t('at-05', 'Цепочка &&: установка и запуск службы', function (w) {
+      var r = w.run('apt-get install isc-dhcp-server && systemctl enable --now ' + UNIT);
+      var st = w.run('systemctl is-active ' + UNIT);
+      return { ok: r.code === 0 && st.out === 'active', actual: st.out, expected: 'active' };
+    });
+    t('at-06', 'Bug report: служба на битом конфиге не раздаёт адреса', function (w) {
+      w.run('apt-get install isc-dhcp-server && systemctl enable --now ' + UNIT);
+      w.setConfig(BROKEN_CONFIG);
+      var log = w.run('journalctl -u ' + UNIT);
+      var cli = w.run('dhclient -v ' + NET.iface);
+      return {
+        ok: /errors encountered/i.test(log.out) && cli.code === 1 && /No DHCPOFFERS/.test(cli.out),
+        actual: log.out.split('\n').slice(-2).join(' ') + ' || dhclient code ' + cli.code,
+        expected: 'ошибка конфигурации в journalctl + отказ dhclient'
+      };
+    });
+    t('at-07', 'Полный позитивный путь: эталонный конфиг, DORA, leases', function (w) {
+      w.run('apt-get install isc-dhcp-server');
+      w.setConfig(GOOD_CONFIG);
+      w.run('systemctl enable --now ' + UNIT);
+      var st = w.run('systemctl status ' + UNIT);
+      var cli = w.run('dhclient -v ' + NET.iface);
+      var leases = w.run('cat /var/lib/dhcpd/dhcpd.leases');
+      return {
+        ok: /active \(running\)/.test(st.out) && /DHCPACK/.test(cli.out) && leases.out.indexOf(NET.rangeStart) !== -1,
+        actual: cli.out.split('\n').pop(),
+        expected: 'DHCPACK ' + NET.rangeStart + ' и запись в leases'
+      };
+    });
+    t('at-08', 'Пайпы и история: history | grep', function (w) {
+      w.run('apt-get install isc-dhcp-server');
+      w.setConfig(GOOD_CONFIG);
+      w.run('systemctl enable --now ' + UNIT);
+      w.run('dhclient -v ' + NET.iface);
+      var r = w.run('history | grep dhclient');
+      return { ok: /dhclient/.test(r.out), actual: r.out, expected: 'строка истории с dhclient' };
+    });
+
+    var passed = results.filter(function (r) { return r.ok; }).length;
+    return { results: results, passed: passed, total: results.length, score: Math.round(passed / results.length * 100) };
+  }
+
   var TASKS = [
     { id: 't1', title: 'Установить и запустить DHCP-службу', kind: 'terminal' },
     { id: 't2', title: 'Объявить подсеть и пул адресов', kind: 'config' },
@@ -279,7 +457,6 @@
     { id: 't6', title: 'Проверить выдачу адреса клиентом (dhclient)', kind: 'terminal' }
   ];
 
-  // Учебные цели стенда (что студент должен уметь по итогам)
   var GOALS = [
     'Объяснять назначение DHCP и последовательность обмена DORA (Discover → Offer → Request → Acknowledge)',
     'Объявлять подсеть subnet/netmask и задавать динамический пул range по границам задания',
@@ -288,7 +465,6 @@
     'Проверять службу и выдачу адреса командами systemctl, journalctl и dhclient'
   ];
 
-  // Контрольный мини-тест: answer — индекс верного варианта, explain — разбор
   var QUIZ = [
     {
       q: 'На каком порту UDP работает DHCP-сервер?',
@@ -324,12 +500,17 @@
 
   return {
     NET: NET,
+    UNIT: UNIT,
+    PKG: PKG,
     TASKS: TASKS,
     GOALS: GOALS,
     QUIZ: QUIZ,
     STARTER_CONFIG: STARTER_CONFIG,
     BROKEN_CONFIG: BROKEN_CONFIG,
+    GOOD_CONFIG: GOOD_CONFIG,
     validateDhcpConfig: validateDhcpConfig,
+    createWorld: createWorld,
+    runAutotests: runAutotests,
     runCommand: runCommand
   };
 });
