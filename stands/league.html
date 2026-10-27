@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<title>лига · уровни, опыт и трайбы · itsliventsev</title>
+<meta name="description" content="Персональная страница учебной лиги: уровни и опыт, неткоины, матрица навыков ФГОС СПО 09.02.06, рейтинг проверяющего, состав трайбов и турниры. Страница с персональными данными не индексируется.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261026q">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026q">
+</head>
+<body class="flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лига работает на локальных данных профиля, без JavaScript страница недоступна.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">виртуальные стенды</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="index.html">каталог</a>
+      <a href="league.html" aria-current="page">лига</a>
+      <a href="teams.html">команды</a>
+      <a href="../admin.html" rel="nofollow">admin</a>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <a href="index.html">виртуальные стенды</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">лига</span>
+    </nav>
+
+    <div class="st-hero">
+      <span class="st-hero-index">L1</span>
+      <div>
+        <p class="flat-kicker">геймификация · пиринг · трайбы</p>
+        <h1>учебная лига</h1>
+      </div>
+    </div>
+
+    <p class="st-lede">
+      Уровни и опыт начисляются за реальную работу на стендах: сдачу лабораторных, автотесты,
+      контрольные тесты и взаимные оценки. Неткоины — внутренняя валюта, рейтинг проверяющего
+      показывает, насколько справедливо и доброжелательно вы оцениваете однокурсников.
+    </p>
+
+    <!-- Профиль -->
+    <div class="flat-profile" id="lg-profile">
+      <span class="fp-name" id="lg-name">—</span>
+      <span class="fp-group" id="lg-group">—</span>
+      <span class="fp-spacer"></span>
+      <span class="flat-badge" id="lg-tribe">трайн: —</span>
+      <button class="flat-btn ghost" id="lg-change" type="button">сменить профиль</button>
+    </div>
+
+    <!-- Уровень и прогресс -->
+    <div class="st-section-head">
+      <span class="st-section-num">01</span>
+      <h2>уровень и опыт</h2>
+      <span class="st-section-tag">прогрессия</span>
+    </div>
+    <section class="lab-panel" id="lg-level-card" aria-live="polite"></section>
+
+    <!-- Лестница уровней -->
+    <div class="st-section-head">
+      <span class="st-section-num">02</span>
+      <h2>лестница уровней</h2>
+      <span class="st-section-tag">карьерная карта</span>
+    </div>
+    <section class="lab-panel">
+      <div id="lg-ladder" class="lg-ladder"></div>
+    </section>
+
+    <!-- Журнал наград -->
+    <div class="st-section-head">
+      <span class="st-section-num">03</span>
+      <h2>журнал наград и неткоины</h2>
+      <span class="st-section-tag">за что начисляется</span>
+    </div>
+    <section class="lab-panel">
+      <div class="lg-awards-grid" id="lg-awards"></div>
+      <p class="admin-hint" style="margin-top:.9rem;">последние события опыта:</p>
+      <div class="sub-table-wrap">
+        <table class="sub-table lg-table">
+          <thead><tr><th>когда</th><th>событие</th><th>стенд</th><th>XP</th><th>неткоины</th></tr></thead>
+          <tbody id="lg-ledger"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Матрица навыков ФГОС -->
+    <div class="st-section-head">
+      <span class="st-section-num">04</span>
+      <h2>матрица навыков ФГОС</h2>
+      <span class="st-section-tag">09.02.06</span>
+    </div>
+    <section class="lab-panel">
+      <p class="admin-hint" style="margin-top:0;">Освоение профессиональных компетенций считается по лучшей сдаче каждого стенда: CI-проверки, контрольный тест и автотесты.</p>
+      <div id="lg-skills" class="lg-skills"></div>
+    </section>
+
+    <!-- Рейтинг проверяющего -->
+    <div class="st-section-head">
+      <span class="st-section-num">05</span>
+      <h2>рейтинг проверяющего</h2>
+      <span class="st-section-tag">равный равному</span>
+    </div>
+    <section class="lab-panel" id="lg-reviewer"></section>
+
+    <!-- Мои работы -->
+    <div class="st-section-head">
+      <span class="st-section-num">06</span>
+      <h2>мои работы</h2>
+      <span class="st-section-tag">история сдачи</span>
+    </div>
+    <section class="lab-panel">
+      <div class="sub-table-wrap">
+        <table class="sub-table lg-table">
+          <thead><tr><th>стенд</th><th>сдано</th><th>CI</th><th>автотесты</th><th>оценок</th><th>код работы</th></tr></thead>
+          <tbody id="lg-subs"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Таблица трайбов -->
+    <div class="st-section-head">
+      <span class="st-section-num">07</span>
+      <h2>таблица трайбов</h2>
+      <span class="st-section-tag">командный зачёт</span>
+    </div>
+    <section class="lab-panel">
+      <div class="sub-table-wrap">
+        <table class="sub-table lg-table">
+          <thead><tr><th>#</th><th>трайн</th><th>участников</th><th>суммарный XP</th></tr></thead>
+          <tbody id="lg-standings"></tbody>
+        </table>
+      </div>
+      <p class="admin-hint" style="margin-bottom:0;">Как устроены трайбы и турниры — на странице <a href="teams.html">команды</a>.</p>
+    </section>
+
+    <!-- Турниры -->
+    <div class="st-section-head">
+      <span class="st-section-num">08</span>
+      <h2>турниры и хакатоны</h2>
+      <span class="st-section-tag">расписание</span>
+    </div>
+    <section class="lab-panel">
+      <div id="lg-hacks" class="lg-hacks"></div>
+    </section>
+
+    <!-- Перенос данных -->
+    <div class="st-section-head">
+      <span class="st-section-num">09</span>
+      <h2>перенос данных между устройствами</h2>
+      <span class="st-section-tag">без сервера</span>
+    </div>
+    <section class="lab-panel">
+      <p class="admin-hint" style="margin-top:0;">Сервера нет: всё хранится в этом браузере. Бандл — один JSON-файл с работами, оценками, presence и журналом опыта. Импортируйте его на другом устройстве.</p>
+      <div class="flex flex-wrap gap-2">
+        <button class="flat-btn" id="lg-export" type="button">экспорт бандла ↧</button>
+        <label class="flat-btn ghost" for="lg-import" style="cursor:pointer;">импорт бандла ↥
+          <input id="lg-import" type="file" accept="application/json,.json" hidden>
+        </label>
+        <button class="flat-btn ghost" id="lg-reset" type="button">сбросить демо-данные</button>
+      </div>
+      <p class="admin-hint" id="lg-data-msg" role="status" style="margin-bottom:0;"></p>
+    </section>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · виртуальные стенды · лига</span>
+    <span>runtime: browser · backend: none · storage: localStorage</span>
+  </footer>
+</div>
+
+<script src="../assets/fgos-skills.js?v=20261026q"></script>
+<script src="../assets/league.js?v=20261026q"></script>
+<script src="../assets/league-page.js?v=20261026q"></script>
+</body>
+</html>
