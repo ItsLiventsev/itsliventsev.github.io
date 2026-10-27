@@ -124,7 +124,7 @@
     ].map(([href, label, key]) => {
       const active = (section === key) ? ' active" aria-current="page' : '';
       const wip = key === 'blog' ? ' is-wip' : '';
-      const plate = key === 'blog' ? ' <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">wip</span>' : '';
+      const plate = key === 'blog' ? ' <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span>' : '';
       return `      <a href="${prefix}${href}" class="nav-link${wip}${active}">${label}${plate}</a>`;
     }).join('\n');
 
@@ -144,7 +144,7 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026m">
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026n">
 </head>
 <body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -211,7 +211,7 @@ ${bodyHtml}
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261026m"></script>
+<script src="${prefix}assets/site.js?v=20261026n"></script>
 </body>
 </html>
 `;
