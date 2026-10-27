@@ -24,6 +24,16 @@
     prp: 'league-prp'
   };
 
+  /* Публичный репозиторий используется как общая доска обмена без сервера:
+     чтение папок submissions/ и reviews/ доступно без токена (Contents API). */
+  var REPO_CONFIG = {
+    owner: 'ItsLiventsev',
+    repo: 'itsliventsev.github.io',
+    branch: 'main',
+    submissionsPath: 'submissions',
+    reviewsPath: 'reviews'
+  };
+
   /* В браузере используем localStorage, в Node — память (юнит-тесты) */
   var memory = {};
   var storage = (typeof localStorage !== 'undefined') ? localStorage : {
@@ -268,6 +278,17 @@
   }
   function reviewsBy(profileId) {
     return reviews().filter(function (r) { return r.reviewer.id === profileId; });
+  }
+  /* Импорт уже готовой рецензии (из кода ITS-REV1 или файла): без начисления PRP,
+     т.к. очки получает рецензент на своей машине в момент написания. */
+  function importReview(r) {
+    var list = reviews();
+    if (r.id && list.some(function (x) { return x.id === r.id; })) return { duplicated: true };
+    r.id = r.id || uid('rev');
+    r.createdAt = r.createdAt || new Date().toISOString();
+    list.push(r);
+    write(KEYS.reviews, list);
+    return { duplicated: false, review: r };
   }
 
   /* Код рецензии: проверяющий отправляет его автору работы в любом мессенджере,
@@ -514,6 +535,7 @@
 
   return {
     KEYS: KEYS,
+    REPO_CONFIG: REPO_CONFIG,
     AWARDS: AWARDS,
     LEVELS: LEVELS,
     TRIBES: TRIBES,
@@ -544,6 +566,7 @@
     decodeSubmission: decodeSubmission,
     reviews: reviews,
     addReview: addReview,
+    importReview: importReview,
     encodeReview: encodeReview,
     decodeReview: decodeReview,
     reviewsFor: reviewsFor,
