@@ -2,7 +2,7 @@
    Админ-панель itsliventsev
    - вход по fine-grained PAT (sessionStorage, не localStorage) или
      GitHub Device Flow (если задан oauthClientId в admin-config.js)
-   - создание постов блога/статей и коммит через GitHub Contents API
+   - создание заметок/статей и коммит через GitHub Contents API
    Секретов в коде нет. Токен живёт только в текущей вкладке.
    ========================================================================== */
 (function () {
@@ -118,12 +118,14 @@
     const srcMeta = d.source ? '    <meta name="post-source" content="' + esc(d.source) + '">\n' : '';
     const draftMeta = d.draft ? '    <meta name="post-status" content="draft">\n' : '';
     const navItems = [
-      ['index.html', 'главная', ''], ['blog.html', 'блог', 'blog'],
+      ['index.html', 'главная', ''], ['blog.html', 'заметки', 'blog'],
       ['articles.html', 'статьи', 'articles'], ['projects.html', 'проекты', 'projects'],
       ['archive.html', 'архив', 'archive']
     ].map(([href, label, key]) => {
       const active = (section === key) ? ' active" aria-current="page' : '';
-      return `      <a href="${prefix}${href}" class="nav-link${active}">${label}</a>`;
+      const wip = key === 'blog' ? ' is-wip' : '';
+      const plate = key === 'blog' ? ' <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">wip</span>' : '';
+      return `      <a href="${prefix}${href}" class="nav-link${wip}${active}">${label}${plate}</a>`;
     }).join('\n');
 
     return `<!DOCTYPE html>
@@ -142,7 +144,7 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026l">
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026m">
 </head>
 <body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -163,7 +165,7 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <div class="page-wrap">
 
   <header class="site-header reveal">
-    <a href="${prefix}${section}.html" class="logo"><span class="arrow">←</span> ${section === 'blog' ? 'блог' : 'статьи'}</a>
+    <a href="${prefix}${section}.html" class="logo"><span class="arrow">←</span> ${section === 'blog' ? 'заметки' : 'статьи'}</a>
     <nav class="site-nav" aria-label="Основная навигация">
 ${navItems}
     </nav>
@@ -181,7 +183,7 @@ ${navItems}
     <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);" aria-label="Хлебные крошки">
       <a href="${prefix}index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
       <span>/</span>
-      <a href="${prefix}${section}.html" class="nav-link" style="padding:.2rem .4rem;">${section === 'blog' ? 'блог' : 'статьи'}</a>
+      <a href="${prefix}${section}.html" class="nav-link" style="padding:.2rem .4rem;">${section === 'blog' ? 'заметки' : 'статьи'}</a>
     </nav>
 
     <article class="reveal">
@@ -203,13 +205,13 @@ ${bodyHtml}
   </main>
 
   <footer class="site-footer">
-    <span>© 2026 itsliventsev · ${section === 'blog' ? 'блог' : 'статьи'}</span>
+    <span>© 2026 itsliventsev · ${section === 'blog' ? 'заметки' : 'статьи'}</span>
     <a href="${prefix}admin.html" class="admin-link" rel="nofollow">admin</a>
   </footer>
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261026l"></script>
+<script src="${prefix}assets/site.js?v=20261026m"></script>
 </body>
 </html>
 `;

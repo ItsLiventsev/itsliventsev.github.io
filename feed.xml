@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>itsliventsev — блог и статьи</title>
+    <title>itsliventsev — заметки и статьи</title>
     <link>https://itsliventsev.github.io/</link>
     <description>Заметки, статьи и учебные материалы по сетям, системному администрированию и IT-образованию.</description>
     <language>ru-RU</language>
     <atom:link href="https://itsliventsev.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Как устроен этот блог</title>
+      <title>Как устроены заметки</title>
       <link>https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</guid>
       <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
-      <category>блог</category>
-      <description>Первая заметка: чем блог отличается от статей и проектов, какие бывают типы записей и как новая страница сама появляется в ленте.</description>
+      <category>заметки</category>
+      <description>Первая заметка: чем заметки отличаются от статей и проектов, какие бывают типы записей и как новая страница сама появляется в ленте.</description>
     </item>
     <item>
       <title>Практикоориентированное формирование знаний</title>

@@ -2431,6 +2431,46 @@ textarea.admin-input { resize: vertical; line-height: 1.6; }
   .nav-bubble { min-width: 1.35rem; height: 1.35rem; font-size: .68rem; }
 }
 
+/* --- WIP-раздел «заметки»: приглушённая навигация и плашка статуса --- */
+.nav-link.is-wip { color: var(--faint); }
+.nav-link.is-wip:hover,
+.nav-link.is-wip.active,
+.nav-link.is-wip[aria-current="page"] { color: var(--muted); }
+.nav-wip {
+  display: inline-flex;
+  align-items: center;
+  margin-left: .35rem;
+  padding: .14rem .42rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.quick-bubble.is-wip { opacity: .72; }
+.quick-bubble.is-wip .qb-glyph { color: var(--faint); }
+.quick-bubble.is-wip:hover { opacity: 1; }
+@media (max-width: 880px) {
+  .nav-wip { font-size: .62rem; padding: .18rem .45rem; }
+}
+
+/* Серый баннер статуса раздела и приглушённая лента */
+.notice-wip {
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+}
+.notice-wip .notice-label { color: var(--faint); }
+.wip-feed { opacity: .55; }
+@media (prefers-reduced-motion: reduce) {
+  .quick-bubble.is-wip, .notice-wip, .wip-feed { transition: none; }
+}
+
 /* --- Вращающаяся метка в заголовке: единый стиль --- */
 .title-mark, #title-mark {
   font-family: var(--font-mono);
