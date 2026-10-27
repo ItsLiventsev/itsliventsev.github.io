@@ -111,8 +111,9 @@
     tbody.innerHTML = list.map(function (p) {
       return '<tr>' +
         '<td><span class="ps-dot ' + (p.online ? 'is-online' : '') + '"></span>' +
-        (p.online ? 'онлайн' : 'неактивен') + (p.demo ? ' <small>(демо)</small>' : '') + '</td>' +
-        '<td><strong>' + esc(p.name) + '</strong></td>' +
+        (p.online ? 'онлайн' : 'неактивен') + '</td>' +
+        '<td><strong>' + esc(p.name) + '</strong>' +
+          (p.handle ? '<br><small class="mono" style="color:var(--muted);">#' + esc(p.handle) + '</small>' : '') + '</td>' +
         '<td class="mono">' + esc(p.group || '—') + '</td>' +
         '<td class="mono">' + esc(p.standId ? standLabel(p.standId) : '—') + '</td>' +
         '<td class="mono" title="' + esc(fmtDate(p.lastSeen)) + '">' + ago(p.lastSeen) + '</td>' +
@@ -149,7 +150,7 @@
     var rows = filtered();
     if (!rows.length) {
       tbody.innerHTML = '<tr><td colspan="8" style="padding:1.4rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">' +
-        (loadItems().length ? '// по фильтрам ничего не найдено' : '// работ пока нет — импорт JSON, приём по коду или загрузка демо-данных') + '</td></tr>';
+        (loadItems().length ? '// по фильтрам ничего не найдено' : '// работ пока нет — импорт JSON, приём по коду ITS-LAB1 или папка submissions/ репозитория') + '</td></tr>';
       return;
     }
     tbody.innerHTML = rows.map(function (s, i) {
@@ -159,7 +160,8 @@
       var peer = revs.length - expert;
       return '<tr>' +
         '<td class="mono">' + String(i + 1).padStart(2, '0') + '</td>' +
-        '<td><strong>' + esc(s.student.name) + '</strong>' + (s.student.demo ? ' <small title="демо-однокурсник">демо</small>' : '') + '</td>' +
+        '<td><strong>' + esc(s.student.name) + '</strong>' +
+          (s.student.handle ? '<br><small class="mono" style="color:var(--muted);">#' + esc(s.student.handle) + '</small>' : '') + '</td>' +
         '<td class="mono">' + esc(s.student.group || '—') + '</td>' +
         '<td>' + esc(s.standTitle || standLabel(s.standId)) + '</td>' +
         '<td><span class="sub-score ' + scoreClass(r.score || 0) + '">' + (r.score != null ? r.score + '%' : '—') + '</span></td>' +
@@ -201,7 +203,7 @@
       '<div class="sub-detail-head">' +
         '<div><strong style="font-size:1.05rem;">' + esc(s.student.name) + '</strong>' +
         '<div class="mono text-xs" style="color:var(--muted);margin-top:.2rem;">' + esc(s.student.group || '—') + ' · ' + esc(s.standTitle || standLabel(s.standId)) +
-        (s.student.demo ? ' · демо-данные' : '') + '</div></div>' +
+        (s.student.handle ? ' · #' + esc(s.student.handle) : '') + '</div></div>' +
         '<span class="sub-score ' + scoreClass(r.score || 0) + '" style="font-size:1rem;">' + (r.score != null ? r.score + '%' : '—') + '</span>' +
       '</div>' +
       '<p class="mono text-xs" style="color:var(--muted);">начало: ' + fmtDate(s.startedAt) + ' · сдача: ' + fmtDate(s.submittedAt) +
@@ -261,40 +263,101 @@
   function acceptCodes(text) {
     if (!L()) { status('Модуль лиги не загружен', true); return; }
     var codes = text.split(/[\r\n]+/).map(function (x) { return x.trim(); }).filter(Boolean);
-    var okCount = 0;
+    var subs = 0, revs = 0;
     var errors = [];
     codes.forEach(function (code, i) {
-      try { L().addSubmission(L().decodeSubmission(code)); okCount++; }
-      catch (e) { errors.push('строка ' + (i + 1) + ': ' + e.message); }
+      try {
+        if (code.indexOf('ITS-LAB1.') === 0) { L().addSubmission(L().decodeSubmission(code)); subs++; }
+        else if (code.indexOf('ITS-REV1.') === 0) { L().importReview(L().decodeReview(code)); revs++; }
+        else errors.push('строка ' + (i + 1) + ': неизвестный префикс кода');
+      } catch (e) { errors.push('строка ' + (i + 1) + ': ' + e.message); }
     });
     render();
-    if (okCount) status('Принято работ по коду: ' + okCount + (errors.length ? ', ошибок: ' + errors.length : ''));
-    else status('Не принято ни одной работы: ' + errors.join('; '), true);
+    if (subs || revs) status('Принято по кодам: работ ' + subs + ', рецензий ' + revs + (errors.length ? ', ошибок: ' + errors.length : ''));
+    else status('Не принято ничего: ' + errors.join('; '), true);
   }
 
-  /* ----------------------------- Папка репозитория (без токена для публичного репо) ----------------------------- */
+  /* ----------------------------- Папки репозитория (чтение без токена для публичного репо) ----------------------------- */
+  function apiHeaders() {
+    var headers = { Accept: 'application/vnd.github+json' };
+    var token = sessionStorage.getItem(TOKEN_KEY);
+    if (token) headers.Authorization = 'Bearer ' + token;
+    return headers;
+  }
+  function listJson(folder) {
+    var cfg = L().REPO_CONFIG;
+    var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '?ref=' + cfg.branch;
+    return fetch(api, { headers: apiHeaders() }).then(function (r) {
+      if (r.status === 404) return [];
+      if (!r.ok) throw new Error('GitHub API: ' + r.status + (r.status === 403 ? ' (лимит запросов — повторите позже или войдите токеном)' : ''));
+      return r.json();
+    }).then(function (files) {
+      var jsons = files.filter(function (f) { return f.name && f.name.endsWith('.json'); });
+      return Promise.all(jsons.map(function (f) { return fetch(f.download_url).then(function (r) { return r.json(); }); }));
+    });
+  }
   function pullFromRepo() {
-    var cfg = window.ADMIN_CONFIG;
-    if (!cfg) return status('Не найден admin-config.js', true);
+    if (!L()) return status('Модуль лиги не загружен', true);
     var btn = $('sub-repo');
     btn.disabled = true;
-    var token = sessionStorage.getItem(TOKEN_KEY);
-    var headers = { Accept: 'application/vnd.github+json' };
-    if (token) headers.Authorization = 'Bearer ' + token;
-    var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/submissions?ref=' + cfg.branch;
-    fetch(api, { headers: headers })
-      .then(function (r) {
-        if (r.status === 404) throw new Error('Папки submissions/ в репозитории ещё нет');
-        if (!r.ok) throw new Error('GitHub API: ' + r.status + (r.status === 403 ? ' (лимит запросов — повторите позже или войдите токеном)' : ''));
-        return r.json();
+    Promise.all([listJson(L().REPO_CONFIG.submissionsPath), listJson(L().REPO_CONFIG.reviewsPath)])
+      .then(function (res) {
+        var before = loadItems().length, revs = 0;
+        addItems(res[0]);
+        res[1].forEach(function (r) {
+          if (r && r.schema === 'league-review/1' && r.submissionId && r.reviewer) {
+            if (!L().importReview(r).duplicated) revs++;
+          }
+        });
+        status('Из репозитория: новых работ ' + (loadItems().length - before) + ', рецензий ' + revs);
+        render();
       })
-      .then(function (files) {
-        var jsons = files.filter(function (f) { return f.name && f.name.endsWith('.json'); });
-        if (!jsons.length) throw new Error('В submissions/ нет JSON-файлов');
-        return Promise.all(jsons.map(function (f) { return fetch(f.download_url).then(function (r) { return r.json(); }); }));
-      })
-      .then(function (list) { addItems(list); })
       .catch(function (err) { status(err.message, true); })
+      .finally(function () { btn.disabled = false; });
+  }
+
+  /* Публикация преподавателем: выгружает новые работы и рецензии в публичные папки
+     репозитория, чтобы группа подтянула их без токенов. Требует вход по PAT. */
+  function publishToRepo() {
+    if (!L()) return status('Модуль лиги не загружен', true);
+    var token = sessionStorage.getItem(TOKEN_KEY);
+    if (!token) return status('Для публикации войдите токеном GitHub в разделе публикации ниже', true);
+    var btn = $('sub-publish');
+    btn.disabled = true;
+    var cfg = L().REPO_CONFIG;
+    var headers = Object.assign({ 'Content-Type': 'application/json' }, apiHeaders());
+    function existingNames(folder) {
+      var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '?ref=' + cfg.branch;
+      return fetch(api, { headers: apiHeaders() }).then(function (r) {
+        if (r.status === 404) return [];
+        if (!r.ok) throw new Error('GitHub API: ' + r.status);
+        return r.json();
+      }).then(function (files) { return files.map(function (f) { return f.name; }); });
+    }
+    function putJson(folder, name, obj, message) {
+      var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '/' + name;
+      var content = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
+      return fetch(api, {
+        method: 'PUT', headers: headers,
+        body: JSON.stringify({ message: message, content: content, branch: cfg.branch })
+      }).then(function (r) { if (!r.ok) throw new Error('PUT ' + name + ': ' + r.status); });
+    }
+    Promise.all([existingNames(cfg.submissionsPath), existingNames(cfg.reviewsPath)]).then(function (have) {
+      var haveSubs = have[0], haveRevs = have[1], chain = Promise.resolve(), published = { subs: 0, revs: 0 };
+      loadItems().forEach(function (s) {
+        var name = 'sub-' + String(s.id).replace(/[^\w-]+/g, '_') + '.json';
+        if (haveSubs.indexOf(name) !== -1) return;
+        chain = chain.then(function () { return putJson(cfg.submissionsPath, name, s, 'студенческая работа ' + name); }).then(function () { published.subs++; });
+      });
+      L().reviews().forEach(function (r) {
+        var name = 'rev-' + String(r.id).replace(/[^\w-]+/g, '_') + '.json';
+        if (haveRevs.indexOf(name) !== -1) return;
+        chain = chain.then(function () { return putJson(cfg.reviewsPath, name, r, 'рецензия ' + name); }).then(function () { published.revs++; });
+      });
+      return chain.then(function () { return published; });
+    }).then(function (published) {
+      status('Опубликовано в репозитории: работ ' + published.subs + ', рецензий ' + published.revs + ' — группа может подтянуть их кнопкой «загрузить из репозитория»');
+    }).catch(function (err) { status(err.message, true); })
       .finally(function () { btn.disabled = false; });
   }
 
@@ -351,12 +414,8 @@
 
     $('sub-repo').addEventListener('click', pullFromRepo);
 
-    $('sub-demo').addEventListener('click', function () {
-      if (!L()) return status('Модуль лиги не загружен', true);
-      L().seedDemo(true);
-      render(); renderPresence();
-      status('Демо-данные загружены: 6 однокурсников, 12 работ, оценки и presence');
-    });
+    var publishBtn = $('sub-publish');
+    if (publishBtn) publishBtn.addEventListener('click', publishToRepo);
 
     $('sub-search').addEventListener('input', function (e) { state.filterText = e.target.value; render(); });
     $('sub-filter-group').addEventListener('change', function (e) { state.filterGroup = e.target.value; render(); });
