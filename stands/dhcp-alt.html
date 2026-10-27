@@ -10,13 +10,12 @@
 <meta name="description" content="Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале, теория и мини-тест.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <!-- Tailwind CDN на стендах не используется: самодостаточная плоская дизайн-система -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261026r">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026r">
+<link rel="stylesheet" href="../assets/site.css?v=20261026s">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026s">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/dhcp-alt.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -110,7 +109,7 @@
       <a href="#sec-work"><span class="sn-dot"></span>терминал</a>
       <a href="#sec-checks"><span class="sn-dot"></span>проверка</a>
       <a href="#sec-submit"><span class="sn-dot"></span>сдача</a>
-      <a href="#sec-peer"><span class="sn-dot"></span>пиринг</a>
+      <a href="#sec-peer"><span class="sn-dot"></span>взаимная оценка</a>
     </nav>
 
     <section class="lab-panel helper-card" id="sec-help" style="margin-bottom:var(--st-gap);">
@@ -122,13 +121,14 @@
         </div>
         <div class="helper-item">
           <h4>2 · спросите коллег</h4>
-          <p>Обсудите задачу с трайбом. Обменяйтесь кодами <code>ITS-LAB1</code> и сравните подходы — это часть методики «равный равному».</p>
+          <p>Обсудите задачу с трайбом. Обменяйтесь кодами <code>ITS-LAB1</code> и сравните подходы — так рождаются самые сильные решения.</p>
         </div>
         <div class="helper-item">
           <h4>3 · найдите в интернете</h4>
           <p>Документация ALT Linux и man-страницы, точный текст ошибки в поисковой строке. Зафиксируйте найденное в журнале действий.</p>
         </div>
       </div>
+        <p class="helper-mentor">// Кирилл Александрович напоминает: порядок поиска — машина, документация, коллега. Сначала прочитайте ошибку целиком, потом спрашивайте.</p>
     </section>
 
     <!-- Цели работы -->
@@ -160,18 +160,7 @@
       <span class="st-section-tag">топология</span>
     </div>
     <div class="lab-schema">
-      <pre class="mermaid">
-graph TD
-  WAN["Внешняя сеть · WAN (NAT enp0s3)"]
-  SRV["ALT Server<br/>DHCP + NAT · 192.168.10.1"]
-  WS1["ALT Workstation 1<br/>DHCP-клиент enp0s8"]
-  WS2["ALT Workstation 2<br/>статический IP"]
-  PRN["Сетевой принтер<br/>резерв 192.168.10.50"]
-  WAN --> SRV
-  SRV -->|LAN 192.168.10.0/24| WS1
-  SRV -->|LAN 192.168.10.0/24| WS2
-  SRV -->|host printer · MAC 00:11:22:33:44:55| PRN
-      </pre>
+      <div class="topo" id="lab-topo" data-stand="dhcp-alt"></div>
       <pre id="schema-fallback" hidden>WAN (NAT, enp0s3) → ALT Server (DHCP+NAT, 192.168.10.1)
   ├─ LAN 192.168.10.0/24 → ALT Workstation 1 (DHCP-клиент)
   ├─ LAN 192.168.10.0/24 → ALT Workstation 2 (статический IP)
@@ -373,15 +362,18 @@ graph TD
       <h2>контрольный мини-тест</h2>
       <span class="st-section-tag">5 вопросов</span>
     </div>
-    <section class="lab-panel st-quiz">
-      <div class="lp-head"><span>проверка теории · DHCP</span><span>самопроверка</span></div>
-      <div class="lp-body" id="lab-quiz"></div>
-    </section>
+    <div class="quiz-launch">
+      <div class="ql-info">
+        <h3>контрольный тест · 5 вопросов</h3>
+        <p id="quiz-launch-hint">Проверьте теорию после практики. Результат сохранится и попадёт в сдаваемую работу.</p>
+      </div>
+      <button class="flat-btn" id="btn-quiz-open" type="button">открыть тест →</button>
+    </div>
 
-    <!-- Взаимное обучение: оценка равный-равному и экспертная -->
+    <!-- Взаимное обучение: взаимная и экспертная оценка -->
     <div class="st-section-head" id="sec-peer">
       <span class="st-section-num">P</span>
-      <h2>взаимная оценка · равный равному</h2>
+      <h2>взаимная оценка работ</h2>
       <span class="st-section-tag">обмен знаниями</span>
     </div>
     <section class="lab-panel">
@@ -413,13 +405,25 @@ graph TD
         <div class="rv-pool" id="rv-pool" data-stand="dhcp-alt"></div>
         <div class="st-section-head" style="margin-top:1.2rem;">
           <h2 style="font-size:.92rem;">оценки моей работы</h2>
-          <span class="st-section-tag">пиринг и эксперт</span>
+          <span class="st-section-tag">взаимная и экспертная</span>
         </div>
         <div id="rv-mine" data-stand="dhcp-alt"></div>
       </div>
     </section>
 
   </main>
+
+
+  <!-- Модальное окно контрольного теста -->
+  <div id="quiz-modal" class="st-modal" hidden>
+    <div class="st-modal-box quiz-modal-box" role="dialog" aria-modal="true" aria-labelledby="quiz-modal-title">
+      <div class="st-modal-head">
+        <h2 id="quiz-modal-title">контрольный тест</h2>
+        <button class="flat-btn ghost" id="quiz-modal-close" type="button" aria-label="закрыть">✕</button>
+      </div>
+      <div id="lab-quiz"></div>
+    </div>
+  </div>
 
   <!-- Модальное окно: код сданной работы -->
   <div id="sub-code-modal" class="st-modal" hidden>
@@ -463,12 +467,12 @@ graph TD
     </div>
   </div>
 
-<script src="../assets/mascots.js?v=20261026r"></script>
-<script src="../assets/os-engine.js?v=20261026r"></script>
-<script src="../assets/fgos-skills.js?v=20261026r"></script>
-<script src="../assets/league.js?v=20261026r"></script>
-<script src="../assets/stands-dhcp.js?v=20261026r"></script>
-<script src="../assets/stands.js?v=20261026r"></script>
+<script src="../assets/mascots.js?v=20261026s"></script>
+<script src="../assets/os-engine.js?v=20261026s"></script>
+<script src="../assets/fgos-skills.js?v=20261026s"></script>
+<script src="../assets/league.js?v=20261026s"></script>
+<script src="../assets/stands-dhcp.js?v=20261026s"></script>
+<script src="../assets/stands.js?v=20261026s"></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var el=document.getElementById("brief-mascot");if(el&&window.MASCOTS){el.innerHTML=window.MASCOTS.svg(el.dataset.mascot,{size:72});}});</script>
 </body>
 </html>

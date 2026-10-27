@@ -1,12 +1,12 @@
 /* ==========================================================================
-   LEAGUE · учебная геймификация и пиринговое обучение (без сервера)
+   LEAGUE · учебная геймификация и взаимные проверки (без сервера)
    Всё состояние — localStorage одного браузера; обмен между устройствами и
    студентами — JSON-бандлы, коды работ ITS-LAB1 и коды рецензий ITS-REV1,
    плюс публичная папка репозитория (читается без токена).
    Профили с маскотами-хэндлами (#енот 7), XP/уровни/неткоины, PRP-очки
-   взаимных проверок (методика «равный равному» Школы 21), трайбы,
-   достижения, рейтинг проверяющего (справедливость, доброжелательность,
-   заинтересованность, пунктуальность), presence. UMD: браузер и Node.
+   взаимных проверок, трайбы, достижения, рейтинг проверяющего
+   (справедливость, доброжелательность, заинтересованность, пунктуальность),
+   presence. UMD: браузер и Node.
    ========================================================================== */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) {
@@ -74,7 +74,7 @@
     standReady:   { xp: 50, coins: 10, note: 'стенд пройден на 100%' },
     autotests:    { xp: 30, coins: 6,  note: 'все автотесты пройдены' },
     quizPerfect:  { xp: 20, coins: 4,  note: 'тест без ошибок' },
-    review:       { xp: 15, coins: 3,  note: 'взаимная оценка равному' },
+    review:       { xp: 15, coins: 3,  note: 'взаимная оценка работы' },
     expertReview: { xp: 25, coins: 5,  note: 'экспертная оценка преподавателя' }
   };
 
@@ -114,7 +114,7 @@
     return { animal: m.animal, num: num, text: m.animal + ' #' + num };
   }
 
-  /* ----------------------------- Трайбы и турниры ----------------------------- */
+  /* ----------------------------- Трайбы ----------------------------- */
   var TRIBES = [
     { id: 'tribe-packet', name: 'Трайб «Пакет»', glyph: 'PKT', color: '#5b9dff' },
     { id: 'tribe-frame', name: 'Трайб «Кадр»', glyph: 'FRM', color: '#34d399' },
@@ -123,11 +123,6 @@
   ];
   function tribeFor(group) { return TRIBES[hash(group || 'ИС-21') % TRIBES.length]; }
 
-  var HACKATHONS = [
-    { id: 'hack-1', title: 'Хакатон «Первая сеть»', status: 'done', date: '2026-09-18', task: 'Базовая настройка DHCP и VLAN' },
-    { id: 'hack-2', title: 'Хакатон «Отказоустойчивость»', status: 'active', date: '2026-11-12', task: 'Диагностика и послеаварийное восстановление сервисов' },
-    { id: 'hack-3', title: 'Хакатон «Сетевой архитектор»', status: 'future', date: '2026-12-16', task: 'Проектирование топологии филиала по ФГОС ПК 5.3' }
-  ];
 
   /* ----------------------------- Профиль и журнал ----------------------------- */
   function getProfile() { return read(KEYS.profile, null); }
@@ -201,9 +196,9 @@
   }
 
   /* ----------------------------- PRP · очки взаимных проверок -----------------------------
-     Методика Школы 21: каждому новичку — 5 PRP. Сдача работы на пиринг стоит 1 PRP,
-     проверка чужой работы приносит 1 PRP. Так проверять коллег становится полезно,
-     а бесконечно «заказывать» рецензии нельзя. В офлайне баланс не блокирует сдачу. */
+     Каждому новичку — 5 PRP. Сдача работы на взаимную проверку стоит 1 PRP,
+     проверка чужой работы приносит 1 PRP: помогать коллегам напрямую выгодно,
+     а бесконечно заказывать рецензии нельзя. В офлайне баланс не блокирует сдачу. */
   var INITIAL_PRP = 5;
   var PRP_CAP = 20;
   function prpMap() { return read(KEYS.prp, {}); }
@@ -222,7 +217,7 @@
     var before = m[profileId] || 0;
     m[profileId] = Math.max(0, before - 1);
     write(KEYS.prp, m);
-    return { balance: m[profileId], charged: before > 0, reason: reason || 'работа выставлена на пиринг' };
+    return { balance: m[profileId], charged: before > 0, reason: reason || 'работа выставлена на взаимную проверку' };
   }
 
   /* ----------------------------- Работы студентов ----------------------------- */
@@ -270,7 +265,7 @@
     r.createdAt = r.createdAt || new Date().toISOString();
     list.push(r);
     write(KEYS.reviews, list);
-    if (r.kind === 'peer' && r.reviewer && r.reviewer.id) earnPrp(r.reviewer.id, 1, 'пиринговая проверка ' + r.submissionId);
+    if (r.kind === 'peer' && r.reviewer && r.reviewer.id) earnPrp(r.reviewer.id, 1, 'взаимная проверка работы ' + r.submissionId);
     return r;
   }
   function reviewsFor(submissionId) {
@@ -308,7 +303,7 @@
   var RUDE = /дурак|туп|плох|ужас|ненавиж|отстой|fail|дно|бездар/i;
   var KIND = /молод|хорош|отлич|супер|спасибо|понрав|аккурат|верно|успеш|рекоменд|пожалуйста/i;
 
-  /* Рейтинг проверяющего: 4 качества по методике «равный равному» */
+  /* Рейтинг проверяющего: четыре качества взаимной оценки */
   function reviewerRating(profileId) {
     var mine = reviewsBy(profileId);
     if (!mine.length) return null;
@@ -540,7 +535,6 @@
     LEVELS: LEVELS,
     TRIBES: TRIBES,
     MASCOTS: MASCOTS,
-    HACKATHONS: HACKATHONS,
     INITIAL_PRP: INITIAL_PRP,
     PRP_CAP: PRP_CAP,
     levelOf: levelOf,
