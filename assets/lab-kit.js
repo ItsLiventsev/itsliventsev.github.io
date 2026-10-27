@@ -234,6 +234,13 @@
       return Math.round(taskPart + quizPart);
     }
 
+    function syncFinishBtn(score) {
+      var btn0 = $('lk-finish-btn');
+      if (!btn0) return;
+      if (score >= 100) { btn0.disabled = true; btn0.textContent = 'сдано на 100% ✓'; }
+      else if (state.finished) { btn0.disabled = false; btn0.textContent = 'обновить сдачу ↻'; }
+    }
+
     function bindFinish(progress) {
       var btn = $('lk-finish-btn');
       if (!btn) return;
@@ -264,17 +271,16 @@
           os: { historyCount: 0, leases: 0 },
           reflection: state.reflection
         };
-        var existed = LEAGUE.submissions().some(function (x) { return x.student.id === profile.id && x.standId === cfg.id; });
         LEAGUE.addSubmission(submission);
-        if (!existed) {
-          LEAGUE.award(profile.id, 'submit', 'submit:' + cfg.id + ':' + Date.now().toString(36), { standId: cfg.id });
-          if (submission.result.ready) LEAGUE.award(profile.id, 'standReady', 'ready:' + cfg.id, { standId: cfg.id });
-          if (cfg.quiz && state.quiz.correct === cfg.quiz.length) LEAGUE.award(profile.id, 'quizPerfect', 'quiz:' + cfg.id, { standId: cfg.id });
-        }
+        /* submit начисляется за каждую сдачу (итерации — тоже работа),
+           standReady и quizPerfect защищены дедуп-ключами внутри LEAGUE.award */
+        LEAGUE.award(profile.id, 'submit', 'submit:' + cfg.id + ':' + Date.now().toString(36), { standId: cfg.id });
+        if (submission.result.ready) LEAGUE.award(profile.id, 'standReady', 'ready:' + cfg.id, { standId: cfg.id });
+        if (cfg.quiz && state.quiz.correct === cfg.quiz.length) LEAGUE.award(profile.id, 'quizPerfect', 'quiz:' + cfg.id, { standId: cfg.id });
         state.finished = true; state.lastScore = score; save();
         $('lk-finish-msg').innerHTML = '✓ Работа сдана на <strong>' + score + '%</strong>. Запись появилась в лиге и в истории ваших работ. ' +
           'Коллеги смогут проверить её по коду ITS-LAB1 в кабинете.';
-        btn.disabled = true; btn.textContent = 'сдано ✓';
+        syncFinishBtn(score);
         renderProgress();
       });
     }
@@ -305,9 +311,8 @@
     renderQuiz();
     bindFinish(renderProgress());
     if (state.finished) {
-      var btn = $('lk-finish-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'сдано ✓'; }
-      if ($('lk-finish-msg')) $('lk-finish-msg').innerHTML = '✓ Работа уже сдана. Можете дополнить конспект и пройти тест заново — прогресс сохраняется.';
+      syncFinishBtn(state.lastScore || 0);
+      if ($('lk-finish-msg')) $('lk-finish-msg').innerHTML = '✓ Работа уже сдана. Можете дополнить конспект и пройти тест заново — прогресс сохраняется, доработку можно отправить повторно.';
     }
   }
 
