@@ -1,13 +1,15 @@
 /* ==========================================================================
-   Виртуальные стенды · клиентское приложение (v2)
-   Профиль студента, виртуальные машины os-engine, автосохранение снапшотов,
-   автотесты, навыки ФГОС, геймификация и пиринг (league.js), presence,
-   сдача работы в трёх каналах без сервера (JSON, код ITS-LAB1, репозиторий).
+   Виртуальные стенды · клиентское приложение (v3)
+   Кабинет студента вселенной «СетьПолис»: профиль с маскотом-хэндлом,
+   квесты-стенды, обмен кодами ITS-LAB1/ITS-REV1 без сервера, пиринг с
+   PRP-очками, светлая/тёмная тема, онбординг, presence, автосейв ВМ.
    ========================================================================== */
 (function () {
   'use strict';
 
   var PROFILE_KEY = 'stands-profile';
+  var THEME_KEY = 'itsliventsev-theme';
+  var TOUR_KEY = 'stands-tour-seen';
   var OLD_SUBMISSIONS_KEY = 'stands-submissions';
 
   function uid() { return 'sub-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
@@ -26,16 +28,36 @@
   var progressKey = function (standId) { return 'stands-progress:' + standId; };
   var hasLeague = function () { return typeof window.LEAGUE !== 'undefined'; };
   var hasFgos = function () { return typeof window.FGOS !== 'undefined'; };
+  var hasMascots = function () { return typeof window.MASCOTS !== 'undefined'; };
+  function mascotSvg(id, size, floating) {
+    if (hasMascots()) return window.MASCOTS.svg(id || 'raccoon', { size: size || 48, floating: floating !== false });
+    return '';
+  }
 
   /* Миграция работ схемы /1 в хранилище лиги */
   function migrateOldSubmissions() {
     if (!hasLeague()) return;
     var old = Store.get(OLD_SUBMISSIONS_KEY);
     if (!Array.isArray(old) || !old.length) return;
-    old.forEach(function (s) {
-      if (s && s.id) window.LEAGUE.addSubmission(s);
-    });
+    old.forEach(function (s) { if (s && s.id) window.LEAGUE.addSubmission(s); });
     localStorage.removeItem(OLD_SUBMISSIONS_KEY);
+  }
+
+  /* ----------------------------- Тема (светлая/тёмная) ----------------------------- */
+  function initTheme() {
+    function apply(theme) { document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark'); }
+    var saved = localStorage.getItem(THEME_KEY);
+    apply(saved === 'light' ? 'light' : 'dark');
+    document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        localStorage.setItem(THEME_KEY, next);
+        apply(next);
+      });
+    });
+    window.addEventListener('storage', function (e) {
+      if (e.key === THEME_KEY) apply(e.newValue === 'light' ? 'light' : 'dark');
+    });
   }
 
   /* ----------------------------- Мини-тест ----------------------------- */
@@ -180,14 +202,18 @@
     if (!profile) return;
     var t = window.LEAGUE.totals(profile.id);
     var tribe = window.LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
+    var handle = window.LEAGUE.handleFor(profile).text;
     var strip = document.createElement('div');
     strip.className = 'xp-strip';
     strip.id = 'xp-strip';
     strip.innerHTML =
+      '<span class="xp-handle" title="ваш хэндл в пиринге">' + mascotSvg(profile.mascotId, 22, false) + ' ' + esc(handle) + '</span>' +
       '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
       '<div class="xp-bar" title="опыт до следующего уровня"><i style="width:' + t.level.progress + '%"></i></div>' +
-      '<span class="xp-meta">' + t.xp + ' XP' + (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : ' · максимум') + '</span>' +
-      '<span class="xp-meta xp-coins">◈ ' + t.coins + ' неткоинов</span>' +
+      '<span class="xp-meta">' + t.xp + ' XP</span>' +
+      '<span class="xp-meta xp-coins">◈ ' + t.coins + '</span>' +
+      '<span class="prp-pill" title="PRP — очки взаимных проверок: сдача тратит 1, проверка коллеги даёт 1">PRP ' +
+        window.LEAGUE.prpBalance(profile.id) + '</span>' +
       (tribe ? '<span class="xp-meta">' + esc(tribe.name) + '</span>' : '');
     anchor.parentNode.insertBefore(strip, anchor.nextSibling);
   }
@@ -214,7 +240,7 @@
       chips(spec.pk) +
       '<ul class="st-practical">' + spec.skills.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>' +
       '<div class="st-skill-group"><h3>общие компетенции</h3>' + chips(spec.ok) +
-      '<p style="margin:.4rem 0 0;font-size:.78rem;color:var(--st-muted);">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден на странице «моя лига».</p></div>';
+      '<p style="margin:.4rem 0 0;font-size:.78rem;color:var(--st-muted);">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден в личном кабинете.</p></div>';
   }
 
   function renderAutotests(report) {
@@ -235,6 +261,97 @@
       }).join('');
   }
 
+  /* ----------------------------- Обмен кодами (ядро пиринга без сервера) ----------------------------- */
+  function processCodes(text) {
+    var L = window.LEAGUE;
+    var report = { subs: 0, reviews: 0, errors: [] };
+    String(text || '').split(/[\r\n]+/).forEach(function (raw, i) {
+      var code = raw.trim();
+      if (!code) return;
+      try {
+        if (code.indexOf('ITS-LAB1.') === 0) {
+          var sub = L.decodeSubmission(code);
+          var before = L.submissions().length;
+          L.addSubmission(sub);
+          if (L.submissions().length > before) report.subs++;
+        } else if (code.indexOf('ITS-REV1.') === 0) {
+          var rv = L.decodeReview(code);
+          var r = L.importReview(rv);
+          if (!r.duplicated) report.reviews++;
+        } else {
+          report.errors.push('строка ' + (i + 1) + ': неизвестный код (ожидается ITS-LAB1… или ITS-REV1…)');
+        }
+      } catch (e) {
+        report.errors.push('строка ' + (i + 1) + ': ' + e.message);
+      }
+    });
+    return report;
+  }
+
+  function bindExchange(textareaId, btnId, msgId, onDone) {
+    var btn = $(btnId), ta = $(textareaId), msg = $(msgId);
+    if (!btn || !ta || btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', function () {
+      if (!hasLeague()) { msg.className = 'exchange-msg is-bad'; msg.textContent = 'Модуль лиги не загружен'; return; }
+      var r = processCodes(ta.value);
+      ta.value = '';
+      msg.className = 'exchange-msg ' + (r.errors.length && !r.subs && !r.reviews ? 'is-bad' : r.errors.length ? '' : 'is-ok');
+      var parts = [];
+      if (r.subs) parts.push('работ добавлено: ' + r.subs);
+      if (r.reviews) parts.push('рецензий получено: ' + r.reviews);
+      msg.textContent = parts.length ? parts.join(' · ') + (r.errors.length ? ' · ошибок: ' + r.errors.length : '')
+        : (r.errors.join('; ') || 'новых данных нет: такие коды уже импортированы ранее');
+      if (typeof onDone === 'function') onDone(r);
+    });
+  }
+
+  /* Подтягивание работ и рецензий из публичной папки репозитория (без токена) */
+  function pullFromRepo(btn, msgEl, onDone) {
+    if (!hasLeague()) return;
+    var cfg = window.LEAGUE.REPO_CONFIG;
+    btn.disabled = true;
+    var old = btn.textContent;
+    btn.textContent = 'проверяю репозиторий…';
+    var headers = { Accept: 'application/vnd.github+json' };
+    function list(folder) {
+      var url = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '?ref=' + cfg.branch;
+      return fetch(url, { headers: headers }).then(function (r) {
+        if (r.status === 404) return [];
+        if (!r.ok) throw new Error('GitHub API: ' + r.status + (r.status === 403 ? ' (лимит запросов — попробуйте позже)' : ''));
+        return r.json();
+      }).then(function (files) {
+        var jsons = files.filter(function (f) { return f.name && f.name.endsWith('.json'); });
+        return Promise.all(jsons.map(function (f) { return fetch(f.download_url).then(function (r) { return r.json(); }); }));
+      });
+    }
+    Promise.all([list(cfg.submissionsPath), list(cfg.reviewsPath)]).then(function (res) {
+      var subList = res[0], revList = res[1], subs = 0, revs = 0;
+      var L = window.LEAGUE;
+      subList.forEach(function (s) {
+        if ((s.schema === 'stands-submission/1' || s.schema === 'stands-submission/2') && s.student && s.id) {
+          var before = L.submissions().length;
+          L.addSubmission(s);
+          if (L.submissions().length > before) subs++;
+        }
+      });
+      revList.forEach(function (r) {
+        if (r.schema === 'league-review/1' && r.submissionId && r.reviewer) {
+          if (!L.importReview(r).duplicated) revs++;
+        }
+      });
+      msgEl.className = 'exchange-msg is-ok';
+      msgEl.textContent = 'Из репозитория: новых работ ' + subs + ', рецензий ' + revs;
+      if (onDone) onDone({ subs: subs, reviews: revs });
+    }).catch(function (err) {
+      msgEl.className = 'exchange-msg is-bad';
+      msgEl.textContent = err.message;
+    }).finally(function () {
+      btn.disabled = false;
+      btn.textContent = old;
+    });
+  }
+
   /* ----------------------------- Взаимные оценки ----------------------------- */
   var RUBRIC = [
     { key: 'config', label: 'корректность конфигурации' },
@@ -246,7 +363,7 @@
   function renderReviewArea(standId) {
     if (!hasLeague()) return;
     var profile = window.LEAGUE.getProfile();
-    var poolBox = $('rv-pool'), mineBox = $('rv-mine'), badge = $('rv-pool-badge');
+    var poolBox = $('rv-pool'), badge = $('rv-pool-badge');
     if (!poolBox || !profile) return;
 
     var pool = window.LEAGUE.submissions().filter(function (s) {
@@ -254,13 +371,17 @@
     });
     if (badge) badge.textContent = pool.length + ' работ';
     if (!pool.length) {
-      poolBox.innerHTML = '<p class="rv-empty">// пул пуст: здесь появятся работы однокурсников и демо-группы после их сдачи</p>';
+      poolBox.innerHTML =
+        '<div class="helper-card"><p style="margin:0 0 .5rem;">Пул пуст. Работы однокурсников приходят двумя путями:</p>' +
+        '<p style="margin:0 0 .3rem;font-size:.82rem;">1. Вставьте код <code>ITS-LAB1…</code>, который прислал коллега, в блок «обмен кодами» ниже.</p>' +
+        '<p style="margin:0;font-size:.82rem;">2. Нажмите «подтянуть из репозитория» — преподаватель публикует там присланные работы.</p></div>';
     } else {
       poolBox.innerHTML = pool.slice(0, 6).map(function (s) {
         var reviewed = window.LEAGUE.reviewsFor(s.id).some(function (r) { return r.reviewer.id === profile.id; });
+        var who = s.student.handle ? esc(s.student.handle) : esc(s.student.name);
         return '<div class="rv-card" data-sub="' + esc(s.id) + '">' +
-          '<div class="rv-card-head"><div class="rv-who">' + esc(s.student.name) +
-            '<small>' + esc(s.student.group) + (s.student.demo ? ' · демо-однокурсник' : '') + '</small></div>' +
+          '<div class="rv-card-head"><div class="rv-who">' + who +
+            '<small>' + esc(s.student.group || '—') + (s.student.name ? ' · ' + esc(s.student.name) : '') + '</small></div>' +
           '<span class="rv-score-pill ' + ((s.result.score || 0) >= 85 ? 'is-ok' : '') + '">CI ' + (s.result.score != null ? s.result.score + '%' : '—') + '</span></div>' +
           (reviewed
             ? '<p class="rv-empty" style="margin:0;">// вы уже проверили эту работу</p>'
@@ -303,13 +424,16 @@
             var comment = holder.querySelector('.rv-comment').value.trim();
             if (!filled) { alert('Поставьте оценку по каждому из четырёх критериев'); return; }
             if (comment.length < 15) { alert('Комментарий короче 15 символов — объясните, что именно хорошо и что улучшить'); return; }
-            window.LEAGUE.addReview({
+            var review = {
+              schema: 'league-review/1',
               kind: 'peer', standId: standId, submissionId: sub.id,
-              reviewer: { id: profile.id, name: profile.name, group: profile.group },
-              reviewee: { id: sub.student.id, name: sub.student.name, group: sub.student.group },
+              reviewer: window.LEAGUE.publicStudent(profile),
+              reviewee: { id: sub.student.id, name: sub.student.name, group: sub.student.group, handle: sub.student.handle },
               scores: scores, comment: comment
-            });
+            };
+            window.LEAGUE.addReview(review); // сам начислит +1 PRP
             window.LEAGUE.award(profile.id, 'review', 'review:' + sub.id, { standId: standId });
+            showReviewCode(review);
             refreshXpStrip();
             renderReviewArea(standId);
             renderMyReviews(standId);
@@ -321,22 +445,42 @@
     renderMyReviews(standId);
   }
 
+  /* Модалка с кодом рецензии: рецензент отправляет ITS-REV1 автору работы */
+  function showReviewCode(review) {
+    var modal = $('rev-code-modal');
+    if (!modal) { window.LEAGUE && alert('Рецензия сохранена. Код: ' + window.LEAGUE.encodeReview(review)); return; }
+    $('rev-code-text').value = window.LEAGUE.encodeReview(review);
+    modal.hidden = false;
+    $('rev-code-close').onclick = function () { modal.hidden = true; };
+    modal.onclick = function (e) { if (e.target === modal) modal.hidden = true; };
+    $('rev-code-copy').onclick = function () {
+      var ta = $('rev-code-text');
+      ta.select();
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).catch(function () {});
+      else document.execCommand('copy');
+      this.textContent = 'скопировано ✓';
+      var btn = this;
+      setTimeout(function () { btn.textContent = 'скопировать код'; }, 2000);
+    };
+  }
+
   function renderMyReviews(standId) {
     var box = $('rv-mine');
     if (!box || !hasLeague()) return;
     var profile = window.LEAGUE.getProfile();
     var mine = window.LEAGUE.reviews().filter(function (r) {
-      return r.standId === standId && r.reviewee.id === profile.id;
+      return r.standId === standId && r.reviewee && (r.reviewee.id === profile.id || r.reviewee.name === profile.name);
     });
     if (!mine.length) {
-      box.innerHTML = '<p class="rv-empty">// пока никто не проверял ваши работы этого стенда</p>';
+      box.innerHTML = '<p class="rv-empty">// здесь появятся рецензии на ваши работы: вставьте код ITS-REV1 от коллеги в блок обмена</p>';
       return;
     }
     box.innerHTML = mine.map(function (r) {
       var avg = Math.round(((r.scores.config + r.scores.completeness + r.scores.journal + r.scores.communication) / 4) * 10) / 10;
+      var who = r.reviewer.handle ? esc(r.reviewer.handle) : esc(r.reviewer.name);
       return '<div class="rv-review ' + (r.kind === 'expert' ? 'is-expert' : '') + '">' +
         '<p class="rv-review-meta">' + (r.kind === 'expert' ? '★ экспертная оценка' : 'взаимная оценка') + ' · ' +
-        esc(r.reviewer.name) + ' · ' + esc(r.reviewer.group || '—') + ' · средний балл ' + avg + '/5</p>' +
+        who + ' · средний балл ' + avg + '/5</p>' +
         '<p>' + esc(r.comment) + '</p></div>';
     }).join('');
   }
@@ -375,7 +519,7 @@
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
       return true;
     } catch (e) {
-      return false; // код работы всё равно доступен через модальное окно
+      return false;
     }
   }
 
@@ -393,39 +537,121 @@
     }
   }
 
-  /* ----------------------------- Лендинг стендов ----------------------------- */
-  function initLanding() {
+  /* ----------------------------- Кабинет (лендинг стендов) ----------------------------- */
+  var QUESTS = [
+    { id: 'dhcp-alt', title: 'DHCP на ALT Server', glyph: 'fox', href: 'dhcp-alt.html',
+      desc: 'Новый офис «СетьПолиса»: 40 рабочих мест, сетевой принтер и гостиная сеть' },
+    { id: 'switch-ovs', title: 'Коммутация · Open vSwitch', glyph: 'crab', href: 'switch-ovs.html',
+      desc: 'Два отдела, один Linux-коммутатор: VLAN access и trunk по брифу Клешни' },
+    { id: 'soon-1', title: 'Маршрутизация и NAT', glyph: 'owl', href: null,
+      desc: 'ip route, маскарадинг LAN↔WAN, диагностика послеаварийного восстановления' },
+    { id: 'soon-2', title: 'Контроль доступа · SSH и sudo', glyph: 'wolf', href: null,
+      desc: 'Ключи вместо паролей, sudoers, аудит и журналирование действий администраторов' }
+  ];
+
+  function renderMascotPicker(selected) {
+    if (!hasLeague()) return '';
+    return '<div class="mascot-pick" id="mascot-pick">' + window.LEAGUE.MASCOTS.map(function (m) {
+      return '<button type="button" data-mascot="' + m.id + '" class="' + (m.id === selected ? 'is-selected' : '') + '" ' +
+        'title="' + m.animal + '" aria-label="маскот ' + m.animal + '">' + mascotSvg(m.id, 42, false) + '</button>';
+    }).join('') + '</div>';
+  }
+
+  function initCabinet() {
     var form = $('profile-form');
     if (!form) return;
     migrateOldSubmissions();
-    if (hasLeague() && !localStorage.getItem('league-demo-version')) {
-      window.LEAGUE.seedDemo();
-    }
     var nameInput = $('p-name'), groupInput = $('p-group'), msg = $('profile-msg');
-    var gate = $('profile-gate'), panel = $('profile-panel'), catalog = $('stands-catalog');
+    var gate = $('profile-gate'), dashboard = $('cab-dashboard');
+    var pickerHost = $('mascot-picker-host');
+    var pickedMascot = null;
 
-    function renderPanel(profile) {
+    function mountPicker(current) {
+      pickedMascot = current || (window.LEAGUE ? window.LEAGUE.MASCOTS[0].id : 'raccoon');
+      pickerHost.innerHTML = renderMascotPicker(pickedMascot);
+      pickerHost.querySelectorAll('button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          pickedMascot = b.dataset.mascot;
+          pickerHost.querySelectorAll('button').forEach(function (x) { x.classList.toggle('is-selected', x === b); });
+          if (hasLeague()) window.LEAGUE.setMascot(pickedMascot);
+        });
+      });
+    }
+
+    function renderDashboard(profile) {
       gate.hidden = true;
-      panel.hidden = false;
-      catalog.hidden = false;
-      $('fp-name').textContent = profile.name;
-      $('fp-group').textContent = profile.group;
-      if (hasLeague()) {
-        window.LEAGUE.dailyLogin(profile.id);
-        var link = document.createElement('a');
-        link.href = 'league.html';
-        link.className = 'flat-btn ghost';
-        link.textContent = 'моя лига →';
-        if (!$('league-entry')) { link.id = 'league-entry'; panel.appendChild(link); }
-        renderLandingSummary(profile);
-      }
+      dashboard.hidden = false;
+      var L = window.LEAGUE;
+      L.dailyLogin(profile.id);
+      var t = L.totals(profile.id);
+      var handle = L.handleFor(profile);
+      var tribe = L.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
+
+      $('cab-id-card').innerHTML =
+        '<div class="id-card-top">' + mascotSvg(profile.mascotId, 64) +
+          '<div><p class="id-handle">' + esc(handle.text) + '</p>' +
+          '<p class="id-name">' + esc(profile.name) + '</p>' +
+          '<p class="id-group">' + esc(profile.group) + (tribe ? ' · ' + esc(tribe.name) : '') + '</p></div></div>' +
+        '<div class="id-stats">' +
+          '<div class="id-stat"><b>' + t.level.level + '</b><span>уровень</span></div>' +
+          '<div class="id-stat"><b>' + t.coins + ' ◈</b><span>неткоины</span></div>' +
+          '<div class="id-stat"><b>' + L.prpBalance(profile.id) + '</b><span>PRP</span></div>' +
+        '</div>' +
+        '<div class="id-level"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
+          (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : '') + '</span>' +
+          '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
+          '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;">' +
+          '<a class="flat-btn ghost" href="league.html" style="text-decoration:none;">моя лига и достижения →</a>' +
+          '<a class="flat-btn ghost" href="teams.html" style="text-decoration:none;">трайн и турниры</a>' +
+          '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div>';
+
+      $('cab-quests').innerHTML = QUESTS.map(function (q) {
+        if (!q.href) {
+          return '<div class="quest-card is-locked"><div class="quest-glyph">' + mascotSvg(q.glyph, 44, false) + '</div>' +
+            '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p></div>' +
+            '<div class="quest-side"><span class="flat-badge is-soon">в разработке</span></div></div>';
+        }
+        var m = L.standMastery(profile.id, q.id);
+        var best = L.bestSubmission(profile.id, q.id);
+        var state = !best ? { label: 'не начат', cls: 'is-soon' }
+          : m.percent >= 95 ? { label: 'пройден ' + m.percent + '%', cls: 'is-ready' }
+          : { label: 'в работе ' + m.percent + '%', cls: 'is-run' };
+        return '<a class="quest-card" href="' + q.href + '" style="text-decoration:none;color:inherit;">' +
+          '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
+          '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
+          '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
+          '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span></div></a>';
+      }).join('');
+
+      var events = L.ledger().filter(function (e) { return e.profileId === profile.id; })
+        .sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); }).slice(0, 8);
+      $('cab-feed').innerHTML = events.length ? '<ul class="feed-list">' + events.map(function (e) {
+        var d = new Date(e.at);
+        return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) +
+          (e.standId ? ' · ' + esc(e.standId) : '') + '</span><span class="feed-date">' +
+          d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
+      }).join('') + '</ul>' : '<p class="rv-empty">// лента пуста: откройте первый квест</p>';
+
+      bindExchange('cab-code-input', 'cab-code-go', 'cab-msg', function () { renderDashboard(profile); });
+      var repoBtn = $('cab-repo');
+      if (repoBtn) repoBtn.onclick = function () {
+        pullFromRepo(repoBtn, $('cab-msg'), function () { renderDashboard(profile); });
+      };
+      var mc = $('cab-mascot-change');
+      if (mc) mc.onclick = function () {
+        dashboard.hidden = true; gate.hidden = false;
+        mountPicker(profile.mascotId);
+        nameInput.value = profile.name; groupInput.value = profile.group;
+      };
     }
 
     var existing = Store.get(PROFILE_KEY);
-    if (existing && existing.name && existing.group) {
-      if (hasLeague() && !existing.id) window.LEAGUE.updateProfile({ name: existing.name, group: existing.group });
-      renderPanel(hasLeague() ? window.LEAGUE.getProfile() : existing);
+    if (hasLeague() && existing && existing.name && existing.group) {
+      var p = window.LEAGUE.getProfile();
+      if (p && p.name) renderDashboard(p);
     }
+
+    mountPicker(existing && existing.mascotId);
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -437,39 +663,78 @@
       if (hasLeague()) {
         var old = window.LEAGUE.getProfile();
         profile = old ? window.LEAGUE.updateProfile({ name: name, group: group }) : window.LEAGUE.ensureProfile(name, group);
+        if (pickedMascot) profile = window.LEAGUE.setMascot(pickedMascot);
       } else {
-        profile = { name: name, group: group, savedAt: nowISO() };
+        profile = { name: name, group: group, mascotId: pickedMascot, savedAt: nowISO() };
         Store.set(PROFILE_KEY, profile);
       }
       msg.textContent = '';
-      renderPanel(profile);
+      renderDashboard(profile);
+      startTour(true);
     });
 
-    $('profile-change').addEventListener('click', function () {
+    var changeBtn = $('profile-change');
+    if (changeBtn) changeBtn.addEventListener('click', function () {
       var p = Store.get(PROFILE_KEY) || {};
       nameInput.value = p.name || '';
       groupInput.value = p.group || '';
-      panel.hidden = true;
-      catalog.hidden = true;
+      dashboard.hidden = true;
       gate.hidden = false;
-      nameInput.focus();
+      mountPicker(p.mascotId);
     });
   }
 
-  function renderLandingSummary(profile) {
-    var anchor = document.querySelector('#stands-catalog .st-section-head');
-    if (!anchor || $('landing-league')) return;
-    var L = window.LEAGUE;
-    var t = L.totals(profile.id);
-    var box = document.createElement('div');
-    box.id = 'landing-league';
-    box.className = 'xp-strip';
-    box.innerHTML =
-      '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
-      '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
-      '<span class="xp-meta">' + t.xp + ' XP · ◈ ' + t.coins + '</span>' +
-      '<a class="flat-btn ghost" href="league.html" style="text-decoration:none;">лига, трайбы и хакатоны →</a>';
-    anchor.parentNode.insertBefore(box, anchor);
+  /* ----------------------------- Онбординг-тур ----------------------------- */
+  var TOUR_STEPS = [
+    { mascot: 'raccoon', who: 'Енот Топотун · наставник',
+      text: 'Привет! Я проведу вас по учебной вселенной <strong>СетьПолис</strong>. Это потоковый проект: каждый стенд — глава одной истории про живую сеть компании.' },
+    { mascot: 'fox', who: 'Лиса Василиса · руководитель IT',
+      text: 'Квесты — это реальные задачи из практики. Внутри каждого: бриф-легенда, терминал виртуальной машины, автотесты как в CI и контрольный тест. Переключайте формы деятельности, когда захотите.' },
+    { mascot: 'crab', who: 'Краб Клешня · инженер ЦОД',
+      text: 'Застряли? Сначала <strong>help</strong> и man на машине, потом спросите коллегу, потом поищите в интернете. Умение искать данные — тоже профессиональный навык.' },
+    { mascot: 'owl', who: 'Филин Мудрей · эксперт',
+      text: 'Сданную работу проверят автотесты, однокурсники и преподаватель. За проверки коллег начисляются PRP и XP, а лучшие рецензенты попадают в рейтинг справедливых. Удачи в квесте!' }
+  ];
+  function startTour(onlyIfNew) {
+    if (onlyIfNew && localStorage.getItem(TOUR_KEY)) return;
+    var overlay = $('tour-overlay');
+    if (!overlay) return;
+    var step = 0;
+    function render() {
+      var s = TOUR_STEPS[step];
+      overlay.innerHTML = '<div class="tour-pop" role="dialog" aria-modal="true">' +
+        (hasMascots() ? window.MASCOTS.speech(s.mascot, s.who, s.text, { size: 56 }) : '<p>' + s.text + '</p>') +
+        '<p class="tour-progress">шаг ' + (step + 1) + ' из ' + TOUR_STEPS.length + '</p>' +
+        '<div class="tour-actions">' +
+        '<button class="flat-btn ghost" id="tour-skip" type="button">пропустить</button>' +
+        '<button class="flat-btn" id="tour-next" type="button">' + (step === TOUR_STEPS.length - 1 ? 'начать квесты →' : 'дальше →') + '</button>' +
+        '</div></div>';
+      $('tour-skip').onclick = close;
+      $('tour-next').onclick = function () { if (step === TOUR_STEPS.length - 1) close(); else { step++; render(); } };
+    }
+    function close() { overlay.innerHTML = ''; localStorage.setItem(TOUR_KEY, '1'); }
+    overlay.hidden = false;
+    render();
+  }
+
+  /* Scroll-spy для степпера стенда */
+  function initStepSpy() {
+    var links = document.querySelectorAll('.step-nav a[href^="#"]');
+    if (!links.length || typeof IntersectionObserver === 'undefined') return;
+    var map = {};
+    links.forEach(function (a) {
+      var sec = document.querySelector(a.getAttribute('href'));
+      if (sec) map[sec.id] = a;
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a) { a.classList.remove('is-active'); });
+          if (map[en.target.id]) map[en.target.id].classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
   }
 
   /* ----------------------------- Mermaid ----------------------------- */
@@ -484,7 +749,7 @@
         themeVariables: {
           darkMode: true, background: '#12161b', primaryColor: '#171d23', primaryBorderColor: '#5b9dff',
           primaryTextColor: '#e7ecf2', lineColor: '#8a95a1', secondaryColor: '#171d23',
-          tertiaryColor: '#0c1014', edgeLabelBackground: '#171d23',
+          tertiaryColor: '#0c1014',
           fontFamily: 'JetBrains Mono, ui-monospace, monospace', fontSize: '13px'
         }
       });
@@ -501,19 +766,35 @@
       location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
       return null;
     }
-    if (hasLeague() && !profile.id) {
-      profile = window.LEAGUE.updateProfile({ name: profile.name, group: profile.group });
+    if (hasLeague()) {
+      var p = window.LEAGUE.getProfile();
+      if (!p || !p.name) {
+        profile = window.LEAGUE.ensureProfile(profile.name, profile.group);
+        if (profile.mascotId) window.LEAGUE.setMascot(profile.mascotId);
+      } else profile = p;
     }
     $('fp-name').textContent = profile.name;
-    $('fp-group').textContent = profile.group;
+    $('fp-group').textContent = window.LEAGUE ? window.LEAGUE.handleFor(profile).text : profile.group;
     return profile;
   }
 
-  function bindCodeModalOnce() {
-    var modal = $('sub-code-modal');
-    if (!modal) return;
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+  function bindCodeModalsOnce() {
+    ['sub-code-modal', 'rev-code-modal'].forEach(function (id) {
+      var modal = $(id);
+      if (!modal) return;
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+      });
+    });
+  }
+
+  function bindStandExchange(standId, rerender) {
+    bindExchange('rv-code-input', 'rv-code-go', 'rv-code-msg', function () {
+      if (rerender) rerender();
+    });
+    var repoBtn = $('rv-repo');
+    if (repoBtn) repoBtn.addEventListener('click', function () {
+      pullFromRepo(repoBtn, $('rv-code-msg'), function () { if (rerender) rerender(); });
     });
   }
 
@@ -523,7 +804,7 @@
     if (!editor || typeof DHCP === 'undefined') return;
     var profile = loadProfile();
     if (!profile) return;
-    bindCodeModalOnce();
+    bindCodeModalsOnce();
     renderXpStrip($('lab-profile'));
     renderSkills('dhcp-alt');
     startPresence('dhcp-alt');
@@ -661,7 +942,7 @@
         schema: 'stands-submission/2',
         standId: standId,
         standTitle: standTitle,
-        student: { id: profile.id || profile.name, name: profile.name, group: profile.group, tribeId: profile.tribeId || null, demo: false },
+        student: hasLeague() ? window.LEAGUE.publicStudent(profile) : { id: profile.id || profile.name, name: profile.name, group: profile.group },
         startedAt: startedAt,
         updatedAt: nowISO(),
         submittedAt: nowISO(),
@@ -677,6 +958,7 @@
       };
       if (hasLeague()) {
         window.LEAGUE.addSubmission(submission);
+        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на пиринг: ' + standId);
         grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
         refreshXpStrip();
         renderReviewArea(standId);
@@ -684,7 +966,7 @@
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
       downloadJson(submission);
       if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
-      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке';
+      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
       autosave();
@@ -693,6 +975,7 @@
     runValidation(true);
     if (saved && saved.autotests) { autotestsReport = saved.autotests; renderAutotests(autotestsReport); }
     renderReviewArea(standId);
+    bindStandExchange(standId, function () { renderReviewArea(standId); });
   }
 
   /* ----------------------------- Стенд Open vSwitch ----------------------------- */
@@ -701,7 +984,7 @@
     if (!panel || typeof OVS === 'undefined') return;
     var profile = loadProfile();
     if (!profile) return;
-    bindCodeModalOnce();
+    bindCodeModalsOnce();
     renderXpStrip($('lab-profile'));
     renderSkills('switch-ovs');
     startPresence('switch-ovs');
@@ -857,7 +1140,7 @@
         schema: 'stands-submission/2',
         standId: standId,
         standTitle: standTitle,
-        student: { id: profile.id || profile.name, name: profile.name, group: profile.group, tribeId: profile.tribeId || null, demo: false },
+        student: hasLeague() ? window.LEAGUE.publicStudent(profile) : { id: profile.id || profile.name, name: profile.name, group: profile.group },
         startedAt: startedAt,
         updatedAt: nowISO(),
         submittedAt: nowISO(),
@@ -873,6 +1156,7 @@
       };
       if (hasLeague()) {
         window.LEAGUE.addSubmission(submission);
+        window.LEAGUE.spendPrp(profile.id, 'работа выставлена на пиринг: ' + standId);
         grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
         refreshXpStrip();
         renderReviewArea(standId);
@@ -880,7 +1164,7 @@
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
       downloadJson(submission);
       if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
-      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке';
+      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
       autosave();
@@ -889,16 +1173,19 @@
     runValidation(true);
     if (saved && saved.autotests) { autotestsReport = saved.autotests; renderAutotests(autotestsReport); }
     renderReviewArea(standId);
+    bindStandExchange(standId, function () { renderReviewArea(standId); });
   }
 
   var booted = false;
   function boot() {
     if (booted) return;
     booted = true;
-    initLanding();
+    initTheme();
+    initCabinet();
     initDhcpLab();
     initOvsLab();
     initMermaid();
+    initStepSpy();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
