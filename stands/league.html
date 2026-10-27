@@ -8,14 +8,14 @@
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <meta name="robots" content="noindex, nofollow">
 <title>лига · уровни, опыт и трайбы · itsliventsev</title>
-<meta name="description" content="Персональная страница учебной лиги: уровни и опыт, неткоины, матрица навыков ФГОС СПО 09.02.06, рейтинг проверяющего, состав трайбов и турниры. Страница с персональными данными не индексируется.">
+<meta name="description" content="Персональная страница учебной лиги: уровни и опыт, неткоины, матрица навыков ФГОС СПО 09.02.06, рейтинг проверяющего, состав трайбов и взаимные оценки. Страница с персональными данными не индексируется.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261026r">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026r">
+<link rel="stylesheet" href="../assets/site.css?v=20261026s">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026s">
 </head>
 <body class="flat-scope" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -58,7 +58,7 @@
     <div class="st-hero">
       <span class="st-hero-index">L1</span>
       <div>
-        <p class="flat-kicker">геймификация · пиринг · трайбы</p>
+        <p class="flat-kicker">уровни · взаимные оценки · трайбы</p>
         <h1>учебная лига</h1>
       </div>
     </div>
@@ -78,129 +78,124 @@
       <button class="flat-btn ghost" id="lg-change" type="button">сменить профиль</button>
     </div>
 
-    <!-- Уровень и прогресс -->
-    <div class="st-section-head">
-      <span class="st-section-num">01</span>
-      <h2>уровень и опыт</h2>
-      <span class="st-section-tag">прогрессия</span>
+    <!-- Табы: вся лига на одном экране -->
+    <div class="lg-tabs" role="tablist" aria-label="Разделы лиги">
+      <button class="lg-tab is-active" type="button" role="tab" aria-selected="true" data-pane="pane-progress">прогресс</button>
+      <button class="lg-tab" type="button" role="tab" aria-selected="false" data-pane="pane-skills">навыки</button>
+      <button class="lg-tab" type="button" role="tab" aria-selected="false" data-pane="pane-reviews">оценки</button>
+      <button class="lg-tab" type="button" role="tab" aria-selected="false" data-pane="pane-teams">команды</button>
+      <button class="lg-tab" type="button" role="tab" aria-selected="false" data-pane="pane-data">данные</button>
     </div>
-    <section class="lab-panel" id="lg-level-card" aria-live="polite"></section>
 
-    <!-- Лестница уровней -->
-    <div class="st-section-head">
-      <span class="st-section-num">02</span>
-      <h2>лестница уровней</h2>
-      <span class="st-section-tag">карьерная карта</span>
-    </div>
-    <section class="lab-panel">
-      <div id="lg-ladder" class="lg-ladder"></div>
-    </section>
-
-    <!-- Журнал наград -->
-    <div class="st-section-head">
-      <span class="st-section-num">03</span>
-      <h2>журнал наград и неткоины</h2>
-      <span class="st-section-tag">за что начисляется</span>
-    </div>
-    <section class="lab-panel">
-      <div class="lg-awards-grid" id="lg-awards"></div>
-      <p class="admin-hint" style="margin-top:.9rem;">последние события опыта:</p>
-      <div class="sub-table-wrap">
-        <table class="sub-table lg-table">
-          <thead><tr><th>когда</th><th>событие</th><th>стенд</th><th>XP</th><th>неткоины</th></tr></thead>
-          <tbody id="lg-ledger"></tbody>
-        </table>
+    <!-- ПАНЕЛЬ: прогресс -->
+    <div class="lg-pane is-active" id="pane-progress" role="tabpanel">
+      <div class="st-section-head">
+        <h2>уровень и опыт</h2>
+        <span class="st-section-tag">прогрессия</span>
       </div>
-    </section>
+      <section class="lab-panel" id="lg-level-card" aria-live="polite"></section>
 
-    <!-- Матрица навыков ФГОС -->
-    <div class="st-section-head">
-      <span class="st-section-num">04</span>
-      <h2>матрица навыков ФГОС</h2>
-      <span class="st-section-tag">09.02.06</span>
-    </div>
-    <section class="lab-panel">
-      <p class="admin-hint" style="margin-top:0;">Освоение профессиональных компетенций считается по лучшей сдаче каждого стенда: CI-проверки, контрольный тест и автотесты.</p>
-      <div id="lg-skills" class="lg-skills"></div>
-    </section>
-
-    <!-- Рейтинг проверяющего -->
-    <div class="st-section-head">
-      <span class="st-section-num">05</span>
-      <h2>рейтинг проверяющего</h2>
-      <span class="st-section-tag">равный равному</span>
-    </div>
-    <section class="lab-panel" id="lg-reviewer"></section>
-
-
-    <!-- Достижения -->
-    <div class="st-section-head">
-      <span class="st-section-num">06</span>
-      <h2>достижения</h2>
-      <span class="st-section-tag">бейджи по реальным действиям</span>
-    </div>
-    <section class="lab-panel">
-      <div id="lg-achievements" class="ach-grid"></div>
-    </section>
-
-    <!-- Мои работы -->
-    <div class="st-section-head">
-      <span class="st-section-num">07</span>
-      <h2>мои работы</h2>
-      <span class="st-section-tag">история сдачи</span>
-    </div>
-    <section class="lab-panel">
-      <div class="sub-table-wrap">
-        <table class="sub-table lg-table">
-          <thead><tr><th>стенд</th><th>сдано</th><th>CI</th><th>автотесты</th><th>оценок</th><th>код работы</th></tr></thead>
-          <tbody id="lg-subs"></tbody>
-        </table>
+      <div class="st-section-head">
+        <h2>лестница уровней</h2>
+        <span class="st-section-tag">карьерная карта</span>
       </div>
-    </section>
+      <section class="lab-panel">
+        <div id="lg-ladder" class="lg-ladder"></div>
+      </section>
 
-    <!-- Таблица трайбов -->
-    <div class="st-section-head">
-      <span class="st-section-num">08</span>
-      <h2>таблица трайбов</h2>
-      <span class="st-section-tag">командный зачёт</span>
-    </div>
-    <section class="lab-panel">
-      <div class="sub-table-wrap">
-        <table class="sub-table lg-table">
-          <thead><tr><th>#</th><th>трайн</th><th>участников</th><th>суммарный XP</th></tr></thead>
-          <tbody id="lg-standings"></tbody>
-        </table>
+      <div class="st-section-head">
+        <h2>журнал наград и неткоины</h2>
+        <span class="st-section-tag">за что начисляется</span>
       </div>
-      <p class="admin-hint" style="margin-bottom:0;">Как устроены трайбы и турниры — на странице <a href="teams.html">команды</a>.</p>
-    </section>
-
-    <!-- Турниры -->
-    <div class="st-section-head">
-      <span class="st-section-num">09</span>
-      <h2>турниры и хакатоны</h2>
-      <span class="st-section-tag">расписание</span>
+      <section class="lab-panel">
+        <div class="lg-awards-grid" id="lg-awards"></div>
+        <p class="admin-hint" style="margin-top:.9rem;">последние события опыта:</p>
+        <div class="sub-table-wrap">
+          <table class="sub-table lg-table">
+            <thead><tr><th>когда</th><th>событие</th><th>стенд</th><th>XP</th><th>неткоины</th></tr></thead>
+            <tbody id="lg-ledger"></tbody>
+          </table>
+        </div>
+      </section>
     </div>
-    <section class="lab-panel">
-      <div id="lg-hacks" class="lg-hacks"></div>
-    </section>
 
-    <!-- Перенос данных -->
-    <div class="st-section-head">
-      <span class="st-section-num">10</span>
-      <h2>перенос данных между устройствами</h2>
-      <span class="st-section-tag">без сервера</span>
-    </div>
-    <section class="lab-panel">
-      <p class="admin-hint" style="margin-top:0;">Сервера нет: всё хранится в этом браузере. Бандл — один JSON-файл с работами, оценками, presence и журналом опыта. Импортируйте его на другом устройстве.</p>
-      <div class="flex flex-wrap gap-2">
-        <button class="flat-btn" id="lg-export" type="button">экспорт бандла ↧</button>
-        <label class="flat-btn ghost" for="lg-import" style="cursor:pointer;">импорт бандла ↥
-          <input id="lg-import" type="file" accept="application/json,.json" hidden>
-        </label>
-        <button class="flat-btn ghost" id="lg-reset" type="button">сбросить все мои данные</button>
+    <!-- ПАНЕЛЬ: навыки -->
+    <div class="lg-pane" id="pane-skills" role="tabpanel" hidden>
+      <div class="st-section-head">
+        <h2>матрица навыков</h2>
+        <span class="st-section-tag">ФГОС СПО 09.02.06</span>
       </div>
-      <p class="admin-hint" id="lg-data-msg" role="status" style="margin-bottom:0;"></p>
-    </section>
+      <section class="lab-panel">
+        <p class="admin-hint" style="margin-top:0;">Освоение профессиональных компетенций считается по лучшей сдаче каждого стенда: CI-проверки, контрольный тест и автотесты. Сначала — рабочая задача, код компетенции указан рядом мелким шифром.</p>
+        <div id="lg-skills" class="skill-grid"></div>
+      </section>
+    </div>
+
+    <!-- ПАНЕЛЬ: оценки -->
+    <div class="lg-pane" id="pane-reviews" role="tabpanel" hidden>
+      <div class="st-section-head">
+        <h2>рейтинг проверяющего</h2>
+        <span class="st-section-tag">взаимная оценка</span>
+      </div>
+      <section class="lab-panel" id="lg-reviewer"></section>
+
+      <div class="st-section-head">
+        <h2>достижения</h2>
+        <span class="st-section-tag">бейджи по реальным действиям</span>
+      </div>
+      <section class="lab-panel">
+        <div id="lg-achievements" class="ach-grid"></div>
+      </section>
+    </div>
+
+    <!-- ПАНЕЛЬ: команды -->
+    <div class="lg-pane" id="pane-teams" role="tabpanel" hidden>
+      <div class="st-section-head">
+        <h2>мои работы</h2>
+        <span class="st-section-tag">история сдачи</span>
+      </div>
+      <section class="lab-panel">
+        <div class="sub-table-wrap">
+          <table class="sub-table lg-table">
+            <thead><tr><th>стенд</th><th>сдано</th><th>CI</th><th>автотесты</th><th>оценок</th><th>код работы</th></tr></thead>
+            <tbody id="lg-subs"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="st-section-head">
+        <h2>таблица трайбов</h2>
+        <span class="st-section-tag">командный зачёт</span>
+      </div>
+      <section class="lab-panel">
+        <div class="sub-table-wrap">
+          <table class="sub-table lg-table">
+            <thead><tr><th>#</th><th>трайн</th><th>участников</th><th>суммарный XP</th></tr></thead>
+            <tbody id="lg-standings"></tbody>
+          </table>
+        </div>
+        <p class="admin-hint" style="margin-bottom:0;">Как устроены трайбы — на странице <a href="teams.html">команды</a>.</p>
+      </section>
+    </div>
+
+    <!-- ПАНЕЛЬ: данные -->
+    <div class="lg-pane" id="pane-data" role="tabpanel" hidden>
+      <div class="st-section-head">
+        <h2>перенос данных между устройствами</h2>
+        <span class="st-section-tag">без сервера</span>
+      </div>
+      <section class="lab-panel">
+        <p class="admin-hint" style="margin-top:0;">Сервера нет: всё хранится в этом браузере. Бандл — один JSON-файл с работами, оценками, presence и журналом опыта. Импортируйте его на другом устройстве.</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="flat-btn" id="lg-export" type="button">экспорт бандла ↧</button>
+          <label class="flat-btn ghost" for="lg-import" style="cursor:pointer;">импорт бандла ↥
+            <input id="lg-import" type="file" accept="application/json,.json" hidden>
+          </label>
+          <button class="flat-btn ghost" id="lg-reset" type="button">сбросить все мои данные</button>
+        </div>
+        <p class="admin-hint" id="lg-data-msg" role="status" style="margin-bottom:0;"></p>
+      </section>
+    </div>
 
   </main>
 
@@ -210,9 +205,9 @@
   </footer>
 </div>
 
-<script src="../assets/mascots.js?v=20261026r"></script>
-<script src="../assets/fgos-skills.js?v=20261026r"></script>
-<script src="../assets/league.js?v=20261026r"></script>
-<script src="../assets/league-page.js?v=20261026r"></script>
+<script src="../assets/mascots.js?v=20261026s"></script>
+<script src="../assets/fgos-skills.js?v=20261026s"></script>
+<script src="../assets/league.js?v=20261026s"></script>
+<script src="../assets/league-page.js?v=20261026s"></script>
 </body>
 </html>

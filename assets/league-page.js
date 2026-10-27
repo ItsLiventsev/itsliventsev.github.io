@@ -1,7 +1,7 @@
 /* ==========================================================================
    Персональная страница учебной лиги (stands/league.html)
    Рендерит уровень/XP, лестницу, награды, матрицу навыков ФГОС, рейтинг
-   проверяющего, мои работы, таблицу трайбов, хакатоны и перенос бандлов.
+   проверяющего, мои работы, таблицу трайбов и перенос бандлов.
    Всё локально (localStorage), сервер не требуется. noindex на странице.
    ========================================================================== */
 (function () {
@@ -64,7 +64,7 @@
       bar(lv.progress, lv.next ? 'до L' + (lv.level + 1) + ' «' + lv.next + '» · ' + lv.into + '/' + lv.span + ' XP' : 'максимальный уровень') +
       '<p class="admin-hint" style="margin-bottom:0;">всего опыта: <strong>' + t.xp + ' XP</strong>' +
       (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') +
-      ' · PRP тратятся при сдаче на пиринг и возвращаются за проверки коллег</p>';
+      ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег</p>';
   }
 
   /* ----------------------------- 06 · достижения ----------------------------- */
@@ -119,18 +119,27 @@
 
   /* ----------------------------- 04 · матрица ФГОС ----------------------------- */
   function renderSkills() {
+    var box = $('lg-skills');
+    if (!box) return;
     var rows = LEAGUE.skillsMatrix(profile.id);
     if (!rows.length) {
-      $('lg-skills').innerHTML = '<p class="admin-hint" style="margin:0;">Модуль навыков не загружен.</p>';
+      box.innerHTML = '<p class="admin-hint" style="margin:0;">Модуль навыков не загружен.</p>';
       return;
     }
     var anySubmission = LEAGUE.submissions().some(function (s) { return s.student.id === profile.id; });
-    $('lg-skills').innerHTML = rows.map(function (r) {
-      var title = (window.FGOS && FGOS.byCode(r.code) || {}).title || r.title || '';
-      return '<div class="lg-skill"><code>' + esc(r.code) + '</code>' +
-        '<span class="lg-skill-title">' + esc(title) + '</span>' +
-        bar(anySubmission ? r.percent : 0) +
-        '<span class="lg-skill-stands">' + r.stands.map(standName).join(' + ') + '</span></div>';
+    box.innerHTML = rows.map(function (r) {
+      var task = (window.FGOS && FGOS.byCode(r.code) || {}).title || r.title || r.code;
+      var pct = anySubmission ? Math.max(0, Math.min(100, Math.round(r.percent))) : 0;
+      return '<div class="skill-card">' +
+        '<div class="skill-card-head">' +
+          '<span class="skill-task">' + esc(task) + '</span>' +
+          '<span class="skill-bubble">' + esc(r.code) + '</span>' +
+        '</div>' +
+        '<div class="lg-bar-row"><span class="lg-bar"><span class="lg-bar-fill" style="width:' + pct + '%"></span></span>' +
+        '<span class="lg-bar-val">' + pct + '%</span></div>' +
+        '<div class="skill-meta"><span>стенды: ' + r.stands.map(standName).join(' + ') + '</span>' +
+        '<span>' + (pct === 100 ? 'освоено полностью' : pct > 0 ? 'в работе' : 'ожидает практики') + '</span></div>' +
+      '</div>';
     }).join('');
   }
 
@@ -198,18 +207,6 @@
     }).join('');
   }
 
-  /* ----------------------------- 08 · хакатоны ----------------------------- */
-  function renderHacks() {
-    var label = { done: 'завершён', active: 'идёт сейчас', future: 'планируется' };
-    $('lg-hacks').innerHTML = LEAGUE.HACKATHONS.map(function (h) {
-      return '<div class="lg-hack is-' + h.status + '">' +
-        '<span class="flat-badge ' + (h.status === 'active' ? 'is-run' : h.status === 'done' ? 'is-ready' : 'is-soon') + '">' + label[h.status] + '</span>' +
-        '<div><strong>' + esc(h.title) + '</strong>' +
-        '<p class="admin-hint" style="margin:.25rem 0 0;">' + esc(h.task) + '</p></div>' +
-        '<span class="mono lg-hack-date">' + esc(h.date) + '</span></div>';
-    }).join('');
-  }
-
   /* ----------------------------- 09 · бандлы ----------------------------- */
   function downloadBundle() {
     var bundle = LEAGUE.exportBundle();
@@ -244,12 +241,29 @@
 
   function renderAll() {
     renderLevel(); renderLadder(); renderLedger(); renderSkills();
-    renderReviewer(); renderAchievements(); renderSubs(); renderStandings(); renderHacks();
+    renderReviewer(); renderAchievements(); renderSubs(); renderStandings();
+  }
+
+  function initTabs() {
+    var tabs = document.querySelectorAll('.lg-tab');
+    var panes = document.querySelectorAll('.lg-pane');
+    if (!tabs.length) return;
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+        panes.forEach(function (p) { p.classList.remove('is-active'); p.hidden = true; });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        var pane = $(tab.dataset.pane);
+        if (pane) { pane.classList.add('is-active'); pane.hidden = false; }
+      });
+    });
   }
 
   function init() {
     if (!loadProfile()) return;
     renderAll();
+    initTabs();
     $('lg-change').addEventListener('click', function () { location.href = 'index.html'; });
     $('lg-export').addEventListener('click', downloadBundle);
     $('lg-import').addEventListener('change', function (e) {
