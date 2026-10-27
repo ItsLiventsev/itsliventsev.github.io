@@ -712,7 +712,7 @@
       $('tour-skip').onclick = close;
       $('tour-next').onclick = function () { if (step === TOUR_STEPS.length - 1) close(); else { step++; render(); } };
     }
-    function close() { overlay.innerHTML = ''; localStorage.setItem(TOUR_KEY, '1'); }
+    function close() { overlay.innerHTML = ''; overlay.hidden = true; localStorage.setItem(TOUR_KEY, '1'); }
     overlay.hidden = false;
     render();
   }

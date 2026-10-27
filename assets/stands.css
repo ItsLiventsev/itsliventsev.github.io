@@ -1100,3 +1100,6 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 .flat-scope .flex { display: flex; }
 .flat-scope .flex-wrap { flex-wrap: wrap; }
 .flat-scope .gap-2 { gap: .5rem; }
+
+/* Атрибут hidden должен побеждать display-значения компонентов */
+.tour-overlay[hidden], .st-modal[hidden] { display: none; }
