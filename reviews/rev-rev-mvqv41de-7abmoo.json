@@ -1,0 +1,24 @@
+{
+  "kind": "expert",
+  "standId": "switch-ovs",
+  "submissionId": "sub-mvqv32bt-trgf87",
+  "reviewer": {
+    "id": "teacher",
+    "name": "Преподаватель",
+    "group": "—"
+  },
+  "reviewee": {
+    "id": "stu-mvqv1jha-k1u6o3",
+    "name": "Тео Вот",
+    "group": "СА22"
+  },
+  "scores": {
+    "config": 4,
+    "completeness": 4,
+    "journal": 4,
+    "communication": 4
+  },
+  "comment": ".............................................",
+  "id": "rev-mvqv41de-7abmoo",
+  "createdAt": "2026-10-27T15:50:39.602Z"
+}
