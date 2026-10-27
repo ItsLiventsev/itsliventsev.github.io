@@ -2440,15 +2440,15 @@ textarea.admin-input { resize: vertical; line-height: 1.6; }
   display: inline-flex;
   align-items: center;
   margin-left: .35rem;
-  padding: .14rem .42rem;
+  padding: .16rem .44rem;
   border-radius: 4px;
   border: 1px solid var(--border);
   background: var(--surface-2);
   color: var(--faint);
   font-family: var(--font-mono);
-  font-size: .58rem;
+  font-size: .56rem;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .05em;
   text-transform: uppercase;
   line-height: 1.2;
   white-space: nowrap;
@@ -2457,7 +2457,7 @@ textarea.admin-input { resize: vertical; line-height: 1.6; }
 .quick-bubble.is-wip .qb-glyph { color: var(--faint); }
 .quick-bubble.is-wip:hover { opacity: 1; }
 @media (max-width: 880px) {
-  .nav-wip { font-size: .62rem; padding: .18rem .45rem; }
+  .nav-wip { font-size: .6rem; padding: .2rem .45rem; }
 }
 
 /* Серый баннер статуса раздела и приглушённая лента */
