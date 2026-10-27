@@ -36,24 +36,49 @@
     return profile;
   }
 
+  function mascot(id, size) {
+    return window.MASCOTS ? window.MASCOTS.svg(id || 'raccoon', { size: size || 40, floating: false }) : '';
+  }
+
   /* ----------------------------- 01 · уровень ----------------------------- */
   function renderLevel() {
     var t = LEAGUE.totals(profile.id);
     var lv = t.level;
     var tribe = LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
+    var handle = LEAGUE.handleFor(profile);
     $('lg-name').textContent = profile.name;
     $('lg-group').textContent = profile.group + ' · ' + (tribe ? tribe.name : 'трайн не назначен');
-    $('lg-tribe').textContent = tribe ? tribe.glyph + ' · ' + tribe.name : 'трайн: —';
+    $('lg-tribe').textContent = (tribe ? tribe.glyph + ' · ' + tribe.name : 'трайн: —') + ' · ' + handle.text;
 
     $('lg-level-card').innerHTML =
       '<div class="lg-level-top">' +
-        '<div><p class="flat-kicker" style="margin:0;">текущий уровень</p>' +
-        '<p class="lg-level-title">L' + lv.level + ' · ' + esc(lv.title) + '</p></div>' +
-        '<div class="lg-coins"><span class="lg-coins-num">' + t.coins + '</span><span class="lg-coins-cap">неткоинов</span></div>' +
+        '<div style="display:flex;gap:.9rem;align-items:center;">' + mascot(profile.mascotId, 56) +
+          '<div><p class="flat-kicker" style="margin:0;">текущий уровень · ' + esc(handle.text) + '</p>' +
+          '<p class="lg-level-title">L' + lv.level + ' · ' + esc(lv.title) + '</p></div></div>' +
+        '<div style="display:flex;gap:.6rem;">' +
+          '<div class="lg-coins"><span class="lg-coins-num">' + t.coins + '</span><span class="lg-coins-cap">неткоинов</span></div>' +
+          '<div class="lg-coins"><span class="lg-coins-num" style="color:var(--st-warn);">' + LEAGUE.prpBalance(profile.id) +
+            '</span><span class="lg-coins-cap">PRP</span></div>' +
+        '</div>' +
       '</div>' +
       bar(lv.progress, lv.next ? 'до L' + (lv.level + 1) + ' «' + lv.next + '» · ' + lv.into + '/' + lv.span + ' XP' : 'максимальный уровень') +
       '<p class="admin-hint" style="margin-bottom:0;">всего опыта: <strong>' + t.xp + ' XP</strong>' +
-      (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') + '</p>';
+      (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') +
+      ' · PRP тратятся при сдаче на пиринг и возвращаются за проверки коллег</p>';
+  }
+
+  /* ----------------------------- 06 · достижения ----------------------------- */
+  function renderAchievements() {
+    var box = $('lg-achievements');
+    if (!box) return;
+    var list = LEAGUE.achievements(profile.id);
+    var unlocked = list.filter(function (a) { return a.unlocked; }).length;
+    box.innerHTML = list.map(function (a) {
+      return '<div class="ach-card ' + (a.unlocked ? 'is-unlocked' : 'is-locked') + '" title="' + esc(a.desc) + '">' +
+        '<span class="ach-icon">' + a.icon + '</span>' +
+        '<div><h4>' + esc(a.title) + '</h4><p>' + esc(a.desc) + '</p></div></div>';
+    }).join('') +
+    '<p class="admin-hint" style="grid-column:1/-1;margin:.4rem 0 0;">открыто ' + unlocked + ' из ' + list.length + ' — бейджи считаются только из фактических действий, нарисовать их нельзя</p>';
   }
 
   /* ----------------------------- 02 · лестница ----------------------------- */
@@ -199,26 +224,17 @@
   function importBundle(file) {
     file.text().then(function (txt) {
       var report = LEAGUE.importBundle(JSON.parse(txt));
-      dataMsg('Импортировано: работ ' + report.submissions + ', оценок ' + report.reviews +
-        ', presence ' + report.presence + ', событий опыта ' + report.ledger + '.');
+      dataMsg('Импортировано: работ ' + report.submissions + ', рецензий ' + report.reviews +
+        ', presence ' + report.presence + ', событий опыта ' + report.ledger +
+        (report.prp ? ', PRP-балансов ' + report.prp : '') + '.');
       renderAll();
     }).catch(function (e) { dataMsg('Не удалось импортировать бандл: ' + e.message, true); });
   }
-  function resetDemo() {
-    if (!confirm('Убрать демо-однокурсников и их работы? Ваши личные данные и прогресс сохранятся.')) return;
-    var keep = function (x) { return !x.demo; };
-    localStorage.setItem(LEAGUE.KEYS.submissions, JSON.stringify(LEAGUE.submissions().filter(keep)));
-    localStorage.setItem(LEAGUE.KEYS.reviews, JSON.stringify(LEAGUE.reviews().filter(keep)));
-    var pres = JSON.parse(localStorage.getItem(LEAGUE.KEYS.presence) || '{}');
-    Object.keys(pres).forEach(function (id) { if (pres[id].demo) delete pres[id]; });
-    localStorage.setItem(LEAGUE.KEYS.presence, JSON.stringify(pres));
-    var demoIds = {};
-    (JSON.parse(localStorage.getItem('league-demo-data') || '{}').students || []).forEach(function (s) { demoIds[s.id] = true; });
-    localStorage.setItem(LEAGUE.KEYS.ledger, JSON.stringify(LEAGUE.ledger().filter(function (e) { return !demoIds[e.profileId]; })));
-    localStorage.removeItem('league-demo-data');
-    localStorage.removeItem(LEAGUE.KEYS.demo);
-    dataMsg('Демо-данные удалены, ваш профиль и прогресс на месте.');
-    renderAll();
+  function resetMine() {
+    if (!confirm('Сбросить ВСЕ локальные данные: профиль, работы, рецензии, XP и PRP? Действие необратимо.')) return;
+    LEAGUE.resetAll();
+    localStorage.removeItem('stands-tour-seen');
+    location.href = 'index.html';
   }
   function dataMsg(text, isErr) {
     var el = $('lg-data-msg');
@@ -228,7 +244,7 @@
 
   function renderAll() {
     renderLevel(); renderLadder(); renderLedger(); renderSkills();
-    renderReviewer(); renderSubs(); renderStandings(); renderHacks();
+    renderReviewer(); renderAchievements(); renderSubs(); renderStandings(); renderHacks();
   }
 
   function init() {
@@ -241,7 +257,7 @@
       if (f) importBundle(f);
       e.target.value = '';
     });
-    $('lg-reset').addEventListener('click', resetDemo);
+    $('lg-reset').addEventListener('click', resetMine);
     window.addEventListener('storage', function (e) {
       if (!e.key) return;
       if (e.key.indexOf('league-') === 0 || e.key === 'stands-profile' || e.key === 'stands-submissions') renderAll();

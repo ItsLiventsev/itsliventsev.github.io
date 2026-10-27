@@ -712,6 +712,8 @@ a.flat-module:hover, a.flat-module:focus-visible {
 /* --- Панель XP/уровня в профиле стенда --- */
 .xp-strip { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; border: 1px solid var(--st-line); background: var(--st-panel); padding: .7rem .9rem; border-radius: var(--st-radius); margin: .9rem 0; }
 .xp-level { font-family: var(--st-mono); font-size: .72rem; color: var(--st-bg); background: var(--st-accent); padding: .25rem .5rem; border-radius: var(--st-radius); white-space: nowrap; }
+.xp-handle { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--st-mono); font-size: .72rem; color: var(--st-accent-2); background: var(--st-panel-2); border: 1px solid var(--st-line-strong); padding: .15rem .55rem; border-radius: var(--st-radius); white-space: nowrap; }
+.xp-handle .mc-svg { width: 22px; height: 22px; }
 .xp-bar { flex: 1 1 160px; height: .55rem; background: var(--st-inset); border: 1px solid var(--st-line); position: relative; overflow: hidden; }
 .xp-bar i { position: absolute; inset: 0 auto 0 0; background: var(--st-accent); width: 0; transition: width .4s var(--st-ease, ease); }
 .xp-meta { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); white-space: nowrap; }
@@ -829,3 +831,275 @@ a.flat-module:hover, a.flat-module:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .lg-bar-fill { transition: none; }
 }
+
+/* ==========================================================================
+   11. Светлая тема стендов (общий ключ itsliventsev-theme с базовым сайтом)
+   Тёмная — по умолчанию; светлая включается html[data-theme="light"].
+   Терминал, редактор и кодовые поверхности остаются тёмными в обеих темах —
+   это консольные окна внутри светлой страницы, как в настоящей IDE.
+   ========================================================================== */
+html[data-theme="light"] .flat-scope {
+  --st-bg: #f3f5f8;
+  --st-bg-2: #e9edf2;
+  --st-panel: #ffffff;
+  --st-panel-2: #f6f8fb;
+  --st-inset: #edf1f5;
+  --st-line: #d8dee6;
+  --st-line-strong: #b6c0cc;
+  --st-text: #1d242e;
+  --st-text-2: #3c4652;
+  --st-muted: #5f6b78;
+  --st-faint: #93a0ad;
+  --st-accent: #2f6fe0;
+  --st-accent-2: #1d56bd;
+  --st-accent-soft: rgba(47, 111, 224, .09);
+  --st-ok: #047857;
+  --st-ok-soft: rgba(4, 120, 87, .08);
+  --st-bad: #dc2626;
+  --st-bad-soft: rgba(220, 38, 38, .07);
+  --st-warn: #b45309;
+  --st-cyan: #0e7490;
+  color-scheme: light;
+}
+html[data-theme="light"] body.flat-scope {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .045) 1px, transparent 1px);
+}
+html[data-theme="light"] body.flat-scope::before {
+  background:
+    linear-gradient(rgba(15, 23, 42, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .05) 1px, transparent 1px);
+}
+/* Тёмные консольные окна в светлой теме */
+html[data-theme="light"] .flat-scope .lab-terminal,
+html[data-theme="light"] .flat-scope .lab-editor,
+html[data-theme="light"] .flat-scope .term-screen,
+html[data-theme="light"] .flat-scope .lt-screen {
+  background: #10141a;
+  color: #d4d9e0;
+  border-color: #232b34;
+}
+html[data-theme="light"] .flat-scope .lab-editor:focus { background: #0d1217; }
+html[data-theme="light"] .flat-scope .lab-terminal input { color: #e7ecf2; }
+html[data-theme="light"] .flat-scope .term-screen::-webkit-scrollbar-track,
+html[data-theme="light"] .flat-scope .lt-screen::-webkit-scrollbar-track { background: #0e1216; }
+
+/* Индивидуальные акценты стендов */
+.flat-scope[data-accent="teal"] {
+  --st-accent: #2dd4bf;
+  --st-accent-2: #5eead4;
+  --st-accent-soft: rgba(45, 212, 191, .1);
+  --st-cyan: #2dd4bf;
+}
+html[data-theme="light"] .flat-scope[data-accent="teal"] {
+  --st-accent: #0d9488;
+  --st-accent-2: #0f766e;
+  --st-accent-soft: rgba(13, 148, 136, .09);
+  --st-cyan: #0e7490;
+}
+.flat-scope[data-accent="amber"] {
+  --st-accent: #fbbf24;
+  --st-accent-2: #fcd34d;
+  --st-accent-soft: rgba(251, 191, 36, .1);
+}
+html[data-theme="light"] .flat-scope[data-accent="amber"] {
+  --st-accent: #b45309;
+  --st-accent-2: #92400e;
+  --st-accent-soft: rgba(180, 83, 9, .09);
+}
+
+/* Тумблер темы в топбаре */
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.1rem; height: 2.1rem; padding: 0;
+  background: transparent; border: 1px solid var(--st-line-strong);
+  border-radius: var(--st-radius); color: var(--st-text-2); cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.theme-toggle:hover { border-color: var(--st-accent); color: var(--st-accent-2); }
+.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
+.theme-toggle .icon-sun { display: none; }
+html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ==========================================================================
+   12. Маскоты: моргание, покачивание, приветствие, облачка реплик
+   ========================================================================== */
+.mc-svg { display: block; }
+.mc-float { animation: mc-float 3.4s ease-in-out infinite; }
+.mc-eye { transform-box: fill-box; transform-origin: center; animation: mc-blink 5.2s infinite; }
+.mc-wave { transform-box: fill-box; transform-origin: 70% 90%; animation: mc-wave 2.6s ease-in-out infinite; }
+@keyframes mc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes mc-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } 97% { transform: scaleY(1); } }
+@keyframes mc-wave { 0%, 70%, 100% { transform: rotate(0); } 78% { transform: rotate(-14deg); } 86% { transform: rotate(8deg); } 94% { transform: rotate(-6deg); } }
+
+.mc-speech { display: flex; gap: .9rem; align-items: flex-start; }
+.mc-speech.is-right { flex-direction: row-reverse; }
+.mc-speech-avatar { flex: 0 0 auto; }
+.mc-bubble {
+  position: relative; flex: 1 1 auto;
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  background: var(--st-panel-2); padding: .85rem 1rem;
+}
+.mc-bubble::before {
+  content: ''; position: absolute; top: 1.15rem; left: -7px;
+  border: 6px solid transparent; border-right-color: var(--st-line-strong);
+}
+.mc-bubble::after {
+  content: ''; position: absolute; top: calc(1.15rem + 1px); left: -5px;
+  border: 5px solid transparent; border-right-color: var(--st-panel-2);
+}
+.mc-speech.is-right .mc-bubble::before { left: auto; right: -7px; border-right-color: transparent; border-left-color: var(--st-line-strong); }
+.mc-speech.is-right .mc-bubble::after { left: auto; right: -5px; border-right-color: transparent; border-left-color: var(--st-panel-2); }
+.mc-who { margin: 0 0 .3rem; font-family: var(--st-mono); font-size: .7rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--st-accent-2); }
+.mc-text { margin: 0; font-size: .9rem; line-height: 1.65; color: var(--st-text-2); }
+.mc-text strong { color: var(--st-text); }
+
+/* ==========================================================================
+   13. Кабинет студента: бейдж-пропуск, квесты, лента, обмен кодами
+   ========================================================================== */
+.cab-grid { display: grid; grid-template-columns: minmax(17rem, 21rem) 1fr; gap: var(--st-gap); align-items: start; }
+.id-card {
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  background: var(--st-panel); overflow: hidden;
+}
+.id-card-top {
+  display: flex; align-items: center; gap: .9rem; padding: 1.1rem 1.1rem .9rem;
+  border-bottom: 1px solid var(--st-line); background: var(--st-panel-2);
+}
+.id-card-top .mc-svg { width: 64px; height: 64px; }
+.id-handle { font-family: var(--st-mono); font-size: 1.15rem; font-weight: 800; color: var(--st-accent-2); margin: 0; }
+.id-name { margin: .15rem 0 0; font-size: .85rem; color: var(--st-text-2); }
+.id-group { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); margin-top: .2rem; }
+.id-stats { display: grid; grid-template-columns: repeat(3, 1fr); }
+.id-stat { padding: .8rem .6rem; text-align: center; border-right: 1px solid var(--st-line); }
+.id-stat:last-child { border-right: none; }
+.id-stat b { display: block; font-family: var(--st-mono); font-size: 1.1rem; color: var(--st-text); }
+.id-stat span { font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--st-muted); }
+.id-level { padding: .8rem 1.1rem 1rem; }
+.id-level .xp-bar { margin-top: .5rem; }
+
+.quest-card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;
+  border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-panel); padding: 1rem 1.15rem; margin-bottom: .7rem;
+  transition: border-color .15s ease;
+}
+.quest-card:hover { border-color: var(--st-accent); }
+.quest-card.is-locked { opacity: .55; }
+.quest-glyph {
+  width: 3.2rem; height: 3.2rem; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius); background: var(--st-panel-2);
+}
+.quest-glyph .mc-svg { width: 44px; height: 44px; }
+.quest-card h3 { margin: 0 0 .2rem; font-size: 1rem; }
+.quest-card p { margin: 0; font-size: .8rem; color: var(--st-muted); }
+.quest-progress { height: .5rem; border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-bg-2); overflow: hidden; margin-top: .55rem; max-width: 26rem; }
+.quest-progress i { display: block; height: 100%; background: var(--st-accent); transition: width .4s ease; }
+.quest-side { text-align: right; font-family: var(--st-mono); font-size: .74rem; color: var(--st-muted); white-space: nowrap; }
+.quest-side .flat-badge { display: inline-flex; margin-top: .4rem; }
+
+.feed-list { list-style: none; margin: 0; padding: 0; }
+.feed-list li {
+  display: grid; grid-template-columns: auto 1fr auto; gap: .7rem; align-items: baseline;
+  padding: .6rem 0; border-bottom: 1px solid var(--st-line); font-size: .82rem;
+}
+.feed-list li:last-child { border-bottom: none; }
+.feed-type { font-family: var(--st-mono); font-size: .7rem; color: var(--st-accent-2); white-space: nowrap; }
+.feed-note { color: var(--st-text-2); }
+.feed-date { font-family: var(--st-mono); font-size: .7rem; color: var(--st-faint); white-space: nowrap; }
+
+/* Выбор маскота в форме входа */
+.mascot-pick { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: .5rem 0 .8rem; }
+.mascot-pick button {
+  border: 1px solid var(--st-line); border-radius: var(--st-radius); background: var(--st-panel-2);
+  padding: .45rem .2rem; cursor: pointer; display: flex; justify-content: center;
+  transition: border-color .15s ease, background .15s ease;
+}
+.mascot-pick button:hover { border-color: var(--st-accent); }
+.mascot-pick button.is-selected { border-color: var(--st-accent); background: var(--st-accent-soft); }
+.mascot-pick .mc-svg { width: 42px; height: 42px; }
+.mascot-pick .mc-float { animation: none; }
+
+/* PRP-чип */
+.prp-pill {
+  display: inline-flex; align-items: center; gap: .35rem;
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  padding: .25rem .6rem; font-family: var(--st-mono); font-size: .78rem; color: var(--st-warn);
+  background: var(--st-panel-2);
+}
+
+/* Обмен кодами между студентами */
+.exchange-grid { display: grid; gap: .6rem; }
+.exchange-row { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
+.exchange-msg { font-family: var(--st-mono); font-size: .76rem; min-height: 1.1em; margin: .2rem 0 0; color: var(--st-muted); }
+.exchange-msg.is-ok { color: var(--st-ok); }
+.exchange-msg.is-bad { color: var(--st-bad); }
+
+/* ==========================================================================
+   14. Бриф-легенда, помощник «застрял?», степпер, онбординг
+   ========================================================================== */
+.brief-card { border-left: 3px solid var(--st-accent); }
+.helper-card { border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius); padding: 1rem 1.15rem; background: var(--st-panel-2); }
+.helper-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .8rem; margin-top: .7rem; }
+.helper-item h4 { margin: 0 0 .25rem; font-size: .85rem; }
+.helper-item p { margin: 0; font-size: .78rem; color: var(--st-muted); line-height: 1.6; }
+.helper-item code { font-size: .74rem; }
+
+.step-nav { display: flex; flex-wrap: wrap; gap: .35rem; padding: .6rem; border: 1px solid var(--st-line);
+  border-radius: var(--st-radius); background: var(--st-panel); margin-bottom: 1.2rem; position: sticky; top: .6rem; z-index: 40; }
+.step-nav a {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .7rem;
+  font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted);
+  border: 1px solid transparent; border-radius: var(--st-radius); text-decoration: none;
+}
+.step-nav a:hover { color: var(--st-accent-2); border-color: var(--st-line); }
+.step-nav a .sn-dot { width: .5rem; height: .5rem; border: 1px solid var(--st-line-strong); border-radius: 50%; }
+.step-nav a.is-done { color: var(--st-ok); }
+.step-nav a.is-done .sn-dot { background: var(--st-ok); border-color: var(--st-ok); }
+.step-nav a.is-active { color: var(--st-accent-2); border-color: var(--st-accent); background: var(--st-accent-soft); }
+
+/* Онбординг-тур */
+.tour-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(8, 10, 13, .55); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.tour-pop {
+  width: min(30rem, 100%); border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  background: var(--st-panel); padding: 1.3rem;
+}
+.tour-pop .mc-speech { align-items: center; }
+.tour-progress { font-family: var(--st-mono); font-size: .72rem; color: var(--st-faint); margin: .8rem 0; }
+.tour-actions { display: flex; justify-content: space-between; gap: .6rem; }
+
+/* Достижения */
+.ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); gap: .6rem; }
+.ach-card {
+  border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .85rem .8rem;
+  background: var(--st-panel-2); display: flex; gap: .7rem; align-items: flex-start;
+}
+.ach-card .ach-icon { font-size: 1.5rem; line-height: 1; }
+.ach-card.is-locked { opacity: .45; filter: grayscale(.8); }
+.ach-card.is-unlocked { border-color: var(--st-accent); background: var(--st-accent-soft); }
+.ach-card h4 { margin: 0 0 .2rem; font-size: .82rem; }
+.ach-card p { margin: 0; font-size: .72rem; color: var(--st-muted); line-height: 1.5; }
+
+@media (max-width: 860px) {
+  .cab-grid { grid-template-columns: 1fr; }
+  .step-nav { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mc-float, .mc-eye, .mc-wave { animation: none; }
+  .quest-progress i { transition: none; }
+}
+
+/* Отступ для якорных переходов под липкий степнер */
+[id^="sec-"] { scroll-margin-top: 5.2rem; }
+
+/* Минимальные utility-классы (Tailwind на стендах не загружается) */
+.flat-scope .flex { display: flex; }
+.flat-scope .flex-wrap { flex-wrap: wrap; }
+.flat-scope .gap-2 { gap: .5rem; }
+
+/* Атрибут hidden должен побеждать display-значения компонентов */
+.tour-overlay[hidden], .st-modal[hidden] { display: none; }

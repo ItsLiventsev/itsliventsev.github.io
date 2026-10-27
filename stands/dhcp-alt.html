@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0e11">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <title>DHCP на ALT Server · виртуальный стенд · itsliventsev</title>
 <meta name="description" content="Виртуальный стенд: настройка DHCP-сервера на ALT Server и ALT Workstation — подсеть, пул адресов, шлюз, DNS, резервирование по MAC, проверка в терминале, теория и мини-тест.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -14,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261026q">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026q">
+<link rel="stylesheet" href="../assets/site.css?v=20261026r">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026r">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/dhcp-alt.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -50,7 +51,7 @@
       <span class="st-brand-mark">←</span>
       <span>itsliventsev</span>
       <span class="st-brand-sep">/</span>
-      <span class="st-brand-sub">виртуальные стенды</span>
+      <span class="st-brand-sub">СетьПолис · стенд</span>
     </a>
     <nav class="st-topnav" aria-label="Навигация раздела стендов">
       <a href="index.html">каталог</a>
@@ -58,7 +59,11 @@
       <a href="teams.html">команды</a>
       <a href="../projects.html">проекты</a>
       <a href="../admin.html" rel="nofollow">admin</a>
-    </nav>
+      <button class="theme-toggle" type="button" aria-label="переключить светлую или тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+</nav>
   </div>
 </header>
 
@@ -90,13 +95,41 @@
       </div>
     </div>
 
-    <div class="st-legend">
-      <span class="st-legend-label">// легенда</span>
-      <p><strong>Легенда.</strong> Вы — администратор компании. Новый отдел получает сеть
-      <code>192.168.10.0/24</code>. Нужно поднять на ALT Server раздачу адресов, а рабочие станции ALT
-      Workstation настроить на автоматическое получение IP. Сетевой принтер должен всегда получать
-      <code>192.168.10.50</code>.</p>
-    </div>
+    <section class="lab-panel brief-card" id="sec-brief" style="margin-bottom:var(--st-gap);">
+      <div class="lp-body" style="padding:1.1rem 1.2rem;">
+        <div class="mc-speech">
+          <div class="mc-speech-avatar"><div id="brief-mascot" data-mascot="fox"></div></div>
+          <div class="mc-bubble"><p class="mc-who">Лиса Василиса · руководитель IT, СетьПолис</p><p class="mc-text">С возвращением в команду, стажёр! Мы открываем <strong>новый офис на 40 рабочих мест</strong>: бухгалтерия, отдел разработки и переговорная. На ALT Server нужно развернуть DHCP: подсеть <code>192.168.10.0/24</code>, пул адресов, шлюз и DNS, а сетевой принтер обязан всегда получать <code>192.168.10.50</code> по MAC. Рабочие станции ALT Workstation должны поднимать сеть сами через <code>dhclient</code>. Это первая глава потокового проекта: в следующей истории Клешня подключит этот офис к VLAN-коммутатору, и адресная схема, которую вы зададите сейчас, должна с ним подружиться.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="step-nav" aria-label="Этапы работы над стендом">
+      <a href="#sec-brief"><span class="sn-dot"></span>бриф</a>
+      <a href="#sec-theory"><span class="sn-dot"></span>теория</a>
+      <a href="#sec-work"><span class="sn-dot"></span>терминал</a>
+      <a href="#sec-checks"><span class="sn-dot"></span>проверка</a>
+      <a href="#sec-submit"><span class="sn-dot"></span>сдача</a>
+      <a href="#sec-peer"><span class="sn-dot"></span>пиринг</a>
+    </nav>
+
+    <section class="lab-panel helper-card" id="sec-help" style="margin-bottom:var(--st-gap);">
+      <div class="lp-head"><span>застряли? порядок поиска решения</span><span class="flat-badge is-run">помощник</span></div>
+      <div class="helper-grid">
+        <div class="helper-item">
+          <h4>1 · спросите машину</h4>
+          <p>Команды <code>help</code>, <code>man &lt;команда&gt;</code>, <code>&lt;команда&gt; --help</code> и <code>journalctl -u служба</code> покажут причину ошибки.</p>
+        </div>
+        <div class="helper-item">
+          <h4>2 · спросите коллег</h4>
+          <p>Обсудите задачу с трайбом. Обменяйтесь кодами <code>ITS-LAB1</code> и сравните подходы — это часть методики «равный равному».</p>
+        </div>
+        <div class="helper-item">
+          <h4>3 · найдите в интернете</h4>
+          <p>Документация ALT Linux и man-страницы, точный текст ошибки в поисковой строке. Зафиксируйте найденное в журнале действий.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- Цели работы -->
     <div class="st-section-head">
@@ -146,7 +179,7 @@ graph TD
     </div>
 
     <!-- Теоретическая часть -->
-    <div class="st-section-head">
+    <div class="st-section-head" id="sec-theory">
       <span class="st-section-num">T</span>
       <h2>теоретическая часть</h2>
       <span class="st-section-tag">разверните блоки</span>
@@ -232,7 +265,7 @@ graph TD
     </div>
 
     <!-- План работ -->
-    <div class="st-section-head">
+    <div class="st-section-head" id="sec-work">
       <span class="st-section-num">B</span>
       <h2>план работ</h2>
       <span class="st-section-tag">6 шагов · отметки автоматические</span>
@@ -280,7 +313,7 @@ graph TD
             <span id="lab-score" class="lab-score">0<small>/0</small></span>
           </div>
           <div class="lp-body">
-            <div class="lab-checks" id="lab-checks"></div>
+            <span id="sec-checks"></span><div class="lab-checks" id="lab-checks"></div>
           </div>
         </section>
 
@@ -299,7 +332,7 @@ graph TD
           </div>
         </section>
 
-        <section class="lab-panel" style="margin-bottom:var(--st-gap);">
+        <span id="sec-submit"></span><section class="lab-panel" style="margin-bottom:var(--st-gap);">
           <div class="lp-head"><span>сдача работы</span></div>
           <div class="lp-body">
             <p style="font-size:.85rem;margin:0 0 .9rem;line-height:1.65;color:var(--st-muted);">
@@ -346,7 +379,7 @@ graph TD
     </section>
 
     <!-- Взаимное обучение: оценка равный-равному и экспертная -->
-    <div class="st-section-head">
+    <div class="st-section-head" id="sec-peer">
       <span class="st-section-num">P</span>
       <h2>взаимная оценка · равный равному</h2>
       <span class="st-section-tag">обмен знаниями</span>
@@ -362,6 +395,21 @@ graph TD
           начисляются XP и неткоины; рейтинг проверяющего считается по справедливости,
           доброжелательности, заинтересованности и пунктуальности.
         </p>
+        <div class="lab-panel" style="margin-bottom:.9rem;">
+          <div class="lp-head"><span>обмен кодами · входящие</span><span class="flat-badge">ITS-LAB1 / ITS-REV1</span></div>
+          <div class="lp-body">
+            <p style="font-size:.8rem;color:var(--st-muted);margin:0 0 .7rem;line-height:1.6;">
+              Вставьте код работы коллеги — она появится в пуле рецензирования; код рецензии на вашу работу — попадёт в блок ниже.
+              Или подтяните пачку из публичной папки репозитория (без токена).
+            </p>
+            <textarea class="flat-input" id="rv-code-input" rows="2" placeholder="ITS-LAB1.… или ITS-REV1.…"></textarea>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem;">
+              <button class="flat-btn" id="rv-code-go" type="button">принять коды</button>
+              <button class="flat-btn ghost" id="rv-repo" type="button">подтянуть из репозитория ↻</button>
+            </div>
+            <p class="exchange-msg" id="rv-code-msg" role="status" style="margin-top:.5rem;"></p>
+          </div>
+        </div>
         <div class="rv-pool" id="rv-pool" data-stand="dhcp-alt"></div>
         <div class="st-section-head" style="margin-top:1.2rem;">
           <h2 style="font-size:.92rem;">оценки моей работы</h2>
@@ -397,10 +445,30 @@ graph TD
   </footer>
 </div>
 
-<script src="../assets/os-engine.js?v=20261026q"></script>
-<script src="../assets/fgos-skills.js?v=20261026q"></script>
-<script src="../assets/league.js?v=20261026q"></script>
-<script src="../assets/stands-dhcp.js?v=20261026q"></script>
-<script src="../assets/stands.js?v=20261026q"></script>
+  <!-- Модальное окно: код рецензии для автора работы -->
+  <div id="rev-code-modal" class="st-modal" hidden>
+    <div class="st-modal-box" role="dialog" aria-modal="true" aria-labelledby="rev-code-title">
+      <div class="st-modal-head">
+        <h2 id="rev-code-title">код рецензии — отправьте автору работы</h2>
+        <button class="flat-btn ghost" id="rev-code-close" type="button" aria-label="закрыть">✕</button>
+      </div>
+      <p style="font-size:.82rem;color:var(--st-muted);line-height:1.6;">
+        Перешлите код <code>ITS-REV1</code> автору в любом мессенджере. Он вставит его в блок «обмен кодами»,
+        и рецензия подхватится без сервера. За проверку вам начислен +1 PRP.
+      </p>
+      <textarea id="rev-code-text" class="flat-input" rows="6" readonly></textarea>
+      <div style="display:flex;gap:.6rem;margin-top:.8rem;">
+        <button class="flat-btn" id="rev-code-copy" type="button">скопировать код</button>
+      </div>
+    </div>
+  </div>
+
+<script src="../assets/mascots.js?v=20261026r"></script>
+<script src="../assets/os-engine.js?v=20261026r"></script>
+<script src="../assets/fgos-skills.js?v=20261026r"></script>
+<script src="../assets/league.js?v=20261026r"></script>
+<script src="../assets/stands-dhcp.js?v=20261026r"></script>
+<script src="../assets/stands.js?v=20261026r"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){var el=document.getElementById("brief-mascot");if(el&&window.MASCOTS){el.innerHTML=window.MASCOTS.svg(el.dataset.mascot,{size:72});}});</script>
 </body>
 </html>

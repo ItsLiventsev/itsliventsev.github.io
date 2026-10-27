@@ -1,10 +1,12 @@
 /* ==========================================================================
    LEAGUE · учебная геймификация и пиринговое обучение (без сервера)
-   Всё состояние — localStorage одного браузера; обмен между устройствами —
-   JSON-бандлы и коды работ. Профили, XP/уровни/валюта, трайбы, взаимные
-   оценки «равный равному», экспертные оценки, рейтинг проверяющих
-   (справедливость, доброжелательность, заинтересованность, пунктуальность),
-   presence-сердцебиения, демо-однокурсники. UMD: браузер и Node (тесты).
+   Всё состояние — localStorage одного браузера; обмен между устройствами и
+   студентами — JSON-бандлы, коды работ ITS-LAB1 и коды рецензий ITS-REV1,
+   плюс публичная папка репозитория (читается без токена).
+   Профили с маскотами-хэндлами (#енот 7), XP/уровни/неткоины, PRP-очки
+   взаимных проверок (методика «равный равному» Школы 21), трайбы,
+   достижения, рейтинг проверяющего (справедливость, доброжелательность,
+   заинтересованность, пунктуальность), presence. UMD: браузер и Node.
    ========================================================================== */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) {
@@ -19,9 +21,18 @@
     ledger: 'league-ledger',
     reviews: 'league-reviews',
     presence: 'league-presence',
-    demo: 'league-demo-version'
+    prp: 'league-prp'
   };
-  var DEMO_VERSION = '3';
+
+  /* Публичный репозиторий используется как общая доска обмена без сервера:
+     чтение папок submissions/ и reviews/ доступно без токена (Contents API). */
+  var REPO_CONFIG = {
+    owner: 'ItsLiventsev',
+    repo: 'itsliventsev.github.io',
+    branch: 'main',
+    submissionsPath: 'submissions',
+    reviewsPath: 'reviews'
+  };
 
   /* В браузере используем localStorage, в Node — память (юнит-тесты) */
   var memory = {};
@@ -80,6 +91,29 @@
     };
   }
 
+  /* ----------------------------- Маскоты и хэндлы ----------------------------- */
+  var MASCOTS = [
+    { id: 'raccoon', animal: 'енот',    color: '#8b93a7' },
+    { id: 'fox',     animal: 'лиса',    color: '#e8843c' },
+    { id: 'crab',    animal: 'краб',    color: '#ef5d5d' },
+    { id: 'owl',     animal: 'филин',   color: '#9b7bd4' },
+    { id: 'cat',     animal: 'кот',     color: '#5b9dff' },
+    { id: 'wolf',    animal: 'волк',    color: '#7d8fa3' },
+    { id: 'otter',   animal: 'выдра',   color: '#3aa6a0' },
+    { id: 'hedgehog', animal: 'ёж',     color: '#b0794a' }
+  ];
+  function mascotById(id) {
+    for (var i = 0; i < MASCOTS.length; i++) if (MASCOTS[i].id === id) return MASCOTS[i];
+    return MASCOTS[0];
+  }
+  /* Хэндл — социальное имя студента: животное-маскот + стабильный номер */
+  function handleFor(p) {
+    if (!p) return { animal: 'енот', num: 1, text: 'енот #1' };
+    var m = mascotById(p.mascotId);
+    var num = p.handleNum || (hash(p.id || p.name || 'x') % 99) + 1;
+    return { animal: m.animal, num: num, text: m.animal + ' #' + num };
+  }
+
   /* ----------------------------- Трайбы и турниры ----------------------------- */
   var TRIBES = [
     { id: 'tribe-packet', name: 'Трайб «Пакет»', glyph: 'PKT', color: '#5b9dff' },
@@ -100,9 +134,18 @@
   function ensureProfile(name, group) {
     var p = getProfile();
     if (p && p.name && p.group) return p;
-    p = { id: uid('stu'), name: name, group: group, createdAt: new Date().toISOString(), savedAt: new Date().toISOString() };
-    p.tribeId = tribeFor(group).id;
+    var id = uid('stu');
+    var m = MASCOTS[hash(group || name || id) % MASCOTS.length];
+    p = {
+      id: id, name: name, group: group,
+      createdAt: new Date().toISOString(), savedAt: new Date().toISOString(),
+      tribeId: tribeFor(group).id,
+      mascotId: m.id, handleNum: (hash(id) % 99) + 1
+    };
     write(KEYS.profile, p);
+    var prp = prpMap();
+    prp[id] = INITIAL_PRP;
+    write(KEYS.prp, prp);
     return p;
   }
   function updateProfile(patch) {
@@ -111,6 +154,22 @@
     if (patch.group) p.tribeId = tribeFor(patch.group).id;
     write(KEYS.profile, p);
     return p;
+  }
+  function setMascot(mascotId) {
+    var p = getProfile();
+    if (!p || !mascotById(mascotId)) return p;
+    p.mascotId = mascotId;
+    p.savedAt = new Date().toISOString();
+    write(KEYS.profile, p);
+    return p;
+  }
+  function publicStudent(p) {
+    if (!p) return p;
+    var h = handleFor(p);
+    return {
+      id: p.id, name: p.name, group: p.group, tribeId: p.tribeId || null,
+      mascotId: p.mascotId || 'raccoon', handle: h.text, handleNum: h.num
+    };
   }
 
   function ledger() { return read(KEYS.ledger, []); }
@@ -139,6 +198,31 @@
   function dailyLogin(profileId) {
     var day = new Date().toISOString().slice(0, 10);
     return award(profileId, 'login', 'login:' + day);
+  }
+
+  /* ----------------------------- PRP · очки взаимных проверок -----------------------------
+     Методика Школы 21: каждому новичку — 5 PRP. Сдача работы на пиринг стоит 1 PRP,
+     проверка чужой работы приносит 1 PRP. Так проверять коллег становится полезно,
+     а бесконечно «заказывать» рецензии нельзя. В офлайне баланс не блокирует сдачу. */
+  var INITIAL_PRP = 5;
+  var PRP_CAP = 20;
+  function prpMap() { return read(KEYS.prp, {}); }
+  function prpBalance(profileId) {
+    var m = prpMap();
+    return typeof m[profileId] === 'number' ? m[profileId] : 0;
+  }
+  function earnPrp(profileId, n, reason) {
+    var m = prpMap();
+    m[profileId] = Math.min(PRP_CAP, (m[profileId] || 0) + (n || 1));
+    write(KEYS.prp, m);
+    return { balance: m[profileId], reason: reason || 'проверка работы коллеги' };
+  }
+  function spendPrp(profileId, reason) {
+    var m = prpMap();
+    var before = m[profileId] || 0;
+    m[profileId] = Math.max(0, before - 1);
+    write(KEYS.prp, m);
+    return { balance: m[profileId], charged: before > 0, reason: reason || 'работа выставлена на пиринг' };
   }
 
   /* ----------------------------- Работы студентов ----------------------------- */
@@ -186,6 +270,7 @@
     r.createdAt = r.createdAt || new Date().toISOString();
     list.push(r);
     write(KEYS.reviews, list);
+    if (r.kind === 'peer' && r.reviewer && r.reviewer.id) earnPrp(r.reviewer.id, 1, 'пиринговая проверка ' + r.submissionId);
     return r;
   }
   function reviewsFor(submissionId) {
@@ -193,6 +278,31 @@
   }
   function reviewsBy(profileId) {
     return reviews().filter(function (r) { return r.reviewer.id === profileId; });
+  }
+  /* Импорт уже готовой рецензии (из кода ITS-REV1 или файла): без начисления PRP,
+     т.к. очки получает рецензент на своей машине в момент написания. */
+  function importReview(r) {
+    var list = reviews();
+    if (r.id && list.some(function (x) { return x.id === r.id; })) return { duplicated: true };
+    r.id = r.id || uid('rev');
+    r.createdAt = r.createdAt || new Date().toISOString();
+    list.push(r);
+    write(KEYS.reviews, list);
+    return { duplicated: false, review: r };
+  }
+
+  /* Код рецензии: проверяющий отправляет его автору работы в любом мессенджере,
+     автор вставляет код у себя на стенде — рецензия подхватывается без сервера. */
+  function encodeReview(r) { return 'ITS-REV1.' + b64encodeUnicode(JSON.stringify(r)); }
+  function decodeReview(code) {
+    code = String(code).trim();
+    if (code.indexOf('ITS-REV1.') !== 0) throw new Error('код рецензии должен начинаться с ITS-REV1.');
+    var obj = JSON.parse(b64decodeUnicode(code.slice(9)));
+    if (!obj || obj.schema !== 'league-review/1' || !obj.submissionId || !obj.reviewer || !obj.reviewee ||
+        !obj.scores || !obj.comment) {
+      throw new Error('структура кода не соответствует контракту league-review/1');
+    }
+    return obj;
   }
 
   var RUDE = /дурак|туп|плох|ужас|ненавиж|отстой|fail|дно|бездар/i;
@@ -250,7 +360,8 @@
     var map = presence();
     map[profile.id] = {
       id: profile.id, name: profile.name, group: profile.group, tribeId: profile.tribeId,
-      standId: standId || null, lastSeen: new Date().toISOString(), demo: !!profile.demo
+      mascotId: profile.mascotId || 'raccoon', handle: handleFor(profile).text,
+      standId: standId || null, lastSeen: new Date().toISOString()
     };
     var cutoff = Date.now() - 7 * 864e5;
     Object.keys(map).forEach(function (id) { if (new Date(map[id].lastSeen).getTime() < cutoff) delete map[id]; });
@@ -298,14 +409,71 @@
     }).sort(function (a, b) { return a.code.localeCompare(b.code); });
   }
 
+  /* ----------------------------- Достижения (бейджи) -----------------------------
+     Вычисляются из реальных данных, ничего отдельно не храним — честность и простота. */
+  var ACHIEVEMENTS = [
+    { id: 'first-login', icon: '🌅', title: 'Первый день в СетьПолисе', desc: 'войти на стенды впервые' },
+    { id: 'first-submit', icon: '📤', title: 'Боевое крещение', desc: 'сдать первую лабораторную' },
+    { id: 'stand-ready', icon: '💯', title: 'Идеальная настройка', desc: 'пройти стенд на 100%' },
+    { id: 'autotests-master', icon: '🤖', title: 'Повелитель автотестов', desc: '8 из 8 автотестов на стенде' },
+    { id: 'quiz-perfect', icon: '🧠', title: 'Эрудит', desc: 'контрольный тест без единой ошибки' },
+    { id: 'both-stands', icon: '🗺️', title: 'Покоритель двух квестов', desc: 'сдать оба доступных стенда' },
+    { id: 'first-review', icon: '🤝', title: 'Первое ревью', desc: 'проверить работу однокурсника' },
+    { id: 'reviewer-5', icon: '⭐', title: 'Опытный проверяющий', desc: 'оставить 5 взаимных оценок' },
+    { id: 'fair-reviewer', icon: '⚖️', title: 'Справедливый глаз', desc: 'рейтинг справедливости не ниже 85' },
+    { id: 'kind-reviewer', icon: '💬', title: 'Доброе слово', desc: 'рейтинг доброжелательности не ниже 85' },
+    { id: 'prp-rich', icon: '🪙', title: 'Капитал доверия', desc: 'накопить 8 PRP проверками коллег' },
+    { id: 'early-bird', icon: '🐦', title: 'Ранняя пташка', desc: 'начать работу до 9:00' },
+    { id: 'streak-3', icon: '🔥', title: 'На три дня', desc: 'заходить на стенды три разных дня' },
+    { id: 'level-3', icon: '🎓', title: 'Администратор сети', desc: 'достичь третьего уровня' }
+  ];
+  function achievements(profileId) {
+    var log = ledger().filter(function (e) { return e.profileId === profileId; });
+    var has = function (type) { return log.some(function (e) { return e.type === type; }); };
+    var mySubs = submissions().filter(function (s) { return s.student.id === profileId; });
+    var myReviews = reviewsBy(profileId);
+    var rating = reviewerRating(profileId);
+    var standsDone = {};
+    mySubs.forEach(function (s) { standsDone[s.standId] = true; });
+    var loginDays = {};
+    log.filter(function (e) { return e.type === 'login'; }).forEach(function (e) { loginDays[e.at.slice(0, 10)] = true; });
+    var early = log.some(function (e) { return new Date(e.at).getHours() < 9; });
+    var checks = {
+      'first-login': log.some(function (e) { return e.type === 'login'; }),
+      'first-submit': has('submit'),
+      'stand-ready': has('standReady'),
+      'autotests-master': has('autotests'),
+      'quiz-perfect': has('quizPerfect'),
+      'both-stands': Object.keys(standsDone).length >= 2,
+      'first-review': myReviews.length >= 1,
+      'reviewer-5': myReviews.length >= 5,
+      'fair-reviewer': !!rating && rating.fairness >= 85,
+      'kind-reviewer': !!rating && rating.kindness >= 85,
+      'prp-rich': prpBalance(profileId) >= 8,
+      'early-bird': early,
+      'streak-3': Object.keys(loginDays).length >= 3,
+      'level-3': totals(profileId).level.level >= 3
+    };
+    return ACHIEVEMENTS.map(function (a) {
+      return Object.assign({}, a, { unlocked: !!checks[a.id] });
+    });
+  }
+
   /* ----------------------------- Трайбы: состав и таблица ----------------------------- */
+  /* Ростер собирается только из реальных следов: свой профиль, авторы работ,
+     участники рецензий, presence-сessions. Никаких искусственных студентов. */
   function roster() {
-    var people = [];
+    var people = {};
+    function add(s) {
+      if (!s || !s.id || !s.name) return;
+      if (!people[s.id]) people[s.id] = { id: s.id, name: s.name, group: s.group, tribeId: s.tribeId, handle: s.handle };
+    }
     var p = getProfile();
-    if (p && p.name) people.push({ id: p.id, name: p.name, group: p.group, tribeId: p.tribeId, demo: false });
-    var demo = read('league-demo-data', { students: [] }).students || [];
-    demo.forEach(function (d) { people.push({ id: d.id, name: d.name, group: d.group, tribeId: d.tribeId, demo: true }); });
-    return people;
+    if (p && p.name) add(Object.assign({}, p, { handle: handleFor(p).text }));
+    submissions().forEach(function (s) { add(s.student); });
+    reviews().forEach(function (r) { add(r.reviewer); add(r.reviewee); });
+    Object.keys(presence()).forEach(function (id) { add(presence()[id]); });
+    return Object.keys(people).map(function (k) { return people[k]; });
   }
   function tribeStandings() {
     var log = ledger();
@@ -322,17 +490,21 @@
   /* ----------------------------- Бандлы обмена между устройствами ----------------------------- */
   function exportBundle() {
     return {
-      schema: 'league-bundle/1',
+      schema: 'league-bundle/2',
       exportedAt: new Date().toISOString(),
+      profile: getProfile(),
       submissions: submissions(),
       reviews: reviews(),
       presence: presence(),
+      prp: prpMap(),
       ledger: ledger()
     };
   }
   function importBundle(bundle) {
-    if (!bundle || bundle.schema !== 'league-bundle/1') throw new Error('ожидался league-bundle/1');
-    var report = { submissions: 0, reviews: 0, presence: 0, ledger: 0 };
+    if (!bundle || (bundle.schema !== 'league-bundle/1' && bundle.schema !== 'league-bundle/2')) {
+      throw new Error('ожидался league-bundle/1 или /2');
+    }
+    var report = { submissions: 0, reviews: 0, presence: 0, ledger: 0, prp: 0 };
     (bundle.submissions || []).forEach(function (s) {
       var before = submissions().length;
       addSubmission(s);
@@ -347,88 +519,42 @@
     var lg = ledger();
     (bundle.ledger || []).forEach(function (e) { if (!lg.some(function (x) { return x.id === e.id; })) { lg.push(e); report.ledger++; } });
     write(KEYS.ledger, lg);
-    return report;
-  }
-
-  /* ----------------------------- Демо-однокурсники ----------------------------- */
-  function seedDemo(force) {
-    if (!force && storage.getItem(KEYS.demo) === DEMO_VERSION) return read('league-demo-data', { students: [] });
-    var groups = ['ИС-21', 'ИС-22'];
-    var names = ['Громов Артём Олегович', 'Зайцева Дарья Сергеевна', 'Ковалёв Никита Андреевич', 'Лебедева Полина Игоревна', 'Морозов Илья Дмитриевич', 'Соколова Вероника Павловна'];
-    var stands = ['dhcp-alt', 'switch-ovs'];
-    var students = [], subs = [], revs = [], pres = {}, led = [];
-    var now = Date.now();
-    names.forEach(function (name, i) {
-      var group = groups[i % 2];
-      /* в демо распределяем трайбы равномерно, чтобы таблица турнира жила сразу */
-      var tribe = TRIBES[i % TRIBES.length];
-      var id = 'demo-' + (i + 1);
-      students.push({ id: id, name: name, group: group, tribeId: tribe.id, demo: true });
-      stands.forEach(function (standId, si) {
-        var score = [86, 100, 71, 100, 57, 86][(i + si) % 6];
-        var sub = {
-          id: uid('demo-sub'), schema: 'stands-submission/2', standId: standId,
-          standTitle: standId === 'dhcp-alt' ? 'DHCP ALT' : 'Open vSwitch',
-          student: { id: id, name: name, group: group, demo: true },
-          startedAt: new Date(now - (5 + i) * 36e5).toISOString(),
-          submittedAt: new Date(now - (4 - si) * 36e5 - i * 18e5).toISOString(),
-          result: { passed: Math.round(score / 100 * (standId === 'dhcp-alt' ? 7 : 6)), total: standId === 'dhcp-alt' ? 7 : 6, score: score, ready: score === 100 },
-          checks: [], config: '// демо-конфигурация', terminalLog: [], actionLog: [],
-          quiz: { done: true, correct: score > 70 ? 5 : 3, answers: { 0: 0, 1: 1, 2: 1, 3: 2, 4: 1 } },
-          autotests: { passed: score === 100 ? 8 : 6, total: 8, score: score === 100 ? 100 : 75 },
-          demo: true
-        };
-        subs.push(sub);
-        led.push({ id: uid('demo-xp'), profileId: id, at: sub.submittedAt, type: 'submit', xp: 40, coins: 8, note: AWARDS.submit.note, dedupKey: null });
-        if (score === 100) led.push({ id: uid('demo-xp'), profileId: id, at: sub.submittedAt, type: 'standReady', xp: 50, coins: 10, note: AWARDS.standReady.note, dedupKey: null });
+    if (bundle.schema === 'league-bundle/2' && bundle.prp) {
+      var m = prpMap();
+      Object.keys(bundle.prp).forEach(function (id) {
+        if (typeof m[id] !== 'number') { m[id] = bundle.prp[id]; report.prp++; }
       });
-      pres[id] = {
-        id: id, name: name, group: group, tribeId: tribe.id,
-        standId: i % 2 ? 'dhcp-alt' : 'switch-ovs',
-        lastSeen: new Date(now - (i < 3 ? i * 12000 : 36e5 * (i - 2))).toISOString(), demo: true
-      };
-    });
-    /* Несколько пиринговых и одна экспертная оценка */
-    var rubric = function (a, b, c, d) { return { config: a, completeness: b, journal: c, communication: d }; };
-    revs.push({
-      id: uid('demo-rev'), kind: 'peer', standId: 'dhcp-alt', submissionId: subs[0].id,
-      reviewer: { id: students[1].id, name: students[1].name, group: students[1].group },
-      reviewee: { id: students[0].id, name: students[0].name, group: students[0].group },
-      scores: rubric(4, 4, 5, 5), comment: 'Аккуратный dhcpd.conf, шлюз и DNS на месте, журнал показывает DORA полностью. Можно чуть подробнее комментировать резерв принтера.',
-      createdAt: new Date(now - 2 * 36e5).toISOString(), demo: true
-    });
-    revs.push({
-      id: uid('demo-rev'), kind: 'expert', standId: 'switch-ovs', submissionId: subs[3].id,
-      reviewer: { id: 'teacher', name: 'Преподаватель', group: '—' },
-      reviewee: { id: students[3].id, name: students[3].name, group: students[3].group },
-      scores: rubric(5, 5, 5, 5), comment: 'Эталонная настройка trunk/access, все проверки и автотесты пройдены. Принято на максимальный балл.',
-      createdAt: new Date(now - 36e5).toISOString(), demo: true
-    });
-    write('league-demo-data', { students: students });
-    write(KEYS.submissions, subs);
-    write(KEYS.reviews, revs);
-    write(KEYS.presence, pres);
-    write(KEYS.ledger, led);
-    storage.setItem(KEYS.demo, DEMO_VERSION);
-    return { students: students };
+      write(KEYS.prp, m);
+    }
+    return report;
   }
 
   function resetAll() {
     Object.keys(KEYS).forEach(function (k) { storage.removeItem(KEYS[k]); });
-    storage.removeItem('league-demo-data');
   }
 
   return {
     KEYS: KEYS,
+    REPO_CONFIG: REPO_CONFIG,
     AWARDS: AWARDS,
     LEVELS: LEVELS,
     TRIBES: TRIBES,
+    MASCOTS: MASCOTS,
     HACKATHONS: HACKATHONS,
+    INITIAL_PRP: INITIAL_PRP,
+    PRP_CAP: PRP_CAP,
     levelOf: levelOf,
     tribeFor: tribeFor,
+    mascotById: mascotById,
+    handleFor: handleFor,
+    setMascot: setMascot,
+    publicStudent: publicStudent,
     getProfile: getProfile,
     ensureProfile: ensureProfile,
     updateProfile: updateProfile,
+    prpBalance: prpBalance,
+    earnPrp: earnPrp,
+    spendPrp: spendPrp,
     ledger: ledger,
     totals: totals,
     award: award,
@@ -440,6 +566,9 @@
     decodeSubmission: decodeSubmission,
     reviews: reviews,
     addReview: addReview,
+    importReview: importReview,
+    encodeReview: encodeReview,
+    decodeReview: decodeReview,
     reviewsFor: reviewsFor,
     reviewsBy: reviewsBy,
     reviewerRating: reviewerRating,
@@ -448,11 +577,11 @@
     listPresence: listPresence,
     standMastery: standMastery,
     skillsMatrix: skillsMatrix,
+    achievements: achievements,
     roster: roster,
     tribeStandings: tribeStandings,
     exportBundle: exportBundle,
     importBundle: importBundle,
-    seedDemo: seedDemo,
     resetAll: resetAll
   };
 });
