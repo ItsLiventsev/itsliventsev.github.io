@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>DNS и синхронизация времени · ДатаПолис · itsliventsev</title>
+<meta name="description" content="BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/site.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261026v">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261026v">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-dns-time.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="DNS и синхронизация времени · ДатаПолис · itsliventsev">
+  <meta property="og:description" content="BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/ops/ops-dns-time.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DNS и синхронизация времени · ДатаПолис · itsliventsev">
+  <meta name="twitter:description" content="BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"DNS и синхронизация времени · ДатаПолис","description":"BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».","url":"https://itsliventsev.github.io/stands/ops/ops-dns-time.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/ops/ops-dns-time.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"DNS и синхронизация времени · ДатаПолис","item":"https://itsliventsev.github.io/stands/ops/ops-dns-time.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope ops-scope" data-accent="teal">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторная сервисного центра работает только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html"><span class="st-brand-mark">←</span><span>itsliventsev</span><span class="st-brand-sep">/</span><span class="st-brand-sub">ДатаПолис</span></a>
+    <nav class="st-topnav" aria-label="Навигация сервисного центра">
+      <a href="index.html">консоль</a>
+      <a href="../index.html">вселенные</a>
+      <a href="../setpolis.html" rel="nofollow">СетьПолис</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="переключить тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">вселенные</a><span aria-hidden="true">/</span>
+      <a href="index.html">ДатаПолис</a><span aria-hidden="true">/</span>
+      <span aria-current="page">DNS и синхронизация времени</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к консоли</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">3</span>
+      <div>
+        <p class="ops-kicker">спринт 3 · Сервисы</p>
+        <h1>DNS и синхронизация времени</h1>
+        <p class="st-hero-lead">BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».</p>
+        <div class="st-hero-meta">
+          <span>формат: <strong>инцидент-день · war room + postmortem</strong></span>
+          <span>примерно <strong>5 ч</strong></span>
+          <span>начисление: <strong>85 неткоинов</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="ops-root"></div>
+  </main>
+  <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span><span>lab: ops-dns-time · autosave: on</span></footer>
+</div>
+
+<script src="../../assets/mascots.js?v=20261026v"></script>
+<script src="../../assets/ops-engine.js?v=20261026v"></script>
+<script src="../../assets/stands.js?v=20261026v"></script>
+<script type="application/json" id="ops-data">{"id": "ops-dns-time", "sprint": 3, "hours": "5 ч", "coins": "85", "mascot": "owl", "who": "сова Агата — координатор разрешения имён и времени", "title": "DNS и синхронизация времени", "lead": "BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».", "story": "Утром в Service Desk посыпались заявки: внутренние сайты открываются по IP, но не по имени, а Kerberos то и дело отказывает в билетах. Два связанных корня — сломанная зона DNS и разъехавшееся время на контроллерах. Вы поднимете BIND, опишете прямую и обратную зоны, настроите chrony и проведёте полный разбор инцидента без поиска виноватого.", "theory": [{"h": "Зоны прямого и обратного просмотра", "p": "DNS переводит имена в адреса (A) и обратно (PTR). Зона — файл записей с серийным номером SOA; при каждом изменении серийник увеличивается, иначе вторичные серверы не подхватят правку.", "code": "# apt-get install bind bind-utils\n# mcedit /var/lib/bind/etc/zone/datapolis.local\n$ORIGIN datapolis.local.\nsrv-hq  IN A 10.20.30.11\n# systemctl reload named"}, {"h": "Синхронизация времени", "p": "Kerberos, TLS и журналирование критичны к точному времени. chrony синхронизирует узлы с NTP-источниками; расхождение более пяти минут ломает аутентификацию домена.", "code": "# mcedit /etc/chrony.conf\nserver ntp.datapolis.local iburst\n# systemctl enable --now chronyd\n# chronyc tracking"}, {"h": "Диагностика по слоям", "p": "Инцидент с именами разбирают последовательно: доступен ли DNS-сервер, отвечает ли он по нужной зоне, верна ли запись, сходится ли обратная зона. Инструменты: dig, host, nslookup, journalctl.", "note": "Типовая ловушка: забытый серийник зоны или обратная запись с адресом справа налево."}], "commands": [{"linux": "dig srv-hq.datapolis.local", "windows": "nslookup srv-hq.datapolis.local", "what": "проверка прямой записи"}, {"linux": "dig -x 10.20.30.11", "windows": "nslookup 10.20.30.11", "what": "обратный просмотр PTR"}, {"linux": "systemctl reload named", "windows": "Restart-Service DNS", "what": "применение изменений зоны"}, {"linux": "chronyc sources", "windows": "w32tm /query /status", "what": "источники времени"}, {"linux": "timedatectl", "windows": "Get-Date ; w32tm /tz", "what": "текущие часы и зона"}, {"linux": "journalctl -u named -n 50", "windows": "Get-EventLog \"DNS Server\"", "what": "журнал службы именования"}], "tasks": [{"id": "t1", "text": "Установите BIND и создайте прямую зону с записями A для трёх сервисов"}, {"id": "t2", "text": "Создайте обратную зону и записи PTR, проверьте dig в обе стороны"}, {"id": "t3", "text": "Настройте форвардер на внешний DNS и проверьте резолв внешних имён"}, {"id": "t4", "text": "Разверните chrony, выведите chronyc tracking и добейтесь синхронизации"}, {"id": "t5", "text": "Воспроизведите инцидент: уменьшите серийник зоны и опишите симптом"}, {"id": "t6", "text": "Устраните причину и зафиксируйте время реакции и восстановления"}, {"id": "t7", "text": "Заполните blameless postmortem: влияние, root cause, меры"}], "ticket": {"type": "incident", "priority": "P2", "title": "Не разрешаются внутренние имена, сбоит Kerberos", "text": "Пользователи жалуются, что внутренние ресурсы доступны только по IP, доменный вход периодически отваливается. Подтвердите гипотезу DNS+время, устраните причину и проведите postmortem. SLA-окно — 60 минут.", "deliverables": ["Рабочие прямая и обратная зоны с проверкой dig", "Вывод chronyc tracking по всем узлам", "Postmortem с корневой причиной и мерами"]}, "runbook": {"title": "Восстановление разрешения имён", "steps": ["Проверить доступность DNS и порт 53", "Сверить серийник SOA и синтаксис зоны", "Перезагрузить named и проверить A/PTR", "Сверить время через chrony", "Закрыть инцидент и записать разбор"]}, "rca": true, "quiz": [{"q": "Запись какого типа возвращает имя по IP-адресу?", "options": ["A", "CNAME", "PTR", "MX"], "answer": 2, "explain": "PTR — обратная запись, зона in-addr.arpa."}, {"q": "Что произойдёт, если не увеличить серийный номер зоны?", "options": ["Ничего", "Вторичные серверы не подтянут изменения", "DNS удалит зону", "Выключится сервер"], "answer": 1, "explain": "По серийному номеру SOA определяется, есть ли новая версия зоны."}, {"q": "Почему рассинхрон часов ломает Kerberos?", "options": ["Это миф", "Тикеты имеют ограниченный срок, время проверяется строго", "Kerberos не использует время", "Ломается только DNS"], "answer": 1, "explain": "Срок действия тикета проверяется по часам; расхождение делает билет недействительным."}, {"q": "Какой инструмент на ALT покажет состояние синхронизации?", "options": ["dig time", "chronyc tracking", "ntpq -clock", "timectl status"], "answer": 1, "explain": "chronyc tracking показывает источник, смещение и точность."}], "reflection": ["Какая гипотеза пришла первой и подтвердилась ли она?", "Почему разбор без вины эффективнее наказания дежурного?", "Какой мониторинг предупредил бы этот инцидент заранее?"], "sprintTitle": "Сервисы"}</script>
+<script src="../../assets/ops-kit.js?v=20261026v"></script>
+</body>
+</html>
