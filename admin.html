@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261026p">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261026p">
-<link rel="stylesheet" href="assets/stands.css?v=20261026p">
+<link rel="stylesheet" href="assets/site.css?v=20261026q">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261026q">
+<link rel="stylesheet" href="assets/stands.css?v=20261026q">
 </head>
 <body class="bg-grid" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -58,7 +58,34 @@
   <h1 class="hero-title text-3xl sm:text-4xl mb-2 reveal">админ-панель</h1>
   <p class="hero-sub reveal mb-10">// публикация постов через GitHub API · токен не покидает вкладку</p>
 
-  <!-- Приём работ виртуальных стендов (работает без токена: импорт JSON) -->
+  <!-- Кто авторизован и онлайн: блок со своей кнопкой обновления (без перезагрузки страницы) -->
+  <section id="presence-card" class="card p-5 sm:p-7 reveal mb-8">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div>
+        <p class="section-label">presence · мониторинг активности</p>
+        <h2 class="text-lg font-bold m-0 mt-1">Авторизованные студенты</h2>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="flat-badge">сессий: <strong id="presence-count">0</strong></span>
+        <span class="flat-badge is-ready">онлайн сейчас: <strong id="presence-online">0</strong></span>
+        <button class="flat-btn" id="presence-refresh" type="button">обновить блок ↻</button>
+      </div>
+    </div>
+    <div class="sub-table-wrap">
+      <table class="sub-table">
+        <thead>
+          <tr><th>статус</th><th>ФИО</th><th>группа</th><th>текущий стенд</th><th>последняя активность</th></tr>
+        </thead>
+        <tbody id="presence-tbody"></tbody>
+      </table>
+    </div>
+    <p class="admin-hint mt-3 mb-0" id="presence-updated" role="status">
+      Живые обновления приходят автоматически из вкладок стендов в этом браузере. Кнопка обновляет только этот блок,
+      без перезагрузки страницы. На другой устройстве данные переносятся кодами работ и JSON-бандлами.
+    </p>
+  </section>
+
+  <!-- Приём работ виртуальных стендов (работает без токена: импорт JSON, приём по коду, публичный репозиторий) -->
   <section id="submissions-card" class="card p-5 sm:p-7 reveal mb-8">
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div>
@@ -73,8 +100,15 @@
         <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
       </label>
       <button class="flat-btn ghost" id="sub-repo" type="button">загрузить из репозитория</button>
+      <button class="flat-btn ghost" id="sub-demo" type="button">демо-данные</button>
       <button class="flat-btn ghost" id="sub-export" type="button">экспорт всех</button>
       <button class="flat-btn ghost" id="sub-clear" type="button">очистить</button>
+    </div>
+
+    <!-- Приём работы по коду ITS-LAB1: студент присылает код из модального окна стенда -->
+    <div class="grid sm:grid-cols-[1fr_auto] gap-2 mb-4">
+      <textarea id="sub-code" class="flat-input" rows="2" placeholder="вставьте сюда код работы ITS-LAB1… (можно несколько кодов, по одному в строке)"></textarea>
+      <button class="flat-btn" id="sub-code-go" type="button">принять работу<br>по коду</button>
     </div>
 
     <div class="grid sm:grid-cols-3 gap-2 mb-4">
@@ -87,15 +121,15 @@
       <table class="sub-table">
         <thead>
           <tr>
-            <th>№</th><th>ФИО</th><th>группа</th><th>стенд</th><th>результат</th><th>сдано</th><th>действия</th>
+            <th>№</th><th>ФИО</th><th>группа</th><th>стенд</th><th>результат</th><th>артефакты</th><th>сдано</th><th>действия</th>
           </tr>
         </thead>
         <tbody id="sub-tbody"></tbody>
       </table>
     </div>
     <p class="admin-hint mt-3 mb-0" id="sub-msg" role="status">
-      Студент скачивает JSON на странице стенда — импортируйте один или несколько файлов сразу.
-      При активном входе по токену можно подтянуть работы из папки <code>submissions/</code> репозитория.
+      Каналы сдачи: импорт JSON-файлов, приём по коду ITS-LAB1, папка <code>submissions/</code> публичного
+      репозитория (читается без токена). Старые файлы схемы stands-submission/1 принимаются наравне с новыми.
     </p>
   </section>
 
@@ -238,9 +272,10 @@
 
 </div>
 
-<script src="assets/admin-config.js?v=20261026p"></script>
-<script src="assets/admin.js?v=20261026p"></script>
-<script src="assets/submissions.js?v=20261026p"></script>
-<script src="assets/site.js?v=20261026p"></script>
+<script src="assets/admin-config.js?v=20261026q"></script>
+<script src="assets/league.js?v=20261026q"></script>
+<script src="assets/admin.js?v=20261026q"></script>
+<script src="assets/submissions.js?v=20261026q"></script>
+<script src="assets/site.js?v=20261026q"></script>
 </body>
 </html>

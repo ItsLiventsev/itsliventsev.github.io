@@ -1,38 +1,42 @@
 /* ==========================================================================
-   Виртуальные стенды · клиентское приложение
-   Профиль студента (ФИО/группа), автосохранение прогресса в localStorage,
-   терминал-симулятор, журнал действий, контрольные мини-тесты и экспорт
-   работы в JSON для преподавателя. Сервер не нужен — всё живёт в браузере.
-   Поддерживает два стенда: DHCP (редактор конфига) и Open vSwitch (терминал).
+   Виртуальные стенды · клиентское приложение (v2)
+   Профиль студента, виртуальные машины os-engine, автосохранение снапшотов,
+   автотесты, навыки ФГОС, геймификация и пиринг (league.js), presence,
+   сдача работы в трёх каналах без сервера (JSON, код ITS-LAB1, репозиторий).
    ========================================================================== */
 (function () {
   'use strict';
 
   var PROFILE_KEY = 'stands-profile';
-  var SUBMISSIONS_KEY = 'stands-submissions';
-  var progressKey = function (standId) { return 'stands-progress:' + standId; };
+  var OLD_SUBMISSIONS_KEY = 'stands-submissions';
 
-  var Store = {
-    get: function (k) {
-      try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; }
-    },
-    set: function (k, v) {
-      try { localStorage.setItem(k, JSON.stringify(v)); return true; }
-      catch (e) { return false; }
-    },
-    del: function (k) { localStorage.removeItem(k); }
-  };
-
-  function uid() {
-    return 'sub-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
-  }
+  function uid() { return 'sub-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
   function nowISO() { return new Date().toISOString(); }
+  function $(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function $(id) { return document.getElementById(id); }
+  var Store = {
+    get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+    del: function (k) { localStorage.removeItem(k); }
+  };
+  var progressKey = function (standId) { return 'stands-progress:' + standId; };
+  var hasLeague = function () { return typeof window.LEAGUE !== 'undefined'; };
+  var hasFgos = function () { return typeof window.FGOS !== 'undefined'; };
+
+  /* Миграция работ схемы /1 в хранилище лиги */
+  function migrateOldSubmissions() {
+    if (!hasLeague()) return;
+    var old = Store.get(OLD_SUBMISSIONS_KEY);
+    if (!Array.isArray(old) || !old.length) return;
+    old.forEach(function (s) {
+      if (s && s.id) window.LEAGUE.addSubmission(s);
+    });
+    localStorage.removeItem(OLD_SUBMISSIONS_KEY);
+  }
 
   /* ----------------------------- Мини-тест ----------------------------- */
   function mountQuiz(box, quiz, saved, onchange) {
@@ -53,9 +57,7 @@
             (state.answers[qi] === oi ? ' checked' : '') + (state.done ? ' disabled' : '') + '>' +
             '<span>' + esc(opt) + '</span></label>';
         }).join('');
-        var explain = state.done
-          ? '<p class="q-explain">// ' + esc(item.explain) + '</p>'
-          : '';
+        var explain = state.done ? '<p class="q-explain">// ' + esc(item.explain) + '</p>' : '';
         return '<div class="q-item" data-q="' + qi + '">' +
           '<p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span>' + esc(item.q) + '</p>' +
           '<div class="q-opts">' + opts + '</div>' + explain + '</div>';
@@ -100,16 +102,15 @@
     function emit() { if (typeof onchange === 'function') onchange(state); }
 
     render();
-    return {
-      getState: function () { return state; },
-      isComplete: function () { return state.done; }
-    };
+    return { getState: function () { return state; }, isComplete: function () { return state.done; } };
   }
 
-  /* --------------------------- Общий терминал --------------------------- */
-  function makeTerminal(screenEl, inputEl, prompt) {
-    var history = [];
-    function printTerm(line, out, isErr) {
+  /* ----------------------------- Терминал ----------------------------- */
+  function makeTerminal(screenEl, inputEl, prompt, getHistory) {
+    var termLog = [];
+    var navIdx = -1;
+
+    function print(line, out, isErr) {
       var row = document.createElement('div');
       row.className = 'lt-line';
       row.innerHTML = '<span class="lt-prompt">' + esc(prompt) + '</span><span>' + esc(line) + '</span>';
@@ -122,29 +123,284 @@
       }
       screenEl.scrollTop = screenEl.scrollHeight;
     }
+
+    inputEl.addEventListener('keydown', function (e) {
+      var hist = getHistory ? getHistory() : [];
+      if (e.key === 'ArrowUp') {
+        if (!hist.length) return;
+        e.preventDefault();
+        navIdx = navIdx === -1 ? hist.length - 1 : Math.max(0, navIdx - 1);
+        inputEl.value = hist[navIdx] || '';
+      } else if (e.key === 'ArrowDown') {
+        if (navIdx === -1) return;
+        e.preventDefault();
+        navIdx++;
+        if (navIdx >= hist.length) { navIdx = -1; inputEl.value = ''; }
+        else inputEl.value = hist[navIdx] || '';
+      } else if (e.key === 'Enter') {
+        navIdx = -1;
+      }
+    });
+
     return {
-      history: history,
-      print: printTerm,
-      restore: function (log) {
-        log.forEach(function (h) { printTerm(h.line, h.out, h.err); });
-      },
+      log: termLog,
+      print: print,
+      restore: function (entries) { entries.forEach(function (h) { print(h.line, h.out, h.err); }); },
       bind: function (handler) {
         inputEl.addEventListener('keydown', function (e) {
           if (e.key !== 'Enter') return;
           var line = inputEl.value.trim();
           inputEl.value = '';
           if (!line) return;
-          if (handler(line) === false) return; // обработчик сам решил (например clear)
+          if (handler(line) === false) return;
         });
       },
-      clear: function () { screenEl.innerHTML = ''; history.length = 0; }
+      clear: function () { screenEl.innerHTML = ''; termLog.length = 0; }
     };
   }
 
-  /* --------------------------- Лендинг стендов --------------------------- */
+  /* ----------------------------- Presence ----------------------------- */
+  var presenceTimer = null;
+  function startPresence(standId) {
+    if (!hasLeague()) return;
+    var profile = window.LEAGUE.getProfile();
+    if (!profile) return;
+    var beat = function () { window.LEAGUE.heartbeat(profile, standId); };
+    beat();
+    clearInterval(presenceTimer);
+    presenceTimer = setInterval(beat, 15000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) beat(); });
+    window.addEventListener('beforeunload', beat);
+  }
+
+  /* ----------------------------- Общие виджеты ----------------------------- */
+  function renderXpStrip(anchor) {
+    if (!hasLeague() || !anchor) return;
+    var profile = window.LEAGUE.getProfile();
+    if (!profile) return;
+    var t = window.LEAGUE.totals(profile.id);
+    var tribe = window.LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
+    var strip = document.createElement('div');
+    strip.className = 'xp-strip';
+    strip.id = 'xp-strip';
+    strip.innerHTML =
+      '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
+      '<div class="xp-bar" title="опыт до следующего уровня"><i style="width:' + t.level.progress + '%"></i></div>' +
+      '<span class="xp-meta">' + t.xp + ' XP' + (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : ' · максимум') + '</span>' +
+      '<span class="xp-meta xp-coins">◈ ' + t.coins + ' неткоинов</span>' +
+      (tribe ? '<span class="xp-meta">' + esc(tribe.name) + '</span>' : '');
+    anchor.parentNode.insertBefore(strip, anchor.nextSibling);
+  }
+
+  function refreshXpStrip() {
+    var old = $('xp-strip');
+    if (old) old.remove();
+    renderXpStrip($('lab-profile'));
+  }
+
+  function renderSkills(standId) {
+    var box = $('lab-skills');
+    if (!box || !hasFgos()) return;
+    var spec = window.FGOS.STANDS[standId];
+    if (!spec) return;
+    function chips(codes) {
+      return '<div class="st-code-chips">' + codes.map(function (code) {
+        var c = window.FGOS.byCode(code);
+        return '<span class="st-code" title="' + esc(c ? c.title : code) + '"><b>' + esc(code) + '</b></span>';
+      }).join('') + '</div>';
+    }
+    box.innerHTML =
+      '<div class="st-skill-group"><h3>профессиональные компетенции · ФГОС СПО ' + esc(window.FGOS.SPECIALTY.split(' ')[0]) + '</h3>' +
+      chips(spec.pk) +
+      '<ul class="st-practical">' + spec.skills.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>' +
+      '<div class="st-skill-group"><h3>общие компетенции</h3>' + chips(spec.ok) +
+      '<p style="margin:.4rem 0 0;font-size:.78rem;color:var(--st-muted);">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден на странице «моя лига».</p></div>';
+  }
+
+  function renderAutotests(report) {
+    var box = $('lab-autotests'), badge = $('at-badge');
+    if (!box) return;
+    if (badge) {
+      badge.textContent = report.passed + '/' + report.total;
+      badge.className = 'flat-badge ' + (report.passed === report.total ? 'is-ready' : 'is-soon');
+    }
+    box.innerHTML = '<div class="at-summary"><span class="at-score">пройдено ' + report.passed + '/' + report.total +
+      ' · ' + report.score + '%</span></div>' +
+      report.results.map(function (r) {
+        return '<div class="at-row ' + (r.ok ? 'is-ok' : 'is-bad') + '">' +
+          '<div class="at-head"><span class="at-mark">' + (r.ok ? '✓' : '×') + '</span>' +
+          '<span class="at-title">' + esc(r.title) + '</span></div>' +
+          (r.ok ? '' : '<p class="at-detail">ожидалось: ' + esc(r.expected) + '<br>факт: ' + esc(r.actual) + '</p>') +
+          '</div>';
+      }).join('');
+  }
+
+  /* ----------------------------- Взаимные оценки ----------------------------- */
+  var RUBRIC = [
+    { key: 'config', label: 'корректность конфигурации' },
+    { key: 'completeness', label: 'полнота: цели, тест, автотесты' },
+    { key: 'journal', label: 'качество журнала и аккуратность' },
+    { key: 'communication', label: 'объяснения и комментарии' }
+  ];
+
+  function renderReviewArea(standId) {
+    if (!hasLeague()) return;
+    var profile = window.LEAGUE.getProfile();
+    var poolBox = $('rv-pool'), mineBox = $('rv-mine'), badge = $('rv-pool-badge');
+    if (!poolBox || !profile) return;
+
+    var pool = window.LEAGUE.submissions().filter(function (s) {
+      return s.standId === standId && s.student.id !== profile.id;
+    });
+    if (badge) badge.textContent = pool.length + ' работ';
+    if (!pool.length) {
+      poolBox.innerHTML = '<p class="rv-empty">// пул пуст: здесь появятся работы однокурсников и демо-группы после их сдачи</p>';
+    } else {
+      poolBox.innerHTML = pool.slice(0, 6).map(function (s) {
+        var reviewed = window.LEAGUE.reviewsFor(s.id).some(function (r) { return r.reviewer.id === profile.id; });
+        return '<div class="rv-card" data-sub="' + esc(s.id) + '">' +
+          '<div class="rv-card-head"><div class="rv-who">' + esc(s.student.name) +
+            '<small>' + esc(s.student.group) + (s.student.demo ? ' · демо-однокурсник' : '') + '</small></div>' +
+          '<span class="rv-score-pill ' + ((s.result.score || 0) >= 85 ? 'is-ok' : '') + '">CI ' + (s.result.score != null ? s.result.score + '%' : '—') + '</span></div>' +
+          (reviewed
+            ? '<p class="rv-empty" style="margin:0;">// вы уже проверили эту работу</p>'
+            : '<button class="flat-btn ghost rv-open" type="button" data-sub="' + esc(s.id) + '">оценить работу</button>') +
+          '<div class="rv-form-holder"></div></div>';
+      }).join('');
+
+      poolBox.querySelectorAll('.rv-open').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var card = btn.closest('.rv-card');
+          var holder = card.querySelector('.rv-form-holder');
+          var sub = pool.filter(function (s) { return s.id === btn.dataset.sub; })[0];
+          var scores = { config: 0, completeness: 0, journal: 0, communication: 0 };
+          holder.innerHTML = '<div class="rv-form">' +
+            '<div class="rv-criteria">' + RUBRIC.map(function (c) {
+              return '<div class="rv-crit" data-crit="' + c.key + '"><label>' + esc(c.label) + '</label>' +
+                '<div class="rv-stars">' + [1, 2, 3, 4, 5].map(function (n) {
+                  return '<button type="button" data-n="' + n + '" aria-label="' + n + ' из 5">★</button>';
+                }).join('') + '</div></div>';
+            }).join('') + '</div>' +
+            '<textarea class="flat-input rv-comment" placeholder="Доброжелательный конструктивный комментарий: что хорошо, что улучшить (по методике «равный равному»)"></textarea>' +
+            '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">' +
+            '<button class="flat-btn rv-save" type="button">отправить оценку</button>' +
+            '<button class="flat-btn ghost rv-cancel" type="button">отмена</button></div></div>';
+
+          holder.querySelectorAll('.rv-crit').forEach(function (crit) {
+            crit.addEventListener('click', function (e) {
+              var star = e.target.closest('button');
+              if (!star) return;
+              var key = crit.dataset.crit, n = Number(star.dataset.n);
+              scores[key] = n;
+              crit.querySelectorAll('.rv-stars button').forEach(function (b, i) {
+                b.classList.toggle('on', i < n);
+              });
+            });
+          });
+          holder.querySelector('.rv-cancel').addEventListener('click', function () { holder.innerHTML = ''; });
+          holder.querySelector('.rv-save').addEventListener('click', function () {
+            var filled = RUBRIC.every(function (c) { return scores[c.key] >= 1; });
+            var comment = holder.querySelector('.rv-comment').value.trim();
+            if (!filled) { alert('Поставьте оценку по каждому из четырёх критериев'); return; }
+            if (comment.length < 15) { alert('Комментарий короче 15 символов — объясните, что именно хорошо и что улучшить'); return; }
+            window.LEAGUE.addReview({
+              kind: 'peer', standId: standId, submissionId: sub.id,
+              reviewer: { id: profile.id, name: profile.name, group: profile.group },
+              reviewee: { id: sub.student.id, name: sub.student.name, group: sub.student.group },
+              scores: scores, comment: comment
+            });
+            window.LEAGUE.award(profile.id, 'review', 'review:' + sub.id, { standId: standId });
+            refreshXpStrip();
+            renderReviewArea(standId);
+            renderMyReviews(standId);
+          });
+        });
+      });
+    }
+
+    renderMyReviews(standId);
+  }
+
+  function renderMyReviews(standId) {
+    var box = $('rv-mine');
+    if (!box || !hasLeague()) return;
+    var profile = window.LEAGUE.getProfile();
+    var mine = window.LEAGUE.reviews().filter(function (r) {
+      return r.standId === standId && r.reviewee.id === profile.id;
+    });
+    if (!mine.length) {
+      box.innerHTML = '<p class="rv-empty">// пока никто не проверял ваши работы этого стенда</p>';
+      return;
+    }
+    box.innerHTML = mine.map(function (r) {
+      var avg = Math.round(((r.scores.config + r.scores.completeness + r.scores.journal + r.scores.communication) / 4) * 10) / 10;
+      return '<div class="rv-review ' + (r.kind === 'expert' ? 'is-expert' : '') + '">' +
+        '<p class="rv-review-meta">' + (r.kind === 'expert' ? '★ экспертная оценка' : 'взаимная оценка') + ' · ' +
+        esc(r.reviewer.name) + ' · ' + esc(r.reviewer.group || '—') + ' · средний балл ' + avg + '/5</p>' +
+        '<p>' + esc(r.comment) + '</p></div>';
+    }).join('');
+  }
+
+  /* ----------------------------- Сдача работы ----------------------------- */
+  function openCodeModal(code) {
+    var modal = $('sub-code-modal');
+    if (!modal) return;
+    $('sub-code-text').value = code;
+    modal.hidden = false;
+    $('sub-code-close').onclick = function () { modal.hidden = true; };
+    modal.onclick = function (e) { if (e.target === modal) modal.hidden = true; };
+    $('sub-code-copy').onclick = function () {
+      var ta = $('sub-code-text');
+      ta.select();
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).catch(function () {});
+      else document.execCommand('copy');
+      this.textContent = 'скопировано ✓';
+      var btn = this;
+      setTimeout(function () { btn.textContent = 'скопировать код'; }, 2000);
+    };
+  }
+
+  function downloadJson(submission) {
+    try {
+      if (typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function' || typeof Blob === 'undefined') return false;
+      var profile = submission.student;
+      var blob = new Blob([JSON.stringify(submission, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = submission.standId + '_' + String(profile.group || '').replace(/[^\wа-яё-]+/gi, '_') +
+        '_' + String(profile.name || '').replace(/[^\wа-яё]+/gi, '_') + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      return true;
+    } catch (e) {
+      return false; // код работы всё равно доступен через модальное окно
+    }
+  }
+
+  function grantSubmitAwards(profile, standId, result, quizApi, autotests) {
+    if (!hasLeague()) return;
+    var L = window.LEAGUE;
+    L.award(profile.id, 'submit', 'submit:' + standId + ':' + Date.now().toString(36), { standId: standId });
+    if (result.ready) L.award(profile.id, 'standReady', 'ready:' + standId, { standId: standId });
+    if (quizApi) {
+      var q = quizApi.getState();
+      if (q.done && q.correct === 5) L.award(profile.id, 'quizPerfect', 'quiz:' + standId, { standId: standId });
+    }
+    if (autotests && autotests.passed === autotests.total) {
+      L.award(profile.id, 'autotests', 'at:' + standId, { standId: standId });
+    }
+  }
+
+  /* ----------------------------- Лендинг стендов ----------------------------- */
   function initLanding() {
     var form = $('profile-form');
     if (!form) return;
+    migrateOldSubmissions();
+    if (hasLeague() && !localStorage.getItem('league-demo-version')) {
+      window.LEAGUE.seedDemo();
+    }
     var nameInput = $('p-name'), groupInput = $('p-group'), msg = $('profile-msg');
     var gate = $('profile-gate'), panel = $('profile-panel'), catalog = $('stands-catalog');
 
@@ -154,10 +410,22 @@
       catalog.hidden = false;
       $('fp-name').textContent = profile.name;
       $('fp-group').textContent = profile.group;
+      if (hasLeague()) {
+        window.LEAGUE.dailyLogin(profile.id);
+        var link = document.createElement('a');
+        link.href = 'league.html';
+        link.className = 'flat-btn ghost';
+        link.textContent = 'моя лига →';
+        if (!$('league-entry')) { link.id = 'league-entry'; panel.appendChild(link); }
+        renderLandingSummary(profile);
+      }
     }
 
     var existing = Store.get(PROFILE_KEY);
-    if (existing && existing.name && existing.group) renderPanel(existing);
+    if (existing && existing.name && existing.group) {
+      if (hasLeague() && !existing.id) window.LEAGUE.updateProfile({ name: existing.name, group: existing.group });
+      renderPanel(hasLeague() ? window.LEAGUE.getProfile() : existing);
+    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -165,8 +433,14 @@
       var group = groupInput.value.trim().replace(/\s+/g, ' ');
       if (name.length < 4) { msg.textContent = 'Укажите ФИО полностью (не короче 4 символов)'; return; }
       if (!group) { msg.textContent = 'Укажите учебную группу'; return; }
-      var profile = { name: name, group: group, savedAt: nowISO() };
-      Store.set(PROFILE_KEY, profile);
+      var profile;
+      if (hasLeague()) {
+        var old = window.LEAGUE.getProfile();
+        profile = old ? window.LEAGUE.updateProfile({ name: name, group: group }) : window.LEAGUE.ensureProfile(name, group);
+      } else {
+        profile = { name: name, group: group, savedAt: nowISO() };
+        Store.set(PROFILE_KEY, profile);
+      }
       msg.textContent = '';
       renderPanel(profile);
     });
@@ -182,7 +456,23 @@
     });
   }
 
-  /* --------------------------- Mermaid (обе страницы) --------------------------- */
+  function renderLandingSummary(profile) {
+    var anchor = document.querySelector('#stands-catalog .st-section-head');
+    if (!anchor || $('landing-league')) return;
+    var L = window.LEAGUE;
+    var t = L.totals(profile.id);
+    var box = document.createElement('div');
+    box.id = 'landing-league';
+    box.className = 'xp-strip';
+    box.innerHTML =
+      '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
+      '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
+      '<span class="xp-meta">' + t.xp + ' XP · ◈ ' + t.coins + '</span>' +
+      '<a class="flat-btn ghost" href="league.html" style="text-decoration:none;">лига, трайбы и хакатоны →</a>';
+    anchor.parentNode.insertBefore(box, anchor);
+  }
+
+  /* ----------------------------- Mermaid ----------------------------- */
   function initMermaid() {
     if (!window.mermaid || !document.querySelector('.mermaid')) return;
     try {
@@ -192,76 +482,87 @@
         securityLevel: 'loose',
         flowchart: { curve: 'linear', htmlLabels: true },
         themeVariables: {
-          darkMode: true,
-          background: '#12161b',
-          primaryColor: '#171d23',
-          primaryBorderColor: '#5b9dff',
-          primaryTextColor: '#e7ecf2',
-          lineColor: '#8a95a1',
-          secondaryColor: '#171d23',
-          tertiaryColor: '#0c1014',
-          edgeLabelBackground: '#171d23',
-          fontFamily: 'JetBrains Mono, ui-monospace, monospace',
-          fontSize: '13px'
+          darkMode: true, background: '#12161b', primaryColor: '#171d23', primaryBorderColor: '#5b9dff',
+          primaryTextColor: '#e7ecf2', lineColor: '#8a95a1', secondaryColor: '#171d23',
+          tertiaryColor: '#0c1014', edgeLabelBackground: '#171d23',
+          fontFamily: 'JetBrains Mono, ui-monospace, monospace', fontSize: '13px'
         }
       });
       window.mermaid.run({ nodes: [document.querySelector('.mermaid')] })
-        .then(function () {
-          var fb = $('schema-fallback');
-          if (fb) fb.hidden = true;
-        })
-        .catch(function () { /* остаётся текстовый fallback */ });
-    } catch (e) { /* fallback */ }
+        .then(function () { var fb = $('schema-fallback'); if (fb) fb.hidden = true; })
+        .catch(function () {});
+    } catch (e) {}
   }
 
-  /* --------------------------- Стенд DHCP --------------------------- */
-  function initDhcpLab() {
-    var editor = $('cfg-editor');
-    if (!editor || typeof DHCP === 'undefined') return;
-
+  /* ----------------------------- Общий каркас стенда ----------------------------- */
+  function loadProfile() {
     var profile = Store.get(PROFILE_KEY);
     if (!profile || !profile.name || !profile.group) {
       location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
-      return;
+      return null;
+    }
+    if (hasLeague() && !profile.id) {
+      profile = window.LEAGUE.updateProfile({ name: profile.name, group: profile.group });
     }
     $('fp-name').textContent = profile.name;
     $('fp-group').textContent = profile.group;
+    return profile;
+  }
+
+  function bindCodeModalOnce() {
+    var modal = $('sub-code-modal');
+    if (!modal) return;
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+    });
+  }
+
+  /* ----------------------------- Стенд DHCP ----------------------------- */
+  function initDhcpLab() {
+    var editor = $('cfg-editor');
+    if (!editor || typeof DHCP === 'undefined') return;
+    var profile = loadProfile();
+    if (!profile) return;
+    bindCodeModalOnce();
+    renderXpStrip($('lab-profile'));
+    renderSkills('dhcp-alt');
+    startPresence('dhcp-alt');
 
     var standId = 'dhcp-alt';
     var standTitle = 'Конфигурация DHCP · ALT Server / ALT Workstation';
     var key = progressKey(standId);
-
     var checkBox = $('lab-checks'), scoreEl = $('lab-score');
     var progressBar = $('lab-progress-bar'), stepList = $('lab-steps');
     var termScreen = $('term-screen'), termInput = $('term-input');
     var submitBtn = $('lab-submit'), statusEl = $('lab-status');
     var log = [];
     var startedAt = nowISO();
+    var autotestsReport = null;
     function addLog(type, msg) { log.push({ t: nowISO(), type: type, msg: msg }); }
 
-    var term = makeTerminal(termScreen, termInput, 'student@alt:~$');
-    var termHistory = term.history;
-
-    // Восстановление прогресса
     var saved = Store.get(key);
-    var quizApi = null;
-    if (saved && saved.config) {
-      editor.value = saved.config;
-      termHistory.push.apply(termHistory, saved.terminalLog || []);
+    var world;
+    try { world = saved && saved.vm ? DHCP.createWorld(saved.vm) : DHCP.createWorld(); }
+    catch (e) { world = DHCP.createWorld(); }
+    if (saved && saved.vm) {
       startedAt = saved.startedAt || startedAt;
       addLog('resume', 'прогресс восстановлен из сохранения браузера');
       statusEl.textContent = '// найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
     } else {
-      editor.value = DHCP.STARTER_CONFIG;
       addLog('start', 'стенд открыт, профиль: ' + profile.name + ' (' + profile.group + ')');
     }
-    term.restore(termHistory.slice());
 
-    quizApi = mountQuiz($('lab-quiz'), DHCP.QUIZ, saved && saved.quiz, function () { autosave(); });
+    var term = makeTerminal(termScreen, termInput, 'student@alt:~$', function () { return world.os.state.history; });
+    if (saved && saved.terminalLog) term.restore(saved.terminalLog);
+    else term.print('help', 'введите help — покажем список команд виртуальной машины', false);
+
+    editor.value = world.getConfig();
+    var quizApi = mountQuiz($('lab-quiz'), DHCP.QUIZ, saved && saved.quiz, autosave);
 
     var lastResult = null;
     function runValidation(quiet) {
-      var result = DHCP.validateDhcpConfig(editor.value);
+      world.setConfig(editor.value);
+      var result = world.validate();
       lastResult = result;
       checkBox.innerHTML = result.checks.map(function (c) {
         return '<div class="lab-check ' + (c.ok ? 'is-ok' : 'is-bad') + '">' +
@@ -278,13 +579,14 @@
     }
 
     function renderSteps(result) {
+      var hist = world.os.state.history;
       var done = {
-        t1: termHistory.some(function (h) { return /install|enable|start/.test(h.line); }),
+        t1: hist.some(function (h) { return /apt-get install|apt install/.test(h); }) && hist.some(function (h) { return /systemctl .*(start|enable)/.test(h); }),
         t2: result.checks.find(function (c) { return c.id === 'subnet'; }).ok && result.checks.find(function (c) { return c.id === 'range'; }).ok,
         t3: result.checks.find(function (c) { return c.id === 'routers'; }).ok && result.checks.find(function (c) { return c.id === 'dns'; }).ok,
         t4: result.checks.find(function (c) { return c.id === 'authoritative'; }).ok,
         t5: result.checks.find(function (c) { return c.id === 'reservation'; }).ok,
-        t6: termHistory.some(function (h) { return h.line.indexOf('dhclient') === 0; }) && result.ready
+        t6: hist.some(function (h) { return h.indexOf('dhclient') === 0 || /\sdhclient/.test(h); }) && result.ready
       };
       stepList.innerHTML = DHCP.TASKS.map(function (t, i) {
         var ok = done[t.id];
@@ -300,13 +602,15 @@
       clearTimeout(saveTimer);
       saveTimer = setTimeout(function () {
         Store.set(key, {
-          config: editor.value,
-          terminalLog: termHistory.slice(-60),
+          v: 2,
+          vm: world.snapshot(),
+          terminalLog: term.log.slice(-60),
           actionLog: log.slice(-200),
           startedAt: startedAt,
           updatedAt: nowISO(),
           lastResult: lastResult,
-          quiz: quizApi ? quizApi.getState() : null
+          quiz: quizApi ? quizApi.getState() : null,
+          autotests: autotestsReport
         });
         statusEl.textContent = '// автосохранено ' + new Date().toLocaleTimeString('ru-RU');
       }, 500);
@@ -314,12 +618,12 @@
     editor.addEventListener('input', function () { runValidation(true); });
 
     term.bind(function (line) {
-      var res = DHCP.runCommand(line, { ready: lastResult ? lastResult.ready : false });
-      if (res.clear) { term.clear(); return false; }
-      term.print(line, res.out, res.ok === false);
-      termHistory.push({ line: line, out: res.out, err: res.ok === false });
+      var res = world.run(line);
+      if (res.clear) { term.clear(); autosave(); return false; }
+      term.print(line, res.out, res.isErr || res.code !== 0);
+      term.log.push({ line: line, out: res.out, err: res.isErr || res.code !== 0 });
       if (res.event) addLog(res.event.type, res.event.msg);
-      if (line.indexOf('dhclient') === 0) runValidation(true);
+      if (/\sdhclient|^dhclient/.test(line)) runValidation(true);
       autosave();
       return true;
     });
@@ -336,66 +640,75 @@
       Store.del(key);
       location.reload();
     });
+    $('btn-autotests').addEventListener('click', function () {
+      var btn = $('btn-autotests');
+      btn.disabled = true;
+      btn.textContent = 'прогоняю на тестовой ВМ…';
+      setTimeout(function () {
+        autotestsReport = DHCP.runAutotests();
+        renderAutotests(autotestsReport);
+        btn.disabled = false;
+        btn.textContent = 'прогнать автотесты →';
+        addLog('autotests', 'автотесты: ' + autotestsReport.passed + '/' + autotestsReport.total);
+        autosave();
+      }, 350);
+    });
 
     submitBtn.addEventListener('click', function () {
       var result = runValidation(true);
       var submission = {
         id: uid(),
-        schema: 'stands-submission/1',
+        schema: 'stands-submission/2',
         standId: standId,
         standTitle: standTitle,
-        student: { name: profile.name, group: profile.group },
+        student: { id: profile.id || profile.name, name: profile.name, group: profile.group, tribeId: profile.tribeId || null, demo: false },
         startedAt: startedAt,
         updatedAt: nowISO(),
         submittedAt: nowISO(),
         result: { passed: result.passed, total: result.total, score: result.score, ready: result.ready },
         checks: result.checks,
         config: editor.value,
-        terminalLog: termHistory.slice(-60),
+        terminalLog: term.log.slice(-60),
         actionLog: log.slice(-200),
-        quiz: quizApi ? quizApi.getState() : null
+        quiz: quizApi ? quizApi.getState() : null,
+        autotests: autotestsReport ? { passed: autotestsReport.passed, total: autotestsReport.total, score: autotestsReport.score } : null,
+        skills: hasFgos() ? { pk: window.FGOS.STANDS[standId].pk, ok: window.FGOS.STANDS[standId].ok } : null,
+        os: { historyCount: world.os.state.history.length, leases: world.leases().length }
       };
-      var mine = Store.get(SUBMISSIONS_KEY) || [];
-      mine.push(submission);
-      Store.set(SUBMISSIONS_KEY, mine);
+      if (hasLeague()) {
+        window.LEAGUE.addSubmission(submission);
+        grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
+        refreshXpStrip();
+        renderReviewArea(standId);
+      }
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
-
-      var blob = new Blob([JSON.stringify(submission, null, 2)], { type: 'application/json' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = standId + '_' + profile.group.replace(/[^\wа-яё-]+/gi, '_') + '_' +
-        profile.name.replace(/[^\wа-яё]+/gi, '_') + '.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
-
-      statusEl.textContent = '// работа сдана (' + result.score + '%). JSON-файл скачан — отправьте его преподавателю';
+      downloadJson(submission);
+      if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
+      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
+      autosave();
     });
 
     runValidation(true);
-    // Без автофокуса: страница должна открываться сверху, без прокрутки к терминалу
+    if (saved && saved.autotests) { autotestsReport = saved.autotests; renderAutotests(autotestsReport); }
+    renderReviewArea(standId);
   }
 
-  /* --------------------------- Стенд Open vSwitch --------------------------- */
+  /* ----------------------------- Стенд Open vSwitch ----------------------------- */
   function initOvsLab() {
     var panel = $('ovs-panel');
     if (!panel || typeof OVS === 'undefined') return;
-
-    var profile = Store.get(PROFILE_KEY);
-    if (!profile || !profile.name || !profile.group) {
-      location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
-      return;
-    }
-    $('fp-name').textContent = profile.name;
-    $('fp-group').textContent = profile.group;
+    var profile = loadProfile();
+    if (!profile) return;
+    bindCodeModalOnce();
+    renderXpStrip($('lab-profile'));
+    renderSkills('switch-ovs');
+    startPresence('switch-ovs');
 
     var standId = 'switch-ovs';
     var standTitle = 'Коммутация в Linux · Open vSwitch (VLAN, access, trunk)';
     var key = progressKey(standId);
-
     var checkBox = $('lab-checks'), scoreEl = $('lab-score');
     var progressBar = $('lab-progress-bar'), stepList = $('lab-steps');
     var termScreen = $('term-screen'), termInput = $('term-input');
@@ -403,30 +716,29 @@
     var portsBody = $('ovs-ports'), bridgeStatus = $('ovs-bridge-status');
     var log = [];
     var startedAt = nowISO();
+    var autotestsReport = null;
     function addLog(type, msg) { log.push({ t: nowISO(), type: type, msg: msg }); }
 
-    var term = makeTerminal(termScreen, termInput, 'student@ovs:~$');
-    var termHistory = term.history;
-
     var saved = Store.get(key);
-    var state;
-    if (saved && saved.ovsState) {
-      state = Object.assign(OVS.freshState(), saved.ovsState);
-      termHistory.push.apply(termHistory, saved.terminalLog || []);
+    var world;
+    try { world = saved && saved.vm ? OVS.createWorld(saved.vm) : OVS.createWorld(); }
+    catch (e) { world = OVS.createWorld(); }
+    if (saved && saved.vm) {
       startedAt = saved.startedAt || startedAt;
       addLog('resume', 'прогресс восстановлен из сохранения браузера');
       statusEl.textContent = '// найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
     } else {
-      state = OVS.freshState();
       addLog('start', 'стенд открыт, профиль: ' + profile.name + ' (' + profile.group + ')');
-      term.print('help', 'введите help — покажем последовательность команд для настройки', false);
-      termHistory.push({ line: 'help', out: 'введите help — покажем последовательность команд для настройки', err: false });
     }
-    term.restore(termHistory.slice());
 
-    var quizApi = mountQuiz($('lab-quiz'), OVS.QUIZ, saved && saved.quiz, function () { autosave(); });
+    var term = makeTerminal(termScreen, termInput, 'student@ovs:~$', function () { return world.os.state.history; });
+    if (saved && saved.terminalLog) term.restore(saved.terminalLog);
+    else term.print('help', 'введите help — покажем список команд виртуальной машины', false);
+
+    var quizApi = mountQuiz($('lab-quiz'), OVS.QUIZ, saved && saved.quiz, autosave);
 
     function renderState() {
+      var state = world.state();
       bridgeStatus.textContent = state.bridge
         ? 'мост ' + state.bridge + ' · служба ' + (state.enabled ? 'active' : 'не запущена')
         : '// мост не создан';
@@ -435,29 +747,24 @@
         var want = OVS.SPEC.ports[name];
         var p = state.ports[name];
         var fact, ok = false;
-        if (!p) {
-          fact = '<span class="ovs-na">порт не добавлен</span>';
-        } else if (p.trunks) {
+        if (!p) fact = '<span class="ovs-na">порт не добавлен</span>';
+        else if (p.trunks) {
           fact = 'trunk · VLAN [' + p.trunks.join(', ') + ']';
           ok = want.role === 'trunk' && want.vlans.every(function (v) { return p.trunks.indexOf(v) !== -1; });
         } else if (p.tag != null) {
           fact = 'access · VLAN ' + p.tag;
           ok = want.role === 'access' && want.vlan === p.tag;
-        } else {
-          fact = 'порт без VLAN';
-        }
+        } else fact = 'порт без VLAN';
         return '<tr class="' + (ok ? 'is-ok' : '') + '">' +
-          '<td class="mono">' + esc(name) + '</td>' +
-          '<td>' + esc(want.label) + '</td>' +
+          '<td class="mono">' + esc(name) + '</td><td>' + esc(want.label) + '</td>' +
           '<td class="mono">' + want.role + ' · ' + (want.vlans ? want.vlans.join(',') : want.vlan) + '</td>' +
-          '<td class="mono">' + fact + '</td>' +
-          '<td class="ovs-mark">' + (ok ? '✓' : '×') + '</td></tr>';
+          '<td class="mono">' + fact + '</td><td class="ovs-mark">' + (ok ? '✓' : '×') + '</td></tr>';
       }).join('');
     }
 
     var lastResult = null;
     function runValidation(quiet) {
-      var result = OVS.validate(state);
+      var result = world.validate();
       lastResult = result;
       checkBox.innerHTML = result.checks.map(function (c) {
         return '<div class="lab-check ' + (c.ok ? 'is-ok' : 'is-bad') + '">' +
@@ -475,7 +782,7 @@
     }
 
     function renderSteps() {
-      var done = OVS.taskStatus(state, termHistory);
+      var done = OVS.taskStatus(world.state(), world.os.state.history);
       stepList.innerHTML = OVS.TASKS.map(function (t, i) {
         var ok = done[t.id];
         return '<li class="lab-step' + (ok ? ' is-done' : '') + '">' +
@@ -490,22 +797,25 @@
       clearTimeout(saveTimer);
       saveTimer = setTimeout(function () {
         Store.set(key, {
-          ovsState: state,
-          terminalLog: termHistory.slice(-60),
+          v: 2,
+          vm: world.snapshot(),
+          terminalLog: term.log.slice(-60),
           actionLog: log.slice(-200),
           startedAt: startedAt,
           updatedAt: nowISO(),
-          quiz: quizApi ? quizApi.getState() : null
+          lastResult: lastResult,
+          quiz: quizApi ? quizApi.getState() : null,
+          autotests: autotestsReport
         });
         statusEl.textContent = '// автосохранено ' + new Date().toLocaleTimeString('ru-RU');
       }, 500);
     }
 
     term.bind(function (line) {
-      var res = OVS.runCommand(line, { state: state });
+      var res = world.run(line);
       if (res.clear) { term.clear(); autosave(); return false; }
-      term.print(line, res.out, res.ok === false);
-      termHistory.push({ line: line, out: res.out, err: res.ok === false });
+      term.print(line, res.out, res.isErr || res.code !== 0);
+      term.log.push({ line: line, out: res.out, err: res.isErr || res.code !== 0 });
       if (res.event) addLog(res.event.type, res.event.msg);
       runValidation(true);
       autosave();
@@ -513,10 +823,10 @@
     });
 
     $('btn-bug').addEventListener('click', function () {
-      state = OVS.brokenState();
+      world.setState(OVS.brokenState());
       addLog('bug', 'загружена ошибочная конфигурация: eth3 вместо trunk сделан access VLAN 10');
       term.print('ovs-vsctl (bug-report)', 'eth3 назначен tag=10; по заданию это должен быть trunk 10,20', true);
-      termHistory.push({ line: 'ovs-vsctl (bug-report)', out: 'eth3 назначен tag=10; по заданию это должен быть trunk 10,20', err: true });
+      term.log.push({ line: 'ovs-vsctl (bug-report)', out: 'eth3 назначен tag=10; по заданию это должен быть trunk 10,20', err: true });
       runValidation(false);
       termScreen.scrollTop = termScreen.scrollHeight;
     });
@@ -525,47 +835,60 @@
       Store.del(key);
       location.reload();
     });
+    $('btn-autotests').addEventListener('click', function () {
+      var btn = $('btn-autotests');
+      btn.disabled = true;
+      btn.textContent = 'прогоняю на тестовой ВМ…';
+      setTimeout(function () {
+        autotestsReport = OVS.runAutotests();
+        renderAutotests(autotestsReport);
+        btn.disabled = false;
+        btn.textContent = 'прогнать автотесты →';
+        addLog('autotests', 'автотесты: ' + autotestsReport.passed + '/' + autotestsReport.total);
+        autosave();
+      }, 350);
+    });
 
     submitBtn.addEventListener('click', function () {
       var result = runValidation(true);
+      var state = world.state();
       var submission = {
         id: uid(),
-        schema: 'stands-submission/1',
+        schema: 'stands-submission/2',
         standId: standId,
         standTitle: standTitle,
-        student: { name: profile.name, group: profile.group },
+        student: { id: profile.id || profile.name, name: profile.name, group: profile.group, tribeId: profile.tribeId || null, demo: false },
         startedAt: startedAt,
         updatedAt: nowISO(),
         submittedAt: nowISO(),
         result: { passed: result.passed, total: result.total, score: result.score, ready: result.ready },
         checks: result.checks,
         config: OVS.stateToText(state),
-        terminalLog: termHistory.slice(-60),
+        terminalLog: term.log.slice(-60),
         actionLog: log.slice(-200),
-        quiz: quizApi ? quizApi.getState() : null
+        quiz: quizApi ? quizApi.getState() : null,
+        autotests: autotestsReport ? { passed: autotestsReport.passed, total: autotestsReport.total, score: autotestsReport.score } : null,
+        skills: hasFgos() ? { pk: window.FGOS.STANDS[standId].pk, ok: window.FGOS.STANDS[standId].ok } : null,
+        os: { historyCount: world.os.state.history.length, bridge: state.bridge, ports: Object.keys(state.ports).length }
       };
-      var mine = Store.get(SUBMISSIONS_KEY) || [];
-      mine.push(submission);
-      Store.set(SUBMISSIONS_KEY, mine);
+      if (hasLeague()) {
+        window.LEAGUE.addSubmission(submission);
+        grantSubmitAwards(profile, standId, result, quizApi, autotestsReport);
+        refreshXpStrip();
+        renderReviewArea(standId);
+      }
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
-
-      var blob = new Blob([JSON.stringify(submission, null, 2)], { type: 'application/json' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = standId + '_' + profile.group.replace(/[^\wа-яё-]+/gi, '_') + '_' +
-        profile.name.replace(/[^\wа-яё]+/gi, '_') + '.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
-
-      statusEl.textContent = '// работа сдана (' + result.score + '%). JSON-файл скачан — отправьте его преподавателю';
+      downloadJson(submission);
+      if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
+      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
+      autosave();
     });
 
     runValidation(true);
-    // Без автофокуса: страница должна открываться сверху, без прокрутки к терминалу
+    if (saved && saved.autotests) { autotestsReport = saved.autotests; renderAutotests(autotestsReport); }
+    renderReviewArea(standId);
   }
 
   var booted = false;
@@ -577,9 +900,6 @@
     initOvsLab();
     initMermaid();
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();

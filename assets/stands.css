@@ -605,6 +605,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
    бейджи), но палитра следует светлой/тёмной теме всего сайта.
    ========================================================================== */
 #submissions-card,
+#presence-card,
 .sub-modal {
   --st-bg: var(--surface);
   --st-panel: var(--surface);
@@ -627,6 +628,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
   --st-radius: 2px;
 }
 [data-theme="dark"] #submissions-card,
+[data-theme="dark"] #presence-card,
 [data-theme="dark"] .sub-modal {
   --st-ok: #34d399;
   --st-ok-soft: rgba(52, 211, 153, .09);
@@ -692,3 +694,138 @@ a.flat-module:hover, a.flat-module:focus-visible {
 }
 .sub-check-row.is-ok { border-color: rgba(5, 150, 105, .4); background: rgba(16, 185, 129, .06); }
 .sub-check-row.is-bad { border-color: rgba(220, 38, 38, .35); background: rgba(220, 38, 38, .05); }
+
+/* ==========================================================================
+   09. Расширения учебного процесса: навыки ФГОС, автотесты, пиринг, лига
+   ========================================================================== */
+
+/* --- Навыки (ФГОС СПО 09.02.06) --- */
+.st-skills { display: grid; gap: .8rem; }
+.st-skill-group { border: 1px solid var(--st-line); background: var(--st-panel); padding: .9rem 1rem; border-radius: var(--st-radius); }
+.st-skill-group h3 { margin: 0 0 .55rem; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; color: var(--st-accent-2); }
+.st-code-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .6rem; }
+.st-code { font-family: var(--st-mono); font-size: .72rem; padding: .28rem .55rem; border: 1px solid var(--st-line-strong); color: var(--st-text-2); border-radius: var(--st-radius); }
+.st-code b { color: var(--st-accent-2); font-weight: 600; }
+.st-practical { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; font-size: .85rem; color: var(--st-text-2); line-height: 1.55; }
+.st-practical li::marker { color: var(--st-accent); }
+
+/* --- Панель XP/уровня в профиле стенда --- */
+.xp-strip { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; border: 1px solid var(--st-line); background: var(--st-panel); padding: .7rem .9rem; border-radius: var(--st-radius); margin: .9rem 0; }
+.xp-level { font-family: var(--st-mono); font-size: .72rem; color: var(--st-bg); background: var(--st-accent); padding: .25rem .5rem; border-radius: var(--st-radius); white-space: nowrap; }
+.xp-bar { flex: 1 1 160px; height: .55rem; background: var(--st-inset); border: 1px solid var(--st-line); position: relative; overflow: hidden; }
+.xp-bar i { position: absolute; inset: 0 auto 0 0; background: var(--st-accent); width: 0; transition: width .4s var(--st-ease, ease); }
+.xp-meta { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); white-space: nowrap; }
+.xp-coins { color: var(--st-warn); }
+
+/* --- Автотесты --- */
+.at-row { border: 1px solid var(--st-line); padding: .7rem .85rem; margin-bottom: .5rem; border-radius: var(--st-radius); background: var(--st-panel); }
+.at-row.is-ok { border-color: rgba(52, 211, 153, .35); background: var(--st-ok-soft); }
+.at-row.is-bad { border-color: rgba(248, 113, 113, .35); background: var(--st-bad-soft); }
+.at-head { display: flex; gap: .6rem; align-items: baseline; }
+.at-mark { font-family: var(--st-mono); color: var(--st-ok); font-weight: 700; }
+.at-row.is-bad .at-mark { color: var(--st-bad); }
+.at-title { font-weight: 600; font-size: .86rem; color: var(--st-text); }
+.at-detail { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); margin: .35rem 0 0 1.4rem; line-height: 1.5; word-break: break-word; }
+.at-summary { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; flex-wrap: wrap; }
+.at-score { font-family: var(--st-mono); font-size: .9rem; color: var(--st-accent-2); }
+
+/* --- Взаимные оценки --- */
+.rv-pool { display: grid; gap: .6rem; }
+.rv-card { border: 1px solid var(--st-line); background: var(--st-panel); border-radius: var(--st-radius); padding: .85rem .95rem; }
+.rv-card-head { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.rv-who { font-weight: 600; font-size: .88rem; }
+.rv-who small { display: block; color: var(--st-muted); font-family: var(--st-mono); font-weight: 400; font-size: .72rem; margin-top: .15rem; }
+.rv-score-pill { font-family: var(--st-mono); font-size: .74rem; padding: .22rem .5rem; border: 1px solid var(--st-line-strong); color: var(--st-text-2); border-radius: var(--st-radius); white-space: nowrap; }
+.rv-score-pill.is-ok { color: var(--st-ok); border-color: rgba(52, 211, 153, .4); }
+.rv-form { display: grid; gap: .55rem; margin-top: .6rem; }
+.rv-criteria { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .5rem; }
+.rv-crit { border: 1px solid var(--st-line); padding: .55rem .65rem; border-radius: var(--st-radius); background: var(--st-inset); }
+.rv-crit label { display: block; font-size: .76rem; color: var(--st-muted); margin-bottom: .35rem; }
+.rv-stars { display: flex; gap: .3rem; }
+.rv-stars button { background: none; border: none; color: var(--st-faint); font-size: 1.05rem; cursor: pointer; padding: 0; line-height: 1; }
+.rv-stars button.on { color: var(--st-warn); }
+.rv-stars button:hover { color: var(--st-warn); }
+.rv-comment { width: 100%; min-height: 4.6rem; resize: vertical; }
+.rv-review { border-left: 2px solid var(--st-accent); padding: .6rem .75rem; background: var(--st-inset); border-radius: 0 var(--st-radius) var(--st-radius) 0; margin-bottom: .55rem; }
+.rv-review.is-expert { border-left-color: var(--st-warn); }
+.rv-review-meta { font-family: var(--st-mono); font-size: .7rem; color: var(--st-muted); margin-bottom: .25rem; }
+.rv-review p { margin: .25rem 0 0; font-size: .85rem; color: var(--st-text-2); line-height: 1.55; }
+.rv-empty { font-family: var(--st-mono); font-size: .78rem; color: var(--st-faint); padding: .8rem; border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius); }
+
+/* --- Модальное окно кода работы --- */
+.st-modal { position: fixed; inset: 0; background: rgba(5, 8, 11, .72); display: flex; align-items: center; justify-content: center; z-index: 60; padding: 1.2rem; }
+.st-modal[hidden] { display: none; }
+.st-modal-box { width: min(44rem, 100%); max-height: 86vh; overflow: auto; background: var(--st-panel-2); border: 1px solid var(--st-line-strong); border-radius: var(--st-radius); }
+.st-modal-head { display: flex; justify-content: space-between; align-items: center; padding: .85rem 1.1rem; border-bottom: 1px solid var(--st-line); }
+.st-modal-head h2 { margin: 0; font-size: .95rem; }
+.st-modal-body { padding: 1rem 1.1rem; }
+.st-modal-body textarea { width: 100%; min-height: 8rem; font-family: var(--st-mono); font-size: .72rem; word-break: break-all; }
+.st-modal-note { font-size: .8rem; color: var(--st-muted); line-height: 1.6; margin: 0 0 .8rem; }
+
+/* --- Presence-точки и подсказки каналов сдачи --- */
+.ps-dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: var(--st-faint); margin-right: .35rem; }
+.ps-dot.is-online { background: var(--st-ok); box-shadow: 0 0 0 3px var(--st-ok-soft); }
+.submit-channels { display: grid; gap: .45rem; margin: .7rem 0 0; padding: 0; list-style: none; font-size: .8rem; color: var(--st-muted); line-height: 1.5; }
+.submit-channels code { color: var(--st-accent-2); }
+
+/* ==========================================================================
+   10. Страница лиги (stands/league.html): уровни, XP, навыки, трайбы
+   ========================================================================== */
+.lg-level-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.lg-level-title { font-family: var(--st-sans); font-size: 1.5rem; font-weight: 800; margin: .25rem 0 0; color: var(--st-text); }
+.lg-coins { display: flex; flex-direction: column; align-items: flex-end; border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .55rem .9rem; background: var(--st-bg-2); min-width: 7rem; }
+.lg-coins-num { font-family: var(--st-mono); font-size: 1.5rem; font-weight: 700; color: var(--st-warn); line-height: 1.1; }
+.lg-coins-cap { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--st-muted); margin-top: .2rem; }
+
+.lg-bar-row { display: grid; grid-template-columns: minmax(11rem, 15rem) 1fr 3.2rem; gap: .7rem; align-items: center; margin: .45rem 0; }
+.lg-bar-label { font-size: .78rem; color: var(--st-muted); }
+.lg-bar { height: .65rem; border: 1px solid var(--st-line); border-radius: var(--st-radius); background: var(--st-bg-2); overflow: hidden; }
+.lg-bar-fill { display: block; height: 100%; background: var(--st-accent); transition: width var(--st-ease); }
+.lg-bar-val { font-family: var(--st-mono); font-size: .75rem; color: var(--st-text-2); text-align: right; }
+
+.lg-ladder { display: grid; gap: .4rem; }
+.lg-step { display: grid; grid-template-columns: 3rem 1fr auto 1.6rem; gap: .8rem; align-items: center; border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .55rem .8rem; background: var(--st-bg-2); }
+.lg-step.is-reached { border-color: var(--st-accent-2); }
+.lg-step-lv { font-family: var(--st-mono); font-weight: 700; color: var(--st-accent-2); }
+.lg-step-name { font-weight: 600; color: var(--st-text); }
+.lg-step-need { font-family: var(--st-mono); font-size: .75rem; color: var(--st-muted); }
+.lg-step-mark { color: var(--st-ok); font-weight: 700; text-align: center; }
+.lg-step-mark.off { color: var(--st-faint); }
+
+.lg-awards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: .55rem; }
+.lg-award { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .65rem .8rem; background: var(--st-bg-2); display: grid; grid-template-columns: auto 1fr; gap: .15rem .7rem; align-items: center; }
+.lg-award strong { font-family: var(--st-mono); color: var(--st-accent-2); font-size: .9rem; }
+.lg-award-coins { font-family: var(--st-mono); font-size: .78rem; color: var(--st-warn); }
+.lg-award-note { grid-column: 1 / -1; font-size: .78rem; color: var(--st-muted); }
+
+.lg-table { font-size: .82rem; }
+.lg-skills { display: grid; gap: .8rem; }
+.lg-skill { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .75rem .9rem; background: var(--st-bg-2); }
+.lg-skill code { font-family: var(--st-mono); color: var(--st-accent-2); font-size: .82rem; }
+.lg-skill-title { display: block; margin: .2rem 0 .5rem; font-size: .85rem; color: var(--st-text-2); }
+.lg-skill .lg-bar-row { grid-template-columns: 1fr 3.2rem; margin: .25rem 0; }
+.lg-skill .lg-bar-label { display: none; }
+.lg-skill-stands { display: block; margin-top: .35rem; font-size: .72rem; color: var(--st-muted); }
+
+.lg-rv-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .8rem; }
+.lg-rv-overall { font-family: var(--st-mono); font-size: 2rem; font-weight: 800; color: var(--st-text); margin: .15rem 0 0; }
+.lg-rv-of { font-size: .95rem; color: var(--st-muted); font-weight: 500; }
+
+.lg-glyph { font-family: var(--st-mono); font-weight: 700; }
+.lg-row-mine { outline: 1px solid var(--st-accent); outline-offset: -1px; }
+
+.lg-hacks { display: grid; gap: .6rem; }
+.lg-hack { display: grid; grid-template-columns: 7.5rem 1fr auto; gap: .9rem; align-items: center; border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .75rem .9rem; background: var(--st-bg-2); }
+.lg-hack.is-active { border-color: var(--st-accent-2); }
+.lg-hack-date { color: var(--st-muted); font-size: .78rem; }
+
+@media (max-width: 640px) {
+  .lg-bar-row { grid-template-columns: 1fr; gap: .25rem; }
+  .lg-bar-val { text-align: left; }
+  .lg-hack { grid-template-columns: 1fr; gap: .45rem; }
+  .lg-step { grid-template-columns: 2.4rem 1fr 1.4rem; }
+  .lg-step-need { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-bar-fill { transition: none; }
+}

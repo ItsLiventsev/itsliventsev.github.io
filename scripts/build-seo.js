@@ -20,7 +20,13 @@ const BLOCK_START = '<!-- SEO:AUTO:START -->';
 const BLOCK_END = '<!-- SEO:AUTO:END -->';
 
 // Страницы, которые не должны попадать в индекс и получать разметку
-const NOINDEX = new Set(['404.html', 'admin.html']);
+// 404/admin — служебные; stands/league.html — персональные данные студентов
+const NOINDEX = new Set(['404.html', 'admin.html', 'stands/league.html']);
+
+// Явный <meta name="robots" content="noindex"> на странице тоже исключает её из индекса и sitemap
+function isNoindex(html) {
+  return /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
+}
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const write = (p, s) => fs.writeFileSync(path.join(ROOT, p), s);
@@ -192,7 +198,7 @@ const sitemapEntries = [];
 
 for (const rel of pages) {
   let html = read(rel);
-  if (NOINDEX.has(rel)) continue;
+  if (NOINDEX.has(rel) || isNoindex(html)) continue;
 
   const info = pageInfo(rel, html);
   if (!info.description) {

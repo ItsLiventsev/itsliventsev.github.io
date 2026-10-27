@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261026p">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026p">
+<link rel="stylesheet" href="../assets/site.css?v=20261026q">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026q">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/switch-ovs.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -53,7 +53,9 @@
       <span class="st-brand-sub">виртуальные стенды</span>
     </a>
     <nav class="st-topnav" aria-label="Навигация раздела стендов">
-      <a href="index.html" aria-current="page">каталог</a>
+      <a href="index.html">каталог</a>
+      <a href="league.html" rel="nofollow">лига</a>
+      <a href="teams.html">команды</a>
       <a href="../projects.html">проекты</a>
       <a href="../admin.html" rel="nofollow">admin</a>
     </nav>
@@ -109,6 +111,14 @@
       <li class="st-goal">Различать access и trunk, настраивать VLAN через <code>tag</code> и <code>trunks</code> (802.1Q)</li>
       <li class="st-goal">Проверять коммутацию утилитами <code>ovs-vsctl</code>, <code>ovs-ofctl</code> и <code>ip</code></li>
     </ul>
+
+    <!-- Навыки по ФГОС СПО 09.02.06 (рендерится из fgos-skills.js) -->
+    <div class="st-section-head">
+      <span class="st-section-num">S</span>
+      <h2>навыки и компетенции</h2>
+      <span class="st-section-tag">ФГОС СПО 09.02.06</span>
+    </div>
+    <div class="st-skills" id="lab-skills" data-stand="switch-ovs"></div>
 
     <!-- Схема + живое состояние -->
     <div class="st-section-head">
@@ -281,13 +291,33 @@ graph TD
           </div>
         </section>
 
+        <section class="lab-panel" style="margin-bottom:var(--st-gap);">
+          <div class="lp-head">
+            <span>автотесты · тестовая ВМ</span>
+            <span class="flat-badge is-run" id="at-badge">не запускались</span>
+          </div>
+          <div class="lp-body">
+            <p style="font-size:.8rem;color:var(--st-muted);margin:0 0 .7rem;line-height:1.6;">
+              Сценарии на чистой виртуальной машине: установка с sudo и без, запрет команд до
+              установки, полный путь до готовой VLAN-конфигурации, bug report и пайпы.
+            </p>
+            <button class="flat-btn" id="btn-autotests" type="button">прогнать автотесты →</button>
+            <div id="lab-autotests" style="margin-top:.8rem;"></div>
+          </div>
+        </section>
+
         <section class="lab-panel">
           <div class="lp-head"><span>сдача работы</span></div>
           <div class="lp-body">
             <p style="font-size:.85rem;margin:0 0 .9rem;line-height:1.65;color:var(--st-muted);">
-              При сдаче формируется JSON с ФИО, группой, выгрузкой <code>ovs-vsctl show</code>,
-              журналом терминала, действий и результатами теста. Файл отправьте преподавателю.
+              При сдаче фиксируются выгрузка <code>ovs-vsctl show</code>, журнал виртуальной машины,
+              автотесты, контрольный тест и навыки. Три канала доставки преподавателю — без сервера:
             </p>
+            <ul class="submit-channels">
+              <li><code>01</code> · JSON-файл — скачать и передать преподавателю;</li>
+              <li><code>02</code> · код работы — переслать в чате или почте, админ вставит его в панели;</li>
+              <li><code>03</code> · папка <code>submissions/</code> репозитория — админ подтянет кнопкой.</li>
+            </ul>
             <div class="lab-submit" style="border-top:none;padding-top:0;margin-top:0;">
               <button class="flat-btn" id="lab-submit" type="button">сдать работу ↓</button>
               <span id="lab-status" style="font-family:var(--st-mono);font-size:.7rem;">// автосохранение включено</span>
@@ -309,7 +339,51 @@ graph TD
       <div class="lp-body" id="lab-quiz"></div>
     </section>
 
+    <!-- Взаимное обучение: оценка равный-равному и экспертная -->
+    <div class="st-section-head">
+      <span class="st-section-num">P</span>
+      <h2>взаимная оценка · равный равному</h2>
+      <span class="st-section-tag">обмен знаниями</span>
+    </div>
+    <section class="lab-panel">
+      <div class="lp-head">
+        <span>пул работ на рецензирование</span>
+        <span class="flat-badge is-run" id="rv-pool-badge">—</span>
+      </div>
+      <div class="lp-body">
+        <p style="font-size:.82rem;color:var(--st-muted);margin:0 0 .8rem;line-height:1.6;">
+          Выполните задание сами, затем проверьте работы однокурсников по рубрике. За каждую оценку
+          начисляются XP и неткоины; рейтинг проверяющего считается по справедливости,
+          доброжелательности, заинтересованности и пунктуальности.
+        </p>
+        <div class="rv-pool" id="rv-pool" data-stand="switch-ovs"></div>
+        <div class="st-section-head" style="margin-top:1.2rem;">
+          <h2 style="font-size:.92rem;">оценки моей работы</h2>
+          <span class="st-section-tag">пиринг и эксперт</span>
+        </div>
+        <div id="rv-mine" data-stand="switch-ovs"></div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- Модальное окно: код сданной работы -->
+  <div id="sub-code-modal" class="st-modal" hidden>
+    <div class="st-modal-box" role="dialog" aria-modal="true" aria-labelledby="sub-code-title">
+      <div class="st-modal-head">
+        <h2 id="sub-code-title">код работы — передайте преподавателю</h2>
+        <button class="flat-btn ghost" id="sub-code-close" type="button" aria-label="закрыть">✕</button>
+      </div>
+      <div class="st-modal-body">
+        <p class="st-modal-note">Скопируйте строку целиком и отправьте в чате/почте. Преподаватель вставит её в админ-панели («принять работу по коду»). JSON-файл также скачан.</p>
+        <textarea id="sub-code-text" readonly></textarea>
+        <div style="display:flex;gap:.6rem;margin-top:.7rem;flex-wrap:wrap;">
+          <button class="flat-btn" id="sub-code-copy" type="button">скопировать код</button>
+          <a class="flat-btn ghost" href="league.html" style="text-decoration:none;display:inline-flex;align-items:center;">моя лига и навыки →</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="st-footer">
     <span>// © 2026 itsliventsev · виртуальные стенды</span>
@@ -317,7 +391,10 @@ graph TD
   </footer>
 </div>
 
-<script src="../assets/stands-ovs.js?v=20261026p"></script>
-<script src="../assets/stands.js?v=20261026p"></script>
+<script src="../assets/os-engine.js?v=20261026q"></script>
+<script src="../assets/fgos-skills.js?v=20261026q"></script>
+<script src="../assets/league.js?v=20261026q"></script>
+<script src="../assets/stands-ovs.js?v=20261026q"></script>
+<script src="../assets/stands.js?v=20261026q"></script>
 </body>
 </html>

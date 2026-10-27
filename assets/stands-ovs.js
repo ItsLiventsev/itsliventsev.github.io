@@ -1,16 +1,16 @@
 /* ==========================================================================
-   Виртуальные стенды · стенд коммутации на Open vSwitch (Linux)
-   Чистая логика без DOM: состояние виртуального коммутатора, эмулятор
-   терминала ovs-vsctl/ovs-ofctl/ip, проверки конфигурации, мини-тест.
-   UMD: браузер (window.OVS) и Node (module.exports) — юнит-тесты без jsdom.
+   Виртуальные стенды · коммутация на Open vSwitch (Linux)
+   Логика без DOM. Состояние OVSDB живёт внутри виртуальной машины os-engine.js:
+   пакет openvswitch-switch, служба openvswitch, мост/порты/VLAN, ovs-vsctl,
+   ovs-ofctl, ip. sudo опционален — команды работают и с ним, и без него.
+   UMD: браузер (window.OVS) и Node (юнит-тесты).
    ========================================================================== */
 (function (root, factory) {
-  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
-  else root.OVS = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory(require('./os-engine.js'));
+  else root.OVS = factory(root.OSEngine);
+})(typeof self !== 'undefined' ? self : this, function (OSEngine) {
   'use strict';
 
-  /* Спецификация стенда: один мост br0, два access-порта и trunk-аплинк */
   var SPEC = {
     bridge: 'br0',
     ifaces: ['eth1', 'eth2', 'eth3'],
@@ -21,13 +21,13 @@
     },
     vlans: { 10: 'SALES', 20: 'ACCOUNTING' }
   };
+  var UNIT = 'openvswitch';
+  var PKG = 'openvswitch-switch';
 
   function freshState() {
     return { installed: false, enabled: false, bridge: null, ports: {}, showRan: false };
   }
 
-  /* «Сломанная» конфигурация для ситуационной задачи: eth3 ошибочно сделан
-     access-портом VLAN 10 вместо trunk 10,20 */
   function brokenState() {
     var s = freshState();
     s.installed = true;
@@ -41,7 +41,6 @@
     return s;
   }
 
-  /* Текстовая выгрузка состояния в стиле `ovs-vsctl show` — идёт в JSON сдачи */
   function stateToText(state) {
     if (!state.bridge) return '// мост ещё не создан (ovs-vsctl add-br ' + SPEC.bridge + ')';
     var lines = [state.bridge];
@@ -55,149 +54,7 @@
     return lines.join('\n');
   }
 
-  /* ----------------------------- Терминал ----------------------------- */
-  function needSvc(state) {
-    if (!state.installed) return { ok: false, out: 'ovs-vsctl: Open vSwitch не установлен — sudo apt-get install openvswitch-switch' };
-    if (!state.enabled) return { ok: false, out: 'ovs-vsctl: служба openvswitch не запущена — sudo systemctl enable --now openvswitch' };
-    return null;
-  }
-
-  function cmdHelp() {
-    return { out: [
-      'доступные команды стенда:',
-      '  sudo apt-get install openvswitch-switch   установка OVS',
-      '  sudo systemctl enable --now openvswitch   запуск службы',
-      '  sudo systemctl status openvswitch         статус службы',
-      '  sudo ovs-vsctl add-br br0                 создать мост',
-      '  sudo ovs-vsctl add-port br0 eth1          добавить порт',
-      '  sudo ovs-vsctl set port eth1 tag=10       access-порт в VLAN 10',
-      '  sudo ovs-vsctl set port eth3 trunks=10,20 trunk с VLAN 10 и 20',
-      '  ovs-vsctl show                            текущая конфигурация OVSDB',
-      '  sudo ovs-ofctl show br0                   таблица портов (OpenFlow)',
-      '  ip -d link show                           интерфейсы Linux',
-      '  clear                                     очистить терминал'
-    ].join('\n') };
-  }
-
-  function cmdInstall(state) {
-    if (state.installed) return { out: 'openvswitch-switch уже установлен (новейшая версия)' };
-    state.installed = true;
-    return {
-      out: 'Чтение списков пакетов… Готово\nopenvswitch-switch установлен: демоны ovs-vswitchd и ovsdb-server\nподсказка: запустите службу — sudo systemctl enable --now openvswitch',
-      event: { type: 'terminal', msg: 'установлен Open vSwitch' }
-    };
-  }
-
-  function cmdSystemctl(state, action) {
-    if (!state.installed) return { ok: false, out: 'Unit openvswitch.service не найден — сначала установите пакет' };
-    if (action === 'status') {
-      return { out: state.enabled
-        ? '● openvswitch.service — active (running)\n   Loaded: loaded; Main PID: 942 (ovs-vswitchd)'
-        : '○ openvswitch.service — inactive (dead)' };
-    }
-    if (!state.enabled) state.enabled = true;
-    return { out: 'Created symlink → openvswitch.service; служба active (running)', event: { type: 'terminal', msg: 'служба openvswitch: ' + action } };
-  }
-
-  function cmdAddBr(state, br) {
-    var blocked = needSvc(state);
-    if (blocked) return blocked;
-    if (br !== SPEC.bridge) return { ok: false, out: 'ovs-vsctl: по заданию мост должен называться ' + SPEC.bridge };
-    if (state.bridge) return { ok: false, out: 'ovs-vsctl: мост ' + br + ' уже существует' };
-    state.bridge = br;
-    return { out: 'ovs-vsctl: создан мост ' + br + ' (новый интерфейс ' + br + ' появился в ip link)', event: { type: 'terminal', msg: 'создан мост ' + br } };
-  }
-
-  function cmdAddPort(state, br, iface) {
-    var blocked = needSvc(state);
-    if (blocked) return blocked;
-    if (!state.bridge) return { ok: false, out: 'ovs-vsctl: моста ещё нет — сначала add-br ' + SPEC.bridge };
-    if (br !== state.bridge) return { ok: false, out: 'ovs-vsctl: нет моста с именем ' + br };
-    if (SPEC.ifaces.indexOf(iface) === -1) return { ok: false, out: 'ovs-vsctl: интерфейс ' + iface + ' отсутствует на стенде (доступны ' + SPEC.ifaces.join(', ') + ')' };
-    if (state.ports[iface]) return { ok: false, out: 'ovs-vsctl: порт ' + iface + ' уже добавлен в ' + br };
-    state.ports[iface] = { tag: null, trunks: null };
-    return { out: 'ovs-vsctl: интерфейс ' + iface + ' добавлен в мост ' + br + ' (пока без VLAN)', event: { type: 'terminal', msg: 'добавлен порт ' + iface } };
-  }
-
-  function cmdSetPort(state, iface, param, value) {
-    var blocked = needSvc(state);
-    if (blocked) return blocked;
-    var p = state.ports[iface];
-    if (!p) return { ok: false, out: 'ovs-vsctl: порт ' + iface + ' не найден — сначала add-port ' + SPEC.bridge + ' ' + iface };
-    if (param === 'tag') {
-      var vid = parseInt(value, 10);
-      if (!vid || vid < 1 || vid > 4094) return { ok: false, out: 'ovs-vsctl: VLAN ID должен быть числом 1–4094' };
-      p.tag = vid; p.trunks = null;
-      return { out: 'ovs-vsctl: ' + iface + ' → access-порт, нетегированный трафик уходит в VLAN ' + vid, event: { type: 'terminal', msg: iface + ' tag=' + vid } };
-    }
-    if (param === 'trunks') {
-      var ids = String(value).split(',').map(function (x) { return parseInt(x.trim(), 10); }).filter(function (n) { return n >= 1 && n <= 4094; });
-      if (!ids.length) return { ok: false, out: 'ovs-vsctl: перечислите VLAN через запятую, например trunks=10,20' };
-      p.trunks = ids; p.tag = null;
-      return { out: 'ovs-vsctl: ' + iface + ' → trunk, разрешены VLAN [' + ids.join(', ') + '] (теги 802.1Q)', event: { type: 'terminal', msg: iface + ' trunks=' + ids.join(',') } };
-    }
-    return { ok: false, out: 'ovs-vsctl: неизвестный параметр ' + param + ' (используйте tag или trunks)' };
-  }
-
-  function cmdShow(state) {
-    var blocked = needSvc(state);
-    if (blocked) return blocked;
-    state.showRan = true;
-    if (!state.bridge) return { out: 'ovs-vsctl: // мостов нет' };
-    return { out: stateToText(state), event: { type: 'terminal', msg: 'выполнена проверка ovs-vsctl show' } };
-  }
-
-  function cmdOfctl(state) {
-    var blocked = needSvc(state);
-    if (blocked) return blocked;
-    if (!state.bridge) return { ok: false, out: 'ovs-ofctl: моста нет' };
-    var rows = ['OFPT_FEATURES_REPLY (dpid=0000000000000001):', ' port(s):'];
-    SPEC.ifaces.forEach(function (name, i) {
-      var p = state.ports[name];
-      rows.push((i + 1) + '(' + name + '): addr:00:0' + (i + 1) + ':00:00:00:0' + (i + 1) +
-        '  config: 0  state: 0  current: ' + (p ? 'LINK_UP' : 'LINK_DOWN'));
-    });
-    return { out: rows.join('\n') };
-  }
-
-  function cmdIpLink(state) {
-    var rows = ['1: lo: <LOOPBACK,UP>', '2: enp0s3: <BROADCAST,MULTICAST,UP> mtu 1500 (NAT/WAN)'];
-    var n = 3;
-    SPEC.ifaces.forEach(function (name) {
-      var kind = state.ports[name] ? ' ovs_slave_of:' + SPEC.bridge : ' обычный NIC';
-      rows.push(n + ': ' + name + ': <BROADCAST,MULTICAST,UP> mtu 1500' + kind);
-      n++;
-    });
-    if (state.bridge) rows.push(n + ': ' + state.bridge + ': <BROADCAST,MULTICAST,UP> mtu 1500  ovs-system (внутренний интерфейс моста)');
-    return { out: rows.join('\n') };
-  }
-
-  function runCommand(line, ctx) {
-    var state = ctx && ctx.state ? ctx.state : freshState();
-    var key = String(line || '').trim().replace(/\s+/g, ' ');
-    if (!key) return { out: '' };
-    if (key === 'clear') return { clear: true };
-    if (key === 'help') return cmdHelp();
-
-    var m;
-    if ((m = key.match(/^sudo apt-get install openvswitch-switch$/))) return cmdInstall(state);
-    if ((m = key.match(/^sudo systemctl (enable --now|start|restart) openvswitch$/))) return cmdSystemctl(state, m[1]);
-    if ((m = key.match(/^sudo systemctl status openvswitch$/))) return cmdSystemctl(state, 'status');
-    if ((m = key.match(/^sudo ovs-vsctl add-br (\S+)$/))) return cmdAddBr(state, m[1]);
-    if ((m = key.match(/^sudo ovs-vsctl add-port (\S+) (\S+)$/))) return cmdAddPort(state, m[1], m[2]);
-    if ((m = key.match(/^sudo ovs-vsctl set port (\S+) (tag|trunks)=([0-9,]+)$/))) return cmdSetPort(state, m[1], m[2], m[3]);
-    if (key === 'ovs-vsctl show' || key === 'sudo ovs-vsctl show') return cmdShow(state);
-    if ((m = key.match(/^sudo ovs-ofctl show (\S+)$/))) {
-      if (m[1] !== SPEC.bridge) return { ok: false, out: 'ovs-ofctl: моста ' + m[1] + ' нет' };
-      return cmdOfctl(state);
-    }
-    if (key === 'ip -d link show' || key === 'ip link show') return cmdIpLink(state);
-
-    var bin = key.split(' ')[0].replace('sudo', '').trim() || key.split(' ')[1];
-    return { ok: false, out: 'bash: ' + bin + ': команда не найдена в стенде (введите help)' };
-  }
-
-  /* ----------------------------- Проверки ----------------------------- */
+  /* ----------------------------- Проверки (контракт 6/6) ----------------------------- */
   var CHECKS = [
     {
       id: 'service', title: 'OVS установлен и служба openvswitch запущена',
@@ -272,10 +129,9 @@
     };
   }
 
-  /* Статус шагов плана для панели прогресса (history — журнал введённых команд) */
   function taskStatus(state, history) {
     history = history || [];
-    var ran = function (re) { return history.some(function (h) { return re.test(h.line || ''); }); };
+    var ran = function (re) { return history.some(function (h) { return re.test(h.line || h); }); };
     return {
       t1: state.installed && state.enabled,
       t2: state.bridge === SPEC.bridge,
@@ -284,6 +140,288 @@
       t5: state.ports.eth3 && Array.isArray(state.ports.eth3.trunks) && state.ports.eth3.trunks.indexOf(10) !== -1 && state.ports.eth3.trunks.indexOf(20) !== -1,
       t6: state.showRan === true || ran(/ovs-vsctl show/)
     };
+  }
+
+  /* ----------------------------- Виртуальная машина ----------------------------- */
+  function createWorld(snapshot) {
+    var os = OSEngine.createOS({
+      hostname: 'ovs',
+      user: 'student',
+      editorMessage: 'на этом стенде конфигурация собирается командами ovs-vsctl в терминале',
+      helpExtra: [
+        '  стенд OVS:  ovs-vsctl add-br|add-port|set|del-port|show|list',
+        '              ovs-ofctl show ' + SPEC.bridge + ', ip link show'
+      ],
+      initFs: function (vfs) {
+        vfs.mkdirp('/etc/openvswitch');
+        vfs.write('/etc/hostname', 'ovs-node\n');
+        vfs.write('/etc/openvswitch/conf.db', '// OVSDB: база создаётся службой openvswitch\n');
+      },
+      resolvePackage: function (pkg) {
+        if (/openvswitch/.test(pkg)) return { package: PKG, service: UNIT, version: '3.2-alt1', hint: 'подсказка: запустите службу — systemctl enable --now ' + UNIT };
+        return { package: pkg, service: pkg, version: '1.0-alt1', hint: '' };
+      },
+      journal: journal,
+      renderIp: renderIp,
+      commands: {
+        'ovs-vsctl': { usage: 'ovs-vsctl <подкоманда>', help: 'управление OVSDB: мосты, порты, VLAN', run: cmdVsvtl },
+        'ovs-ofctl': { usage: 'ovs-ofctl <подкоманда> ' + SPEC.bridge, help: 'управление OpenFlow: таблицы потоков и портов', run: cmdOfctl },
+        'ovs-appctl': { usage: 'ovs-appctl <подкоманда>', help: 'внутренние команды демона ovs-vswitchd', run: cmdAppctl }
+      }
+    }, snapshot);
+
+    if (!os.state.ovs) os.state.ovs = freshState();
+
+    function db() { return os.state.ovs; }
+    /* OVS-состояние — проекция реестра пакетов/служб виртуальной ОС */
+    function sync() {
+      var s = db(), svc = os.service(UNIT);
+      s.installed = svc.installed;
+      s.enabled = svc.active;
+      return s;
+    }
+    function needSvc() {
+      var s = sync();
+      if (!s.installed) return { out: 'ovs-vsctl: Open vSwitch не установлен — apt-get install ' + PKG, code: 1, isErr: true };
+      if (!s.enabled) return { out: 'ovs-vsctl: служба ' + UNIT + ' не запущена — systemctl enable --now ' + UNIT, code: 1, isErr: true };
+      return null;
+    }
+
+    function journal(state, unit, mode) {
+      if (unit && unit !== UNIT) return { out: '-- No entries -- для ' + unit, code: 0 };
+      var s = sync();
+      if (!s.installed) return { out: 'Unit ' + UNIT + '.service could not be found.', code: 5, isErr: true };
+      if (!s.enabled) return { out: '○ ' + UNIT + '.service — Open vSwitch Forwarding Unit\n   Active: inactive (dead)', code: 0 };
+      var base = [
+        'ovsdb-server[711]: ovsdb_server: opened database /etc/openvswitch/conf.db',
+        'ovs-vswitchd[742]: ovs_vswitchd: starting up'
+      ];
+      if (s.bridge) base.push('ovs-vswitchd[742]: bridge ' + s.bridge + ': added interface');
+      if (mode === 'status') {
+        return { out: '● ' + UNIT + '.service — active (running)\n   Main PID: 742 (ovs-vswitchd)\n\n' + base.join('\n'), code: 0 };
+      }
+      return { out: base.join('\n'), code: 0 };
+    }
+
+    function renderIp(state, kind) {
+      var s = sync();
+      if (kind === 'route') return { out: 'default via 10.0.2.2 dev enp0s3\n10.0.2.0/24 dev enp0s3 proto kernel scope link', code: 0 };
+      var rows = ['1: lo: <LOOPBACK,UP>', '2: enp0s3: <BROADCAST,MULTICAST,UP> mtu 1500 (NAT/WAN)'];
+      var n = 3;
+      SPEC.ifaces.forEach(function (name) {
+        var kind2 = s.ports[name] ? ' ovs_slave_of:' + SPEC.bridge : ' обычный NIC';
+        rows.push(n + ': ' + name + ': <BROADCAST,MULTICAST,UP> mtu 1500' + kind2);
+        n++;
+      });
+      if (s.bridge) rows.push(n + ': ' + s.bridge + ': <BROADCAST,MULTICAST,UP> mtu 1500  ovs-system (внутренний интерфейс моста)');
+      return { out: rows.join('\n'), code: 0 };
+    }
+
+    function cmdVsvtl(a, state) {
+      var s = db();
+      var args = a.positionals;
+      var sub = args[0];
+      var blocked = needSvc();
+      if (sub === '--version') return { out: 'ovs-vsctl (Open vSwitch) 3.2.0\nDB Schema 8.3.0', code: 0 };
+      if (blocked && sub !== 'show') return blocked;
+      if (!sub || sub === 'show') {
+        if (blocked) return blocked;
+        s.showRan = true;
+        if (!s.bridge) return { out: 'ovs-vsctl: // мостов нет', code: 0, event: { type: 'terminal', msg: 'выполнена проверка ovs-vsctl show' } };
+        return { out: stateToText(s), code: 0, event: { type: 'terminal', msg: 'выполнена проверка ovs-vsctl show' } };
+      }
+      var m;
+      var raw = a.positionals.join(' ');
+      if (sub === 'add-br') {
+        var br = args[1];
+        if (br !== SPEC.bridge) return { out: 'ovs-vsctl: по заданию мост должен называться ' + SPEC.bridge, code: 1, isErr: true };
+        if (s.bridge) return { out: 'ovs-vsctl: мост ' + br + ' уже существует', code: 1, isErr: true };
+        s.bridge = br;
+        return { out: 'ovs-vsctl: создан мост ' + br + ' (новый интерфейс ' + br + ' появился в ip link)', code: 0, event: { type: 'terminal', msg: 'создан мост ' + br } };
+      }
+      if (sub === 'add-port') {
+        var b = args[1], iface = args[2];
+        if (!s.bridge) return { out: 'ovs-vsctl: моста ещё нет — сначала add-br ' + SPEC.bridge, code: 1, isErr: true };
+        if (b !== s.bridge) return { out: 'ovs-vsctl: нет моста с именем ' + b, code: 1, isErr: true };
+        if (SPEC.ifaces.indexOf(iface) === -1) return { out: 'ovs-vsctl: интерфейс ' + iface + ' отсутствует на стенде (доступны ' + SPEC.ifaces.join(', ') + ')', code: 1, isErr: true };
+        if (s.ports[iface]) return { out: 'ovs-vsctl: порт ' + iface + ' уже добавлен в ' + b, code: 1, isErr: true };
+        s.ports[iface] = { tag: null, trunks: null };
+        return { out: 'ovs-vsctl: интерфейс ' + iface + ' добавлен в мост ' + b + ' (пока без VLAN)', code: 0, event: { type: 'terminal', msg: 'добавлен порт ' + iface } };
+      }
+      if (sub === 'del-port') {
+        var dp = args[2];
+        if (!s.ports[dp]) return { out: 'ovs-vsctl: порт ' + dp + ' не найден на мосту ' + SPEC.bridge, code: 1, isErr: true };
+        delete s.ports[dp];
+        return { out: 'ovs-vsctl: порт ' + dp + ' удалён', code: 0, event: { type: 'terminal', msg: 'удалён порт ' + dp } };
+      }
+      if (sub === 'set' && args[1] === 'port') {
+        var name = args[2], assign = args[3] || '';
+        var p = s.ports[name];
+        if (!p) return { out: 'ovs-vsctl: порт ' + name + ' не найден — сначала add-port ' + SPEC.bridge + ' ' + name, code: 1, isErr: true };
+        if ((m = assign.match(/^(tag|trunks)=([0-9,]+)$/))) {
+          var param = m[1], value = m[2];
+          if (param === 'tag') {
+            var vid = parseInt(value, 10);
+            if (!vid || vid < 1 || vid > 4094) return { out: 'ovs-vsctl: VLAN ID должен быть числом 1–4094', code: 1, isErr: true };
+            p.tag = vid; p.trunks = null;
+            return { out: 'ovs-vsctl: ' + name + ' → access-порт, нетегированный трафик уходит в VLAN ' + vid, code: 0, event: { type: 'terminal', msg: name + ' tag=' + vid } };
+          }
+          var ids = value.split(',').map(function (x) { return parseInt(x.trim(), 10); }).filter(function (n) { return n >= 1 && n <= 4094; });
+          if (!ids.length) return { out: 'ovs-vsctl: перечислите VLAN через запятую, например trunks=10,20', code: 1, isErr: true };
+          p.trunks = ids; p.tag = null;
+          return { out: 'ovs-vsctl: ' + name + ' → trunk, разрешены VLAN [' + ids.join(', ') + '] (теги 802.1Q)', code: 0, event: { type: 'terminal', msg: name + ' trunks=' + ids.join(',') } };
+        }
+        return { out: 'ovs-vsctl: неизвестный параметр (используйте tag=VLAN или trunks=10,20)', code: 1, isErr: true };
+      }
+      if (sub === 'list') {
+        var what = args[1] || 'br';
+        if (what === 'br' || what === 'bridge') return { out: '_uuid               name\n' + (s.bridge ? 'uuid-0001            ' + s.bridge : '// записей нет'), code: 0 };
+        if (what === 'port' || what === 'interface') {
+          var names = Object.keys(s.ports);
+          return { out: names.length ? names.map(function (n) { return 'uuid-' + n + '  name=' + n; }).join('\n') : '// записей нет', code: 0 };
+        }
+        return { out: 'ovs-vsctl: неизвестная таблица ' + what, code: 1, isErr: true };
+      }
+      if (sub === 'get') return { out: 'ovs-vsctl: укажите таблицу и поле, например get port eth1 tag', code: 1 };
+      return { out: 'ovs-vsctl: неизвестная подкоманда «' + sub + '» (введите help)', code: 1, isErr: true };
+    }
+
+    function cmdOfctl(a) {
+      var s = db();
+      var blocked = needSvc();
+      if (blocked) return blocked;
+      var sub = a.positionals[0], br = a.positionals[1];
+      if (!sub) return { out: 'Usage: ovs-ofctl show|dump-flows|dump-ports BRIDGE', code: 2, isErr: true };
+      if (br && br !== SPEC.bridge) return { out: 'ovs-ofctl: моста ' + br + ' нет', code: 1, isErr: true };
+      if (!s.bridge) return { out: 'ovs-ofctl: моста нет — сначала ovs-vsctl add-br ' + SPEC.bridge, code: 1, isErr: true };
+      if (sub === 'show') {
+        var rows = ['OFPT_FEATURES_REPLY (dpid=0000000000000001):', ' ' + SPEC.ifaces.length + ' port(s):'];
+        SPEC.ifaces.forEach(function (name, i) {
+          var p = s.ports[name];
+          rows.push((i + 1) + '(' + name + '): addr:00:0' + (i + 1) + ':00:00:00:0' + (i + 1) +
+            '  config: 0  state: 0  current: ' + (p ? 'LINK_UP' : 'LINK_DOWN'));
+        });
+        return { out: rows.join('\n'), code: 0 };
+      }
+      if (sub === 'dump-flows') {
+        return { out: 'cookie=0x0, duration=12.4s, table=0, n_packets=0, priority=0 actions=NORMAL', code: 0 };
+      }
+      if (sub === 'dump-ports') {
+        return { out: SPEC.ifaces.map(function (n) { return n + ': rx pkts=0, tx pkts=0, rx drop=0, tx drop=0'; }).join('\n'), code: 0 };
+      }
+      return { out: 'ovs-ofctl: неизвестная подкоманда «' + sub + '»', code: 1, isErr: true };
+    }
+
+    function cmdAppctl(a) {
+      var sub = a.positionals[0];
+      var blocked = needSvc();
+      if (blocked) return blocked;
+      if (sub === 'version') return { out: 'ovs-vswitchd (Open vSwitch) 3.2.0', code: 0 };
+      if (sub === 'bridge/reconnect') return { out: 'ovs-appctl: bridge ' + SPEC.bridge + ': reconnect requested', code: 0 };
+      return { out: 'ovs-appctl: неизвестная команда «' + (sub || '') + '»', code: 1, isErr: true };
+    }
+
+    return {
+      os: os,
+      run: function (line) { return os.run(line); },
+      state: function () { return sync(); },
+      setState: function (s) {
+        os.state.ovs = s;
+        var svc = os.service(UNIT);
+        svc.installed = !!s.installed;
+        svc.enabled = !!s.enabled;
+        svc.active = !!s.enabled;
+      },
+      snapshot: function () { return os.serialize(); },
+      validate: function () { return validate(sync()); }
+    };
+  }
+
+  /* Совместимость: старый вызов OVS.runCommand на эфемерной машине */
+  var legacy = null;
+  function runCommand(line, ctx) {
+    if (!legacy) legacy = createWorld();
+    if (ctx && ctx.state) legacy.setState(ctx.state);
+    return legacy.run(line);
+  }
+
+  /* ----------------------------- Автотесты стенда ----------------------------- */
+  function runAutotests() {
+    var results = [];
+    function t(id, title, fn) {
+      var world = createWorld();
+      var actual, expected, ok = false;
+      try { var r = fn(world) || {}; ok = !!r.ok; actual = r.actual || ''; expected = r.expected || ''; }
+      catch (e) { actual = 'исключение: ' + e.message; expected = 'без исключений'; }
+      results.push({ id: id, title: title, ok: ok, actual: actual, expected: expected });
+    }
+
+    t('at-01', 'Установка Open vSwitch с sudo', function (w) {
+      var r = w.run('sudo apt-get install ' + PKG);
+      var again = w.run('sudo apt-get install ' + PKG);
+      return { ok: r.code === 0 && /уже установлен/i.test(again.out), actual: again.out.slice(0, 60), expected: 'код 0, повторно: уже установлен' };
+    });
+    t('at-02', 'Установка без sudo тоже работает', function (w) {
+      var r = w.run('apt-get install ' + PKG);
+      return { ok: r.code === 0, actual: 'код ' + r.code, expected: 'код 0' };
+    });
+    t('at-03', 'ovs-vsctl до установки запрещён', function (w) {
+      var r = w.run('ovs-vsctl add-br ' + SPEC.bridge);
+      return { ok: r.code === 1 && /не установлен/.test(r.out), actual: r.out, expected: 'ошибка с подсказкой установки' };
+    });
+    t('at-04', 'Неизвестная команда возвращает 127', function (w) {
+      var r = w.run('ifconfig');
+      return { ok: r.code === 127, actual: 'код ' + r.code, expected: 'код 127' };
+    });
+    t('at-05', 'Полный позитивный путь до готовой конфигурации', function (w) {
+      w.run('apt-get install ' + PKG);
+      w.run('systemctl enable --now ' + UNIT);
+      w.run('ovs-vsctl add-br ' + SPEC.bridge);
+      w.run('ovs-vsctl add-port ' + SPEC.bridge + ' eth1');
+      w.run('ovs-vsctl add-port ' + SPEC.bridge + ' eth2');
+      w.run('ovs-vsctl add-port ' + SPEC.bridge + ' eth3');
+      w.run('ovs-vsctl set port eth1 tag=10');
+      w.run('ovs-vsctl set port eth2 tag=20');
+      w.run('ovs-vsctl set port eth3 trunks=10,20');
+      var show = w.run('ovs-vsctl show');
+      var ofctl = w.run('ovs-ofctl show ' + SPEC.bridge);
+      var v = w.validate();
+      return {
+        ok: v.ready && show.out.indexOf(SPEC.bridge) !== -1 && (ofctl.out.match(/LINK_UP/g) || []).length === 3,
+        actual: 'проверок пройдено ' + v.passed + '/' + v.total + ', LINK_UP: ' + ((ofctl.out.match(/LINK_UP/g) || []).length),
+        expected: '6/6 проверок и 3 LINK_UP'
+      };
+    });
+    t('at-06', 'set port работает и с sudo, и без sudo', function (w) {
+      w.run('apt-get install ' + PKG + ' && systemctl enable --now ' + UNIT);
+      w.run('ovs-vsctl add-br ' + SPEC.bridge);
+      w.run('sudo ovs-vsctl add-port ' + SPEC.bridge + ' eth1');
+      var bare = w.run('ovs-vsctl set port eth1 tag=10');
+      var withSudo = w.run('sudo ovs-vsctl set port eth1 tag=10');
+      return { ok: bare.code === 0 && withSudo.code === 0 && w.state().ports.eth1.tag === 10, actual: 'tag=' + w.state().ports.eth1.tag, expected: 'tag=10 в обоих случаях' };
+    });
+    t('at-07', 'Bug report: eth3 ошибочно access, затем исправление на trunk', function (w) {
+      w.run('apt-get install ' + PKG);
+      w.setState(brokenState());
+      var before = w.validate();
+      var fix = w.run('ovs-vsctl set port eth3 trunks=10,20');
+      var after = w.validate();
+      return {
+        ok: !before.ready && before.checks.find(function (c) { return c.id === 'eth3'; }).ok === false && fix.code === 0 && after.ready,
+        actual: 'до: ' + before.passed + '/6, после: ' + after.passed + '/6',
+        expected: 'ошибка eth3 до исправления, 6/6 после'
+      };
+    });
+    t('at-08', 'Пайп grep и история команд', function (w) {
+      w.run('apt-get install ' + PKG);
+      w.run('systemctl enable --now ' + UNIT);
+      w.run('ovs-vsctl add-br ' + SPEC.bridge);
+      var piped = w.run('ovs-vsctl show | grep ' + SPEC.bridge);
+      return { ok: new RegExp(SPEC.bridge).test(piped.out), actual: piped.out, expected: SPEC.bridge + ' в выводе пайпа' };
+    });
+
+    var passed = results.filter(function (r) { return r.ok; }).length;
+    return { results: results, passed: passed, total: results.length, score: Math.round(passed / results.length * 100) };
   }
 
   var TASKS = [
@@ -338,6 +476,8 @@
 
   return {
     SPEC: SPEC,
+    UNIT: UNIT,
+    PKG: PKG,
     TASKS: TASKS,
     GOALS: GOALS,
     QUIZ: QUIZ,
@@ -346,6 +486,8 @@
     stateToText: stateToText,
     validate: validate,
     taskStatus: taskStatus,
+    createWorld: createWorld,
+    runAutotests: runAutotests,
     runCommand: runCommand
   };
 });
