@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261026s">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026s">
+<link rel="stylesheet" href="../assets/site.css?v=20261026t">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026t">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/switch-ovs.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -145,14 +145,6 @@
       <li class="st-goal">Проверять коммутацию утилитами <code>ovs-vsctl</code>, <code>ovs-ofctl</code> и <code>ip</code></li>
     </ul>
 
-    <!-- Навыки по ФГОС СПО 09.02.06 (рендерится из fgos-skills.js) -->
-    <div class="st-section-head">
-      <span class="st-section-num">S</span>
-      <h2>навыки и компетенции</h2>
-      <span class="st-section-tag">ФГОС СПО 09.02.06</span>
-    </div>
-    <div class="st-skills" id="lab-skills" data-stand="switch-ovs"></div>
-
     <!-- Схема + живое состояние -->
     <div class="st-section-head">
       <span class="st-section-num">A</span>
@@ -162,8 +154,6 @@
     <div class="ovs-grid">
       <div class="lab-schema" style="margin-bottom:0;">
         <div class="topo" id="lab-topo" data-stand="switch-ovs"></div>
-        <pre id="schema-fallback" hidden>ПК продаж (VLAN 10) → eth1 ┐
-ПК бухгалтерии (VLAN 20) → eth2 ├─ Open vSwitch br0 ─ eth3 (trunk 10,20) → вышестоящий коммутатор</pre>
       </div>
       <section class="lab-panel" id="ovs-panel">
         <div class="lp-head">
@@ -407,6 +397,20 @@
       </div>
     </section>
 
+
+    <!-- Навыки и компетенции: справочно, свёрнуты, чтобы не отвлекать от практики -->
+    <details class="skills-details">
+      <summary class="skills-summary">
+        <span class="st-section-num">S</span>
+        <span class="skills-summary-title">навыки и компетенции</span>
+        <span class="st-section-tag">ФГОС СПО 09.02.06</span>
+        <span class="skills-summary-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="skills-details-body">
+        <div class="st-skills" id="lab-skills" data-stand="switch-ovs"></div>
+      </div>
+    </details>
+
   </main>
 
 
@@ -463,12 +467,12 @@
     </div>
   </div>
 
-<script src="../assets/mascots.js?v=20261026s"></script>
-<script src="../assets/os-engine.js?v=20261026s"></script>
-<script src="../assets/fgos-skills.js?v=20261026s"></script>
-<script src="../assets/league.js?v=20261026s"></script>
-<script src="../assets/stands-ovs.js?v=20261026s"></script>
-<script src="../assets/stands.js?v=20261026s"></script>
+<script src="../assets/mascots.js?v=20261026t"></script>
+<script src="../assets/os-engine.js?v=20261026t"></script>
+<script src="../assets/fgos-skills.js?v=20261026t"></script>
+<script src="../assets/league.js?v=20261026t"></script>
+<script src="../assets/stands-ovs.js?v=20261026t"></script>
+<script src="../assets/stands.js?v=20261026t"></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var el=document.getElementById("brief-mascot");if(el&&window.MASCOTS){el.innerHTML=window.MASCOTS.svg(el.dataset.mascot,{size:72});}});</script>
 </body>
 </html>
