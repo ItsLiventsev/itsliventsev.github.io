@@ -8,12 +8,13 @@
 <title>виртуальные стенды · itsliventsev</title>
 <meta name="description" content="Учебные виртуальные стенды в браузере: идентификация по ФИО и группе, автосохранение прогресса, лабораторная по настройке DHCP на ALT Server с автоматической проверкой.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind CDN на стендах не используется: самодостаточная плоская дизайн-система -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026o">
-<link rel="stylesheet" href="../assets/stands.css?v=20261026o">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261026p">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026p">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/index.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -105,7 +106,7 @@
             </datalist>
           </div>
           <button class="flat-btn" type="submit">войти на стенды →</button>
-          <p class="m-0" id="profile-msg" role="status" style="color:var(--st-bad);font-family:var(--st-mono);font-size:.78rem;min-height:1em;"></p>
+          <p id="profile-msg" role="status" style="color:var(--st-bad);font-family:var(--st-mono);font-size:.78rem;min-height:1em;margin:0;"></p>
         </form>
       </div>
     </section>
@@ -200,7 +201,7 @@
   </footer>
 </div>
 
-<script src="../assets/stands-dhcp.js?v=20261026o"></script>
-<script src="../assets/stands.js?v=20261026o"></script>
+<script src="../assets/stands-dhcp.js?v=20261026p"></script>
+<script src="../assets/stands.js?v=20261026p"></script>
 </body>
 </html>

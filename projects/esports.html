@@ -9,11 +9,13 @@
 <title>киберспорт · проект ПК8 · itsliventsev</title>
 <meta name="description" content="Киберспортивное направление в Политехническом колледже №8: программа на 108 часов, сборные по 5 дисциплинам, лиги МСКЛ и МШКЛ, бронза Main Stage по CS:GO.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<script src="https://cdn.tailwindcss.com"></script>
+<script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261026o">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261026p">
+<link rel="stylesheet" href="../assets/tw-fallback.css?v=20261026p">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/projects/esports.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -453,6 +455,6 @@
 
 </div>
 
-<script src="../assets/site.js?v=20261026o"></script>
+<script src="../assets/site.js?v=20261026p"></script>
 </body>
 </html>
