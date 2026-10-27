@@ -31,7 +31,7 @@
 
     var profile = LEAGUE.getProfile();
     if (!profile || !profile.name) {
-      location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
+      location.href = 'setpolis.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
       return;
     }
     var fpName = $('fp-name'), fpGroup = $('fp-group');

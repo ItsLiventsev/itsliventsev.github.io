@@ -1740,3 +1740,42 @@ p { overflow-wrap: break-word; }
   .mc-svg.mc-float { animation: none; }
   .lk-progress-strip .xp-bar i, .quest-progress i, .roadmap-meter .xp-bar i { transition: none; }
 }
+
+/* ==========================================================================
+   29. ПОРТАЛ УЧЕБНЫХ ВСЕЛЕННЫХ (stands/index.html)
+   Использует site.css (.p-card, .bento-grid, .zone, .dark-hero-title) + местные штрихи
+   ========================================================================== */
+.uni-hero { position: relative; padding: 2.4rem 0 1.6rem; overflow: hidden; }
+.uni-hero .bg-glyphs { position: absolute; inset: 0; pointer-events: none; opacity: .5; }
+.system-badge {
+  display: inline-block; font-family: var(--st-mono); font-size: .7rem; letter-spacing: .08em;
+  color: var(--st-accent-2); border: 1px solid var(--st-line); border-radius: 999px;
+  padding: .3rem .8rem; margin-bottom: 1.1rem; background: var(--st-panel-2);
+}
+.uni-kicker { font-size: .8rem; color: var(--st-muted); margin: .4rem 0 1rem; }
+.uni-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) { .uni-grid { grid-template-columns: 1fr; } }
+.uni-card { min-height: 100%; }
+.uni-card--ops { border-color: color-mix(in srgb, #0d9488 30%, var(--st-line)); }
+.uni-title { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.code-sup {
+  font-family: var(--st-mono); font-size: .62rem; font-weight: 700; letter-spacing: .04em;
+  color: var(--st-muted); background: var(--st-panel-2); border: 1px solid var(--st-line);
+  border-radius: 6px; padding: .12rem .4rem; vertical-align: super; cursor: help;
+  text-transform: uppercase;
+}
+.code-sup-note { font-size: .85em; color: var(--st-accent-2); margin-left: .1rem; }
+.uni-tags { list-style: none; display: flex; flex-wrap: wrap; gap: .45rem; margin: .9rem 0 0; padding: 0; }
+.uni-tags li {
+  font-family: var(--st-mono); font-size: .68rem; color: var(--st-text-2);
+  border: 1px solid var(--st-line); background: var(--st-panel-2);
+  border-radius: 999px; padding: .25rem .65rem;
+}
+.uni-footnote {
+  margin: 1.3rem 0 0; padding: .9rem 1rem; border-left: 2px solid var(--st-line-strong);
+  background: var(--st-panel-2); border-radius: 0 var(--st-radius) var(--st-radius) 0;
+  font-size: .76rem; line-height: 1.7; color: var(--st-muted);
+}
+.uni-mini-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .uni-mini-grid { grid-template-columns: 1fr; } }
+.uni-mini .p-title { font-size: .95rem; margin: .6rem 0 .4rem; }

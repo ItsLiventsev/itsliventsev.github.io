@@ -988,7 +988,7 @@
   function loadProfile() {
     var profile = Store.get(PROFILE_KEY);
     if (!profile || !profile.name || !profile.group) {
-      location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
+      location.href = 'setpolis.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
       return null;
     }
     if (hasLeague()) {
