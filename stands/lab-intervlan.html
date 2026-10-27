@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж · лабораторная ПМ.01 · itsliventsev</title>
+<meta name="description" content="VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261026u">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026u">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/lab-intervlan.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж · лабораторная ПМ.01 · itsliventsev">
+  <meta property="og:description" content="VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/lab-intervlan.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж · лабораторная ПМ.01 · itsliventsev">
+  <meta name="twitter:description" content="VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж · лабораторная ПМ.01","description":"VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.","url":"https://itsliventsev.github.io/stands/lab-intervlan.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/lab-intervlan.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж · лабораторная ПМ.01","item":"https://itsliventsev.github.io/stands/lab-intervlan.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторная работа открывается только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">ПМ.01 · лабораторная</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="index.html">каталог</a>
+      <a href="league.html" rel="nofollow">лига</a>
+      <a href="teams.html">команды</a>
+      <a href="glossary.html">словарь</a>
+      <a href="../projects.html">проекты</a>
+      <button class="theme-toggle" type="button" aria-label="переключить светлую или тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <a href="index.html">стенды</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Маршрутизация между VLAN · роутер-на-палочке и L</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к каталогу</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">02</span>
+      <div>
+        <p class="flat-kicker">спринт 2 · Кадр · лабораторная ПМ.01</p>
+        <h1>Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж</h1>
+        <p class="st-hero-lead">VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.</p>
+        <div class="st-hero-meta"><span>формат: <strong>индивидуальный, с двумя стендами</strong></span><span>примерно <strong>4 ч</strong></span><span>начисление: <strong>80 неткоинов</strong></span></div>
+      </div>
+    </div>
+
+    <div id="lab-root"></div>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · виртуальные стенды</span>
+    <span>lab: lab-intervlan · autosave: on</span>
+  </footer>
+</div>
+
+<script src="../assets/mascots.js?v=20261026u"></script>
+<script src="../assets/fgos-skills.js?v=20261026u"></script>
+<script src="../assets/league.js?v=20261026u"></script>
+<script src="../assets/stands.js?v=20261026u"></script>
+<script type="application/json" id="lab-data">{"id": "lab-intervlan", "title": "Маршрутизация между VLAN · роутер-на-палочке и Linux-бридж", "sprint": 2, "sprintTitle": "Кадр", "hours": "4 ч", "coins": "80", "mascot": "otter", "who": "выдра Лин — проводник через границы сетей", "lead": "VLAN изолируют трафик, но отделы должны работать вместе: inter-VLAN на 802.1Q подынтерфейсах и мостах Linux.", "story": "Бухгалтерия и продажи сидят в разных VLAN, и это правильно — но ERP-сервер общий. Значит, между сегментами нужен маршрутизатор. Вы настроите классическую схему «роутер-на-палочке» с подынтерфейсами на Cisco, а затем повторите ту же логику на Linux VLAN-интерфейсах и бриджах — и поймёте, что это одна и та же модель.", "theory": [{"h": "Шлюз в каждом VLAN", "p": "Устройства разных VLAN находятся в разных подсетях. Чтобы общаться, каждому VLAN нужен свой шлюз — IP маршрутизатора в этой подсети. На физическом интерфейсе создаются подынтерфейсы по одному на VLAN.", "code": "R(config)# interface gi0/0.10\nR(config-subif)# encapsulation dot1Q 10\nR(config-subif)# ip address 192.168.10.1 255.255.255.0\nR(config)# interface gi0/0.20\nR(config-subif)# encapsulation dot1Q 20\nR(config-subif)# ip address 192.168.20.1 255.255.255.0"}, {"h": "Транк до маршрутизатора", "p": "Порт коммутатора, смотрящий на маршрутизатор, переводится в trunk и пропускает оба VLAN. Один физический кабель обслуживает несколько подсетей — отсюда шутливое название схемы."}, {"h": "Та же схема на Linux", "p": "Ядро Linux умеет VLAN-интерфейсы поверх физического: eth0.10, eth0.20. Им назначаются адреса шлюзов, форвардинг включается через sysctl. Бридж объединяет интерфейсы в коммутируемый сегмент.", "code": "# ip link add link eth0 name eth0.10 type vlan id 10\n# ip addr add 192.168.10.1/24 dev eth0.10\n# ip link set eth0.10 up\n# sysctl -w net.ipv4.ip_forward=1\n# bridge vlan show"}], "commands": [{"cisco": "interface gi0/0.10", "linux": "ip link add link eth0 name eth0.10 type vlan id 10", "what": "создать VLAN-подынтерфейс"}, {"cisco": "encapsulation dot1Q 10", "linux": "type vlan id 10 при создании", "what": "привязать тег 802.1Q"}, {"cisco": "ip address 192.168.10.1 255.255.255.0", "linux": "ip addr add 192.168.10.1/24 dev eth0.10", "what": "адрес шлюза VLAN"}, {"cisco": "show vlan / show interfaces trunk", "linux": "bridge vlan ; ip -d link show eth0.10", "what": "проверка тегирования"}, {"cisco": "show ip route", "linux": "ip route show", "what": "маршруты между подсетями"}, {"cisco": "traceroute", "linux": "traceroute", "what": "путь пакета через шлюз"}], "tasks": [{"id": "t1", "text": "Подготовьте два VLAN (10, 20) с тестовыми ПК из предыдущей лабораторной или соберите заново"}, {"id": "t2", "text": "Настройте транк от коммутатора к маршрутизатору с разрешёнными 10 и 20"}, {"id": "t3", "text": "Создайте подынтерфейсы gi0/0.10 и gi0/0.20 с encapsulation dot1Q и адресами шлюзов"}, {"id": "t4", "text": "Пропишите шлюзы по умолчанию на ПК и проверьте ping между VLAN"}, {"id": "t5", "text": "Снимите traceroute между ПК разных VLAN и объясните каждый хоп"}, {"id": "t6", "text": "На ALT создайте eth0.10/eth0.20 с теми же адресами, включите ip_forward"}, {"id": "t7", "text": "Проверьте bridge vlan show и сопоставьте вывод с show interfaces trunk Cisco"}, {"id": "t8", "text": "Сломайте намеренно тег на одном подынтерфейсе, опишите симптом и способ диагностики"}], "situational": {"text": "Кейс: новые сотрудники жалуются, что общий сервер пингуется из VLAN 10, но не из VLAN 20. Шлюзы прописаны. Составьте план поиска неисправности: шлюз VLAN 20, тег на транке, allowed vlan, firewall — и найдите заранее внесённую преподавателем ошибку.", "deliverables": ["Пошаговый чек-лист диагностики inter-VLAN", "Исправленная конфигурация", "Скриншоты ping и traceroute между всеми VLAN"]}, "quiz": [{"q": "Сколько подынтерфейсов нужно для трёх VLAN на схеме «роутер-на-палочке»?", "options": ["Один", "Два", "Три", "По числу портов коммутатора"], "answer": 2, "explain": "По одному подынтерфейсу с тегом на каждый VLAN — значит, три."}, {"q": "Какая команда привязывает подынтерфейс к VLAN 20?", "options": ["vlan 20", "encapsulation dot1Q 20", "switchport vlan 20", "tag 20 encapsulate"], "answer": 1, "explain": "encapsulation dot1Q 20 — инкапсуляция тега на подынтерфейсе."}, {"q": "Какой sysctl включает маршрутизацию пакетов на Linux?", "options": ["net.ipv4.tcp_syncookies", "net.ipv4.ip_forward=1", "net.core.somaxconn", "vm.forwarding"], "answer": 1, "explain": "net.ipv4.ip_forward=1 разрешает пересылку между интерфейсами."}, {"q": "Что общего между eth0.10 в Linux и gi0/0.10 в IOS?", "options": ["Ничего, совпадение в названии", "Оба — логические интерфейсы с тегом VLAN 10 поверх физического", "Оба требуют DHCP", "Это имена одного и того же устройства"], "answer": 1, "explain": "Это одинаковая модель: VLAN-интерфейс поверх физического линка."}, {"q": "Почему ПК разных VLAN не пингуются без маршрутизатора?", "options": ["Разные MAC-адреса", "Они в разных подсетях и широковещательных доменах", "ICMP запрещён на коммутаторе", "Нужен кабель другой категории"], "answer": 1, "explain": "Без шлюза кадр не покидает VLAN, а подсети требуют L3-пересылки."}], "reflection": ["Какая аналогия между VLAN и комнатами с дверьми-шлюзами приходит в голову?", "Где в схеме единственная точка отказа и как её усиливают в реальных сетях?", "Что было непонятно до traceroute и прояснилось после?"]}</script>
+<script src="../assets/lab-kit.js?v=20261026u"></script>
+</body>
+</html>

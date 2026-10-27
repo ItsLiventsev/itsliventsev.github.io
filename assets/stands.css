@@ -722,7 +722,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
 .xp-handle .mc-svg { width: 22px; height: 22px; }
 .xp-bar { flex: 1 1 160px; height: .55rem; background: var(--st-inset); border: 1px solid var(--st-line); position: relative; overflow: hidden; }
 .xp-bar i { position: absolute; inset: 0 auto 0 0; background: var(--st-accent); width: 0; transition: width .4s var(--st-ease, ease); }
-.xp-meta { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); white-space: nowrap; }
+.xp-meta { font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); white-space: normal; overflow-wrap: break-word; min-width: 0; }
 .xp-coins { color: var(--st-warn); }
 
 /* --- Автотесты --- */
@@ -1418,8 +1418,8 @@ p { overflow-wrap: break-word; }
   /* сетка-сайдбар только на страницах с пошаговой навигацией; на остальных main без изменений */
   .st-wrap > main:has(> .step-nav) {
     display: grid;
-    grid-template-columns: 11.5rem minmax(0, 1fr);
-    column-gap: 1.7rem;
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    column-gap: 1.6rem;
     align-items: start;
   }
   .st-wrap > main:has(> .step-nav) > .step-nav {
@@ -1430,19 +1430,34 @@ p { overflow-wrap: break-word; }
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
-    gap: .25rem;
-    padding: .8rem .7rem;
-    margin: 0 0 1rem;
+    gap: .15rem;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-left: 1px solid var(--st-line);
   }
   .st-wrap > main:has(> .step-nav) > .step-nav a {
-    padding: .55rem .7rem;
+    padding: .5rem .85rem;
     white-space: nowrap;
+    border: 1px solid transparent;
+    border-left: none;
+    border-radius: 0 var(--st-radius) var(--st-radius) 0;
+    position: relative;
+  }
+  .st-wrap > main:has(> .step-nav) > .step-nav a::before {
+    content: ''; position: absolute; left: -1px; top: 50%; transform: translateY(-50%);
+    width: 1px; height: 0; background: var(--st-accent); transition: height .2s ease;
   }
   .st-wrap > main:has(> .step-nav) > .step-nav a.is-active {
     background: var(--st-accent-soft);
-    border-color: var(--st-accent);
+    border-color: var(--st-line);
+    border-left: none;
     color: var(--st-accent-2);
+    font-weight: 700;
   }
+  .st-wrap > main:has(> .step-nav) > .step-nav a.is-active::before { height: 60%; }
   .st-wrap > main:has(> .step-nav) > *:not(.step-nav) { grid-column: 2; min-width: 0; }
 }
 @media (max-width: 1099.98px) {
@@ -1607,3 +1622,121 @@ p { overflow-wrap: break-word; }
 .rv-who { overflow-wrap: break-word; }
 .lg-level-top > div { min-width: 0; }
 .st-mini p, .st-mini strong { overflow-wrap: break-word; }
+
+/* ==========================================================================
+   28. LAB KIT · движок лабораторных практики ПМ.01
+   ========================================================================== */
+.lk-progress-strip { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+.lk-progress-strip .xp-bar { flex: 1 1 12rem; margin: 0; min-width: 8rem; }
+
+.lab-brief { padding: 1.2rem 1.3rem; }
+.lab-brief .mc-bubble { background: var(--st-panel-2); }
+
+.theory-block { padding-bottom: 1.1rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--st-line); }
+.theory-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.theory-block h3 { margin: 0 0 .45rem; font-size: .95rem; color: var(--st-text); display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.theory-num { font-family: var(--st-mono); font-size: .72rem; color: var(--st-accent-2); font-weight: 700; }
+.theory-block p { margin: .35rem 0; font-size: .88rem; line-height: 1.7; color: var(--st-text-2); }
+.lab-codeblock {
+  margin: .6rem 0; padding: .85rem 1rem; background: #10141a; color: #d4d9e0;
+  border: 1px solid #232b34; border-radius: var(--st-radius);
+  overflow-x: auto; font-family: var(--st-mono); font-size: .78rem; line-height: 1.7;
+}
+.lab-codeblock code { white-space: pre; background: none; border: none; padding: 0; color: inherit; }
+.lab-note {
+  margin: .6rem 0 0; padding: .6rem .8rem; border-left: 3px solid var(--st-warn, #b45309);
+  background: var(--st-accent-soft); border-radius: 0 var(--st-radius) var(--st-radius) 0;
+  font-size: .82rem; color: var(--st-text-2);
+}
+
+/* Шпаргалка команд: две колонки Cisco/Linux */
+.cmd-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.cmd-col h4 {
+  margin: 0 0 .7rem; font-family: var(--st-mono); font-size: .72rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--st-accent-2);
+  padding-bottom: .45rem; border-bottom: 1px solid var(--st-line);
+}
+.cmd-row { padding: .5rem 0; border-bottom: 1px dashed var(--st-line); }
+.cmd-row:last-child { border-bottom: none; }
+.cmd-row code { display: block; margin-bottom: .2rem; font-size: .76rem; white-space: normal; overflow-wrap: anywhere; }
+.cmd-row span { font-size: .78rem; color: var(--st-muted); line-height: 1.5; }
+
+/* Бэклог задач */
+.task-list { display: grid; gap: .55rem; }
+.task-item {
+  display: flex; gap: .8rem; align-items: flex-start;
+  padding: .8rem .95rem; border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-panel-2); cursor: pointer; transition: border-color .18s ease, background-color .18s ease;
+}
+.task-item:hover { border-color: var(--st-line-strong); }
+.task-item input { margin-top: .25rem; width: 1.05rem; height: 1.05rem; accent-color: var(--st-accent); flex: 0 0 auto; }
+.task-item.is-done { border-color: var(--st-ok); background: var(--st-ok-soft); }
+.task-item.is-done .task-title { text-decoration: line-through; text-decoration-color: var(--st-muted); color: var(--st-muted); }
+.task-body { min-width: 0; }
+.task-title { display: block; font-size: .88rem; line-height: 1.55; color: var(--st-text); font-weight: 600; }
+.task-num { font-family: var(--st-mono); color: var(--st-accent-2); font-size: .76rem; margin-right: .35rem; }
+.task-hint { display: block; margin-top: .25rem; font-size: .78rem; color: var(--st-muted); line-height: 1.5; }
+
+.lab-solution { margin-top: .9rem; min-height: 6rem; resize: vertical; font-family: var(--st-sans); line-height: 1.6; }
+
+/* Рефлексия */
+.reflect-item { margin-bottom: .9rem; }
+.reflect-item label { display: block; font-size: .82rem; font-weight: 600; color: var(--st-text-2); margin-bottom: .4rem; }
+.reflect-item textarea, .plus-minus textarea { width: 100%; font-family: var(--st-sans); font-size: .85rem; line-height: 1.6; }
+.plus-minus { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin-top: .5rem; }
+.plus-minus strong { display: block; font-size: .8rem; margin-bottom: .4rem; color: var(--st-text); }
+
+.lab-finish .lab-finish-msg { margin: .9rem 0 0; font-size: .85rem; color: var(--st-ok); min-height: 1.2em; }
+.lab-finish button { min-width: 16rem; }
+
+/* Бейдж спринта в герое */
+.sprint-badge {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-family: var(--st-mono); font-size: .72rem; font-weight: 700;
+  color: var(--st-accent-2); background: var(--st-accent-soft);
+  border: 1px solid var(--st-accent); padding: .3rem .75rem; border-radius: 999px;
+  margin-bottom: .9rem;
+}
+
+/* Роадмап спринтов в кабинете */
+.sprint-group { margin-bottom: 1.6rem; }
+.sprint-head { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .7rem; flex-wrap: wrap; }
+.sprint-head h3 { margin: 0; font-size: .98rem; color: var(--st-text); }
+.sprint-head .sprint-meta { font-family: var(--st-mono); font-size: .7rem; color: var(--st-muted); letter-spacing: .06em; }
+.sprint-head .sprint-line { flex: 1 1 auto; height: 1px; background: var(--st-line); min-width: 2rem; }
+
+/* Глоссарий практик */
+.glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .8rem; }
+.glossary-item { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding: .9rem 1rem; background: var(--st-panel-2); }
+.glossary-item dt { font-family: var(--st-mono); font-size: .8rem; font-weight: 700; color: var(--st-accent-2); margin-bottom: .35rem; }
+.glossary-item dd { margin: 0; font-size: .82rem; line-height: 1.6; color: var(--st-text-2); }
+
+@media (max-width: 900px) {
+  .cmd-duo, .plus-minus { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .lab-brief { padding: 1rem; }
+  .lk-progress-strip { flex-wrap: wrap; }
+  .lab-finish button { width: 100%; min-width: 0; }
+}
+
+/* Hero лабораторных: лид-абзац и строка мета-данных */
+.st-hero-lead { margin: .55rem 0 .7rem; font-size: .9rem; line-height: 1.65; color: var(--st-muted); max-width: 62ch; }
+.st-hero-meta { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; font-family: var(--st-mono); font-size: .72rem; color: var(--st-muted); }
+.st-hero-meta strong { color: var(--st-text-2); font-weight: 600; }
+
+/* Шапка роадмапа в кабинете */
+.roadmap-overview {
+  display: flex; gap: 1.2rem; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-panel-2); padding: 1rem 1.15rem; margin-bottom: 1.3rem;
+}
+.roadmap-overview strong { font-size: .92rem; color: var(--st-text); }
+.roadmap-meter { min-width: 15rem; flex: 1 1 15rem; max-width: 22rem; }
+
+/* Уважение к настройке «уменьшить движение»: lab-kit без анимаций */
+@media (prefers-reduced-motion: reduce) {
+  .task-item, .cmd-row, .sprint-group .quest-card, .glossary-item { transition: none; }
+  .mc-svg.mc-float { animation: none; }
+  .lk-progress-strip .xp-bar i, .quest-progress i, .roadmap-meter .xp-bar i { transition: none; }
+}

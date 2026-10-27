@@ -541,15 +541,44 @@
   }
 
   /* ----------------------------- Кабинет (лендинг стендов) ----------------------------- */
+  /* Единая история практики ПМ.01: пять спринтов от игровых задач к реальной работе
+     сетевого администратора. Cisco-подобные и Linux-стенды чередуются ~50/50. */
+  var SPRINT_STORY = {
+    1: { title: 'Новобранец', note: 'игровой старт: база CLI, адресация и кабель — руками и на симуляторе' },
+    2: { title: 'Кадр', note: 'коммутация: VLAN, транки, STP и маршрутизация между сегментами' },
+    3: { title: 'Маршрут', note: 'маршрутизация и граница: статика, OSPF/FRR, NAT и firewall' },
+    4: { title: 'Защита', note: 'службы и доступ: DHCP, SSH-ключи, sudoers и AAA' },
+    5: { title: 'Проект', note: 'реальная работа: документация, бэклог, спринты и защита ЛВС под ключ' }
+  };
   var QUESTS = [
-    { id: 'dhcp-alt', title: 'DHCP на ALT Server', glyph: 'fox', href: 'dhcp-alt.html',
-      desc: 'Новый офис «СетьПолиса»: 40 рабочих мест, сетевой принтер и гостиная сеть' },
-    { id: 'switch-ovs', title: 'Коммутация · Open vSwitch', glyph: 'crab', href: 'switch-ovs.html',
-      desc: 'Два отдела, один Linux-коммутатор: VLAN access и trunk по брифу Клешни' },
-    { id: 'soon-1', title: 'Маршрутизация и NAT', glyph: 'owl', href: null,
-      desc: 'ip route, маскарадинг LAN↔WAN, диагностика послеаварийного восстановления' },
-    { id: 'soon-2', title: 'Контроль доступа · SSH и sudo', glyph: 'wolf', href: null,
-      desc: 'Ключи вместо паролей, sudoers, аудит и журналирование действий администраторов' }
+    { id: 'lab-ios-basics', sprint: 1, glyph: 'fox', href: 'lab-ios-basics.html', format: 'индивидуально',
+      title: 'Cisco IOS · первая настройка', desc: 'Режимы CLI, hostname, интерфейсы и сохранение конфигурации' },
+    { id: 'lab-alt-basics', sprint: 1, glyph: 'crab', href: 'lab-alt-basics.html', format: 'индивидуально',
+      title: 'ALT Linux · базовая настройка', desc: 'Консоль, apt-get, systemd и сеть через /etc/net/ifaces' },
+    { id: 'lab-ip-subnet', sprint: 1, glyph: 'owl', href: 'lab-ip-subnet.html', format: 'пара',
+      title: 'IP-адресация и подсети', desc: 'Маски, VLSM и ручной расчёт с проверкой калькулятором' },
+    { id: 'lab-cabling', sprint: 1, glyph: 'hedgehog', href: 'lab-cabling.html', format: 'бригада',
+      title: 'Обжим и кабельный расчёт', desc: 'T568A/B, прямой и кросс-линк, розетки, формула средней длины' },
+    { id: 'switch-ovs', sprint: 2, glyph: 'crab', href: 'switch-ovs.html', format: 'интерактивный стенд',
+      title: 'Коммутация · Open vSwitch', desc: 'Два отдела, один Linux-коммутатор: VLAN access и trunk' },
+    { id: 'lab-vlan-cisco', sprint: 2, glyph: 'wolf', href: 'lab-vlan-cisco.html', format: 'пара',
+      title: 'Cisco · VLAN, STP, EtherChannel', desc: 'Access и trunk-порты, PortFast, rapid-pvst, агрегация' },
+    { id: 'lab-intervlan', sprint: 2, glyph: 'otter', href: 'lab-intervlan.html', format: 'индивидуально',
+      title: 'Маршрутизация между VLAN', desc: 'Подынтерфейсы 802.1Q на Cisco и VLAN-бридж на Linux' },
+    { id: 'lab-static-cisco', sprint: 3, glyph: 'fox', href: 'lab-static-cisco.html', format: 'пара',
+      title: 'Статическая маршрутизация', desc: 'ip route, маршрут по умолчанию и таблица сетей на троих роутерах' },
+    { id: 'lab-frr', sprint: 3, glyph: 'owl', href: 'lab-frr.html', format: 'группа',
+      title: 'FRR · RIP, OSPF, EIGRP', desc: 'Динамическая маршрутизация на ALT через vtysh, мозговой штурм' },
+    { id: 'lab-nat-firewall', sprint: 3, glyph: 'cat', href: 'lab-nat-firewall.html', format: 'пара',
+      title: 'NAT и firewall на iptables', desc: 'ip_forward, MASQUERADE, цепочки filter, DROP против REJECT' },
+    { id: 'dhcp-alt', sprint: 4, glyph: 'fox', href: 'dhcp-alt.html', format: 'интерактивный стенд',
+      title: 'DHCP на ALT Server', desc: 'Новый офис «СетьПолиса»: 40 мест, принтер и гостиная сеть' },
+    { id: 'lab-ssh-sudo', sprint: 4, glyph: 'raccoon', href: 'lab-ssh-sudo.html', format: 'индивидуально + 1:1',
+      title: 'SSH, sudoers и AAA', desc: 'Ключи вместо паролей, минимальные привилегии, доступ на Cisco' },
+    { id: 'lab-netdoc', sprint: 5, glyph: 'otter', href: 'lab-netdoc.html', format: 'группа + ревью',
+      title: 'Документирование сети', desc: 'Физ- и логсхемы, IP-план, ведомости и перекрёстное ревью' },
+    { id: 'lab-final', sprint: 5, glyph: 'wolf', href: 'lab-final.html', format: 'командный проект',
+      title: 'Комплексный проект ЛВС', desc: 'Бэклог, три спринта, защита и авария на время — сеть под ключ' }
   ];
 
   function renderMascotPicker(selected) {
@@ -609,23 +638,40 @@
           '<a class="flat-btn ghost" href="teams.html" style="text-decoration:none;">трайн и команды</a>' +
           '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div>';
 
-      $('cab-quests').innerHTML = QUESTS.map(function (q) {
-        if (!q.href) {
-          return '<div class="quest-card is-locked"><div class="quest-glyph">' + mascotSvg(q.glyph, 44, false) + '</div>' +
-            '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p></div>' +
-            '<div class="quest-side"><span class="flat-badge is-soon">в разработке</span></div></div>';
-        }
-        var m = L.standMastery(profile.id, q.id);
-        var best = L.bestSubmission(profile.id, q.id);
-        var state = !best ? { label: 'не начат', cls: 'is-soon' }
-          : m.percent >= 95 ? { label: 'пройден ' + m.percent + '%', cls: 'is-ready' }
-          : { label: 'в работе ' + m.percent + '%', cls: 'is-run' };
-        return '<a class="quest-card" href="' + q.href + '" style="text-decoration:none;color:inherit;">' +
-          '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
-          '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
-          '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
-          '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span></div></a>';
-      }).join('');
+      (function renderQuests() {
+        var doneCount = 0;
+        var cards = QUESTS.map(function (q) {
+          var m = L.standMastery(profile.id, q.id);
+          var best = L.bestSubmission(profile.id, q.id);
+          if (best && m.percent >= 95) doneCount++;
+          var state = !best ? { label: 'не начат', cls: 'is-soon' }
+            : m.percent >= 95 ? { label: 'пройден ' + m.percent + '%', cls: 'is-ready' }
+            : { label: 'в работе ' + m.percent + '%', cls: 'is-run' };
+          return '<a class="quest-card" href="' + q.href + '" style="text-decoration:none;color:inherit;">' +
+            '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
+            '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
+            '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
+            '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span>' +
+            '<span class="flat-badge" style="margin-top:.4rem;">' + esc(q.format) + '</span></div></a>';
+        });
+        var overall = Math.round(doneCount / QUESTS.length * 100);
+        var head = '<div class="roadmap-overview">' +
+          '<div><strong>роадмап практики ПМ.01</strong>' +
+          '<p class="admin-hint" style="margin:.3rem 0 0;">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
+          '<div class="roadmap-meter"><span class="xp-meta">' + doneCount + ' из ' + QUESTS.length + ' работ · ' + overall + '%</span>' +
+          '<div class="xp-bar" style="margin-top:.4rem;"><i style="width:' + overall + '%"></i></div></div></div>';
+
+        var groups = '';
+        Object.keys(SPRINT_STORY).map(Number).sort().forEach(function (sp) {
+          var story = SPRINT_STORY[sp];
+          var rows = QUESTS.map(function (q, i) { return q.sprint === sp ? cards[i] : null; }).filter(Boolean).join('');
+          groups += '<div class="sprint-group">' +
+            '<div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(story.title) + '</h3>' +
+            '<span class="sprint-meta">// ' + esc(story.note) + '</span><span class="sprint-line"></span></div>' +
+            rows + '</div>';
+        });
+        $('cab-quests').innerHTML = head + groups;
+      })();
 
       var events = L.ledger().filter(function (e) { return e.profileId === profile.id; })
         .sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); }).slice(0, 8);

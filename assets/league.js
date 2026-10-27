@@ -222,7 +222,16 @@
 
   /* ----------------------------- Работы студентов ----------------------------- */
   function submissions() { return read(KEYS.submissions, []); }
+  /* Демо-данные разработки в боевой системе не принимаем ниоткуда */
+  function isDemoRecord(x) {
+    if (!x || typeof x !== 'object') return false;
+    if (x.demo === true) return true;
+    var ids = [x.id, x.student && x.student.id, x.reviewer && x.reviewer.id, x.reviewee && x.reviewee.id].filter(Boolean);
+    return ids.some(function (v) { return /^demo(-|_)/i.test(String(v)); });
+  }
+
   function addSubmission(s) {
+    if (isDemoRecord(s)) return submissions();
     var list = submissions();
     if (list.some(function (x) { return x.id === s.id; })) return list;
     list.push(s);
@@ -260,6 +269,7 @@
   /* ----------------------------- Взаимные оценки ----------------------------- */
   function reviews() { return read(KEYS.reviews, []); }
   function addReview(r) {
+    if (isDemoRecord(r)) return reviews();
     var list = reviews();
     r.id = r.id || uid('rev');
     r.createdAt = r.createdAt || new Date().toISOString();
@@ -368,7 +378,8 @@
     return Object.keys(presence()).map(function (id) {
       var p = presence()[id];
       return Object.assign({}, p, { online: now - new Date(p.lastSeen).getTime() <= window });
-    }).sort(function (a, b) { return new Date(b.lastSeen) - new Date(a.lastSeen); });
+    }).filter(function (p) { return !isDemoRecord(p); })
+      .sort(function (a, b) { return new Date(b.lastSeen) - new Date(a.lastSeen); });
   }
 
   /* ----------------------------- Мастерство навыков (ФГОС) ----------------------------- */
@@ -460,7 +471,7 @@
   function roster() {
     var people = {};
     function add(s) {
-      if (!s || !s.id || !s.name) return;
+      if (!s || !s.id || !s.name || isDemoRecord(s)) return;
       if (!people[s.id]) people[s.id] = { id: s.id, name: s.name, group: s.group, tribeId: s.tribeId, handle: s.handle };
     }
     var p = getProfile();

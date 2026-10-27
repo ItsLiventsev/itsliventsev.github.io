@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>Cisco IOS · статическая маршрутизация и маршрут по умолчанию · лабораторная ПМ.01 · itsliventsev</title>
+<meta name="description" content="Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261026u">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026u">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/lab-static-cisco.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Cisco IOS · статическая маршрутизация и маршрут по умолчанию · лабораторная ПМ.01 · itsliventsev">
+  <meta property="og:description" content="Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/lab-static-cisco.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cisco IOS · статическая маршрутизация и маршрут по умолчанию · лабораторная ПМ.01 · itsliventsev">
+  <meta name="twitter:description" content="Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Cisco IOS · статическая маршрутизация и маршрут по умолчанию · лабораторная ПМ.01","description":"Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.","url":"https://itsliventsev.github.io/stands/lab-static-cisco.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/lab-static-cisco.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Cisco IOS · статическая маршрутизация и маршрут по умолчанию · лабораторная ПМ.01","item":"https://itsliventsev.github.io/stands/lab-static-cisco.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторная работа открывается только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">ПМ.01 · лабораторная</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="index.html">каталог</a>
+      <a href="league.html" rel="nofollow">лига</a>
+      <a href="teams.html">команды</a>
+      <a href="glossary.html">словарь</a>
+      <a href="../projects.html">проекты</a>
+      <button class="theme-toggle" type="button" aria-label="переключить светлую или тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <a href="index.html">стенды</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Cisco IOS · статическая маршрутизация и маршрут </span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к каталогу</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">03</span>
+      <div>
+        <p class="flat-kicker">спринт 3 · Маршрут · лабораторная ПМ.01</p>
+        <h1>Cisco IOS · статическая маршрутизация и маршрут по умолчанию</h1>
+        <p class="st-hero-lead">Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.</p>
+        <div class="st-hero-meta"><span>формат: <strong>парная работа с обменом неисправностями</strong></span><span>примерно <strong>5 ч</strong></span><span>начисление: <strong>85 неткоинов</strong></span></div>
+      </div>
+    </div>
+
+    <div id="lab-root"></div>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · виртуальные стенды</span>
+    <span>lab: lab-static-cisco · autosave: on</span>
+  </footer>
+</div>
+
+<script src="../assets/mascots.js?v=20261026u"></script>
+<script src="../assets/fgos-skills.js?v=20261026u"></script>
+<script src="../assets/league.js?v=20261026u"></script>
+<script src="../assets/stands.js?v=20261026u"></script>
+<script type="application/json" id="lab-data">{"id": "lab-static-cisco", "title": "Cisco IOS · статическая маршрутизация и маршрут по умолчанию", "sprint": 3, "sprintTitle": "Маршрут", "hours": "5 ч", "coins": "85", "mascot": "fox", "who": "лис Итан — уже с картой сетей", "lead": "Три маршрутизатора, пять подсетей и ноль протоколов маршрутизации: только руки, таблицы и ip route.", "story": "Маленький филиал не нуждается в сложных протоколах: пять подсетей, три маршрутизатора, предсказуемая топология. Статика здесь быстрее, безопаснее и не тратит ресурсы. Но любая забытая сеть — это «там не открывается, у нас всё пингуется». Учимся мыслить таблицей маршрутов целиком, а не одним устройством.", "theory": [{"h": "Анатомия маршрута", "p": "Команда ip route сообщает маршрутизатору: «сеть назначения N/маска достижима через следующий узел A (или выходной интерфейс)». Маршрут по умолчанию 0.0.0.0/0 ловит всё, чему нет более точного маршрута — типичная роль граничного роутера.", "code": "R1(config)# ip route 192.168.30.0 255.255.255.0 10.0.1.2\nR1(config)# ip route 192.168.30.0 255.255.255.0 gi0/1\nR1(config)# ip route 0.0.0.0 0.0.0.0 10.0.1.2\nR1# show ip route static"}, {"h": "Двунаправленность связи", "p": "Ping не пойдёт, пока обратная сеть тоже не знает маршрут до источника. Частая ошибка новичка: настроить маршрут только в одну сторону и искать проблему в кабеле. Правило: для каждой сети каждая пара маршрутизаторов должна знать путь туда и обратно."}, {"h": "Когда статика — правильный выбор", "p": "Статические маршруты не нагружают CPU, не передают служебный трафик и предсказуемы. Они хороши в маленьких стабильных сетях, на стыках с провайдером и для маршрутов по умолчанию. В большой растущей сети их поддержка становится ручным адом — там появляются динамические протоколы (следующий спринт)."}], "commands": [{"cisco": "ip route 10.0.2.0 255.255.255.0 10.0.1.2", "linux": "ip route add 10.0.2.0/24 via 10.0.1.2", "what": "статический маршрут через next-hop"}, {"cisco": "no ip route 10.0.2.0 ...", "linux": "ip route del 10.0.2.0/24 via 10.0.1.2", "what": "удалить маршрут"}, {"cisco": "ip route 0.0.0.0 0.0.0.0 10.0.1.2", "linux": "ip route add default via 10.0.1.2", "what": "маршрут по умолчанию"}, {"cisco": "show ip route", "linux": "ip route show", "what": "таблица маршрутизации"}, {"cisco": "show ip route static", "linux": "ip route show type unicast | grep -v default", "what": "только статические записи"}, {"cisco": "traceroute 192.168.30.10", "linux": "tracepath 192.168.30.10", "what": "диагностика пути"}], "tasks": [{"id": "t1", "text": "Соберите цепочку R1–R2–R3 с пятьми подсетями (две ЛВС + три межроутерных /30)"}, {"id": "t2", "text": "Составьте на бумаге единую таблицу: сеть, маска, шлюз для каждого маршрутизатора"}, {"id": "t3", "text": "Настройте адреса на всех интерфейсах и добейтесь ping между соседними роутерами"}, {"id": "t4", "text": "Пропишите статические маршруты до удалённых ЛВС на каждом маршрутизаторе (туда и обратно)"}, {"id": "t5", "text": "На R3 настройте маршрут по умолчанию на R2, на R1 — суммарный маршрут до сетей за R2"}, {"id": "t6", "text": "Проверьте сквозной ping между ПК обеих ЛВС и traceroute с промежуточными хопами"}, {"id": "t7", "text": "Удалите один маршрут и зафиксируйте, как меняется show ip route и поведение ping"}, {"id": "t8", "text": "Проверьте работу напарника: внесите в его схему «слепую зону» и обменяйтесь диагностикой"}], "situational": {"text": "Кейс «ТехноСервис»: филиал жалуется — внутренние ресурсы открываются, Интернет не работает. На граничном маршрутизаторе 12 статических маршрутов, маршрута по умолчанию нет, а один из маршрутов указывает next-hop на выключенный интерфейс. Найдите обе проблемы и исправьте.", "deliverables": ["Диагноз с выдержками из show ip route", "Исправленная конфигурация", "Правило «три проверки статики», которое вы дадите новичку"]}, "quiz": [{"q": "Что означает запись ip route 0.0.0.0 0.0.0.0 10.0.1.1?", "options": ["Запрет любого трафика", "Маршрут по умолчанию через 10.0.1.1", "Маршрут до сети нулей", "Очистка таблицы"], "answer": 1, "explain": "0.0.0.0/0 — дефолт, ловит весь трафик без более точного совпадения."}, {"q": "Ping не идёт в одну сторону, обратный маршрут отсутствует. Что увидит отправитель?", "options": ["Ответ от чужого шлюза", "Таймаут: запросы уходят, ответы не возвращаются", "Немедленный успех", "Смена MAC-адреса"], "answer": 1, "explain": "Без обратного маршрута echo reply не доходит — ping висит до таймаута."}, {"q": "В чём преимущество статики перед динамическим протоколом в маленькой сети?", "options": ["Нет преимуществ", "Нет служебного трафика, предсказуемость, минимум нагрузки", "Автоматическое обнаружение соседей", "Статика сама чинит петли"], "answer": 1, "explain": "Статика молчит, детерминирована и не зависит от смежных устройств."}, {"q": "Чем запись через next-hop отличается от записи через интерфейс?", "options": ["Ничем после загрузки", "Next-hop точнее на Ethernet: роутер знает, у кого запрашивать MAC", "Интерфейс работает только на серийных линках", "Next-hop не сохраняется"], "answer": 1, "explain": "На broadcast-сетях next-hop корректнее: для интерфейса роутер ищет MAC назначения напрямую."}, {"q": "Какой командой увидеть только статические маршруты?", "options": ["show ip static", "show ip route static", "show routes static", "display ip route-static"], "answer": 1, "explain": "show ip route static фильтрует таблицу по типу записи."}], "reflection": ["Какой момент с «обратным маршрутом» дал главную инсайт?", "Где в вашей домашней сети стоит маршрут по умолчанию?", "Почему карта сетей на бумаге экономит часы отладки?"]}</script>
+<script src="../assets/lab-kit.js?v=20261026u"></script>
+</body>
+</html>
