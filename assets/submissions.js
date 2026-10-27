@@ -153,7 +153,11 @@
       ' · проверок пройдено: ' + (r.passed != null ? r.passed + '/' + r.total : '—') + '</p>' +
       '<p class="section-label" style="margin-top:1rem;">результаты CI-проверок</p>' +
       '<div class="lab-checks">' + checks + '</div>' +
-      '<p class="section-label" style="margin-top:1.2rem;">итоговый dhcpd.conf</p>' +
+      (s.quiz && s.quiz.done ?
+        '<p class="section-label" style="margin-top:1.2rem;">контрольный мини-тест</p>' +
+        '<p class="sub-detail-meta">результат: ' + esc(s.quiz.correct) + ' из ' +
+        esc(Object.keys(s.quiz.answers || {}).length) + ' верных ответов</p>' : '') +
+      '<p class="section-label" style="margin-top:1.2rem;">итоговая конфигурация стенда</p>' +
       '<pre class="sub-code">' + esc(s.config || '') + '</pre>' +
       '<p class="section-label" style="margin-top:1.2rem;">журнал терминала</p>' +
       '<pre class="sub-code">' + esc((s.terminalLog || []).map(function (h) {

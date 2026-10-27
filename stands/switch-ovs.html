@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark">
+<title>Коммутация в Linux · Open vSwitch · виртуальный стенд · itsliventsev</title>
+<meta name="description" content="Виртуальный стенд по коммутации в Linux: Open vSwitch, мосты и порты, VLAN access и trunk (802.1Q), утилиты ovs-vsctl, ovs-ofctl, ip — терминал-тренажёр с проверкой и мини-тестом.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css?v=20261026l">
+<link rel="stylesheet" href="../assets/stands.css?v=20261026l">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/switch-ovs.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · блог и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Коммутация в Linux · Open vSwitch · виртуальный стенд · itsliventsev">
+  <meta property="og:description" content="Виртуальный стенд по коммутации в Linux: Open vSwitch, мосты и порты, VLAN access и trunk (802.1Q), утилиты ovs-vsctl, ovs-ofctl, ip — терминал-тренажёр с проверкой и мини-тестом.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/switch-ovs.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Коммутация в Linux · Open vSwitch · виртуальный стенд · itsliventsev">
+  <meta name="twitter:description" content="Виртуальный стенд по коммутации в Linux: Open vSwitch, мосты и порты, VLAN access и trunk (802.1Q), утилиты ovs-vsctl, ovs-ofctl, ip — терминал-тренажёр с проверкой и мини-тестом.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Коммутация в Linux · Open vSwitch · виртуальный стенд","description":"Виртуальный стенд по коммутации в Linux: Open vSwitch, мосты и порты, VLAN access и trunk (802.1Q), утилиты ovs-vsctl, ovs-ofctl, ip — терминал-тренажёр с проверкой и мини-тестом.","url":"https://itsliventsev.github.io/stands/switch-ovs.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/switch-ovs.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"виртуальные стенды","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Коммутация в Linux · Open vSwitch · виртуальный стенд","item":"https://itsliventsev.github.io/stands/switch-ovs.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторный стенд работает только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">виртуальные стенды</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="index.html" aria-current="page">каталог</a>
+      <a href="../projects.html">проекты</a>
+      <a href="../admin.html" rel="nofollow">admin</a>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <a href="index.html">стенды</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">коммутация · OVS</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к каталогу</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">02</span>
+      <div>
+        <p class="flat-kicker">stand / switch-ovs · Linux bridging + VLAN</p>
+        <h1>Коммутация в Linux: Open vSwitch</h1>
+      </div>
+    </div>
+
+    <div class="st-legend">
+      <span class="st-legend-label">// легенда</span>
+      <p><strong>Легенда.</strong> На сервер установлен <strong>Open vSwitch</strong>. Нужно собрать виртуальный
+      коммутатор <code>br0</code> с тремя портами: <code>eth1</code> и <code>eth2</code> — access-порты
+      отделов в VLAN 10 и 20, <code>eth3</code> — trunk-аплинк к вышестоящему коммутатору с VLAN 10 и 20.
+      Все настройки выполняются командами в терминале, состояние коммутатора видно на панели справа.</p>
+    </div>
+
+    <!-- Цели -->
+    <div class="st-section-head">
+      <span class="st-section-num">G</span>
+      <h2>цели работы</h2>
+      <span class="st-section-tag">чему научитесь</span>
+    </div>
+    <ul class="st-goals">
+      <li class="st-goal">Понимать, что делает коммутатор на канальном уровне: MAC-таблица, доставка кадров, flooding</li>
+      <li class="st-goal">Объяснять назначение Open vSwitch и его архитектуру: <code>ovs-vswitchd</code>, OVSDB, OpenFlow</li>
+      <li class="st-goal">Создавать мосты и добавлять порты командами <code>ovs-vsctl add-br / add-port</code></li>
+      <li class="st-goal">Различать access и trunk, настраивать VLAN через <code>tag</code> и <code>trunks</code> (802.1Q)</li>
+      <li class="st-goal">Проверять коммутацию утилитами <code>ovs-vsctl</code>, <code>ovs-ofctl</code> и <code>ip</code></li>
+    </ul>
+
+    <!-- Схема + живое состояние -->
+    <div class="st-section-head">
+      <span class="st-section-num">A</span>
+      <h2>схема и состояние коммутатора</h2>
+      <span class="st-section-tag">обновляется в реальном времени</span>
+    </div>
+    <div class="ovs-grid">
+      <div class="lab-schema" style="margin-bottom:0;">
+        <pre class="mermaid">
+graph TD
+  PC1["ПК отдела продаж<br/>access · VLAN 10"]
+  PC2["ПК бухгалтерии<br/>access · VLAN 20"]
+  UP["Вышестоящий коммутатор<br/>trunk · VLAN 10,20"]
+  SW["Open vSwitch · br0<br/>eth1 · eth2 · eth3"]
+  PC1 -->|eth1 tag 10| SW
+  PC2 -->|eth2 tag 20| SW
+  SW -->|eth3 trunks 10,20| UP
+        </pre>
+        <pre id="schema-fallback" hidden>ПК продаж (VLAN 10) → eth1 ┐
+ПК бухгалтерии (VLAN 20) → eth2 ├─ Open vSwitch br0 ─ eth3 (trunk 10,20) → вышестоящий коммутатор</pre>
+      </div>
+      <section class="lab-panel" id="ovs-panel">
+        <div class="lp-head">
+          <span>состояние OVS</span>
+          <span class="ovs-status is-bad" id="ovs-bridge-status">// мост не создан</span>
+        </div>
+        <div class="lp-body" style="padding:0;">
+          <table class="st-port-table">
+            <thead><tr><th>интерфейс</th><th>назначение</th><th>по заданию</th><th>фактически</th><th></th></tr></thead>
+            <tbody id="ovs-ports"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Теория -->
+    <div class="st-section-head">
+      <span class="st-section-num">T</span>
+      <h2>теоретическая часть</h2>
+      <span class="st-section-tag">разверните блоки</span>
+    </div>
+    <div class="st-theory">
+      <details class="st-details">
+        <summary>Что вообще делает коммутатор: канальный уровень и MAC-таблица</summary>
+        <div class="st-details-body">
+          <p><strong>Коммутатор (switch)</strong> работает на канальном уровне (L2) и оперирует
+          кадрами Ethernet и <strong>MAC-адресами</strong>, не понимая IP. Он запоминает, за каким портом
+          находится какой MAC, и шлёт кадр адресату точечно (unicast). Если адрес ещё неизвестен —
+          рассылает кадр во все порты, кроме входного (<strong>flooding</strong>).</p>
+          <p>Маршрутизатор, в отличие от него, работает на L3 с IP-адресами и соединяет разные подсети.
+          В нашем стенде коммутация — внутри одной сети, но с разделением на VLAN.</p>
+        </div>
+      </details>
+      <details class="st-details">
+        <summary>Open vSwitch: что это и из чего состоит</summary>
+        <div class="st-details-body">
+          <p><strong>Open vSwitch (OVS)</strong> — production-grade виртуальный коммутатор для Linux:
+          именно он соединяет виртуальные машины и контейнеры в OpenStack, KVM, Kubernetes-кластерах.</p>
+          <ul>
+            <li><code>ovs-vswitchd</code> — демон, который реально коммутирует трафик;</li>
+            <li><strong>OVSDB</strong> — база конфигурации: мосты, порты, VLAN (её меняет <code>ovs-vsctl</code>);</li>
+            <li><strong>OpenFlow</strong> — протокол правил обработки потоков (ими управляет <code>ovs-ofctl</code>);</li>
+            <li><code>ovs-appctl</code> — внутренние команды демона.</li>
+          </ul>
+          <p>В стенде вы работаете с OVSDB: создаёте мост и порты, то есть собираете сам коммутатор.</p>
+        </div>
+      </details>
+      <details class="st-details">
+        <summary>VLAN, access и trunk: теги 802.1Q</summary>
+        <div class="st-details-body">
+          <p><strong>VLAN</strong> делит один физический коммутатор на независимые логические сети:
+          устройства из VLAN 10 не видят трафик VLAN 20, хотя подключены к одному «железу». Кадр
+          помечается тегом по стандарту <strong>802.1Q</strong>.</p>
+          <ul>
+            <li><strong>Access-порт</strong> подключает одно устройство (ПК, принтер) к одному VLAN.
+            Трафик внутри нетегированный, тег добавляется/снимается на коммутаторе. В OVS:
+            <code>ovs-vsctl set port eth1 tag=10</code>;</li>
+            <li><strong>Trunk-порт</strong> соединяет коммутаторы и несёт сразу несколько VLAN:
+            кадры идут с тегами, приёмник различает их по номеру. В OVS:
+            <code>ovs-vsctl set port eth3 trunks=10,20</code>.</li>
+          </ul>
+          <p>Типичная ошибка (она в bug-report стенда) — назначить аплинку <code>tag</code> вместо
+          <code>trunks</code>: тогда порт превращается в access и пропускает лишь один VLAN.</p>
+        </div>
+      </details>
+      <details class="st-details">
+        <summary>Утилиты Linux: ovs-vsctl, ovs-ofctl, ip</summary>
+        <div class="st-details-body">
+          <ul>
+            <li><code>ovs-vsctl</code> — конфигурация через OVSDB: мосты, порты, VLAN, <code>show</code>;</li>
+            <li><code>ovs-ofctl show br0</code> — таблица портов с точки зрения OpenFlow, состояние линков;</li>
+            <li><code>ip link show</code> / <code>ip -d link show</code> — интерфейсы ядра Linux,
+            тип и принадлежность мосту (<code>ovs_slave_of:br0</code>);</li>
+            <li><code>systemctl</code> — управление службой <code>openvswitch</code>.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- Справка команд -->
+    <div class="st-section-head">
+      <span class="st-section-num">C</span>
+      <h2>справочник команд стенда</h2>
+      <span class="st-section-tag">терминал · OVS</span>
+    </div>
+    <div class="st-cmd-wrap">
+      <table class="st-cmd-table">
+        <thead><tr><th>команда</th><th>что делает</th></tr></thead>
+        <tbody>
+          <tr><td>sudo apt-get install openvswitch-switch</td><td>установка Open vSwitch (демоны + утилиты)</td></tr>
+          <tr><td>sudo systemctl enable --now openvswitch</td><td>автозапуск и немедленный старт службы</td></tr>
+          <tr><td>sudo ovs-vsctl add-br br0</td><td>создать программный мост (коммутатор) br0</td></tr>
+          <tr><td>sudo ovs-vsctl add-port br0 eth1</td><td>подключить интерфейс eth1 к мосту (пока без VLAN)</td></tr>
+          <tr><td>sudo ovs-vsctl set port eth1 tag=10</td><td>сделать порт access в VLAN 10 (аналогично eth2 → 20)</td></tr>
+          <tr><td>sudo ovs-vsctl set port eth3 trunks=10,20</td><td>сделать порт trunk, разрешить VLAN 10 и 20</td></tr>
+          <tr><td>ovs-vsctl show</td><td>текущая конфигурация OVSDB: мост, порты, tag/trunks</td></tr>
+          <tr><td>sudo ovs-ofctl show br0</td><td>OpenFlow-таблица портов и состояние линков</td></tr>
+          <tr><td>ip -d link show</td><td>интерфейсы Linux и привязка к мосту</td></tr>
+          <tr><td>clear</td><td>очистить терминал</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- План -->
+    <div class="st-section-head">
+      <span class="st-section-num">B</span>
+      <h2>план работ</h2>
+      <span class="st-section-tag">6 шагов · отметки автоматические</span>
+    </div>
+    <div class="lab-progress"><i id="lab-progress-bar" style="width:0%"></i></div>
+    <ol class="lab-steps" id="lab-steps"></ol>
+
+    <div class="lab-layout">
+
+      <!-- Левая колонка: терминал + кнопки -->
+      <div>
+        <section class="lab-panel" style="margin-bottom:var(--st-gap);">
+          <div class="lp-head">
+            <span>терминал · Linux + OVS</span>
+            <span>help</span>
+          </div>
+          <div class="lab-terminal">
+            <div class="lt-screen" id="term-screen"></div>
+            <div class="lt-input-row">
+              <span class="lt-prompt">student@ovs:~$</span>
+              <input id="term-input" type="text" autocomplete="off" spellcheck="false" aria-label="команда терминала" placeholder="введите команду…">
+            </div>
+          </div>
+        </section>
+
+        <section class="lab-panel">
+          <div class="lp-head"><span>инструменты стенда</span></div>
+          <div class="lp-body" style="display:flex;flex-wrap:wrap;gap:.6rem;">
+            <button class="flat-btn ghost" id="btn-bug" type="button">загрузить bug-report</button>
+            <button class="flat-btn ghost" id="btn-reset" type="button">сбросить прогресс</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Правая колонка: проверки и сдача -->
+      <div>
+        <section class="lab-panel" style="margin-bottom:var(--st-gap);">
+          <div class="lp-head">
+            <span>CI · проверки</span>
+            <span id="lab-score" class="lab-score">0<small>/0</small></span>
+          </div>
+          <div class="lp-body">
+            <div class="lab-checks" id="lab-checks"></div>
+          </div>
+        </section>
+
+        <section class="lab-panel">
+          <div class="lp-head"><span>сдача работы</span></div>
+          <div class="lp-body">
+            <p style="font-size:.85rem;margin:0 0 .9rem;line-height:1.65;color:var(--st-muted);">
+              При сдаче формируется JSON с ФИО, группой, выгрузкой <code>ovs-vsctl show</code>,
+              журналом терминала, действий и результатами теста. Файл отправьте преподавателю.
+            </p>
+            <div class="lab-submit" style="border-top:none;padding-top:0;margin-top:0;">
+              <button class="flat-btn" id="lab-submit" type="button">сдать работу ↓</button>
+              <span id="lab-status" style="font-family:var(--st-mono);font-size:.7rem;">// автосохранение включено</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- Контрольный мини-тест -->
+    <div class="st-section-head">
+      <span class="st-section-num">Q</span>
+      <h2>контрольный мини-тест</h2>
+      <span class="st-section-tag">5 вопросов</span>
+    </div>
+    <section class="lab-panel st-quiz">
+      <div class="lp-head"><span>проверка теории · коммутация и OVS</span><span>самопроверка</span></div>
+      <div class="lp-body" id="lab-quiz"></div>
+    </section>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · виртуальные стенды</span>
+    <span>stand: switch-ovs · autosave: on</span>
+  </footer>
+</div>
+
+<script src="../assets/stands-ovs.js?v=20261026l"></script>
+<script src="../assets/stands.js?v=20261026l"></script>
+</body>
+</html>
