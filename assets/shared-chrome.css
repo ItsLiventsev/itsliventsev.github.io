@@ -1,0 +1,155 @@
+/* ==========================================================================
+   shared-chrome.css · единый хром всех страниц
+   Мягкий сайт и три стенда сохраняют визуальный язык (радиусы, палитра),
+   но геометрия, движение и состояния общих элементов здесь одни и те же.
+   Подключается ПОСЛЕ site.css / stands.css / ops.css / office.css.
+   Цвета берутся из переменных текущего scope.
+   ========================================================================== */
+
+/* 1. View Transitions: межстраничные переходы там, где API поддерживается.
+   Старые браузеры просто игнорируют правило и делают обычную навигацию. */
+@view-transition { navigation: auto; }
+.logo, .st-brand { view-transition-name: chrome-brand; }
+.theme-toggle { view-transition-name: chrome-theme; }
+h1 { view-transition-name: page-title; }
+
+/* 2. Якоря: единый отступ под липкую шапку вместо точечных scroll-mt-* */
+section[id],
+[id].scroll-anchor,
+.scroll-mt-24 { scroll-margin-top: calc(var(--header-h) + .5rem); }
+
+/* 3. skip-link: единые состояния на всех страницах */
+.skip-link {
+  transition: transform var(--dur-base) var(--ease-emphasized),
+              opacity var(--dur-base) var(--ease-standard);
+}
+.skip-link:active { transform: translate(-50%, 0) scale(.98); }
+
+/* 4. noscript-bar: та же геометрия в обоих scope */
+.noscript-bar {
+  position: relative;
+  z-index: 100;
+  max-width: var(--page-max);
+  margin: 0 auto var(--st-sp-4, 1rem);
+  padding: .7rem 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+}
+
+/* 5. theme-toggle: одинаковый размер и поведение, радиус — по языку scope */
+.theme-toggle {
+  width: 2.15rem;
+  height: 2.15rem;
+  flex: 0 0 auto;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard),
+              transform var(--dur-fast) var(--ease-standard);
+}
+.theme-toggle:active { transform: scale(.96); }
+.theme-toggle:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
+
+/* 6. Футеры: единая геометрия и ритм, цвета остаются scope-овыми */
+.site-footer,
+.st-footer {
+  min-height: 3.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+  flex-wrap: wrap;
+}
+.site-footer { gap: .9rem; }
+.st-footer { gap: var(--st-sp-2, .5rem); }
+/* Пустые слоты футера не занимают место и не ломают центровку */
+.site-footer > *:empty,
+.st-footer > *:empty { display: none; }
+.footer-updated,
+.st-footer-updated { white-space: nowrap; }
+
+/* 7. Хлебные крошки: мягкий scope получает тот же резерв высоты */
+.breadcrumbs, .st-crumbs { min-height: 1.75rem; }
+
+/* 7.1 Резерв высоты под JS-контент хабов: блоки не сдвигают страницу при рендере */
+#sla-grid, #roadmap { min-height: 7rem; }
+#board { min-height: 14rem; }
+#feed { min-height: 5rem; }
+
+/* 8. Skeleton: резерв места под JS-контент, пульсация только через opacity */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  min-height: 6rem;
+  border-radius: var(--radius-xs, 4px);
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  opacity: .35;
+  animation: skeleton-pulse var(--dur-slower) var(--ease-standard) infinite;
+}
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: .22; }
+  50% { opacity: .6; }
+}
+
+/* 9. Табы секции «стек» (прогрессивное улучшение главной, включается из JS) */
+.stack-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 1.25rem;
+}
+.stack-tab {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+  padding: .45rem .9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard),
+              transform var(--dur-fast) var(--ease-standard);
+}
+.stack-tab:hover { color: var(--text); border-color: var(--border-strong); }
+.stack-tab:active { transform: scale(.97); }
+.stack-tab[aria-selected="true"] {
+  color: var(--bg);
+  background: var(--text);
+  border-color: var(--text);
+}
+.stack-panel { animation: stack-panel-in var(--dur-slow) var(--ease-emphasized) both; }
+@keyframes stack-panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 10. Уведомления-тосты: вход/выход через transform+opacity, шапку не перекрывают */
+.toast {
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: transform var(--dur-fast) var(--ease-emphasized),
+              opacity var(--dur-fast) var(--ease-standard);
+}
+.toast.is-show { transform: translateY(0); opacity: 1; }
+.toast.is-hide {
+  transform: translateY(-4px);
+  opacity: 0;
+  transition: transform var(--dur-fast) var(--ease-exit),
+              opacity var(--dur-fast) var(--ease-exit);
+}
+
+/* 11. Общий reduced-motion хрома: только opacity ≤100ms, без сдвигов */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+  .skeleton::after { animation: none; opacity: .3; }
+  .stack-panel, .toast { animation: none; transform: none; }
+  .skip-link, .theme-toggle, .stack-tab { transition: opacity var(--dur-fast) var(--ease-standard); }
+}
