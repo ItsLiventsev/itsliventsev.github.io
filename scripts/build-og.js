@@ -32,8 +32,10 @@ const FAINT = '#5f6b79';
 
 /* Плоский OG в языке стендов: тёмный фон, 1px сетка, моно-глифы. */
 function flatOg(o) {
+  const accent = o.accent || ACCENT;
+  const accent2 = o.accent2 || ACCENT_2;
   const glyphs = o.glyphs.map((g) =>
-    `<text x="${g.x}" y="${g.y}" font-family="'JetBrains Mono',monospace" font-size="${g.s}" font-weight="700" fill="${g.c || ACCENT}" opacity="${g.o}">${g.t}</text>`
+    `<text x="${g.x}" y="${g.y}" font-family="'JetBrains Mono',monospace" font-size="${g.s}" font-weight="700" fill="${g.c || accent}" opacity="${g.o}">${g.t}</text>`
   ).join('\n  ');
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
@@ -44,18 +46,36 @@ function flatOg(o) {
   <rect width="1200" height="630" fill="${BG}"/>
   <rect width="1200" height="630" fill="url(#grid)"/>
   ${glyphs}
-  <rect x="96" y="176" width="132" height="132" rx="0" fill="none" stroke="${ACCENT}" stroke-width="2"/>
-  <path d="M128 218l22 24-22 24" fill="none" stroke="${ACCENT}" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="96" y="176" width="132" height="132" rx="0" fill="none" stroke="${accent}" stroke-width="2"/>
+  <path d="M128 218l22 24-22 24" fill="none" stroke="${accent}" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
   <line x1="162" y1="266" x2="202" y2="266" stroke="${INK}" stroke-width="8" stroke-linecap="square"/>
   <text x="262" y="248" font-family="Inter,system-ui,sans-serif" font-size="86" font-weight="800" fill="${INK}">${o.title}</text>
-  <text x="264" y="296" font-family="'JetBrains Mono',monospace" font-size="27" font-weight="500" fill="${ACCENT_2}">${o.kicker}</text>
+  <text x="264" y="296" font-family="'JetBrains Mono',monospace" font-size="27" font-weight="500" fill="${accent2}">${o.kicker}</text>
   <rect x="96" y="430" width="1008" height="2" fill="${LINE}"/>
   <text x="96" y="492" font-family="'JetBrains Mono',monospace" font-size="26" font-weight="500" fill="${MUTED}">${o.tags}</text>
   <text x="96" y="536" font-family="'JetBrains Mono',monospace" font-size="21" font-weight="400" fill="${FAINT}">itsliventsev.github.io${o.url}</text>
 </svg>`;
 }
 
+const AMBER = '#fbbf24';
+const AMBER_2 = '#fcd34d';
+
 const variants = [
+  {
+    svg: 'og-office.svg', png: 'og-office.png',
+    markup: flatOg({
+      title: 'ОфисПолис',
+      kicker: '// бюро оператора ЭВМ · документы, таблицы, презентации',
+      tags: 'Writer · Calc · Impress · Base · OCR · мониторинг · сайт · 10 работ',
+      url: '/stands/office',
+      glyphs: [
+        { t: '@', x: 880, y: 340, s: 420, o: 0.10, c: AMBER },
+        { t: '#', x: 640, y: 560, s: 300, o: 0.07, c: AMBER },
+        { t: '¶', x: 1060, y: 150, s: 170, o: 0.10, c: AMBER_2 },
+      ],
+      accent: AMBER, accent2: AMBER_2,
+    }),
+  },
   {
     svg: 'og-stands.svg', png: 'og-stands.png',
     markup: flatOg({

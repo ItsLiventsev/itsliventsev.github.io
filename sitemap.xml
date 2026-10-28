@@ -183,6 +183,61 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/stands/office/index.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-animation.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-charts.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-db.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-docs.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-draw.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-monitor.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-scan.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-sheets.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-slides.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/stands/office/office-web.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/stands/ops/index.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
