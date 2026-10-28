@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261028w">
-<link rel="stylesheet" href="../assets/stands.css?v=20261028w">
+<link rel="stylesheet" href="../assets/site.css?v=20261028y">
+<link rel="stylesheet" href="../assets/stands.css?v=20261028y">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/switch-ovs.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -162,10 +162,12 @@
           <span class="ovs-status is-bad" id="ovs-bridge-status">// мост не создан</span>
         </div>
         <div class="lp-body lp-body--flush">
-          <table class="st-port-table">
-            <thead><tr><th>интерфейс</th><th>назначение</th><th>по заданию</th><th>фактически</th><th></th></tr></thead>
-            <tbody id="ovs-ports"></tbody>
-          </table>
+          <div class="st-table-scroll">
+            <table class="st-port-table">
+              <thead><tr><th>интерфейс</th><th>назначение</th><th>по заданию</th><th>фактически</th><th></th></tr></thead>
+              <tbody id="ovs-ports"></tbody>
+            </table>
+          </div>
         </div>
       </section>
     </div>
@@ -264,7 +266,7 @@
       <h2>план работ</h2>
       <span class="st-section-tag">6 шагов · отметки автоматические</span>
     </div>
-    <div class="lab-progress"><i id="lab-progress-bar" style="width:0%"></i></div>
+    <div class="lab-progress"><i id="lab-progress-bar"></i></div>
     <ol class="lab-steps" id="lab-steps"></ol>
 
     <div class="lab-layout">
@@ -317,7 +319,7 @@
               установки, полный путь до готовой VLAN-конфигурации, bug report и пайпы.
             </p>
             <button class="flat-btn" id="btn-autotests" type="button">прогнать автотесты →</button>
-            <div id="lab-autotests" style="margin-top:var(--st-sp-4);"></div>
+            <div id="lab-autotests" class="st-mt-4"></div>
           </div>
         </section>
 
@@ -386,11 +388,11 @@
               <button class="flat-btn" id="rv-code-go" type="button">принять коды</button>
               <button class="flat-btn ghost" id="rv-repo" type="button">подтянуть из репозитория ↻</button>
             </div>
-            <p class="exchange-msg" id="rv-code-msg" role="status" style="margin-top:var(--st-sp-2);"></p>
+            <p class="exchange-msg st-mt-2" id="rv-code-msg" role="status"></p>
           </div>
         </div>
         <div class="rv-pool" id="rv-pool" data-stand="switch-ovs"></div>
-        <div class="st-section-head st-section-head--compact" style="margin-top:var(--st-sp-5);">
+        <div class="st-section-head st-section-head--compact">
           <h2>оценки моей работы</h2>
           <span class="st-section-tag">взаимная и экспертная</span>
         </div>
@@ -468,12 +470,12 @@
     </div>
   </div>
 
-<script src="../assets/mascots.js?v=20261028w"></script>
-<script src="../assets/os-engine.js?v=20261028w"></script>
-<script src="../assets/fgos-skills.js?v=20261028w"></script>
-<script src="../assets/league.js?v=20261028w"></script>
-<script src="../assets/stands-ovs.js?v=20261028w"></script>
-<script src="../assets/stands.js?v=20261028w"></script>
+<script src="../assets/mascots.js?v=20261028y"></script>
+<script src="../assets/os-engine.js?v=20261028y"></script>
+<script src="../assets/fgos-skills.js?v=20261028y"></script>
+<script src="../assets/league.js?v=20261028y"></script>
+<script src="../assets/stands-ovs.js?v=20261028y"></script>
+<script src="../assets/stands.js?v=20261028y"></script>
 <script>document.addEventListener("DOMContentLoaded",function(){var el=document.getElementById("brief-mascot");if(el&&window.MASCOTS){el.innerHTML=window.MASCOTS.svg(el.dataset.mascot,{size:72});}});</script>
 </body>
 </html>
