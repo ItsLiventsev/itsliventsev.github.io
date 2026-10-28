@@ -1,0 +1,26 @@
+/* ==========================================================================
+   OFFICE · уточнения для вселенной «ОфисПолис»
+   Компоненты (lab-panel, cmd-duo, task-list, q-item, quest-card, sla-grid)
+   переиспользуются из stands.css/ops.css; здесь только scope-фиксы и
+   переносы текста по аналогии с ops-scope. Акцент задаётся data-accent=amber.
+   ========================================================================== */
+
+.flat-scope.office-scope { --st-accent: #b45309; --st-accent-2: #d97706; }
+html[data-theme="dark"] .flat-scope.office-scope {
+  --st-accent: #fbbf24;
+  --st-accent-2: #fcd34d;
+  --st-accent-soft: rgba(251, 191, 36, .1);
+  --st-btn-bg: #fbbf24;
+  --st-btn-text: #2a1c05;
+}
+
+.office-scope .lp-body > .admin-hint:first-child { margin-top: 0; }
+.office-scope .st-section-head { margin-top: var(--st-sp-7); }
+.office-scope .mc-bubble { min-width: 0; }
+.office-scope .mc-bubble, .office-scope .mc-text,
+.office-scope .sla-stat { overflow-wrap: break-word; }
+.office-scope .lab-codeblock code, .office-scope .cmd-row code { overflow-wrap: anywhere; }
+.office-scope h1, .office-scope h2, .office-scope h3 { overflow-wrap: break-word; }
+
+/* Шпаргалка приложений: бейджи сред */
+.office-scope .os-tag.linux { text-transform: none; letter-spacing: var(--ls-fine); }

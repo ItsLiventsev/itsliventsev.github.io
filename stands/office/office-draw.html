@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>Построение простых схем и чертежей · ОфисПолис · itsliventsev</title>
+<meta name="description" content="Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/site.css?v=20261028ab">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261028ab">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261028ab">
+<link rel="stylesheet" href="../../assets/office.css?v=20261028ab">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/office/office-draw.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Построение простых схем и чертежей · ОфисПолис · itsliventsev">
+  <meta property="og:description" content="Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/office/office-draw.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-office.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Построение простых схем и чертежей · ОфисПолис · itsliventsev">
+  <meta name="twitter:description" content="Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-office.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Построение простых схем и чертежей · ОфисПолис","description":"Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.","url":"https://itsliventsev.github.io/stands/office/office-draw.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/office/office-draw.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-office.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"учебные вселенные","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Построение простых схем и чертежей · ОфисПолис","item":"https://itsliventsev.github.io/stands/office/office-draw.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope office-scope" data-accent="amber">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: практическая работа бюро работает только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">ОфисПолис · бюро</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="../index.html">вселенные</a>
+      <a href="index.html">бюро</a>
+      <a href="../teams.html">команды</a>
+      <a href="../glossary.html">словарь</a>
+      <a href="../../projects.html">проекты</a>
+
+      <a class="st-nav-admin" href="../../admin.html" rel="nofollow">преподавателю</a>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="переключить тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">вселенные</a><span aria-hidden="true">/</span>
+      <a href="index.html">ОфисПолис</a><span aria-hidden="true">/</span>
+      <span aria-current="page">Построение простых схем и чертежей</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="index.html">к бюро</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">07</span>
+      <div>
+        <p class="ops-kicker">спринт 4 · Графика и базы</p>
+        <h1>Построение простых схем и чертежей</h1>
+        <p class="st-hero-lead">Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.</p>
+        <div class="st-hero-meta">
+          <span>формат: <strong>практическая работа оператора ЭВМ</strong></span>
+          <span>примерно <strong>4 ч</strong></span>
+          <span>начисление: <strong>80 неткоинов</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="office-root"></div>
+  </main>
+  <footer class="st-footer"><span>// © 2026 itsliventsev · ОфисПолис</span><span>lab: office-draw · autosave: on · storage: localStorage (office-*)</span>
+    <span class="st-footer-updated" data-footer-updated></span>
+  </footer>
+</div>
+
+<script src="../../assets/mascots.js?v=20261028ab"></script>
+<script src="../../assets/office-engine.js?v=20261028ab"></script>
+<script src="../../assets/dom-kit.js?v=20261028ab"></script>
+<script src="../../assets/stands.js?v=20261028ab"></script>
+<script type="application/json" id="office-data">{"id":"office-draw","sprint":4,"hours":"4 ч","coins":"80","mascot":"crab","who":"краб Гоша — рисует схемы, по которым реально подключают кабели","title":"Построение простых схем и чертежей","lead":"Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.","story":"Монтажники пришли с картинкой из презентации, где коммутаторы нарисованы квадратиками на глаз. Гоша учит чертить по сетке и шаблонам: у каждого элемента — имя и порт, у линий — привязка к точкам, у схемы — легенда и штамп. Тогда по чертежу можно работать, а не угадывать.","theory":[{"h":"Сетка, привязки и стандартные фигуры","p":"Чертеж ведут по сетке с включённой привязкой; линии соединяют точки фигур, а не тащат рядом. Стандартные элементы (ромб решения, параллелограмм данных, прямоугольник процесса) не заменяют самодельными значками — схему должны прочитать без пояснений."},{"h":"Блок-схемы и сетевые топологии","p":"Блок-схема алгоритма читается сверху вниз: начало/конец, процесс, решение с ветками да/нет. Сетевая схема показывает устройства, порты, адреса и среду (медь/оптика/Wi-Fi); каждый кабель подписан с двух концов.","note":"Подпись порта на обоих концах патч-корда экономит часы диагностики."},{"h":"Легенда, штамп и экспорт","p":"Легенда расшифровывает условные обозначения и цвета, штамп содержит название, версию, автора и дату. На печать экспортируют PDF в масштабе 1:1, для веб-правок — SVG, редактируемый исходник хранят рядом.","code":"// экспорт из CLI (опционально):\n# libreoffice --headless --convert-to pdf scheme.odg"}],"reference":[{"lo":"LibreOffice Draw","ms":"Microsoft Visio","what":"векторные схемы и чертежи"},{"lo":"Привязка к сетке (Shift+перетаскивание)","ms":"Привязать к сетке","what":"ровные соединения"},{"lo":"Панель · Блок-схемы","ms":"Фигуры · Блок-схема","what":"стандартные нотации"},{"lo":"Вставка · Поля · Штамп","ms":"Вставка · Надпись (title block)","what":"версия и авторство"},{"lo":"Экспорт · SVG / PDF","ms":"Сохранить как · SVG/PDF","what":"веб и печать"},{"lo":"Слои (Вид · Слои)","ms":"Разработчик · Слои","what":"раздельные элементы и подписи"}],"tasks":[{"id":"t1","text":"Постройте блок-схему алгоритма из 7–9 элементов с решениями и ветками"},{"id":"t2","text":"Начертите сетевую схему: два коммутатора, маршрутизатор, три ПК, точки Wi-Fi"},{"id":"t3","text":"Подпишите порты и адреса на устройствах, промаркируйте каждый кабель с двух концов"},{"id":"t4","text":"Добавьте легенду обозначений и основной штамп с версией и датой"},{"id":"t5","text":"Разнесите элементы и подписи по слоям, проверьте привязки и отсутствие висячих линий"},{"id":"t6","text":"Экспортируйте PDF для печати 1:1 и SVG для веб-страницы"}],"quiz":[{"q":"Зачем на схеме включают привязку к сетке?","options":["Это замедляет работу","Элементы и соединения выравниваются, схему можно читать","Для удаления линий","Сетка видна на печати"],"answer":1,"explain":"Без привязки линии не соединены с фигурами, и монтаж по такому чертежу превращается в догадки."},{"q":"Что обязательно подписывают на сетевом кабеле?","options":["Только его цвет","Порты на обоих концах и при необходимости среду","Любимое число","Ничего, кабели не различают"],"answer":1,"explain":"Двусторонняя маркировка портов — основа быстрой диагностики и аккуратного кросса."},{"q":"Ромб в стандартной блок-схеме означает…","options":["Начало","Решение с ветвями да/нет","Базу данных","Принтер"],"answer":1,"explain":"Ромб — условный переход; из него выходят ветви, подписанные да и нет."},{"q":"Зачем нужны легенда и штамп?","options":["Для увеличения объёма","Чтобы обозначения читались однозначно, а версия и автор были известны","Это украшение","Они отменяют экспорт"],"answer":1,"explain":"Легенда — словарь схемы, штамп — её паспорт: название, ревизия, дата, ответственный."}],"reflection":["Какая схема в кабинете была бы полезнее всего и что на ней должно быть?","Какие ошибки самодельных рисунков мешают монтажу?","Почему редактируемый исходник хранят вместе с PDF?"],"sprintTitle":"Графика и базы"}</script>
+<script src="../../assets/office-kit.js?v=20261028ab"></script>
+</body>
+</html>
