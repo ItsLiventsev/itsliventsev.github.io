@@ -24,7 +24,7 @@ if (!global.DOMKIT || typeof global.DOMKIT.esc !== 'function') throw new Error('
 const esc = global.DOMKIT.esc;
 console.log('esc check:', esc('<a href="x">&\'"') === '&lt;a href=&quot;x&quot;&gt;&amp;&#39;&quot;');
 
-for (const f of ['mascots.js','league.js','fgos-skills.js','stands.js','ops-engine.js','ops-kit.js','ops-hub.js','office-engine.js','office-kit.js','office-hub.js','lab-kit.js','league-page.js','submissions.js','shared-chrome.js']) {
+for (const f of ['mascots.js','league.js','fgos-skills.js','stands.js','ops-engine.js','ops-kit.js','ops-hub.js','office-engine.js','office-kit.js','office-hub.js','lab-kit.js','league-page.js','submissions.js','shared-chrome.js','flow.js']) {
   delete require.cache[require.resolve(path.join(ROOT, 'assets', f))];
   require(path.join(ROOT, 'assets', f));
   console.log('load OK:', f);
