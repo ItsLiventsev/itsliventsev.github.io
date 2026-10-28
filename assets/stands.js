@@ -387,7 +387,7 @@
             '<small>' + esc(s.student.group || '—') + (s.student.name ? ' · ' + esc(s.student.name) : '') + '</small></div>' +
           '<span class="rv-score-pill ' + ((s.result.score || 0) >= 85 ? 'is-ok' : '') + '">CI ' + (s.result.score != null ? s.result.score + '%' : '—') + '</span></div>' +
           (reviewed
-            ? '<p class="rv-empty" style="margin:0;">// вы уже проверили эту работу</p>'
+            ? '<p class="rv-empty">// вы уже проверили эту работу</p>'
             : '<button class="flat-btn ghost rv-open" type="button" data-sub="' + esc(s.id) + '">оценить работу</button>') +
           '<div class="rv-form-holder"></div></div>';
       }).join('');
@@ -406,7 +406,7 @@
                 }).join('') + '</div></div>';
             }).join('') + '</div>' +
             '<textarea class="flat-input rv-comment" placeholder="Доброжелательный конструктивный комментарий: что хорошо, что можно улучшить"></textarea>' +
-            '<div style="display:flex;gap:.6rem;flex-wrap:wrap;">' +
+            '<div class="flat-row">' +
             '<button class="flat-btn rv-save" type="button">отправить оценку</button>' +
             '<button class="flat-btn ghost rv-cancel" type="button">отмена</button></div></div>';
 
@@ -633,9 +633,9 @@
         '<div class="id-level"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
           (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : '') + '</span>' +
           '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
-          '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;">' +
-          '<a class="flat-btn ghost" href="league.html" style="text-decoration:none;">моя лига и достижения →</a>' +
-          '<a class="flat-btn ghost" href="teams.html" style="text-decoration:none;">трайн и команды</a>' +
+          '<div class="flat-row flat-row--spaced">' +
+          '<a class="flat-btn ghost" href="league.html">моя лига и достижения →</a>' +
+          '<a class="flat-btn ghost" href="teams.html">трайн и команды</a>' +
           '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div>';
 
       (function renderQuests() {
@@ -652,14 +652,14 @@
             '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
             '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
             '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span>' +
-            '<span class="flat-badge" style="margin-top:.4rem;">' + esc(q.format) + '</span></div></a>';
+            '<span class="flat-badge">' + esc(q.format) + '</span></div></a>';
         });
         var overall = Math.round(doneCount / QUESTS.length * 100);
         var head = '<div class="roadmap-overview">' +
-          '<div><strong>роадмап практики ПМ.01</strong>' +
-          '<p class="admin-hint" style="margin:.3rem 0 0;">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
+          '<div><strong>роадмап практики</strong>' +
+          '<p class="admin-hint">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
           '<div class="roadmap-meter"><span class="xp-meta">' + doneCount + ' из ' + QUESTS.length + ' работ · ' + overall + '%</span>' +
-          '<div class="xp-bar" style="margin-top:.4rem;"><i style="width:' + overall + '%"></i></div></div></div>';
+          '<div class="xp-bar"><i style="width:' + overall + '%"></i></div></div></div>';
 
         var groups = '';
         Object.keys(SPRINT_STORY).map(Number).sort().forEach(function (sp) {

@@ -122,7 +122,7 @@
     function tasksHtml() {
       return '<section class="lab-panel" id="lk-tasks"><div class="lp-head"><span>бэклог задач лабораторной</span>' +
         '<span class="flat-badge" id="lk-task-chip"></span></div><div class="lp-body">' +
-        '<p class="admin-hint" style="margin-top:0;">Отмечайте задачу только после того, как реально выполнили её на оборудовании, в Packet Tracer или на виртуальной машине. Честность прогресса — главное правило практики.</p>' +
+        '<p class="admin-hint">Отмечайте задачу только после того, как реально выполнили её на оборудовании, в Packet Tracer или на виртуальной машине. Честность прогресса — главное правило практики.</p>' +
         '<div class="task-list">' +
         cfg.tasks.map(function (t, i) {
           var on = !!state.tasks[t.id];
@@ -140,7 +140,7 @@
       if (!cfg.situational) return '';
       return '<section class="lab-panel" id="lk-situational"><div class="lp-head"><span>ситуационная задача · кейс</span>' +
         '<span class="flat-badge is-soon">мозговой штурм</span></div><div class="lp-body">' +
-        '<p style="margin-top:0;">' + cfg.situational.text + '</p>' +
+        '<p>' + cfg.situational.text + '</p>' +
         (cfg.situational.deliverables ? '<ul class="submit-channels">' +
           cfg.situational.deliverables.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') +
         '<textarea class="flat-input lab-solution" id="lk-solution" rows="4" placeholder="Зафиксируйте решение: команды, схему, выводы — это часть вашей сдачи">' + esc(state.solution || '') + '</textarea>' +
@@ -209,7 +209,7 @@
       if (!cfg.reflection || !cfg.reflection.length) return '';
       return '<section class="lab-panel" id="lk-reflection"><div class="lp-head"><span>рефлексия · ван-он-ван с собой</span>' +
         '<span class="flat-badge is-run">2 минуты</span></div><div class="lp-body">' +
-        '<p class="admin-hint" style="margin-top:0;">Короткая рефлексия после практики закрепляет результат лучше повторного чтения. Ответы видны только вам.</p>' +
+        '<p class="admin-hint">Короткая рефлексия после практики закрепляет результат лучше повторного чтения. Ответы видны только вам.</p>' +
         cfg.reflection.map(function (q, i) {
           return '<div class="reflect-item"><label for="lk-rf' + i + '">' + esc(q) + '</label>' +
             '<textarea class="flat-input" id="lk-rf' + i + '" rows="2" data-rf="' + i + '">' + esc(state.reflection[i] || '') + '</textarea></div>';
@@ -221,8 +221,8 @@
 
     /* ----------------------------- Сдача ----------------------------- */
     function finishHtml() {
-      return '<section class="lab-panel lab-finish" id="lk-finish"><div class="lp-body" style="text-align:center;">' +
-        '<p class="admin-hint" style="margin-top:0;">Сдача засчитается, когда отмечены все задачи и пройден тест. Результат уйдёт в вашу историю и повлияет на уровень, неткоины и матрицу навыков.</p>' +
+      return '<section class="lab-panel lab-finish" id="lk-finish"><div class="lp-body finish-body">' +
+        '<p class="admin-hint">Сдача засчитается, когда отмечены все задачи и пройден тест. Результат уйдёт в вашу историю и повлияет на уровень, неткоины и матрицу навыков.</p>' +
         '<button class="flat-btn" id="lk-finish-btn" type="button">сдать лабораторную ↓</button>' +
         '<p class="lab-finish-msg" id="lk-finish-msg" role="status"></p>' +
         '</div></section>';
