@@ -52,17 +52,17 @@
 
     $('lg-level-card').innerHTML =
       '<div class="lg-level-top">' +
-        '<div style="display:flex;gap:.9rem;align-items:center;">' + mascot(profile.mascotId, 56) +
-          '<div><p class="flat-kicker" style="margin:0;">текущий уровень · ' + esc(handle.text) + '</p>' +
+        '<div class="lg-id-row">' + mascot(profile.mascotId, 56) +
+          '<div><p class="flat-kicker">текущий уровень · ' + esc(handle.text) + '</p>' +
           '<p class="lg-level-title">L' + lv.level + ' · ' + esc(lv.title) + '</p></div></div>' +
-        '<div style="display:flex;gap:.6rem;">' +
+        '<div class="lg-coins-row">' +
           '<div class="lg-coins"><span class="lg-coins-num">' + t.coins + '</span><span class="lg-coins-cap">неткоинов</span></div>' +
-          '<div class="lg-coins"><span class="lg-coins-num" style="color:var(--st-warn);">' + LEAGUE.prpBalance(profile.id) +
+          '<div class="lg-coins"><span class="lg-coins-num">' + LEAGUE.prpBalance(profile.id) +
             '</span><span class="lg-coins-cap">PRP</span></div>' +
         '</div>' +
       '</div>' +
       bar(lv.progress, lv.next ? 'до L' + (lv.level + 1) + ' «' + lv.next + '» · ' + lv.into + '/' + lv.span + ' XP' : 'максимальный уровень') +
-      '<p class="admin-hint" style="margin-bottom:0;">всего опыта: <strong>' + t.xp + ' XP</strong>' +
+      '<p class="admin-hint">всего опыта: <strong>' + t.xp + ' XP</strong>' +
       (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') +
       ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег</p>';
   }
@@ -78,7 +78,7 @@
         '<span class="ach-icon">' + a.icon + '</span>' +
         '<div><h4>' + esc(a.title) + '</h4><p>' + esc(a.desc) + '</p></div></div>';
     }).join('') +
-    '<p class="admin-hint" style="grid-column:1/-1;margin:.4rem 0 0;">открыто ' + unlocked + ' из ' + list.length + ' — бейджи считаются только из фактических действий, нарисовать их нельзя</p>';
+    '<p class="admin-hint">открыто ' + unlocked + ' из ' + list.length + ' — бейджи считаются только из фактических действий, нарисовать их нельзя</p>';
   }
 
   /* ----------------------------- 02 · лестница ----------------------------- */
@@ -117,7 +117,7 @@
       return '<tr><td class="mono">' + fmt(e.at) + '</td><td>' + esc(awardNames[e.type] || e.note || e.type) + '</td>' +
         '<td class="mono">' + esc(e.standId ? standName(e.standId) : '—') + '</td>' +
         '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">+' + (e.coins || 0) + ' ◈</td></tr>';
-    }).join('') : '<tr><td colspan="5" class="admin-hint" style="padding:1rem;">// событий пока нет — выполните лабораторную на стенде</td></tr>';
+    }).join('') : '<tr><td colspan="5" class="admin-hint table-empty">// событий пока нет — выполните лабораторную на стенде</td></tr>';
   }
 
   /* ----------------------------- 04 · матрица ФГОС ----------------------------- */
@@ -126,7 +126,7 @@
     if (!box) return;
     var rows = LEAGUE.skillsMatrix(profile.id);
     if (!rows.length) {
-      box.innerHTML = '<p class="admin-hint" style="margin:0;">Модуль навыков не загружен.</p>';
+      box.innerHTML = '<p class="admin-hint">Модуль навыков не загружен.</p>';
       return;
     }
     var anySubmission = LEAGUE.submissions().some(function (s) { return s.student.id === profile.id; });
@@ -151,7 +151,7 @@
     var r = LEAGUE.reviewerRating(profile.id);
     if (!r) {
       $('lg-reviewer').innerHTML =
-        '<p class="admin-hint" style="margin:0;">Вы ещё не проверяли чужие работы. Откройте стенд, выберите работу однокурсника ' +
+        '<p class="admin-hint">Вы ещё не проверяли чужие работы. Откройте стенд, выберите работу однокурсника ' +
         'в блоке взаимной оценки и оставьте развёрнутое ревью — здесь появятся четыре оси рейтинга.</p>';
       return;
     }
@@ -162,7 +162,7 @@
       ['punctuality', 'пунктуальность', 'скорость проверки после сдачи']
     ];
     $('lg-reviewer').innerHTML =
-      '<div class="lg-rv-head"><div><p class="flat-kicker" style="margin:0;">интегральный рейтинг</p>' +
+      '<div class="lg-rv-head"><div><p class="flat-kicker">интегральный рейтинг</p>' +
       '<p class="lg-rv-overall">' + r.overall + '<span class="lg-rv-of">/100</span></p></div>' +
       '<span class="flat-badge is-ready">проверок: ' + r.count + '</span></div>' +
       axes.map(function (a) { return bar(r[a[0]], a[1] + ' — ' + a[2]); }).join('');
@@ -182,7 +182,7 @@
         '<td class="mono">' + auto + '</td>' +
         '<td class="mono">' + revs.length + '</td>' +
         '<td><button class="flat-btn ghost lg-copy" type="button" data-code="' + esc(code) + '">код ↧</button></td></tr>';
-    }).join('') : '<tr><td colspan="6" class="admin-hint" style="padding:1rem;">// работ пока нет — откройте стенд из каталога</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="admin-hint table-empty">// работ пока нет — откройте стенд из каталога</td></tr>';
 
     document.querySelectorAll('.lg-copy').forEach(function (btn) {
       btn.addEventListener('click', function () {
