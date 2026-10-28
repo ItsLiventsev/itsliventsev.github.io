@@ -16,7 +16,7 @@
   function bar(percent, label) {
     var p = Math.max(0, Math.min(100, Math.round(percent)));
     return '<div class="lg-bar-row"><span class="lg-bar-label">' + esc(label || '') + '</span>' +
-      '<span class="lg-bar"><span class="lg-bar-fill" style="width:' + p + '%"></span></span>' +
+      '<span class="lg-bar"><span class="lg-bar-fill" style="--p:' + (p / 100) + '"></span></span>' +
       '<span class="lg-bar-val">' + p + '%</span></div>';
   }
   function standName(id) { return id === 'dhcp-alt' ? 'DHCP · ALT' : id === 'switch-ovs' ? 'Open vSwitch' : id; }
@@ -134,7 +134,7 @@
           '<span class="skill-task">' + esc(task) + '</span>' +
           '<span class="skill-bubble">' + esc(r.code) + '</span>' +
         '</div>' +
-        '<div class="lg-bar-row"><span class="lg-bar"><span class="lg-bar-fill" style="width:' + pct + '%"></span></span>' +
+        '<div class="lg-bar-row"><span class="lg-bar"><span class="lg-bar-fill" style="--p:' + (pct / 100) + '"></span></span>' +
         '<span class="lg-bar-val">' + pct + '%</span></div>' +
         '<div class="skill-meta"><span>стенды: ' + r.stands.map(standName).join(' + ') + '</span>' +
         '<span>' + (pct === 100 ? 'освоено полностью' : pct > 0 ? 'в работе' : 'ожидает практики') + '</span></div>' +

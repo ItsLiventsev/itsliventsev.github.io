@@ -70,7 +70,7 @@
       var done = cfg.tasks.filter(function (t) { return state.tasks[t.id]; }).length;
       var pct = Math.round(done / cfg.tasks.length * 100);
       var bar = $('ops-progress-bar'), label = $('ops-progress-label');
-      if (bar) bar.style.width = pct + '%';
+      if (bar) bar.style.setProperty('--p', pct / 100);
       if (label) label.textContent = done + ' из ' + cfg.tasks.length + ' задач · ' + pct + '%';
       return { done: done, total: cfg.tasks.length, pct: pct };
     }
@@ -124,7 +124,7 @@
         '<span class="ticket-state ' + stateCls + '">' + stateLabel + '</span></div>' +
         '<p class="ticket-text">' + esc(t.text) + '</p>' +
         (t.deliverables ? '<ul class="submit-channels">' + t.deliverables.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') +
-        '<div class="sla-meter"><span class="sla-num">SLA-окно: ' + esc(OPS.SLA_MIN[t.priority]) + ' мин</span><div class="xp-bar"><i id="ops-sla-bar" style="width:0"></i></div><span class="sla-num" id="ops-sla-state">не взят</span></div>' +
+        '<div class="sla-meter"><span class="sla-num">SLA-окно: ' + esc(OPS.SLA_MIN[t.priority]) + ' мин</span><div class="xp-bar"><i id="ops-sla-bar" style="--p:0"></i></div><span class="sla-num" id="ops-sla-state">не взят</span></div>' +
         rollback +
         '<div class="ticket-actions">' +
         '<button class="flat-btn" type="button" id="ops-ticket-ack">взять в работу</button>' +
@@ -230,7 +230,7 @@
         if (!state.ticketId) return;
         var t = OPS.getTicket(state.ticketId);
         if (!t) return;
-        if (t.ackedAt) { ack.disabled = true; res.disabled = !!t.resolvedAt; slaBar.style.width = '100%'; slaState.textContent = t.resolvedAt ? ('закрыт · SLA ' + (t.slaMet ? 'выдержан' : 'нарушен')) : 'в работе'; }
+        if (t.ackedAt) { ack.disabled = true; res.disabled = !!t.resolvedAt; slaBar.style.setProperty('--p', 1); slaState.textContent = t.resolvedAt ? ('закрыт · SLA ' + (t.slaMet ? 'выдержан' : 'нарушен')) : 'в работе'; }
       }
       ack.addEventListener('click', function () {
         if (state.ticketId) return;
@@ -343,7 +343,7 @@
 
     var root = $('ops-root');
     root.innerHTML =
-      '<div class="lk-progress-strip"><div class="xp-bar"><i id="ops-progress-bar" style="width:0"></i></div><span class="xp-meta" id="ops-progress-label">—</span>' +
+      '<div class="lk-progress-strip"><div class="xp-bar"><i id="ops-progress-bar" style="--p:0"></i></div><span class="xp-meta" id="ops-progress-label">—</span>' +
       '<span class="kind-badge">спринт ' + cfg.sprint + ' · ' + esc(cfg.sprintTitle) + '</span></div>' +
       briefHtml() + theoryHtml() + commandsHtml() + tasksHtml() + ticketHtml() + runbookHtml() + rcaHtml() + quizHtml() + reflectionHtml() + finishHtml();
 
