@@ -27,11 +27,24 @@
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
 
+  function showBootError(name, err) {
+    if (window && window.console) console.error('[ops-kit] ' + name + ':', err);
+    var host = document.getElementById('main-content') || document.body;
+    if (!host) return;
+    var box = document.createElement('div');
+    box.className = 'st-init-error';
+    box.setAttribute('role', 'alert');
+    box.innerHTML = '<strong>// модуль «' + name + '» запустился с ошибкой.</strong>' +
+      '<span>Сохранение работает; обновите страницу. Если повторяется — текст из консоли (F12) преподавателю.</span>';
+    host.insertBefore(box, host.firstChild);
+  }
+
   function boot() {
     var node = $('ops-data');
     if (!node || typeof OPS === 'undefined') return;
     var cfg;
-    try { cfg = JSON.parse(node.textContent); } catch (e) { return; }
+    try { cfg = JSON.parse(node.textContent); }
+    catch (e) { showBootError('данные лабораторной', e); return; }
 
     var profile = OPS.getProfile();
     if (!profile || !profile.name) {
@@ -42,13 +55,17 @@
     if (fpName) fpName.textContent = profile.name;
     if (fpGroup) fpGroup.textContent = OPS.handleFor(profile).text;
 
-    (function presence() {
-      var beat = function () { OPS.heartbeat(profile, cfg.id); };
-      beat(); setInterval(beat, 15000);
-      document.addEventListener('visibilitychange', function () { if (!document.hidden) beat(); });
-      window.addEventListener('beforeunload', beat);
-    })();
+    /* Presence изолирован: его сбой не должен убивать рендер лабораторной */
+    try {
+      (function presence() {
+        var beat = function () { OPS.heartbeat(profile, cfg.id); };
+        beat(); setInterval(beat, 15000);
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) beat(); });
+        window.addEventListener('beforeunload', beat);
+      })();
+    } catch (e) { if (window && window.console) console.warn('[ops-kit] presence:', e); }
 
+    try {
     var key = 'opskit:' + cfg.id;
     var state = STORE.get(key, {
       tasks: {}, quiz: { answers: {}, done: false, correct: 0 }, reflection: {},
@@ -166,8 +183,18 @@
           return '<label class="' + cls + '"><input type="radio" name="opsq' + qi + '" value="' + oi + '"' +
             (state.quiz.answers[qi] === oi ? ' checked' : '') + (state.quiz.done ? ' disabled' : '') + '><span>' + esc(opt) + '</span></label>';
         }).join('');
-        var explain = state.quiz.done ? '<p class="q-explain">// ' + esc(item.explain) + '</p>' : '';
-        return '<div class="q-item"><p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span> ' + esc(item.q) + '</p><div class="q-opts">' + opts + '</div>' + explain + '</div>';
+        var verdict = '', explain = '';
+        if (state.quiz.done) {
+          var chosen = state.quiz.answers[qi];
+          var answered = chosen != null;
+          var isCorrect = answered && chosen === item.answer;
+          var vCls = !answered ? 'is-warn' : isCorrect ? 'is-ok' : 'is-bad';
+          var vText = !answered ? 'без ответа' : isCorrect ? 'верно' : 'неверно';
+          verdict = '<p class="q-verdict ' + vCls + '"><span class="q-verdict-badge">' + vText + '</span>' +
+            (isCorrect ? '' : ' правильный ответ: <strong>' + esc(item.options[item.answer]) + '</strong>') + '</p>';
+          explain = '<p class="q-explain">// ' + esc(item.explain) + '</p>';
+        }
+        return '<div class="q-item"><p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span> ' + esc(item.q) + '</p><div class="q-opts">' + opts + '</div>' + verdict + explain + '</div>';
       }).join('') +
       '<div class="q-actions"><button class="flat-btn" type="button" id="ops-quiz-check"' + (state.quiz.done ? ' hidden' : '') + '>проверить ответы</button>' +
       '<button class="flat-btn ghost" type="button" id="ops-quiz-reset"' + (state.quiz.done ? '' : ' hidden') + '>пройти заново</button>' +
@@ -343,6 +370,7 @@
 
     progress(); renderQuiz(); bindTicket(); bindRunbook(); bindRca(); bindFinish();
     if (state.finished) { syncBtn(state.lastScore || 0); var m = $('ops-finish-msg'); if (m) { m.className = 'ops-msg'; m.textContent = '✓ Работа уже сдавалась. Доработайте и отправьте повторно — лучшая версия идёт в зачёт.'; } }
+    } catch (e) { showBootError('лабораторная «' + (cfg.title || cfg.id) + '»', e); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

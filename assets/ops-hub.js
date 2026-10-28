@@ -40,6 +40,8 @@
     { id: 'ops-remote', sprint: 3, glyph: 'raccoon', os: 'mixed', title: 'Удалённый доступ SSH и RDP', href: 'ops-remote.html' },
     { id: 'ops-monitor', sprint: 4, glyph: 'wolf', os: 'linux', title: 'Мониторинг, алерты и логи', href: 'ops-monitor.html' },
     { id: 'ops-backup', sprint: 4, glyph: 'hedgehog', os: 'mixed', title: 'Резервное копирование', href: 'ops-backup.html' },
+    { id: 'ops-log-audit', sprint: 4, glyph: 'otter', os: 'linux', title: 'Журналы, auditd и ротация', href: 'ops-log-audit.html' },
+    { id: 'ops-net-tshoot', sprint: 4, glyph: 'crab', os: 'mixed', title: 'Диагностика сети · парный инцидент', href: 'ops-net-tshoot.html' },
     { id: 'ops-security-change', sprint: 5, glyph: 'cat', os: 'mixed', title: 'Безопасность и управление изменениями', href: 'ops-security-change.html' },
     { id: 'ops-final', sprint: 5, glyph: 'wolf', os: 'mixed', title: 'Запуск сервиса под ключ', href: 'ops-final.html' }
   ];
@@ -165,6 +167,13 @@
       var name = $('p-name').value.trim(), group = $('p-group').value.trim();
       if (!name || !group) { setMsg($('gate-msg'), 'Заполните ФИО и учебную группу.', 'bad'); return; }
       var p = OPS.ensureProfile(name, group, picked);
+      /* Возврат к лабораторной, с которой пришёл гейт: только локальный html-файл */
+      var back = null;
+      try {
+        var r = new URLSearchParams(location.search).get('return');
+        if (r && /^[\w.-]+\.html$/.test(r)) back = r;
+      } catch (err) {}
+      if (back) { location.href = back; return; }
       renderDashboard(p);
     });
     var changeBtn = $('profile-change');
