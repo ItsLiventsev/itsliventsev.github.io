@@ -17,10 +17,10 @@ h1 { view-transition-name: page-title; }
 .ambient, .st-ambient { view-transition-name: ambient-layer; }
 .site-header, .st-topbar { view-transition-name: chrome-header; }
 
-/* 2. Якоря: единый отступ под липкую шапку вместо точечных scroll-mt-* */
+/* 2. Якоря: единый отступ под фиксированную шапку (12px сверху + высота) */
 section[id],
 [id].scroll-anchor,
-.scroll-mt-24 { scroll-margin-top: calc(var(--header-h) + .5rem); }
+.scroll-mt-24 { scroll-margin-top: calc(12px + var(--header-h) + .5rem); }
 
 /* 3. skip-link: единые состояния на всех страницах */
 .skip-link {

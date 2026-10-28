@@ -100,11 +100,16 @@
   // Дочерним элементам групп проставляем индекс --i (потолок в CSS)
   targets.forEach(function (group) {
     if (!group.hasAttribute('data-flow-group')) return;
-    Array.prototype.slice.call(group.children, 0, 8).forEach(function (child, i) {
+    // Декорируем всех детей: задержка стаггера ограничена --flow-cap в CSS,
+    // поэтому большие сетки (10+ карточек) не растягивают каскад
+    Array.prototype.slice.call(group.children).forEach(function (child, i) {
       child.style.setProperty('--i', i);
       if (!child.hasAttribute('data-flow')) child.setAttribute('data-flow', 'rise');
     });
   });
+  // Пересобираем список ПОСЛЕ декорирования групп: иначе дочерние карточки
+  // не попадают ни в наблюдатель, ни в страховочный таймаут и остаются opacity:0
+  targets = Array.prototype.slice.call(document.querySelectorAll('[data-flow], [data-flow-words], [data-flow-group]'));
   if ('IntersectionObserver' in window && targets.length) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {

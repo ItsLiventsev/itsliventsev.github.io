@@ -174,7 +174,7 @@ body.flat-scope::before {
 .flat-scope :focus-visible { outline: 2px solid var(--st-accent); outline-offset: 2px; }
 
 /* Контейнер */
-.st-wrap { position: relative; z-index: 1; width: min(var(--st-page-max), calc(100% - var(--st-page-gutter) * 2));margin:0 auto; padding:var(--st-sp-6) 0 var(--st-sp-9); }
+.st-wrap { position: relative; z-index: 1; width: min(var(--st-page-max), calc(100% - var(--st-page-gutter) * 2));margin:0 auto; padding:calc(var(--st-header-h) + var(--st-sp-6)) 0 var(--st-sp-9); }
 
 /* Пропуск ссылки и noscript — в языке стендов */
 .flat-scope .skip-link {
@@ -206,7 +206,8 @@ body.flat-scope::before {
    2. Собственная топ-панель стендов (не базовый site-header)
    -------------------------------------------------------------------------- */
 .st-topbar {
-  position: sticky; top: 0; z-index: var(--st-z-topbar);
+  /* Фиксированный хром: не течёт с контентом и стабилен в View Transition */
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--st-z-topbar);
   background: rgba(11, 14, 17, .82);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -723,6 +724,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
 @media (max-width: 640px) {
   /* Две стабильные строки (бренд + скролл-меню): высота зафиксирована,
      чтобы при переходе через брейкпоинт контент не прыгал */
+  .st-wrap { padding-top: calc(var(--st-topbar-h-mobile) + var(--st-sp-4)); }
   .st-topbar-in { flex-direction: column; align-items: stretch; gap:var(--st-sp-2); min-height: var(--st-topbar-h-mobile); }
   .st-brand { align-self: flex-start; }
   /* Кнопка темы прилипает к правому краю скролл-строки и всегда доступна */
@@ -1272,8 +1274,11 @@ a.quest-card { text-decoration: none; color: inherit; }
   .quest-progress i { transition: none; }
 }
 
-/* Отступ для якорных переходов под липкий степнер/шапку */
-[id^="sec-"], #main-content, #gate { scroll-margin-top: 5.2rem; }
+/* Отступ для якорных переходов под фиксированную шапку */
+[id^="sec-"], .st-section-head[id], #main-content, #gate { scroll-margin-top: calc(var(--st-header-h) + 1.2rem); }
+@media (max-width: 640px) {
+  [id^="sec-"], .st-section-head[id], #main-content, #gate { scroll-margin-top: calc(var(--st-topbar-h-mobile) + .75rem); }
+}
 
 /* Минимальные utility-классы (Tailwind на стендах не загружается) */
 .flat-scope .flex { display: flex; }
@@ -1975,6 +1980,20 @@ label.flat-btn { cursor: pointer; }
   vertical-align: middle;
   white-space: nowrap;
 }
+/* Пометка свежих терминов: акцентная пилюля, заметна при беглом осмотре */
+.gl-term-new {
+  color: var(--st-accent-2);
+  border-color: var(--st-accent);
+  background: var(--st-accent-soft);
+}
+.glossary-legend {
+  margin: 0;
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-mini);
+  color: var(--st-faint);
+  line-height: var(--st-lh-text);
+}
+.glossary-legend .gl-term-tag { margin-left: 0; margin-right: .25rem; }
 /* Тулбар: живой поиск, оглавление-якоря и статус фильтра */
 .glossary-toolbar { display: flex; flex-direction: column; gap: var(--st-sp-3); margin: var(--st-sp-5) 0 var(--st-sp-6); }
 .glossary-search { display: block; }

@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028ae';
+const VERSION = '20261028af';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -25,13 +25,13 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 70, 'HTML страниц должно быть 70, фактически ' + allHtml.length);
+ok(allHtml.length === 71, 'HTML страниц должно быть 71, фактически ' + allHtml.length);
 ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad') && !s.includes('?v=20261028ae'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 67, 'sitemap URL = 67, фактически ' + locs.length);
+ok(locs.length === 68, 'sitemap URL = 68, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -342,6 +342,15 @@ ok(read('index.html').includes('data-flow="mask"') && read('index.html').include
 /* reduced-motion в flow.css гасит и вход, и ambient, и модалки */
 ok(/prefers-reduced-motion[\s\S]*data-flow[\s\S]*transform: none/.test(flowCss), 'flow.css: reduced-motion не сбрасывает data-flow');
 ok(/prefers-reduced-motion[\s\S]*st-ambient[\s\S]*display: none/.test(flowCss), 'flow.css: ambient не отключается при reduced-motion');
+/* Контракт data-flow-group: дети не должны оставаться opacity:0.
+   JS пересобирает targets после декорирования, CSS каскадно раскрывает группу */
+ok(flowCss.includes('[data-flow-group].flow-in > [data-flow]'), 'flow.css: нет каскадного раскрытия data-flow-group');
+ok(/Пересобираем список[\s\S]{0,200}querySelectorAll\('\[data-flow\]/.test(flowJs), 'flow.js: targets не пересобираются после декорирования групп');
+/* Шапки — фиксированный хром поверх страниц, с резервированием места */
+ok(/\.site-header\s*\{[^}]*position:\s*fixed/.test(siteCss), 'site.css: .site-header не fixed');
+ok(siteCss.includes('padding-top: var(--header-reserve)'), 'site.css: page-wrap без резерва под шапку');
+ok(/\.st-topbar\s*\{[^}]*position:\s*fixed/.test(stCss), 'stands.css: .st-topbar не fixed');
+ok(/\.st-wrap\s*\{[^}]*padding:calc\(var\(--st-header-h\)/.test(stCss), 'stands.css: st-wrap без резерва под топбар');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

@@ -67,6 +67,14 @@
 .flow-stagger > * {
   transition-delay: calc(min(var(--i, 0), var(--flow-cap)) * var(--flow-step));
 }
+/* Каскад группы: когда сама группа получила flow-in (по IO или страховке),
+   проявляются и её дочерние элементы — запасной канал к индивидуальному IO */
+.js-enabled [data-flow-group].flow-in > [data-flow] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  clip-path: inset(-1px -1px -1px -1px);
+}
 
 /* --------------------------------------------------------------------------
    2. Текст: маскированное появление словами. Никакого «падения» —

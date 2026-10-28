@@ -130,18 +130,10 @@ document.documentElement.classList.add('js-enabled');
     }, { passive: true });
   }
 
-  // Тень шапки при скролле + «умное» скрытие: вниз — уезжает, вверх — возвращается.
-  // Без анимаций (reduced-motion) шапка не прячется; не прячется и при открытом меню.
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let lastY = window.scrollY;
+  // Шапка фиксированная и всегда закреплена: при скролле меняется только тень.
+  // Никаких трансформов по направлению скролла — меню не «шатается».
   const onScroll = () => {
-    const y = window.scrollY;
-    header.classList.toggle('is-scrolled', y > 24);
-    if (!reduceMotion && burger && !(header.classList.contains('nav-open'))) {
-      if (y > 160 && y > lastY + 4) header.classList.add('header-hidden');
-      else if (y < lastY - 4 || y < 80) header.classList.remove('header-hidden');
-    }
-    lastY = y;
+    header.classList.toggle('is-scrolled', window.scrollY > 24);
   };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
