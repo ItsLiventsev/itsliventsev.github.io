@@ -165,6 +165,17 @@ body.flat-scope::before {
   background: var(--st-bad-soft); border-bottom: 1px solid var(--st-bad);
   color: var(--st-bad); font-family: var(--st-mono); font-size:var(--st-fs-small);
 }
+/* Плашка сбоя подсистемы: терминал при этом продолжает работать */
+.st-init-error {
+  display: flex; flex-direction: column; gap: var(--st-sp-1);
+  margin: 0 0 var(--st-sp-4); padding: var(--st-sp-4) var(--st-gap);
+  background: var(--st-bad-soft); border: 1px solid var(--st-bad);
+  border-left: 3px solid var(--st-bad); border-radius: var(--st-radius);
+  color: var(--st-text); font-family: var(--st-mono); font-size: var(--st-fs-small);
+  line-height: var(--st-lh-text);
+}
+.st-init-error strong { color: var(--st-bad); font-weight: 700; }
+.st-init-error span { color: var(--st-muted); }
 
 /* --------------------------------------------------------------------------
    2. Собственная топ-панель стендов (не базовый site-header)
@@ -199,11 +210,21 @@ body.flat-scope::before {
   padding:var(--st-sp-2) var(--st-sp-3);
   font-family: var(--st-mono); font-size:var(--st-fs-mini); font-weight: 700;
   letter-spacing: var(--st-ls-label); text-transform: uppercase;
-  color: var(--st-muted); text-decoration: none;
+  color: var(--st-muted); text-decoration: none; white-space: nowrap;
   border: 1px solid transparent;
 }
 .st-topnav a:hover { color: var(--st-text); border-color: var(--st-line); background: var(--st-panel); }
 .st-topnav a[aria-current] { color: var(--st-accent-2); border-color: var(--st-line-strong); background: var(--st-panel); }
+/* Вход в панель преподавателя: тот же хитбокс, но тише остальных пунктов */
+.st-topnav a.st-nav-admin {
+  color: var(--st-faint);
+  border: 1px dashed var(--st-line-strong);
+  text-transform: none; letter-spacing: var(--st-ls-fine);
+}
+.st-topnav a.st-nav-admin:hover,
+.st-topnav a.st-nav-admin:focus-visible {
+  color: var(--st-accent-2); border-color: var(--st-accent); background: var(--st-accent-soft);
+}
 
 /* Хлебные крошки */
 .st-crumbs {
@@ -608,7 +629,14 @@ a.flat-module:hover, a.flat-module:focus-visible {
 .q-opt input {margin:0; accent-color: var(--st-accent); }
 .q-opt.is-ok { border-color: rgba(52, 211, 153, .5); background: var(--st-ok-soft); color: var(--st-ok); }
 .q-opt.is-bad { border-color: rgba(248, 113, 113, .5); background: var(--st-bad-soft); color: var(--st-bad); }
-.q-explain { margin:var(--st-sp-3) 0 0;padding:var(--st-sp-2) var(--st-sp-3); border-left: 2px solid var(--st-accent); background: var(--st-panel-2); font-family: var(--st-mono); font-size:var(--st-fs-mini); line-height: var(--st-lh-text); color: var(--st-muted); }
+.q-explain { margin:var(--st-sp-2) 0 0;padding:var(--st-sp-2) var(--st-sp-3); border-left: 2px solid var(--st-accent); background: var(--st-panel-2); font-family: var(--st-mono); font-size:var(--st-fs-mini); line-height: var(--st-lh-text); color: var(--st-muted); }
+/* Вердикт вопроса после проверки: бейдж + формулировка правильного ответа */
+.q-verdict { display: flex; flex-wrap: wrap; align-items: center; gap: var(--st-sp-2); margin:var(--st-sp-2) 0 0; font-family: var(--st-mono); font-size:var(--st-fs-mini); line-height: var(--st-lh-ui); color: var(--st-text-2); }
+.q-verdict-badge { flex: 0 0 auto; padding: .08rem var(--st-sp-2); border: 1px solid var(--st-line-strong); border-radius: var(--st-radius); font-weight: 700; text-transform: uppercase; letter-spacing: var(--st-ls-label); }
+.q-verdict.is-ok .q-verdict-badge { color: var(--st-ok); border-color: var(--st-ok); background: var(--st-ok-soft); }
+.q-verdict.is-bad .q-verdict-badge { color: var(--st-bad); border-color: var(--st-bad); background: var(--st-bad-soft); }
+.q-verdict.is-warn .q-verdict-badge { color: var(--st-warn); border-color: var(--st-warn); }
+.q-verdict strong { color: var(--st-text); font-weight: 700; }
 .q-actions { display: flex; flex-wrap: wrap; align-items: center;gap:var(--st-sp-3); margin-top:var(--st-sp-4); }
 .q-score { font-family: var(--st-mono); font-size:var(--st-fs-small); color: var(--st-faint); }
 .q-score.is-ok { color: var(--st-ok); }
@@ -1877,8 +1905,13 @@ label.flat-btn { cursor: pointer; }
   color: var(--st-accent-2); border: 1px solid var(--st-line); border-radius: 999px;padding:var(--st-sp-2) var(--st-sp-4); margin-bottom:var(--st-gap); background: var(--st-panel-2);
 }
 .uni-kicker { font-size:var(--st-fs-small); color: var(--st-muted); margin:var(--st-sp-2) 0 var(--st-sp-4); }
-.uni-grid { grid-template-columns: 1fr 1fr; }
-@media (max-width: 900px) { .uni-grid { grid-template-columns: 1fr; } }
+/* Портал вселенных: две равные колонки. Класс .wide из site.css даёт span 2,
+   что при одной колонке (≤900px) плодит неявную дорожку и карточки «наваливаются» —
+   здесь span отменён, ширина задаётся только этой сеткой. */
+.uni-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.uni-grid .p-card.wide { grid-column: auto; }
+.uni-grid .uni-card { min-width: 0; }
+@media (max-width: 900px) { .uni-grid { grid-template-columns: minmax(0, 1fr); } }
 .uni-card { min-height: 100%; }
 .uni-card--netpolis { --card-accent: #2563eb; }
 .uni-card--ops { --card-accent: #0d9488; border-color: color-mix(in srgb, #0d9488 30%, var(--st-line)); }
