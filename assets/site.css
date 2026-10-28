@@ -46,6 +46,8 @@
   --header-h-md: 3.75rem;
   --header-h-lg: 4rem;
   --header-h: var(--header-h-lg);
+  /* Резерв под фиксированную шапку: отступ 12px + высота + ритм до контента */
+  --header-reserve: calc(12px + var(--header-h) + 2.75rem);
   /* --ease — историческое имя, остаётся алиасом стандартной кривой */
   --ease: var(--ease-standard);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -237,15 +239,19 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 
 /* ---------- 5. Шапка и навигация ---------- */
 .site-header {
-  position: sticky;
+  /* Фиксированный хром поверх страницы: не участвует в потоке и не
+     «шатается» при View Transition и смене высоты контента. Ширина
+     повторяет .page-wrap, снапшот VT стабилен между страницами. */
+  position: fixed;
   top: 12px;
+  left: max(var(--page-gutter), calc((100vw - var(--page-max)) / 2));
+  right: max(var(--page-gutter), calc((100vw - var(--page-max)) / 2));
   z-index: 50;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: .6rem .9rem;
-  margin-bottom: 2.75rem;
   min-height: var(--header-h-lg);
   padding: .55rem .7rem .55rem 1.05rem;
   background: var(--header-bg);
@@ -382,7 +388,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
      навигация остаётся обычным потоком и полностью доступна. */
   .js-enabled .site-nav {
     position: fixed;
-    top: calc(12px + var(--header-h-md) + .5rem);
+    top: calc(12px + var(--header-h) + .5rem);
     left: var(--page-gutter);
     right: var(--page-gutter);
     z-index: 49;
@@ -428,10 +434,15 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 
 /* Узкие экраны: фиксированная геометрия шапки по брейкпоинтам */
 @media (max-width: 880px) {
+  :root { --header-h: var(--header-h-md); }
   .site-header { min-height: var(--header-h-md); }
 }
 @media (max-width: 480px) {
-  .site-header { min-height: var(--header-h-sm); padding: .45rem .5rem .45rem .85rem; gap: .45rem .55rem; margin-bottom: 2rem; }
+  :root {
+    --header-h: var(--header-h-sm);
+    --header-reserve: calc(12px + var(--header-h-sm) + 2rem);
+  }
+  .site-header { min-height: var(--header-h-sm); padding: .45rem .5rem .45rem .85rem; gap: .45rem .55rem; }
   .logo { font-size: var(--fs-small); gap: .38rem; }
   .header-actions { gap: .32rem; }
 }
@@ -529,6 +540,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .btn-danger { color: var(--danger-text); border-color: rgba(225, 29, 72, .35); }
 .btn-danger:hover { background: rgba(225, 29, 72, .08); border-color: var(--danger-text); color: var(--danger-text); }
 /* Смысловые группы кнопок в админке: приём, публикация, данные */
+.admin-btngroup { margin-bottom: 1rem; }
 .admin-btngroup + .admin-btngroup { margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--border); }
 .admin-grouplabel { font-family: var(--font-mono); font-size: var(--fs-mini); color: var(--faint); margin: 0 0 .45rem; }
 .admin-btnrow { display: flex; flex-wrap: wrap; gap: .5rem; }
@@ -2050,7 +2062,9 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   max-width: var(--page-max);      /* 1180px — общий «хребет» сайта */
   margin-inline: auto;
   padding-inline: var(--page-gutter);
-  padding-block: clamp(1.75rem, 4vw, 3rem);
+  /* сверху — резерв под фиксированную шапку, снизу — прежний свободный ритм */
+  padding-top: var(--header-reserve);
+  padding-bottom: clamp(1.75rem, 4vw, 3rem);
   position: relative;
   z-index: 10;                      /* над .floating-elements (z-index:0) */
 }
@@ -2404,6 +2418,111 @@ textarea.admin-input { resize: vertical; line-height: var(--lh-text); }
   transition: all var(--dur-base) var(--ease-standard);
 }
 .admin-tab.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ---------- Сегментированная навигация админки (верхний уровень) ---------- */
+.admin-hero-sub { margin-bottom: 1.4rem; }
+.admin-segments {
+  position: sticky;
+  top: calc(12px + var(--header-h) + .6rem);
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  padding: .4rem;
+  margin-bottom: 1.5rem;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-card);
+}
+.admin-seg {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+  font-weight: 600;
+  padding: .6rem 1.1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color var(--dur-base) var(--ease-standard),
+              color var(--dur-base) var(--ease-standard),
+              border-color var(--dur-base) var(--ease-standard);
+}
+.admin-seg:hover { color: var(--text); background: var(--ghost-bg-strong); }
+.admin-seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.admin-seg.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.admin-section[hidden] { display: none; }
+
+/* Карточки секций админки: единый ритм вместо Tailwind-россыпи */
+.admin-card { padding: clamp(1.1rem, 2.5vw, 1.75rem); margin-bottom: 1.25rem; }
+.admin-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+.admin-card-title { font-size: var(--fs-lead); font-weight: 700; margin: .25rem 0 0; color: var(--text); }
+.admin-head-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.admin-hint-block { margin-top: 1rem; margin-bottom: 0; }
+.admin-code-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; align-items: stretch; }
+.admin-filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin-bottom: 1rem; }
+.admin-work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
+.admin-work-grid .admin-card { margin-bottom: 1.25rem; }
+@media (max-width: 760px) {
+  .admin-code-grid, .admin-filter-grid, .admin-work-grid, .admin-row { grid-template-columns: 1fr; }
+  .admin-segments { border-radius: var(--radius); }
+  .admin-seg { flex: 1 1 100%; }
+}
+
+/* ---------- FAQ: аккордеоны справки ---------- */
+.faq-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.faq-toc a {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+  color: var(--text-2);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: .4rem .9rem;
+  transition: border-color var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard),
+              background-color var(--dur-fast) var(--ease-standard);
+}
+.faq-toc a:hover,
+.faq-toc a:focus-visible {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.faq-list { display: grid; gap: .6rem; }
+.faq-list .acc-wrap { border-top: 1px solid var(--border); }
+.faq-summary {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem 1.15rem;
+  list-style: none;
+  cursor: pointer;
+}
+.faq-summary::-webkit-details-marker { display: none; }
+.faq-q { font-weight: 600; font-size: var(--fs-body); color: var(--text); }
+.faq-answer { padding: 0 1.15rem 1.1rem 2.2rem; }
+.faq-answer p { color: var(--text-2); line-height: var(--lh-prose); margin: .5rem 0; }
+.faq-answer ul { padding-left: 1.2rem; color: var(--text-2); line-height: var(--lh-prose); margin: .5rem 0; display: grid; gap: .35rem; }
+.faq-answer a { color: var(--accent); text-underline-offset: 3px; }
+@media (max-width: 640px) {
+  .faq-answer { padding-left: 1.15rem; }
+}
 
 /* Рабочая область */
 .admin-bar {
@@ -2762,12 +2881,8 @@ body[data-accent="emerald"] .ambient .orb { background: #10b981; }
    28. КАЧЕСТВО И ДОСТУПНОСТЬ: умная шапка, skip-link, типографика, печать
    ========================================================================== */
 
-/* 28.1 Умная шапка: уезжает вверх при скролле вниз, возвращается при скролле вверх.
-   Не прячется, пока открыто мобильное меню или фокус внутри шапки. */
-.site-header { transition: box-shadow var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), background-color var(--dur-slow) var(--ease-standard), transform var(--dur-slow) var(--ease); }
-.site-header.header-hidden { transform: translateY(calc(-100% - 22px)); }
-.site-header.nav-open.header-hidden,
-.site-header:focus-within.header-hidden { transform: none; }
+/* 28.1 Шапка фиксированная и всегда видимая: направленного автоскрытия нет,
+   при скролле меняется только тень (.is-scrolled) — меню не дёргается. */
 
 /* 28.2 Skip-link: невидим, пока не получит фокус с клавиатуры */
 .skip-link {
@@ -2854,11 +2969,12 @@ h1, h2, h3, .hero-title, .zone-title, .esp-title { text-wrap: balance; }
 
 /* 28.9 Печать: только контент, без декора и навигации */
 @media print {
-  .site-header, .ambient, .scroll-progress, #scroll-progress, #to-top,
+  .site-header, .st-topbar, .ambient, .st-ambient, .flow-bubble, .scroll-progress, #scroll-progress, #to-top,
   .nav-burger, .quick-bubbles, .bg-glyphs, .noscript-bar, .filter-btn,
   .theme-toggle, .lang-btn, .footer-nav, .feed-note { display: none !important; }
   body { background: #fff !important; }
   .page-wrap { max-width: none; padding: 0; margin: 0; }
+  .st-wrap { padding-top: 0; }
   .card, .p-card, .notice, .callout, .glass, .esp-stat, .tint-panel {
     box-shadow: none !important; break-inside: avoid;
   }
@@ -2866,9 +2982,8 @@ h1, h2, h3, .hero-title, .zone-title, .esp-title { text-wrap: balance; }
   .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
 }
 
-/* 28.10 reduced-motion: умная шапка не уезжает */
+/* 28.10 reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .site-header.header-hidden { transform: none; }
   .skip-link { transition: none; }
 }
 

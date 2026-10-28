@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fafafa">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>вопросы и ответы · itsliventsev</title>
+<meta name="description" content="Справка по учебным стендам itsliventsev: с чего начать, как устроены работы и оценка 70/30, как сдавать работы кодом ITS-LAB1 и JSON-бандлом, где хранится прогресс и как его перенести, технические требования.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://cdn.tailwindcss.com">
+<script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="assets/site.css?v=20261028af">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028af">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261028af">
+<link rel="stylesheet" href="assets/flow.css?v=20261028af">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/faq.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="вопросы и ответы · itsliventsev">
+  <meta property="og:description" content="Справка по учебным стендам itsliventsev: с чего начать, как устроены работы и оценка 70/30, как сдавать работы кодом ITS-LAB1 и JSON-бандлом, где хранится прогресс и как его перенести, технические требования.">
+  <meta property="og:url" content="https://itsliventsev.github.io/faq.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="вопросы и ответы · itsliventsev">
+  <meta name="twitter:description" content="Справка по учебным стендам itsliventsev: с чего начать, как устроены работы и оценка 70/30, как сдавать работы кодом ITS-LAB1 и JSON-бандлом, где хранится прогресс и как его перенести, технические требования.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"вопросы и ответы","description":"Справка по учебным стендам itsliventsev: с чего начать, как устроены работы и оценка 70/30, как сдавать работы кодом ITS-LAB1 и JSON-бандлом, где хранится прогресс и как его перенести, технические требования.","url":"https://itsliventsev.github.io/faq.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="bg-grid" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: тексты справки доступны, но интерактивные стенды работать не будут.</div></noscript>
+
+<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
+<div class="ambient" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="ambient-glyph">#</span>
+  <span class="ambient-glyph">/</span>
+  <span class="ambient-glyph">&gt;_</span>
+</div>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<div class="page-wrap">
+
+  <header class="site-header">
+    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
+    <nav class="site-nav" aria-label="Основная навигация">
+      <a href="index.html" class="nav-link">главная</a>
+      <a href="blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
+      <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <section class="hero">
+      <h1 class="hero-title" data-flow="mask">вопросы и ответы</h1>
+      <p class="hero-sub" data-flow="blur">// как устроены стенды, как сдавать работы и где живёт ваш прогресс</p>
+    </section>
+
+    <!-- Быстрая навигация по разделам -->
+    <nav class="glossary-toc faq-toc" aria-label="Разделы справки" data-flow="rise" style="margin-bottom:2rem;">
+      <a href="#faq-start">старт</a>
+      <a href="#faq-works">работы и оценка</a>
+      <a href="#faq-submit">сдача</a>
+      <a href="#faq-data">данные и приватность</a>
+      <a href="#faq-tech">техника</a>
+    </nav>
+
+    <!-- 01 · Старт -->
+    <section class="reveal mb-10" id="faq-start" aria-labelledby="faq-start-title">
+      <h2 class="section-label" id="faq-start-title">01 · с чего начать</h2>
+      <div class="faq-list" data-flow-group>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">что такое три учебные вселенные?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Три практики с разными профессиональными ролями, но едиными правилами игры:</p>
+            <ul>
+              <li><strong>СетьПолис</strong> — настройка сети: коммутаторы, маршрутизаторы, Cisco и ALT Linux, 15 работ;</li>
+              <li><strong>ОфисПолис</strong> — рабочее место оператора ЭВМ: документы, таблицы, OCR, базы, сайты, 10 работ;</li>
+              <li><strong>ДатаПолис</strong> — эксплуатация ИТ-службы: тикеты, SLA, дежурства, домен и бэкапы, 16 работ.</li>
+            </ul>
+            <p>Порядок рекомендован, но не заперт: можно войти в любую вселенную, прогрессы не пересекаются. Вход — со <a href="stands/index.html">страницы-хэба вселенных</a>.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">нужна ли регистрация, логин или пароль?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Нет. Стенды работают полностью в браузере, без сервера и учётных записей. Открыли страницу — можно работать. Личность в работах и рецензиях заменяет анонимный хэндл вида «лис #12».</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">можно ли проходить с телефона?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Страницы адаптивны и открываются с телефона, но лабораторные с терминалами, таблицами и схемами рассчитаны на ноутбук или десктоп. С телефона удобно смотреть теорию, глоссарий и следить за прогрессом лиги.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 02 · Работы и оценка -->
+    <section class="reveal mb-10" id="faq-works" aria-labelledby="faq-works-title">
+      <h2 class="section-label" id="faq-works-title">02 · работы и оценка</h2>
+      <div class="faq-list" data-flow-group>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как устроена одна работа?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Каждая работа — это спринт с бэклогом: списком конкретных задач с чек-листом приёмки. Сначала теория и бриф, затем практические действия, самопроверка и короткий квиз. В конце — рефлексия «плюсы / точки роста». Подробные определения — в <a href="stands/glossary.html">словаре практик</a>.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как считается оценка?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>По формуле <strong>70 / 30</strong>: 70% — выполненный бэклог с реальным результатом (файл, команда, конфигурация), 30% — контрольный тест, где к каждому вопросу даётся объяснение ошибки. Сдача по критериям готовности DoD возможна от 95% чек-листа: работа, сданная полностью, приносит дополнительные XP и неткоины.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">что такое XP, неткоины и PRP?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p><strong>XP</strong> — очки опыта, определяют уровень от стажёра до эксперта. <strong>Неткоин (◈)</strong> — внутренняя валюта всех вселенных, тратится на заказ взаимных проверок. <strong>PRP</strong> — очки взаимных проверок в лиге СетьПолиса: стартовый баланс 5, плюс за проверку чужой работы, минус за заказ рецензии, потолок 20. Все определения — в <a href="stands/glossary.html#g4">разделе 04 словаря</a>.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 03 · Сдача -->
+    <section class="reveal mb-10" id="faq-submit" aria-labelledby="faq-submit-title">
+      <h2 class="section-label" id="faq-submit-title">03 · сдача работ</h2>
+      <div class="faq-list" data-flow-group>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как сдать работу преподавателю?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Два способа, оба без сервера:</p>
+            <ul>
+              <li><strong>код ITS-LAB1</strong> — компактный код из модального окна стенда, его можно переслать в любом мессенджере, а преподаватель примет работу по коду в админ-панели;</li>
+              <li><strong>JSON-бандл</strong> — файл со всеми результатами, который выгружается на странице <a href="stands/league.html">лиги</a> кнопкой «экспорт бандла».</li>
+            </ul>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">что такое взаимная проверка (пир-ревью)?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Проверка работы коллегой по чек-листу до проверки преподавателем. Рецензия передаётся кодом ITS-REV1, анонимность сохраняется хэндлом. За качественные проверки начисляются PRP: помогать разбирать чужие работы экономически выгодно.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 04 · Данные -->
+    <section class="reveal mb-10" id="faq-data" aria-labelledby="faq-data-title">
+      <h2 class="section-label" id="faq-data-title">04 · данные и приватность</h2>
+      <div class="faq-list" data-flow-group>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">где хранится мой прогресс?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Только в локальном хранилище браузера (localStorage) на вашем устройстве. Сайт ничего не отправляет на сервер: три вселенные изолированы друг от друга отдельными ключами, поэтому прогресс СетьПолиса не мешает ДатаПолису. Удаление данных сайта или чистка браузера прогресс обнулит — поэтому перед сменой устройства сделайте экспорт бандла.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как перенести прогресс на другой компьютер?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>На странице <a href="stands/league.html">лиги</a> нажмите «экспорт бандла ↧» и сохраните JSON-файл. На новом устройстве откройте ту же страницу и используйте «импорт бандла ↥». Дальше файл можно прислать преподавателю — он подтянет результаты в общий журнал.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как начать заново и удалить свои данные?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>На странице <a href="stands/league.html">лиги</a> есть кнопка «сбросить все мои данные». Действие необратимо: если планируете вернуться к результатам, сначала экспортируйте бандл.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 05 · Техника -->
+    <section class="reveal mb-10" id="faq-tech" aria-labelledby="faq-tech-title">
+      <h2 class="section-label" id="faq-tech-title">05 · технические требования</h2>
+      <div class="faq-list" data-flow-group>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">какой браузер нужен?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Любой актуальный Chrome, Firefox, Edge или Safari с включённым JavaScript и localStorage — без них интерактивные стенды не работают (навигация и тексты останутся доступны). Сайт умеет работать и при блокировке внешнего Tailwind-CDN: подключается локальный запасной стиль, страница не ломается.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">почему я не вижу анимаций?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Скорее всего, в системе включено «уменьшение движения» (prefers-reduced-motion). Это осознанное поведение: вся информация показывается сразу, без параллакса и появлений, ничего не теряется. Если анимации нужны — отключите соответствующую настройку доступности в ОС или браузере.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">где посмотреть все разделы сайта?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>На странице <a href="sitemap.html">карта сайта</a> собраны все разделы, три вселенные с числом работ и служебные ленты. А непонятные термины практики объяснены в <a href="stands/glossary.html">словаре</a>.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="card p-5 sm:p-7 reveal">
+      <p class="section-label">практика</p>
+      <h2 class="admin-card-title" style="margin-bottom:.5rem;">готовы начать?</h2>
+      <p class="admin-hint" style="margin-top:0;">Выберите вселенную и пройдите первый спринт — прогресс сохранится в браузере автоматически.</p>
+      <div class="admin-btnrow" style="margin-top:1rem;">
+        <a class="btn btn-primary btn-sm" href="stands/index.html">к вселенным →</a>
+        <a class="btn btn-sm" href="stands/glossary.html">словарь практик</a>
+        <a class="btn btn-sm" href="sitemap.html">карта сайта</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 itsliventsev · вопросы и ответы</span>
+    <nav class="footer-nav" aria-label="Служебная навигация">
+      <a href="index.html">главная</a>
+      <a href="projects.html">проекты</a>
+      <a href="sitemap.html">карта сайта</a>
+      <a href="feed.xml">rss</a>
+      <a href="admin.html" rel="nofollow">admin</a>
+    </nav>
+    <span data-footer-updated class="footer-updated"></span>
+  </footer>
+
+</div>
+
+<script src="assets/site.js?v=20261028af"></script>
+<script src="assets/shared-chrome.js?v=20261028af"></script>
+<script src="assets/flow.js?v=20261028af"></script>
+</body>
+</html>

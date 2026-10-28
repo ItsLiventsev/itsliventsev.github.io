@@ -13,10 +13,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261028ae">
-<link rel="stylesheet" href="../assets/stands.css?v=20261028ae">
-<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261028ae">
-<link rel="stylesheet" href="../assets/flow.css?v=20261028ae">
+<link rel="stylesheet" href="../assets/site.css?v=20261028af">
+<link rel="stylesheet" href="../assets/stands.css?v=20261028af">
+<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261028af">
+<link rel="stylesheet" href="../assets/flow.css?v=20261028af">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -89,7 +89,7 @@
       <div>
         <p class="flat-kicker">понятный язык практики · три вселенные</p>
         <h1>словарь практик</h1>
-        <p class="st-hero-lead">Лабораторные говорят на языке реальных ИТ-команд. Каждое слово объяснено коротко: что это значит, зачем нужно и в какой из трёх вселенных встретится на практике.</p>
+        <p class="st-hero-lead">Лабораторные говорят на языке реальных ИТ-команд. Каждое слово объяснено коротко: что это значит, зачем нужно и в какой из трёх вселенных встретится на практике. Семь разделов, 66 терминов, пометки «новое» у свежих добавлений.</p>
       </div>
     </div>
 
@@ -105,7 +105,12 @@
         <a href="#g4">04 · оценка</a>
         <a href="#g5">05 · ДатаПолис</a>
         <a href="#g6">06 · ОфисПолис</a>
+        <a href="#g7">07 · техязык</a>
       </nav>
+      <p class="glossary-legend">
+        <span class="gl-term-tag">вселенная</span> — термин одной из практик ·
+        <span class="gl-term-tag gl-term-new">новое</span> — добавлено в этом обновлении
+      </p>
       <p class="glossary-status" id="glossary-status" role="status" aria-live="polite"></p>
     </div>
 
@@ -166,6 +171,8 @@
       <div class="glossary-item"><dt>PRP <span class="gl-term-tag">лига СетьПолиса</span></dt><dd>Очки взаимных проверок: стартовый баланс 5, +1 за проверку чужой работы, −1 за заказ рецензии, потолок 20. Помогать коллегам экономически выгодно.</dd></div>
       <div class="glossary-item"><dt>маскот и хэндл</dt><dd>Аватар-проводник и анонимный ник вида «лис #12» в работах и рецензиях. Хэндл сохраняет честность пировой оценки.</dd></div>
       <div class="glossary-item"><dt>код ITS-LAB1 / ITS-REV1</dt><dd>Компактный код работы и рецензии для пересылки в любом мессенджере. Так обмен работает без сервера и регистраций.</dd></div>
+      <div class="glossary-item"><dt>JSON-бандл <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Файл выгрузки с результатами всех работ: прогресс, XP, рецензии. Студент экспортирует бандл в «лиге» и присылает преподавателю, а админ-панель импортирует его в журнал и presence — сервер для этого не нужен.</dd></div>
+      <div class="glossary-item"><dt>демоэкзамен <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Практический экзамен по образцу чемпионата: рабочее место, задача на время и чек-лист эксперта. Вся практика построена под его формат — та же логика «бэклог → реальный результат → DoD», что и в обычных работах.</dd></div>
     </dl>
 
     <div class="st-section-head" id="g5">
@@ -203,6 +210,30 @@
       <div class="glossary-item"><dt>запрос, форма и отчёт</dt><dd>Запрос отвечает на вопрос к данным (QBE кликами или SQL-текстом), форма — контролируемый ввод, отчёт — печатная версия с группировкой и итогами.</dd></div>
       <div class="glossary-item"><dt>мониторинг рабочего места</dt><dd>Регулярная проверка доступности узлов (ping, traceroute), ресурсов ПК, журналов событий, места на дисках и состояния принтеров. Чек-лист обхода ловит деградацию до звонка пользователя.</dd></div>
       <div class="glossary-item"><dt>статический сайт</dt><dd>Набор готовых HTML/CSS-файлов без сервера и базы данных: публикуется копированием на хостинг, ломаться почти нечему. Семантическая разметка, alt и title — обязательный минимум качества.</dd></div>
+      <div class="glossary-item"><dt>ВПР (VLOOKUP) <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Функция поиска значения в таблице по ключу: подтягивает цену из прайса, группу из списка, ставку из справочника. Главная функция бюро для связи двух таблиц без ручного копирования.</dd></div>
+      <div class="glossary-item"><dt>диаграмма <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Графическое представление данных таблицы. Правило бюро: тип диаграммы выбирается под вопрос — сравнение (столбчатая), доли (круговая), динамика во времени (линейная), а цвета не несут лишнего смысла.</dd></div>
+      <div class="glossary-item"><dt>колонтитул <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Повторяющаяся область вверху или внизу каждой страницы документа или слайда: номер страницы, название работы, логотип. Задаётся один раз и обновляется сразу во всём файле.</dd></div>
+      <div class="glossary-item"><dt>хостинг <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Размещение файлов сайта на сервере, чтобы страница открывалась по адресу в интернете. Статическому сайту достаточно самого простого хостинга — ни базы, ни серверного кода не требуется.</dd></div>
+    </dl>
+
+    <div class="st-section-head" id="g7">
+      <span class="st-section-num">07</span>
+      <h2>технический язык практики</h2>
+      <span class="st-section-tag">термины из лабораторных</span>
+    </div>
+    <dl class="glossary-grid" data-flow-group>
+      <div class="glossary-item"><dt>VLAN и trunk <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Виртуальная сеть делит коммутатор на независимые сегменты: устройства разных VLAN не видят трафик друг друга. Trunk — магистральный порт, который несёт сразу несколько VLAN между коммутаторами по тегам.</dd></div>
+      <div class="glossary-item"><dt>NAT <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Трансляция адресов: сотни устройств частной сети выходят в интернет через один белый IP. NAT — причина, по которой напрямую подключиться к домашнему ПК извне нельзя без проброса портов.</dd></div>
+      <div class="glossary-item"><dt>OSPF <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Протокол динамической маршрутизации: маршрутизаторы сами обмениваются информацией о сетях и перестраивают маршруты при обрыве канала. В лабораторной соседи OSPF диагностируются через мозговой штурм гипотез.</dd></div>
+      <div class="glossary-item"><dt>DHCP <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Служба автоматической выдачи IP-адресов: устройство получает адрес, маску, шлюз и DNS без ручной настройки. Механика аренды запоминается как DORA — discover, offer, request, acknowledge.</dd></div>
+      <div class="glossary-item"><dt>DNS <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Телефонная книга сети: переводит имя сайта в IP-адрес. Записи A указывают на адрес, CNAME — на другое имя (алиас). Без DNS пришлось бы помнить адреса всех сервисов наизусть.</dd></div>
+      <div class="glossary-item"><dt>SSH и sudo <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>SSH — зашифрованный удалённый доступ к терминалу Linux-сервера, ключи вместо паролей. sudo — повышение прав под конкретную команду: администратор действует от root точечно, а не сидит под ним постоянно.</dd></div>
+      <div class="glossary-item"><dt>межсетевой экран <span class="gl-term-tag">СетьПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Firewall фильтрует трафик по правилам: что разрешено, что запрещено, по портам и адресам. Правило по умолчанию «запрещено всё, что явно не разрешено» — базовая гигиена периметра.</dd></div>
+      <div class="glossary-item"><dt>домен и Samba AD <span class="gl-term-tag">ДатаПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Домен — единая база пользователей и компьютеров организации: один логин и пароль действуют на всех рабочих станциях. Samba AD — реализация Active Directory на ALT Linux без проприетарного сервера.</dd></div>
+      <div class="glossary-item"><dt>RDP <span class="gl-term-tag">ДатаПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Протокол удалённого рабочего стола Windows: инженер подключается к машине пользователя и видит её экран, как если бы сидел рядом. Канал должен быть защищён, а права — выданы только службе поддержки.</dd></div>
+      <div class="glossary-item"><dt>инвентаризация <span class="gl-term-tag">ДатаПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Реестр оборудования и ПО: что за техника, где стоит, какой серийный номер и кто ответственный. Без актуальной инвентаризации невозможны ни закупки, ни быстрое восстановление после сбоя.</dd></div>
+      <div class="glossary-item"><dt>аудит журналов <span class="gl-term-tag">ДатаПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Разбор системных логов: входы, ошибки, изменения прав. Журналы отвечают на вопрос «что и когда произошло», а их защита от подделки — отдельное требование безопасности.</dd></div>
+      <div class="glossary-item"><dt>веб-сервер <span class="gl-term-tag">ДатаПолис</span> <span class="gl-term-tag gl-term-new">новое</span></dt><dd>Программа, которая слушает HTTP-запросы и отдаёт браузеру страницы и файлы (nginx, Apache). Развёртывание веб-сервера включает настройку портов, прав доступа и базовой защиты.</dd></div>
     </dl>
 
     <p class="glossary-empty" id="glossary-empty" hidden>ничего не найдено — попробуйте другой запрос или очистите поиск.</p>
@@ -219,6 +250,7 @@
           <a class="flat-btn ghost" href="office/index.html">бюро ОфисПолиса</a>
           <a class="flat-btn ghost" href="ops/index.html">консоль ДатаПолиса</a>
           <a class="flat-btn ghost" href="teams.html">как устроены команды</a>
+          <a class="flat-btn ghost" href="../faq.html">вопросы и ответы</a>
         </div>
       </div>
     </section>
@@ -232,10 +264,10 @@
     <span class="st-footer-updated" data-footer-updated></span>
   </footer>
 </div>
-<script src="../assets/dom-kit.js?v=20261028ae"></script>
-<script src="../assets/stands.js?v=20261028ae"></script>
-<script src="../assets/shared-chrome.js?v=20261028ae"></script>
-<script src="../assets/flow.js?v=20261028ae"></script>
+<script src="../assets/dom-kit.js?v=20261028af"></script>
+<script src="../assets/stands.js?v=20261028af"></script>
+<script src="../assets/shared-chrome.js?v=20261028af"></script>
+<script src="../assets/flow.js?v=20261028af"></script>
 <script>
 /* Живой фильтр словаря: zero-dep, работает только на этой странице.
    Скрываем несовпавшие карточки и секции без совпадений; статус доступен
