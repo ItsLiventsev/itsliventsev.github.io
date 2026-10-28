@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261028aa">
-<link rel="stylesheet" href="../assets/stands.css?v=20261028aa">
+<link rel="stylesheet" href="../assets/site.css?v=20261028ab">
+<link rel="stylesheet" href="../assets/stands.css?v=20261028ab">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -52,7 +52,8 @@
       <span class="st-brand-sub">СетьПолис · словарь</span>
     </a>
     <nav class="st-topnav" aria-label="Навигация раздела стендов">
-      <a href="setpolis.html">каталог</a>
+      <a href="index.html">вселенные</a>
+      <a href="setpolis.html" rel="nofollow">каталог</a>
       <a href="league.html" rel="nofollow">лига</a>
       <a href="teams.html">команды</a>
       <a href="glossary.html" aria-current="page">словарь</a>
@@ -146,15 +147,54 @@
       <div class="glossary-item"><dt>код ITS-LAB1 / ITS-REV1</dt><dd>Компактный код работы и рецензии для пересылки в любом мессенджере. Так обмен работает без сервера и регистраций.</dd></div>
     </dl>
 
+    <div class="st-section-head">
+      <span class="st-section-num">05</span>
+      <h2>ИТ-служба и эксплуатация · ДатаПолис</h2>
+      <span class="st-section-tag">язык сервисного центра</span>
+    </div>
+    <dl class="glossary-grid">
+      <div class="glossary-item"><dt>тикет (заявка)</dt><dd>Зарегистрированное обращение пользователя с номером, приоритетом и статусом. Всё, что делает инженер, фиксируется в тикете — устные просьбы «зайди потом» в работу не берутся.</dd></div>
+      <div class="glossary-item"><dt>SLA</dt><dd>Соглашение об уровне сервиса: норматив времени реакции и решения по приоритетам (P1 — 30 минут, P2 — 60, P3 — 4 часа, P4 — сутки). Нарушение SLA — повод для разбора, а не штрафа.</dd></div>
+      <div class="glossary-item"><dt>инцидент</dt><dd>Событие, при котором сервис недоступен или деградировал. Инциденты чинят срочно, а их причины разбирают отдельно, чтобы сбой не повторился.</dd></div>
+      <div class="glossary-item"><dt>изменение (change)</dt><dd>Запланированная правка инфраструктуры. Каждое изменение сопровождается планом отката: шагом «как вернуть всё как было», если релиз пойдёт не так.</dd></div>
+      <div class="glossary-item"><dt>runbook</dt><dd>Пошаговая инструкция эксплуатации: что нажать, что проверить и как понять, что заработало. По runbook новичок повторяет работу без автора инструкции.</dd></div>
+      <div class="glossary-item"><dt>postmortem (разбор без вины)</dt><dd>Blameless-разбор инцидента: что произошло, корневая причина и системные меры защиты. Ошибка сотрудника считается дефектом процесса, а не поводом для наказания.</dd></div>
+      <div class="glossary-item"><dt>дежурство</dt><dd>Смена, в течение которой инженер отвечает за мониторинг, реакцию на алерты и фиксацию событий. Дежурство ротируется, чтобы усталость не становилась причиной сбоя.</dd></div>
+      <div class="glossary-item"><dt>RTO и RPO</dt><dd>RTO — допустимое время восстановления сервиса, RPO — максимальный возраст данных, который допустимо потерять. От них зависит схема резервного копирования.</dd></div>
+      <div class="glossary-item"><dt>ретеншен (retention)</dt><dd>Политика хранения: сколько копий, каких и как долго держим. Ретеншен не даёт ни захламить диски, ни удалить архив раньше срока.</dd></div>
+    </dl>
+
+    <div class="st-section-head">
+      <span class="st-section-num">06</span>
+      <h2>рабочее место оператора ЭВМ · ОфисПолис</h2>
+      <span class="st-section-tag">язык цифрового бюро</span>
+    </div>
+    <dl class="glossary-grid">
+      <div class="glossary-item"><dt>стиль документа</dt><dd>Именованный набор параметров абзаца и символа (шрифт, отступы, интервалы). Стили превращают оглавление и единое оформление в автоматику вместо ручного подбора размеров.</dd></div>
+      <div class="glossary-item"><dt>слияние (mail merge)</dt><dd>Подстановка данных из таблицы (имена, адреса) в шаблон письма, приказа или договора. Один шаблон — десятки персональных документов без копипаста.</dd></div>
+      <div class="glossary-item"><dt>OCR (распознавание текста)</dt><dd>Преобразование картинки скана в редактируемый текстовый слой. После OCR по PDF работает поиск; «отсканировано» без распознавания — это просто изображение страницы.</dd></div>
+      <div class="glossary-item"><dt>PDF/A</dt><dd>Архивная версия PDF со встроенными шрифтами и без внешних зависимостей. Гарантирует, что документ откроется одинаково через десятилетия.</dd></div>
+      <div class="glossary-item"><dt>формула и функция</dt><dd>Формула — любое выражение в ячейке, функция — готовая операция с именем (СУММ, ВПР, ЕСЛИ). Правило бюро: в ячейке живёт формула, а не посчитанное вручную число.</dd></div>
+      <div class="glossary-item"><dt>абсолютная ссылка</dt><dd>Закреплённая через знак $ ссылка на ячейку (например $D$1), которая не сдвигается при протягивании формулы. Так подставляют курс, ставку или норматив.</dd></div>
+      <div class="glossary-item"><dt>сводная таблица</dt><dd>Инструмент группировки и итогов по тысячам строк без единой формулы: фильтры по столбцам, суммы и количества пересобираются в несколько кликов.</dd></div>
+      <div class="glossary-item"><dt>мастер-слайд</dt><dd>Образец оформления презентации: фон, шрифты, колонтитулы и логотип наследуются всеми слайдами, поэтому стиль не собирают вручную на каждом листе.</dd></div>
+      <div class="glossary-item"><dt>СУБД, таблицы и связи</dt><dd>Система управления базой данных хранит сущности в отдельных таблицах, связанных первичными и внешними ключами. Нормализация убирает дубли, целостность данных не пускает «битые» ссылки.</dd></div>
+      <div class="glossary-item"><dt>запрос, форма и отчёт</dt><dd>Запрос отвечает на вопрос к данным (QBE кликами или SQL-текстом), форма — контролируемый ввод, отчёт — печатная версия с группировкой и итогами.</dd></div>
+      <div class="glossary-item"><dt>мониторинг рабочего места</dt><dd>Регулярная проверка доступности узлов (ping, traceroute), ресурсов ПК, журналов событий, места на дисках и состояния принтеров. Чек-лист обхода ловит деградацию до звонка пользователя.</dd></div>
+      <div class="glossary-item"><dt>статический сайт</dt><dd>Набор готовых HTML/CSS-файлов без сервера и базы данных: публикуется копированием на хостинг, ломаться почти нечему. Семантическая разметка, alt и title — обязательный минимум качества.</dd></div>
+    </dl>
+
     <section class="lab-panel">
       <div class="lp-head">
         <span>практика</span>
-        <span class="flat-badge is-run">вход открыт</span>
+        <span class="flat-badge is-run">вход открыт во все три вселенные</span>
       </div>
       <div class="lp-body">
-        <p>Термины живут не сами по себе: каждый встречается в конкретной лабораторной роадмапа. Начните со спринта 1 — базовой настройки Cisco IOS и ALT Linux.</p>
+        <p>Термины живут не сами по себе: каждый встречается в конкретной работе роадмапа. СетьПолис — настройка сети, ОфисПолис — рабочее место оператора ЭВМ, ДатаПолис — эксплуатация сервисов.</p>
         <div class="flat-row">
-          <a class="flat-btn" href="setpolis.html">перейти к каталогу →</a>
+          <a class="flat-btn" href="setpolis.html">каталог СетьПолиса →</a>
+          <a class="flat-btn ghost" href="office/index.html">бюро ОфисПолиса</a>
+          <a class="flat-btn ghost" href="ops/index.html">консоль ДатаПолиса</a>
           <a class="flat-btn ghost" href="teams.html">как устроены трайбы</a>
         </div>
       </div>
@@ -168,7 +208,7 @@
     <span class="st-footer-updated" data-footer-updated></span>
   </footer>
 </div>
-<script src="../assets/dom-kit.js?v=20261028aa"></script>
-<script src="../assets/stands.js?v=20261028aa"></script>
+<script src="../assets/dom-kit.js?v=20261028ab"></script>
+<script src="../assets/stands.js?v=20261028ab"></script>
 </body>
 </html>

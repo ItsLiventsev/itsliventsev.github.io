@@ -155,6 +155,7 @@ function jsonLd(rel, info) {
    корневые страницы → общая карточка. */
 function ogImage(rel) {
   if (rel.startsWith('stands/ops/')) return SITE_URL + '/assets/og-ops.png';
+  if (rel.startsWith('stands/office/')) return SITE_URL + '/assets/og-office.png';
   if (rel.startsWith('stands/')) return SITE_URL + '/assets/og-stands.png';
   return SITE_URL + '/assets/og.png';
 }
