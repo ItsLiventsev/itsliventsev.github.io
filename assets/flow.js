@@ -46,8 +46,8 @@
         layer.appendChild(span);
       });
       var bubbles = [
-        { w: '220px', top: '16%', left: '78%', bx: '20px', by: '-34px', d: '17s', delay: '-2s' },
-        { w: '150px', top: '66%', left: '10%', bx: '-16px', by: '-26px', d: '20s', delay: '-8s' }
+        { w: '200px', top: '16%', left: '78%', bx: '20px', by: '-34px', d: '18s', delay: '-2s' },
+        { w: '140px', top: '66%', left: '10%', bx: '-16px', by: '-26px', d: '22s', delay: '-8s' }
       ];
       bubbles.forEach(function (b) {
         layer.appendChild(makeEl('span', 'flow-bubble',
@@ -63,9 +63,9 @@
       ambient.classList.add('flow-parallax');
       if (!ambient.querySelector('.flow-bubble')) {
         ambient.appendChild(makeEl('span', 'flow-bubble',
-          'width:180px;height:180px;top:24%;left:8%;--bx:22px;--by:-30px;--bdur:18s;--bdelay:-4s'));
+          'width:200px;height:200px;top:24%;left:8%;--bx:22px;--by:-30px;--bdur:18s;--bdelay:-4s'));
         ambient.appendChild(makeEl('span', 'flow-bubble',
-          'width:120px;height:120px;top:60%;right:12%;left:auto;--bx:-18px;--by:-24px;--bdur:21s;--bdelay:-10s'));
+          'width:140px;height:140px;top:60%;right:12%;left:auto;--bx:-18px;--by:-24px;--bdur:22s;--bdelay:-10s'));
       }
     }
   })();

@@ -10,16 +10,17 @@
 <title>админка · itsliventsev</title>
 <meta name="description" content="Панель публикации постов. Страница не индексируется.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://cdn.tailwindcss.com">
 <script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261028ad">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028ad">
-<link rel="stylesheet" href="assets/stands.css?v=20261028ad">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261028ad">
-<link rel="stylesheet" href="assets/flow.css?v=20261028ad">
+<link rel="stylesheet" href="assets/site.css?v=20261028ae">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028ae">
+<link rel="stylesheet" href="assets/stands.css?v=20261028ae">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261028ae">
+<link rel="stylesheet" href="assets/flow.css?v=20261028ae">
   <meta property="og:type" content="website">
   <meta property="og:title" content="админка · itsliventsev">
   <meta property="og:description" content="Служебная панель публикации постов. Страница не индексируется.">
@@ -67,8 +68,8 @@
 
   <main id="main-content">
 
-  <h1 class="hero-title text-3xl sm:text-4xl mb-2 reveal">админ-панель</h1>
-  <p class="hero-sub reveal mb-10">// публикация постов через GitHub API · токен не покидает вкладку</p>
+  <h1 class="hero-title reveal">админ-панель</h1>
+  <p class="hero-sub reveal mb-10">// приём работ стендов и публикация постов через GitHub API · токен не покидает вкладку</p>
 
   <!-- Кто авторизован и онлайн: блок со своей кнопкой обновления (без перезагрузки страницы) -->
   <section id="presence-card" class="card p-5 sm:p-7 reveal mb-8">
@@ -78,9 +79,9 @@
         <h2 class="text-lg font-bold m-0 mt-1">Сессии этого браузера и импортированных бандлов</h2>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <span class="flat-badge">сессий: <strong id="presence-count">0</strong></span>
-        <span class="flat-badge is-ready">онлайн сейчас: <strong id="presence-online">0</strong></span>
-        <button class="flat-btn" id="presence-refresh" type="button">обновить блок ↻</button>
+        <span class="p-status p-status-neutral">сессий: <strong id="presence-count">0</strong></span>
+        <span class="p-status p-status-ready">онлайн сейчас: <strong id="presence-online">0</strong></span>
+        <button class="btn btn-sm" id="presence-refresh" type="button">обновить блок ↻</button>
       </div>
     </div>
     <div class="sub-table-wrap">
@@ -105,29 +106,40 @@
         <p class="section-label">работы студентов · виртуальные стенды</p>
         <h2 class="text-lg font-bold m-0 mt-1">Журнал сдачи лабораторных</h2>
       </div>
-      <span class="flat-badge is-ready">работ: <strong id="sub-count">0</strong></span>
+      <span class="p-status p-status-neutral">работ в журнале: <strong id="sub-count">0</strong></span>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-4">
-      <label class="flat-btn" for="sub-import" style="cursor:pointer;">импорт JSON ↥
-        <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
-      </label>
-      <button class="flat-btn ghost" id="sub-repo" type="button">загрузить из репозитория</button>
-      <button class="flat-btn ghost" id="sub-publish" type="button" title="Выложить новые работы и рецензии в папки submissions/ и reviews/ репозитория (нужен вход токеном)">опубликовать в репозиторий ↥</button>
-      <button class="flat-btn ghost" id="sub-export" type="button">экспорт всех</button>
-      <button class="flat-btn ghost" id="sub-clear" type="button">очистить</button>
+    <div class="admin-btngroup mb-4">
+      <p class="admin-grouplabel">приём работ</p>
+      <div class="admin-btnrow">
+        <label class="btn btn-primary btn-sm" for="sub-import" style="cursor:pointer;">импорт JSON ↥
+          <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
+        </label>
+        <button class="btn btn-sm" id="sub-repo" type="button">загрузить из репозитория</button>
+      </div>
     </div>
 
-    <!-- Приём работы по коду ITS-LAB1: студент присылает код из модального окна стенда -->
-    <div class="grid sm:grid-cols-[1fr_auto] gap-2 mb-4">
-      <textarea id="sub-code" class="flat-input" rows="2" placeholder="вставьте сюда код работы ITS-LAB1… (можно несколько кодов, по одному в строке)"></textarea>
-      <button class="flat-btn" id="sub-code-go" type="button">принять работу<br>по коду</button>
+    <div class="admin-btngroup mb-4">
+      <p class="admin-grouplabel">приём по коду ITS-LAB1 (студент присылает код из модального окна стенда)</p>
+      <div class="grid sm:grid-cols-[1fr_auto] gap-2">
+        <textarea id="sub-code" class="admin-input" rows="2" placeholder="вставьте сюда код работы ITS-LAB1… (можно несколько кодов, по одному в строке)"></textarea>
+        <button class="btn btn-primary" id="sub-code-go" type="button">принять работу<br>по коду</button>
+      </div>
+    </div>
+
+    <div class="admin-btngroup mb-4">
+      <p class="admin-grouplabel">публикация и данные журнала</p>
+      <div class="admin-btnrow">
+        <button class="btn btn-sm" id="sub-publish" type="button" title="Выложить новые работы и рецензии в папки submissions/ и reviews/ репозитория (нужен вход токеном)">опубликовать в репозиторий ↥</button>
+        <button class="btn btn-sm" id="sub-export" type="button">экспорт всех</button>
+        <button class="btn btn-sm btn-danger" id="sub-clear" type="button">очистить журнал</button>
+      </div>
     </div>
 
     <div class="grid sm:grid-cols-3 gap-2 mb-4">
-      <input id="sub-search" class="flat-input" type="search" placeholder="поиск по ФИО, группе, стенду…">
-      <select id="sub-filter-group" class="flat-input"><option value="">все группы</option></select>
-      <select id="sub-filter-stand" class="flat-input"><option value="">все стенды</option></select>
+      <input id="sub-search" class="admin-input" type="search" placeholder="поиск по ФИО, группе, стенду…">
+      <select id="sub-filter-group" class="admin-input"><option value="">все группы</option></select>
+      <select id="sub-filter-stand" class="admin-input"><option value="">все стенды</option></select>
     </div>
 
     <div class="sub-table-wrap">
@@ -281,18 +293,19 @@
 
 <footer class="site-footer">
     <span>© 2026 itsliventsev · служебная страница</span>
-      <span data-footer-updated class="footer-updated"></span>
+    <nav class="footer-nav" aria-label="Служебная навигация"><a href="index.html">главная</a> <a href="projects.html">проекты</a> <a href="sitemap.html">карта сайта</a> <a href="feed.xml">rss</a></nav>
+    <span data-footer-updated class="footer-updated"></span>
   </footer>
 
 </div>
 
-<script src="assets/admin-config.js?v=20261028ad"></script>
-<script src="assets/league.js?v=20261028ad"></script>
-<script src="assets/admin.js?v=20261028ad"></script>
-<script src="assets/dom-kit.js?v=20261028ad"></script>
-<script src="assets/submissions.js?v=20261028ad"></script>
-<script src="assets/site.js?v=20261028ad"></script>
-<script src="assets/shared-chrome.js?v=20261028ad"></script>
-<script src="assets/flow.js?v=20261028ad"></script>
+<script src="assets/admin-config.js?v=20261028ae"></script>
+<script src="assets/league.js?v=20261028ae"></script>
+<script src="assets/admin.js?v=20261028ae"></script>
+<script src="assets/dom-kit.js?v=20261028ae"></script>
+<script src="assets/submissions.js?v=20261028ae"></script>
+<script src="assets/site.js?v=20261028ae"></script>
+<script src="assets/shared-chrome.js?v=20261028ae"></script>
+<script src="assets/flow.js?v=20261028ae"></script>
 </body>
 </html>

@@ -7,11 +7,15 @@
    ========================================================================== */
 
 /* 1. View Transitions: межстраничные переходы там, где API поддерживается.
-   Старые браузеры просто игнорируют правило и делают обычную навигацию. */
+   Старые браузеры просто игнорируют правило и делают обычную навигацию.
+   Именованные слои «перетекают» между страницами без пересоздания:
+   шапка, тумблер темы, заголовок и фоновый ambient не мигают. */
 @view-transition { navigation: auto; }
 .logo, .st-brand { view-transition-name: chrome-brand; }
 .theme-toggle { view-transition-name: chrome-theme; }
 h1 { view-transition-name: page-title; }
+.ambient, .st-ambient { view-transition-name: ambient-layer; }
+.site-header, .st-topbar { view-transition-name: chrome-header; }
 
 /* 2. Якоря: единый отступ под липкую шапку вместо точечных scroll-mt-* */
 section[id],
@@ -65,6 +69,16 @@ section[id],
 .st-footer > *:empty { display: none; }
 .footer-updated,
 .st-footer-updated { white-space: nowrap; }
+/* Единый набор служебных ссылок в мягких футерах (стэндовый st-footer
+   живёт в stands.css своей дизайн-системы) */
+.footer-nav { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; }
+.footer-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.footer-nav a:hover,
+.footer-nav a:focus-visible { color: var(--accent); }
 
 /* 7. Хлебные крошки: мягкий scope получает тот же резерв высоты */
 .breadcrumbs, .st-crumbs { min-height: 1.75rem; }
@@ -95,7 +109,22 @@ section[id],
   50% { opacity: .6; }
 }
 
-/* 9. Табы секции «стек» (прогрессивное улучшение главной, включается из JS) */
+/* 9. Табы секции «стек» (прогрессивное улучшение главной, включается из JS).
+   Все панели лежат в одной grid-ячейке: переключение не меняет высоту
+   секции (CLS = 0), неактивные панели скрыты visibility, а не display:none. */
+/* id-селектор надёжно перебивает Tailwind md:grid-cols-2 (CDN и fallback):
+   в таб-режиме нужна одна колонка-стек, иначе панель ужмётся в полширины */
+#stack .stack-stage { display: grid; grid-template-columns: minmax(0, 1fr); }
+.stack-stage > .group { grid-area: 1 / 1; min-width: 0; }
+.stack-stage > .group[hidden] {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+/* В режиме табов заголовок категории дублирует сам таб — не повторяемся */
+.stack-stage > .group > .mono { display: none; }
 .stack-tabs {
   display: flex;
   flex-wrap: wrap;

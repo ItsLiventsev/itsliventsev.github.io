@@ -13,11 +13,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261028ad">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261028ad">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261028ad">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261028ad">
-<link rel="stylesheet" href="../../assets/flow.css?v=20261028ad">
+<link rel="stylesheet" href="../../assets/site.css?v=20261028ae">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261028ae">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261028ae">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261028ae">
+<link rel="stylesheet" href="../../assets/flow.css?v=20261028ae">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-backup.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -97,18 +97,19 @@
 
     <div id="ops-root"></div>
   </main>
-  <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span><span>lab: ops-backup · autosave: on</span>
+  <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span>
+    <a href="../../sitemap.html">карта сайта</a><span>lab: ops-backup · autosave: on</span>
     <span class="st-footer-updated" data-footer-updated></span>
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261028ad"></script>
-<script src="../../assets/ops-engine.js?v=20261028ad"></script>
-<script src="../../assets/dom-kit.js?v=20261028ad"></script>
-<script src="../../assets/stands.js?v=20261028ad"></script>
+<script src="../../assets/mascots.js?v=20261028ae"></script>
+<script src="../../assets/ops-engine.js?v=20261028ae"></script>
+<script src="../../assets/dom-kit.js?v=20261028ae"></script>
+<script src="../../assets/stands.js?v=20261028ae"></script>
 <script type="application/json" id="ops-data">{"id": "ops-backup", "sprint": 4, "hours": "5 ч", "coins": "85", "mascot": "hedgehog", "who": "ёжик Боря — хранитель резервных копий", "title": "Резервное копирование и восстановление", "lead": "Стратегия 3-2-1, планы бэкапа, проверка восстановления и регламент на ALT и Windows.", "story": "Бэкап, который ни разу не восстанавливали, — это не бэкап, а надежда. Вы настроите резервное копирование конфигурации и данных на ALT (включая подход cyberbackup из практики демоэкзамена), средства Windows Server на стороне Windows, и главное — отработаете восстановление. Изменение с планом отката и понятной схемой ретеншена закрывает спринт эксплуатации.", "theory": [{"h": "Принцип 3-2-1", "p": "Три копии данных, на двух типах носителей, одна вне площадки. Бэкап без регулярной проверки восстановления не считается рабочим.", "code": "# контроль точек монтирования и места\n# df -h ; mount | grep backup"}, {"h": "Планы резервного копирования", "p": "На ALT современные решения (в учебной среде — cyberbackup) создают организацию, хранилище, план и запускают задание. Классика — tar/rsync по расписанию cron/systemd timer.", "code": "# rsync -a /etc/ /backup/etc-$(date +%F)/\n# cyberbackup create-plan --name etc_backup \\\n  --source /etc --storage HQ_Backup\n# cyberbackup start-backup --plan etc_backup"}, {"h": "Восстановление и ретеншен", "p": "Ценность бэкапа проверяется восстановлением на тестовой машине. Политика хранения (ретеншен) описывает, сколько копий и как долго держим.", "note": "Бэкап — часть управления изменениями: перед рискованным релизом всегда делают точку возврата."}], "commands": [{"linux": "rsync -a src/ dst/", "windows": "robocopy src dst /MIR", "what": "синхронизация копий"}, {"linux": "tar -czf etc.tgz /etc", "windows": "Windows Server Backup / wbadmin", "what": "архив конфигурации"}, {"linux": "cyberbackup start-backup", "windows": "Start-WBBackup", "what": "запуск плана копирования"}, {"linux": "systemctl list-timers", "windows": "Task Scheduler", "what": "расписание заданий"}, {"linux": "tar -tzf etc.tgz (проверка)", "windows": "wbadmin get versions", "what": "проверка наличия копий"}, {"linux": "rsync -a dst/ restore/", "windows": "wbadmin start recovery", "what": "восстановление данных"}], "tasks": [{"id": "t1", "text": "Опишите схему 3-2-1 для инфраструктуры ДатаПолиса с конкретными носителями"}, {"id": "t2", "text": "Настройте плановый rsync каталога /etc по systemd timer"}, {"id": "t3", "text": "Создайте план резервного копирования и запустите задание (или учебный аналог)"}, {"id": "t4", "text": "На Windows настройте Windows Server Backup системного состояния"}, {"id": "t5", "text": "Удалите тестовый файл и восстановите его из копии, зафиксируйте RTO"}, {"id": "t6", "text": "Задайте политику ретеншена и проверку целостности копий"}, {"id": "t7", "text": "Напишите runbook восстановления и план отката релиза через бэкап"}], "ticket": {"type": "change", "priority": "P2", "title": "Ввести регламент резервного копирования и проверку восстановления", "text": "Развернуть планы бэкапа критичных каталогов и системного состояния, доказать восстановление тестового файла и зафиксировать RTO. Без подтверждённого восстановления изменение не закрывается.", "deliverables": ["Планы копирования на ALT и Windows", "Протокол восстановления с замером RTO", "Runbook и политика ретеншена"]}, "runbook": {"title": "Восстановление после сбоя", "steps": ["Определить повреждённый объём и актуальную копию", "Подготовить тестовое восстановление", "Вернуть данные и сверить контрольные суммы", "Проверить запуск сервиса", "Закрыть инцидент и обновить регламент"]}, "quiz": [{"q": "Сформулируйте принцип 3-2-1?", "options": ["3 диска, 2 ПК, 1 кабель", "3 копии, 2 типа носителей, 1 вне площадки", "3 часа, 2 минуты, 1 секунда", "3 человека, 2 сервера"], "answer": 1, "explain": "Классическая модель устойчивости к потере данных и площадки."}, {"q": "Главный признак рабочего бэкапа?", "options": ["Большой размер архива", "Успешно проверенное восстановление", "Свежая дата в имени файла", "Наличие ярлыка на рабочем столе"], "answer": 1, "explain": "Непроверенная копия может оказаться битой или неполной."}, {"q": "Что такое RTO?", "options": ["Тип архива", "Допустимое время восстановления сервиса", "Имя сервера", "Версия ОС"], "answer": 1, "explain": "Recovery Time Objective — целевой таймлайн возврата сервиса."}, {"q": "Что обязательно делают перед рискованным изменением?", "options": ["Ничего", "Точку возврата/бэкап и план отката", "Обновляют обои", "Удаляют старые логи"], "answer": 1, "explain": "Бэкап до релиза превращает необратимую ошибку в управляемый откат."}], "reflection": ["Почему надежда на бэкап без теста — профессиональный риск?", "Какой RTO реалистичен для вашего учебного сервиса?", "Где в ДатаПолисе расположили бы внеплощадочную копию?"], "sprintTitle": "Эксплуатация"}</script>
-<script src="../../assets/ops-kit.js?v=20261028ad"></script>
-<script src="../../assets/shared-chrome.js?v=20261028ad"></script>
-<script src="../../assets/flow.js?v=20261028ad"></script>
+<script src="../../assets/ops-kit.js?v=20261028ae"></script>
+<script src="../../assets/shared-chrome.js?v=20261028ae"></script>
+<script src="../../assets/flow.js?v=20261028ae"></script>
 </body>
 </html>
