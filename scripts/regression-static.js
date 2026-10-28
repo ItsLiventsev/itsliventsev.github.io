@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028ac';
+const VERSION = '20261028ad';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -31,7 +31,7 @@ ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' +
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -261,7 +261,8 @@ ok(siteCss.includes('--ease-exit') && siteCss.includes('--ease-emphasized'), 'н
 ok(stCss.includes('--st-dur-base: var(--dur-base)') && stCss.includes('--st-ease-exit: var(--ease-exit)'), 'в stands.css нет motion-алиасов');
 ok(siteCss.includes('--header-h-sm') && siteCss.includes('--header-h-md') && siteCss.includes('--header-h-lg'), 'нет токенов высоты шапки');
 /* никаких числовых длительностей в transition — только var(--dur-*) или 0s/none */
-for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
+const flowCss = read('assets/flow.css');
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss], ['flow.css', flowCss]]) {
   c.split('\n').forEach((line, i) => {
     if (line.includes('transition') && /(?<![\w-])\d*\.?\d+s/.test(line)) {
       ok(false, n + ':' + (i + 1) + ' числовая длительность в transition: ' + line.trim().slice(0, 80));
@@ -269,7 +270,7 @@ for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', 
   });
 }
 /* запрещённые для переходов свойства: layout двигается только transform'ом */
-for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss], ['flow.css', flowCss]]) {
   c.split('\n').forEach((line, i) => {
     if (/transition[^;]*(?<![\w-])(width|height|top|left|right|bottom|max-height)(?![\w-])/.test(line)) {
       ok(false, n + ':' + (i + 1) + ' transition геометрии: ' + line.trim().slice(0, 80));
@@ -287,9 +288,10 @@ const chromePages = allHtml.filter(f => read(f).includes('assets/shared-chrome.c
 ok(chromePages.length === allHtml.length, 'shared-chrome подключён не на всех страницах: ' + (allHtml.length - chromePages.length));
 for (const f of allHtml) {
   const c = read(f);
-  const cssPos = c.indexOf('shared-chrome.css');
-  const lastCss = c.lastIndexOf('.css?v=');
-  ok(cssPos > lastCss - 40, f + ': shared-chrome.css должен идти последним из стилей');
+  const chromePos = c.indexOf('shared-chrome.css');
+  const scopePos = Math.max(c.indexOf('stands.css'), c.indexOf('site.css'));
+  ok(chromePos > scopePos, f + ': shared-chrome.css должен идти после scope-стилей');
+  ok(c.indexOf('flow.css') > chromePos, f + ': flow.css должен идти после shared-chrome.css');
 }
 /* reduced-motion: глобальный сброс и точечные гарантии видимости */
 ok(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*animation-duration: ?\.01ms/.test(siteCss), 'нет глобального reduced-motion сброса');
@@ -303,6 +305,43 @@ ok(stCss.includes('position: sticky') && stCss.includes('.is-compact'), 'нет 
 ok(sharedCss.includes('.skeleton') && /#board[^{]*\{[^}]*min-height/.test(sharedCss), 'нет резерва высот JS-блоков');
 /* стаггер через --i, не через таймерные d-классы */
 ok(siteJs.includes("--i") && siteCss.includes('calc(var(--i, 0) * 40ms)'), 'стаггер не переведён на --i');
+
+
+/* 22. Flow-motion 2026: токены, наследование, только композитор-свойства */
+ok(flowCss.includes('--ease-spring') && flowCss.includes('--flow-glass')
+  && flowCss.includes('--flow-rise') && flowCss.includes('--flow-step'), 'flow.css: нет полного набора flow-токенов');
+ok(stCss.includes('--st-dur-base') && flowCss.includes('var(--dur-slow)'), 'flow не наследует базовые dur-токены');
+/* keyframes flow.css не двигают layout: только transform/opacity/filter/clip-path */
+const keyframeBlocks = flowCss.match(/@keyframes[^{]+\{[\s\S]*?\n\}/g) || [];
+ok(keyframeBlocks.length >= 5, 'flow.css: ожидались 5+ keyframes, фактически ' + keyframeBlocks.length);
+for (const block of keyframeBlocks) {
+  ok(!/(?<![\w-])(width|height|top|left|right|bottom|margin|padding)(?![\w-])\s*:/.test(block),
+    'flow keyframe двигает геометрию: ' + block.split('{')[0].trim());
+}
+/* пословный сплит с защитой от вложенных тегов и reduced-motion */
+const flowJs = read('assets/flow.js');
+ok(flowJs.includes("querySelector('*')") && flowJs.includes("data-flow-words"), 'flow.js: нет безопасного сплита слов');
+ok(flowJs.includes("prefers-reduced-motion") && flowJs.includes("(pointer: fine)"), 'flow.js: нет guard reduced-motion/pointer:fine');
+ok(flowJs.includes("aria-hidden") && flowJs.includes("pointer-events") === false, 'flow.js: инжект ambient без aria-hidden');
+/* подключение flow последним на всех страницах */
+const flowPages = allHtml.filter(f => {
+  const c = read(f);
+  return c.includes('assets/flow.css') && c.includes('assets/flow.js');
+});
+ok(flowPages.length === allHtml.length, 'flow подключён не на всех страницах: ' + (allHtml.length - flowPages.length));
+for (const f of allHtml) {
+  const c = read(f);
+  ok(c.indexOf('flow.css') > c.indexOf('shared-chrome.css'), f + ': flow.css должен идти после shared-chrome.css');
+  ok(c.indexOf('flow.js') > c.indexOf('shared-chrome.js'), f + ': flow.js должен идти после shared-chrome.js');
+}
+/* пословные заголовки на трёх хабах, маска — на главной */
+ok(read('stands/ops/index.html').includes('data-flow-words')
+  && read('stands/office/index.html').includes('data-flow-words')
+  && read('stands/index.html').includes('data-flow-words'), 'хабы без data-flow-words');
+ok(read('index.html').includes('data-flow="mask"') && read('index.html').includes('data-flow-group'), 'главная без mask/flow-group');
+/* reduced-motion в flow.css гасит и вход, и ambient, и модалки */
+ok(/prefers-reduced-motion[\s\S]*data-flow[\s\S]*transform: none/.test(flowCss), 'flow.css: reduced-motion не сбрасывает data-flow');
+ok(/prefers-reduced-motion[\s\S]*st-ambient[\s\S]*display: none/.test(flowCss), 'flow.css: ambient не отключается при reduced-motion');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

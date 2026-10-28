@@ -1,0 +1,294 @@
+/* ==========================================================================
+   flow.css · flow-motion слой уровня 2026 (Apple HIG / One UI эстетика)
+   Подключается ПОСЛЕДНИМ. Только композитор-friendly свойства:
+   transform / opacity / filter / clip-path. Никаких width/height/top/left.
+   Иерархия наследования: :root → scope (.flat-scope) → секция → элемент,
+   каждый уровень может переопределить --flow-* локально, не трогая другие.
+   ========================================================================== */
+
+:root {
+  /* Кривые: мягкая пружина для появления, стандарт — для всего остального */
+  --ease-spring: cubic-bezier(.175, .885, .32, 1.15);
+  /* Георгафия движения: путь выезда, глубина блюра, стекло панелей */
+  --flow-rise: 18px;
+  --flow-rise-sm: 10px;
+  --flow-blur: 12px;
+  --flow-blur-sm: 6px;
+  --flow-glass: blur(22px) saturate(180%);
+  /* Длительность и шаг стаггера наследуются по DOM-уровням */
+  --flow-dur: var(--dur-slow);
+  --flow-step: 56ms;
+  --flow-cap: 6;
+}
+
+/* --------------------------------------------------------------------------
+   1. Эволюция .reveal: тот же класс, новая пластика.
+      Скрытое состояние живёт только при включённом JS — без JS контент виден.
+   -------------------------------------------------------------------------- */
+.js-enabled .reveal {
+  transform: translate3d(0, var(--flow-rise), 0);
+  transition:
+    opacity var(--flow-dur) var(--ease-emphasized),
+    transform var(--flow-dur) var(--ease-emphasized),
+    filter var(--flow-dur) var(--ease-emphasized);
+}
+.js-enabled .reveal.active,
+.js-enabled .reveal.in { opacity: 1; transform: none; filter: none; }
+
+/* Базовый вход «rise»: подъём + проявление, наследует --flow-rise/--flow-dur */
+.js-enabled [data-flow] {
+  opacity: 0;
+  transform: translate3d(0, var(--flow-rise), 0);
+  transition:
+    opacity var(--flow-dur) var(--ease-emphasized),
+    transform var(--flow-dur) var(--ease-emphasized),
+    filter var(--flow-dur) var(--ease-emphasized),
+    clip-path var(--flow-dur) var(--ease-emphasized);
+}
+/* Варианты входа через data-flow — наследуемые переменные, не новые классы */
+.js-enabled [data-flow="blur"] {
+  filter: blur(var(--flow-blur));
+  transform: translate3d(0, var(--flow-rise-sm), 0);
+}
+.js-enabled [data-flow="pop"] {
+  transform: scale(.96) translate3d(0, var(--flow-rise-sm), 0);
+}
+.js-enabled [data-flow="mask"] {
+  clip-path: inset(0 0 100% 0);
+  transform: none;
+  transition: clip-path var(--flow-dur) var(--ease-emphasized),
+              opacity var(--flow-dur) var(--ease-emphasized);
+}
+.js-enabled [data-flow].flow-in {
+  opacity: 1; transform: none; filter: none; clip-path: inset(-1px -1px -1px -1px);
+}
+/* Стаггер внутри группы: индекс --i ставит flow.js, потолок --flow-cap */
+[data-flow-group] > [data-flow],
+.flow-stagger > * {
+  transition-delay: calc(min(var(--i, 0), var(--flow-cap)) * var(--flow-step));
+}
+
+/* --------------------------------------------------------------------------
+   2. Текст: маскированное появление словами. Никакого «падения» —
+   слово выезжает из-под маски по мягкой пружине.
+   -------------------------------------------------------------------------- */
+.flow-words .flow-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: .08em; /* запас под нижние выносные при маске */
+  margin-bottom: -.08em;
+}
+.flow-words .flow-word-in {
+  display: inline-block;
+  transform: translateY(112%);
+  transition: transform var(--dur-slow) var(--ease-spring);
+  transition-delay: calc(min(var(--i, 0), 8) * 46ms);
+  will-change: transform;
+}
+.flow-words.is-in .flow-word-in { transform: translateY(0); }
+
+/* --------------------------------------------------------------------------
+   3. Меню мягкого сайта: стеклянный оверлей + хореография пунктов.
+   Панель «вырастает» из кнопки (scale + translate), пункты — каскадом.
+   -------------------------------------------------------------------------- */
+@media (max-width: 880px) {
+  .js-enabled .site-nav {
+    -webkit-backdrop-filter: var(--flow-glass);
+    backdrop-filter: var(--flow-glass);
+    transform: translateY(-.75rem) scale(.97);
+    transform-origin: top right;
+    transition:
+      opacity var(--dur-base) var(--ease-exit),
+      transform var(--dur-base) var(--ease-exit);
+  }
+  .js-enabled .site-header.nav-open .site-nav {
+    transform: translateY(0) scale(1);
+    transition:
+      opacity var(--dur-slow) var(--ease-emphasized),
+      transform var(--dur-slow) var(--ease-spring);
+  }
+  /* Пункты наследуют --i и проявляются трансформом, а не голой opacity */
+  .js-enabled .site-header.nav-open .nav-link {
+    animation: flow-menu-in var(--dur-slow) var(--ease-emphasized) both;
+    animation-delay: calc(min(var(--i, 0), 6) * 42ms);
+  }
+  .site-header.nav-open .nav-link:nth-child(1) { --i: 0; }
+  .site-header.nav-open .nav-link:nth-child(2) { --i: 1; }
+  .site-header.nav-open .nav-link:nth-child(3) { --i: 2; }
+  .site-header.nav-open .nav-link:nth-child(4) { --i: 3; }
+  .site-header.nav-open .nav-link:nth-child(5) { --i: 4; }
+  .site-header.nav-open .nav-link:nth-child(6) { --i: 5; }
+  .site-header.nav-open .nav-link:nth-child(n+7) { --i: 6; }
+}
+@keyframes flow-menu-in {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0) scale(.98); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+/* Стенды: скользящий индикатор пункта через scaleX — без сдвига строки */
+.st-topnav a { position: relative; }
+.st-topnav a::after {
+  content: '';
+  position: absolute;
+  left: .7rem; right: .7rem; bottom: .22rem;
+  height: 2px;
+  background: var(--st-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.st-topnav a:hover::after,
+.st-topnav a:focus-visible::after,
+.st-topnav a[aria-current]::after { transform: scaleX(1); }
+
+/* Бургер: общий морфинг на spring-кривой */
+.burger-bar { transition: transform var(--dur-base) var(--ease-spring),
+                            opacity var(--dur-fast) var(--ease-standard),
+                            background-color var(--dur-fast) var(--ease-standard); }
+
+/* --------------------------------------------------------------------------
+   4. Mount-анимации динамического контента.
+      keyframe-to не содержит transform → после завершения hover-эффекты
+      карточек работают поверх, fill-mode не перетирает каскад.
+   -------------------------------------------------------------------------- */
+@keyframes flow-rise {
+  from { opacity: 0; transform: translate3d(0, var(--flow-rise-sm), 0); }
+  to   { opacity: 1; }
+}
+@keyframes flow-pop {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; }
+}
+/* Только классы, которыми не управляет reveal-наблюдатель stands.js */
+.flat-scope .sla-stat,
+.flat-scope .crew-card,
+.flat-scope .ops-ticket-mini,
+.flat-scope .ach-card,
+.flat-scope .rv-card,
+.flat-scope .uni-card {
+  animation: flow-rise var(--dur-slow) var(--ease-emphasized) both;
+}
+.flat-scope .sla-stat:nth-child(2),
+.flat-scope .uni-card:nth-child(2),
+.flat-scope .crew-card:nth-child(2) { animation-delay: 70ms; }
+.flat-scope .sla-stat:nth-child(3),
+.flat-scope .uni-card:nth-child(3),
+.flat-scope .crew-card:nth-child(3) { animation-delay: 140ms; }
+.flat-scope .sla-stat:nth-child(4),
+.flat-scope .crew-card:nth-child(4) { animation-delay: 210ms; }
+.flat-scope .sla-stat:nth-child(5) { animation-delay: 280ms; }
+.flat-scope .sla-stat:nth-child(6) { animation-delay: 350ms; }
+.flat-scope .sla-stat:nth-child(n+7) { animation-delay: 380ms; }
+
+/* Лента наград: новые записи всплывают, старая feed-in заменена общей */
+.flat-scope .feed-list li {
+  animation: flow-rise var(--dur-base) var(--ease-emphasized) both;
+}
+.flat-scope .feed-list li:nth-child(2) { animation-delay: 50ms; }
+.flat-scope .feed-list li:nth-child(3) { animation-delay: 100ms; }
+.flat-scope .feed-list li:nth-child(n+4) { animation-delay: 140ms; }
+
+/* Мягкий сайт: карточки проектов/блога «приземляются» pop'ом */
+.p-card, .step-card, .trophy-card {
+  animation: flow-pop var(--dur-slow) var(--ease-spring) both;
+}
+
+/* --------------------------------------------------------------------------
+   5. Тактильность 2026: нажатие — пружинка, карточка приподнимается.
+   Только transform: layout заморожен, тень меняется отдельным свойством.
+   -------------------------------------------------------------------------- */
+.quest-card:not(.is-locked):hover {
+  transform: translateY(-4px);
+  transition: transform var(--dur-base) var(--ease-spring),
+              border-color var(--dur-base) var(--ease-standard);
+}
+.p-card:hover, .crew-card:hover, .uni-card:hover {
+  transform: translateY(-4px);
+  transition: transform var(--dur-base) var(--ease-spring),
+              box-shadow var(--dur-base) var(--ease-standard),
+              border-color var(--dur-base) var(--ease-standard);
+}
+.btn:active, .flat-btn:active, .icon-btn:active,
+.nav-burger:active, .stack-tab:active, .p-card:active, .quest-card:active {
+  transform: scale(.97);
+}
+
+/* --------------------------------------------------------------------------
+   6. Ambient: моно-глифы (решётка, слэш, стрелка) с глубиной резкости
+   и баблы. Слой общий для мягкого сайта (инжект flow.js) и стендов.
+   -------------------------------------------------------------------------- */
+.st-ambient .amb-glyph {
+  position: absolute;
+  font-family: var(--st-mono, var(--font-mono));
+  font-weight: 700;
+  color: var(--st-text, currentColor);
+  opacity: .04;
+  user-select: none;
+  filter: blur(.4px);
+  animation: flow-glyph-drift var(--gdur, 22s) ease-in-out var(--gdelay, 0s) infinite alternate;
+  will-change: transform;
+}
+.st-ambient .amb-glyph.is-far { opacity: .025; filter: blur(2.5px); }
+@keyframes flow-glyph-drift {
+  from { transform: translate3d(0, 0, 0) rotate(var(--r0, -8deg)); }
+  to   { transform: translate3d(var(--dx, 14px), var(--dy, -24px), 0) rotate(var(--r1, 9deg)); }
+}
+
+.flow-bubble {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 34% 30%,
+    color-mix(in srgb, var(--bubble-accent, var(--accent)) 42%, transparent) 0%,
+    transparent 72%);
+  filter: blur(1.5px);
+  opacity: .5;
+  animation: flow-bubble-float var(--bdur, 16s) ease-in-out var(--bdelay, 0s) infinite alternate;
+  will-change: transform;
+}
+.flat-scope .flow-bubble { --bubble-accent: var(--st-accent); opacity: .32; }
+@keyframes flow-bubble-float {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(var(--bx, 18px), var(--by, -30px), 0) scale(1.1); }
+}
+
+/* Параллакс-слой: трансформ на контейнере, внутренние анимации не ломаются */
+.ambient.flow-parallax,
+.st-ambient.flow-parallax {
+  transition: none;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   7. Модалки и тосты: вырастание с лёгким блюром, выход — быстрее.
+   -------------------------------------------------------------------------- */
+.st-modal:not([hidden]) .st-modal-box,
+.st-modal:not([hidden]) .tour-pop {
+  animation: flow-modal-in var(--dur-slow) var(--ease-spring) both;
+}
+@keyframes flow-modal-in {
+  from { opacity: 0; transform: translateY(14px) scale(.97); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+.toast { transform: translateY(-10px) scale(.98); }
+.toast.is-show { transform: translateY(0) scale(1); }
+
+/* --------------------------------------------------------------------------
+   8. Reduced motion: всё мгновенно видимо, никаких трансформных стартов.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .js-enabled .reveal,
+  .js-enabled [data-flow] { opacity: 1 !important; transform: none !important;
+    filter: none !important; clip-path: none !important; }
+  .flow-words .flow-word-in { transform: none !important; transition: none !important; }
+  .flat-scope .sla-stat, .flat-scope .quest-card, .flat-scope .crew-card,
+  .flat-scope .ops-ticket-mini, .flat-scope .ach-card, .flat-scope .rv-card,
+  .flat-scope .uni-card, .flat-scope .id-card, .flat-scope .feed-list li,
+  .p-card, .step-card, .trophy-card { animation: none !important; }
+  .st-ambient, .ambient.flow-parallax, .st-ambient.flow-parallax { display: none; }
+  .flow-bubble { animation: none; }
+  .st-modal:not([hidden]) .st-modal-box,
+  .st-modal:not([hidden]) .tour-pop { animation: none; }
+  .js-enabled .site-nav { transform: none; }
+}
