@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261028y">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028y">
-<link rel="stylesheet" href="assets/stands.css?v=20261028y">
+<link rel="stylesheet" href="assets/site.css?v=20261028z">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028z">
+<link rel="stylesheet" href="assets/stands.css?v=20261028z">
 </head>
 <body class="bg-grid" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -63,7 +63,7 @@
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div>
         <p class="section-label">presence · мониторинг активности</p>
-        <h2 class="text-lg font-bold m-0 mt-1">Авторизованные студенты</h2>
+        <h2 class="text-lg font-bold m-0 mt-1">Сессии этого браузера и импортированных бандлов</h2>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <span class="flat-badge">сессий: <strong id="presence-count">0</strong></span>
@@ -80,8 +80,9 @@
       </table>
     </div>
     <p class="admin-hint mt-3 mb-0" id="presence-updated" role="status">
-      Живые обновления приходят автоматически из вкладок стендов в этом браузере. Кнопка обновляет только этот блок,
-      без перезагрузки страницы. На другой устройстве данные переносятся кодами работ и JSON-бандлами.
+      Сервера нет: видны сессии из этого браузера и из импортированных JSON-бандлов лиги (кнопка «импорт JSON» ниже
+      принимает и бандлы, и отдельные работы). Студенты выгружают бандл в своей «лиге», присылают файл — вы импортируете
+      его, и журнал сдачи вместе с presence пополняется. Живые обновления внутри одного браузера приходят автоматически.
     </p>
   </section>
 
@@ -272,10 +273,10 @@
 
 </div>
 
-<script src="assets/admin-config.js?v=20261028y"></script>
-<script src="assets/league.js?v=20261028y"></script>
-<script src="assets/admin.js?v=20261028y"></script>
-<script src="assets/submissions.js?v=20261028y"></script>
-<script src="assets/site.js?v=20261028y"></script>
+<script src="assets/admin-config.js?v=20261028z"></script>
+<script src="assets/league.js?v=20261028z"></script>
+<script src="assets/admin.js?v=20261028z"></script>
+<script src="assets/submissions.js?v=20261028z"></script>
+<script src="assets/site.js?v=20261028z"></script>
 </body>
 </html>

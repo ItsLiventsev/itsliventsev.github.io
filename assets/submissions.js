@@ -105,7 +105,7 @@
     $('presence-count').textContent = list.length;
     $('presence-online').textContent = list.filter(function (p) { return p.online; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" class="presence-empty">// пока нет ни одной сессии: данные появятся, когда студенты откроют стенды</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="presence-empty">// пока нет ни одной сессии: откройте стенд в этом браузере или импортируйте JSON-бандл лиги студента через «импорт JSON» ниже</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (p) {
@@ -385,7 +385,30 @@
       var files = [].slice.call(e.target.files || []);
       Promise.all(files.map(function (f) {
         return f.text().then(function (txt) { try { return JSON.parse(txt); } catch (err) { status('Не удалось разобрать ' + f.name, true); return null; } });
-      })).then(function (list) { addItems(list.filter(Boolean)); });
+      })).then(function (parsed) {
+        var bundles = [], submissions = [];
+        parsed.filter(Boolean).forEach(function (item) {
+          if (item && /^league-bundle\/[12]$/.test(item.schema)) bundles.push(item);
+          else if (Array.isArray(item)) submissions = submissions.concat(item);
+          else submissions.push(item);
+        });
+        if (bundles.length) {
+          if (!L()) { status('Бандлы лиги доступны после создания профиля в этом браузере', true); }
+          else {
+            var beforeSubs = L().submissions().length;
+            bundles.forEach(function (b) {
+              try { L().importBundle(b); } catch (err) { status('Бандл отклонён: ' + err.message, true); }
+            });
+            var newSubs = L().submissions().length - beforeSubs;
+            render();
+            renderPresence();
+            status('Принято бандлов: ' + bundles.length + ', новых работ: ' + newSubs +
+              ', сессий в presence: ' + L().listPresence(45000).length + ' (включая неактивные за 7 дней — в журнале лиги)');
+          }
+        }
+        if (submissions.length) addItems(submissions);
+        if (!bundles.length && !submissions.length) status('В файлах не найдено ни работ, ни бандлов лиги', true);
+      });
       e.target.value = '';
     });
 

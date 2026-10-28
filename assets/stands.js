@@ -26,9 +26,41 @@
     del: function (k) { localStorage.removeItem(k); }
   };
   var progressKey = function (standId) { return 'stands-progress:' + standId; };
+  /* Безопасный возврат после онбординга: только файл этого каталога,
+     без протоколов, слэшей и обхода путей (защита от open redirect). */
+  function returnTarget() {
+    try {
+      var p = new URLSearchParams(location.search).get('return');
+      if (p && /^[\w.-]+\.html$/.test(p)) return p;
+    } catch (e) {}
+    return null;
+  }
   var hasLeague = function () { return typeof window.LEAGUE !== 'undefined'; };
   var hasFgos = function () { return typeof window.FGOS !== 'undefined'; };
   var hasMascots = function () { return typeof window.MASCOTS !== 'undefined'; };
+
+  /* Безопасный запуск подсистем: сбой декоративного/дочернего модуля не должен
+     убивать терминал и остальные стенды. Ошибка показывается пользователю. */
+  function showInitError(name, err) {
+    if (window && window.console) console.error('[stands] ' + name + ':', err);
+    var host = document.getElementById('main-content') || document.body;
+    if (!host) return;
+    var box = document.createElement('div');
+    box.className = 'st-init-error';
+    box.setAttribute('role', 'alert');
+    box.innerHTML = '<strong>// модуль «' + esc(name) + '» запустился с ошибкой.</strong>' +
+      '<span>Терминал и сохранение работают; обновите страницу. Если повторяется — ' +
+      'передайте текст из консоли (F12) преподавателю.</span>';
+    host.insertBefore(box, host.firstChild);
+  }
+  function safeRun(name, fn) {
+    try { fn(); } catch (err) { showInitError(name, err); }
+  }
+  /* Декоративные виджеты (XP-полоса, навыки, presence) изолированы:
+     их сбой не прерывает привязку терминала и автосейв. */
+  function safeWidget(name, fn) {
+    try { fn(); } catch (err) { if (window && window.console) console.warn('[stands] widget ' + name + ':', err); }
+  }
   function mascotSvg(id, size, floating) {
     if (hasMascots()) return window.MASCOTS.svg(id || 'raccoon', { size: size || 48, floating: floating !== false });
     return '';
@@ -79,10 +111,21 @@
             (state.answers[qi] === oi ? ' checked' : '') + (state.done ? ' disabled' : '') + '>' +
             '<span>' + esc(opt) + '</span></label>';
         }).join('');
-        var explain = state.done ? '<p class="q-explain">// ' + esc(item.explain) + '</p>' : '';
+        var verdict = '';
+        var explain = '';
+        if (state.done) {
+          var chosen = state.answers[qi];
+          var answered = chosen != null;
+          var isCorrect = answered && chosen === item.answer;
+          var vCls = !answered ? 'is-warn' : isCorrect ? 'is-ok' : 'is-bad';
+          var vText = !answered ? 'без ответа' : isCorrect ? 'верно' : 'неверно';
+          verdict = '<p class="q-verdict ' + vCls + '"><span class="q-verdict-badge">' + vText + '</span>' +
+            (isCorrect ? '' : ' правильный ответ: <strong>' + esc(item.options[item.answer]) + '</strong>') + '</p>';
+          explain = '<p class="q-explain">// ' + esc(item.explain) + '</p>';
+        }
         return '<div class="q-item" data-q="' + qi + '">' +
           '<p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span>' + esc(item.q) + '</p>' +
-          '<div class="q-opts">' + opts + '</div>' + explain + '</div>';
+          '<div class="q-opts">' + opts + '</div>' + verdict + explain + '</div>';
       }).join('') +
       '<div class="q-actions"><button class="flat-btn" type="button" id="quiz-check"' + (state.done ? ' hidden' : '') + '>проверить ответы</button>' +
       '<button class="flat-btn ghost" type="button" id="quiz-reset"' + (state.done ? '' : ' hidden') + '>пройти заново</button>' +
@@ -219,9 +262,11 @@
   }
 
   function refreshXpStrip() {
-    var old = $('xp-strip');
-    if (old) old.remove();
-    renderXpStrip($('lab-profile'));
+    safeWidget('xp-strip-refresh', function () {
+      var old = $('xp-strip');
+      if (old) old.remove();
+      renderXpStrip($('lab-profile'));
+    });
   }
 
   function renderSkills(standId) {
@@ -575,6 +620,8 @@
       title: 'DHCP на ALT Server', desc: 'Новый офис «СетьПолиса»: 40 мест, принтер и гостиная сеть' },
     { id: 'lab-ssh-sudo', sprint: 4, glyph: 'raccoon', href: 'lab-ssh-sudo.html', format: 'индивидуально + 1:1',
       title: 'SSH, sudoers и AAA', desc: 'Ключи вместо паролей, минимальные привилегии, доступ на Cisco' },
+    { id: 'lab-dns-bind', sprint: 4, glyph: 'owl', href: 'lab-dns-bind.html', format: 'пара + ревью',
+      title: 'DNS на BIND · зоны и записи', desc: 'Прямая и обратная зона, A/CNAME/PTR/MX, диагностика dig и чек-лист приёмки' },
     { id: 'lab-netdoc', sprint: 5, glyph: 'otter', href: 'lab-netdoc.html', format: 'группа + ревью',
       title: 'Документирование сети', desc: 'Физ- и логсхемы, IP-план, ведомости и перекрёстное ревью' },
     { id: 'lab-final', sprint: 5, glyph: 'wolf', href: 'lab-final.html', format: 'командный проект',
@@ -719,6 +766,8 @@
         Store.set(PROFILE_KEY, profile);
       }
       msg.textContent = '';
+      var back = returnTarget();
+      if (back) { location.href = back; return; }
       renderDashboard(profile);
       startTour(true);
     });
@@ -998,8 +1047,9 @@
         if (profile.mascotId) window.LEAGUE.setMascot(profile.mascotId);
       } else profile = p;
     }
-    $('fp-name').textContent = profile.name;
-    $('fp-group').textContent = window.LEAGUE ? window.LEAGUE.handleFor(profile).text : profile.group;
+    var fpName = $('fp-name'), fpGroup = $('fp-group');
+    if (fpName) fpName.textContent = profile.name;
+    if (fpGroup) fpGroup.textContent = hasLeague() ? window.LEAGUE.handleFor(profile).text : profile.group;
     return profile;
   }
 
@@ -1030,9 +1080,9 @@
     var profile = loadProfile();
     if (!profile) return;
     bindCodeModalsOnce();
-    renderXpStrip($('lab-profile'));
-    renderSkills('dhcp-alt');
-    startPresence('dhcp-alt');
+    safeWidget('xp-strip', function () { renderXpStrip($('lab-profile')); });
+    safeWidget('skills', function () { renderSkills('dhcp-alt'); });
+    safeWidget('presence', function () { startPresence('dhcp-alt'); });
 
     var standId = 'dhcp-alt';
     var standTitle = 'Конфигурация DHCP · ALT Server / ALT Workstation';
@@ -1214,9 +1264,9 @@
     var profile = loadProfile();
     if (!profile) return;
     bindCodeModalsOnce();
-    renderXpStrip($('lab-profile'));
-    renderSkills('switch-ovs');
-    startPresence('switch-ovs');
+    safeWidget('xp-strip', function () { renderXpStrip($('lab-profile')); });
+    safeWidget('skills', function () { renderSkills('switch-ovs'); });
+    safeWidget('presence', function () { startPresence('switch-ovs'); });
 
     var standId = 'switch-ovs';
     var standTitle = 'Коммутация в Linux · Open vSwitch (VLAN, access, trunk)';
@@ -1428,12 +1478,12 @@
   function boot() {
     if (booted) return;
     booted = true;
-    initTheme();
-    initCabinet();
-    initDhcpLab();
-    initOvsLab();
-    initReveal();
-    initStepSpy();
+    safeRun('тема', initTheme);
+    safeRun('кабинет', initCabinet);
+    safeRun('стенд DHCP', initDhcpLab);
+    safeRun('стенд OVS', initOvsLab);
+    safeRun('анимации', initReveal);
+    safeRun('навигация шагов', initStepSpy);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
