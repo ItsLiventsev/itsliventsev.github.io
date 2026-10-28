@@ -589,8 +589,15 @@ a.flat-module:hover, a.flat-module:focus-visible {
   font-family: var(--st-mono); font-size:var(--st-fs-mini); letter-spacing: var(--st-ls-dense);
   color: var(--st-faint);
 }
-.st-footer a { color: var(--st-muted); text-decoration: none; }
-.st-footer a:hover { color: var(--st-accent-2); }
+.st-footer a {
+  color: var(--st-muted);
+  text-decoration: none;
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-mini);
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.st-footer a:hover,
+.st-footer a:focus-visible { color: var(--st-accent-2); }
 
 /* --------------------------------------------------------------------------
    6.1 Учебные цели — квадратный чек-лист
@@ -1314,26 +1321,13 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 @keyframes cursor-blink { 50% { opacity: 0; } }
 
 /* --------------------------------------------------------------------------
-   17. Ambient-моно: еле заметные плавающие глифы (# / >_ и т.п.).
+   17. Ambient-слой стендов: контейнер. Содержимое (.amb-glyph, .flow-bubble)
+   создаёт flow.js и полностью стилизует flow.css — единый источник правил.
    Чистый декор: aria-hidden, pointer-events:none, не перехватывает фокус.
    -------------------------------------------------------------------------- */
 .st-ambient {
   position: fixed; inset: 0; z-index: 0; overflow: hidden;
   pointer-events: none;
-}
-.st-ambient span {
-  position: absolute;
-  font-family: var(--st-mono);
-  font-weight: 700;
-  color: var(--st-text);
-  opacity: .035;
-  user-select: none;
-  animation: st-ambient-drift var(--dur, 24s) ease-in-out var(--delay, 0s) infinite alternate;
-  will-change: transform;
-}
-@keyframes st-ambient-drift {
-  from { transform: translate3d(0, 0, 0) rotate(var(--r0, -8deg)); }
-  to   { transform: translate3d(var(--dx, 12px), var(--dy, -22px), 0) rotate(var(--r1, 10deg)); }
 }
 @media (prefers-reduced-motion: reduce) { .st-ambient { display: none; } }
 
@@ -1964,6 +1958,62 @@ label.flat-btn { cursor: pointer; }
 .glossary-item { border: 1px solid var(--st-line); border-radius: var(--st-radius); padding:var(--st-sp-4) var(--st-sp-4); background: var(--st-panel-2); }
 .glossary-item dt { font-family: var(--st-mono); font-size:var(--st-fs-small); font-weight: 700; color: var(--st-accent-2); margin-bottom:var(--st-sp-2); }
 .glossary-item dd {margin:0; font-size:var(--st-fs-small); line-height: var(--st-lh-text); color: var(--st-text-2); }
+.glossary-item[hidden],
+.glossary-grid[hidden],
+.st-section-head[hidden] { display: none; }
+/* Тег вселенной у термина: мягкая пилюля в моноширине */
+.gl-term-tag {
+  display: inline-block;
+  margin-left: var(--st-sp-2);
+  padding: .1rem .45rem;
+  border: 1px solid var(--st-line);
+  border-radius: 999px;
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-mini);
+  font-weight: 500;
+  color: var(--st-text-2);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+/* Тулбар: живой поиск, оглавление-якоря и статус фильтра */
+.glossary-toolbar { display: flex; flex-direction: column; gap: var(--st-sp-3); margin: var(--st-sp-5) 0 var(--st-sp-6); }
+.glossary-search { display: block; }
+.glossary-toc { display: flex; flex-wrap: wrap; gap: var(--st-sp-2); }
+.glossary-toc a {
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-mini);
+  color: var(--st-text-2);
+  text-decoration: none;
+  border: 1px solid var(--st-line);
+  border-radius: 999px;
+  padding: var(--st-sp-2) var(--st-sp-4);
+  transition: border-color var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard),
+              background-color var(--dur-fast) var(--ease-standard);
+}
+.glossary-toc a:hover,
+.glossary-toc a:focus-visible {
+  border-color: var(--st-accent);
+  color: var(--st-accent-2);
+  background: var(--st-accent-soft);
+}
+.glossary-status {
+  margin: 0;
+  min-height: 1.25em;
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-mini);
+  color: var(--st-faint);
+}
+.glossary-empty {
+  margin: var(--st-sp-5) 0;
+  padding: var(--st-sp-5);
+  text-align: center;
+  font-family: var(--st-mono);
+  font-size: var(--st-fs-small);
+  color: var(--st-text-2);
+  border: 1px dashed var(--st-line-strong);
+  border-radius: var(--st-radius);
+}
 
 @media (max-width: 900px) {
   .cmd-duo, .plus-minus { grid-template-columns: 1fr; }
@@ -2064,6 +2114,4 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
 .uni-mini-grid { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) { .uni-mini-grid { grid-template-columns: 1fr; } }
 .uni-mini .p-title { font-size:var(--st-fs-lead);margin:var(--st-sp-3) 0 var(--st-sp-2); }
-
-/* Слот «обновлено» в плоском футере; наследует моно-шрифт и faint от .st-footer */
-.st-footer-updated { white-space: nowrap; }
+/* .st-footer-updated общий — единое правило в shared-chrome.css */

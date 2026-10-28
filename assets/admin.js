@@ -140,11 +140,18 @@
 <meta name="description" content="${desc}">
 <meta name="post-date" content="${esc(d.date)}">
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://cdn.tailwindcss.com">
+<script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261026o">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261028ae">
+<link rel="stylesheet" href="${prefix}assets/tw-fallback.css?v=20261028ae">
+<link rel="stylesheet" href="${prefix}assets/shared-chrome.css?v=20261028ae">
+<link rel="stylesheet" href="${prefix}assets/flow.css?v=20261028ae">
+  <!-- SEO:AUTO:START -->
+  <!-- SEO:AUTO:END -->
 </head>
 <body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -206,12 +213,21 @@ ${bodyHtml}
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · ${section === 'blog' ? 'заметки' : 'статьи'}</span>
-    <a href="${prefix}admin.html" class="admin-link" rel="nofollow">admin</a>
+    <nav class="footer-nav" aria-label="Служебная навигация">
+      <a href="${prefix}index.html">главная</a>
+      <a href="${prefix}projects.html">проекты</a>
+      <a href="${prefix}sitemap.html">карта сайта</a>
+      <a href="${prefix}feed.xml">rss</a>
+      <a href="${prefix}admin.html" rel="nofollow">admin</a>
+    </nav>
+    <span data-footer-updated class="footer-updated"></span>
   </footer>
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261026o"></script>
+<script src="${prefix}assets/site.js?v=20261028ae"></script>
+<script src="${prefix}assets/shared-chrome.js?v=20261028ae"></script>
+<script src="${prefix}assets/flow.js?v=20261028ae"></script>
 </body>
 </html>
 `;

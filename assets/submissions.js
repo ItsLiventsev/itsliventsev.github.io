@@ -226,11 +226,11 @@
       '<div id="expert-crits" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.6rem;">' +
       [['config', 'корректность конфигурации'], ['completeness', 'полнота работы'], ['journal', 'журнал и аккуратность'], ['communication', 'объяснения']].map(function (c) {
         return '<label style="font-size:.8rem;color:var(--text-2);">' + c[1] +
-          ' <select class="flat-input expert-score" data-crit="' + c[0] + '" style="margin-top:.25rem;width:100%;">' +
+          ' <select class="admin-input expert-score" data-crit="' + c[0] + '" style="margin-top:.25rem;width:100%;">' +
           [1, 2, 3, 4, 5].map(function (n) { return '<option value="' + n + '"' + (n === 4 ? ' selected' : '') + '>' + n + ' из 5</option>'; }).join('') +
           '</select></label>';
       }).join('') + '</div>' +
-      '<textarea id="expert-comment" class="flat-input" rows="3" style="margin-top:.7rem;width:100%;" placeholder="Экспертное заключение: сильные стороны и точки роста"></textarea>' +
+      '<textarea id="expert-comment" class="admin-input" rows="3" style="margin-top:.7rem;width:100%;" placeholder="Экспертное заключение: сильные стороны и точки роста"></textarea>' +
       '<button class="btn btn-primary" id="expert-save" type="button" style="margin-top:.7rem;">сохранить экспертную оценку</button></div>';
   }
 

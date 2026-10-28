@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028ad';
+const VERSION = '20261028ae';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -25,13 +25,13 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 69, 'HTML страниц должно быть 69, фактически ' + allHtml.length);
+ok(allHtml.length === 70, 'HTML страниц должно быть 70, фактически ' + allHtml.length);
 ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 66, 'sitemap URL = 66, фактически ' + locs.length);
+ok(locs.length === 67, 'sitemap URL = 67, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');

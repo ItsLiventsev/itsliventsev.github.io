@@ -4,6 +4,7 @@
    2. Компактная «пилюля» липкого профиля на мобильных
    3. Табы секции «стек» на главной (прогрессивное улучшение)
    4. Плавные якоря с потолком 400ms и уважением reduced-motion
+   5. Prefetch внутренних страниц при наведении/фокусе (мгновенные переходы)
    Любая секция включается только при наличии своих элементов.
    ========================================================================== */
 (function () {
@@ -60,7 +61,14 @@
       groups.forEach(function (g, i) {
         var on = i === index;
         g.hidden = !on;
-        g.classList.toggle('stack-panel', on);
+        if (on) {
+          // Перезапуск входной анимации для каждой новой панели
+          g.classList.remove('stack-panel');
+          void g.offsetWidth;
+          g.classList.add('stack-panel');
+        } else {
+          g.classList.remove('stack-panel');
+        }
       });
       if (!tabList) return;
       tabList.querySelectorAll('.stack-tab').forEach(function (btn, i) {
@@ -84,11 +92,13 @@
         tabList.appendChild(btn);
       });
       grid.parentNode.insertBefore(tabList, grid);
+      grid.classList.add('stack-stage');
       show(0);
     }
 
     function disable() {
       if (tabList) { tabList.remove(); tabList = null; }
+      grid.classList.remove('stack-stage');
       groups.forEach(function (g) { g.hidden = false; g.classList.remove('stack-panel'); });
     }
 
@@ -145,4 +155,34 @@
       window.requestAnimationFrame(frame);
     });
   }
+
+  /* ---------- 5. Prefetch внутренних ссылок ----------
+     Клик попадает в кэш браузера — переход ощущается мгновенным,
+     без видимой «пересборки». Внешние ссылки, якоря и протоколы пропускаем. */
+  (function initPrefetch() {
+    if (!document.head || !window.addEventListener) return;
+    var seen = Object.create(null);
+    function prefetch(abs) {
+      if (seen[abs] || abs === location.href.split('#')[0]) return;
+      seen[abs] = true;
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = abs;
+      document.head.appendChild(l);
+    }
+    function fromEvent(e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var a = t.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#' || /^(mailto:|tel:)/.test(href)) return;
+      try {
+        var u = new URL(a.href, location.href);
+        if (u.origin === location.origin) prefetch(u.href);
+      } catch (err) {}
+    }
+    document.addEventListener('pointerover', fromEvent, { passive: true });
+    document.addEventListener('focusin', fromEvent, { passive: true });
+  })();
 })();
