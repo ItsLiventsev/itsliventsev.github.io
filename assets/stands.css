@@ -36,7 +36,7 @@
   --st-text: #e7ecf2;
   --st-text-2: #b8c2cc;
   --st-muted: #8a95a1;
-  --st-faint: #74808e;
+  --st-faint: #828d9a; /* 5.74:1 на --st-bg — запас над AA 4.5 */
   --st-accent: #5b9dff;
   --st-accent-2: #86b6ff;
   /* Поверхность интерактивных элементов с гарантированным AA-контрастом текста */
@@ -71,29 +71,38 @@
   /* Брейкпоинты (единые для всего flat-scope): 640 телефон · 900 планшет · 1100 десктоп */
   --st-mono: var(--font-mono, ui-monospace, monospace);
   --st-sans: var(--font-sans, system-ui, sans-serif);
-  /* Типографическая шкала: 6 ступеней, дробные кегли сводятся к ним */
-  --st-fs-micro: .66rem;
-  --st-fs-mini: .72rem;
-  --st-fs-small: .78rem;
-  --st-fs-body: .88rem;
-  --st-fs-lead: .95rem;
-  --st-fs-title: 1.05rem;
-  /* Крупные метрики и цифры дашбордов */
+  /* Типографическая шкала — алиасы общей шкалы сайта (--fs-* из site.css).
+     Языки систем разные (моно/2px против Inter/16px), но кегли общие:
+     переход между главной и стендами не меняет размер текста.
+     Правило: micro — только короткие лейблы/бейджи; многострочный текст ≥ small. */
+  --st-fs-micro: var(--fs-micro);
+  --st-fs-mini: var(--fs-mini);
+  --st-fs-small: var(--fs-small);
+  --st-fs-body: var(--fs-body);
+  --st-fs-lead: var(--fs-lead);
+  --st-fs-title: var(--fs-title);
+  /* Крупные метрики и цифры дашбордов — специфика консоли */
   --st-fs-metric: 1.5rem;
   --st-fs-display: 2rem;
-  /* Единая шкала интерлиньяжа: цифры · заголовки · контролы · карточки · текст · прозу */
+  /* Интерлиньяж: общая шкала --lh-*; numeral/display остаются консольными
+     (плотная вертикаль для цифр и моно-заголовков) */
   --st-lh-numeral: 1.1;
   --st-lh-display: 1.15;
-  --st-lh-tight: 1.25;
-  --st-lh-ui: 1.55;
-  --st-lh-text: 1.6;
-  --st-lh-prose: 1.7;
-  /* Шкала трекинга: тонкий · плотный · лейблы · кикеры · дисплейные надписи */
-  --st-ls-fine: .04em;
-  --st-ls-dense: .06em;
-  --st-ls-label: .08em;
-  --st-ls-kicker: .1em;
-  --st-ls-display: .16em;
+  --st-lh-tight: var(--lh-tight);
+  --st-lh-ui: var(--lh-ui);
+  --st-lh-text: var(--lh-text);
+  --st-lh-prose: var(--lh-prose);
+  /* Трекинг: общая шкала --ls-*; dense схлопнут в fine (Кирилл: два почти
+     одинаковых значения не нужны), kicker выровнен на .12em */
+  --st-ls-fine: var(--ls-fine);
+  --st-ls-dense: var(--ls-fine);
+  --st-ls-label: var(--ls-label);
+  --st-ls-kicker: var(--ls-kicker);
+  --st-ls-display: var(--ls-display);
+  /* Геометрия страницы — общий хребет с мягкой системой */
+  --st-page-max: var(--page-max);
+  --st-page-gutter: var(--page-gutter);
+  --st-space-section: var(--space-section);
   /* Единая плавность переходов (та же кривая, что у мягкой системы) */
   --st-ease: cubic-bezier(.16, 1, .3, 1);
   /* Семантика приоритетов тикетов (тёмная тема) */
@@ -121,6 +130,8 @@ body.flat-scope {margin:0;
   font-family: var(--st-sans);
   line-height: var(--st-lh-text);
   -webkit-font-smoothing: antialiased;
+  /* Плавная смена темы; reduced-motion глушит переход глобальным правилом ниже */
+  transition: background-color .28s ease, color .28s ease;
 }
 body.flat-scope::before {
   content: '';
@@ -150,16 +161,17 @@ body.flat-scope::before {
 .flat-scope :focus-visible { outline: 2px solid var(--st-accent); outline-offset: 2px; }
 
 /* Контейнер */
-.st-wrap { position: relative; z-index: 1; width: min(1180px, calc(100% - 2.4rem));margin:0 auto; padding:var(--st-sp-6) 0 var(--st-sp-9); }
+.st-wrap { position: relative; z-index: 1; width: min(var(--st-page-max), calc(100% - var(--st-page-gutter) * 2));margin:0 auto; padding:var(--st-sp-6) 0 var(--st-sp-9); }
 
 /* Пропуск ссылки и noscript — в языке стендов */
 .flat-scope .skip-link {
   position: fixed; top: -4rem; left: .8rem; z-index: var(--st-z-skip);
   padding:var(--st-sp-3) var(--st-sp-4); background: var(--st-btn-bg); color: var(--st-btn-text);
   font-family: var(--st-mono); font-size:var(--st-fs-small); font-weight: 700;
-  text-decoration: none; border-radius: 0;
+  text-decoration: none; border-radius: var(--st-radius);
 }
-.flat-scope .skip-link:focus { top: .8rem; color: var(--st-bg); }
+.flat-scope .skip-link:focus,
+.flat-scope .skip-link:focus-visible { top: .8rem; color: var(--st-btn-text); }
 .flat-scope .noscript-bar {
   display: block;padding:var(--st-sp-4) var(--st-sp-4);margin:0;
   background: var(--st-bad-soft); border-bottom: 1px solid var(--st-bad);
@@ -186,7 +198,7 @@ body.flat-scope::before {
   border-bottom: 1px solid var(--st-line-strong);
 }
 .st-topbar-in {
-  width: min(1180px, calc(100% - 2.4rem));margin:0 auto;
+  width: min(var(--st-page-max), calc(100% - var(--st-page-gutter) * 2));margin:0 auto;
   min-height: 3.4rem;
   display: flex; align-items: center; justify-content: space-between; gap:var(--st-sp-4);
   flex-wrap: wrap; padding:var(--st-sp-2) 0;
@@ -540,7 +552,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
 /* Футер стендов */
 .st-footer {
   position: relative; z-index: 1;
-  width: min(1180px, calc(100% - 2.4rem));margin:var(--st-sp-9) auto 0;
+  width: min(var(--st-page-max), calc(100% - var(--st-page-gutter) * 2));margin:var(--st-sp-9) auto 0;
   padding-top:var(--st-sp-5);
   border-top: 1px solid var(--st-line);
   display: flex; flex-wrap: wrap; justify-content: space-between;gap:var(--st-sp-2);
@@ -674,7 +686,15 @@ a.flat-module:hover, a.flat-module:focus-visible {
 @media (max-width: 640px) {
   .st-topbar-in { flex-direction: column; align-items: stretch; gap:var(--st-sp-2); }
   .st-brand { align-self: flex-start; }
-  .st-topnav { width: 100%; justify-content: space-between; row-gap: var(--st-sp-1); }
+  /* Одна строка с горизонтальным скроллом вместо переноса на пол-экрана;
+     кнопка темы прилипает к правому краю и всегда доступна */
+  .st-topnav {
+    width: 100%; flex-wrap: nowrap; justify-content: flex-start;
+    overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; padding-bottom: 2px;
+  }
+  .st-topnav::-webkit-scrollbar { display: none; }
+  .st-topnav .theme-toggle { position: sticky; right: 0; flex: 0 0 auto; background: var(--st-bg); z-index: 1; }
   .st-hero, .flat-head { flex-direction: row; }
   .st-hero-index, .flat-index { min-width: 2.6rem; }
   .flat-profile .fp-spacer {margin-left:0; width: 100%; }
@@ -842,6 +862,9 @@ a.flat-module:hover, a.flat-module:focus-visible {
 .rv-review-meta { font-family: var(--st-mono); font-size:var(--st-fs-mini); color: var(--st-muted);margin-bottom:var(--st-sp-1); }
 .rv-review p { margin:var(--st-sp-1) 0 0; font-size:var(--st-fs-body); color: var(--st-text-2); line-height: var(--st-lh-ui); }
 .rv-empty { font-family: var(--st-mono); font-size:var(--st-fs-small); color: var(--st-faint);padding:var(--st-sp-4); border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius); }
+.rv-empty--mascot { display: flex; align-items: center; gap: var(--st-sp-3); text-align: left; }
+.rv-empty--mascot svg { flex: 0 0 auto; }
+.rv-empty--mascot span { min-width: 0; }
 
 /* --- Модальное окно кода работы --- */
 .st-modal { position: fixed; inset: 0; background: rgba(5, 8, 11, .72); display: flex; align-items: center; justify-content: center; z-index: var(--st-z-modal);padding:var(--st-sp-5); }
@@ -1199,8 +1222,8 @@ a.quest-card { text-decoration: none; color: inherit; }
   .quest-progress i { transition: none; }
 }
 
-/* Отступ для якорных переходов под липкий степнер */
-[id^="sec-"] { scroll-margin-top: 5.2rem; }
+/* Отступ для якорных переходов под липкий степнер/шапку */
+[id^="sec-"], #main-content, #gate { scroll-margin-top: 5.2rem; }
 
 /* Минимальные utility-классы (Tailwind на стендах не загружается) */
 .flat-scope .flex { display: flex; }
@@ -1246,6 +1269,42 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 }
 .lt-input-row:focus-within::after { opacity: 1; }
 @keyframes cursor-blink { 50% { opacity: 0; } }
+
+/* --------------------------------------------------------------------------
+   17. Ambient-моно: еле заметные плавающие глифы (# / >_ и т.п.).
+   Чистый декор: aria-hidden, pointer-events:none, не перехватывает фокус.
+   -------------------------------------------------------------------------- */
+.st-ambient {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  pointer-events: none;
+}
+.st-ambient span {
+  position: absolute;
+  font-family: var(--st-mono);
+  font-weight: 700;
+  color: var(--st-text);
+  opacity: .035;
+  user-select: none;
+  animation: st-ambient-drift var(--dur, 24s) ease-in-out var(--delay, 0s) infinite alternate;
+  will-change: transform;
+}
+@keyframes st-ambient-drift {
+  from { transform: translate3d(0, 0, 0) rotate(var(--r0, -8deg)); }
+  to   { transform: translate3d(var(--dx, 12px), var(--dy, -22px), 0) rotate(var(--r1, 10deg)); }
+}
+@media (prefers-reduced-motion: reduce) { .st-ambient { display: none; } }
+
+/* Маскоты в интерактивных контейнерах «оживают» только на hover/focus:
+   по умолчанию пауза, непрерывно живёт лишь маскот в брифе (.mc-speech-avatar) */
+.mascot-pick .mc-eye,
+.id-card-top .mc-float,
+.id-card-top .mc-eye { animation-play-state: paused; }
+.mascot-pick button:hover .mc-eye,
+.mascot-pick button:focus-visible .mc-eye,
+.id-card-top:hover .mc-float,
+.id-card-top:hover .mc-eye,
+.id-card-top:focus-within .mc-float,
+.id-card-top:focus-within .mc-eye { animation-play-state: running; }
 
 /* Онлайн-точка дышит */
 .ps-dot.is-online { animation: dot-pulse 2s ease-in-out infinite; }
@@ -1430,11 +1489,11 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 /* ==========================================================================
    22. Общие полировки отступов и читаемости
    ========================================================================== */
-.st-section-head { margin:var(--st-sp-8) 0 var(--st-sp-4); }
+.st-section-head { margin:var(--st-space-section) 0 var(--st-sp-4); }
 .lab-panel .lp-body { padding:var(--st-gap) var(--st-sp-5); }
 .lab-panel .lp-head { padding:var(--st-sp-4) var(--st-sp-5); }
 .st-lede { margin-bottom:var(--st-sp-8); }
-.st-hero { margin-bottom:var(--st-sp-6); }
+.st-hero { margin-bottom: var(--st-space-section); }
 p { overflow-wrap: break-word; }
 .rv-pool, .rv-mine { display: grid;gap:var(--st-sp-3); }
 .rv-form { margin-top:var(--st-sp-4);padding:var(--st-sp-4); border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius); }
@@ -1912,6 +1971,29 @@ label.flat-btn { cursor: pointer; }
 .uni-grid .p-card.wide { grid-column: auto; }
 .uni-grid .uni-card { min-width: 0; }
 @media (max-width: 900px) { .uni-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Схема пути «СетьПолис → ДатаПолис → следующий стенд» (главная стендов) */
+.uni-flow {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--st-sp-3); align-items: stretch;
+}
+.uni-flow-step {
+  border: 1px solid var(--st-line); background: var(--st-panel);
+  padding: var(--st-sp-4); display: flex; flex-direction: column; gap: var(--st-sp-2);
+  min-width: 0;
+}
+.uni-flow-num { font-size: var(--st-fs-micro); letter-spacing: var(--st-ls-kicker); color: var(--st-accent-2); text-transform: uppercase; }
+.uni-flow-name { font-size: var(--st-fs-h4); font-weight: 700; color: var(--st-text); }
+.uni-flow-text { font-size: var(--st-fs-sm); color: var(--st-muted); line-height: var(--st-lh-text); }
+.uni-flow-arrow {
+  display: flex; align-items: center; color: var(--st-faint);
+  font-size: var(--st-fs-h4);
+}
+@media (max-width: 900px) {
+  .uni-flow { grid-template-columns: minmax(0, 1fr); }
+  .uni-flow-arrow { transform: rotate(90deg); justify-content: center; padding: var(--st-sp-1) 0; }
+}
 .uni-card { min-height: 100%; }
 .uni-card--netpolis { --card-accent: #2563eb; }
 .uni-card--ops { --card-accent: #0d9488; border-color: color-mix(in srgb, #0d9488 30%, var(--st-line)); }
@@ -1937,3 +2019,6 @@ label.flat-btn { cursor: pointer; }
 .uni-mini-grid { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) { .uni-mini-grid { grid-template-columns: 1fr; } }
 .uni-mini .p-title { font-size:var(--st-fs-lead);margin:var(--st-sp-3) 0 var(--st-sp-2); }
+
+/* Слот «обновлено» в плоском футере; наследует моно-шрифт и faint от .st-footer */
+.st-footer-updated { white-space: nowrap; }

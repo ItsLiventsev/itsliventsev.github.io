@@ -14,12 +14,8 @@
 
   function uid() { return 'sub-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
   function nowISO() { return new Date().toISOString(); }
-  function $(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  var $ = window.DOMKIT.$;  // общий хелпер: dom-kit.js
+  var esc = window.DOMKIT.esc;  // единое экранирование: dom-kit.js
   var Store = {
     get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
@@ -65,6 +61,15 @@
     if (hasMascots()) return window.MASCOTS.svg(id || 'raccoon', { size: size || 48, floating: floating !== false });
     return '';
   }
+  /* Пустое состояние с маскотом-наставником; без mascots.js — обычный текст */
+  function emptyHtml(text, id) {
+    if (hasMascots()) {
+      return '<div class="rv-empty rv-empty--mascot">' +
+        window.MASCOTS.svg(id || 'raccoon', { size: 44, floating: true }) +
+        '<span>' + text + '</span></div>';
+    }
+    return '<p class="rv-empty">' + text + '</p>';
+  }
 
   /* Миграция работ схемы /1 в хранилище лиги */
   function migrateOldSubmissions() {
@@ -84,7 +89,24 @@
       btn.addEventListener('click', function () {
         var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         localStorage.setItem(THEME_KEY, next);
-        apply(next);
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // View Transitions: круговое раскрытие новой темы от кнопки;
+        // без API или при reduced-motion — мгновенное переключение.
+        if (!reduce && document.startViewTransition) {
+          var rect = btn.getBoundingClientRect();
+          var x = rect.left + rect.width / 2;
+          var y = rect.top + rect.height / 2;
+          var maxRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+          var vt = document.startViewTransition(function () { apply(next); });
+          vt.ready.then(function () {
+            document.documentElement.animate(
+              { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + maxRadius + 'px at ' + x + 'px ' + y + 'px)'] },
+              { duration: 460, easing: 'cubic-bezier(.16, 1, .3, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+          }).catch(function () {});
+        } else {
+          apply(next);
+        }
       });
     });
     window.addEventListener('storage', function (e) {
@@ -520,7 +542,7 @@
       return r.standId === standId && r.reviewee && (r.reviewee.id === profile.id || r.reviewee.name === profile.name);
     });
     if (!mine.length) {
-      box.innerHTML = '<p class="rv-empty">// здесь появятся рецензии на ваши работы: вставьте код ITS-REV1 от коллеги в блок обмена</p>';
+      box.innerHTML = emptyHtml('// здесь появятся рецензии на ваши работы: вставьте код ITS-REV1 от коллеги в блок обмена', 'fox');
       return;
     }
     box.innerHTML = mine.map(function (r) {
@@ -727,7 +749,7 @@
         return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) +
           (e.standId ? ' · ' + esc(e.standId) : '') + '</span><span class="feed-date">' +
           d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
-      }).join('') + '</ul>' : '<p class="rv-empty">// лента пуста: откройте первый квест</p>';
+      }).join('') + '</ul>' : emptyHtml('// лента пуста: откройте первый квест', 'raccoon');
 
       bindExchange('cab-code-input', 'cab-code-go', 'cab-msg', function () { renderDashboard(profile); });
       var repoBtn = $('cab-repo');
@@ -1483,8 +1505,54 @@
     safeRun('стенд DHCP', initDhcpLab);
     safeRun('стенд OVS', initOvsLab);
     safeRun('анимации', initReveal);
+    safeRun('ambient-декор', initAmbient);
+    safeRun('футер', initFooterDate);
     safeRun('навигация шагов', initStepSpy);
   }
+
+  // Единый слот футера «обновлено»: дата берётся из времени выдачи файла,
+  // чтобы не хардкодить дату в каждой из 37 страниц.
+  function initFooterDate() {
+    var el = document.querySelector('[data-footer-updated]');
+    if (!el) return;
+    var d = new Date(document.lastModified);
+    if (isNaN(d.getTime())) return;
+    el.textContent = '// обновлено: ' + d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  // Ambient-моно: декоративные плавающие глифы. Только для украшения,
+  // отключается при prefers-reduced-motion и не создаётся дважды.
+  function initAmbient() {
+    if (document.querySelector('.st-ambient')) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var glyphs = [
+      { g: '#',  x: 6,  y: 18, size: '5.5rem', dur: '26s', delay: '0s',    dx: '14px',  dy: '-24px', r0: '-9deg',  r1: '8deg' },
+      { g: '>_', x: 84, y: 12, size: '4rem',   dur: '31s', delay: '-6s',   dx: '-16px', dy: '-18px', r0: '6deg',   r1: '-7deg' },
+      { g: '/',  x: 70, y: 62, size: '6rem',   dur: '28s', delay: '-11s',  dx: '12px',  dy: '22px',  r0: '-12deg', r1: '11deg' },
+      { g: '$',  x: 12, y: 74, size: '3.4rem', dur: '23s', delay: '-4s',   dx: '-10px', dy: '-20px', r0: '7deg',   r1: '-9deg' },
+      { g: '~',  x: 44, y: 34, size: '4.6rem', dur: '34s', delay: '-15s',  dx: '18px',  dy: '16px',  r0: '-6deg',  r1: '10deg' },
+      { g: '{ }',x: 90, y: 78, size: '3rem',   dur: '27s', delay: '-8s',   dx: '-14px', dy: '-16px', r0: '8deg',   r1: '-8deg' }
+    ];
+    var layer = document.createElement('div');
+    layer.className = 'st-ambient';
+    layer.setAttribute('aria-hidden', 'true');
+    glyphs.forEach(function (it) {
+      var el = document.createElement('span');
+      el.textContent = it.g;
+      el.style.left = it.x + '%';
+      el.style.top = it.y + '%';
+      el.style.fontSize = it.size;
+      el.style.setProperty('--dur', it.dur);
+      el.style.setProperty('--delay', it.delay);
+      el.style.setProperty('--dx', it.dx);
+      el.style.setProperty('--dy', it.dy);
+      el.style.setProperty('--r0', it.r0);
+      el.style.setProperty('--r1', it.r1);
+      layer.appendChild(el);
+    });
+    document.body.insertBefore(layer, document.body.firstChild);
+  }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

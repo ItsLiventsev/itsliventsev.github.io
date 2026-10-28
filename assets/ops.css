@@ -60,8 +60,8 @@
 .sla-meter span.sla-num { font-family: var(--st-mono); font-size: var(--st-fs-mini); color: var(--st-text-2); white-space: nowrap; }
 
 /* Доска заявок на хабе */
-.ops-board { display: grid; grid-template-columns: repeat(3, 1fr);gap:var(--st-sp-4); }
-@media (max-width: 900px) { .ops-board { grid-template-columns: 1fr; } }
+/* Колонки сами перетекают 3 → 2 → 1 по ширине, без ручного брейкпоинта */
+.ops-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));gap:var(--st-sp-4); }
 .ops-column { border: 1px solid var(--st-line); border-radius: var(--st-radius); background: var(--st-panel); overflow: hidden; min-width: 0; }
 .ops-column-head { display: flex; flex-wrap: wrap; row-gap: var(--st-sp-1); justify-content: space-between; align-items: center;gap:var(--st-sp-2);padding:var(--st-sp-3) var(--st-sp-4); background: var(--st-panel-2); border-bottom: 1px solid var(--st-line); font-family: var(--st-mono); font-size: var(--st-fs-mini); font-weight: 700; text-transform: uppercase; letter-spacing: var(--st-ls-label); color: var(--st-text-2); }
 .ops-column-head .count { background: var(--st-panel); border: 1px solid var(--st-line); border-radius: 999px;padding:var(--st-sp-1) var(--st-sp-2); }
@@ -157,3 +157,24 @@
   .ops-dot { box-shadow: none; }
   .p-card, .crew-card, .ops-ticket-mini, .mascot-opt { transition: none; }
 }
+
+/* Легенда смены перед гейтом: приоритеты P1–P4 и SLA */
+.ops-legend { margin-bottom: var(--st-space-section); }
+.ops-legend-title {
+  margin: 0 0 var(--st-sp-4); font-family: var(--st-sans);
+  font-size: var(--st-fs-h4); color: var(--st-text);
+}
+.ops-legend-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--st-sp-3);
+}
+.ops-legend-list li {
+  display: flex; gap: var(--st-sp-3); align-items: flex-start;
+  border: 1px solid var(--st-line); background: var(--st-panel-2);
+  padding: var(--st-sp-3) var(--st-sp-4); min-width: 0;
+}
+.ops-legend-list .sev { flex: 0 0 auto; }
+.ops-legend-list span:not(.sev) { font-size: var(--st-fs-sm); line-height: var(--st-lh-text); color: var(--st-muted); }
+.ops-legend-list strong { color: var(--st-text); font-weight: 600; }
+.ops-legend-note { margin: var(--st-sp-4) 0 0; font-size: var(--st-fs-mini); color: var(--st-faint); }

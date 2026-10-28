@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#232b34" stroke-width="1" opacity="0.55"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0b0e11"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <text x="905" y="330" font-family="'JetBrains Mono',monospace" font-size="400" font-weight="700" fill="#5b9dff" opacity="0.1">$</text>
+  <text x="640" y="560" font-family="'JetBrains Mono',monospace" font-size="300" font-weight="700" fill="#5b9dff" opacity="0.07">#</text>
+  <text x="1060" y="150" font-family="'JetBrains Mono',monospace" font-size="150" font-weight="700" fill="#86b6ff" opacity="0.08">>_</text>
+  <rect x="96" y="176" width="132" height="132" rx="0" fill="none" stroke="#5b9dff" stroke-width="2"/>
+  <path d="M128 218l22 24-22 24" fill="none" stroke="#5b9dff" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
+  <line x1="162" y1="266" x2="202" y2="266" stroke="#f5f7fa" stroke-width="8" stroke-linecap="square"/>
+  <text x="262" y="248" font-family="Inter,system-ui,sans-serif" font-size="86" font-weight="800" fill="#f5f7fa">ДатаПолис</text>
+  <text x="264" y="296" font-family="'JetBrains Mono',monospace" font-size="27" font-weight="500" fill="#86b6ff">// сервисный центр · эксплуатация и администрирование</text>
+  <rect x="96" y="430" width="1008" height="2" fill="#232b34"/>
+  <text x="96" y="492" font-family="'JetBrains Mono',monospace" font-size="26" font-weight="500" fill="#8a95a1">SLA · инциденты · изменения · дежурства · 5 спринтов · 16 работ</text>
+  <text x="96" y="536" font-family="'JetBrains Mono',monospace" font-size="21" font-weight="400" fill="#5f6b79">itsliventsev.github.io/stands/ops</text>
+</svg>

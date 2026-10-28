@@ -132,7 +132,7 @@ function jsonLd(rel, info) {
       headline: info.headline, description: info.description, url,
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       inLanguage: 'ru-RU', author: person, publisher: { '@type': 'Person', name: 'itsliventsev' },
-      image: SITE_URL + '/assets/og.png',
+      image: ogImage(rel),
     };
     if (info.date) { node.datePublished = info.date; node.dateModified = info.date; }
     if (info.tags.length) node.keywords = info.tags.join(', ');
@@ -151,9 +151,17 @@ function jsonLd(rel, info) {
   return graphs.map((g) => '<script type="application/ld+json">' + JSON.stringify(g, null, 0) + '</script>').join('\n  ');
 }
 
+/* OG-картинка выбирается по вселенной: stands/ops → ДатаПолис, stands → СетьПолис,
+   корневые страницы → общая карточка. */
+function ogImage(rel) {
+  if (rel.startsWith('stands/ops/')) return SITE_URL + '/assets/og-ops.png';
+  if (rel.startsWith('stands/')) return SITE_URL + '/assets/og-stands.png';
+  return SITE_URL + '/assets/og.png';
+}
+
 function buildBlock(rel, info) {
   const url = abs(rel);
-  const img = SITE_URL + '/assets/og.png';
+  const img = ogImage(rel);
   const lines = [BLOCK_START];
   lines.push(`<link rel="canonical" href="${url}">`);
   lines.push('<link rel="icon" type="image/png" sizes="192x192" href="' + SITE_URL + '/assets/icon-192.png">');

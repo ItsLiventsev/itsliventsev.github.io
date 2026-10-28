@@ -1,0 +1,3 @@
+# Сборочные зависимости (OG-генератор, scripts/build-og.js) — не часть сайта
+.ogbuild/
+node_modules/
