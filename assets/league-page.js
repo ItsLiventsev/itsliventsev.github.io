@@ -7,12 +7,8 @@
 (function () {
   'use strict';
 
-  function $(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  var $ = window.DOMKIT.$;  // общий хелпер: dom-kit.js
+  var esc = window.DOMKIT.esc;  // единое экранирование: dom-kit.js
   function fmt(iso) {
     try { return new Date(iso).toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' }); }
     catch (e) { return iso || '—'; }

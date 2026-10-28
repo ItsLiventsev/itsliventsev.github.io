@@ -5,19 +5,10 @@
    ========================================================================== */
 (function () {
   'use strict';
-  function $(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  var $ = window.DOMKIT.$;  // общий хелпер: dom-kit.js
+  var esc = window.DOMKIT.esc;  // единое экранирование: dom-kit.js
   function mascotSvg(id, size) { return window.MASCOTS ? MASCOTS.svg(id || 'wolf', { size: size || 44, floating: false }) : ''; }
-  function setMsg(el, text, state) {
-    if (!el) return;
-    el.textContent = text || '';
-    el.classList.remove('is-ok', 'is-bad', 'is-warn');
-    if (state) el.classList.add('is-' + state);
-  }
+  var setMsg = window.DOMKIT.setMsg;  // общий статус: dom-kit.js
 
   /* Роадмап второй вселенной — синхронизирован с id страниц-лабораторных */
   var SPRINTS = {
@@ -142,7 +133,7 @@
       var d = new Date(e.at);
       return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) + '</span>' +
         '<span class="feed-date">' + d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
-    }).join('') + '</ul>' : '<p class="rv-empty">// лента пуста: выйдите на первую смену</p>';
+    }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('otter', 44) + '<span>// лента пуста: выйдите на первую смену</span></div>';
   }
 
   function init() {

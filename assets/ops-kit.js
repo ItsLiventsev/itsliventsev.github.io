@@ -8,19 +8,10 @@
    ========================================================================== */
 (function () {
   'use strict';
-  function $(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  var $ = window.DOMKIT.$;  // общий хелпер: dom-kit.js
+  var esc = window.DOMKIT.esc;  // единое экранирование: dom-kit.js
   function nowISO() { return new Date().toISOString(); }
-  function setMsg(el, text, state) {
-    if (!el) return;
-    el.textContent = text || '';
-    el.classList.remove('is-ok', 'is-bad', 'is-warn');
-    if (state) el.classList.add('is-' + state);
-  }
+  var setMsg = window.DOMKIT.setMsg;  // общий статус: dom-kit.js
   function uid() { return 'opslab-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
   var STORE = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },

@@ -9,12 +9,8 @@
 (function () {
   'use strict';
 
-  function $(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+  var $ = window.DOMKIT.$;  // общий хелпер: dom-kit.js
+  var esc = window.DOMKIT.esc;  // единое экранирование: dom-kit.js
   function nowISO() { return new Date().toISOString(); }
   function uid() { return 'lab-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
 
