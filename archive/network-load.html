@@ -9,15 +9,16 @@
 <title>Устранение паразитирующей нагрузки · itsliventsev</title>
 <meta name="description" content="7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://cdn.tailwindcss.com">
 <script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261028ad">
-<link rel="stylesheet" href="../assets/tw-fallback.css?v=20261028ad">
-<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261028ad">
-<link rel="stylesheet" href="../assets/flow.css?v=20261028ad">
+<link rel="stylesheet" href="../assets/site.css?v=20261028ae">
+<link rel="stylesheet" href="../assets/tw-fallback.css?v=20261028ae">
+<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261028ae">
+<link rel="stylesheet" href="../assets/flow.css?v=20261028ae">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/network-load.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -170,11 +171,11 @@
           <div class="font-medium text-[var(--text)] mb-2">Этап 1: Командная строка — ваш друг (25 мин, 6 баллов)</div>
           <div class="text-xs text-[var(--text-2)] space-y-2">
             <div>
-              <div class="font-medium mb-1">ШАГ 1: Обучение с ИИ</div>
+              <div class="font-medium mb-1">шаг 1: Обучение с ИИ</div>
               <p class="text-[var(--muted)] mb-0">Спросите у ИИ: «Объясни команду 'netstat -ano' в Windows: что означает каждый ключ (-a, -n, -o), как читать вывод, что означают столбцы Proto, Local Address, Foreign Address, State, PID?»</p>
             </div>
             <div>
-              <div class="font-medium mb-1">ШАГ 2: Практика</div>
+              <div class="font-medium mb-1">шаг 2: Практика</div>
               <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте CMD от имени администратора</li>
                 <li>• Выполните: <code>netstat -ano &gt; C:\netstat_full.txt</code></li>
@@ -182,11 +183,11 @@
               </ol>
             </div>
             <div>
-              <div class="font-medium mb-1">ШАГ 3: Анализ</div>
+              <div class="font-medium mb-1">шаг 3: Анализ</div>
               <p class="text-[var(--muted)] mb-0">Откройте netstat_established.txt и найдите 5 разных внешних IP-адресов и соответствующие PID процессов.</p>
             </div>
             <div>
-              <div class="font-medium mb-1">ШАГ 4: Идентификация</div>
+              <div class="font-medium mb-1">шаг 4: Идентификация</div>
               <p class="text-[var(--muted)] mb-0">Для каждого PID выполните: <code>tasklist | findstr «[PID]»</code></p>
             </div>
           </div>
@@ -232,7 +233,7 @@
           <div class="font-medium text-[var(--text)] mb-2">Этап 1: Анатомия автообновлений (25 мин, 7 баллов)</div>
           <div class="text-xs text-[var(--text-2)] space-y-2">
             <div>
-              <div class="font-medium mb-1">ШАГ 1: Исследование служб</div>
+              <div class="font-medium mb-1">шаг 1: Исследование служб</div>
               <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте services.msc (Win+R → services.msc)</li>
                 <li>• Найдите службы, связанные с обновлениями: wuauserv, UsoSvc, WaaSMedicSvc, DoSvc</li>
@@ -240,7 +241,7 @@
               </ol>
             </div>
             <div>
-              <div class="font-medium mb-1">ШАГ 2: Групповые политики</div>
+              <div class="font-medium mb-1">шаг 2: Групповые политики</div>
               <ol class="ml-4 space-y-1 mb-0">
                 <li>• Откройте gpedit.msc (Win+R)</li>
                 <li>• Путь: Computer Configuration → Administrative Templates → Windows Components → Windows Update</li>
@@ -288,13 +289,13 @@
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · архив</span>
-    <a href="../admin.html" class="admin-link" rel="nofollow">admin</a>
-      <span data-footer-updated class="footer-updated"></span>
+    <nav class="footer-nav" aria-label="Служебная навигация"><a href="../index.html">главная</a> <a href="../projects.html">проекты</a> <a href="../sitemap.html">карта сайта</a> <a href="../feed.xml">rss</a> <a href="../admin.html" rel="nofollow">admin</a></nav>
+    <span data-footer-updated class="footer-updated"></span>
   </footer>
 </div>
 
-<script src="../assets/site.js?v=20261028ad"></script>
-<script src="../assets/shared-chrome.js?v=20261028ad"></script>
-<script src="../assets/flow.js?v=20261028ad"></script>
+<script src="../assets/site.js?v=20261028ae"></script>
+<script src="../assets/shared-chrome.js?v=20261028ae"></script>
+<script src="../assets/flow.js?v=20261028ae"></script>
 </body>
 </html>
