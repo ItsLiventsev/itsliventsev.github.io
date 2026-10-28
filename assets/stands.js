@@ -274,7 +274,7 @@
     strip.innerHTML =
       '<span class="xp-handle" title="ваш хэндл во взаимных оценках">' + mascotSvg(profile.mascotId, 22, false) + ' ' + esc(handle) + '</span>' +
       '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
-      '<div class="xp-bar" title="опыт до следующего уровня"><i style="width:' + t.level.progress + '%"></i></div>' +
+      '<div class="xp-bar" title="опыт до следующего уровня"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
       '<span class="xp-meta">' + t.xp + ' XP</span>' +
       '<span class="xp-meta xp-coins">◈ ' + t.coins + '</span>' +
       '<span class="prp-pill" title="PRP — очки взаимных проверок: сдача тратит 1, проверка коллеги даёт 1">PRP ' +
@@ -694,18 +694,18 @@
           '<div><p class="id-handle">' + esc(handle.text) + '</p>' +
           '<p class="id-name">' + esc(profile.name) + '</p>' +
           '<p class="id-group">' + esc(profile.group) + (tribe ? ' · ' + esc(tribe.name) : '') + '</p></div></div>' +
-        '<div class="id-stats">' +
+        '<div class="id-stats"><div class="id-collapse">' +
           '<div class="id-stat"><b>' + t.level.level + '</b><span>уровень</span></div>' +
           '<div class="id-stat"><b>' + t.coins + ' ◈</b><span>неткоины</span></div>' +
           '<div class="id-stat"><b>' + L.prpBalance(profile.id) + '</b><span>PRP</span></div>' +
-        '</div>' +
-        '<div class="id-level"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
+        '</div></div>' +
+        '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
           (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : '') + '</span>' +
-          '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div>' +
+          '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
           '<div class="flat-row flat-row--spaced">' +
           '<a class="flat-btn ghost" href="league.html">моя лига и достижения →</a>' +
           '<a class="flat-btn ghost" href="teams.html">трайн и команды</a>' +
-          '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div>';
+          '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div></div>';
 
       (function renderQuests() {
         var doneCount = 0;
@@ -719,7 +719,7 @@
           return '<a class="quest-card" href="' + q.href + '">' +
             '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
             '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
-            '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
+            '<div class="quest-progress"><i style="--p:' + (m.percent / 100) + '"></i></div></div>' +
             '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span>' +
             '<span class="flat-badge">' + esc(q.format) + '</span></div></a>';
         });
@@ -728,7 +728,7 @@
           '<div><strong>роадмап практики</strong>' +
           '<p class="admin-hint">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
           '<div class="roadmap-meter"><span class="xp-meta">' + doneCount + ' из ' + QUESTS.length + ' работ · ' + overall + '%</span>' +
-          '<div class="xp-bar"><i style="width:' + overall + '%"></i></div></div></div>';
+          '<div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>';
 
         var groups = '';
         Object.keys(SPRINT_STORY).map(Number).sort().forEach(function (sp) {
@@ -1153,7 +1153,7 @@
           '<span class="lc-hint">' + esc(c.hint) + '</span></div></div>';
       }).join('');
       scoreEl.innerHTML = result.passed + '<small>/' + result.total + ' проверок · ' + result.score + '%</small>';
-      progressBar.style.width = result.score + '%';
+      progressBar.style.setProperty('--p', result.score / 100);
       renderSteps(result);
       if (!quiet) addLog('check', 'проверка конфига: ' + result.passed + '/' + result.total);
       autosave();
@@ -1376,7 +1376,7 @@
           '<span class="lc-hint">' + esc(c.hint) + '</span></div></div>';
       }).join('');
       scoreEl.innerHTML = result.passed + '<small>/' + result.total + ' проверок · ' + result.score + '%</small>';
-      progressBar.style.width = result.score + '%';
+      progressBar.style.setProperty('--p', result.score / 100);
       renderSteps();
       renderState();
       if (!quiet) addLog('check', 'проверка конфигурации OVS: ' + result.passed + '/' + result.total);

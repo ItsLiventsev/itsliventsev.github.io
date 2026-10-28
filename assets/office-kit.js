@@ -70,7 +70,7 @@
       var done = cfg.tasks.filter(function (t) { return state.tasks[t.id]; }).length;
       var pct = Math.round(done / cfg.tasks.length * 100);
       var bar = $('office-progress-bar'), label = $('office-progress-label');
-      if (bar) bar.style.width = pct + '%';
+      if (bar) bar.style.setProperty('--p', pct / 100);
       if (label) label.textContent = done + ' из ' + cfg.tasks.length + ' задач · ' + pct + '%';
       return { done: done, total: cfg.tasks.length, pct: pct };
     }
@@ -219,7 +219,7 @@
 
     var root = $('office-root');
     root.innerHTML =
-      '<div class="lk-progress-strip"><div class="xp-bar"><i id="office-progress-bar" style="width:0"></i></div><span class="xp-meta" id="office-progress-label">—</span>' +
+      '<div class="lk-progress-strip"><div class="xp-bar"><i id="office-progress-bar" style="--p:0"></i></div><span class="xp-meta" id="office-progress-label">—</span>' +
       '<span class="kind-badge">спринт ' + cfg.sprint + ' · ' + esc(cfg.sprintTitle) + '</span></div>' +
       briefHtml() + theoryHtml() + referenceHtml() + tasksHtml() + quizHtml() + reflectionHtml() + finishHtml();
 

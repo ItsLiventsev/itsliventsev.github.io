@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028ab';
+const VERSION = '20261028ac';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -31,7 +31,7 @@ ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' +
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -249,6 +249,60 @@ for (const f of walk('stands/office', /office-.*\.html$/)) {
   ok(cfg.tasks.length >= 6 && cfg.quiz.length === 4 && cfg.theory.length >= 3 && cfg.reference.length >= 5, f + ': неполный контент работы');
   ok(cfg.sprintTitle && cfg.story && cfg.who, f + ': нет брифа/маскота');
 }
+
+
+/* 21. Motion-система: токены, запрещённые свойства, общий хром */
+const sharedCss = read('assets/shared-chrome.css');
+const siteJs = read('assets/site.js');
+ok(/--ease-standard:\s*cubic-bezier\(\.2, ?\.7, ?\.2, ?1\)/.test(siteCss), 'нет токена --ease-standard');
+ok(siteCss.includes('--dur-fast: 120ms') && siteCss.includes('--dur-base: 220ms')
+  && siteCss.includes('--dur-slow: 380ms') && siteCss.includes('--dur-slower: 600ms'), 'нет полной шкалы --dur-*');
+ok(siteCss.includes('--ease-exit') && siteCss.includes('--ease-emphasized'), 'нет кривых входа/выхода');
+ok(stCss.includes('--st-dur-base: var(--dur-base)') && stCss.includes('--st-ease-exit: var(--ease-exit)'), 'в stands.css нет motion-алиасов');
+ok(siteCss.includes('--header-h-sm') && siteCss.includes('--header-h-md') && siteCss.includes('--header-h-lg'), 'нет токенов высоты шапки');
+/* никаких числовых длительностей в transition — только var(--dur-*) или 0s/none */
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
+  c.split('\n').forEach((line, i) => {
+    if (line.includes('transition') && /(?<![\w-])\d*\.?\d+s/.test(line)) {
+      ok(false, n + ':' + (i + 1) + ' числовая длительность в transition: ' + line.trim().slice(0, 80));
+    }
+  });
+}
+/* запрещённые для переходов свойства: layout двигается только transform'ом */
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
+  c.split('\n').forEach((line, i) => {
+    if (/transition[^;]*(?<![\w-])(width|height|top|left|right|bottom|max-height)(?![\w-])/.test(line)) {
+      ok(false, n + ':' + (i + 1) + ' transition геометрии: ' + line.trim().slice(0, 80));
+    }
+  });
+}
+/* прогресс-бары живут на scaleX(var(--p)), а не на width */
+ok(/\.xp-bar i[^{]*\{[^}]*scaleX\(var\(--p/.test(stCss), 'xp-bar не переведён на scaleX(var(--p))');
+ok(!/style\.width/.test(read('assets/stands.js') + read('assets/ops-kit.js') + read('assets/office-kit.js') + read('assets/lab-kit.js')), 'JS всё ещё анимирует style.width');
+/* View Transitions и именованные элементы хрома */
+ok(sharedCss.includes('@view-transition') && sharedCss.includes('view-transition-name: chrome-brand')
+  && sharedCss.includes('view-transition-name: chrome-theme'), 'нет View Transitions хрома');
+/* общий хром подключён на всех страницах после остальных стилей */
+const chromePages = allHtml.filter(f => read(f).includes('assets/shared-chrome.css') && read(f).includes('assets/shared-chrome.js'));
+ok(chromePages.length === allHtml.length, 'shared-chrome подключён не на всех страницах: ' + (allHtml.length - chromePages.length));
+for (const f of allHtml) {
+  const c = read(f);
+  const cssPos = c.indexOf('shared-chrome.css');
+  const lastCss = c.lastIndexOf('.css?v=');
+  ok(cssPos > lastCss - 40, f + ': shared-chrome.css должен идти последним из стилей');
+}
+/* reduced-motion: глобальный сброс и точечные гарантии видимости */
+ok(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*animation-duration: ?\.01ms/.test(siteCss), 'нет глобального reduced-motion сброса');
+ok(sharedCss.includes('skeleton-pulse') && /prefers-reduced-motion[\s\S]*skeleton::after/.test(sharedCss), 'skeleton не глушится при reduced-motion');
+/* мобильное меню — оверлей, а не перестройка шапки */
+ok(/@media \(max-width: 880px\)[\s\S]*\.js-enabled \.site-nav[\s\S]*position: fixed/.test(siteCss), 'мобильное меню не стало fixed-оверлеем');
+ok(!/transition:[^;]*max-height/.test(siteCss), 'остался max-height-переход меню');
+/* липкий профиль и компактная пилюля */
+ok(stCss.includes('position: sticky') && stCss.includes('.is-compact'), 'нет липкого профиля/компактного состояния');
+/* скелетоны и резерв высот JS-контейнеров */
+ok(sharedCss.includes('.skeleton') && /#board[^{]*\{[^}]*min-height/.test(sharedCss), 'нет резерва высот JS-блоков');
+/* стаггер через --i, не через таймерные d-классы */
+ok(siteJs.includes("--i") && siteCss.includes('calc(var(--i, 0) * 40ms)'), 'стаггер не переведён на --i');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

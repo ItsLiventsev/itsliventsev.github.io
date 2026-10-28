@@ -62,11 +62,11 @@
       '<div class="id-card-top">' + mascotSvg(p.mascotId, 64) +
       '<div><p class="id-handle">' + esc(OFFICE.handleFor(p).text) + '</p><p class="id-name">' + esc(p.name) + '</p>' +
       '<p class="id-group">' + esc(p.group) + ' · бюро ОфисПолиса</p></div></div>' +
-      '<div class="id-stats"><div class="id-stat"><b>' + t.level.level + '</b><span>уровень</span></div>' +
+      '<div class="id-stats"><div class="id-collapse"><div class="id-stat"><b>' + t.level.level + '</b><span>уровень</span></div>' +
       '<div class="id-stat"><b>' + t.coins + ' ◈</b><span>неткоины</span></div>' +
-      '<div class="id-stat"><b>' + done + '/' + QUESTS.length + '</b><span>работы</span></div></div>' +
-      '<div class="id-level"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP</span>' +
-      '<div class="xp-bar"><i style="width:' + t.level.progress + '%"></i></div></div>';
+      '<div class="id-stat"><b>' + done + '/' + QUESTS.length + '</b><span>работы</span></div></div></div>' +
+      '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP</span>' +
+      '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div></div></div>';
 
     $('sla-grid').innerHTML = [
       ['работ открыто', QUESTS.length - done], ['работ сдано', done], ['на отлично (≥95%)', ready],
@@ -89,7 +89,7 @@
         return '<a class="quest-card" href="' + q.href + '">' +
           '<div class="quest-glyph">' + mascotSvg(q.glyph, 42) + '</div>' +
           '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag linux">практическая работа</span></p>' +
-          '<div class="quest-progress"><i style="width:' + mst.pct + '%"></i></div></div>' +
+          '<div class="quest-progress"><i style="--p:' + (mst.pct / 100) + '"></i></div></div>' +
           '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span></div></a>';
       }).join('');
       return '<div class="sprint-group"><div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(SPRINTS[sp].title) + '</h3>' +
@@ -98,7 +98,7 @@
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап бюро</strong>' +
       '<p class="admin-hint">Пять спринтов от сложного документа до простого сайта. Приложения: LibreOffice и Microsoft Office, пара работ — с сетевыми инструментами.</p></div>' +
-      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i style="width:' + overall + '%"></i></div></div></div>' + groups;
+      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>' + groups;
   }
 
   function renderFeed(p) {

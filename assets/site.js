@@ -54,7 +54,8 @@ document.documentElement.classList.add('js-enabled');
       transition.ready.then(() => {
         document.documentElement.animate(
           { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`] },
-          { duration: 460, easing: 'cubic-bezier(.16, 1, .3, 1)', pseudoElement: '::view-transition-new(root)' }
+          // Длительность совпадает с --dur-base и прокруткой иконки theme-toggle
+          { duration: 220, easing: 'cubic-bezier(.2, .8, .2, 1)', pseudoElement: '::view-transition-new(root)' }
         );
       }).catch(() => {});
     } else {
@@ -157,7 +158,7 @@ document.documentElement.classList.add('js-enabled');
     ticking = false;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-    if (progress) progress.style.width = pct + '%';
+    if (progress) progress.style.transform = 'scaleX(' + (pct / 100) + ')';
     if (readPercent) readPercent.textContent = Math.round(pct) + '%';
     if (toTop) toTop.classList.toggle('show', window.scrollY > 600);
   }
@@ -176,6 +177,12 @@ document.documentElement.classList.add('js-enabled');
 (function () {
   const targets = document.querySelectorAll('.reveal, .stagger');
   if (!targets.length) return;
+  // Стаггер через --i (первые 6 дочерних), без таймеров и магических задержек
+  document.querySelectorAll('.stagger').forEach((el) => {
+    Array.prototype.slice.call(el.children, 0, 6).forEach((child, i) => {
+      child.style.setProperty('--i', i);
+    });
+  });
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {

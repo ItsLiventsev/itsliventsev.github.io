@@ -13,10 +13,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261028ab">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261028ab">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261028ab">
-<link rel="stylesheet" href="../../assets/office.css?v=20261028ab">
+<link rel="stylesheet" href="../../assets/site.css?v=20261028ac">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261028ac">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261028ac">
+<link rel="stylesheet" href="../../assets/office.css?v=20261028ac">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261028ac">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/office/office-monitor.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -106,11 +107,12 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261028ab"></script>
-<script src="../../assets/office-engine.js?v=20261028ab"></script>
-<script src="../../assets/dom-kit.js?v=20261028ab"></script>
-<script src="../../assets/stands.js?v=20261028ab"></script>
+<script src="../../assets/mascots.js?v=20261028ac"></script>
+<script src="../../assets/office-engine.js?v=20261028ac"></script>
+<script src="../../assets/dom-kit.js?v=20261028ac"></script>
+<script src="../../assets/stands.js?v=20261028ac"></script>
 <script type="application/json" id="office-data">{"id":"office-monitor","sprint":5,"hours":"4 ч","coins":"80","mascot":"owl","who":"сова Агата — учит видеть проблему до звонка пользователя","title":"Мониторинг сетевой инфраструктуры","lead":"Доступность узлов, ping и traceroute, ресурсы ПК, журналы событий, инвентаризация и чек-листы оператора.","story":"Принтер «иногда не печатает», а причина — забитая очередь и сетевая маска. Агата показывает рабочий минимум мониторинга оператора: проверка доступности, диагностика маршрута, загрузка ресурсов, журналы событий и простой журнал обходов. Не все инциденты требуют NOC — многие закрываются на первой линии по чек-листу.","theory":[{"h":"Доступность: ping и маршрут","p":"ping проверяет доступность узла и потери, traceroute (tracert в Windows) показывает, где обрывается путь. Сначала проверяют шлюз, потом внешний узел — так локальную проблему отделяют от глобальной.","code":"ping -c 4 192.168.1.1      # Linux/macOS\nping -n 4 192.168.1.1       # Windows\ntraceroute example.ru / tracert example.ru\nip a / ipconfig             # адрес и маска"},{"h":"Ресурсы ПК и журналы событий","p":"Диспетчер задач (Windows) и htop/top (Linux) показывают CPU, память, диск и сеть; нагрузка 100% на диске объясняет «всё тормозит». Журналы событий (Event Viewer, journalctl) хранят ошибки служб и время сбоя — это факты, а не догадки."},{"h":"Чек-листы и инвентаризация","p":"Обход фиксируют в простом чек-листе: доступность, место на дисках, тонер и бумага принтеров, резервные копии, ошибки журналов. Инвентарная запись каждого ПК (модель, ОС, серийник, пользователь) ускоряет любую заявку.","note":"Мониторинг — это рутина по расписанию: одна запись в смену ценнее десяти воспоминаний после аварии."}],"reference":[{"lo":"ping / traceroute (iputils)","ms":"ping / tracert","what":"доступность и маршрут"},{"lo":"htop / top","ms":"Диспетчер задач","what":"CPU, память, диск, сеть"},{"lo":"journalctl -xe","ms":"Просмотр событий (eventvwr)","what":"журналы ошибок служб"},{"lo":"df -h / du -sh *","ms":"Проводник · Свойства диска","what":"свободное место"},{"lo":"ip a / nmcli","ms":"ipconfig /all","what":"адрес, маска, шлюз, DNS"},{"lo":"ss -tulpn","ms":"netstat -ano","what":"открытые порты и службы"}],"tasks":[{"id":"t1","text":"Проверьте доступность шлюза и внешнего узла, зафиксируйте потери и задержки"},{"id":"t2","text":"Постройте traceroute до внешнего ресурса и опишите, на каком хопе теряется связь при сбое"},{"id":"t3","text":"Снимите показатели ресурсов ПК в покое и под нагрузкой, найдите процесс-лидер"},{"id":"t4","text":"Найдите в журналах событий ошибку службы и расшифруйте её код"},{"id":"t5","text":"Проверьте место на дисках, очередь печати, статус бэкапа и обновлений"},{"id":"t6","text":"Заполните чек-лист обхода и инвентарную карточку учебного ПК"}],"quiz":[{"q":"С чего начинают диагностику «нет сети»?","options":["С переустановки ОС","С проверки шлюза через ping, затем внешнего узла","С покупки нового кабеля вслепую","С очистки корзины"],"answer":1,"explain":"Пинг шлюза отделяет локальную проблему от внешней и сужает поиск за минуту."},{"q":"Что показывает traceroute/tracert?","options":["Скорость печати","Цепочку маршрутизаторов до узла и точку обрыва","Список файлов","Пароли"],"answer":1,"explain":"Хопы рисуют путь пакета: видно, где связь прекращается."},{"q":"Где найти факт ошибки службы, а не догадки?","options":["В названии папки","В журнале событий / journalctl с временем сбоя","В обоях рабочего стола","В истории браузера"],"answer":1,"explain":"Системные журналы хранят коды ошибок и временные метки — опора разбора."},{"q":"Зачем ведут чек-лист обхода по сменам?","options":["Для отчётности «для галочки»","Регулярная запись ловит деградацию до инцидента","Чтобы заменить принтер","Это отменяет мониторинг"],"answer":1,"explain":"История показателей показывает тренд: диск заполняется, тонер кончается, сбои учащаются."}],"reflection":["Какой пункт обхода помог бы предотвратить недавний сбой в кабинете?","Чем факт из журнала сильнее устного «оно само»?","Какие поля обязательны в инвентарной карточке ПК?"],"sprintTitle":"Инфраструктура и веб"}</script>
-<script src="../../assets/office-kit.js?v=20261028ab"></script>
+<script src="../../assets/office-kit.js?v=20261028ac"></script>
+<script src="../../assets/shared-chrome.js?v=20261028ac"></script>
 </body>
 </html>
