@@ -32,7 +32,7 @@
     var el = $('sub-msg');
     if (!el) return;
     el.textContent = msg;
-    el.style.color = isErr ? '#dc2626' : 'var(--accent)';
+    el.style.color = isErr ? 'var(--danger-text)' : 'var(--accent)';
   }
   var L = function () { return window.LEAGUE || null; };
 

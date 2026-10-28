@@ -12,6 +12,12 @@
     });
   }
   function mascotSvg(id, size) { return window.MASCOTS ? MASCOTS.svg(id || 'wolf', { size: size || 44, floating: false }) : ''; }
+  function setMsg(el, text, state) {
+    if (!el) return;
+    el.textContent = text || '';
+    el.classList.remove('is-ok', 'is-bad', 'is-warn');
+    if (state) el.classList.add('is-' + state);
+  }
 
   /* Роадмап второй вселенной — синхронизирован с id страниц-лабораторных */
   var SPRINTS = {
@@ -112,7 +118,7 @@
       var rows = QUESTS.filter(function (q) { return q.sprint === sp; }).map(function (q) {
         var mst = mastery(p.id, q.id);
         if (mst.pct >= 95) done++;
-        return '<a class="quest-card" href="' + q.href + '" style="text-decoration:none;color:inherit;">' +
+        return '<a class="quest-card" href="' + q.href + '">' +
           '<div class="quest-glyph">' + mascotSvg(q.glyph, 42) + '</div>' +
           '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag ' + (q.os === 'windows' ? 'windows' : q.os === 'linux' ? 'linux' : 'linux') + '">' + (q.os === 'windows' ? 'Windows' : q.os === 'linux' ? 'ALT Linux' : 'смешанно') + '</span></p>' +
           '<div class="quest-progress"><i style="width:' + mst.pct + '%"></i></div></div>' +
@@ -123,8 +129,8 @@
     }).join('');
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап эксплуатации</strong>' +
-      '<p class="admin-hint" style="margin:.3rem 0 0;">Пять спринтов от приёмки сервера до запуска сервиса с дежурством. ~70% ALT Linux, ~30% Windows.</p></div>' +
-      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar" style="margin-top:.4rem;"><i style="width:' + overall + '%"></i></div></div></div>' + groups;
+      '<p class="admin-hint">Пять спринтов от приёмки сервера до запуска сервиса с дежурством. ~70% ALT Linux, ~30% Windows.</p></div>' +
+      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i style="width:' + overall + '%"></i></div></div></div>' + groups;
   }
 
   function renderFeed(p) {
@@ -157,7 +163,7 @@
     if (form) form.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = $('p-name').value.trim(), group = $('p-group').value.trim();
-      if (!name || !group) { $('gate-msg').textContent = 'Заполните ФИО и учебную группу.'; return; }
+      if (!name || !group) { setMsg($('gate-msg'), 'Заполните ФИО и учебную группу.', 'bad'); return; }
       var p = OPS.ensureProfile(name, group, picked);
       renderDashboard(p);
     });
@@ -174,7 +180,7 @@
       lines.forEach(function (code) {
         try { OPS.importArtifact(code); okN++; } catch (e) { /* битый код пропускаем */ }
       });
-      msg.textContent = okN ? 'Принято артефактов: ' + okN + ' (тикеты, runbook или postmortem).' : 'Коды не распознаны.';
+      setMsg(msg, okN ? 'Принято артефактов: ' + okN + ' (тикеты, runbook или postmortem).' : 'Коды не распознаны.', okN ? 'ok' : 'bad');
       input.value = '';
       var p = OPS.getProfile(); if (p) renderDashboard(p);
     });
