@@ -89,10 +89,15 @@ function pageInfo(rel, html) {
   const sectionNames = { blog: 'заметки', articles: 'статьи', archive: 'архив', projects: 'проекты' };
   const crumbs = [{ name: 'главная', url: SITE_URL + '/' }];
   if (dir === 'stands') {
-    // стенды — подраздел проектов: главная → проекты → каталог стендов → стенд
+    // раздел практик: главная → проекты → портал вселенных → вселенная → страница
     crumbs.push({ name: 'проекты', url: SITE_URL + '/projects.html' });
-    crumbs.push({ name: 'виртуальные стенды', url: SITE_URL + '/stands/index.html' });
-    if (rel !== 'stands/index.html') crumbs.push({ name: headline, url: abs(rel) });
+    crumbs.push({ name: 'учебные вселенные', url: SITE_URL + '/stands/index.html' });
+    if (rel.startsWith('stands/ops/')) {
+      crumbs.push({ name: 'ДатаПолис', url: SITE_URL + '/stands/ops/index.html' });
+      if (rel !== 'stands/ops/index.html') crumbs.push({ name: headline, url: abs(rel) });
+    } else if (rel !== 'stands/index.html') {
+      crumbs.push({ name: headline, url: abs(rel) });
+    }
   } else if (dir) {
     crumbs.push({ name: sectionNames[dir] || dir, url: SITE_URL + '/' + dir + '.html' });
     crumbs.push({ name: headline, url: abs(rel) });
