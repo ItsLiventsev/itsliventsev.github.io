@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e11">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<title>Доступ и привилегии · SSH, ключи, sudoers и AAA на Cisco · itsliventsev</title>
+<meta name="description" content="Ключи вместо паролей, минимальные привилегии через sudoers и AAA: вход в оборудование по-взрослому.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=20261028z">
+<link rel="stylesheet" href="../assets/stands.css?v=20261028z">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/stands/lab-dns-bind.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Доступ и привилегии · SSH, ключи, sudoers и AAA на Cisco · itsliventsev">
+  <meta property="og:description" content="Ключи вместо паролей, минимальные привилегии через sudoers и AAA: вход в оборудование по-взрослому.">
+  <meta property="og:url" content="https://itsliventsev.github.io/stands/lab-dns-bind.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Доступ и привилегии · SSH, ключи, sudoers и AAA на Cisco · itsliventsev">
+  <meta name="twitter:description" content="Ключи вместо паролей, минимальные привилегии через sudoers и AAA: вход в оборудование по-взрослому.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Доступ и привилегии · SSH, ключи, sudoers и AAA на Cisco","description":"Ключи вместо паролей, минимальные привилегии через sudoers и AAA: вход в оборудование по-взрослому.","url":"https://itsliventsev.github.io/stands/lab-dns-bind.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/lab-dns-bind.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"учебные вселенные","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Доступ и привилегии · SSH, ключи, sudoers и AAA на Cisco","item":"https://itsliventsev.github.io/stands/lab-dns-bind.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="flat-scope" data-accent="blue">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<noscript><div class="noscript-bar">// JavaScript отключён: лабораторная работа открывается только с включённым JavaScript.</div></noscript>
+
+<header class="st-topbar">
+  <div class="st-topbar-in">
+    <a class="st-brand" href="../index.html">
+      <span class="st-brand-mark">←</span>
+      <span>itsliventsev</span>
+      <span class="st-brand-sep">/</span>
+      <span class="st-brand-sub">СетьПолис · лабораторная</span>
+    </a>
+    <nav class="st-topnav" aria-label="Навигация раздела стендов">
+      <a href="setpolis.html">каталог</a>
+      <a href="league.html" rel="nofollow">лига</a>
+      <a href="teams.html">команды</a>
+      <a href="glossary.html">словарь</a>
+      <a href="../projects.html">проекты</a>
+
+      <a class="st-nav-admin" href="../admin.html" rel="nofollow">преподавателю</a>
+
+      <button class="theme-toggle" type="button" aria-label="переключить светлую или тёмную тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="st-wrap">
+  <main id="main-content">
+
+    <nav class="st-crumbs" aria-label="Хлебные крошки">
+      <a href="../index.html">главная</a>
+      <span aria-hidden="true">/</span>
+      <a href="../projects.html">проекты</a>
+      <span aria-hidden="true">/</span>
+      <a href="setpolis.html">СетьПолис</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">DNS-сервер на BIND · зоны, записи и диагностика</span>
+    </nav>
+
+    <div class="flat-profile" id="lab-profile">
+      <span class="fp-name" id="fp-name">—</span>
+      <span class="fp-group" id="fp-group">—</span>
+      <span class="fp-spacer"></span>
+      <a class="flat-btn ghost" href="setpolis.html">к каталогу</a>
+    </div>
+
+    <div class="st-hero">
+      <span class="st-hero-index">04</span>
+      <div>
+        <p class="flat-kicker">спринт 4 · Защита</p>
+        <h1>DNS-сервер на BIND · зоны, записи и диагностика</h1>
+        <p class="st-hero-lead">Прямая и обратная зона, A/CNAME/PTR/MX и диагностика dig: имена вместо голых IP.</p>
+        <div class="st-hero-meta"><span>формат: <strong>пара · настройка, диагностика и взаимное ревью</strong></span><span>примерно <strong>5 ч</strong></span><span>начисление: <strong>90 неткоинов</strong></span></div>
+      </div>
+    </div>
+
+    <div id="lab-root"></div>
+
+  </main>
+
+  <footer class="st-footer">
+    <span>// © 2026 itsliventsev · СетьПолис</span>
+    <span>lab: lab-dns-bind · autosave: on</span>
+  </footer>
+</div>
+
+<script src="../assets/mascots.js?v=20261028z"></script>
+<script src="../assets/fgos-skills.js?v=20261028z"></script>
+<script src="../assets/league.js?v=20261028z"></script>
+<script src="../assets/stands.js?v=20261028z"></script>
+<script type="application/json" id="lab-data">{"id": "lab-dns-bind", "title": "DNS-сервер на BIND · зоны, записи и диагностика", "sprint": 4, "sprintTitle": "Защита", "hours": "5 ч", "coins": "90", "mascot": "owl", "who": "филин Сёма — хранитель имён сети", "lead": "Прямая и обратная зона, A/CNAME/PTR/MX и диагностика dig: имена вместо голых IP.", "story": "В новом офисе «СетьПолиса» сотрудники продолжают подключаться к принтеру и файловой шаре по IP-адресам. Любая смена адреса ломает половину рабочих мест. Вы развернёте кэширующий DNS на BIND (ALT Server), заведёте прямую и обратную зоны kait20.local, пропишете A-, CNAME-, PTR- и MX-записи и научитесь диагностикой доказывать, что резолвинг работает с любой машины сегмента.", "theory": [{"h": "BIND на ALT: пакет, служба, конфигурация", "p": "Демон named из пакета bind. Главный конфиг /etc/bind/named.conf, зоны подключают через include или директиву zone. До открытия порта 53/UDP проверьте синтаксис: named-checkconf и named-checkzone — они ловят ошибку до рестарта службы.", "code": "# apt-get install bind bind-utils\n# systemctl enable --now named\n# named-checkconf\n# ss -ulnp | grep ':53 '"}, {"h": "Прямая и обратная зона: A, CNAME, MX, PTR", "p": "Прямая зона переводит имя в адрес (A), обратная — адрес в имя (PTR). CNAME — это псевдоним внутри зоны, MX указывает почтовый узел и требует приоритета. Серийный номер SOA принято увеличивать при каждом изменении, иначе вторичные серверы не подхватят зону.", "code": "$ORIGIN kait20.local.\n@   IN SOA ns1.kait20.local. admin.kait20.local. (\n        2026102801 7200 3600 1209600 3600 )\n@      IN NS  ns1\nns1    IN A   192.168.10.1\nprn01  IN A   192.168.10.50\nfiles  IN CNAME ns1\n@      IN MX  10 mail\nmail   IN A   192.168.10.15\n# обратная зона: 50.10.168.192.in-addr.arpa -> prn01\n50 IN PTR prn01.kait20.local."}, {"h": "Диагностика: dig, nslookup и клиентский resolv.conf", "p": "dig показывает статус ответа (NOERROR, NXDOMAIN), секции Answer и TTL. Реверсная проверка через dig -x. На клиенте имена серверов задаёт /etc/resolv.conf; если там остаётся чужой DNS, ваша зона не используется, даже когда сервер исправен.", "code": "# named-checkzone kait20.local /var/lib/bind/kait20.local.zone\n[user]$ dig @192.168.10.1 prn01.kait20.local\n[user]$ dig @192.168.10.1 -x 192.168.10.50\n[user]$ dig MX kait20.local\n# клиент: mcedit /etc/resolv.conf -> nameserver 192.168.10.1"}], "commands": [{"cisco": "show running-config | include ip name-server", "linux": "cat /etc/resolv.conf", "what": "какой DNS использует узел"}, {"cisco": "ip name-server 192.168.10.1", "linux": "echo 'nameserver 192.168.10.1' > /etc/resolv.conf", "what": "назначить DNS-сервер"}, {"cisco": "ping prn01.kait20.local", "linux": "dig prn01.kait20.local", "what": "проверить резолвинг имени"}, {"cisco": "show hosts", "linux": "dig -x 192.168.10.50", "what": "проверить обратную зону (PTR)"}, {"cisco": "n/a", "linux": "named-checkconf ; named-checkzone", "what": "валидация конфига и зоны до рестарта"}, {"cisco": "n/a", "linux": "journalctl -u named -n 50", "what": "журнал демона при сбое загрузки зоны"}], "tasks": [{"id": "t1", "text": "Установите bind и bind-utils на ALT Server, включите named и убедитесь, что слушается порт 53/UDP"}, {"id": "t2", "text": "Настройте кэширующий DNS: разрешите запросы локальной подсети 192.168.10.0/24, проверьте named-checkconf"}, {"id": "t3", "text": "Создайте прямую зону kait20.local с записями NS, SOA и A для ns1, prn01, mail"}, {"id": "t4", "text": "Добавьте CNAME files -> ns1 и MX-запись с приоритетом 10, увеличьте серийник SOA"}, {"id": "t5", "text": "Создайте обратную зону и PTR-запись для 192.168.10.50, пройдите named-checkzone обеих зон"}, {"id": "t6", "text": "На клиентской ALT Workstation пропишите ваш DNS в resolv.conf и проверьте dig прямой и обратный резолвинг"}, {"id": "t7", "text": "Смоделируйте сбой: ошибка в серийнике/SOA, найдите её через journalctl -u named, исправьте и подтвердите NOERROR"}, {"id": "t8", "text": "Подготовьте для напарника чек-лист приёмки DNS (5 пунктов) и обменяйтесь конфигами зон через код ITS-LAB1"}], "situational": {"text": "Кейс: после смены IP принтера половина офиса печатает, половина — нет. Выясните, что часть машин ходит по старому A-записи и кэшу, часть — по прямому IP. Опишите порядок действий: правка зоны, увеличение SOA, сброс кэша, проверка TTL, перевод пользователей на имена. Проведите взаимную проверку с напарником по его чек-листу и отправьте рецензию кодом ITS-REV1.", "deliverables": ["Файлы прямой и обратной зон + named.conf", "Скриншоты/вывод dig A, MX и PTR со статусом NOERROR", "Чек-лист приёмки DNS и рецензия напарника (ITS-REV1)"]}, "quiz": [{"q": "Какая запись сопоставляет имя узла с IPv4-адресом?", "options": ["PTR", "A", "CNAME", "MX"], "answer": 1, "explain": "A-запись — имя в адрес. PTR работает наоборот, CNAME — псевдоним, MX — почтовый маршрут."}, {"q": "Зачем увеличивать серийный номер в SOA при правке зоны?", "options": ["Это требование безопасности", "Чтобы вторичные серверы поняли, что зона изменилась, и скачали новую версию", "Без него named не стартует", "Он задаёт TTL записи"], "answer": 1, "explain": "Вторичные DNS сравнивают серийник: вырос — запрашивают трансфер зоны. Не вырос — продолжают отдавать старую версию."}, {"q": "Как проверить обратный резолвинг 192.168.10.50?", "options": ["dig -x 192.168.10.50", "dig PTR 50", "nslookup --reverse ns1", "ping -r 192.168.10.50"], "answer": 0, "explain": "dig -x собирает корректное имя in-addr.arpa и запрашивает PTR-запись."}, {"q": "Что делает CNAME?", "options": ["Задаёт почтовый сервер", "Запрещает кэширование", "Объявляет псевдоним, ссылающийся на каноническое имя", "Шифрует DNS-трафик"], "answer": 2, "explain": "CNAME — алиас: files.kait20.local может указывать на ns1, и при смене адреса правится только A-запись канонического имени."}, {"q": "Сервер исправен, но клиент не видит зону. Первый кандидат на проверку?", "options": ["MAC-адрес клиента", "/etc/resolv.conf клиента — какой nameserver там прописан", "Длина кабеля", "Версия браузера"], "answer": 1, "explain": "Если resolv.conf указывает на чужой DNS, запросы просто не доходят до вашего сервера — это классическая ловушка лабораторной."}], "reflection": ["Почему работа по именам устойчивее, чем по «зашитым» IP, даже в маленькой сети?", "Какие две команды вы выполните до рестарта named и почему именно до?", "Что в чек-листе напарника оказалось полезнее всего для вашей зоны?"]}</script>
+<script src="../assets/lab-kit.js?v=20261028z"></script>
+</body>
+</html>
