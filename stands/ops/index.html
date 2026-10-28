@@ -13,9 +13,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261028z">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261028z">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261028z">
+<link rel="stylesheet" href="../../assets/site.css?v=20261028aa">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261028aa">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261028aa">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/index.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -28,15 +28,15 @@
   <meta property="og:title" content="ДатаПолис · сервисный центр · учебная вселенная itsliventsev">
   <meta property="og:description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
   <meta property="og:url" content="https://itsliventsev.github.io/stands/ops/index.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-ops.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ДатаПолис · сервисный центр · учебная вселенная itsliventsev">
   <meta name="twitter:description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ДатаПолис · сервисный центр · учебная вселенная itsliventsev","description":"Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.","url":"https://itsliventsev.github.io/stands/ops/index.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/ops/index.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-ops.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ДатаПолис · сервисный центр · учебная вселенная itsliventsev","description":"Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.","url":"https://itsliventsev.github.io/stands/ops/index.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/stands/ops/index.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-ops.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"учебные вселенные","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"ДатаПолис","item":"https://itsliventsev.github.io/stands/ops/index.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -89,6 +89,21 @@
         </div>
       </div>
     </div>
+
+    <!-- Легенда смены: приоритеты и SLA -->
+    <section class="ops-legend lab-panel" aria-labelledby="legend-title">
+      <div class="lp-head"><span>легенда смены · как читать заявки</span><span class="kind-badge">SLA</span></div>
+      <div class="lp-body">
+        <h2 id="legend-title" class="ops-legend-title">приоритеты и время реакции</h2>
+        <ul class="ops-legend-list">
+          <li><span class="sev sev-P1">P1</span><span><strong>авария · 30 минут.</strong> Сервис недоступен полностью, работа стоит.</span></li>
+          <li><span class="sev sev-P2">P2</span><span><strong>высокий · 60 минут.</strong> Ключевая функция деградировала, есть обходной путь.</span></li>
+          <li><span class="sev sev-P3">P3</span><span><strong>обычный · 4 часа (240 минут).</strong> Стандартная заявка пользователя.</span></li>
+          <li><span class="sev sev-P4">P4</span><span><strong>низкий · 24 часа (1440 минут).</strong> Бэклог, улучшения и мелкие правки.</span></li>
+        </ul>
+        <p class="ops-legend-note mono">// время идёт в рабочих минутах смены; выдержанный SLA напрямую влияет на метрику «SLA выдержан, %» на дашборде</p>
+      </div>
+    </section>
 
     <!-- Гейт профиля -->
     <section id="gate" class="lab-panel lab-panel--narrow" hidden>
@@ -200,12 +215,14 @@
   <footer class="st-footer">
     <span>// © 2026 itsliventsev · ДатаПолис</span>
     <span>runtime: browser · backend: none · storage: localStorage (ops-*)</span>
+    <span class="st-footer-updated" data-footer-updated>// обновлено: …</span>
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261028z"></script>
-<script src="../../assets/ops-engine.js?v=20261028z"></script>
-<script src="../../assets/stands.js?v=20261028z"></script>
-<script src="../../assets/ops-hub.js?v=20261028z"></script>
+<script src="../../assets/mascots.js?v=20261028aa"></script>
+<script src="../../assets/ops-engine.js?v=20261028aa"></script>
+<script src="../../assets/dom-kit.js?v=20261028aa"></script>
+<script src="../../assets/stands.js?v=20261028aa"></script>
+<script src="../../assets/ops-hub.js?v=20261028aa"></script>
 </body>
 </html>

@@ -15,8 +15,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261028z">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028z">
+<link rel="stylesheet" href="assets/site.css?v=20261028aa">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028aa">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="404 · страница не найдена · itsliventsev">
+  <meta property="og:description" content="Такой страницы нет — но есть рабочие разделы сайта.">
+  <meta property="og:url" content="https://itsliventsev.github.io/404.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
 </head>
 <body class="bg-grid" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -77,6 +87,7 @@
 
       <!-- Крупный код и ссылки -->
       <section class="reveal mt-10 text-center">
+        <div class="error-mascot" id="error-mascot" aria-hidden="true"></div>
         <div class="mono font-extrabold leading-none mb-3" style="font-size:clamp(4rem,16vw,8rem); color:var(--accent); letter-spacing:-.05em;">404</div>
         <h1 class="text-xl sm:text-2xl font-bold mb-2" style="color:var(--text);">Такой страницы нет</h1>
         <p class="text-sm max-w-md mx-auto mb-7" style="color:var(--muted);">
@@ -93,9 +104,12 @@
 
   <footer class="site-footer">
     <span>© 2026 itsliventsev · even 404 gets a clean page</span>
+      <span data-footer-updated class="footer-updated">// обновлено: …</span>
   </footer>
 </div>
 
-<script src="assets/site.js?v=20261028z"></script>
+<script src="assets/mascots.js?v=20261028aa"></script>
+<script>try { document.getElementById('error-mascot').innerHTML = MASCOTS.svg('owl', { size: 72, floating: true }); } catch (e) {}</script>
+<script src="assets/site.js?v=20261028aa"></script>
 </body>
 </html>
