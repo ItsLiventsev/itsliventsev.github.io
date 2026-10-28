@@ -15,6 +15,12 @@
     });
   }
   function nowISO() { return new Date().toISOString(); }
+  function setMsg(el, text, state) {
+    if (!el) return;
+    el.textContent = text || '';
+    el.classList.remove('is-ok', 'is-bad', 'is-warn');
+    if (state) el.classList.add('is-' + state);
+  }
   function uid() { return 'opslab-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
   var STORE = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -86,7 +92,7 @@
     }
     function tasksHtml() {
       return '<section class="lab-panel" id="ops-tasks"><div class="lp-head"><span>бэклог смены</span><span class="kind-badge" id="ops-task-chip">чек-лист</span></div><div class="lp-body">' +
-        '<p class="admin-hint" style="margin-top:0;">Отмечайте задачу после реального выполнения на сервере, ВМ или стенде. Честность прогресса — правило дежурной смены.</p><div class="task-list">' +
+        '<p class="admin-hint">Отмечайте задачу после реального выполнения на сервере, ВМ или стенде. Честность прогресса — правило дежурной смены.</p><div class="task-list">' +
         cfg.tasks.map(function (t, i) {
           var on = !!state.tasks[t.id];
           return '<label class="task-item' + (on ? ' is-done' : '') + '"><input type="checkbox" data-task="' + esc(t.id) + '"' + (on ? ' checked' : '') + '>' +
@@ -103,44 +109,44 @@
       var stateLabel = state.ticketId ? 'в работе/закрыт — смотрите доску' : 'открыт, ждёт реакции';
       var stateCls = state.ticketId ? 'is-progress' : 'is-open';
       var rollback = t.type === 'change' ?
-        '<div style="margin-top:.8rem;"><label class="flat-label" for="ops-rollback">план отката (обязателен для изменения)</label>' +
+        '<div class="rollback-field"><label class="flat-label" for="ops-rollback">план отката (обязателен для изменения)</label>' +
         '<textarea class="flat-input" id="ops-rollback" rows="2" placeholder="Как вернуть всё как было, если изменение сломает сервис">' + esc(state.rollback) + '</textarea></div>' : '';
       return '<section class="lab-panel ticket-card ' + kindCls + '" id="ops-ticket"><div class="lp-head"><span>тикет обслуживания</span><span class="kind-badge">' + esc(typeLabel) + '</span></div><div class="lp-body">' +
         '<div class="ticket-head"><h3>' + esc(t.title) + '</h3><span class="sev sev-' + esc(t.priority) + '">' + esc(t.priority) + '</span>' +
         '<span class="ticket-state ' + stateCls + '">' + stateLabel + '</span></div>' +
-        '<p style="margin:.3rem 0;font-size:.86rem;color:var(--st-text-2);line-height:1.65;">' + esc(t.text) + '</p>' +
+        '<p class="ticket-text">' + esc(t.text) + '</p>' +
         (t.deliverables ? '<ul class="submit-channels">' + t.deliverables.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') +
         '<div class="sla-meter"><span class="sla-num">SLA-окно: ' + esc(OPS.SLA_MIN[t.priority]) + ' мин</span><div class="xp-bar"><i id="ops-sla-bar" style="width:0"></i></div><span class="sla-num" id="ops-sla-state">не взят</span></div>' +
         rollback +
-        '<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem;">' +
+        '<div class="ticket-actions">' +
         '<button class="flat-btn" type="button" id="ops-ticket-ack">взять в работу</button>' +
         '<button class="flat-btn ghost" type="button" id="ops-ticket-resolve" disabled>закрыть с решением</button></div>' +
-        '<p class="admin-hint" id="ops-ticket-msg" style="margin:.7rem 0 0;"></p></div></section>';
+        '<p class="ops-msg" id="ops-ticket-msg" role="status"></p></div></section>';
     }
 
     function runbookHtml() {
       if (!cfg.runbook) return '';
       return '<section class="lab-panel" id="ops-runbook"><div class="lp-head"><span>runbook · база знаний смены</span><span class="kind-badge">артефакт сдачи</span></div><div class="lp-body runbook-editor">' +
-        '<p class="admin-hint" style="margin-top:0;">Runbook — пошаговая инструкция, по которой новичок повторит вашу работу без вас. Опирайтесь на предложенный каркас.</p>' +
-        '<div class="runbook-step" style="border-bottom:1px solid var(--st-line);padding-bottom:.6rem;margin-bottom:.5rem;">' +
+        '<p class="admin-hint">Runbook — пошаговая инструкция, по которой новичок повторит вашу работу без вас. Опирайтесь на предложенный каркас.</p>' +
+        '<div class="runbook-step runbook-map">' +
         '<span class="rs-num">карта</span><div>' + cfg.runbook.steps.map(function (s, i) {
-          return '<p style="margin:.15rem 0;"><strong>' + String(i + 1) + '.</strong> ' + esc(s) + '</p>';
+          return '<p><strong>' + String(i + 1) + '.</strong> ' + esc(s) + '</p>';
         }).join('') + '</div></div>' +
         '<textarea class="flat-input" id="ops-runbook-text" rows="5" placeholder="Ваш runbook: пронумерованные шаги, команды и проверки результата">' + esc(state.runbookText || '') + '</textarea>' +
-        '<button class="flat-btn ghost" type="button" id="ops-runbook-save" style="margin-top:.7rem;">сохранить runbook в базу знаний</button>' +
-        '<p class="admin-hint" id="ops-runbook-msg" style="margin:.6rem 0 0;"></p></div></section>';
+        '<button class="flat-btn ghost" type="button" id="ops-runbook-save">сохранить runbook в базу знаний</button>' +
+        '<p class="ops-msg" id="ops-runbook-msg" role="status"></p></div></section>';
     }
 
     function rcaHtml() {
       if (!cfg.rca) return '';
       return '<section class="lab-panel rca-box" id="ops-rca"><div class="lp-head"><span>postmortem · разбор без вины</span><span class="kind-badge">blameless</span></div><div class="lp-body">' +
-        '<div class="blameless-note" style="margin-bottom:.9rem;"><span>🛡</span><span>Цель разбора — найти <strong>причину и защиту на будущее</strong>, а не виноватого. Ошибка сотрудника — это дефект процесса, который чинится системно.</span></div>' +
+        '<div class="blameless-note"><span>🛡</span><span>Цель разбора — найти <strong>причину и защиту на будущее</strong>, а не виноватого. Ошибка сотрудника — это дефект процесса, который чинится системно.</span></div>' +
         '<div class="rca-fields">' +
         '<div><label>что произошло и влияние (какие сервисы/пользователи затронуты)</label><textarea class="flat-input" data-rca="impact" rows="2">' + esc((state.rcaFields || {}).impact || '') + '</textarea></div>' +
         '<div><label>корневая причина (root cause)</label><textarea class="flat-input" data-rca="cause" rows="2">' + esc((state.rcaFields || {}).cause || '') + '</textarea></div>' +
         '<div><label>меры на будущее (конкретные действия и сроки)</label><textarea class="flat-input" data-rca="actions" rows="2">' + esc((state.rcaFields || {}).actions || '') + '</textarea></div>' +
-        '</div><button class="flat-btn ghost" type="button" id="ops-rca-save" style="margin-top:.8rem;">сохранить postmortem</button>' +
-        '<p class="admin-hint" id="ops-rca-msg" style="margin:.6rem 0 0;"></p></div></section>';
+        '</div><button class="flat-btn ghost" type="button" id="ops-rca-save">сохранить postmortem</button>' +
+        '<p class="ops-msg" id="ops-rca-msg" role="status"></p></div></section>';
     }
 
     function quizHtml() {
@@ -218,19 +224,19 @@
         state.ticketId = t.id; save();
         ack.disabled = true; res.disabled = false;
         slaState.textContent = 'вы взяли в работу';
-        msg.textContent = '// Тикет ' + t.id + ' создан и назначен на вас. Время реакции зафиксировано.';
+        setMsg(msg, '// Тикет ' + t.id + ' создан и назначен на вас. Время реакции зафиксировано.', 'ok');
       });
       res.addEventListener('click', function () {
         if (!state.ticketId) return;
         if (cfg.ticket.type === 'change' && !($('ops-rollback').value || '').trim()) {
-          msg.textContent = 'Для изменения обязателен план отката — заполните поле выше.'; return;
+          setMsg(msg, 'Для изменения обязателен план отката — заполните поле выше.', 'bad'); return;
         }
         var resolution = ($('ops-solution') ? $('ops-solution').value : '') || 'решение зафиксировано в runbook';
         var t = OPS.updateTicket(state.ticketId, { status: 'resolved', resolution: resolution });
         OPS.award(profile.id, t.type === 'incident' ? 'incidentResolved' : t.type === 'change' ? 'changeReleased' : 'ticketClosed', 'tk:' + t.id, { ticketId: t.id });
         if (t.slaMet) OPS.award(profile.id, 'slaMet', 'sla:' + t.id, { ticketId: t.id });
         res.disabled = true; refresh();
-        msg.textContent = '// Тикет закрыт' + (t.slaMet ? ', SLA выдержан — дополнительный опыт.' : ', SLA нарушен: это повод для postmortem, а не для штрафа.');
+        setMsg(msg, '// Тикет закрыт' + (t.slaMet ? ', SLA выдержан — дополнительный опыт.' : ', SLA нарушен: это повод для postmortem, а не для штрафа.'), t.slaMet ? 'ok' : 'warn');
       });
       var rb = $('ops-rollback');
       if (rb) rb.addEventListener('input', function () { state.rollback = rb.value; save(); });
@@ -242,13 +248,13 @@
       if (!ta) return;
       ta.addEventListener('input', function () { state.runbookText = ta.value; save(); });
       btn.addEventListener('click', function () {
-        if (ta.value.trim().length < 30) { msg.textContent = 'Слишком короткий runbook: опишите хотя бы несколько конкретных шагов.'; return; }
+        if (ta.value.trim().length < 30) { setMsg(msg, 'Слишком короткий runbook: опишите хотя бы несколько конкретных шагов.', 'bad'); return; }
         if (!state.runbookId) {
           var rb = OPS.addRunbook({ title: 'Runbook: ' + cfg.title, steps: ta.value.split('\n').filter(Boolean), labId: cfg.id, author: OPS.publicStudent(profile) });
           state.runbookId = rb.id; save();
           OPS.award(profile.id, 'runbookWritten', 'rb:' + cfg.id, { labId: cfg.id });
-          msg.textContent = '// Runbook сохранён в базу знаний экипажа, опыт начислен.';
-        } else msg.textContent = '// Runbook этой лабораторной уже в базе знаний.';
+          setMsg(msg, '// Runbook сохранён в базу знаний экипажа, опыт начислен.', 'ok');
+        } else setMsg(msg, '// Runbook этой лабораторной уже в базе знаний.', 'warn');
       });
     }
     function bindRca() {
@@ -260,22 +266,22 @@
       $('ops-rca-save').addEventListener('click', function () {
         var f = state.rcaFields;
         if (!f.impact || !f.cause || !f.actions || !f.impact.trim() || !f.cause.trim() || !f.actions.trim()) {
-          $('ops-rca-msg').textContent = 'Заполните все три поля разбора.'; return;
+          setMsg($('ops-rca-msg'), 'Заполните все три поля разбора.', 'bad'); return;
         }
         if (!state.rcaId) {
           var pm = OPS.addPostmortem({ ticketId: state.ticketId, labId: cfg.id, impact: f.impact, rootCause: f.cause, actions: f.actions, author: OPS.publicStudent(profile) });
           state.rcaId = pm.id; save();
           OPS.award(profile.id, 'postmortem', 'rca:' + cfg.id, { labId: cfg.id });
-          $('ops-rca-msg').textContent = '// Postmortem сохранён. Без вины, с системными выводами — опыт начислен.';
-        } else $('ops-rca-msg').textContent = '// Postmortem этой лабораторной уже сохранён.';
+          setMsg($('ops-rca-msg'), '// Postmortem сохранён. Без вины, с системными выводами — опыт начислен.', 'ok');
+        } else setMsg($('ops-rca-msg'), '// Postmortem этой лабораторной уже сохранён.', 'warn');
       });
     }
 
     function finishHtml() {
-      return '<section class="lab-panel" id="ops-finish"><div class="lp-body" style="text-align:center;">' +
-        '<p class="admin-hint" style="margin-top:0;">Сдача засчитается при отмеченном бэклоге и пройденном тесте. Итог попадёт в историю и повлияет на уровень, неткоины и репутацию экипажа.</p>' +
+      return '<section class="lab-panel" id="ops-finish"><div class="lp-body finish-body">' +
+        '<p class="admin-hint">Сдача засчитается при отмеченном бэклоге и пройденном тесте. Итог попадёт в историю и повлияет на уровень, неткоины и репутацию экипажа.</p>' +
         '<button class="flat-btn" id="ops-finish-btn" type="button">сдать лабораторную ↓</button>' +
-        '<p class="lab-finish-msg" id="ops-finish-msg" role="status"></p></div></section>';
+        '<p class="ops-msg" id="ops-finish-msg" role="status"></p></div></section>';
     }
     function computeScore(p) {
       var taskPart = p.total ? p.done / p.total * 70 : 0;
@@ -292,8 +298,8 @@
       var btn = $('ops-finish-btn');
       btn.addEventListener('click', function () {
         var p = progress();
-        if (p.total - p.done > 0) { $('ops-finish-msg').textContent = 'Отметьте выполненные задачи бэклога: осталось ' + (p.total - p.done) + '.'; return; }
-        if (cfg.quiz && cfg.quiz.length && !state.quiz.done) { $('ops-finish-msg').textContent = 'Сначала пройдите контрольный тест.'; return; }
+        if (p.total - p.done > 0) { setMsg($('ops-finish-msg'), 'Отметьте выполненные задачи бэклога: осталось ' + (p.total - p.done) + '.', 'bad'); return; }
+        if (cfg.quiz && cfg.quiz.length && !state.quiz.done) { setMsg($('ops-finish-msg'), 'Сначала пройдите контрольный тест.', 'bad'); return; }
         var score = computeScore(p);
         var sub = {
           id: uid(), schema: 'ops-submission/1', standId: cfg.id, standTitle: cfg.title,
@@ -310,7 +316,9 @@
         if (sub.result.ready) OPS.award(profile.id, 'standReady', 'ready:' + cfg.id, { standId: cfg.id });
         if (cfg.quiz && state.quiz.correct === cfg.quiz.length) OPS.award(profile.id, 'quizPerfect', 'quiz:' + cfg.id, { standId: cfg.id });
         state.finished = true; state.lastScore = score; save();
-        $('ops-finish-msg').innerHTML = '✓ Сдано на <strong>' + score + '%</strong>. Запись в истории сервиса, экипаж видит вклад в репутацию.';
+        var fm = $('ops-finish-msg');
+        fm.className = 'ops-msg is-ok';
+        fm.innerHTML = '✓ Сдано на <strong>' + score + '%</strong>. Запись в истории сервиса, экипаж видит вклад в репутацию.';
         syncBtn(score); progress();
       });
     }
@@ -334,7 +342,7 @@
     if (sol) sol.addEventListener('input', function () { state.solution = sol.value; save(); });
 
     progress(); renderQuiz(); bindTicket(); bindRunbook(); bindRca(); bindFinish();
-    if (state.finished) { syncBtn(state.lastScore || 0); var m = $('ops-finish-msg'); if (m) m.textContent = '✓ Работа уже сдавалась. Доработайте и отправьте повторно — лучшая версия идёт в зачёт.'; }
+    if (state.finished) { syncBtn(state.lastScore || 0); var m = $('ops-finish-msg'); if (m) { m.className = 'ops-msg'; m.textContent = '✓ Работа уже сдавалась. Доработайте и отправьте повторно — лучшая версия идёт в зачёт.'; } }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

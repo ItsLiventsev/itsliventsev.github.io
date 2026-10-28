@@ -116,10 +116,10 @@
 
   /* ----------------------------- Трайбы ----------------------------- */
   var TRIBES = [
-    { id: 'tribe-packet', name: 'Трайб «Пакет»', glyph: 'PKT', color: '#5b9dff' },
-    { id: 'tribe-frame', name: 'Трайб «Кадр»', glyph: 'FRM', color: '#34d399' },
-    { id: 'tribe-route', name: 'Трайб «Маршрут»', glyph: 'RTE', color: '#fbbf24' },
-    { id: 'tribe-socket', name: 'Трайб «Сокет»', glyph: 'SKT', color: '#f87171' }
+    { id: 'tribe-packet', name: 'Трайб «Пакет»', glyph: 'PKT', color: 'var(--st-accent)' },
+    { id: 'tribe-frame', name: 'Трайб «Кадр»', glyph: 'FRM', color: 'var(--st-ok)' },
+    { id: 'tribe-route', name: 'Трайб «Маршрут»', glyph: 'RTE', color: 'var(--st-warn)' },
+    { id: 'tribe-socket', name: 'Трайб «Сокет»', glyph: 'SKT', color: 'var(--st-bad)' }
   ];
   function tribeFor(group) { return TRIBES[hash(group || 'ИС-21') % TRIBES.length]; }
 

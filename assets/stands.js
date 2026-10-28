@@ -243,7 +243,7 @@
       cards(spec.pk) +
       '<ul class="st-practical">' + spec.skills.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>' +
       '<div class="st-skill-group"><h3>общие компетенции</h3>' + cards(spec.ok) +
-      '<p style="margin:.4rem 0 0;font-size:.78rem;color:var(--st-muted);">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден в личном кабинете.</p></div>';
+      '<p class="flat-caption flat-caption--mt">Мастерство по каждому коду растёт от результатов CI, автотестов и квиза — прогресс виден в личном кабинете.</p></div>';
   }
 
   function renderAutotests(report) {
@@ -375,9 +375,9 @@
     if (badge) badge.textContent = pool.length + ' работ';
     if (!pool.length) {
       poolBox.innerHTML =
-        '<div class="helper-card"><p style="margin:0 0 .5rem;">Пул пуст. Работы однокурсников приходят двумя путями:</p>' +
-        '<p style="margin:0 0 .3rem;font-size:.82rem;">1. Вставьте код <code>ITS-LAB1…</code>, который прислал коллега, в блок «обмен кодами» ниже.</p>' +
-        '<p style="margin:0;font-size:.82rem;">2. Нажмите «подтянуть из репозитория» — преподаватель публикует там присланные работы.</p></div>';
+        '<div class="helper-card"><p class="helper-lead">Пул пуст. Работы однокурсников приходят двумя путями:</p>' +
+        '<p class="flat-caption">1. Вставьте код <code>ITS-LAB1…</code>, который прислал коллега, в блок «обмен кодами» ниже.</p>' +
+        '<p class="flat-caption">2. Нажмите «подтянуть из репозитория» — преподаватель публикует там присланные работы.</p></div>';
     } else {
       poolBox.innerHTML = pool.slice(0, 6).map(function (s) {
         var reviewed = window.LEAGUE.reviewsFor(s.id).some(function (r) { return r.reviewer.id === profile.id; });
@@ -647,7 +647,7 @@
           var state = !best ? { label: 'не начат', cls: 'is-soon' }
             : m.percent >= 95 ? { label: 'пройден ' + m.percent + '%', cls: 'is-ready' }
             : { label: 'в работе ' + m.percent + '%', cls: 'is-run' };
-          return '<a class="quest-card" href="' + q.href + '" style="text-decoration:none;color:inherit;">' +
+          return '<a class="quest-card" href="' + q.href + '">' +
             '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
             '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
             '<div class="quest-progress"><i style="width:' + m.percent + '%"></i></div></div>' +
