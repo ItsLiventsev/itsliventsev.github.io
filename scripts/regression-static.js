@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028aa';
+const VERSION = '20261028ab';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -25,13 +25,13 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 58, 'HTML страниц должно быть 58, фактически ' + allHtml.length);
-ok(standsHtml.length === 37, 'stands-страниц 37, фактически ' + standsHtml.length);
+ok(allHtml.length === 69, 'HTML страниц должно быть 69, фактически ' + allHtml.length);
+ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z'), f + ': устаревшая версия z');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -74,10 +74,13 @@ function questBlock(src) {
   const b = src.indexOf('];', a);
   return src.slice(a, b);
 }
+const officeHub = read('assets/office-hub.js');
 const q1 = (questBlock(standsJs).match(/id: '[^']+'/g) || []);
 const q2 = (questBlock(opsHub).match(/id: '[^']+'/g) || []);
+const q3 = (questBlock(officeHub).match(/id: '[^']+'/g) || []);
 ok(q1.length === 15, 'QUEST stands.js = 15, фактически ' + q1.length);
 ok(q2.length === 16, 'QUEST ops-hub.js = 16, фактически ' + q2.length);
+ok(q3.length === 10, 'QUEST office-hub.js = 10, фактически ' + q3.length);
 for (const m of q1) {
   const id = m.match(/'([^']+)'/)[1];
   const href = (questBlock(standsJs).match(new RegExp("id: '" + id + "',[\\s\\S]*?href: '([^']+)'")) || [])[1];
@@ -88,11 +91,16 @@ for (const m of q2) {
   const href = (questBlock(opsHub).match(new RegExp("id: '" + id + "',[\\s\\S]*?href: '([^']+)'")) || [])[1];
   ok(exists('stands/ops/' + (href || id + '.html')), 'файл реестра ops отсутствует: ' + id);
 }
+for (const m of q3) {
+  const id = m.match(/'([^']+)'/)[1];
+  const href = (questBlock(officeHub).match(new RegExp("id: '" + id + "',[\\s\\S]*?href: '([^']+)'")) || [])[1];
+  ok(exists('stands/office/' + (href || id + '.html')), 'файл реестра office отсутствует: ' + id);
+}
 
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 55, 'sitemap URL = 55, фактически ' + locs.length);
+ok(locs.length === 66, 'sitemap URL = 66, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -117,14 +125,18 @@ ok(/\.st-ambient\s*{[^}]*pointer-events:\s*none/.test(stCss), 'ambient без po
 ok(standsJs.includes("aria-hidden") && standsJs.includes('initAmbient'), 'ambient не aria-hidden/не инициализируется');
 
 /* 12. OG-картинки по вселенным */
-ok(exists('assets/og.png') && exists('assets/og-stands.png') && exists('assets/og-ops.png'), 'OG PNG отсутствуют');
-for (const f of standsHtml.filter(f => !f.startsWith('stands/ops/'))) {
-  const s = read(f);
-  ok(s.includes('assets/og-stands.png'), f + ': не подключена og-stands.png');
-  ok(!s.includes('og-ops.png'), f + ': чужая OG (ops) на stands-странице');
+ok(exists('assets/og.png') && exists('assets/og-stands.png') && exists('assets/og-ops.png') && exists('assets/og-office.png'), 'OG PNG отсутствуют');
+for (const f of standsHtml.filter(f => f.startsWith('stands/office/'))) {
+  const c = read(f);
+  ok(c.includes('assets/og-office.png'), f + ': не подключена og-office.png');
+  ok(!c.includes('og-ops.png') && !c.includes('og-stands.png'), f + ': чужая OG на office-странице');
 }
 for (const f of standsHtml.filter(f => f.startsWith('stands/ops/'))) {
   ok(read(f).includes('assets/og-ops.png'), f + ': не подключена og-ops.png');
+}
+for (const f of standsHtml.filter(f => !f.startsWith('stands/ops/') && !f.startsWith('stands/office/'))) {
+  const c = read(f);
+  if (c.includes('og:image')) ok(c.includes('assets/og-stands.png'), f + ': не подключена og-stands.png');
 }
 for (const f of rootHtml) ok(read(f).includes('assets/og.png'), f + ': корневая OG потеряна');
 
@@ -136,10 +148,10 @@ for (const f of allHtml) {
 ok(standsJs.includes('initFooterDate') && read('assets/site.js').includes('data-footer-updated'), 'нет JS-заполнения даты футера');
 
 /* 14. dom-kit: порядок и делегирование */
-const engines = ['stands.js', 'ops-hub.js', 'ops-kit.js', 'lab-kit.js', 'league-page.js', 'submissions.js'];
+const engines = ['stands.js', 'ops-hub.js', 'ops-kit.js', 'office-hub.js', 'office-kit.js', 'lab-kit.js', 'league-page.js', 'submissions.js'];
 for (const e of engines) ok(read('assets/' + e).includes('window.DOMKIT.esc'), e + ': не делегирует esc в DOMKIT');
 ok(exists('assets/dom-kit.js'), 'нет assets/dom-kit.js');
-const engineRe = /(stands|ops-hub|ops-kit|lab-kit|league-page|submissions)\.js/;
+const engineRe = /(stands|ops-hub|ops-kit|office-hub|office-kit|lab-kit|league-page|submissions)\.js/;
 for (const f of allHtml) {
   const s = read(f);
   if (!engineRe.test(s)) continue;
@@ -149,10 +161,13 @@ for (const f of allHtml) {
 }
 /* реестр dom-kit-страниц = 37 stands + admin */
 const dkPages = allHtml.filter(f => read(f).includes('dom-kit.js'));
-ok(dkPages.length === 37, 'dom-kit подключён на 37 страницах (36 stands + admin), фактически ' + dkPages.length);
+ok(dkPages.length === 48, 'dom-kit подключён на 48 страницах (47 stands + admin), фактически ' + dkPages.length);
 
 /* 15. Нарратив */
 ok(read('stands/index.html').includes('uni-flow'), 'нет схемы вселенных uni-flow');
+ok(read('stands/index.html').includes('office/index.html') && read('stands/index.html').includes('три вселенные'), 'хаб не переведён на три вселенные');
+ok(read('stands/office/index.html').includes('ops-legend'), 'нет легенды бюро на входе ОфисПолиса');
+ok(read('stands/office/index.html').includes('office-hub.js'), 'хаб ОфисПолиса не подключает office-hub.js');
 ok(read('stands/ops/index.html').includes('ops-legend'), 'нет легенды SLA на входе ДатаПолиса');
 ok(read('404.html').includes('error-mascot') && read('404.html').includes('mascots.js'), '404 без маскота');
 ok(standsJs.includes('emptyHtml'), 'stands.js: нет emptyHtml с маскотом');
@@ -197,6 +212,42 @@ for (const f of allHtml) {
 for (const f of rootHtml) {
   const s = read(f);
   if (s.includes('cdn.tailwindcss.com')) ok(s.includes('tw-failed') && exists('assets/tw-fallback.css'), f + ': нет fallback Tailwind');
+}
+
+
+/* 20. ОфисПолис: изоляция, движок, единое меню */
+const offEng = read('assets/office-engine.js');
+const offKit = read('assets/office-kit.js');
+ok(/profile: 'office-profile'/.test(offEng) && /ledger: 'office-ledger'/.test(offEng) && /submissions: 'office-submissions'/.test(offEng), 'ключи OFFICE не изолированы префиксом office-');
+ok(!/ops-profile|stands-submissions/.test(offEng), 'office-engine пересекается с чужими ключами');
+ok(offEng.includes("schema: 'office-bundle/1'") && offKit.includes("schema: 'office-submission/1'"), 'схемы office-артефактов потеряны');
+ok(offKit.includes("'officekit:'") && offKit.includes('#office-data') && offKit.includes('OFFICE.award'), 'office-kit не использует officekit:/OFFICE');
+for (const f of walk('stands/office', /\.html$/)) {
+  const c = read(f);
+  ok(c.includes('office.css') && c.includes('office-scope') && c.includes('data-accent="amber"'), f + ': нет office-scope/amber');
+  ok(c.includes('dom-kit.js'), f + ': без dom-kit');
+  ok(!c.includes('ПМ.01') && !/МДК[.\s]?\d/.test(c.replace(/<!--[\s\S]*?-->/g, '')), f + ': запрещённый код в UI');
+  const nav = c.match(/<nav class="st-topnav"[\s\S]*?<\/nav>/)[0];
+  ok(nav.includes('href="../index.html"') && nav.includes('вселенные'), f + ': нет общего пункта «вселенные»');
+  ok(nav.includes('glossary.html') && nav.includes('teams.html'), f + ': меню без словаря/команд');
+}
+/* единое меню: пункт «вселенные» во всех stands-страницах с топнавом */
+for (const f of standsHtml) {
+  if (f === 'stands/index.html') continue; // хаб вселенных сам является точкой входа
+  const c = read(f);
+  if (!c.includes('st-topnav')) continue;
+  const nav = c.match(/<nav class="st-topnav"[\s\S]*?<\/nav>/)[0];
+  ok(/вселенные/.test(nav), f + ': в меню нет пункта «вселенные»');
+}
+/* 10 работ с валидным встроенным JSON и обязательными блоками */
+for (const f of walk('stands/office', /office-.*\.html$/)) {
+  if (f.endsWith('index.html')) continue;
+  const c = read(f);
+  const a = c.indexOf('id="office-data">') + 'id="office-data">'.length;
+  const b = c.indexOf('</script>', a);
+  const cfg = JSON.parse(c.slice(a, b));
+  ok(cfg.tasks.length >= 6 && cfg.quiz.length === 4 && cfg.theory.length >= 3 && cfg.reference.length >= 5, f + ': неполный контент работы');
+  ok(cfg.sprintTitle && cfg.story && cfg.who, f + ': нет брифа/маскота');
 }
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
