@@ -9,7 +9,7 @@
 /* Акцент вселенной — teal вместо синего, плюс служебные цвета приоритетов */
 .flat-scope.ops-scope { --st-accent: #0d9488; --st-accent-2: #2dd4bf; --st-accent-soft: rgba(13, 148, 136, .1); }
 
-.ops-kicker { font-family: var(--st-mono); font-size: var(--st-fs-mini); letter-spacing: .14em; text-transform: uppercase; color: var(--st-accent-2); }
+.ops-kicker { font-family: var(--st-mono); font-size: var(--st-fs-mini); letter-spacing: var(--st-ls-display); text-transform: uppercase; color: var(--st-accent-2); }
 
 /* Лента-статус сервисного центра */
 .ops-statusbar {
@@ -28,7 +28,7 @@
 .sev-P2 { color: var(--st-p2-text); background: var(--st-p2-soft); border-color: var(--st-p2-line); }
 .sev-P3 { color: var(--st-p3-text); background: var(--st-p3-soft); border-color: var(--st-p3-line); }
 .sev-P4 { color: var(--st-muted); background: var(--st-panel-2); border-color: var(--st-line); }
-.kind-badge { font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--st-accent-2); border: 1px solid var(--st-line); border-radius: var(--st-radius);padding:var(--st-sp-1) var(--st-sp-2); background: var(--st-panel-2); white-space: nowrap; }
+.kind-badge { font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700; letter-spacing: var(--st-ls-label); text-transform: uppercase; color: var(--st-accent-2); border: 1px solid var(--st-line); border-radius: var(--st-radius);padding:var(--st-sp-1) var(--st-sp-2); background: var(--st-panel-2); white-space: nowrap; }
 
 /* Роль дежурного */
 .role-ribbon {
@@ -37,7 +37,7 @@
   background: linear-gradient(180deg, var(--st-accent-soft), var(--st-panel));
   border-radius: var(--st-radius);padding:var(--st-sp-4) var(--st-gap);margin-bottom:var(--st-sp-5);
 }
-.role-ribbon .rr-label { font-family: var(--st-mono); font-size: var(--st-fs-micro); text-transform: uppercase; letter-spacing: .1em; color: var(--st-muted); }
+.role-ribbon .rr-label { font-family: var(--st-mono); font-size: var(--st-fs-micro); text-transform: uppercase; letter-spacing: var(--st-ls-kicker); color: var(--st-muted); }
 .role-ribbon .rr-name { font-weight: 800; color: var(--st-text); font-size: var(--st-fs-title); }
 .role-ribbon .rr-note { color: var(--st-muted); font-size: var(--st-fs-small); flex: 1 1 100%; }
 .role-ribbon .flat-btn {margin-left:auto; }
@@ -63,26 +63,26 @@
 .ops-board { display: grid; grid-template-columns: repeat(3, 1fr);gap:var(--st-sp-4); }
 @media (max-width: 900px) { .ops-board { grid-template-columns: 1fr; } }
 .ops-column { border: 1px solid var(--st-line); border-radius: var(--st-radius); background: var(--st-panel); overflow: hidden; min-width: 0; }
-.ops-column-head { display: flex; justify-content: space-between; align-items: center;gap:var(--st-sp-2);padding:var(--st-sp-3) var(--st-sp-4); background: var(--st-panel-2); border-bottom: 1px solid var(--st-line); font-family: var(--st-mono); font-size: var(--st-fs-mini); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--st-text-2); }
+.ops-column-head { display: flex; flex-wrap: wrap; row-gap: var(--st-sp-1); justify-content: space-between; align-items: center;gap:var(--st-sp-2);padding:var(--st-sp-3) var(--st-sp-4); background: var(--st-panel-2); border-bottom: 1px solid var(--st-line); font-family: var(--st-mono); font-size: var(--st-fs-mini); font-weight: 700; text-transform: uppercase; letter-spacing: var(--st-ls-label); color: var(--st-text-2); }
 .ops-column-head .count { background: var(--st-panel); border: 1px solid var(--st-line); border-radius: 999px;padding:var(--st-sp-1) var(--st-sp-2); }
 .ops-column-body {padding:var(--st-sp-3); display: grid;gap:var(--st-sp-3); min-height: 4rem; }
 .ops-ticket-mini { border: 1px solid var(--st-line); border-radius: var(--st-radius);padding:var(--st-sp-3) var(--st-sp-3); background: var(--st-panel-2); font-size: var(--st-fs-small); min-width: 0; }
 .ops-ticket-mini h4 {margin:var(--st-sp-2) 0 var(--st-sp-2); font-size: var(--st-fs-small); color: var(--st-text); overflow-wrap: anywhere; }
-.ops-ticket-mini p {margin:0; font-size: var(--st-fs-mini); color: var(--st-muted); line-height: 1.5; }
+.ops-ticket-mini p {margin:0; font-size: var(--st-fs-mini); color: var(--st-muted); line-height: var(--st-lh-ui); }
 .ops-empty { border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius);padding:var(--st-gap); text-align: center; color: var(--st-muted); font-size: var(--st-fs-small); }
 
 /* Метрики SLA */
-.sla-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));gap:var(--st-sp-4); }
+.sla-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));gap:var(--st-sp-4); }
 .sla-stat { border: 1px solid var(--st-line); border-radius: var(--st-radius);padding:var(--st-sp-4) var(--st-sp-4); background: var(--st-panel-2); }
-.sla-stat b { display: block; font-family: var(--st-mono); font-size: 1.5rem; color: var(--st-accent-2);margin-bottom:var(--st-sp-1); }
+.sla-stat b { display: block; font-family: var(--st-mono); font-size:var(--st-fs-metric); color: var(--st-accent-2);margin-bottom:var(--st-sp-1); }
 .sla-stat span { font-size: var(--st-fs-mini); color: var(--st-muted); }
 
 /* Runbook-шаги */
-.runbook-editor textarea { font-family: var(--st-sans); line-height: 1.6; }
+.runbook-editor textarea { font-family: var(--st-sans); line-height: var(--st-lh-text); }
 .runbook-step { display: flex;gap:var(--st-sp-3); align-items: flex-start;padding:var(--st-sp-2) 0; border-bottom: 1px dashed var(--st-line); }
 .runbook-step:last-child { border-bottom: none; }
 .runbook-step .rs-num { font-family: var(--st-mono); color: var(--st-accent-2); font-size: var(--st-fs-small); min-width: 2.2rem; }
-.runbook-step p {margin:0; font-size: var(--st-fs-small); color: var(--st-text-2); line-height: 1.55; }
+.runbook-step p {margin:0; font-size: var(--st-fs-small); color: var(--st-text-2); line-height: var(--st-lh-ui); }
 
 /* Блок blameless postmortem */
 .rca-box { border-left: 3px solid var(--st-warn); }
@@ -91,24 +91,24 @@
 .blameless-note { display: flex;gap:var(--st-sp-3); align-items: flex-start; background: var(--st-accent-soft); border: 1px solid color-mix(in srgb, var(--st-accent) 30%, var(--st-line)); border-radius: var(--st-radius);padding:var(--st-sp-3) var(--st-sp-4); font-size: var(--st-fs-small); color: var(--st-text-2); }
 
 /* Windows/Linux маркеры в шпаргалке */
-.os-tag { font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700;padding:var(--st-sp-1) var(--st-sp-2); border-radius: var(--st-radius); letter-spacing: .06em; white-space: nowrap; }
+.os-tag { font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700;padding:var(--st-sp-1) var(--st-sp-2); border-radius: var(--st-radius); letter-spacing: var(--st-ls-dense); white-space: nowrap; }
 .os-tag.linux { color: var(--st-linux); background: var(--st-linux-soft); }
 .os-tag.windows { color: var(--st-win); background: var(--st-win-soft); }
 .os-tag.mixed { color: var(--st-muted); background: var(--st-panel-2); }
 
 /* Карточки экипажей на хабе */
-.crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));gap:var(--st-sp-4); }
+.crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));gap:var(--st-sp-4); }
 .crew-card { border: 1px solid var(--st-line); border-radius: var(--st-radius);padding:var(--st-sp-4); background: var(--st-panel-2); position: relative; overflow: hidden; }
 .crew-card.is-mine { border-color: color-mix(in srgb, var(--st-accent) 45%, var(--st-line)); background: linear-gradient(180deg, var(--st-accent-soft), var(--st-panel-2)); }
-.crew-card .crew-glyph { font-family: var(--st-mono); font-weight: 800; font-size: var(--st-fs-small); letter-spacing: .08em; }
+.crew-card .crew-glyph { font-family: var(--st-mono); font-weight: 800; font-size: var(--st-fs-small); letter-spacing: var(--st-ls-label); }
 .crew-card h3 {margin:var(--st-sp-2) 0 var(--st-sp-2); font-size: var(--st-fs-lead); color: var(--st-text); }
-.crew-card p {margin:0; font-size: var(--st-fs-small); color: var(--st-muted); line-height: 1.55; }
+.crew-card p {margin:0; font-size: var(--st-fs-small); color: var(--st-muted); line-height: var(--st-lh-ui); }
 
 /* Уведомления движка лабораторной: единая плашка вместо разрозненных <p> */
 .ops-msg {margin:var(--st-sp-3) 0 0;padding:var(--st-sp-2) var(--st-sp-3); min-height: 1.2em;
   border: 1px solid var(--st-line); border-left-width: 3px; border-radius: var(--st-radius);
   background: var(--st-panel-2); color: var(--st-text-2);
-  font-family: var(--st-mono); font-size: var(--st-fs-small); line-height: 1.55;
+  font-family: var(--st-mono); font-size: var(--st-fs-small); line-height: var(--st-lh-ui);
 }
 .ops-msg:empty { display: none; }
 .ops-msg.is-ok { color: var(--st-ok); border-left-color: var(--st-ok); background: var(--st-ok-soft); }
@@ -129,13 +129,13 @@
 .mascot-opt .mc-float { animation: none; }
 
 /* Подписи полей и контейнер теории лабораторной */
-.flat-label { display: block;margin:0 0 var(--st-sp-2); font-family: var(--st-mono); font-size: var(--st-fs-mini); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--st-text-2); }
+.flat-label { display: block;margin:0 0 var(--st-sp-2); font-family: var(--st-mono); font-size: var(--st-fs-mini); font-weight: 700; letter-spacing: var(--st-ls-dense); text-transform: uppercase; color: var(--st-text-2); }
 .lab-theory { display: flex; flex-direction: column;gap:var(--st-sp-1); }
 
 /* Структурные элементы лабораторной (вместо инлайн-стилей) */
 .ops-scope .lp-body > .admin-hint:first-child {margin-top:0; }
 .rollback-field {margin-top:var(--st-sp-4); }
-.ticket-text {margin:var(--st-sp-2) 0; font-size: var(--st-fs-body); color: var(--st-text-2); line-height: 1.65; }
+.ticket-text {margin:var(--st-sp-2) 0; font-size: var(--st-fs-body); color: var(--st-text-2); line-height: var(--st-lh-text); }
 .ticket-actions { display: flex;gap:var(--st-sp-3); flex-wrap: wrap;margin-top:var(--st-sp-4); }
 .runbook-map { border-bottom: 1px solid var(--st-line);padding-bottom:var(--st-sp-3);margin-bottom:var(--st-sp-2); }
 .runbook-map p {margin:var(--st-sp-1) 0; }
