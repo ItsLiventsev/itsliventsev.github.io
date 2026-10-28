@@ -27,6 +27,11 @@
   --radius-xs: 8px;
   --radius-lg: 24px;
   --radius-pill: 999px;
+  /* Единый «хребет» страницы: макс. ширина и поля контента для обеих систем */
+  --page-max: 73.75rem;            /* 1180px */
+  --page-gutter: clamp(1.1rem, 3.6vw, 2.75rem);
+  /* Межсекционный ритм: не слипается на телефоне, не разваливается на десктопе */
+  --space-section: clamp(2rem, 5vw, 3.5rem);
   --ease: cubic-bezier(.16, 1, .3, 1);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -153,6 +158,8 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  /* Плавная смена темы; глобальный reduced-motion сокращает переход до ~0 */
+  transition: background-color .28s ease, color .28s ease;
 }
 
 .mono { font-family: var(--font-mono); }
@@ -1739,7 +1746,7 @@ body { animation: page-in .5s var(--ease); }
   color: var(--text);
   margin: 0 0 1rem;
 }
-.nav-hero-title strong { font-weight: 750; color: var(--nav-blue-deep); }
+.nav-hero-title strong { font-weight: 700; color: var(--nav-blue-deep); }
 :root[data-theme="dark"] .nav-hero-title strong { color: #93b4e8; }
 .nav-hero-sub {
   font-family: var(--font-mono);
@@ -1934,7 +1941,7 @@ body { animation: page-in .5s var(--ease); }
   color: var(--nav-mint);
   margin-bottom: .55rem;
 }
-.flow-step h3 { font-size: var(--fs-body); font-weight: 750; margin: 0 0 .4rem; color: var(--text); }
+.flow-step h3 { font-size: var(--fs-body); font-weight: 700; margin: 0 0 .4rem; color: var(--text); }
 .flow-step p { font-size: var(--fs-small); line-height: var(--lh-text); color: var(--muted); margin: 0; }
 
 /* ---------- 21. Полировка 2026: тач-таргеты, View Transitions, док ---------- */
@@ -1975,9 +1982,9 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
    на всех страницах сайта (один масштаб при одинаковом зуме браузера) */
 .page-wrap {
   width: 100%;
-  max-width: 72rem;                 /* 1152px — общий «хребет» сайта */
+  max-width: var(--page-max);      /* 1180px — общий «хребет» сайта */
   margin-inline: auto;
-  padding-inline: clamp(1.1rem, 3.6vw, 2.75rem);
+  padding-inline: var(--page-gutter);
   padding-block: clamp(1.75rem, 4vw, 3rem);
   position: relative;
   z-index: 10;                      /* над .floating-elements (z-index:0) */
@@ -2068,7 +2075,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
 .note-title {
   margin: 0;
   font-size: var(--fs-lead);
-  font-weight: 750;
+  font-weight: 700;
   line-height: var(--lh-heading);
   color: var(--text);
   display: -webkit-box;
@@ -2392,7 +2399,7 @@ textarea.admin-input { resize: vertical; line-height: var(--lh-text); }
 /* Превью markdown */
 .admin-preview { max-width: none; }
 .admin-preview h1 { font-size: var(--fs-h3); font-weight: 800; margin: 0 0 1rem; color: var(--text); }
-.admin-preview h2 { font-size: var(--fs-title); font-weight: 750; margin: 1.2rem 0 .5rem; color: var(--text); }
+.admin-preview h2 { font-size: var(--fs-title); font-weight: 700; margin: 1.2rem 0 .5rem; color: var(--text); }
 .admin-preview h3 { font-size: var(--fs-lead); font-weight: 700; margin: 1rem 0 .4rem; color: var(--text); }
 .admin-preview p { font-size: var(--fs-body); color: var(--text-2); line-height: var(--lh-prose); }
 .admin-preview ul, .admin-preview ol { padding-left: 1.3rem; font-size: var(--fs-body); color: var(--text-2); line-height: var(--lh-prose); }
@@ -2781,7 +2788,7 @@ body[data-accent="emerald"] .ambient .orb { background: #10b981; }
 .noscript-bar {
   position: relative;
   z-index: 100;
-  max-width: 72rem;
+  max-width: var(--page-max);
   margin: 0 auto 1.2rem;
   padding: .7rem 1rem;
   border-radius: var(--radius-sm);
@@ -2820,3 +2827,13 @@ h1, h2, h3, .hero-title, .zone-title, .esp-title { text-wrap: balance; }
   .site-header.header-hidden { transform: none; }
   .skip-link { transition: none; }
 }
+
+/* Маскот-проводник на странице 404 (инлайн-SVG из mascots.js, без stands.css) */
+.error-mascot { display: flex; justify-content: center; margin-bottom: 1rem; }
+.error-mascot .mc-svg { display: block; }
+
+/* Слот «обновлено» в едином футере мягких страниц */
+.footer-updated { font-family: var(--font-mono); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+
+/* Якорный отступ под липкую шапку: работает и без Tailwind CDN (tw-fallback) */
+section[id], .scroll-mt-24 { scroll-margin-top: 5.5rem; }
