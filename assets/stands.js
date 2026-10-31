@@ -89,24 +89,8 @@
       btn.addEventListener('click', function () {
         var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         localStorage.setItem(THEME_KEY, next);
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        // View Transitions: круговое раскрытие новой темы от кнопки;
-        // без API или при reduced-motion — мгновенное переключение.
-        if (!reduce && document.startViewTransition) {
-          var rect = btn.getBoundingClientRect();
-          var x = rect.left + rect.width / 2;
-          var y = rect.top + rect.height / 2;
-          var maxRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-          var vt = document.startViewTransition(function () { apply(next); });
-          vt.ready.then(function () {
-            document.documentElement.animate(
-              { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + maxRadius + 'px at ' + x + 'px ' + y + 'px)'] },
-              { duration: 460, easing: 'cubic-bezier(.16, 1, .3, 1)', pseudoElement: '::view-transition-new(root)' }
-            );
-          }).catch(function () {});
-        } else {
-          apply(next);
-        }
+        // Переключение мгновенное: анимации раскрытия выключены
+        apply(next);
       });
     });
     window.addEventListener('storage', function (e) {
@@ -1480,7 +1464,6 @@
     safeRun('кабинет', initCabinet);
     safeRun('стенд DHCP', initDhcpLab);
     safeRun('стенд OVS', initOvsLab);
-    safeRun('ambient-декор', initAmbient);
     safeRun('футер', initFooterDate);
     safeRun('навигация шагов', initStepSpy);
   }
@@ -1493,39 +1476,6 @@
     var d = new Date(document.lastModified);
     if (isNaN(d.getTime())) return;
     el.textContent = '// обновлено: ' + d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  }
-
-  // Ambient-моно: декоративные плавающие глифы. Только для украшения,
-  // отключается при prefers-reduced-motion и не создаётся дважды.
-  function initAmbient() {
-    if (document.querySelector('.st-ambient')) return;
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var glyphs = [
-      { g: '#',  x: 6,  y: 18, size: '5.5rem', dur: '26s', delay: '0s',    dx: '14px',  dy: '-24px', r0: '-9deg',  r1: '8deg' },
-      { g: '>_', x: 84, y: 12, size: '4rem',   dur: '31s', delay: '-6s',   dx: '-16px', dy: '-18px', r0: '6deg',   r1: '-7deg' },
-      { g: '/',  x: 70, y: 62, size: '6rem',   dur: '28s', delay: '-11s',  dx: '12px',  dy: '22px',  r0: '-12deg', r1: '11deg' },
-      { g: '$',  x: 12, y: 74, size: '3.4rem', dur: '23s', delay: '-4s',   dx: '-10px', dy: '-20px', r0: '7deg',   r1: '-9deg' },
-      { g: '~',  x: 44, y: 34, size: '4.6rem', dur: '34s', delay: '-15s',  dx: '18px',  dy: '16px',  r0: '-6deg',  r1: '10deg' },
-      { g: '{ }',x: 90, y: 78, size: '3rem',   dur: '27s', delay: '-8s',   dx: '-14px', dy: '-16px', r0: '8deg',   r1: '-8deg' }
-    ];
-    var layer = document.createElement('div');
-    layer.className = 'st-ambient';
-    layer.setAttribute('aria-hidden', 'true');
-    glyphs.forEach(function (it) {
-      var el = document.createElement('span');
-      el.textContent = it.g;
-      el.style.left = it.x + '%';
-      el.style.top = it.y + '%';
-      el.style.fontSize = it.size;
-      el.style.setProperty('--dur', it.dur);
-      el.style.setProperty('--delay', it.delay);
-      el.style.setProperty('--dx', it.dx);
-      el.style.setProperty('--dy', it.dy);
-      el.style.setProperty('--r0', it.r0);
-      el.style.setProperty('--r1', it.r1);
-      layer.appendChild(el);
-    });
-    document.body.insertBefore(layer, document.body.firstChild);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

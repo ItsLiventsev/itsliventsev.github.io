@@ -6,16 +6,8 @@
    Цвета берутся из переменных текущего scope.
    ========================================================================== */
 
-/* 1. View Transitions: межстраничные переходы там, где API поддерживается.
-   Старые браузеры просто игнорируют правило и делают обычную навигацию.
-   Именованные слои «перетекают» между страницами без пересоздания:
-   шапка, тумблер темы, заголовок и фоновый ambient не мигают. */
-@view-transition { navigation: auto; }
-.logo, .st-brand { view-transition-name: chrome-brand; }
-.theme-toggle { view-transition-name: chrome-theme; }
-h1 { view-transition-name: page-title; }
-.ambient, .st-ambient { view-transition-name: ambient-layer; }
-.site-header, .st-topbar { view-transition-name: chrome-header; }
+/* 1. Межстраничные анимации выключены: навигация между страницами
+   мгновенна и предсказуема, браузер просто отрисовывает новую страницу. */
 
 /* 2. Якоря: единый отступ под фиксированную шапку (12px сверху + высота) */
 section[id],
@@ -173,11 +165,8 @@ section[id],
               opacity var(--dur-fast) var(--ease-exit);
 }
 
-/* 11. Общий reduced-motion хрома: только opacity ≤100ms, без сдвигов */
+/* 11. Общий reduced-motion хрома */
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) { animation: none !important; }
   .skeleton::after { animation: none; opacity: .3; }
   .stack-panel, .toast { animation: none; transform: none; }
   .skip-link, .theme-toggle, .stack-tab { transition: opacity var(--dur-fast) var(--ease-standard); }
