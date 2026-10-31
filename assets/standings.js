@@ -13,6 +13,9 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
+  /* Глобальный объект внутри фабрики: window в браузере, globalThis в Node */
+  var root = typeof self !== 'undefined' ? self : globalThis;
+
   var CACHE_KEY = 'standings-cache-v1';
   var CACHE_TTL = 10 * 60 * 1000;
 
@@ -132,6 +135,10 @@
     'point-wipe': 'не ставить точку', 'rescue': 'спасательная круглая', 'topic-first': 'первый выбор темы',
     'grade-plus': '+1 балл к четвертной'
   };
+  /* Каталог лиги — первоисточник; локальная карта — фолбэк для Node/кэша */
+  function rewardTitle(id) {
+    return (root.LEAGUE && LEAGUE.REWARDS && LEAGUE.REWARDS[id] && LEAGUE.REWARDS[id].title) || REWARD_TITLES[id] || id;
+  }
   function claimsList(snap) {
     var rows = (snap && snap.claims) || [];
     if (!rows.length) return '<p class="std-empty-hint">ордеров ещё не было — обменяйте неткоины на <a href="rewards.html">бирже привилегий</a>.</p>';
@@ -139,9 +146,35 @@
       var cls = c.status === 'approved' ? 'is-ok' : c.status === 'rejected' ? 'is-bad' : 'is-wait';
       var label = c.status === 'approved' ? 'выдано' : c.status === 'rejected' ? 'отклонено' : c.status === 'refunded' ? 'возвращено' : 'ждёт подтверждения';
       return '<li class="std-claim ' + cls + '"><span class="mono">' + esc(c.handle || '') + '</span>' +
-        '<span>' + esc(REWARD_TITLES[c.rewardId] || c.rewardId) + '</span>' +
+        '<span>' + esc(rewardTitle(c.rewardId)) + '</span>' +
         '<span class="std-claim-status">' + label + '</span></li>';
     }).join('') + '</ul>';
+  }
+
+  /* Экипажи ДатаПолиса: очки команд и проведённые операции (snap.datapolis) */
+  function opsCrewsTable(snap) {
+    var dp = snap && snap.datapolis;
+    if (!dp || !dp.crews || !dp.crews.length) return '';
+    var max = Math.max.apply(null, dp.crews.map(function (c) { return num(c.points); })) || 1;
+    var medals = ['🥇', '🥈', '🥉'];
+    var opsLine = '';
+    if (dp.opsDone) {
+      var parts = Object.keys(dp.opsDone).map(function (id) {
+        var title = (dp.opsTitles && dp.opsTitles[id]) || id;
+        return esc(title) + ' ×' + dp.opsDone[id];
+      });
+      if (parts.length) opsLine = '<p class="std-meta" style="margin-top:var(--st-sp-3);">операций проведено: ' + parts.join(' · ') + '</p>';
+    }
+    var table = '<div class="std-table-wrap"><table class="std-table">' +
+      '<thead><tr><th>экипаж</th><th>очков</th><th class="std-col-bar">копилка экипажа</th></tr></thead><tbody>' +
+      dp.crews.slice().sort(function (a, b) { return b.points - a.points; }).map(function (c, i) {
+        return '<tr>' +
+          '<td class="std-place">' + (medals[i] || (i + 1) + '.') + ' ' + esc(c.name || c.id) + '</td>' +
+          '<td class="mono">' + num(c.points) + '</td>' +
+          '<td class="std-col-bar"><span class="std-bar"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
+          '</tr>';
+      }).join('') + '</tbody></table></div>';
+    return '<p class="list-lead"><strong>экипажи ДатаПолиса · очки за операции</strong></p>' + table + opsLine;
   }
 
   /* Декларативные блоки: <div data-standings="tribes|members|claims" data-standings-limit="10"></div> */
@@ -153,6 +186,7 @@
       if (kind === 'tribes') el.innerHTML = tribesTable(snap);
       else if (kind === 'members') el.innerHTML = membersTable(snap, { limit: limit || 20 });
       else if (kind === 'claims') el.innerHTML = claimsList(snap);
+      else if (kind === 'ops-crews') el.innerHTML = opsCrewsTable(snap);
       else if (kind === 'meta') el.innerHTML = snap ? metaLine(snap) : '';
       el.classList.add('std-ready');
     });
@@ -174,6 +208,7 @@
     renderTribes: tribesTable,
     renderMembers: membersTable,
     renderClaims: claimsList,
+    renderOpsCrews: opsCrewsTable,
     hydrate: hydrate,
     autoInit: autoInit,
     REWARD_TITLES: REWARD_TITLES

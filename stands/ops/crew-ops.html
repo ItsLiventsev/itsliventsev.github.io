@@ -124,10 +124,29 @@
     </section>
 
     <!-- Операции -->
+    <div class="st-section-head">
+      <span class="st-section-num">01</span>
+      <h2>чек-листы операций</h2>
+      <span class="st-section-tag">5 регламентов</span>
+    </div>
     <div id="crew-ops-root"></div>
     <p class="ops-msg" id="crew-ops-msg" role="status"></p>
 
-    <section class="lab-panel st-mt-7">
+    <div class="st-section-head st-mt-7">
+      <span class="st-section-num">02</span>
+      <h2>командный зачёт экипажей</h2>
+      <span class="st-section-tag">публикуется с GitHub</span>
+    </div>
+    <section class="lab-panel st-mb-7">
+      <div class="lp-body">
+        <p class="admin-hint">Сводка экипажей публикуется преподавателем вместе со стендом лиги (stands/standings.json):
+        очки за операции и список проведённых операций — без ФИО, только числа. Пока снимка нет, таблица не показывается.</p>
+        <noscript><p class="admin-hint">// зачёт подгружается из репозитория при включённом JavaScript</p></noscript>
+        <div data-standings="ops-crews"></div>
+      </div>
+    </section>
+
+    <section class="lab-panel st-mb-7">
       <div class="lp-head"><span>правила операций</span><span class="kind-badge">регламент</span></div>
       <div class="lp-body">
         <ul class="submit-channels">
@@ -153,6 +172,7 @@
 <script src="../../assets/mascots.js?v=20261031ad"></script>
 <script src="../../assets/ops-engine.js?v=20261031ad"></script>
 <script src="../../assets/dom-kit.js?v=20261031ad"></script>
+<script src="../../assets/standings.js?v=20261031ad"></script>
 <script src="../../assets/ops-hub.js?v=20261031ad"></script>
 <script src="../../assets/shared-chrome.js?v=20261031ad"></script>
 </body>

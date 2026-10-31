@@ -416,6 +416,10 @@ ok(oe.includes('CREW_OPS') && oe.includes('closeCrewOp') && oe.includes('ops-cre
 ok(oe.includes('crewop:') && oe.includes("W' + w"), 'ops-engine.js: нет недельного дедупа операций');
 ok(oe.includes("'ops-bundle/2'") && oe.includes('crewsSnapshot'), 'ops-engine.js: бандл ops не v2 или нет снапшота экипажей');
 ok(read('stands/ops/crew-ops.html').includes('ops-hub.js') && read('stands/ops/crew-ops.html').includes('crew-ops-root'), 'crew-ops.html: не подключён движок кабинета');
+ok(read('stands/ops/crew-ops.html').includes('data-standings="ops-crews"') && read('stands/ops/crew-ops.html').includes('standings.js'), 'crew-ops.html: нет командного зачёта экипажей');
+ok(read('assets/standings.js').includes('renderOpsCrews') && read('assets/standings.js').includes('opsCrewsTable'), 'standings.js: нет рендера экипажей ДатаПолиса');
+ok(read('assets/ops-engine.js').includes('opsTitles'), 'ops-engine.js: снапшот без названий операций');
+ok(read('stands/teams.html').includes('data-standings="ops-crews"'), 'teams.html: экипажи не показаны рядом с трайбами');
 ok(read('stands/ops/index.html').includes('crew-ops.html'), 'ops/index.html: нет входа на операции экипажа');
 for (const term of ['биржа привилегий', 'ордер', 'операция экипажа', 'очки экипажа', 'стенд лиги']) {
   ok(read('stands/glossary.html').includes(term), 'в глоссарии нет термина: ' + term);
