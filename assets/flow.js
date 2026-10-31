@@ -1,11 +1,10 @@
 /* ==========================================================================
-   flow.js · хореография flow-motion (zero-deps, подключается последним)
+   flow.js · ambient-слой и параллакс (zero-deps, подключается последним)
    1. Инжект ambient-слоя с моно-глифами и баблами на стендах
-   2. Пословное появление заголовков [data-flow-words] (маска + пружина)
-   3. IntersectionObserver для [data-flow]-блоков и групп со стаггером --i
-   4. Параллакс ambient-слоя за курсором (только pointer:fine, rAF-лерп)
-   При prefers-reduced-motion модуль не делает ничего: контент остаётся
-   в естественном состоянии, вся видимая информация доступна сразу.
+   2. Параллакс ambient-слоя за курсором (только pointer:fine, rAF-лерп)
+   Входных анимаций больше нет: контент всех страниц виден сразу,
+   без скрытых состояний, наблюдателей и страховочных таймеров.
+   При prefers-reduced-motion модуль не делает ничего.
    ========================================================================== */
 (function () {
   'use strict';
@@ -70,69 +69,7 @@
     }
   })();
 
-  /* ---------- 2. Пословное появление заголовков ---------- */
-  function splitWords(el) {
-    // Безопасный сплит: только элементы без вложенных тегов
-    if (el.querySelector('*') || el.dataset.flowSplit === 'done') return;
-    var text = el.textContent;
-    el.dataset.flowSplit = 'done';
-    el.classList.add('flow-words');
-    el.textContent = '';
-    var wordIndex = 0;
-    text.split(/(\s+)/).forEach(function (part) {
-      if (part === '') return;
-      if (/^\s+$/.test(part)) { el.appendChild(document.createTextNode(part)); return; }
-      var outer = document.createElement('span');
-      outer.className = 'flow-word';
-      var inner = document.createElement('span');
-      inner.className = 'flow-word-in';
-      inner.style.setProperty('--i', Math.min(wordIndex, 8));
-      inner.textContent = part;
-      outer.appendChild(inner);
-      el.appendChild(outer);
-      wordIndex++;
-    });
-  }
-  Array.prototype.forEach.call(document.querySelectorAll('[data-flow-words]'), splitWords);
-
-  /* ---------- 3. IO: блоки data-flow и стаггер-группы ---------- */
-  var targets = Array.prototype.slice.call(document.querySelectorAll('[data-flow], [data-flow-words], [data-flow-group]'));
-  // Дочерним элементам групп проставляем индекс --i (потолок в CSS)
-  targets.forEach(function (group) {
-    if (!group.hasAttribute('data-flow-group')) return;
-    // Декорируем всех детей: задержка стаггера ограничена --flow-cap в CSS,
-    // поэтому большие сетки (10+ карточек) не растягивают каскад
-    Array.prototype.slice.call(group.children).forEach(function (child, i) {
-      child.style.setProperty('--i', i);
-      if (!child.hasAttribute('data-flow')) child.setAttribute('data-flow', 'rise');
-    });
-  });
-  // Пересобираем список ПОСЛЕ декорирования групп: иначе дочерние карточки
-  // не попадают ни в наблюдатель, ни в страховочный таймаут и остаются opacity:0
-  targets = Array.prototype.slice.call(document.querySelectorAll('[data-flow], [data-flow-words], [data-flow-group]'));
-  if ('IntersectionObserver' in window && targets.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        el.classList.add(el.hasAttribute('data-flow-words') ? 'is-in' : 'flow-in');
-        io.unobserve(el);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    targets.forEach(function (el) { io.observe(el); });
-    // Подстраховка: если наблюдатель не сработал, контент всё равно появится
-    window.setTimeout(function () {
-      targets.forEach(function (el) {
-        el.classList.add(el.hasAttribute('data-flow-words') ? 'is-in' : 'flow-in');
-      });
-    }, 1600);
-  } else {
-    targets.forEach(function (el) {
-      el.classList.add(el.hasAttribute('data-flow-words') ? 'is-in' : 'flow-in');
-    });
-  }
-
-  /* ---------- 4. Параллакс ambient за курсором (rAF-лерп) ---------- */
+  /* ---------- 2. Параллакс ambient за курсором (rAF-лерп) ---------- */
   if (finePointer) {
     var layers = Array.prototype.slice.call(document.querySelectorAll('.flow-parallax'));
     if (layers.length) {

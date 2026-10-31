@@ -1,104 +1,28 @@
 /* ==========================================================================
-   flow.css · flow-motion слой уровня 2026 (Apple HIG / One UI эстетика)
-   Подключается ПОСЛЕДНИМ. Только композитор-friendly свойства:
-   transform / opacity / filter / clip-path. Никаких width/height/top/left.
-   Иерархия наследования: :root → scope (.flat-scope) → секция → элемент,
-   каждый уровень может переопределить --flow-* локально, не трогая другие.
+   flow.css · тактильный слой хрома (zero-deps, подключается последним)
+   Входные/появляющиеся анимации убраны: страницы отрисовываются сразу
+   в финальном состоянии, без скрытых состояний и наблюдателей.
+   Здесь осталось только то, что запускает сам пользователь или фон:
+     1. Мобильное меню и индикатор навигации стендов
+     2. Тактильность: hover-подъём карточек, нажатие кнопок
+     3. Ambient-слой: моно-глифы и баблы (инжект flow.js, aria-hidden)
+     4. Модалки и тосты
+     5. Reduced motion: всё отключается
+   Только композитор-friendly свойства: transform / opacity / filter.
+   Никаких width/height/top/left в переходах и keyframes.
    ========================================================================== */
 
 :root {
-  /* Кривые: мягкая пружина для появления, стандарт — для всего остального */
+  /* Кривая пружины для пользовательских действий (меню, модалки, hover) */
   --ease-spring: cubic-bezier(.175, .885, .32, 1.15);
-  /* Георгафия движения: путь выезда, глубина блюра, стекло панелей */
-  --flow-rise: 18px;
-  --flow-rise-sm: 10px;
-  --flow-blur: 12px;
-  --flow-blur-sm: 6px;
+  /* Стекло панелей мобильного меню */
   --flow-glass: blur(22px) saturate(180%);
-  /* Длительность и шаг стаггера наследуются по DOM-уровням */
-  --flow-dur: var(--dur-slow);
-  --flow-step: 56ms;
-  --flow-cap: 6;
 }
 
 /* --------------------------------------------------------------------------
-   1. Эволюция .reveal: тот же класс, новая пластика.
-      Скрытое состояние живёт только при включённом JS — без JS контент виден.
-   -------------------------------------------------------------------------- */
-.js-enabled .reveal {
-  transform: translate3d(0, var(--flow-rise), 0);
-  transition:
-    opacity var(--flow-dur) var(--ease-emphasized),
-    transform var(--flow-dur) var(--ease-emphasized),
-    filter var(--flow-dur) var(--ease-emphasized);
-}
-.js-enabled .reveal.active,
-.js-enabled .reveal.in { opacity: 1; transform: none; filter: none; }
-
-/* Базовый вход «rise»: подъём + проявление, наследует --flow-rise/--flow-dur */
-.js-enabled [data-flow] {
-  opacity: 0;
-  transform: translate3d(0, var(--flow-rise), 0);
-  transition:
-    opacity var(--flow-dur) var(--ease-emphasized),
-    transform var(--flow-dur) var(--ease-emphasized),
-    filter var(--flow-dur) var(--ease-emphasized),
-    clip-path var(--flow-dur) var(--ease-emphasized);
-}
-/* Варианты входа через data-flow — наследуемые переменные, не новые классы */
-.js-enabled [data-flow="blur"] {
-  filter: blur(var(--flow-blur));
-  transform: translate3d(0, var(--flow-rise-sm), 0);
-}
-.js-enabled [data-flow="pop"] {
-  transform: scale(.96) translate3d(0, var(--flow-rise-sm), 0);
-}
-.js-enabled [data-flow="mask"] {
-  clip-path: inset(0 0 100% 0);
-  transform: none;
-  transition: clip-path var(--flow-dur) var(--ease-emphasized),
-              opacity var(--flow-dur) var(--ease-emphasized);
-}
-.js-enabled [data-flow].flow-in {
-  opacity: 1; transform: none; filter: none; clip-path: inset(-1px -1px -1px -1px);
-}
-/* Стаггер внутри группы: индекс --i ставит flow.js, потолок --flow-cap */
-[data-flow-group] > [data-flow],
-.flow-stagger > * {
-  transition-delay: calc(min(var(--i, 0), var(--flow-cap)) * var(--flow-step));
-}
-/* Каскад группы: когда сама группа получила flow-in (по IO или страховке),
-   проявляются и её дочерние элементы — запасной канал к индивидуальному IO */
-.js-enabled [data-flow-group].flow-in > [data-flow] {
-  opacity: 1;
-  transform: none;
-  filter: none;
-  clip-path: inset(-1px -1px -1px -1px);
-}
-
-/* --------------------------------------------------------------------------
-   2. Текст: маскированное появление словами. Никакого «падения» —
-   слово выезжает из-под маски по мягкой пружине.
-   -------------------------------------------------------------------------- */
-.flow-words .flow-word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding-bottom: .08em; /* запас под нижние выносные при маске */
-  margin-bottom: -.08em;
-}
-.flow-words .flow-word-in {
-  display: inline-block;
-  transform: translateY(112%);
-  transition: transform var(--dur-slow) var(--ease-spring);
-  transition-delay: calc(min(var(--i, 0), 8) * 46ms);
-  will-change: transform;
-}
-.flow-words.is-in .flow-word-in { transform: translateY(0); }
-
-/* --------------------------------------------------------------------------
-   3. Меню мягкого сайта: стеклянный оверлей + хореография пунктов.
-   Панель «вырастает» из кнопки (scale + translate), пункты — каскадом.
+   1. Меню мягкого сайта: стеклянный оверлей + хореография пунктов.
+      Панель «вырастает» из кнопки (scale + translate), пункты — каскадом.
+      Анимация только на действие пользователя — открытие меню.
    -------------------------------------------------------------------------- */
 @media (max-width: 880px) {
   .js-enabled .site-nav {
@@ -156,55 +80,8 @@
                             background-color var(--dur-fast) var(--ease-standard); }
 
 /* --------------------------------------------------------------------------
-   4. Mount-анимации динамического контента.
-      keyframe-to не содержит transform → после завершения hover-эффекты
-      карточек работают поверх, fill-mode не перетирает каскад.
-   -------------------------------------------------------------------------- */
-@keyframes flow-rise {
-  from { opacity: 0; transform: translate3d(0, var(--flow-rise-sm), 0); }
-  to   { opacity: 1; }
-}
-@keyframes flow-pop {
-  from { opacity: 0; transform: scale(.94); }
-  to   { opacity: 1; }
-}
-/* Только классы, которыми не управляет reveal-наблюдатель stands.js */
-.flat-scope .sla-stat,
-.flat-scope .crew-card,
-.flat-scope .ops-ticket-mini,
-.flat-scope .ach-card,
-.flat-scope .rv-card,
-.flat-scope .uni-card {
-  animation: flow-rise var(--dur-slow) var(--ease-emphasized) both;
-}
-.flat-scope .sla-stat:nth-child(2),
-.flat-scope .uni-card:nth-child(2),
-.flat-scope .crew-card:nth-child(2) { animation-delay: 70ms; }
-.flat-scope .sla-stat:nth-child(3),
-.flat-scope .uni-card:nth-child(3),
-.flat-scope .crew-card:nth-child(3) { animation-delay: 140ms; }
-.flat-scope .sla-stat:nth-child(4),
-.flat-scope .crew-card:nth-child(4) { animation-delay: 210ms; }
-.flat-scope .sla-stat:nth-child(5) { animation-delay: 280ms; }
-.flat-scope .sla-stat:nth-child(6) { animation-delay: 350ms; }
-.flat-scope .sla-stat:nth-child(n+7) { animation-delay: 380ms; }
-
-/* Лента наград: новые записи всплывают, старая feed-in заменена общей */
-.flat-scope .feed-list li {
-  animation: flow-rise var(--dur-base) var(--ease-emphasized) both;
-}
-.flat-scope .feed-list li:nth-child(2) { animation-delay: 50ms; }
-.flat-scope .feed-list li:nth-child(3) { animation-delay: 100ms; }
-.flat-scope .feed-list li:nth-child(n+4) { animation-delay: 140ms; }
-
-/* Мягкий сайт: карточки проектов/блога «приземляются» pop'ом */
-.p-card, .step-card, .trophy-card {
-  animation: flow-pop var(--dur-slow) var(--ease-spring) both;
-}
-
-/* --------------------------------------------------------------------------
-   5. Тактильность 2026: нажатие — пружинка, карточка приподнимается.
-   Только transform: layout заморожен, тень меняется отдельным свойством.
+   2. Тактильность 2026: нажатие — пружинка, карточка приподнимается.
+      Только transform: layout заморожен, тень меняется отдельным свойством.
    -------------------------------------------------------------------------- */
 .quest-card:not(.is-locked):hover {
   transform: translateY(-4px);
@@ -223,7 +100,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. Ambient: моно-глифы (решётка, слэш, стрелка) с глубиной резкости
+   3. Ambient: моно-глифы (решётка, слэш, стрелка) с глубиной резкости
    и баблы. Слой общий для мягкого сайта (инжект flow.js) и стендов.
    -------------------------------------------------------------------------- */
 .st-ambient .amb-glyph {
@@ -271,7 +148,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   7. Модалки и тосты: вырастание с лёгким блюром, выход — быстрее.
+   4. Модалки и тосты: вырастание с лёгким блюром, выход — быстрее.
+      Анимация запускается только открытием модалки пользователем.
    -------------------------------------------------------------------------- */
 .st-modal:not([hidden]) .st-modal-box,
 .st-modal:not([hidden]) .tour-pop {
@@ -285,17 +163,10 @@
 .toast.is-show { transform: translateY(0) scale(1); }
 
 /* --------------------------------------------------------------------------
-   8. Reduced motion: всё мгновенно видимо, никаких трансформных стартов.
+   5. Reduced motion: контент всегда виден, декоративные слои отключаются.
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .js-enabled .reveal,
-  .js-enabled [data-flow] { opacity: 1 !important; transform: none !important;
-    filter: none !important; clip-path: none !important; }
   .flow-words .flow-word-in { transform: none !important; transition: none !important; }
-  .flat-scope .sla-stat, .flat-scope .quest-card, .flat-scope .crew-card,
-  .flat-scope .ops-ticket-mini, .flat-scope .ach-card, .flat-scope .rv-card,
-  .flat-scope .uni-card, .flat-scope .id-card, .flat-scope .feed-list li,
-  .p-card, .step-card, .trophy-card { animation: none !important; }
   .st-ambient, .ambient.flow-parallax, .st-ambient.flow-parallax { display: none; }
   .flow-bubble { animation: none; }
   .st-modal:not([hidden]) .st-modal-box,

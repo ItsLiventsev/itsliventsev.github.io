@@ -20,8 +20,9 @@ const BLOCK_START = '<!-- SEO:AUTO:START -->';
 const BLOCK_END = '<!-- SEO:AUTO:END -->';
 
 // Страницы, которые не должны попадать в индекс и получать разметку
-// 404/admin — служебные; stands/league.html — персональные данные студентов
-const NOINDEX = new Set(['404.html', 'admin.html', 'stands/league.html']);
+// 404/admin — служебные; stands/league.html — персональные данные студентов;
+// projects/glossary.html — редирект-заглушка на единый словарь stands/glossary.html
+const NOINDEX = new Set(['404.html', 'admin.html', 'stands/league.html', 'projects/glossary.html']);
 
 // Явный <meta name="robots" content="noindex"> на странице тоже исключает её из индекса и sitemap
 function isNoindex(html) {

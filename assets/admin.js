@@ -171,7 +171,7 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 
 <div class="page-wrap">
 
-  <header class="site-header reveal">
+  <header class="site-header">
     <a href="${prefix}${section}.html" class="logo"><span class="arrow">←</span> ${section === 'blog' ? 'заметки' : 'статьи'}</a>
     <nav class="site-nav" aria-label="Основная навигация">
 ${navItems}
@@ -193,7 +193,7 @@ ${navItems}
       <a href="${prefix}${section}.html" class="nav-link" style="padding:.2rem .4rem;">${section === 'blog' ? 'заметки' : 'статьи'}</a>
     </nav>
 
-    <article class="reveal">
+    <article>
       <div class="article-meta">
         <span class="pill ${section === 'blog' ? 'pill-rose' : 'pill-amber'}">${esc(TYPE_LABELS[section][d.type] || d.type)}</span>
         <span class="dot"></span><span>${esc(d.date)}</span>

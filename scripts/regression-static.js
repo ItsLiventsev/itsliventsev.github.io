@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261028af';
+const VERSION = '20261031aa';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -31,7 +31,7 @@ ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' +
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad') && !s.includes('?v=20261028ae'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad') && !s.includes('?v=20261028ae') && !s.includes('?v=20261028af'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 68, 'sitemap URL = 68, фактически ' + locs.length);
+ok(locs.length === 67, 'sitemap URL = 67, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -138,7 +138,10 @@ for (const f of standsHtml.filter(f => !f.startsWith('stands/ops/') && !f.starts
   const c = read(f);
   if (c.includes('og:image')) ok(c.includes('assets/og-stands.png'), f + ': не подключена og-stands.png');
 }
-for (const f of rootHtml) ok(read(f).includes('assets/og.png'), f + ': корневая OG потеряна');
+for (const f of rootHtml) {
+  if (f === 'projects/glossary.html') continue; // noindex-редирект на единый словарь
+  ok(read(f).includes('assets/og.png'), f + ': корневая OG потеряна');
+}
 
 /* 13. Футер: слот на каждой странице с футером */
 for (const f of allHtml) {
@@ -283,11 +286,14 @@ ok(!/style\.width/.test(read('assets/stands.js') + read('assets/ops-kit.js') + r
 /* View Transitions и именованные элементы хрома */
 ok(sharedCss.includes('@view-transition') && sharedCss.includes('view-transition-name: chrome-brand')
   && sharedCss.includes('view-transition-name: chrome-theme'), 'нет View Transitions хрома');
-/* общий хром подключён на всех страницах после остальных стилей */
-const chromePages = allHtml.filter(f => read(f).includes('assets/shared-chrome.css') && read(f).includes('assets/shared-chrome.js'));
-ok(chromePages.length === allHtml.length, 'shared-chrome подключён не на всех страницах: ' + (allHtml.length - chromePages.length));
+/* общий хром подключён на всех страницах после остальных стилей
+   (редирект-заглушка projects/glossary.html живёт без общих ассетов) */
+const chromePages = allHtml.filter(f => f !== 'projects/glossary.html'
+  && read(f).includes('assets/shared-chrome.css') && read(f).includes('assets/shared-chrome.js'));
+ok(chromePages.length === allHtml.length - 1, 'shared-chrome подключён не на всех страницах кроме заглушки: ' + (allHtml.length - 1 - chromePages.length));
 for (const f of allHtml) {
   const c = read(f);
+  if (!c.includes('assets/shared-chrome.css')) continue;
   const chromePos = c.indexOf('shared-chrome.css');
   const scopePos = Math.max(c.indexOf('stands.css'), c.indexOf('site.css'));
   ok(chromePos > scopePos, f + ': shared-chrome.css должен идти после scope-стилей');
@@ -303,54 +309,76 @@ ok(!/transition:[^;]*max-height/.test(siteCss), 'остался max-height-пе�
 ok(stCss.includes('position: sticky') && stCss.includes('.is-compact'), 'нет липкого профиля/компактного состояния');
 /* скелетоны и резерв высот JS-контейнеров */
 ok(sharedCss.includes('.skeleton') && /#board[^{]*\{[^}]*min-height/.test(sharedCss), 'нет резерва высот JS-блоков');
-/* стаггер через --i, не через таймерные d-классы */
-ok(siteJs.includes("--i") && siteCss.includes('calc(var(--i, 0) * 40ms)'), 'стаггер не переведён на --i');
+/* систем появления при загрузке больше нет: контент виден сразу */
+ok(!siteJs.includes(".reveal") && !siteJs.includes("data-mark") && !siteJs.includes(".magnetic"), 'site.js: остались мёртвые системы reveal/data-mark/magnetic');
+ok(!standsJs.includes('initReveal'), 'stands.js: initReveal не удалён');
+ok(!siteCss.includes('js-enabled .reveal') && !siteCss.includes('.js-enabled .stagger'), 'site.css: остались скрытые состояния reveal/stagger');
+ok(!stCss.includes('.reveal'), 'stands.css: остались правила .reveal');
+ok(!siteCss.includes('.chart-bar { height: var(--h); transform: scaleY(0)'), 'site.css: график снова прячется до reveal');
 
 
-/* 22. Flow-motion 2026: токены, наследование, только композитор-свойства */
-ok(flowCss.includes('--ease-spring') && flowCss.includes('--flow-glass')
-  && flowCss.includes('--flow-rise') && flowCss.includes('--flow-step'), 'flow.css: нет полного набора flow-токенов');
+/* 22. Тактильный слой flow: ambient, меню, модалки; входных анимаций нет */
+ok(flowCss.includes('--ease-spring') && flowCss.includes('--flow-glass'), 'flow.css: нет токенов spring/glass');
+ok(!flowCss.includes('--flow-rise') && !flowCss.includes('--flow-step')
+  && !flowCss.includes('--flow-blur') && !flowCss.includes('--flow-dur') && !flowCss.includes('--flow-cap'),
+  'flow.css: остались мёртвые токены входных анимаций');
 ok(stCss.includes('--st-dur-base') && flowCss.includes('var(--dur-slow)'), 'flow не наследует базовые dur-токены');
 /* keyframes flow.css не двигают layout: только transform/opacity/filter/clip-path */
 const keyframeBlocks = flowCss.match(/@keyframes[^{]+\{[\s\S]*?\n\}/g) || [];
-ok(keyframeBlocks.length >= 5, 'flow.css: ожидались 5+ keyframes, фактически ' + keyframeBlocks.length);
+ok(keyframeBlocks.length >= 4, 'flow.css: ожидались 4+ keyframes, фактически ' + keyframeBlocks.length);
 for (const block of keyframeBlocks) {
   ok(!/(?<![\w-])(width|height|top|left|right|bottom|margin|padding)(?![\w-])\s*:/.test(block),
     'flow keyframe двигает геометрию: ' + block.split('{')[0].trim());
 }
-/* пословный сплит с защитой от вложенных тегов и reduced-motion */
+/* flow.js — только ambient и параллакс: никаких IO и скрытых состояний */
 const flowJs = read('assets/flow.js');
-ok(flowJs.includes("querySelector('*')") && flowJs.includes("data-flow-words"), 'flow.js: нет безопасного сплита слов');
+ok(!flowJs.includes('IntersectionObserver') && !flowJs.includes('data-flow'), 'flow.js: осталась логика входных анимаций');
+ok(flowJs.includes('st-ambient') && flowJs.includes('flow-bubble') && flowJs.includes('flow-parallax'), 'flow.js: потерян ambient-слой');
 ok(flowJs.includes("prefers-reduced-motion") && flowJs.includes("(pointer: fine)"), 'flow.js: нет guard reduced-motion/pointer:fine');
-ok(flowJs.includes("aria-hidden") && flowJs.includes("pointer-events") === false, 'flow.js: инжект ambient без aria-hidden');
+ok(flowJs.includes("aria-hidden"), 'flow.js: инжект ambient без aria-hidden');
 /* подключение flow последним на всех страницах */
 const flowPages = allHtml.filter(f => {
   const c = read(f);
   return c.includes('assets/flow.css') && c.includes('assets/flow.js');
 });
-ok(flowPages.length === allHtml.length, 'flow подключён не на всех страницах: ' + (allHtml.length - flowPages.length));
+ok(flowPages.length === allHtml.length - 1, 'flow подключён не на всех страницах кроме заглушки: ' + (allHtml.length - 1 - flowPages.length));
 for (const f of allHtml) {
   const c = read(f);
+  if (!c.includes('assets/flow.css')) continue; // редирект-заглушка без ассетов
   ok(c.indexOf('flow.css') > c.indexOf('shared-chrome.css'), f + ': flow.css должен идти после shared-chrome.css');
   ok(c.indexOf('flow.js') > c.indexOf('shared-chrome.js'), f + ': flow.js должен идти после shared-chrome.js');
 }
-/* пословные заголовки на трёх хабах, маска — на главной */
-ok(read('stands/ops/index.html').includes('data-flow-words')
-  && read('stands/office/index.html').includes('data-flow-words')
-  && read('stands/index.html').includes('data-flow-words'), 'хабы без data-flow-words');
-ok(read('index.html').includes('data-flow="mask"') && read('index.html').includes('data-flow-group'), 'главная без mask/flow-group');
-/* reduced-motion в flow.css гасит и вход, и ambient, и модалки */
-ok(/prefers-reduced-motion[\s\S]*data-flow[\s\S]*transform: none/.test(flowCss), 'flow.css: reduced-motion не сбрасывает data-flow');
+/* во всей разметке не осталось атрибутов и классов входных анимаций */
+for (const f of allHtml) {
+  const c = read(f);
+  ok(!c.includes('data-flow') && !c.includes('data-mark'), f + ': остались атрибуты входных анимаций');
+  ok(!/class="[^"]*\b(reveal|stagger)\b/.test(c), f + ': остались классы reveal/stagger');
+}
+/* ambient и модалки отключаются при reduced-motion */
 ok(/prefers-reduced-motion[\s\S]*st-ambient[\s\S]*display: none/.test(flowCss), 'flow.css: ambient не отключается при reduced-motion');
-/* Контракт data-flow-group: дети не должны оставаться opacity:0.
-   JS пересобирает targets после декорирования, CSS каскадно раскрывает группу */
-ok(flowCss.includes('[data-flow-group].flow-in > [data-flow]'), 'flow.css: нет каскадного раскрытия data-flow-group');
-ok(/Пересобираем список[\s\S]{0,200}querySelectorAll\('\[data-flow\]/.test(flowJs), 'flow.js: targets не пересобираются после декорирования групп');
 /* Шапки — фиксированный хром поверх страниц, с резервированием места */
 ok(/\.site-header\s*\{[^}]*position:\s*fixed/.test(siteCss), 'site.css: .site-header не fixed');
 ok(siteCss.includes('padding-top: var(--header-reserve)'), 'site.css: page-wrap без резерва под шапку');
 ok(/\.st-topbar\s*\{[^}]*position:\s*fixed/.test(stCss), 'stands.css: .st-topbar не fixed');
 ok(/\.st-wrap\s*\{[^}]*padding:calc\(var\(--st-header-h\)/.test(stCss), 'stands.css: st-wrap без резерва под топбар');
+
+
+/* 23. Единый глоссарий, тренажёры netsys, навигация FAQ */
+const stubHtml = read('projects/glossary.html');
+ok(stubHtml.includes('http-equiv="refresh"') && stubHtml.includes('noindex'), 'projects/glossary.html: не редирект-заглушка');
+ok(stubHtml.includes('stands/glossary.html'), 'заглушка не ссылается на единый словарь');
+ok(!sm.includes('projects/glossary'), 'sitemap.xml всё ещё содержит заглушку');
+ok(read('projects.html').includes('href="stands/glossary.html"'), 'projects.html: карточка глоссария не ведёт в единый словарь');
+const glCount = (read('stands/glossary.html').match(/class="glossary-item"/g) || []).length;
+ok(glCount === 69, 'терминов в едином глоссарии должно быть 69, фактически ' + glCount);
+const glAll = read('stands/glossary.html');
+for (const term of ['VPN', 'контейнеризация', 'первичный ключ (PK)']) {
+  ok(glAll.includes(term), 'в глоссарии нет термина: ' + term);
+}
+ok(read('projects.html').includes('netsys_trainer') && read('sitemap.html').includes('netsys_trainer'), 'тренажёры netsys не встроены в проекты/карту');
+ok(read('projects.html').includes('3 из 6 доступно'), 'projects.html: счётчик зоны 01 не обновлён');
+ok(JSON.parse(read('feed-counts.json')).projects === 4, 'feed-counts: projects должен быть 4');
+ok(read('faq.html').includes('href="#faq-start"') && read('faq.html').includes('глоссарий · 69 терминов'), 'faq.html: нет оглавления или обновлённой кнопки');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

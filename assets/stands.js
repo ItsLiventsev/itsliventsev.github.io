@@ -858,30 +858,6 @@
     Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
   }
 
-  /* ----------------------------- Появление блоков при скролле ----------------------------- */
-  function initReveal() {
-    var blocks = document.querySelectorAll('.st-section-head, .lab-panel, .topo, .quiz-launch, .greet-card, .st-goals, .st-skills, .quest-card, .id-card, .flat-module, .skills-details, .flat-profile');
-    if (!blocks.length) return;
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var i = 0;
-    blocks.forEach(function (el) {
-      if (el.classList.contains('reveal')) return;
-      el.classList.add('reveal');
-      if (i % 4) el.classList.add('d' + ((i % 4) + 1));
-      i++;
-    });
-    if (typeof IntersectionObserver === 'undefined') {
-      blocks.forEach(function (el) { el.classList.add('in'); });
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-    blocks.forEach(function (el) { io.observe(el); });
-  }
-
   /* ----------------------------- Приветствие маскота в кабинете ----------------------------- */
   function dayGreeting() {
     var h = new Date().getHours();
@@ -1504,7 +1480,6 @@
     safeRun('кабинет', initCabinet);
     safeRun('стенд DHCP', initDhcpLab);
     safeRun('стенд OVS', initOvsLab);
-    safeRun('анимации', initReveal);
     safeRun('ambient-декор', initAmbient);
     safeRun('футер', initFooterDate);
     safeRun('навигация шагов', initStepSpy);

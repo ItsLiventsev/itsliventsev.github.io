@@ -40,7 +40,7 @@
   --dur-fast: 120ms;    /* hover, focus, active */
   --dur-base: 220ms;    /* меню, смена темы, переключатели */
   --dur-slow: 380ms;    /* перестроение сеток, липкие блоки */
-  --dur-slower: 600ms;  /* reveal, появление секции */
+  --dur-slower: 600ms;  /* длинные переходы: тултипы, раскрытие деталей */
   /* Геометрия шапки: фиксированная высота на каждом брейкпоинте (CLS ≈ 0) */
   --header-h-sm: 3.25rem;
   --header-h-md: 3.75rem;
@@ -884,19 +884,7 @@ code, .code {
 .marquee:hover .marquee-content { animation-play-state: paused; }
 @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ---------- 14. Анимации появления ---------- */
-.reveal { opacity: 1; transform: none; }
-.js-enabled .reveal { opacity: 0; transform: translateY(18px); transition: opacity var(--dur-slower) var(--ease), transform var(--dur-slower) var(--ease); }
-.js-enabled .reveal.active { opacity: 1; transform: none; }
-
-.stagger > * { opacity: 1; transform: none; }
-.js-enabled .stagger > * { opacity: 0; transform: translateY(12px); transition: opacity var(--dur-slower) var(--ease), transform var(--dur-slower) var(--ease); }
-.js-enabled .stagger.active > * { opacity: 1; transform: none; }
-/* Стаггер по индексу: --i навешивает site.js, шаг 40ms, не больше 6 элементов */
-.js-enabled .stagger.active > * { transition-delay: calc(var(--i, 0) * 40ms); }
-.js-enabled .stagger.active > *:nth-child(n+7) { transition-delay: 200ms; }
-
-/* ---------- 15. Подвал ---------- */
+/* ---------- 14. Подвал ---------- */
 .site-footer {
   display: flex;
   justify-content: center;
@@ -939,13 +927,12 @@ code, .code {
 .toc-link.current { color: var(--accent) !important; border-color: var(--accent) !important; }
 
 /* Отдельный неймспейс .chart-*: класс .bar намеренно не используется,
-   чтобы никогда не пересекаться с палочками бургера .burger-bar */
-.chart-bar { height: var(--h); transform: scaleY(0); transform-origin: bottom; transition: transform var(--dur-slower) var(--ease-emphasized) var(--dur-base); }
-.reveal.active .chart-bar { transform: none; }
+   чтобы никогда не пересекаться с палочками бургера .burger-bar.
+   Графики отрисовываются сразу в финальном состоянии — без входных анимаций. */
+.chart-bar { height: var(--h); transform-origin: bottom; }
 .chart-label { opacity: 0; transition: opacity var(--dur-base) var(--ease-standard); }
 .chart-group:hover .chart-label { opacity: 1; }
-.range-seg { width: var(--w); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-slower) var(--ease-emphasized) var(--dur-base); }
-.reveal.active .range-seg { transform: none; }
+.range-seg { width: var(--w); }
 .prose-p { margin-bottom: 1.1em; line-height: var(--lh-prose); }
 
 /* ---------- 17. Страница проектов (тёмная тема) ---------- */
@@ -1525,7 +1512,6 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 @keyframes rainbow { 100% { filter: hue-rotate(360deg); } }
 .secret-msg { opacity: 0; transition: opacity var(--dur-slower) var(--ease-standard); }
 .secret-msg.visible { opacity: 1; }
-.magnetic { transition: transform var(--dur-base) var(--ease-standard); }
 .counter { font-variant-numeric: tabular-nums; }
 
 /* ---------- 19. Редизайн-итерация: единые компоненты ---------- */
@@ -2046,7 +2032,6 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
 /* ---------- 22. Доступность ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-  .js-enabled .reveal, .js-enabled .stagger > * { opacity: 1; transform: none; }
   body { animation: none; }
   .sheen::after { display: none; }
   /* Без анимаций мобильное меню просто видимо/скрыто */
@@ -2282,7 +2267,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
    переносятся, а гриды/флексы не распираются контентом */
 body { overflow-wrap: anywhere; }
 .card, .note-card, .pub-card, .glass, .slot-card, .stair-row, .flow-step { min-width: 0; }
-.grid, .bento-grid, .note-grid, .pub-list, .stagger { min-width: 0; }
+.grid, .bento-grid, .note-grid, .pub-list { min-width: 0; }
 pre, code, .code-block { overflow-wrap: normal; }
 pre { white-space: pre-wrap; word-break: break-word; }
 code { font-family: var(--font-mono); font-size: .88em; }
@@ -2505,6 +2490,8 @@ textarea.admin-input { resize: vertical; line-height: var(--lh-text); }
   background: var(--accent-soft);
 }
 .faq-list { display: grid; gap: .6rem; }
+/* Якоря разделов справки не прячутся под фиксированной шапкой */
+section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
 .faq-list .acc-wrap { border-top: 1px solid var(--border); }
 .faq-summary {
   display: flex;
@@ -2979,7 +2966,6 @@ h1, h2, h3, .hero-title, .zone-title, .esp-title { text-wrap: balance; }
     box-shadow: none !important; break-inside: avoid;
   }
   a { color: #000 !important; text-decoration: none; }
-  .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
 }
 
 /* 28.10 reduced-motion */
