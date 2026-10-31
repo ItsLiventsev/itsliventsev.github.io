@@ -21,7 +21,8 @@
     ledger: 'league-ledger',
     reviews: 'league-reviews',
     presence: 'league-presence',
-    prp: 'league-prp'
+    prp: 'league-prp',
+    claims: 'league-claims'
   };
 
   /* Публичный репозиторий используется как общая доска обмена без сервера:
@@ -176,7 +177,11 @@
     return { xp: xp, coins: coins, level: levelOf(xp) };
   }
   function award(profileId, type, dedupKey, extra) {
-    var spec = AWARDS[type];
+    /* Произвольные xp/coins в extra (ордера, возвраты, командные бонусы)
+       переопределяют каталог: так траты и возвраты остаются в общем журнале. */
+    var spec = (extra && (typeof extra.xp === 'number' || typeof extra.coins === 'number'))
+      ? { xp: extra.xp || 0, coins: extra.coins || 0, note: extra.note || 'начисление' }
+      : AWARDS[type];
     if (!spec) throw new Error('неизвестная награда ' + type);
     var log = ledger();
     if (dedupKey && log.some(function (e) { return e.profileId === profileId && e.dedupKey === dedupKey; })) {
@@ -275,7 +280,16 @@
     r.createdAt = r.createdAt || new Date().toISOString();
     list.push(r);
     write(KEYS.reviews, list);
-    if (r.kind === 'peer' && r.reviewer && r.reviewer.id) earnPrp(r.reviewer.id, 1, 'взаимная проверка работы ' + r.submissionId);
+    if (r.kind === 'peer' && r.reviewer && r.reviewer.id) {
+      earnPrp(r.reviewer.id, 1, 'взаимная проверка работы ' + r.submissionId);
+      /* Командная связность: проверил коллегу своего трайба — +1 PRP сверху.
+         Помогать своим напрямую выгоднее, знания остаются внутри команды. */
+      var sameTribe = r.reviewer.group && r.reviewee && r.reviewee.group &&
+        tribeFor(r.reviewer.group).id === tribeFor(r.reviewee.group).id;
+      if (sameTribe && r.reviewer.id !== (r.reviewee && r.reviewee.id)) {
+        earnPrp(r.reviewer.id, 1, 'бонус трайба: проверил коллегу по команде');
+      }
+    }
     return r;
   }
   function reviewsFor(submissionId) {
@@ -465,6 +479,72 @@
     });
   }
 
+  /* ----------------------------- Биржа привилегий -----------------------------
+     Неткоины тратятся на реальные учебные привилегии. Студент создаёт ордер
+     (claim): монеты списываются в общий журнал, ордер уезжает преподавателю
+     внутри бандла и подтверждается публикацией стенда лиги. Отклонённый ордер
+     студент возвращает себе кнопкой — журнал снова честный. */
+  var REWARDS = {
+    'hint':        { coins: 25,  title: 'Подсказка преподавателя',    note: 'одна наводящая подсказка во время проверки работы' },
+    'board-pass':  { coins: 30,  title: 'Час без доски',              note: 'освобождение от ответа у доски на одном занятии' },
+    'deadline':    { coins: 35,  title: 'Личный дедлайн +1 день',     note: 'перенос личного срока сдачи на один день' },
+    'point-wipe':  { coins: 40,  title: 'Не ставить точку',           note: 'аннулирование одного замечания («точки») в журнале' },
+    'rescue':      { coins: 60,  title: 'Спасательная круглая',       note: 'пересдача двойки без журнальной записи' },
+    'topic-first': { coins: 80,  title: 'Первый выбор темы',          note: 'право первым выбрать тему проекта или работы' },
+    'grade-plus':  { coins: 150, title: '+1 балл к четвертной',       note: 'прибавка один балл к оценке за период' }
+  };
+  function claims() { return read(KEYS.claims, []); }
+  function myClaims(profileId) {
+    return claims().filter(function (c) { return c.profileId === profileId; });
+  }
+  function createClaim(profileId, rewardId) {
+    var reward = REWARDS[rewardId];
+    if (!reward) throw new Error('неизвестная награда: ' + rewardId);
+    var profile = getProfile();
+    var mine = myClaims(profileId);
+    if (mine.some(function (c) { return c.rewardId === rewardId && c.status === 'local'; })) {
+      throw new Error('ордер на «' + reward.title + '» уже ждёт подтверждения');
+    }
+    var balance = totals(profileId).coins;
+    if (balance < reward.coins) {
+      throw new Error('не хватает неткоинов: нужно ' + reward.coins + ' ◈, на счету ' + balance + ' ◈');
+    }
+    var claim = {
+      id: uid('clm'), profileId: profileId, rewardId: rewardId,
+      handle: handleFor(profile).text, status: 'local',
+      at: new Date().toISOString()
+    };
+    write(KEYS.claims, claims().concat([claim]));
+    award(profileId, 'rewardSpend', null, {
+      xp: 0, coins: -reward.coins,
+      note: 'ордер №' + claim.id.slice(-4) + ': ' + reward.title
+    });
+    return claim;
+  }
+  function refundClaim(claimId) {
+    var list = claims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status === 'approved') throw new Error('одобренный ордер нельзя вернуть');
+    if (claim.status === 'refunded') return { duplicated: true };
+    var reward = REWARDS[claim.rewardId];
+    claim.status = 'refunded';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'возврат по ордеру №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  function setClaimStatus(claimId, status) {
+    var list = claims();
+    var found = false;
+    list.forEach(function (c) { if (c.id === claimId) { c.status = status; c.decidedAt = new Date().toISOString(); found = true; } });
+    if (found) write(KEYS.claims, list);
+    return found;
+  }
+
   /* ----------------------------- Трайбы: состав и таблица ----------------------------- */
   /* Ростер собирается только из реальных следов: свой профиль, авторы работ,
      участники рецензий, presence-сessions. Никаких искусственных студентов. */
@@ -484,33 +564,72 @@
   function tribeStandings() {
     var log = ledger();
     var byTribe = {};
-    TRIBES.forEach(function (t) { byTribe[t.id] = { tribe: t, xp: 0, members: 0 }; });
+    TRIBES.forEach(function (t) { byTribe[t.id] = { tribe: t, xp: 0, coins: 0, members: 0, works: 0 }; });
     roster().forEach(function (person) {
       if (!byTribe[person.tribeId]) return;
       byTribe[person.tribeId].members++;
-      log.forEach(function (e) { if (e.profileId === person.id) byTribe[person.tribeId].xp += e.xp || 0; });
+      log.forEach(function (e) {
+        if (e.profileId !== person.id) return;
+        byTribe[person.tribeId].xp += e.xp || 0;
+        byTribe[person.tribeId].coins += e.coins || 0;
+      });
+      byTribe[person.tribeId].works += submissions().filter(function (s) { return s.student.id === person.id; }).length;
     });
     return Object.keys(byTribe).map(function (id) { return byTribe[id]; }).sort(function (a, b) { return b.xp - a.xp; });
+  }
+
+  /* ----------------------------- Стенд лиги (публичный снапшот) -----------------------------
+     Обезличенная сводка для публикации в репозиторий: только хэндлы, трайбы и числа.
+     Преподаватель собирает её из импортированных бандлов и публикует одной кнопкой;
+     студенты читают без токена — общий рейтинг виден всем и живёт на GitHub. */
+  function standingsSnapshot(period) {
+    var members = roster().map(function (person) {
+      var t = totals(person.id);
+      return {
+        handle: person.handle || (handleFor(person).text),
+        tribeId: person.tribeId || null,
+        xp: t.xp, coins: t.coins, level: t.level.level,
+        prp: prpBalance(person.id),
+        works: submissions().filter(function (s) { return s.student.id === person.id; }).length,
+        reviews: reviewsBy(person.id).length
+      };
+    }).sort(function (a, b) { return b.xp - a.xp; });
+    var tribes = tribeStandings().map(function (row) {
+      return { id: row.tribe.id, name: row.tribe.name, xp: row.xp, coins: row.coins, members: row.members, works: row.works };
+    });
+    var totalXp = 0, totalCoins = 0;
+    members.forEach(function (m) { totalXp += m.xp; totalCoins += m.coins; });
+    return {
+      schema: 'standings/1',
+      generatedAt: new Date().toISOString(),
+      period: period || (new Date().getFullYear() + ' · ' + (Math.floor(new Date().getMonth() / 3) + 1) + '-й квартал'),
+      setpolis: { members: members, tribes: tribes },
+      claims: claims().map(function (c) {
+        return { id: c.id, handle: c.handle, rewardId: c.rewardId, status: c.status, at: c.at };
+      }),
+      totals: { xp: totalXp, coins: totalCoins, works: submissions().length, reviews: reviews().length }
+    };
   }
 
   /* ----------------------------- Бандлы обмена между устройствами ----------------------------- */
   function exportBundle() {
     return {
-      schema: 'league-bundle/2',
+      schema: 'league-bundle/3',
       exportedAt: new Date().toISOString(),
       profile: getProfile(),
       submissions: submissions(),
       reviews: reviews(),
       presence: presence(),
       prp: prpMap(),
-      ledger: ledger()
+      ledger: ledger(),
+      claims: claims()
     };
   }
   function importBundle(bundle) {
-    if (!bundle || (bundle.schema !== 'league-bundle/1' && bundle.schema !== 'league-bundle/2')) {
-      throw new Error('ожидался league-bundle/1 или /2');
+    if (!bundle || !/^league-bundle\/[123]$/.test(bundle.schema)) {
+      throw new Error('ожидался league-bundle/1, /2 или /3');
     }
-    var report = { submissions: 0, reviews: 0, presence: 0, ledger: 0, prp: 0 };
+    var report = { submissions: 0, reviews: 0, presence: 0, ledger: 0, prp: 0, claims: 0 };
     (bundle.submissions || []).forEach(function (s) {
       var before = submissions().length;
       addSubmission(s);
@@ -532,6 +651,19 @@
       });
       write(KEYS.prp, m);
     }
+    /* Ордера на награды: v3. Слияние по id — статус преподавателя старше
+       локального, поэтому чужие решения не затирают свои. */
+    (bundle.claims || []).forEach(function (c) {
+      if (!c || !c.id || !c.rewardId) return;
+      var list = claims();
+      var known = null;
+      list.forEach(function (x) { if (x.id === c.id) known = x; });
+      if (!known) { list.push(c); report.claims++; }
+      else if ((c.decidedAt || '') > (known.decidedAt || '') && known.status === 'local') {
+        known.status = c.status; known.decidedAt = c.decidedAt || known.decidedAt;
+      }
+      write(KEYS.claims, list);
+    });
     return report;
   }
 
@@ -585,6 +717,13 @@
     achievements: achievements,
     roster: roster,
     tribeStandings: tribeStandings,
+    standingsSnapshot: standingsSnapshot,
+    REWARDS: REWARDS,
+    claims: claims,
+    myClaims: myClaims,
+    createClaim: createClaim,
+    refundClaim: refundClaim,
+    setClaimStatus: setClaimStatus,
     exportBundle: exportBundle,
     importBundle: importBundle,
     resetAll: resetAll

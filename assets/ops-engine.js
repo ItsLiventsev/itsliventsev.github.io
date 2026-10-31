@@ -21,7 +21,9 @@
     tickets: 'ops-tickets',
     runbooks: 'ops-runbooks',
     postmortems: 'ops-postmortems',
-    role: 'ops-role'
+    role: 'ops-role',
+    crewOps: 'ops-crew-ops',
+    crewPoints: 'ops-crew-points'
   };
 
   var memory = {};
@@ -66,6 +68,88 @@
   ];
   function crewFor(group) { return CREWS[hash(group || 'ИС-21') % CREWS.length]; }
 
+  /* ----------------------------- Командные операции экипажа -----------------------------
+     Общая работа ДатаПолиса: операции проходят несколько инженеров вместе,
+     один закрыть не может — минимум minParticipants участников. */
+  var CREW_OPS = [
+    { id: 'crew-handover', minParticipants: 2,
+      title: 'Смена дежурства NOC', points: 25,
+      brief: 'Уходящий дежурный передаёт вахту заступающему: открытые инциденты, планы, доступы.',
+      roles: ['уходящий дежурный', 'заступающий дежурный'],
+      steps: ['Собрать открытые тикеты и инциденты за смену', 'Сверить мониторинг: что мигало и почему', 'Передать план смены и контакты дежурных', 'Обе стороны подтверждают передачу в чате экипажа'] },
+    { id: 'crew-warroom', minParticipants: 3,
+      title: 'War room по инциденту', points: 40,
+      brief: 'Разбор живого инцидента втроём: кто связи, кто логи, кто пишет хронологию.',
+      roles: ['координатор', 'дежурный инженер', 'хронолог'],
+      steps: ['Объявить инцидент и роли в war room', 'Собрать факты: что сломалось и с какого времени', 'Применить план реагирования из runbook', 'Зафиксировать хронологию для postmortem'] },
+    { id: 'crew-audit', minParticipants: 2,
+      title: 'Аудит доступов Бастиона', points: 30,
+      brief: 'Проверка учёток и прав: кто имеет доступ к сервисам и зачем.',
+      roles: ['аудитор', 'владелец сервиса'],
+      steps: ['Выгрузить список активных доступов сервиса', 'Сверить с матрицей прав: лишние отозвать', 'Оформить находки списком с приоритетами', 'Согласовать исправления с владельцем'] },
+    { id: 'crew-rollback', minParticipants: 3,
+      title: 'Репетиция отката релиза', points: 45,
+      brief: 'Экипаж «Релиз» репетирует откат: план, команды, проверка сервиса после.',
+      roles: ['release-инженер', 'наблюдатель', 'проверяющий'],
+      steps: ['Прочитать план отката и озвучить критерии остановки', 'Прогнать команды отката на тестовом стенде', 'Проверить работоспособность сервиса после отката', 'Оформить выводы: сколько заняло, что улучшить'] },
+    { id: 'crew-deskday', minParticipants: 2,
+      title: 'День Service Desk парой', points: 20,
+      brief: 'Приёмная работает в два голоса: один принимает заявки, второй маршрутизирует и учится.',
+      roles: ['принимающий оператор', 'маршрутизатор'],
+      steps: ['Принять и классифицировать заявки первой линии', 'Разобрать сложный кейс вместе с наставником', 'Проставить приоритеты по SLA', 'Итог смены: что перекинуть на вторую линию'] }
+  ];
+
+  function crewOpsCatalog() { return CREW_OPS; }
+  function crewSteps() { return read(KEYS.crewOps, {}); }
+  function setCrewStep(opId, stepIdx, on) {
+    var m = crewSteps();
+    var key = opId + '#' + stepIdx;
+    if (on) m[key] = nowISO(); else delete m[key];
+    write(KEYS.crewOps, m);
+    return m;
+  }
+  function crewPointsMap() { return read(KEYS.crewPoints, {}); }
+  function addCrewPoints(crewId, pts) {
+    var m = crewPointsMap();
+    m[crewId] = (m[crewId] || 0) + pts;
+    write(KEYS.crewPoints, m);
+    return m[crewId];
+  }
+  /* Проведение операции: шаги отмечают все участники в своих браузерах,
+     закрытие — у того, кто вводил состав. Дедуп операция+неделя: регулярно
+     повторяющиеся дежурства приносят награду раз в неделю. */
+  function closeCrewOp(profile, opId, participants) {
+    var op = null;
+    CREW_OPS.forEach(function (o) { if (o.id === opId) op = o; });
+    if (!op) throw new Error('неизвестная операция');
+    var names = (participants || []).map(function (s) { return String(s).trim(); }).filter(Boolean);
+    var uniq = []; names.forEach(function (n) { if (uniq.indexOf(n.toLowerCase()) < 0) uniq.push(n.toLowerCase()); });
+    if (uniq.length < op.minParticipants) {
+      throw new Error('нужно минимум ' + op.minParticipants + ' участника, указано ' + uniq.length);
+    }
+    var steps = crewSteps();
+    for (var i = 0; i < op.steps.length; i++) {
+      if (!steps[op.id + '#' + i]) throw new Error('не все шаги отмечены выполненными');
+    }
+    var week = (function () {
+      var d = new Date(), onejan = new Date(d.getFullYear(), 0, 1);
+      var w = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+      return d.getFullYear() + 'W' + w;
+    })();
+    var awardRes = award(profile.id, 'crewOp', 'crewop:' + op.id + ':' + week);
+    if (awardRes.duplicated) {
+      /* Повтор на той же неделе: без награды, очков экипажу и записи в журнал */
+      return { award: awardRes, crewPoints: crewPointsMap()[profile.crewId] || 0, op: op, duplicated: true };
+    }
+    var crewPts = addCrewPoints(profile.crewId || crewFor(profile.group).id, op.points);
+    var done = read(KEYS.crewOps + '-done', []);
+    done.push({ id: uid('cop'), opId: op.id, crewId: profile.crewId, participants: uniq,
+      points: op.points, week: week, at: nowISO() });
+    write(KEYS.crewOps + '-done', done.slice(-100));
+    return { award: awardRes, crewPoints: crewPts, op: op };
+  }
+  function crewOpsDone() { return read(KEYS.crewOps + '-done', []); }
+
   /* Роли ротационные: на один спринт/дежурство, не пожизненные */
   var ROLES = [
     { id: 'ic', name: 'Incident Commander', note: 'ведёт war room и принимает решение по инциденту' },
@@ -108,7 +192,8 @@
     slaMet: { xp: 20, coins: 4, note: 'SLA выдержан' },
     runbookWritten: { xp: 30, coins: 6, note: 'написан runbook' },
     changeReleased: { xp: 40, coins: 8, note: 'изменение выпущено с откатом' },
-    postmortem: { xp: 25, coins: 5, note: 'разбор инцидента без вины' }
+    postmortem: { xp: 25, coins: 5, note: 'разбор инцидента без вины' },
+    crewOp: { xp: 35, coins: 9, note: 'командная операция экипажа проведена' }
   };
 
   var PRP_CAP = 20, INITIAL_PRP = 5;
@@ -369,17 +454,39 @@
   /* ----------------------------- Бандлы и сброс ----------------------------- */
   function exportBundle(profile) {
     return {
-      schema: 'ops-bundle/1', exportedAt: nowISO(), student: publicStudent(profile),
+      schema: 'ops-bundle/2', exportedAt: nowISO(), student: publicStudent(profile),
       profile: getProfile(), ledger: ledger(), submissions: submissions(),
-      tickets: tickets(), runbooks: runbooks(), postmortems: postmortems()
+      tickets: tickets(), runbooks: runbooks(), postmortems: postmortems(),
+      crewOpsDone: crewOpsDone(), crewPoints: crewPointsMap()
     };
   }
   function resetAll() {
     Object.keys(KEYS).forEach(function (k) { storage.removeItem(KEYS[k]); });
+    storage.removeItem(KEYS.crewOps + '-done');
+  }
+
+  /* Сводка экипажей ДатаПолиса для общего стенда: очки команд и счётчики
+     проведённых операций. Преподаватель собирает её из импортированных
+     ops-бандлов так же, как стенд лиги СетьПолиса. */
+  function crewsSnapshot() {
+    var crews = CREWS.map(function (c) {
+      var pts = crewPointsMap()[c.id] || 0;
+      return { id: c.id, name: c.name, points: pts };
+    }).filter(function (c) { return c.points > 0; });
+    var opsCount = {};
+    crewOpsDone().forEach(function (d) { if (opsCount[d.opId]) opsCount[d.opId]++; else opsCount[d.opId] = 1; });
+    var members = [];
+    var p = getProfile();
+    if (p && p.id) {
+      var xp = 0;
+      ledger().forEach(function (e) { if (e.profileId === p.id) xp += e.xp || 0; });
+      members.push({ handle: handleFor(p).text, crewId: p.crewId, xp: xp });
+    }
+    return { crews: crews, opsDone: opsCount, members: members };
   }
 
   return {
-    KEYS: KEYS, CREWS: CREWS, ROLES: ROLES, LEVELS: LEVELS, AWARDS: AWARDS,
+    KEYS: KEYS, CREWS: CREWS, ROLES: ROLES, LEVELS: LEVELS, AWARDS: AWARDS, CREW_OPS: CREW_OPS,
     SLA_MIN: SLA_MIN, TICKET_TYPES: TICKET_TYPES, PRP_CAP: PRP_CAP, INITIAL_PRP: INITIAL_PRP,
     crewFor: crewFor, levelOf: levelOf, handleFor: handleFor,
     getProfile: getProfile, ensureProfile: ensureProfile, updateProfile: updateProfile,
@@ -394,6 +501,9 @@
     currentRole: currentRole, rotateRole: rotateRole,
     heartbeat: heartbeat, listPresence: listPresence, crewReputation: crewReputation,
     encodeArtifact: encodeArtifact, decodeArtifact: decodeArtifact, importArtifact: importArtifact,
-    exportBundle: exportBundle, resetAll: resetAll, isDemoRecord: isDemoRecord
+    exportBundle: exportBundle, resetAll: resetAll, isDemoRecord: isDemoRecord,
+    crewOpsCatalog: crewOpsCatalog, crewSteps: crewSteps, setCrewStep: setCrewStep,
+    crewPointsMap: crewPointsMap, addCrewPoints: addCrewPoints,
+    closeCrewOp: closeCrewOp, crewOpsDone: crewOpsDone, crewsSnapshot: crewsSnapshot
   };
 });

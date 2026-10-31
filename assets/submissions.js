@@ -274,6 +274,16 @@
   }
 
   /* ----------------------------- Папки репозитория (чтение без токена для публичного репо) ----------------------------- */
+  /* putJson вынесен на уровень модуля: пишет и работы/рецензии, и стенд лиги */
+  function putJson(folder, name, obj, message) {
+    var cfg = L().REPO_CONFIG;
+    var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '/' + name;
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
+    return fetch(api, {
+      method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, apiHeaders()),
+      body: JSON.stringify({ message: message, content: content, branch: cfg.branch })
+    }).then(function (r) { if (!r.ok) throw new Error('PUT ' + name + ': ' + r.status); });
+  }
   function apiHeaders() {
     var headers = { Accept: 'application/vnd.github+json' };
     var token = sessionStorage.getItem(TOKEN_KEY);
@@ -330,14 +340,6 @@
         return r.json();
       }).then(function (files) { return files.map(function (f) { return f.name; }); });
     }
-    function putJson(folder, name, obj, message) {
-      var api = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + folder + '/' + name;
-      var content = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
-      return fetch(api, {
-        method: 'PUT', headers: headers,
-        body: JSON.stringify({ message: message, content: content, branch: cfg.branch })
-      }).then(function (r) { if (!r.ok) throw new Error('PUT ' + name + ': ' + r.status); });
-    }
     Promise.all([existingNames(cfg.submissionsPath), existingNames(cfg.reviewsPath)]).then(function (have) {
       var haveSubs = have[0], haveRevs = have[1], chain = Promise.resolve(), published = { subs: 0, revs: 0 };
       loadItems().forEach(function (s) {
@@ -357,17 +359,85 @@
       .finally(function () { btn.disabled = false; });
   }
 
+  /* ----------------------------- Ордера на награды (биржа привилегий) ----------------------------- */
+  var REWARD_TITLES = {
+    'hint': 'подсказка преподавателя', 'board-pass': 'час без доски', 'deadline': 'дедлайн +1 день',
+    'point-wipe': 'не ставить точку', 'rescue': 'спасательная круглая', 'topic-first': 'первый выбор темы',
+    'grade-plus': '+1 балл к четвертной'
+  };
+  function renderClaims() {
+    var tbody = $('claims-tbody');
+    if (!tbody || !L()) return;
+    var list = L().claims().slice().sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); });
+    var count = $('claims-count');
+    if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(function (c) {
+      var statusLabel = c.status === 'approved' ? 'выдано ✓' : c.status === 'rejected' ? 'отклонено' : c.status === 'refunded' ? 'монеты возвращены' : 'ждёт решения';
+      var actions = c.status === 'local'
+        ? '<button class="btn btn-sm" type="button" data-clm-ok="' + esc(c.id) + '">выдать</button> ' +
+          '<button class="btn btn-sm btn-ghost" type="button" data-clm-no="' + esc(c.id) + '">отклонить</button>'
+        : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
+      return '<tr>' +
+        '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
+        '<td>' + esc(REWARD_TITLES[c.rewardId] || c.rewardId) + '</td>' +
+        '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
+        '<td class="mono">' + esc(statusLabel) + '</td>' +
+        '<td class="sub-actions">' + actions + '</td></tr>';
+    }).join('');
+  }
+
+  /* ----------------------------- Публичный стенд лиги (standings/standings.json) ----------------------------- */
+  function publishStandings() {
+    if (!L()) return status('Модуль лиги не загружен', true);
+    var token = sessionStorage.getItem(TOKEN_KEY);
+    if (!token) return status('Для публикации стенда войдите токеном GitHub в разделе публикации', true);
+    var btn = $('standings-publish');
+    btn.disabled = true;
+    var snapshot = L().standingsSnapshot();
+    /* Прогресс ДатаПолиса (экипажи и операции) попадает в тот же стенд,
+       если преподаватель входил в кабинет этой вселенной в этом браузере. */
+    if (window.OPS && OPS.crewsSnapshot) {
+      var dp = OPS.crewsSnapshot();
+      if (dp.crews.length || dp.members.length) snapshot.datapolis = dp;
+    }
+    putJson('standings', 'standings.json', snapshot, 'стенд лиги: рейтинг и ордера (без персональных данных)')
+      .then(function () {
+        status('Стенд опубликован: СетьПолис ' + snapshot.setpolis.members.length + ' участников, ' +
+          snapshot.claims.length + ' ордеров' + (snapshot.datapolis ? ', ДатаПолис: ' + snapshot.datapolis.crews.length + ' экипажей' : '') +
+          ' — группа видит рейтинг на страницах лиги, команд и биржи');
+        renderClaims();
+      })
+      .catch(function (err) { status(err.message, true); })
+      .finally(function () { btn.disabled = false; });
+  }
+  function downloadStandings() {
+    if (!L()) return status('Модуль лиги не загружен', true);
+    var snapshot = L().standingsSnapshot();
+    var blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'standings.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    status('Снимок стенда скачан — можно закоммитить в standings/standings.json вручную');
+  }
+
   /* ----------------------------- Инициализация ----------------------------- */
   function init() {
     if (!$('submissions-card')) return;
     render();
     renderPresence();
+    renderClaims();
 
     // Живые обновления из других вкладок того же браузера (без перезагрузки)
     window.addEventListener('storage', function (e) {
       if (!e.key) return;
       if (L() && (e.key === L().KEYS.submissions || e.key === L().KEYS.reviews)) render();
       if (L() && e.key === L().KEYS.presence) renderPresence();
+      if (L() && e.key === L().KEYS.claims) renderClaims();
     });
     // Периодическое обновление только presence-блока
     setInterval(renderPresence, 20000);
@@ -435,6 +505,17 @@
 
     var publishBtn = $('sub-publish');
     if (publishBtn) publishBtn.addEventListener('click', publishToRepo);
+    var stdPublish = $('standings-publish');
+    if (stdPublish) stdPublish.addEventListener('click', publishStandings);
+    var stdDownload = $('standings-download');
+    if (stdDownload) stdDownload.addEventListener('click', downloadStandings);
+
+    $('claims-tbody').addEventListener('click', function (e) {
+      var okId = e.target.getAttribute && e.target.getAttribute('data-clm-ok');
+      var noId = e.target.getAttribute && e.target.getAttribute('data-clm-no');
+      if (okId && L()) { L().setClaimStatus(okId, 'approved'); renderClaims(); status('Ордер подтверждён: не забудьте выдать награду и опубликовать стенд лиги'); }
+      if (noId && L()) { L().setClaimStatus(noId, 'rejected'); renderClaims(); status('Ордер отклонён: студент вернёт монеты кнопкой на бирже'); }
+    });
 
     $('sub-search').addEventListener('input', function (e) { state.filterText = e.target.value; render(); });
     $('sub-filter-group').addEventListener('change', function (e) { state.filterGroup = e.target.value; render(); });

@@ -14,9 +14,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261031ac">
-<link rel="stylesheet" href="../assets/stands.css?v=20261031ac">
-<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261031ac">
+<link rel="stylesheet" href="../assets/site.css?v=20261031ad">
+<link rel="stylesheet" href="../assets/stands.css?v=20261031ad">
+<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261031ad">
   <meta property="og:type" content="website">
   <meta property="og:title" content="СетьПолис · лига · itsliventsev">
   <meta property="og:description" content="Учебная лига: уровни и опыт, неткоины, трайбы и взаимные оценки работ однокурсников.">
@@ -193,6 +193,21 @@
         <p class="admin-hint">Как устроены трайбы — на странице <a href="teams.html">команды</a>
       <a href="glossary.html">словарь</a>.</p>
       </section>
+
+      <div class="st-section-head">
+        <h2>публичный стенд лиги</h2>
+        <span class="st-section-tag">живой рейтинг с GitHub</span>
+      </div>
+      <section class="lab-panel">
+        <p class="admin-hint">Преподаватель собирает обезличенную сводку всех бандлов (только хэндлы и числа — без ФИО и работ)
+        и публикует её в репозитории. Снимок ниже — общий для всей группы и открывается с любого устройства.</p>
+        <div data-standings="meta"></div>
+        <div data-standings="tribes"></div>
+        <div class="st-section-head st-mt-4" style="margin-top:1.25rem;">
+          <h3 style="font-size:1rem;">лучшие участники</h3>
+        </div>
+        <div data-standings="members" data-standings-limit="10"></div>
+      </section>
     </div>
 
     <!-- ПАНЕЛЬ: данные -->
@@ -224,11 +239,12 @@
   </footer>
 </div>
 
-<script src="../assets/mascots.js?v=20261031ac"></script>
-<script src="../assets/fgos-skills.js?v=20261031ac"></script>
-<script src="../assets/league.js?v=20261031ac"></script>
-<script src="../assets/dom-kit.js?v=20261031ac"></script>
-<script src="../assets/league-page.js?v=20261031ac"></script>
-<script src="../assets/shared-chrome.js?v=20261031ac"></script>
+<script src="../assets/mascots.js?v=20261031ad"></script>
+<script src="../assets/fgos-skills.js?v=20261031ad"></script>
+<script src="../assets/league.js?v=20261031ad"></script>
+<script src="../assets/dom-kit.js?v=20261031ad"></script>
+<script src="../assets/standings.js?v=20261031ad"></script>
+<script src="../assets/league-page.js?v=20261031ad"></script>
+<script src="../assets/shared-chrome.js?v=20261031ad"></script>
 </body>
 </html>

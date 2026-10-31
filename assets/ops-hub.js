@@ -136,6 +136,82 @@
     }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('otter', 44) + '<span>// лента пуста: выйдите на первую смену</span></div>';
   }
 
+  /* --------------------- Страница «операции экипажа» (crew-ops.html) ---------------------
+     Общая работа ДатаПолиса: инженеры вместе проходят чек-листы операций
+     (смена дежурства, war room, аудит доступов…). Шаги отмечают каждый в
+     своём браузере, закрытие — у координатора, который вводит состав.
+     Награда: XP/неткоины каждому участнику с дедупом на неделю + очки экипажу. */
+  function renderCrewOps(p) {
+    var root = $('crew-ops-root');
+    if (!root) return false;
+    var ops = OPS.CREW_OPS, steps = OPS.crewSteps(), done = OPS.crewOpsDone();
+    var crew = OPS.CREWS.filter(function (c) { return c.id === p.crewId; })[0] || OPS.CREWS[0];
+    var pts = OPS.crewPointsMap()[p.crewId] || 0;
+    var totalPts = 0;
+    OPS.crewPointsMap() && Object.keys(OPS.crewPointsMap()).forEach(function (k) { totalPts += OPS.crewPointsMap()[k]; });
+    var doneCount = {};
+    done.forEach(function (d) { doneCount[d.opId] = (doneCount[d.opId] || 0) + 1; });
+
+    var html = '<div class="ops-cohead">' +
+      '<div><strong>' + esc(crew.name) + '</strong><span>' + esc(crew.focus) + '</span></div>' +
+      '<div class="sla-stats"><div class="sla-stat"><b>' + pts + '</b><span>очков экипажа</span></div>' +
+      '<div class="sla-stat"><b>' + Object.keys(doneCount).length + '/' + ops.length + '</b><span>типов операций закрыто</span></div></div></div>';
+
+    html += '<div class="ops-cogrid">' + ops.map(function (op) {
+      var allChecked = op.steps.every(function (_, i) { return steps[op.id + '#' + i]; });
+      var closed = doneCount[op.id] || 0;
+      var roleList = op.roles.map(function (r) { return '<span class="ops-role-chip">' + esc(r) + '</span>'; }).join('');
+      var stepList = '<ul class="ops-steps">' + op.steps.map(function (st, i) {
+        var on = !!steps[op.id + '#' + i];
+        return '<li><label class="ops-step' + (on ? ' is-done' : '') + '">' +
+          '<input type="checkbox" data-op-step="' + op.id + '#' + i + '"' + (on ? ' checked' : '') + '>' +
+          '<span>' + esc(st) + '</span></label></li>';
+      }).join('') + '</ul>';
+      var recent = done.filter(function (d) { return d.opId === op.id; }).slice(-2)
+        .map(function (d) { return '<li class="mono">' + esc(d.participants.join(', ')) + '</li>'; }).join('');
+      return '<article class="ops-cocard" id="op-' + op.id + '">' +
+        '<div class="ops-cocard-head"><div><strong>' + esc(op.title) + '</strong>' +
+        '<p>' + esc(op.brief) + '</p></div>' +
+        '<div class="ops-cocard-meta"><span class="ops-op-points mono">+' + op.points + '</span>' +
+        '<span class="ops-op-done mono">' + (closed ? 'проведено: ' + closed : 'ещё не проводилась') + '</span></div></div>' +
+        '<div class="ops-role-row">' + roleList + '<span class="ops-role-note mono">минимум ' + op.minParticipants + ' участн.</span></div>' +
+        stepList +
+        (recent ? '<p class="ops-recent-label mono">// последние составы:</p><ul class="ops-recent">' + recent + '</ul>' : '') +
+        '<div class="ops-close-row">' +
+        '<input class="ops-participants" id="participants-' + op.id + '" type="text" ' +
+        'placeholder="участники через запятую (минимум ' + op.minParticipants + ')">' +
+        '<button class="btn btn-primary" type="button" data-op-close="' + op.id + '"' + (allChecked ? '' : ' disabled') + '>операция проведена ✓</button>' +
+        '</div></article>';
+    }).join('') + '</div>';
+
+    root.innerHTML = html;
+    root.querySelectorAll('[data-op-step]').forEach(function (box) {
+      box.addEventListener('change', function () {
+        var parts = box.getAttribute('data-op-step').split('#');
+        OPS.setCrewStep(parts[0], parseInt(parts[1], 10), box.checked);
+        var now = OPS.crewSteps();
+        var all = OPS.CREW_OPS.filter(function (o) { return o.id === parts[0]; })[0]
+          .steps.every(function (_, i) { return now[parts[0] + '#' + i]; });
+        var btn = root.querySelector('[data-op-close="' + parts[0] + '"]');
+        if (btn) btn.disabled = !all;
+      });
+    });
+    root.querySelectorAll('[data-op-close]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var opId = btn.getAttribute('data-op-close');
+        var input = root.querySelector('#participants-' + opId);
+        try {
+          var res = OPS.closeCrewOp(p, opId, (input.value || '').split(','));
+          setMsg($('crew-ops-msg'),
+            'Операция «' + res.op.title + '» закрыта: +' + res.op.points + ' очков экипажу, всего у экипажа ' + res.crewPoints +
+            '. Участникам: +' + OPS.AWARDS.crewOp.xp + ' XP и +' + OPS.AWARDS.crewOp.coins + ' ◈ (один раз в неделю).', 'ok');
+          renderCrewOps(OPS.getProfile());
+        } catch (err) { setMsg($('crew-ops-msg'), err.message, 'bad'); }
+      });
+    });
+    return true;
+  }
+
   function init() {
     if (typeof OPS === 'undefined') return;
     var form = $('gate-form'), gate = $('gate'), dash = $('dash');
@@ -150,7 +226,9 @@
       });
     }
     var existing = OPS.getProfile();
-    if (existing && existing.name) { renderDashboard(existing); }
+    if (existing && existing.name) {
+      if (!renderCrewOps(existing)) renderDashboard(existing);
+    }
     else { gate.hidden = false; mountPicker(picked); }
 
     if (form) form.addEventListener('submit', function (e) {
@@ -165,7 +243,7 @@
         if (r && /^[\w.-]+\.html$/.test(r)) back = r;
       } catch (err) {}
       if (back) { location.href = back; return; }
-      renderDashboard(p);
+      if (!renderCrewOps(p)) renderDashboard(p);
     });
     var changeBtn = $('profile-change');
     if (changeBtn) changeBtn.addEventListener('click', function () {

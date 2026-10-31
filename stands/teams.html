@@ -13,9 +13,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../assets/site.css?v=20261031ac">
-<link rel="stylesheet" href="../assets/stands.css?v=20261031ac">
-<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261031ac">
+<link rel="stylesheet" href="../assets/site.css?v=20261031ad">
+<link rel="stylesheet" href="../assets/stands.css?v=20261031ad">
+<link rel="stylesheet" href="../assets/shared-chrome.css?v=20261031ad">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/teams.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -203,12 +203,32 @@
       <p class="admin-hint">
         Повторные награды за одно и то же событие не начисляются: каждая сдача, тест и ревью имеют уникальный ключ.
         Неткоины (◈) — внутренняя валюта лиги, зарабатывается вместе с опытом и отражает ваш вклад в общую работу.
+        Потратить их можно на <a href="rewards.html">бирже привилегий</a>.
       </p>
+    </section>
+
+    <!-- Живой стенд: общий рейтинг из репозитория -->
+    <div class="st-section-head">
+      <span class="st-section-num">04</span>
+      <h2>живой командный зачёт</h2>
+      <span class="st-section-tag">стенд лиги с GitHub</span>
+    </div>
+    <section class="lab-panel">
+      <p class="admin-hint">
+        Таблицы ниже обновляются из обезличенной сводки, которую преподаватель публикует в репозитории
+        после импорта работ: суммарный опыт трайбов и топ участников (только хэндлы и числа — без ФИО).
+        Это тот же зачёт, что и в личном кабинете лиги, но общий для всей группы и виден с любого устройства.
+      </p>
+      <div data-standings="meta"></div>
+      <div data-standings="tribes"></div>
+      <div data-standings="members" data-standings-limit="10"></div>
+      <p class="admin-hint">Полный рейтинг со статусами ордеров — на странице <a href="league.html" rel="nofollow">лиги</a>,
+      обмен монет на поощрения — на <a href="rewards.html">бирже</a>.</p>
     </section>
 
     <!-- Взаимная оценка -->
     <div class="st-section-head">
-      <span class="st-section-num">04</span>
+      <span class="st-section-num">05</span>
       <h2>взаимное обучение и рейтинг проверяющего</h2>
       <span class="st-section-tag">взаимная оценка</span>
     </div>
@@ -240,6 +260,8 @@
       </ul>
 
       <p class="list-lead"><strong>PRP — очки взаимных проверок</strong></p>
+      <p class="admin-hint">Командная связность: проверка работы коллеги <em>своего</em> трайба даёт дополнительный
+      +1 PRP к стандартному заработку — помогать своим выгодно, экспертиза оседает внутри команды.</p>
       <ul class="submit-channels">
         <li>при первом входе каждый стажёр получает <strong>5 PRP</strong>;</li>
         <li>выставление работы на взаимную проверку списывает <strong>1 PRP</strong> — бесконечно заказывать рецензии нельзя;</li>
@@ -280,6 +302,7 @@
     <span class="st-footer-updated" data-footer-updated></span>
   </footer>
 </div>
-<script src="../assets/shared-chrome.js?v=20261031ac"></script>
+<script src="../assets/standings.js?v=20261031ad"></script>
+<script src="../assets/shared-chrome.js?v=20261031ad"></script>
 </body>
 </html>
