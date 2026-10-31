@@ -3432,3 +3432,28 @@ html, body { overflow-x: hidden; overflow-x: clip; }
   background: var(--neo-surface);
 }
 #to-top:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); }
+
+/* ==========================================================================
+   TYPO 2026 · волна 12: дисплейная типографика чтения и заголовков
+   ========================================================================== */
+/* Заголовок статьи/лонгрида: Unbounded с балансировкой строк */
+.article-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.5rem, 3.8vw, 2.55rem);
+  line-height: 1.16;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+  color: var(--text);
+}
+/* Заголовки секций и карточек — в дисплейной паре */
+.zone-title, .esp-title, .p-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -.015em;
+}
+/* Балансировка строк заголовков (прогрессивное улучшение) */
+.hero-title, .ht-tagline, .article-title, .zone-title, .esp-title, .p-title,
+.note-title, .pub-title, .nf-title, .stat-num { text-wrap: balance; }
+/* Чтение: аккуратные переносы абзацев (прогрессивное) */
+.prose-neo p { text-wrap: pretty; }
