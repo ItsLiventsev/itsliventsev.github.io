@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031az';
+const VERSION = '20261031ba';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031ay') && !c.includes('?v=20261031ax') && !c.includes('?v=20261031aw'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031az') && !c.includes('?v=20261031ay') && !c.includes('?v=20261031ax'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -712,8 +712,16 @@ ok(exists('docs/design-system.md') && read('docs/design-system.md').includes('Н
 /* дизайн 2026 · волна 17: mechanics — reduce-safe прогресс, единый hover */
 ok(/@media \(prefers-reduced-motion: reduce\) \{\n    \.scroll-progress \{ animation: none; \}\n  \}/.test(siteCss), 'site.css: прогресс не защищён от reduce-заморозки');
 ok(read('assets/site.js').includes("CSS.supports('animation-timeline: scroll()')") && read('assets/site.js').includes('!cssDriven'), 'site.js: нет guard против дубля CSS-прогресса');
-const upHover = siteCss.split('\n').filter(l => /:hover[^{]*\{[^}]*translateY\(-\dpx/.test(l));
-ok(upHover.length === 0, 'site.css: hover-подъёмы вверх не унифицированы: ' + upHover.join(' | '));
+const hoverUp = [siteCss, stCss].flatMap(css => {
+  const out = [];
+  for (const m of css.matchAll(/(?:^|[},])\s*([^{}]*?(?::hover|:focus-visible)[^{}]*?)\{([^}]*)\}/g)) {
+    const sel = m[1].trim().replace(/\s+/g, ' ');
+    if (!/(?::hover|:focus-visible)$/.test(sel)) continue; // отклики внутренних элементов (.mc-svg) разрешены
+    if (/translateY\(-\d+px|scale\(1\.0\d/.test(m[2])) out.push(sel.slice(-50));
+  }
+  return out;
+});
+ok(hoverUp.length === 0, 'hover-подъёмы вверх/scale не унифицированы: ' + hoverUp.join(' | '));
 ok(siteCss.includes('a.p-card:hover { transform: translate(-2px, -2px);') && siteCss.includes('.pub-card:hover {\n  transform: translate(-2px, -2px);'), 'site.css: карточки p/pub не в единой hover-механике');
 ok(siteCss.includes('.esp-stat:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink);') && siteCss.includes('.step-card:hover { transform: translate(-2px, -2px);'), 'site.css: esp-stat/step-card не в единой hover-механике');
 ok(!siteCss.includes('scale(1.03)') && !siteCss.includes('scale(1.08)'), 'site.css: «парящие» scale-hover не убраны');
@@ -738,6 +746,17 @@ ok(siteCss.includes('font-size: clamp(1.35rem, 2.8vw, 1.85rem);'), 'site.css: h2
 ok(!siteCss.split('\n.prose-measure article h2 {').slice(1).some(b => b.split('}')[0].includes('font-size')), 'site.css: .prose-measure article h2 перебивает дисплей-каноны');
 ok(siteCss.includes('.prose-neo h2::before { text-shadow: none; }'), 'site.css: ▚-маркер не изолирован от подложки');
 ok(!read('projects.html').includes('<div class="zone-index">zone 0'), 'projects.html: плашки zone 01/02 не удалены');
+
+
+/* дизайн 2026 · волна 20: HERITAGE — футер, титулы карточек, диагональ везде */
+const projHtml = read('projects.html');
+ok(projHtml.includes('<footer class="site-footer">') && projHtml.includes('footer-nav'), 'projects.html: футер не переведён на общий .site-footer');
+ok(!projHtml.includes('<footer class="flex'), 'projects.html: остался ад-хок футер');
+ok(siteCss.includes('.p-title, .note-title, .pub-title, .admin-card-title {\n  font-family: var(--font-display);'), 'site.css: титулы карточек не в дисплейной паре');
+ok(siteCss.includes('a.p-card:hover .p-title, a.p-card:focus-visible .p-title,') && siteCss.includes('.note-card:hover .note-title, .note-card:focus-visible .note-title {'), 'site.css: титулы p/note не отвечают на hover (паритет pub)');
+ok(stCss.includes('.crew-card:hover, .uni-card:hover {\n  transform: translate(-2px, -2px);') && stCss.includes('.quest-card:not(.is-locked):hover { transform: translate(-2px, -2px); }'), 'stands.css: crew/uni/quest не в диагональной механике');
+ok(!stCss.includes('.bento-cell:hover, .bento-cell:focus-visible {\n  transform: translateY(-3px);'), 'stands.css: мёртвый translateY bento не вычищен');
+ok(!read('archive.html').includes('220,38,38') && !read('archive.html').includes('#f87171'), 'archive.html: легаси-красные инлайны не переведены на вермильон');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
