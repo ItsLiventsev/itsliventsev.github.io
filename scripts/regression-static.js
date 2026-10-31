@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ap';
+const VERSION = '20261031aq';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -235,7 +235,7 @@ ok(!read('stands/ops/rewards.html').includes('id="gate-form"'), 'ops/rewards.htm
 ok(offKit.includes("'officekit:'") && offKit.includes('#office-data') && offKit.includes('OFFICE.award'), 'office-kit не использует officekit:/OFFICE');
 for (const f of walk('stands/office', /\.html$/)) {
   const c = read(f);
-  ok(c.includes('office.css') && c.includes('office-scope') && c.includes('data-accent="amber"'), f + ': нет office-scope/amber');
+  ok(c.includes('office.css') && c.includes('office-scope') && c.includes('data-accent="cocoa"'), f + ': нет office-scope/cocoa');
   ok(c.includes('dom-kit.js'), f + ': без dom-kit');
   ok(!c.includes('ПМ.01') && !/МДК[.\s]?\d/.test(c.replace(/<!--[\s\S]*?-->/g, '')), f + ': запрещённый код в UI');
   const nav = c.match(/<nav class="st-topnav"[\s\S]*?<\/nav>/)[0];
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031ao') && !c.includes('?v=20261031an') && !c.includes('?v=20261031am'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ap') && !c.includes('?v=20261031ao') && !c.includes('?v=20261031an'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -542,8 +542,8 @@ ok(read('stands/index.html').includes('биржей') && read('stands/index.html
 ok(siteCss.includes('--neo-leaf-tint') && siteCss.includes('--neo-rose-tint') && siteCss.includes('.light-card {\n  background: linear-gradient'), 'site.css: нет цветных блоков (Craft-стиль)');
 ok(siteCss.includes('.note-excerpt::first-letter') && siteCss.includes('.prose-neo > p:first-of-type'), 'site.css: нет буквиц и лида');
 ok(siteCss.includes('.ht-tagline') && siteCss.includes('.ht-slash'), 'site.css: нет типографской композиции hero');
-ok(siteCss.includes('body[data-accent="blue"]    { --accent: #cf4a18;'), 'site.css: blue-акцент не ремапнут на коралл');
-ok(siteCss.includes('body[data-accent="amber"]   { --accent: #96602a;') && siteCss.includes('body[data-accent="teal"],'), 'site.css: нет новых акцентов amber/teal');
+ok(siteCss.includes('body[data-accent="rust"]   { --accent: #cf4a18;'), 'site.css: rust-акцент не на коралле');
+ok(siteCss.includes('body[data-accent="cocoa"]  { --accent: #96602a;') && siteCss.includes('body[data-accent="sage"]    { --accent: #4f7a44;'), 'site.css: нет акцентов cocoa/sage');
 ok(siteCss.includes('--accent: #ff7a47;') && !siteCss.includes('#3b82f6'), 'site.css: синий не выведен из тёмной темы');
 ok(siteCss.includes('.note-card[data-type="digest"]  { --note-accent: #c2410c; }'), 'site.css: синий не выведен из типов заметок');
 ok(stCss.includes('--st-radius: 14px') && stCss.includes('border-radius: 999px'), 'stands.css: нет casual-пилюль');
@@ -582,6 +582,27 @@ ok(!read('stands/lab-dns-bind.html').includes('SSH'), 'lab-dns-bind.html: чуж
 ok(!read('stands/lab-dns-bind.html').includes('sudoers'), 'lab-dns-bind.html: чужое description не вычищено');
 ok(read('assets/shared-chrome.js').includes("main.querySelector('#profile-gate')"), 'shared-chrome.js: нет скрытия формы при активной сессии');
 ok(read('blog.html').includes('posts.length < 2'), 'blog.html: фильтры не скрываются при единственной записи');
+
+/* дизайн 2026 · волна 10: system — акценты, i18n, пасхалки, перенос профиля */
+let badAcc = 0;
+for (const f of allHtml) {
+  const c = read(f);
+  if (/data-accent="(blue|amber|teal|cyan)"/.test(c)) badAcc++;
+}
+ok(badAcc === 0, 'страниц со старыми именами акцентов (blue/amber/teal/cyan): ' + badAcc);
+ok(siteCss.includes('body[data-accent="sage"] .ambient .orb'), 'site.css: emerald-орб не переведён на sage');
+ok(!siteCss.includes('data-accent="emerald"') && !siteCss.includes('data-accent="cyan"'), 'site.css: мёртвые селекторы cyan/emerald живы');
+ok(exists('assets/i18n.js') && read('assets/i18n.js').includes('window.I18N') && read('assets/i18n.js').includes("itsliventsev-lang"), 'i18n.js: нет реестра или персиста языка');
+ok(read('index.html').includes('window.I18N.register') && !read('index.html').includes('function toggleLang'), 'index.html: i18n-движок не вынесен из страницы');
+ok(read('index.html').includes('assets/i18n.js?v=' + VERSION), 'index.html: i18n.js без версии или старой версии');
+ok(read('assets/shared-chrome.js').includes('konami') && read('assets/shared-chrome.js').includes("querySelector('#logo, .logo')") && read('assets/shared-chrome.js').includes('bounce-click'), 'shared-chrome.js: пасхалки не в общем JS');
+ok(!read('index.html').includes('party-mode'), 'index.html: inline-пасхалки не удалены');
+ok(read('assets/rewards-page.js').includes('rw-io') && read('assets/rewards-page.js').includes("parsed.universe !== uni") && read('assets/rewards-page.js').includes('itsliventsev-' ) , 'rewards-page.js: нет экспорта/импорта профиля с валидацией');
+ok(stCss.includes('.rw-io') && stCss.includes('.rw-io-btn'), 'stands.css: нет стилей блока переноса профиля');
+ok(!read('assets/admin.js').includes('cdn.tailwindcss.com') && !read('assets/admin.js').includes('Inter:wght@') && read('assets/admin.js').includes('tw-compiled.css'), 'admin.js: шаблон генерируемых страниц остался на CDN/Inter');
+ok(read('assets/admin.js').includes('Golos+Text'), 'admin.js: шаблон не переведён на пару NEO');
+ok(siteCss.includes('::placeholder { color: var(--muted); opacity: 1; }') && siteCss.includes('@media (pointer: coarse)'), 'site.css: нет плейсхолдеров/тач-зон');
+ok(stCss.includes('.flat-scope ::placeholder') && stCss.includes('min-height: 44px'), 'stands.css: нет плейсхолдеров/тач-зон');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

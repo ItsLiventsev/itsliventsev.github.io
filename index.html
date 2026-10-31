@@ -14,10 +14,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031ap">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031ap">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031ap">
-<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031ap">
+<link rel="stylesheet" href="assets/site.css?v=20261031aq">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031aq">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031aq">
+<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031aq">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -42,7 +42,7 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"],"jobTitle":"мастер производственного обучения"}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="bg-grid" data-accent="blue">
+<body class="bg-grid" data-accent="rust">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
 
@@ -258,57 +258,11 @@
 
 </div>
 
-<script src="assets/site.js?v=20261031ap"></script>
+<script src="assets/site.js?v=20261031aq"></script>
+<script src="assets/i18n.js?v=20261031aq"></script>
 <script>
-  /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami.
-     При prefers-reduced-motion остаётся только статичная подсветка. */
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('.tech-tag').forEach(tag => {
-    tag.addEventListener('click', function () {
-      if (reduceMotion) return;
-      this.classList.add('bounce-click');
-      setTimeout(() => this.classList.remove('bounce-click'), 400);
-    });
-  });
-
-  function stopParty() {
-    document.body.classList.remove('party-mode');
-    document.getElementById('secret-message').classList.remove('visible');
-  }
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') stopParty();
-  });
-
-  let logoClicks = 0;
-  document.getElementById('logo').addEventListener('click', function () {
-    logoClicks++;
-    if (logoClicks >= 5 && !reduceMotion) {
-      document.body.classList.add('party-mode');
-      setTimeout(() => document.body.classList.remove('party-mode'), 3000);
-      logoClicks = 0;
-    }
-  });
-
-  const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
-  let ki = 0;
-  document.addEventListener('keydown', (e) => {
-    if (e.code === konami[ki]) {
-      ki++;
-      if (ki === konami.length) {
-        if (reduceMotion) { ki = 0; return; }
-        document.getElementById('secret-message').classList.add('visible');
-        document.body.classList.add('party-mode');
-        setTimeout(stopParty, 5000);
-        ki = 0;
-      }
-    } else ki = 0;
-  });
-
-  console.log('%c🦀 привет, разработчик!', 'font-size:14px;color:#2563eb;font-weight:bold');
-  console.log('%ckonami: ↑↑↓↓←→←→BA · или 5 кликов по логотипу', 'font-size:11px;color:#71717a');
-
-  /* Переключение языка */
-  const T = {
+  /* Словарь главной: движок перевода — в assets/i18n.js (общий) */
+  window.I18N.register({
     ru: {
       nav_stack: "стек", nav_materials: "материалы", nav_blog: "заметки", nav_articles: "статьи",
       nav_projects: "проекты", nav_archive: "архив", nav_cv: "опыт",
@@ -346,19 +300,9 @@
       edu_8: "vocational teacher · professional retraining",
       contact_title: "contact", portfolio: "portfolio", secret: "you found the secret message!"
     }
-  };
-  let lang = 'ru';
-  function toggleLang() {
-    lang = lang === 'ru' ? 'en' : 'ru';
-    document.getElementById('lang-indicator').textContent = lang === 'ru' ? 'EN' : 'RU';
-    document.documentElement.lang = lang;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const k = el.dataset.i18n;
-      if (T[lang][k]) el.textContent = T[lang][k];
-    });
-  }
+});
 </script>
 
-<script src="assets/shared-chrome.js?v=20261031ap"></script>
+<script src="assets/shared-chrome.js?v=20261031aq"></script>
 </body>
 </html>

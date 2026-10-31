@@ -13,11 +13,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261031ap">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261031ap">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261031ap">
-<link rel="stylesheet" href="../../assets/office.css?v=20261031ap">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031ap">
+<link rel="stylesheet" href="../../assets/site.css?v=20261031aq">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261031aq">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261031aq">
+<link rel="stylesheet" href="../../assets/office.css?v=20261031aq">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031aq">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/office/office-draw.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -42,7 +42,7 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"учебные вселенные","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"Построение простых схем и чертежей · ОфисПолис","item":"https://itsliventsev.github.io/stands/office/office-draw.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="flat-scope office-scope" data-accent="amber">
+<body class="flat-scope office-scope" data-accent="cocoa">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: практическая работа бюро работает только с включённым JavaScript.</div></noscript>
 
@@ -119,12 +119,12 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261031ap"></script>
-<script src="../../assets/office-engine.js?v=20261031ap"></script>
-<script src="../../assets/dom-kit.js?v=20261031ap"></script>
-<script src="../../assets/stands.js?v=20261031ap"></script>
+<script src="../../assets/mascots.js?v=20261031aq"></script>
+<script src="../../assets/office-engine.js?v=20261031aq"></script>
+<script src="../../assets/dom-kit.js?v=20261031aq"></script>
+<script src="../../assets/stands.js?v=20261031aq"></script>
 <script type="application/json" id="office-data">{"id":"office-draw","sprint":4,"hours":"4 ч","coins":"80","mascot":"crab","who":"краб Гоша — рисует схемы, по которым реально подключают кабели","title":"Построение простых схем и чертежей","lead":"Блок-схемы, сетевые и электрические схемы, размеры, легенда, экспорт в PDF и SVG в Draw и Visio.","story":"Монтажники пришли с картинкой из презентации, где коммутаторы нарисованы квадратиками на глаз. Гоша учит чертить по сетке и шаблонам: у каждого элемента — имя и порт, у линий — привязка к точкам, у схемы — легенда и штамп. Тогда по чертежу можно работать, а не угадывать.","theory":[{"h":"Сетка, привязки и стандартные фигуры","p":"Чертеж ведут по сетке с включённой привязкой; линии соединяют точки фигур, а не тащат рядом. Стандартные элементы (ромб решения, параллелограмм данных, прямоугольник процесса) не заменяют самодельными значками — схему должны прочитать без пояснений."},{"h":"Блок-схемы и сетевые топологии","p":"Блок-схема алгоритма читается сверху вниз: начало/конец, процесс, решение с ветками да/нет. Сетевая схема показывает устройства, порты, адреса и среду (медь/оптика/Wi-Fi); каждый кабель подписан с двух концов.","note":"Подпись порта на обоих концах патч-корда экономит часы диагностики."},{"h":"Легенда, штамп и экспорт","p":"Легенда расшифровывает условные обозначения и цвета, штамп содержит название, версию, автора и дату. На печать экспортируют PDF в масштабе 1:1, для веб-правок — SVG, редактируемый исходник хранят рядом.","code":"// экспорт из CLI (опционально):\n# libreoffice --headless --convert-to pdf scheme.odg"}],"reference":[{"lo":"LibreOffice Draw","ms":"Microsoft Visio","what":"векторные схемы и чертежи"},{"lo":"Привязка к сетке (Shift+перетаскивание)","ms":"Привязать к сетке","what":"ровные соединения"},{"lo":"Панель · Блок-схемы","ms":"Фигуры · Блок-схема","what":"стандартные нотации"},{"lo":"Вставка · Поля · Штамп","ms":"Вставка · Надпись (title block)","what":"версия и авторство"},{"lo":"Экспорт · SVG / PDF","ms":"Сохранить как · SVG/PDF","what":"веб и печать"},{"lo":"Слои (Вид · Слои)","ms":"Разработчик · Слои","what":"раздельные элементы и подписи"}],"tasks":[{"id":"t1","text":"Постройте блок-схему алгоритма из 7–9 элементов с решениями и ветками"},{"id":"t2","text":"Начертите сетевую схему: два коммутатора, маршрутизатор, три ПК, точки Wi-Fi"},{"id":"t3","text":"Подпишите порты и адреса на устройствах, промаркируйте каждый кабель с двух концов"},{"id":"t4","text":"Добавьте легенду обозначений и основной штамп с версией и датой"},{"id":"t5","text":"Разнесите элементы и подписи по слоям, проверьте привязки и отсутствие висячих линий"},{"id":"t6","text":"Экспортируйте PDF для печати 1:1 и SVG для веб-страницы"}],"quiz":[{"q":"Зачем на схеме включают привязку к сетке?","options":["Это замедляет работу","Элементы и соединения выравниваются, схему можно читать","Для удаления линий","Сетка видна на печати"],"answer":1,"explain":"Без привязки линии не соединены с фигурами, и монтаж по такому чертежу превращается в догадки."},{"q":"Что обязательно подписывают на сетевом кабеле?","options":["Только его цвет","Порты на обоих концах и при необходимости среду","Любимое число","Ничего, кабели не различают"],"answer":1,"explain":"Двусторонняя маркировка портов — основа быстрой диагностики и аккуратного кросса."},{"q":"Ромб в стандартной блок-схеме означает…","options":["Начало","Решение с ветвями да/нет","Базу данных","Принтер"],"answer":1,"explain":"Ромб — условный переход; из него выходят ветви, подписанные да и нет."},{"q":"Зачем нужны легенда и штамп?","options":["Для увеличения объёма","Чтобы обозначения читались однозначно, а версия и автор были известны","Это украшение","Они отменяют экспорт"],"answer":1,"explain":"Легенда — словарь схемы, штамп — её паспорт: название, ревизия, дата, ответственный."}],"reflection":["Какая схема в кабинете была бы полезнее всего и что на ней должно быть?","Какие ошибки самодельных рисунков мешают монтажу?","Почему редактируемый исходник хранят вместе с PDF?"],"sprintTitle":"Графика и базы"}</script>
-<script src="../../assets/office-kit.js?v=20261031ap"></script>
-<script src="../../assets/shared-chrome.js?v=20261031ap"></script>
+<script src="../../assets/office-kit.js?v=20261031aq"></script>
+<script src="../../assets/shared-chrome.js?v=20261031aq"></script>
 </body>
 </html>
