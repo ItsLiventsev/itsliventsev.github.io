@@ -375,15 +375,20 @@
       tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
       return;
     }
+    var rewards = L().REWARDS || {};
     tbody.innerHTML = list.map(function (c) {
-      var statusLabel = c.status === 'approved' ? 'выдано ✓' : c.status === 'rejected' ? 'отклонено' : c.status === 'refunded' ? 'монеты возвращены' : 'ждёт решения';
+      var statusLabel = c.status === 'approved' ? 'выдано ✓'
+        : c.status === 'rejected' ? 'отклонено'
+        : c.status === 'refunded' ? 'монеты возвращены'
+        : c.status === 'cancelled' ? 'отменён студентом'
+        : 'ждёт подтверждения';
       var actions = c.status === 'local'
         ? '<button class="btn btn-sm" type="button" data-clm-ok="' + esc(c.id) + '">выдать</button> ' +
           '<button class="btn btn-sm btn-ghost" type="button" data-clm-no="' + esc(c.id) + '">отклонить</button>'
         : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
       return '<tr>' +
         '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
-        '<td>' + esc(REWARD_TITLES[c.rewardId] || c.rewardId) + '</td>' +
+        '<td>' + esc((rewards[c.rewardId] || REWARD_TITLES[c.rewardId] || {}).title || c.rewardId) + '</td>' +
         '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
         '<td class="mono">' + esc(statusLabel) + '</td>' +
         '<td class="sub-actions">' + actions + '</td></tr>';
@@ -454,7 +459,7 @@
       })).then(function (parsed) {
         var bundles = [], submissions = [];
         parsed.filter(Boolean).forEach(function (item) {
-          if (item && /^league-bundle\/[12]$/.test(item.schema)) bundles.push(item);
+          if (item && /^league-bundle\/[123]$/.test(item.schema)) bundles.push(item);
           else if (Array.isArray(item)) submissions = submissions.concat(item);
           else submissions.push(item);
         });
@@ -468,6 +473,7 @@
             var newSubs = L().submissions().length - beforeSubs;
             render();
             renderPresence();
+            renderClaims();
             status('Принято бандлов: ' + bundles.length + ', новых работ: ' + newSubs +
               ', сессий в presence: ' + L().listPresence(45000).length + ' (включая неактивные за 7 дней — в журнале лиги)');
           }

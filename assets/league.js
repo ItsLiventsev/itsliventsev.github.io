@@ -521,13 +521,31 @@
     });
     return claim;
   }
+  /* Отмена до решения преподавателя: «передумал» — монеты возвращаются,
+     в публичном стенде отменённый ордер не участвует. */
+  function cancelClaim(claimId) {
+    var list = claims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status !== 'local') throw new Error('отменить можно только ордер, который ещё ждёт подтверждения');
+    var reward = REWARDS[claim.rewardId];
+    claim.status = 'cancelled';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'отмена ордера №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  /* Возврат монет после отклонения преподавателем. */
   function refundClaim(claimId) {
     var list = claims();
     var claim = null;
     list.forEach(function (c) { if (c.id === claimId) claim = c; });
     if (!claim) throw new Error('ордер не найден');
-    if (claim.status === 'approved') throw new Error('одобренный ордер нельзя вернуть');
     if (claim.status === 'refunded') return { duplicated: true };
+    if (claim.status !== 'rejected') throw new Error('вернуть монеты можно только по отклонённому ордеру');
     var reward = REWARDS[claim.rewardId];
     claim.status = 'refunded';
     write(KEYS.claims, list);
@@ -604,7 +622,7 @@
       generatedAt: new Date().toISOString(),
       period: period || (new Date().getFullYear() + ' · ' + (Math.floor(new Date().getMonth() / 3) + 1) + '-й квартал'),
       setpolis: { members: members, tribes: tribes },
-      claims: claims().map(function (c) {
+      claims: claims().filter(function (c) { return c.status !== 'cancelled'; }).map(function (c) {
         return { id: c.id, handle: c.handle, rewardId: c.rewardId, status: c.status, at: c.at };
       }),
       totals: { xp: totalXp, coins: totalCoins, works: submissions().length, reviews: reviews().length }
@@ -722,6 +740,7 @@
     claims: claims,
     myClaims: myClaims,
     createClaim: createClaim,
+    cancelClaim: cancelClaim,
     refundClaim: refundClaim,
     setClaimStatus: setClaimStatus,
     exportBundle: exportBundle,

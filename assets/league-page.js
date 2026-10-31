@@ -99,7 +99,8 @@
     var awardNames = {
       login: 'ежедневный вход', submit: 'сдача лабораторной', standReady: 'стенд на 100%',
       autotests: 'все автотесты', quizPerfect: 'тест без ошибок',
-      review: 'взаимная оценка', expertReview: 'экспертная оценка'
+      review: 'взаимная оценка', expertReview: 'экспертная оценка',
+      rewardSpend: 'обмен на бирже привилегий', rewardRefund: 'возврат по ордеру'
     };
     $('lg-awards').innerHTML = Object.keys(LEAGUE.AWARDS).map(function (k) {
       var a = LEAGUE.AWARDS[k];
@@ -112,7 +113,8 @@
     $('lg-ledger').innerHTML = rows.length ? rows.map(function (e) {
       return '<tr><td class="mono">' + fmt(e.at) + '</td><td>' + esc(awardNames[e.type] || e.note || e.type) + '</td>' +
         '<td class="mono">' + esc(e.standId ? standName(e.standId) : '—') + '</td>' +
-        '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">+' + (e.coins || 0) + ' ◈</td></tr>';
+        '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">' +
+        ((e.coins || 0) >= 0 ? '+' : '') + (e.coins || 0) + ' ◈</td></tr>';
     }).join('') : '<tr><td colspan="5" class="admin-hint table-empty">// событий пока нет — выполните лабораторную на стенде</td></tr>';
   }
 
