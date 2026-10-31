@@ -398,9 +398,17 @@
     var btn = $('standings-publish');
     btn.disabled = true;
     var snapshot = L().standingsSnapshot();
+    /* Прогресс ДатаПолиса (экипажи и операции) попадает в тот же стенд,
+       если преподаватель входил в кабинет этой вселенной в этом браузере. */
+    if (window.OPS && OPS.crewsSnapshot) {
+      var dp = OPS.crewsSnapshot();
+      if (dp.crews.length || dp.members.length) snapshot.datapolis = dp;
+    }
     putJson('standings', 'standings.json', snapshot, 'стенд лиги: рейтинг и ордера (без персональных данных)')
       .then(function () {
-        status('Стенд лиги опубликован: ' + snapshot.setpolis.members.length + ' участников, ' + snapshot.claims.length + ' ордеров — группа видит рейтинг на страницах лиги, команд и биржи');
+        status('Стенд опубликован: СетьПолис ' + snapshot.setpolis.members.length + ' участников, ' +
+          snapshot.claims.length + ' ордеров' + (snapshot.datapolis ? ', ДатаПолис: ' + snapshot.datapolis.crews.length + ' экипажей' : '') +
+          ' — группа видит рейтинг на страницах лиги, команд и биржи');
         renderClaims();
       })
       .catch(function (err) { status(err.message, true); })

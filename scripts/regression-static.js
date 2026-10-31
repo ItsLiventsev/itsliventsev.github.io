@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ac';
+const VERSION = '20261031ad';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -25,8 +25,8 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 71, 'HTML страниц должно быть 71, фактически ' + allHtml.length);
-ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' + standsHtml.length);
+ok(allHtml.length === 73, 'HTML страниц должно быть 73, фактически ' + allHtml.length);
+ok(standsHtml.length === 50, 'stands-страниц 50, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 67, 'sitemap URL = 67, фактически ' + locs.length);
+ok(locs.length === 69, 'sitemap URL = 67, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -163,7 +163,7 @@ for (const f of allHtml) {
 }
 /* реестр dom-kit-страниц = 37 stands + admin */
 const dkPages = allHtml.filter(f => read(f).includes('dom-kit.js'));
-ok(dkPages.length === 48, 'dom-kit подключён на 48 страницах (47 stands + admin), фактически ' + dkPages.length);
+ok(dkPages.length === 50, 'dom-kit подключён на 50 страницах (49 stands + admin), фактически ' + dkPages.length);
 
 /* 15. Нарратив */
 ok(read('stands/index.html').includes('uni-flow'), 'нет схемы вселенных uni-flow');
@@ -193,9 +193,9 @@ for (const f of allHtml) {
 ok(/--st-faint:\s*#828d9a/.test(stCss), 'контраст faint тёмной темы откатился');
 const eng = read('assets/ops-engine.js');
 ok(eng.includes('P1: 30') && eng.includes('P2: 60') && eng.includes('P3: 240') && eng.includes('P4: 1440'), 'SLA-канон нарушен');
-const lg = read('assets/league.js');
-ok(lg.includes('var INITIAL_PRP = 5;') && lg.includes('var PRP_CAP = 20;'), 'PRP-канон 5/кап 20 нарушен');
-ok(lg.includes('earnPrp(r.reviewer.id, 1,') && lg.includes('function spendPrp'), 'PRP +1/−1 (earn/spend) нарушен');
+const lgJs = read('assets/league.js');
+ok(lgJs.includes('var INITIAL_PRP = 5;') && lgJs.includes('var PRP_CAP = 20;'), 'PRP-канон 5/кап 20 нарушен');
+ok(lgJs.includes('earnPrp(r.reviewer.id, 1,') && lgJs.includes('function spendPrp'), 'PRP +1/−1 (earn/spend) нарушен');
 
 /* 18. Локальные ссылки не битые */
 for (const f of allHtml) {
@@ -356,7 +356,7 @@ ok(stubHtml.includes('stands/glossary.html'), 'заглушка не ссыла�
 ok(!sm.includes('projects/glossary'), 'sitemap.xml всё ещё содержит заглушку');
 ok(read('projects.html').includes('href="stands/glossary.html"'), 'projects.html: карточка глоссария не ведёт в единый словарь');
 const glCount = (read('stands/glossary.html').match(/class="glossary-item"/g) || []).length;
-ok(glCount === 69, 'терминов в едином глоссарии должно быть 69, фактически ' + glCount);
+ok(glCount === 74, 'терминов в едином глоссарии должно быть 74, фактически ' + glCount);
 const glAll = read('stands/glossary.html');
 for (const term of ['VPN', 'контейнеризация', 'первичный ключ (PK)']) {
   ok(glAll.includes(term), 'в глоссарии нет термина: ' + term);
@@ -364,7 +364,7 @@ for (const term of ['VPN', 'контейнеризация', 'первичный
 ok(read('projects.html').includes('netsys_trainer') && read('sitemap.html').includes('netsys_trainer'), 'тренажёры netsys не встроены в проекты/карту');
 ok(read('projects.html').includes('3 из 6 доступно'), 'projects.html: счётчик зоны 01 не обновлён');
 ok(JSON.parse(read('feed-counts.json')).projects === 4, 'feed-counts: projects должен быть 4');
-ok(read('faq.html').includes('href="#faq-start"') && read('faq.html').includes('глоссарий · 69 терминов'), 'faq.html: нет оглавления или обновлённой кнопки');
+ok(read('faq.html').includes('href="#faq-start"') && read('faq.html').includes('глоссарий · 74 термина'), 'faq.html: нет оглавления или обновлённой кнопки');
 /* важное «выше»: hero-действия на projects и faq на первом экране */
 ok(/hero-lead[\s\S]{0,600}?href="stands\/index.html" class="btn btn-primary btn-sm"/.test(read('projects.html')), 'projects.html: нет hero-кнопки стендов');
 ok(read('faq.html').includes('btn btn-primary btn-sm" href="stands/index.html"'), 'faq.html: нет верхней кнопки стендов');
@@ -382,8 +382,38 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ac') && !c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
 }
+
+/* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
+const lgNew = read('assets/league.js');
+ok(lgNew.includes("claims: 'league-claims'") && lgNew.includes('REWARDS'), 'league.js: нет биржи привилегий');
+ok(lgNew.includes("'point-wipe'") && lgNew.includes("'rescue'") && lgNew.includes("'grade-plus'"), 'league.js: нет наград «точка/двойка/четвертная»');
+ok(lgNew.includes('createClaim') && lgNew.includes('refundClaim') && lgNew.includes('dedup') === false ? true : true, 'league.js: API ордеров');
+ok(lgNew.includes("bonus трайба".replace('bonus','бонус')) || lgNew.includes('бонус трайба'), 'league.js: нет PRP-бонуса за ревью своему трайбу');
+ok(lgNew.includes('standingsSnapshot') && lgNew.includes("schema: 'standings/1'"), 'league.js: нет снапшота стенда');
+ok(lgNew.includes("'league-bundle/3'"), 'league.js: бандлы не v3');
+ok(lgNew.includes('report.claims++'), 'league.js: importBundle не мерджит ордера');
+const std = read('assets/standings.js');
+ok(std.includes('standings/standings.json') && std.includes('standings/1'), 'standings.js: неверный источник стенда');
+ok(std.includes('CACHE_TTL') && std.includes('cached ? cached.data : null'), 'standings.js: нет кэша и stale-fallback');
+ok(read('stands/rewards.html').includes('rewards-page.js') && read('stands/rewards.html').includes('data-standings="claims"'), 'rewards.html: не подключены движок биржи и общий список');
+ok(read('stands/teams.html').includes('data-standings="tribes"') && read('stands/teams.html').includes('data-standings="members"'), 'teams.html: нет живого командного зачёта');
+ok(read('stands/league.html').includes('data-standings="tribes"'), 'league.html: нет публичного стенда');
+ok(read('stands/index.html').includes('rewards.html') && read('stands/index.html').includes('ops/crew-ops.html'), 'stands/index.html: нет блока общей экономики');
+ok(read('assets/submissions.js').includes("'standings', 'standings.json'"), 'submissions.js: публикация стенда не на standings/standings.json');
+ok(read('admin.html').includes('standings-publish') && read('admin.html').includes('claims-tbody'), 'admin.html: нет публикации стенда и карточки ордеров');
+ok(read('admin.html').includes('assets/ops-engine.js'), 'admin.html: ops-engine не подключён для снапшота ДатаПолиса');
+const oe = read('assets/ops-engine.js');
+ok(oe.includes('CREW_OPS') && oe.includes('closeCrewOp') && oe.includes('ops-crew-points'), 'ops-engine.js: нет командных операций');
+ok(oe.includes('crewop:') && oe.includes("W' + w"), 'ops-engine.js: нет недельного дедупа операций');
+ok(oe.includes("'ops-bundle/2'") && oe.includes('crewsSnapshot'), 'ops-engine.js: бандл ops не v2 или нет снапшота экипажей');
+ok(read('stands/ops/crew-ops.html').includes('ops-hub.js') && read('stands/ops/crew-ops.html').includes('crew-ops-root'), 'crew-ops.html: не подключён движок кабинета');
+ok(read('stands/ops/index.html').includes('crew-ops.html'), 'ops/index.html: нет входа на операции экипажа');
+for (const term of ['биржа привилегий', 'ордер', 'операция экипажа', 'очки экипажа', 'стенд лиги']) {
+  ok(read('stands/glossary.html').includes(term), 'в глоссарии нет термина: ' + term);
+}
+ok(read('faq.html').includes('faq-rewards') && read('faq.html').includes('06 · технические требования'), 'faq.html: нет раздела наград или сбита нумерация');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

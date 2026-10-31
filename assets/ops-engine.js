@@ -137,6 +137,10 @@
       return d.getFullYear() + 'W' + w;
     })();
     var awardRes = award(profile.id, 'crewOp', 'crewop:' + op.id + ':' + week);
+    if (awardRes.duplicated) {
+      /* Повтор на той же неделе: без награды, очков экипажу и записи в журнал */
+      return { award: awardRes, crewPoints: crewPointsMap()[profile.crewId] || 0, op: op, duplicated: true };
+    }
     var crewPts = addCrewPoints(profile.crewId || crewFor(profile.group).id, op.points);
     var done = read(KEYS.crewOps + '-done', []);
     done.push({ id: uid('cop'), opId: op.id, crewId: profile.crewId, participants: uniq,

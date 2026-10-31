@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031ac">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031ac">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031ac">
+<link rel="stylesheet" href="assets/site.css?v=20261031ad">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031ad">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031ad">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/faq.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -87,6 +87,7 @@
     <nav class="glossary-toc faq-toc" aria-label="Разделы справки" style="margin-bottom:2rem;">
       <a href="#faq-start">старт</a>
       <a href="#faq-works">работы и оценка</a>
+      <a href="#faq-rewards">награды и команды</a>
       <a href="#faq-submit">сдача</a>
       <a href="#faq-data">данные и приватность</a>
       <a href="#faq-tech">техника</a>
@@ -95,7 +96,7 @@
     <!-- Главные действия справки — сразу на первом экране -->
     <div class="flex flex-wrap gap-2" style="margin:-.75rem 0 2.25rem;">
       <a class="btn btn-primary btn-sm" href="stands/index.html">к вселенным →</a>
-      <a class="btn btn-sm" href="stands/glossary.html">глоссарий · 69 терминов</a>
+      <a class="btn btn-sm" href="stands/glossary.html">глоссарий · 74 термина</a>
       <a class="btn btn-sm" href="sitemap.html">карта сайта</a>
     </div>
 
@@ -174,16 +175,54 @@
             <span class="faq-q">что такое XP, неткоины и PRP?</span>
           </summary>
           <div class="acc-wrap"><div class="acc-inner faq-answer">
-            <p><strong>XP</strong> — очки опыта, определяют уровень от стажёра до эксперта. <strong>Неткоин (◈)</strong> — внутренняя валюта всех вселенных, тратится на заказ взаимных проверок. <strong>PRP</strong> — очки взаимных проверок в лиге СетьПолиса: стартовый баланс 5, плюс за проверку чужой работы, минус за заказ рецензии, потолок 20. Все определения — в <a href="stands/glossary.html#g4">разделе 04 словаря</a>.</p>
+            <p><strong>XP</strong> — очки опыта, определяют уровень от стажёра до эксперта. <strong>Неткоин (◈)</strong> — внутренняя валюта всех вселенных: тратится на заказ взаимных проверок и на <a href="stands/rewards.html">бирже привилегий</a> (например, «не ставить точку» за 40 ◈). <strong>PRP</strong> — очки взаимных проверок в лиге СетьПолиса: стартовый баланс 5, плюс за проверку чужой работы (проверка коллеги своего трайба даёт бонус +1), минус за заказ рецензии, потолок 20. Все определения — в <a href="stands/glossary.html#g4">разделе 04 словаря</a>.</p>
           </div></div>
         </details>
 
       </div>
     </section>
 
-    <!-- 03 · Сдача -->
+    <!-- 03 · Награды и команды -->
+    <section class="mb-10" id="faq-rewards" aria-labelledby="faq-rewards-title">
+      <h2 class="section-label" id="faq-rewards-title">03 · награды и команды</h2>
+      <div class="faq-list">
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как обменять неткоины на поощрение?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>На <a href="stands/rewards.html">бирже привилегий</a> выберите награду и создайте ордер — монеты спишутся сразу, чтобы один баланс нельзя было потратить дважды. Ордер уедет преподавателю в бандле лиги (страница лиги → «обмен бандлами»); после подтверждения покажите его на занятии — «точка» не ставится, «спасательная круглая» разрешает пересдачу без записи. Отклонённый ордер возвращается кнопкой, монеты снова на счету.</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">откуда в общем рейтинге мои данные?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Общий командный зачёт — это обезличенная сводка: только хэндлы (маскот и номер), трайбы и числа. Преподаватель импортирует бандлы в админ-панели и одной кнопкой публикует стенд лиги в репозиторий; ФИО и содержимое работ туда не попадают. Пока снимок не опубликован, страницы честно пишут «стенда пока нет».</p>
+          </div></div>
+        </details>
+
+        <details class="card accordion hoverable">
+          <summary class="faq-summary">
+            <span class="chevron mono">▸</span>
+            <span class="faq-q">как проводятся операции экипажа в ДатаПолисе?</span>
+          </summary>
+          <div class="acc-wrap"><div class="acc-inner faq-answer">
+            <p>Соберите состав (для большинства операций минимум два человека, для war room и отката — три), вместе пройдите чек-лист: смена дежурства, аудит доступов, репетиция отката и другие — на странице <a href="stands/ops/crew-ops.html">операций экипажа</a>. Координатор закрывает операцию, указывая состав: каждый участник получает XP и неткоины (повтор той же операции — на следующей неделе), экипаж — командные очки в общий зачёт.</p>
+          </div></div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 04 · Сдача -->
     <section class="mb-10" id="faq-submit" aria-labelledby="faq-submit-title">
-      <h2 class="section-label" id="faq-submit-title">03 · сдача работ</h2>
+      <h2 class="section-label" id="faq-submit-title">04 · сдача работ</h2>
       <div class="faq-list">
 
         <details class="card accordion hoverable">
@@ -215,7 +254,7 @@
 
     <!-- 04 · Данные -->
     <section class="mb-10" id="faq-data" aria-labelledby="faq-data-title">
-      <h2 class="section-label" id="faq-data-title">04 · данные и приватность</h2>
+      <h2 class="section-label" id="faq-data-title">05 · данные и приватность</h2>
       <div class="faq-list">
 
         <details class="card accordion hoverable">
@@ -253,7 +292,7 @@
 
     <!-- 05 · Техника -->
     <section class="mb-10" id="faq-tech" aria-labelledby="faq-tech-title">
-      <h2 class="section-label" id="faq-tech-title">05 · технические требования</h2>
+      <h2 class="section-label" id="faq-tech-title">06 · технические требования</h2>
       <div class="faq-list">
 
         <details class="card accordion hoverable">
@@ -296,7 +335,7 @@
       <p class="admin-hint" style="margin-top:0;">Выберите вселенную и пройдите первый спринт — прогресс сохранится в браузере автоматически.</p>
       <div class="admin-btnrow" style="margin-top:1rem;">
         <a class="btn btn-primary btn-sm" href="stands/index.html">к вселенным →</a>
-        <a class="btn btn-sm" href="stands/glossary.html">глоссарий · 69 терминов</a>
+        <a class="btn btn-sm" href="stands/glossary.html">глоссарий · 74 термина</a>
         <a class="btn btn-sm" href="sitemap.html">карта сайта</a>
       </div>
     </section>
@@ -317,7 +356,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261031ac"></script>
-<script src="assets/shared-chrome.js?v=20261031ac"></script>
+<script src="assets/site.js?v=20261031ad"></script>
+<script src="assets/shared-chrome.js?v=20261031ad"></script>
 </body>
 </html>
