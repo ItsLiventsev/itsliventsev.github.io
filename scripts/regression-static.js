@@ -431,6 +431,10 @@ ok(oe.includes("'ops-claims'"), 'ops-engine.js: нет хранилища орд
 ok(read('stands/ops/rewards.html').includes('data-standings="ops-claims"') && read('stands/ops/rewards.html').includes('rewards-page.js'), 'ops/rewards.html: не подключены движок биржи и общий список');
 ok(read('stands/ops/index.html').includes('href="rewards.html"') && read('stands/ops/crew-ops.html').includes('href="rewards.html"'), 'ops: нет навигации на биржу ДатаПолиса');
 ok(read('admin.html').includes('ops-claims-tbody') && read('assets/submissions.js').includes('renderOpsClaims') && read('assets/submissions.js').includes('ops-bundle\\/[123]'), 'admin: нет приёма ордеров ДатаПолиса');
+ok(read('admin.html').includes('office-claims-tbody') && read('assets/submissions.js').includes('renderOfficeClaims') && read('assets/submissions.js').includes('office-bundle\\/[12]'), 'admin: нет приёма ордеров ОфисПолиса');
+ok(read('admin.html').includes('assets/office-engine.js'), 'admin.html: office-engine не подключён');
+ok(read('assets/standings.js').includes('renderOfficeClaims') && read('assets/standings.js').includes('office-claims'), 'standings.js: нет блока офис-ордеров');
+ok(read('assets/submissions.js').includes('snapshot.office'), 'submissions.js: office-ордера не публикуются в стенд');
 ok(read('assets/standings.js').includes('renderDatapolisClaims'), 'standings.js: нет рендера ордеров ДатаПолиса');
 ok(read('stands/ops/crew-ops.html').includes('ops-hub.js') && read('stands/ops/crew-ops.html').includes('crew-ops-root'), 'crew-ops.html: не подключён движок кабинета');
 ok(read('stands/ops/crew-ops.html').includes('data-standings="ops-crews"') && read('stands/ops/crew-ops.html').includes('standings.js'), 'crew-ops.html: нет командного зачёта экипажей');

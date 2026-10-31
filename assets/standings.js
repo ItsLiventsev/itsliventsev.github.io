@@ -152,6 +152,30 @@
     }).join('') + '</ul>';
   }
 
+  /* Каталоги наград вселенных: движок биржи — первоисточник, карта — фолбэк */
+  var OFFICE_REWARD_TITLES = {
+    'template-kit': 'шаблон-помощник', 'mentor-hint': 'подсказка наставника',
+    'deadline-plus': '+1 день на работу спринта', 'point-wipe': 'не ставить точку',
+    'fast-review': 'проверка вне очереди', 'rescue': 'спасательная круглая',
+    'grade-plus': '+1 балл к четвертной'
+  };
+  function officeRewardTitle(id) {
+    return (root.OFFICE && OFFICE.REWARDS_OFFICE && OFFICE.REWARDS_OFFICE[id] && OFFICE.REWARDS_OFFICE[id].title) || OFFICE_REWARD_TITLES[id] || id;
+  }
+  /* Ордера ОфисПолиса (snap.office.claims): решения преподавателя по бирже бюро */
+  function officeClaimsList(snap) {
+    var office = snap && snap.office;
+    var rows = (office && office.claims) || [];
+    if (!rows.length) return '<p class="std-empty-hint">ордеров ОфисПолиса ещё не было — обменяйте неткоины бюро на <a href="office/rewards.html">бирже ОфисПолиса</a>.</p>';
+    return '<ul class="std-claims">' + rows.map(function (c) {
+      var cls = c.status === 'approved' ? 'is-ok' : c.status === 'rejected' ? 'is-bad' : 'is-wait';
+      var label = c.status === 'approved' ? 'выдано' : c.status === 'rejected' ? 'отклонено' : c.status === 'refunded' ? 'возвращено' : 'ждёт подтверждения';
+      return '<li class="std-claim ' + cls + '"><span class="mono">' + esc(c.handle || '') + '</span>' +
+        '<span>' + esc(officeRewardTitle(c.rewardId)) + '</span>' +
+        '<span class="std-claim-status">' + label + '</span></li>';
+    }).join('') + '</ul>';
+  }
+
   /* Ордера ДатаПолиса (snap.datapolis.claims): решения преподавателя по бирже эксплуатации */
   function datapolisClaimsList(snap) {
     var dp = snap && snap.datapolis;
@@ -213,6 +237,7 @@
       else if (kind === 'claims') el.innerHTML = claimsList(snap);
       else if (kind === 'ops-crews') el.innerHTML = opsCrewsTable(snap);
       else if (kind === 'ops-claims') el.innerHTML = datapolisClaimsList(snap);
+      else if (kind === 'office-claims') el.innerHTML = officeClaimsList(snap);
       else if (kind === 'meta') el.innerHTML = snap ? metaLine(snap) : '';
       el.classList.add('std-ready');
     });
@@ -236,6 +261,7 @@
     renderClaims: claimsList,
     renderOpsCrews: opsCrewsTable,
     renderDatapolisClaims: datapolisClaimsList,
+    renderOfficeClaims: officeClaimsList,
     hydrate: hydrate,
     autoInit: autoInit,
     REWARD_TITLES: REWARD_TITLES

@@ -147,6 +147,7 @@
             <h2 class="admin-card-title">Обмен неткоинов на поощрения
               <span class="nav-bubble is-filled" id="claims-count" style="margin-left:.4rem;" title="ордера СетьПолиса в ожидании">0</span>
               <span class="nav-bubble bubble-orange is-filled" id="ops-claims-count" style="margin-left:.2rem;" title="ордера ДатаПолиса в ожидании">0</span>
+              <span class="nav-bubble bubble-rose is-filled" id="office-claims-count" style="margin-left:.2rem;" title="ордера ОфисПолиса в ожидании">0</span>
             </h2>
           </div>
         </div>
@@ -154,7 +155,8 @@
           Ордер — это заявление студента потратить неткоины: «не ставить точку», «спасательная круглая», «+1 балл к четвертной» и другие.
           Монеты списываются у студента сразу, вы подтверждаете выдачу или отклоняете ордер; после отклонения студент возвращает монеты
           кнопкой на бирже. Студент может сам отменить ордер до вашего решения — он исчезнет из списка ожидания. Решения видны группе
-          после публикации стенда лиги. Ордера ДатаПолиса приезжают в ops-бандле (каталог — <a href="stands/ops/rewards.html">stands/ops/rewards.html</a>).
+          после публикации стенда лиги. Ордера ДатаПолиса приезжают в ops-бандле (каталог — <a href="stands/ops/rewards.html">stands/ops/rewards.html</a>),
+          ОфисПолиса — в office-бандле (<a href="stands/office/rewards.html">stands/office/rewards.html</a>).
         </p>
         <p class="admin-grouplabel">СетьПолис · неткоины лиги (каталог — <a href="stands/rewards.html">stands/rewards.html</a>)</p>
         <div class="sub-table-wrap">
@@ -172,6 +174,15 @@
               <tr><th>участник</th><th>награда</th><th>создан</th><th>статус</th><th>решение</th></tr>
             </thead>
             <tbody id="ops-claims-tbody"></tbody>
+          </table>
+        </div>
+        <p class="admin-grouplabel st-mt-4">ОфисПолис · неткоины бюро (документы, таблицы, презентации)</p>
+        <div class="sub-table-wrap">
+          <table class="sub-table">
+            <thead>
+              <tr><th>участник</th><th>награда</th><th>создан</th><th>статус</th><th>решение</th></tr>
+            </thead>
+            <tbody id="office-claims-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -357,6 +368,7 @@
 <script src="assets/admin-config.js?v=20261031af"></script>
 <script src="assets/league.js?v=20261031af"></script>
 <script src="assets/ops-engine.js?v=20261031af"></script>
+<script src="assets/office-engine.js?v=20261031af"></script>
 <script src="assets/admin.js?v=20261031af"></script>
 <script src="assets/dom-kit.js?v=20261031af"></script>
 <script src="assets/submissions.js?v=20261031af"></script>
