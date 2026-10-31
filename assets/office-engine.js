@@ -19,7 +19,8 @@
     profile: 'office-profile',
     ledger: 'office-ledger',
     submissions: 'office-submissions',
-    presence: 'office-presence'
+    presence: 'office-presence',
+    claims: 'office-claims'
   };
 
   var memory = {};
@@ -111,7 +112,10 @@
   /* ----------------------------- Журнал, XP, неткоины ----------------------------- */
   function ledger() { return read(KEYS.ledger, []); }
   function award(profileId, type, dedupKey, extra) {
-    var spec = AWARDS[type];
+    /* Произвольные coins в extra (траты/возвраты биржи) переопределяют каталог */
+    var spec = (extra && typeof extra.coins === 'number')
+      ? { xp: extra.xp || 0, coins: extra.coins, note: extra.note || 'начисление' }
+      : AWARDS[type];
     if (!spec) throw new Error('неизвестная награда ' + type);
     var log = ledger();
     if (dedupKey && log.some(function (e) { return e.profileId === profileId && e.dedupKey === dedupKey; })) {
@@ -179,24 +183,161 @@
   }
 
   /* ----------------------------- Бандлы и сброс ----------------------------- */
+  /* ----------------------------- Биржа привилегий ОфисПолиса -----------------------------
+     Неткоины бюро тратятся на реальную поддержку документооборота.
+     «Журнальные» награды (точка, пересдача, балл) — по единой политике цен
+     со СетьПолисом и ДатаПолисом. Ордера едут преподавателю в office-бандле.
+     API ордеров сознательно совпадает с лигой: createClaim/cancelClaim/
+     refundClaim/setClaimStatus — одна логика на все вселенные. */
+  var REWARDS_OFFICE = {
+    'template-kit': { coins: 20,  title: 'Шаблон-помощник',        note: 'готовая заготовка документа или таблицы на контрольной' },
+    'mentor-hint':  { coins: 25,  title: 'Подсказка наставника',   note: 'наводящая подсказка по работе до сдачи' },
+    'deadline-plus':{ coins: 30,  title: '+1 день на работу спринта', note: 'перенос личного срока по работе спринта' },
+    'point-wipe':   { coins: 40,  title: 'Не ставить точку',       note: 'аннулирование одного замечания в журнале' },
+    'fast-review':  { coins: 45,  title: 'Проверка вне очереди',   note: 'экспресс-проверка работы без ожидания потока' },
+    'rescue':       { coins: 60,  title: 'Спасательная круглая',   note: 'пересдача двойки без журнальной записи' },
+    'grade-plus':   { coins: 150, title: '+1 балл к четвертной',   note: 'прибавка один балл к оценке за период' }
+  };
+  function claims() { return read(KEYS.claims, []); }
+  function myClaims(profileId) {
+    return claims().filter(function (c) { return c.profileId === profileId; });
+  }
+  function createClaim(profileId, rewardId) {
+    var reward = REWARDS_OFFICE[rewardId];
+    if (!reward) throw new Error('неизвестная награда: ' + rewardId);
+    var profile = getProfile();
+    if (myClaims(profileId).some(function (c) { return c.rewardId === rewardId && c.status === 'local'; })) {
+      throw new Error('ордер на «' + reward.title + '» уже ждёт подтверждения');
+    }
+    var balance = totals(profileId).coins;
+    if (balance < reward.coins) {
+      throw new Error('не хватает неткоинов: нужно ' + reward.coins + ' ◈, на счету ' + balance + ' ◈');
+    }
+    var claim = {
+      id: uid('fcl'), profileId: profileId, rewardId: rewardId,
+      handle: handleFor(profile).text, status: 'local',
+      at: nowISO()
+    };
+    write(KEYS.claims, claims().concat([claim]));
+    award(profileId, 'rewardSpend', null, {
+      xp: 0, coins: -reward.coins,
+      note: 'ордер №' + claim.id.slice(-4) + ': ' + reward.title
+    });
+    return claim;
+  }
+  /* Отмена до решения преподавателя: «передумал» — монеты возвращаются. */
+  function cancelClaim(claimId) {
+    var list = claims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status !== 'local') throw new Error('отменить можно только ордер, который ещё ждёт подтверждения');
+    var reward = REWARDS_OFFICE[claim.rewardId];
+    claim.status = 'cancelled';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'отмена ордера №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  /* Возврат монет после отклонения преподавателем. */
+  function refundClaim(claimId) {
+    var list = claims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status === 'refunded') return { duplicated: true };
+    if (claim.status !== 'rejected') throw new Error('вернуть монеты можно только по отклонённому ордеру');
+    var reward = REWARDS_OFFICE[claim.rewardId];
+    claim.status = 'refunded';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'возврат по ордеру №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  function setClaimStatus(claimId, status) {
+    var list = claims();
+    var found = false;
+    list.forEach(function (c) { if (c.id === claimId) { c.status = status; c.decidedAt = nowISO(); found = true; } });
+    if (found) write(KEYS.claims, list);
+    return found;
+  }
+
   function exportBundle(profile) {
     return {
-      schema: 'office-bundle/1', exportedAt: nowISO(), student: publicStudent(profile),
-      profile: getProfile(), ledger: ledger(), submissions: submissions()
+      schema: 'office-bundle/2', exportedAt: nowISO(), student: publicStudent(profile),
+      profile: getProfile(), ledger: ledger(), submissions: submissions(),
+      claims: claims()
     };
+  }
+  /* Перенос прогресса ОфисПолиса: слияние по id, события дедупятся
+     по (profileId, dedupKey) и дню входа; при переносе тем же человеком
+     (ФИО совпало, id другой) события и ордера перепривязываются. */
+  function importBundle(bundle) {
+    if (!bundle || !/^office-bundle\/[12]$/.test(bundle.schema)) {
+      throw new Error('ожидался office-bundle/1 или /2');
+    }
+    var report = { ledger: 0, submissions: 0, claims: 0 };
+    var me = getProfile();
+    var migrating = !!(me && bundle.profile && bundle.profile.name === me.name && bundle.profile.id !== me.id);
+
+    var log = ledger();
+    (bundle.ledger || []).forEach(function (e) {
+      if (!e || !e.id || isDemoRecord(e)) return;
+      var ev = Object.assign({}, e);
+      if (migrating) ev.profileId = me.id;
+      var dup = log.some(function (x) {
+        return x.id === ev.id ||
+          (ev.dedupKey && x.profileId === ev.profileId && x.dedupKey === ev.dedupKey) ||
+          (ev.type === 'login' && x.type === 'login' && ev.at && x.at && ev.at.slice(0, 10) === x.at.slice(0, 10) && x.profileId === ev.profileId);
+      });
+      if (!dup) { log.push(ev); report.ledger++; }
+    });
+    write(KEYS.ledger, log);
+
+    var subs = submissions();
+    var added = 0;
+    (bundle.submissions || []).forEach(function (item) {
+      if (!item || !item.id || isDemoRecord(item)) return;
+      if (!subs.some(function (x) { return x.id === item.id; })) { subs.push(item); added++; }
+    });
+    if (added) write(KEYS.submissions, subs);
+    report.submissions = added;
+
+    (bundle.claims || []).forEach(function (c) {
+      if (!c || !c.id || !c.rewardId) return;
+      var cl = Object.assign({}, c);
+      if (migrating) cl.profileId = me.id;
+      var list = claims();
+      var known = null;
+      list.forEach(function (x) { if (x.id === cl.id) known = x; });
+      if (!known) { list.push(cl); report.claims++; }
+      else if ((cl.decidedAt || '') > (known.decidedAt || '') && known.status === 'local') {
+        known.status = cl.status; known.decidedAt = cl.decidedAt || known.decidedAt;
+      }
+      write(KEYS.claims, list);
+    });
+    return report;
   }
   function resetAll() {
     Object.keys(KEYS).forEach(function (k) { storage.removeItem(KEYS[k]); });
   }
 
   return {
-    KEYS: KEYS, LEVELS: LEVELS, AWARDS: AWARDS,
+    KEYS: KEYS, LEVELS: LEVELS, AWARDS: AWARDS, REWARDS_OFFICE: REWARDS_OFFICE,
     levelOf: levelOf, handleFor: handleFor,
     getProfile: getProfile, ensureProfile: ensureProfile, updateProfile: updateProfile,
     setMascot: setMascot, publicStudent: publicStudent,
     ledger: ledger, award: award, totals: totals, dailyLogin: dailyLogin,
     submissions: submissions, addSubmission: addSubmission, bestSubmission: bestSubmission,
     heartbeat: heartbeat, listPresence: listPresence,
-    exportBundle: exportBundle, resetAll: resetAll, isDemoRecord: isDemoRecord
+    exportBundle: exportBundle, resetAll: resetAll, isDemoRecord: isDemoRecord,
+    claims: claims, myClaims: myClaims,
+    createClaim: createClaim, cancelClaim: cancelClaim,
+    refundClaim: refundClaim, setClaimStatus: setClaimStatus,
+    importBundle: importBundle
   };
 });

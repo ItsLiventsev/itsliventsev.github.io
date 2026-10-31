@@ -1,22 +1,63 @@
 /* ==========================================================================
-   Страница «Биржа привилегий» (stands/rewards.html)
-   Каталог наград за неткоины, баланс, ордера студента и публичный список
-   решений преподавателя (из standings/standings.json через standings.js).
-   Всё локально: монеты и ордера живут в лиге (league.js), публикация —
-   в админке преподавателя. zero-deps, esc через dom-kit.
+   Универсальный движок страниц «Биржа привилегий» (stands/rewards.html,
+   stands/ops/rewards.html, stands/office/rewards.html)
+   Одна логика для трёх вселенных: баланс, каталог наград, ордера студента
+   (создание / отмена / возврат), статус-строки. Вселенная выбирается
+   атрибутом <body data-rewards="league|ops|office">, движок берёт
+   соответствующий модуль (LEAGUE / OPS / OFFICE) и каталог наград.
+   Публичный список решений преподавателя рендерит standings.js
+   (блоки [data-standings="claims|ops-claims|office-claims"]).
    ========================================================================== */
 (function () {
   'use strict';
 
-  var $ = window.DOMKIT.$;        // общий хелпер: dom-kit.js
-  var esc = window.DOMKIT.esc;    // единое экранирование: dom-kit.js
-  var setMsg = window.DOMKIT.setMsg; // статус-строка: dom-kit.js
-  function say(text, state) { setMsg($('rw-msg'), text, state); }
-  function L() { return window.LEAGUE || null; }
+  var $ = window.DOMKIT.$;
+  var esc = window.DOMKIT.esc;
+  var setMsg = window.DOMKIT.setMsg;
+  function mascotSvg(id, size) { return window.MASCOTS ? window.MASCOTS.svg(id || 'fox', { size: size || 44, floating: false }) : ''; }
+
+  /* Конфигурации вселенных: движок, каталог, порядок карточек, тексты */
+  var UNIVERSES = {
+    league: {
+      engine: function () { return window.LEAGUE || null; },
+      rewards: 'REWARDS',
+      methods: { create: 'createClaim', cancel: 'cancelClaim', refund: 'refundClaim', my: 'myClaims' },
+      order: ['point-wipe', 'rescue', 'grade-plus', 'board-pass', 'deadline', 'hint', 'topic-first'],
+      labels: {
+        account: 'лига СетьПолиса',
+        earnHint: 'Неткоины приходят за сдачи работ, автотесты, тесты без ошибок и взаимные проверки. Полный журнал — на <a href="league.html" rel="nofollow">странице лиги</a>.',
+        created: ' создан: он уедет преподавателю в бандле лиги (страница лиги → «обмен бандлами»), решение появится здесь и в общем списке ниже.'
+      }
+    },
+    ops: {
+      engine: function () { return (window.OPS && OPS.REWARDS_OPS) ? OPS : null; },
+      rewards: 'REWARDS_OPS',
+      methods: { create: 'createOpsClaim', cancel: 'cancelOpsClaim', refund: 'refundOpsClaim', my: 'myOpsClaims' },
+      order: ['ticket-pick', 'mentor-hint', 'deadline-plus', 'point-wipe', 'standby-skip', 'rescue', 'grade-plus'],
+      labels: {
+        account: 'эксплуатация · ДатаПолис',
+        earnHint: 'Неткоины эксплуатации приходят за закрытые заявки, устранённые инциденты, выдержанный SLA, runbook и командные операции экипажа. Полный журнал — в <a href="index.html">консоли ДатаПолиса</a>.',
+        created: ' создан: он уедет преподавателю в ops-бандле, решение появится здесь и в общем списке ниже.'
+      }
+    },
+    office: {
+      engine: function () { return (window.OFFICE && OFFICE.REWARDS_OFFICE) ? OFFICE : null; },
+      rewards: 'REWARDS_OFFICE',
+      methods: { create: 'createClaim', cancel: 'cancelClaim', refund: 'refundClaim', my: 'myClaims' },
+      order: ['template-kit', 'mentor-hint', 'deadline-plus', 'point-wipe', 'fast-review', 'rescue', 'grade-plus'],
+      labels: {
+        account: 'цифровое бюро · ОфисПолис',
+        earnHint: 'Неткоины бюро приходят за сдачу практических работ по DoD, тесты без ошибок и ежедневный вход. Полный журнал — в <a href="index.html">бюро ОфисПолиса</a>.',
+        created: ' создан: он уедет преподавателю в office-бандле, решение появится здесь и в общем списке ниже.'
+      }
+    }
+  };
 
   var profile = null;
+  var E = null;
+  var cfg = null;
 
-  function mascotSvg(id, size) { return window.MASCOTS ? window.MASCOTS.svg(id || 'fox', { size: size || 44, floating: false }) : ''; }
+  function say(text, state) { setMsg($('rw-msg'), text, state); }
 
   function gate(show) {
     var g = $('rw-gate'), body = $('rw-body');
@@ -25,9 +66,9 @@
   }
 
   function balanceCard() {
-    var t = L().totals(profile.id);
+    var t = E.totals(profile.id);
     var lvl = t.level;
-    var handle = L().handleFor(profile).text;
+    var handle = E.handleFor(profile).text;
     return '<div class="rw-balance">' +
       mascotSvg(profile.mascotId, 52) +
       '<div class="rw-balance-main"><strong>' + esc(handle) + '</strong>' +
@@ -35,22 +76,19 @@
       '<div class="rw-balance-coins"><b>' + t.coins + ' ◈</b><span>на счету</span></div>' +
       '<div class="rw-balance-xp"><b>' + t.xp + '</b><span>XP</span></div>' +
       '</div>' +
-      '<p class="admin-hint">Неткоины приходят за сдачи работ, автотесты, тесты без ошибок и взаимные проверки. ' +
-      'Полный журнал — на <a href="league.html" rel="nofollow">странице лиги</a>.</p>';
+      '<p class="admin-hint">' + cfg.labels.earnHint + '</p>';
   }
 
   function catalog() {
-    var rewards = L().REWARDS;
-    var t = L().totals(profile.id);
-    var mine = L().myClaims(profile.id);
-    var order = ['point-wipe', 'rescue', 'grade-plus', 'board-pass', 'deadline', 'hint', 'topic-first'];
-    return '<div class="rw-grid">' + order.map(function (id) {
+    var rewards = E[cfg.rewards];
+    var t = E.totals(profile.id);
+    var mine = E[cfg.methods.my](profile.id);
+    return '<div class="rw-grid">' + cfg.order.map(function (id) {
       var r = rewards[id];
       if (!r) return '';
       var pending = mine.some(function (c) { return c.rewardId === id && c.status === 'local'; });
       var affordable = t.coins >= r.coins;
-      var cls = 'rw-card' + (affordable ? '' : ' is-locked');
-      return '<div class="' + cls + '">' +
+      return '<div class="rw-card' + (affordable ? '' : ' is-locked') + '">' +
         '<div class="rw-card-head"><strong>' + esc(r.title) + '</strong>' +
         '<span class="rw-price mono">' + r.coins + ' ◈</span></div>' +
         '<p class="rw-note">' + esc(r.note) + '</p>' +
@@ -63,9 +101,9 @@
   }
 
   function myClaimsList() {
-    var mine = L().myClaims(profile.id).slice().sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); });
+    var mine = E[cfg.methods.my](profile.id).slice().sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); });
     if (!mine.length) return '<p class="admin-hint">ордеров пока нет — выберите награду в каталоге выше.</p>';
-    var titles = L().REWARDS;
+    var titles = E[cfg.rewards];
     return '<ul class="rw-claims">' + mine.map(function (c) {
       var r = titles[c.rewardId] || { title: c.rewardId, coins: 0 };
       var label = c.status === 'approved' ? 'выдано преподавателем ✓'
@@ -95,39 +133,41 @@
 
   function bind() {
     document.addEventListener('click', function (e) {
-      var rewardId = e.target.getAttribute && e.target.getAttribute('data-reward');
+      var get = function (name) { return e.target.getAttribute && e.target.getAttribute(name); };
+      var rewardId = get('data-reward');
       if (rewardId && profile) {
         try {
-          var claim = L().createClaim(profile.id, rewardId);
+          var claim = E[cfg.methods.create](profile.id, rewardId);
           render();
-          say('Ордер №' + claim.id.slice(-4) + ' создан: он уйдёт преподавателю в бандле лиги (страница лиги → обмен бандлами), решение появится здесь и в общем списке ниже.', 'ok');
+          say('Ордер №' + claim.id.slice(-4) + cfg.labels.created, 'ok');
         } catch (err) { say(err.message, 'bad'); }
         return;
       }
-      var refundId = e.target.getAttribute && e.target.getAttribute('data-refund');
+      var refundId = get('data-refund');
       if (refundId && profile) {
-        try { L().refundClaim(refundId); render(); say('Монеты возвращены на счёт.', 'ok'); }
+        try { E[cfg.methods.refund](refundId); render(); say('Монеты возвращены на счёт.', 'ok'); }
         catch (err) { say(err.message, 'bad'); }
         return;
       }
-      var cancelId = e.target.getAttribute && e.target.getAttribute('data-cancel');
+      var cancelId = get('data-cancel');
       if (cancelId && profile) {
-        try { L().cancelClaim(cancelId); render(); say('Ордер отменён, монеты вернулись на счёт.', 'ok'); }
+        try { E[cfg.methods.cancel](cancelId); render(); say('Ордер отменён, монеты вернулись на счёт.', 'ok'); }
         catch (err) { say(err.message, 'bad'); }
       }
     });
   }
 
   function init() {
-    if (!$('rw-body')) return;
-    profile = L() ? L().getProfile() : null;
+    if (typeof document === 'undefined' || !document.body || !$('rw-body')) return;
+    cfg = UNIVERSES[document.body.getAttribute('data-rewards')];
+    if (!cfg) return;
+    E = cfg.engine();
+    if (!E) return;
+    profile = E.getProfile();
     if (!profile || !profile.name) { gate(true); return; }
     render();
     bind();
-    /* Публичные решения преподавателя — после загрузки стенда */
-    if (window.STANDINGS) {
-      STANDINGS.autoInit(true);
-    }
+    if (window.STANDINGS) STANDINGS.autoInit(true);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

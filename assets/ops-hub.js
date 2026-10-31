@@ -217,8 +217,10 @@
     var form = $('gate-form'), gate = $('gate'), dash = $('dash');
     var picked = 'wolf';
     function mountPicker(cur) {
-      $('mascot-host').innerHTML = mascotPicker(cur);
-      $('mascot-host').querySelectorAll('button').forEach(function (b) {
+      var host = $('mascot-host');
+      if (!host) return;
+      host.innerHTML = mascotPicker(cur);
+      host.querySelectorAll('button').forEach(function (b) {
         b.addEventListener('click', function () {
           picked = b.dataset.mascot;
           $('mascot-host').querySelectorAll('button').forEach(function (x) { x.classList.toggle('is-selected', x === b); });
@@ -227,9 +229,10 @@
     }
     var existing = OPS.getProfile();
     if (existing && existing.name) {
-      if (!renderCrewOps(existing)) renderDashboard(existing);
+      /* Спутниковые страницы (биржа) без root/dash просто не рендерят кабинет */
+      if (!renderCrewOps(existing) && $('dash')) renderDashboard(existing);
     }
-    else { gate.hidden = false; mountPicker(picked); }
+    else if (gate) { gate.hidden = false; mountPicker(picked); }
 
     if (form) form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -243,7 +246,7 @@
         if (r && /^[\w.-]+\.html$/.test(r)) back = r;
       } catch (err) {}
       if (back) { location.href = back; return; }
-      if (!renderCrewOps(p)) renderDashboard(p);
+      if (!renderCrewOps(p) && $('dash')) renderDashboard(p);
     });
     var changeBtn = $('profile-change');
     if (changeBtn) changeBtn.addEventListener('click', function () {

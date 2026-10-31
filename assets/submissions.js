@@ -32,6 +32,7 @@
   }
   var L = function () { return window.LEAGUE || null; };
   var O = function () { return (window.OPS && window.OPS.REWARDS_OPS) ? window.OPS : null; };
+  var F = function () { return (window.OFFICE && window.OFFICE.REWARDS_OFFICE) ? window.OFFICE : null; };
 
   /* Хранилище работ: общее с лигой ключом stands-submissions */
   function loadItems() {
@@ -434,6 +435,44 @@
     }).join('');
   }
 
+  /* ----------------------------- Ордера ОфисПолиса (office-бандлы) ----------------------------- */
+  var OFFICE_REWARD_TITLES = {
+    'template-kit': 'шаблон-помощник', 'mentor-hint': 'подсказка наставника',
+    'deadline-plus': '+1 день на работу спринта', 'point-wipe': 'не ставить точку',
+    'fast-review': 'проверка вне очереди', 'rescue': 'спасательная круглая',
+    'grade-plus': '+1 балл к четвертной'
+  };
+  function renderOfficeClaims() {
+    var tbody = $('office-claims-tbody');
+    if (!tbody || !F()) return;
+    var catalog = F().REWARDS_OFFICE || {};
+    var list = F().claims().slice().sort(function (a, b) { return (b.at || '').localeCompare(a.at || ''); });
+    var count = $('office-claims-count');
+    if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины бюро на stands/office/rewards.html, ордера приходят в office-бандлах</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(function (c) {
+      var statusLabel = c.status === 'approved' ? 'выдано ✓'
+        : c.status === 'rejected' ? 'отклонено'
+        : c.status === 'refunded' ? 'монеты возвращены'
+        : c.status === 'cancelled' ? 'отменён студентом'
+        : 'ждёт подтверждения';
+      var actions = c.status === 'local'
+        ? '<button class="btn btn-sm" type="button" data-fclm-ok="' + esc(c.id) + '">выдать</button> ' +
+          '<button class="btn btn-sm btn-ghost" type="button" data-fclm-no="' + esc(c.id) + '">отклонить</button>'
+        : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
+      var title = (catalog[c.rewardId] || OFFICE_REWARD_TITLES[c.rewardId] || {}).title || c.rewardId;
+      return '<tr>' +
+        '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
+        '<td>' + esc(title) + '</td>' +
+        '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
+        '<td class="mono">' + esc(statusLabel) + '</td>' +
+        '<td class="sub-actions">' + actions + '</td></tr>';
+    }).join('');
+  }
+
   /* ----------------------------- Публичный стенд лиги (standings/standings.json) ----------------------------- */
   function publishStandings() {
     if (!L()) return status('Модуль лиги не загружен', true);
@@ -447,6 +486,11 @@
     if (window.OPS && OPS.crewsSnapshot) {
       var dp = OPS.crewsSnapshot();
       if (dp.crews.length || dp.members.length) snapshot.datapolis = dp;
+    }
+    if (window.OFFICE && OFFICE.claims) {
+      var offClaims = OFFICE.claims().filter(function (c) { return c.status !== 'cancelled'; })
+        .map(function (c) { return { id: c.id, handle: c.handle, rewardId: c.rewardId, status: c.status, at: c.at }; });
+      if (offClaims.length) snapshot.office = { claims: offClaims };
     }
     putJson('standings', 'standings.json', snapshot, 'стенд лиги: рейтинг и ордера (без персональных данных)')
       .then(function () {
@@ -476,6 +520,7 @@
     renderPresence();
     renderClaims();
     renderOpsClaims();
+    renderOfficeClaims();
 
     // Живые обновления из других вкладок того же браузера (без перезагрузки)
     window.addEventListener('storage', function (e) {
@@ -484,6 +529,7 @@
       if (L() && e.key === L().KEYS.presence) renderPresence();
       if (L() && e.key === L().KEYS.claims) renderClaims();
       if (O() && e.key === O().KEYS.claims) renderOpsClaims();
+      if (F() && e.key === F().KEYS.claims) renderOfficeClaims();
     });
     // Периодическое обновление только presence-блока
     setInterval(renderPresence, 20000);
@@ -498,13 +544,28 @@
       Promise.all(files.map(function (f) {
         return f.text().then(function (txt) { try { return JSON.parse(txt); } catch (err) { status('Не удалось разобрать ' + f.name, true); return null; } });
       })).then(function (parsed) {
-        var bundles = [], opsBundles = [], submissions = [];
+        var bundles = [], opsBundles = [], officeBundles = [], submissions = [];
         parsed.filter(Boolean).forEach(function (item) {
           if (item && /^league-bundle\/[123]$/.test(item.schema)) bundles.push(item);
           else if (item && /^ops-bundle\/[123]$/.test(item.schema)) opsBundles.push(item);
+          else if (item && /^office-bundle\/[12]$/.test(item.schema)) officeBundles.push(item);
           else if (Array.isArray(item)) submissions = submissions.concat(item);
           else submissions.push(item);
         });
+        if (officeBundles.length) {
+          if (!F()) { status('Office-бандлы доступны после входа в бюро ОфисПолиса в этом браузере', true); }
+          else {
+            var offReport = { ledger: 0, claims: 0 };
+            officeBundles.forEach(function (b) {
+              try {
+                var r = F().importBundle(b);
+                offReport.ledger += r.ledger; offReport.claims += r.claims;
+              } catch (err) { status('Office-бандл отклонён: ' + err.message, true); }
+            });
+            renderOfficeClaims();
+            status('Принято office-бандлов: ' + officeBundles.length + ' (событий: ' + offReport.ledger + ', ордеров: ' + offReport.claims + ')');
+          }
+        }
         if (opsBundles.length) {
           if (!O()) { status('Ops-бандлы доступны после входа в кабинет ДатаПолиса в этом браузере', true); }
           else {
@@ -581,6 +642,10 @@
       var oNo = e.target.getAttribute && e.target.getAttribute('data-oclm-no');
       if (oOk && O()) { O().setOpsClaimStatus(oOk, 'approved'); renderOpsClaims(); status('Ордер ДатаПолиса подтверждён: выдайте привилегию и опубликуйте стенд'); }
       if (oNo && O()) { O().setOpsClaimStatus(oNo, 'rejected'); renderOpsClaims(); status('Ордер ДатаПолиса отклонён: студент вернёт монеты на бирже'); }
+      var fOk = e.target.getAttribute && e.target.getAttribute('data-fclm-ok');
+      var fNo = e.target.getAttribute && e.target.getAttribute('data-fclm-no');
+      if (fOk && F()) { F().setClaimStatus(fOk, 'approved'); renderOfficeClaims(); status('Ордер ОфисПолиса подтверждён: выдайте привилегию и опубликуйте стенд'); }
+      if (fNo && F()) { F().setClaimStatus(fNo, 'rejected'); renderOfficeClaims(); status('Ордер ОфисПолиса отклонён: студент вернёт монеты на бирже'); }
     });
 
     $('sub-search').addEventListener('input', function (e) { state.filterText = e.target.value; render(); });
