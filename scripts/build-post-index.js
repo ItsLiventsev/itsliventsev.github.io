@@ -92,8 +92,9 @@ const counts = {
   blog: collect(path.join(ROOT, 'blog')).length,
   articles: collect(path.join(ROOT, 'articles')).length,
   // глоссарий — служебная страница, в счётчик проектов не идёт;
-  // каталог виртуальных стендов stands/ — третий проект сайта (карточка 03 на projects.html)
-  projects: countHtml('projects', { exclude: ['glossary.html'] }) + 1,
+  // каталог виртуальных стендов stands/ и внешняя серия тренажёров
+  // netsys_trainer — две отдельные карточки на projects.html
+  projects: countHtml('projects', { exclude: ['glossary.html'] }) + 2,
   archive: countHtml('archive'),
 };
 const countsPath = path.join(ROOT, 'feed-counts.json');

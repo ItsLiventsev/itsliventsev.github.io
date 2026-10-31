@@ -165,29 +165,6 @@ document.documentElement.classList.add('js-enabled');
   }
 })();
 
-/* ---------- Появление блоков при скролле ---------- */
-(function () {
-  const targets = document.querySelectorAll('.reveal, .stagger');
-  if (!targets.length) return;
-  // Стаггер через --i (первые 6 дочерних), без таймеров и магических задержек
-  document.querySelectorAll('.stagger').forEach((el) => {
-    Array.prototype.slice.call(el.children, 0, 6).forEach((child, i) => {
-      child.style.setProperty('--i', i);
-    });
-  });
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.01, rootMargin: '0px 0px -36px 0px' });
-  targets.forEach((el) => observer.observe(el));
-  // Подстраховка: если наблюдатель не сработал
-  setTimeout(() => targets.forEach((el) => el.classList.add('active')), 1200);
-})();
-
 /* ---------- Счётчики с анимацией ---------- */
 (function () {
   const counters = document.querySelectorAll('.counter[data-target]');
@@ -208,28 +185,6 @@ document.documentElement.classList.add('js-enabled');
     });
   }, { threshold: 0.5 });
   counters.forEach((c) => observer.observe(c));
-})();
-
-/* ---------- Анимированные «метки» в заголовках ----------
-   data-mark='[".","..","..."]'            — текстовые кадры
-   data-mark-html='["<span> >_</span>"]'  — HTML-кадры
-   data-mark-interval="450"                — скорость
-   При prefers-reduced-motion остаётся статичный первый кадр. */
-(function () {
-  const marks = document.querySelectorAll('[data-mark], [data-mark-html]');
-  if (!marks.length) return;
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) return; // первый кадр из разметки остаётся как есть
-  marks.forEach((el) => {
-    const frames = el.dataset.mark ? JSON.parse(el.dataset.mark) : JSON.parse(el.dataset.markHtml);
-    const interval = parseInt(el.dataset.markInterval || '450', 10);
-    let i = 0;
-    setInterval(() => {
-      i = (i + 1) % frames.length;
-      if (el.dataset.markHtml !== undefined) el.innerHTML = frames[i];
-      else el.textContent = frames[i];
-    }, interval);
-  });
 })();
 
 /* ---------- Автосчётчики разделов: баблы в меню и быстрых ссылках ----------
@@ -276,15 +231,6 @@ document.querySelectorAll('[data-filter-root]').forEach((root) => {
       if (empty) empty.hidden = visible !== 0;
     });
   });
-});
-
-/* ---------- Магнитные элементы ---------- */
-document.querySelectorAll('.magnetic').forEach((el) => {
-  el.addEventListener('mousemove', (e) => {
-    const r = el.getBoundingClientRect();
-    el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px, ${(e.clientY - r.top - r.height / 2) * .18}px)`;
-  });
-  el.addEventListener('mouseleave', () => { el.style.transform = ''; });
 });
 
 /* ---------- Scrollspy для якорных ссылок в шапке и нижнем доке ---------- */

@@ -15,10 +15,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261028af">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261028af">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261028af">
-<link rel="stylesheet" href="assets/flow.css?v=20261028af">
+<link rel="stylesheet" href="assets/site.css?v=20261031aa">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031aa">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031aa">
+<link rel="stylesheet" href="assets/flow.css?v=20261031aa">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -62,7 +62,7 @@
 <div class="page-wrap">
 
   <!-- Header -->
-  <header class="site-header reveal">
+  <header class="site-header">
     <span class="logo magnetic cursor-pointer" id="logo" title="click me">~/itsliventsev</span>
     <nav class="site-nav" aria-label="Основная навигация">
       <a href="#stack" class="nav-link" data-i18n="nav_stack">стек</a>
@@ -88,15 +88,15 @@
   <main id="main-content">
 
   <!-- Hero -->
-  <section class="hero reveal">
+  <section class="hero">
     <div class="bg-glyphs" aria-hidden="true">
       <span class="bg-glyph">/</span>
       <span class="bg-glyph">#</span>
       <span class="bg-glyph">{ }</span>
     </div>
-    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl" data-flow="mask">itsliventsev<span class="brand-cursor" aria-hidden="true">_</span></h1>
-    <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="tagline" data-flow="blur">// заметки · статьи · проекты · учебные материалы</p>
-    <div class="quick-bubbles" data-flow-group>
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl">itsliventsev<span class="brand-cursor" aria-hidden="true">_</span></h1>
+    <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="tagline">// заметки · статьи · проекты · учебные материалы</p>
+    <div class="quick-bubbles">
       <a href="blog.html" class="quick-bubble is-wip"><span class="qb-glyph">~</span> <span data-i18n="qb_blog">заметки</span> <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
       <a href="articles.html" class="quick-bubble"><span class="qb-glyph">/</span> <span data-i18n="qb_articles">статьи</span> <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
       <a href="projects.html" class="quick-bubble"><span class="qb-glyph">#</span> <span data-i18n="qb_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
@@ -105,7 +105,7 @@
   </section>
 
   <!-- Stack -->
-  <section id="stack" class="reveal mb-10 sm:mb-12 scroll-mt-24">
+  <section id="stack" class="mb-10 sm:mb-12 scroll-mt-24">
     <h2 class="section-label" data-i18n="stack_title">технический стек</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
       <div class="group">
@@ -149,9 +149,9 @@
   </section>
 
   <!-- Materials -->
-  <section id="resources" class="reveal mb-10 sm:mb-12 scroll-mt-24">
+  <section id="resources" class="mb-10 sm:mb-12 scroll-mt-24">
     <h2 class="section-label" data-i18n="res_title">материалы для студентов</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 stagger">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
       <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_1">база знаний</span>
         <span class="mono text-xs text-[var(--faint)] group-hover:text-[var(--accent)] transition-colors">buildin →</span>
@@ -180,9 +180,9 @@
   </section>
 
   <!-- CV -->
-  <section id="cv" class="reveal mb-10 sm:mb-12 scroll-mt-24">
+  <section id="cv" class="mb-10 sm:mb-12 scroll-mt-24">
     <h2 class="section-label" data-i18n="cv_title">опыт и образование</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 stagger">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
       <div class="card sheen hoverable p-4 sm:p-5">
         <div class="mono text-xs text-[var(--faint)] mb-2" data-i18n="work_title">работа</div>
         <div class="text-sm font-semibold text-[var(--text)] mb-1.5" data-i18n="work_1">мастер производственного обучения</div>
@@ -212,9 +212,9 @@
   </section>
 
   <!-- Contacts -->
-  <section class="reveal mb-10">
+  <section class="mb-10">
     <h2 class="section-label" data-i18n="contact_title">контакты</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 stagger">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
       <a href="mailto:livencev01@ya.ru" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">email</span>
         <span class="mono text-xs sm:text-sm text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors truncate block">livencev01@ya.ru</span>
@@ -255,7 +255,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261028af"></script>
+<script src="assets/site.js?v=20261031aa"></script>
 <script>
   /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami.
      При prefers-reduced-motion остаётся только статичная подсветка. */
@@ -356,7 +356,7 @@
   }
 </script>
 
-<script src="assets/shared-chrome.js?v=20261028af"></script>
-<script src="assets/flow.js?v=20261028af"></script>
+<script src="assets/shared-chrome.js?v=20261031aa"></script>
+<script src="assets/flow.js?v=20261031aa"></script>
 </body>
 </html>

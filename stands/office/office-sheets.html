@@ -13,12 +13,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261028af">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261028af">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261028af">
-<link rel="stylesheet" href="../../assets/office.css?v=20261028af">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261028af">
-<link rel="stylesheet" href="../../assets/flow.css?v=20261028af">
+<link rel="stylesheet" href="../../assets/site.css?v=20261031aa">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261031aa">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261031aa">
+<link rel="stylesheet" href="../../assets/office.css?v=20261031aa">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031aa">
+<link rel="stylesheet" href="../../assets/flow.css?v=20261031aa">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/office/office-sheets.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -109,13 +109,13 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261028af"></script>
-<script src="../../assets/office-engine.js?v=20261028af"></script>
-<script src="../../assets/dom-kit.js?v=20261028af"></script>
-<script src="../../assets/stands.js?v=20261028af"></script>
+<script src="../../assets/mascots.js?v=20261031aa"></script>
+<script src="../../assets/office-engine.js?v=20261031aa"></script>
+<script src="../../assets/dom-kit.js?v=20261031aa"></script>
+<script src="../../assets/stands.js?v=20261031aa"></script>
 <script type="application/json" id="office-data">{"id":"office-sheets","sprint":2,"hours":"5 ч","coins":"85","mascot":"otter","who":"выдра Лина — она держит цифры в порядке и не верит ручным подсчётам","title":"Создание таблиц с данными. Выполнение вычислений по табличным данным","lead":"Формулы и ссылки, функции, проверка данных, сводные таблицы и аккуратное форматирование в Calc и Excel.","story":"Коллега считал смету на калькуляторе и вписывал итоги в ячейки — после смены цен половина чисел разъехалась. Лина учит правилу: в ячейке живёт формула, а не результат. Тогда обновление одной цены пересчитывает всю книгу, а сводная отвечает на вопросы за секунды.","theory":[{"h":"Абсолютные и относительные ссылки","p":"A1 меняется при протягивании, $A$1 — закреплённая ссылка на константу (курс, ставка, норматив). F4 переключает режим. Смешивать их нужно осознанно, иначе протягивание ломает расчёт.","code":"=B2*$D$1          // цена × курс из закреплённой ячейки\n=SUMIFS(Сумма; Категория; \"расход\")\n=VLOOKUP(...) / =XLOOKUP(...)"},{"h":"Функции вместо ручной арифметики","p":"SUM/СРЗНАЧ/ЕСЛИ/СУММЕСЛИМН закрывают типовые задачи; ВПР (VLOOKUP) и XLOOKUP подтягивают данные из справочника по ключу. Деление защищают проверкой знаменателя ЕСЛИОШИБКА/IFERROR.","note":"Формула читается по имени: «=СУММЕСЛИМН…» понятнее столбика неподписанных плюсов."},{"h":"Сводные таблицы и проверка данных","p":"Сводная за минуту группирует тысячи строк по категориям без единой формулы. Проверка данных (список, диапазон) не даёт ввести «да», «Да» и «yes» как три разных значения."}],"reference":[{"lo":"LibreOffice Calc","ms":"Microsoft Excel","what":"табличный процессор"},{"lo":"F4 — закрепить ссылку ($)","ms":"F4 — абсолютная ссылка","what":"протягивание без сдвига"},{"lo":"Данные · Проверка корректности","ms":"Данные · Проверка данных","what":"списки и ограничения ввода"},{"lo":"Данные · Сводная таблица","ms":"Вставка · Сводная таблица","what":"группировки и итоги"},{"lo":"ВСТАВИТЬ.ЕСЛИ / ВПР","ms":"XLOOKUP / ВПР","what":"подтягивание из справочника"},{"lo":"Формат · Условное форматирование","ms":"Главная · Условное форматирование","what":"подсветка выбросов и порогов"}],"tasks":[{"id":"t1","text":"Соберите таблицу на 30+ строк: номенклатура, количество, цена, сумма формулой"},{"id":"t2","text":"Вынесите ставку НДС в закреплённую ячейку ($) и примените в расчёте ко всем строкам"},{"id":"t3","text":"Добавьте итоги СУММ/СРЗНАЧ и функцию СУММЕСЛИМН по двум категориям"},{"id":"t4","text":"Подтяните справочное поле через ВПР или XLOOKUP по ключу"},{"id":"t5","text":"Включите проверку данных (список) и условное форматирование для просроченных дат"},{"id":"t6","text":"Постройте сводную: количество и сумма по категориям, оформите печать на один лист"}],"quiz":[{"q":"Что написано в правильно построенной ячейке с итогом?","options":["Посчитанное на калькуляторе число","Формула со ссылками на исходные ячейки","Текст «итого»","Случайное число для красоты"],"answer":1,"explain":"Формула пересчитывает итог автоматически при изменении исходных данных."},{"q":"Что делает знак $ в ссылке $A$1?","options":["Удаляет ячейку","Закрепляет её при протягивании формулы","Прячет лист","Меняет валюту на доллар навсегда"],"answer":1,"explain":"Абсолютная ссылка держит константу (ставку, курс) одинаковой для всех строк."},{"q":"Самый быстрый способ сгруппировать 5000 строк по категориям —","options":["Перекрасить строки вручную","Сводная таблица","Отсортировать и считать на бумаге","Удалить половину строк"],"answer":1,"explain":"Сводная группирует и суммирует без формул и ручного отбора."},{"q":"Зачем нужна проверка данных со списком?","options":["Чтобы запретить печатать вообще","Чтобы значения были единообразными и без опечаток","Для украшения ячеек","Для замены формул"],"answer":1,"explain":"Список устраняет «да/Да/yes» как три разных значения и спасает отчёты."}],"reflection":["Какой ручной подсчёт в ваших задачах стоит превратить в формулу?","Что пошло бы не так при изменении цен в таблице без формул?","Какие вопросы заказчика закрывает одна сводная?"],"sprintTitle":"Таблицы и данные"}</script>
-<script src="../../assets/office-kit.js?v=20261028af"></script>
-<script src="../../assets/shared-chrome.js?v=20261028af"></script>
-<script src="../../assets/flow.js?v=20261028af"></script>
+<script src="../../assets/office-kit.js?v=20261031aa"></script>
+<script src="../../assets/shared-chrome.js?v=20261031aa"></script>
+<script src="../../assets/flow.js?v=20261031aa"></script>
 </body>
 </html>

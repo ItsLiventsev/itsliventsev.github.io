@@ -1298,13 +1298,9 @@ html[data-theme="light"] .step-nav { background: var(--st-panel); }
 html[data-theme="light"] .st-footer { color: var(--st-faint); }
 
 /* ==========================================================================
-   16. Система моушена: появление, поповеры, пульс, микровзаимодействия
-   Классы .reveal навешивает JS — без JavaScript контент остаётся видимым.
+   16. Система моушена: поповеры, пульс, микровзаимодействия.
+   Входных анимаций появления нет: контент страниц виден сразу.
    ========================================================================== */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-slower) var(--st-ease, var(--ease-standard)), transform var(--dur-slower) var(--st-ease, var(--ease-standard)); }
-.reveal.in { opacity: 1; transform: none; }
-.reveal.d1 { transition-delay: var(--dur-fast); } .reveal.d2 { transition-delay: var(--dur-fast); }
-.reveal.d3 { transition-delay: var(--dur-base); } .reveal.d4 { transition-delay: var(--dur-base); }
 
 /* Появление модальных окон */
 .st-modal:not([hidden]) .st-modal-box,
@@ -1387,16 +1383,9 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 .rv-card, .ach-card, .lg-step, .id-card, .lg-award { transition: border-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard); }
 .rv-card:hover { border-color: var(--st-accent); }
 
-/* Лента событий: строка выезжает */
-.feed-list li { animation: feed-in var(--dur-slow) var(--st-ease, ease) both; }
-.feed-list li:nth-child(2) { animation-delay: .05s; }
-.feed-list li:nth-child(3) { animation-delay: .1s; }
-.feed-list li:nth-child(4) { animation-delay: .15s; }
-.feed-list li:nth-child(n+5) { animation-delay: .2s; }
-@keyframes feed-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+/* Лента событий: без входных анимаций — строки видны сразу */
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
   .mc-float, .mc-eye, .mc-wave, .ps-dot.is-online, .lt-input-row::after,
   .quest-card .quest-progress i::after, .feed-list li,
   .st-modal:not([hidden]) .st-modal-box, .tab-pane { animation: none; }
@@ -1410,7 +1399,6 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
   display: flex;gap:var(--st-sp-4); align-items: center;
   border: 1px solid var(--st-line-strong); border-left: 3px solid var(--st-accent);
   border-radius: var(--st-radius); background: var(--st-panel);padding:var(--st-gap) var(--st-sp-5); margin-bottom: var(--st-gap);
-  animation: modal-pop var(--dur-slow) cubic-bezier(.2, .9, .3, 1.1);
 }
 .greet-card .mc-svg { width: 64px; height: 64px; flex: 0 0 auto; }
 .greet-card h2 { margin:0 0 var(--st-sp-1); font-size:var(--st-fs-title); }
