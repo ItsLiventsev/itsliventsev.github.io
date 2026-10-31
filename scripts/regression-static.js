@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031bb';
+const VERSION = '20261031bc';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031ba') && !c.includes('?v=20261031az') && !c.includes('?v=20261031ay'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031bb') && !c.includes('?v=20261031ba') && !c.includes('?v=20261031az'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -730,11 +730,11 @@ ok(siteCss.includes('border-color var(--dur-fast) var(--ease-standard), backgrou
 
 /* дизайн 2026 · волна 18: misprint-дисплей чтения, подложки зон/статей */
 ok(siteCss.includes('.article-title {\n  text-shadow: 5px 5px 0 var(--neo-leaf);') && siteCss.includes('transform: translateX(calc(var(--sk, 0) * 10px)) skewX(calc(var(--sk, 0) * -1.2deg));'), 'site.css: заголовок статьи без листовой подложки/кинетики hero');
-ok(siteCss.includes('font-size: clamp(1.9rem, 4.2vw, 2.7rem);') && /\.zone-title \{[^}]*font-weight: 900;[^}]*text-shadow: 5px 5px 0 var\(--neo-leaf\);/.test(siteCss), 'site.css: зоны не переведены на крупный дисплей с подложкой');
-ok(/\.esp-title \{[^}]*font-weight: 900;[^}]*text-shadow: 4px 4px 0 var\(--neo-leaf\);/.test(siteCss), 'site.css: esp-секции без подложки');
+ok(siteCss.includes('text-shadow: 6px 6px 0 var(--mis, var(--mis-lime));') && /@supports \(-webkit-text-stroke: 1px #000\) \{\s*\.zone-title \{ color: transparent; -webkit-text-stroke: 2px var\(--neo-ink\); \}/.test(siteCss), 'site.css: зоны не в misprint-каноне (контур 2px + сдвиг)');
+ok(/\.esp-title,\n  \.prose-neo h2, \.prose-measure h2, \.prose-measure article h2 \{\s*color: transparent;\s*-webkit-text-stroke: 1\.8px var\(--neo-ink\);/.test(siteCss), 'site.css: esp/главы без контура 1.8px');
 ok(siteCss.includes('.zone-title .zt-serif, .esp-title .zt-serif, .article-title .zt-serif { text-shadow: none; }'), 'site.css: serif-вставки не изолированы от подложки');
-ok(/\.prose-neo h2, \.prose-measure h2, \.prose-measure article h2 \{[^}]*text-transform: lowercase;[^}]*text-shadow: 4px 4px 0 var\(--neo-leaf\);/.test(siteCss), 'site.css: секции чтения не в дисплей-канонах (solid + листовая подложка)');
-ok(!siteCss.includes('-webkit-text-stroke: 1.4px') && !siteCss.includes('@supports (-webkit-text-stroke: 1px #000)'), 'site.css: нечитаемый контур h2 (misprint) не выведен наружу');
+ok(/\.zone-title, \.esp-title,\n\.prose-neo h2, \.prose-measure h2, \.prose-measure article h2 \{[^}]*text-transform: none;[^}]*text-shadow: 5px 5px 0 var\(--mis, var\(--mis-lime\)\);/.test(siteCss), 'site.css: главы не в misprint-каноне (сдвиг без lowercase — ФГОС СПО и аббревиатуры)');
+ok(siteCss.includes('@supports (-webkit-text-stroke: 1px #000) {') && siteCss.includes('-webkit-text-stroke: 2px var(--neo-ink);') && siteCss.includes('-webkit-text-stroke: 0;'), 'site.css: misprint-контур без stroke-guard/изолятов');
 ok(/\(animation-timeline: view\(\)\)[\s\S]{0,700}prefers-reduced-motion[\s\S]{0,220}animation: none;/.test(siteCss), 'site.css: view()-reveal без reduce-исключения (урок 17)');
 ok(/@media \(prefers-reduced-motion: reduce\) \{\s*\.article-title \{ animation: none; transform: none; \}\s*\}/.test(siteCss), 'site.css: заголовок статьи без reduce-сброса');
 
@@ -742,7 +742,7 @@ ok(/@media \(prefers-reduced-motion: reduce\) \{\s*\.article-title \{ animation:
 /* дизайн 2026 · волна 19: SPACE — ширина чтения, шапка статьи, чистые зоны */
 ok(siteCss.includes('.prose-head {\n  max-width: 60rem; }') || /\.prose-head \{ max-width: 60rem; \}/.test(siteCss) || siteCss.includes('.prose-head {'), 'site.css: нет широкой шапки статьи .prose-head');
 ok(read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html').includes('class="mb-10 prose-head"'), 'статья: шапка не переведена на .prose-head (заголовок зажат в 44rem)');
-ok(siteCss.includes('font-size: clamp(1.35rem, 2.8vw, 1.85rem);'), 'site.css: h2 чтения не увеличен для читабельности');
+ok(siteCss.includes('font-size: clamp(1.6rem, 3vw, 2.05rem);'), 'site.css: главы не увеличены до дисплейного кегля');
 ok(!siteCss.split('\n.prose-measure article h2 {').slice(1).some(b => b.split('}')[0].includes('font-size')), 'site.css: .prose-measure article h2 перебивает дисплей-каноны');
 ok(siteCss.includes('.prose-neo h2::before { text-shadow: none; }'), 'site.css: ▚-маркер не изолирован от подложки');
 ok(!read('projects.html').includes('<div class="zone-index">zone 0'), 'projects.html: плашки zone 01/02 не удалены');
@@ -772,6 +772,20 @@ const noMeta = ['index.html', 'projects.html', 'blog.html', 'stands/index.html',
 ok(noMeta.length === 0, 'theme-color отсутствует: ' + noMeta.join(', '));
 ok(!read('index.html').includes('content="#fafafa"') && !read('stands/index.html').includes('content="#0b0e11"'), 'theme-color: легаси-хексы #fafafa/#0b0e11 не выведены');
 ok(read('assets/site.js').includes("theme === 'dark' ? '#14110a' : '#f4efe4'"), 'site.js: синк theme-color не в бумажных тонах');
+
+
+/* дизайн 2026 · волна 22: MISPRINT2 — «сети/данные» на зонах и главах */
+ok(siteCss.includes('--mis-lime: rgba(216, 242, 75, .5);') && siteCss.includes('--mis-verm: rgba(232, 75, 12, .35);') && siteCss.includes('--mis-rose: rgba(194, 82, 122, .3);') && siteCss.includes('--mis-sage: rgba(79, 122, 68, .32);'), 'site.css: палитра сдвигов misprint неполна');
+ok(/:root\[data-theme="dark"\] \{\s*--mis-verm: rgba\(255, 122, 71, \.4\);/.test(siteCss), 'site.css: нет dark-пар сдвигов');
+ok(siteCss.includes('.mis-verm { --mis: var(--mis-verm); }') && siteCss.includes('.mis-sage { --mis: var(--mis-sage); }'), 'site.css: нет утилит ротации .mis-*');
+ok(siteCss.includes('#zone-projects .zone-title, #econ-title { --mis: var(--mis-verm); }'), 'site.css: вторая зона проектов/экономика не вермильон');
+const artHtml = read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html');
+const artH2 = (artHtml.match(/<h2 class="[^"]*"/g) || []).filter(c => c.includes('flex items-baseline'));
+ok(artH2.length === 8 && artH2.filter(c => c.includes('mis-verm')).length === 2 && artH2.filter(c => c.includes('mis-rose')).length === 2 && artH2.filter(c => c.includes('mis-sage')).length === 2, 'статья: ротация mis-* по 8 главам неверна');
+ok(artH2[0].startsWith('<h2 class="flex'), 'статья: первая глава должна остаться лаймовой (без класса)');
+const standsIdx = read('stands/index.html');
+ok(standsIdx.includes('class="zone-title mis-rose"') && standsIdx.includes('class="zone-title mis-sage"'), 'stands/index: зоны без ротации rose/sage');
+ok(/@supports \(animation-timeline: view\(\)\) \{\s*\.prose-measure article h2 \{\s*animation: display-in linear both;/.test(siteCss), 'site.css: главы без view()-reveal');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
