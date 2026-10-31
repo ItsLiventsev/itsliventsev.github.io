@@ -2431,3 +2431,6 @@ html[data-theme="light"] body.flat-scope {
   background: linear-gradient(135deg, color-mix(in srgb, var(--st-accent) 16%, var(--st-panel)), var(--st-panel));
   border-color: color-mix(in srgb, var(--st-accent) 35%, var(--st-line-strong));
 }
+
+/* Серия входов (streak): мягкая акцентная метка */
+.rw-streak { color: var(--st-accent); font-weight: 700; white-space: nowrap; }

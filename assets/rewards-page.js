@@ -69,10 +69,12 @@
     var t = E.totals(profile.id);
     var lvl = t.level;
     var handle = E.handleFor(profile).text;
+    var streak = E.loginStreak ? E.loginStreak(profile.id) : 0;
     return '<div class="rw-balance">' +
       mascotSvg(profile.mascotId, 52) +
       '<div class="rw-balance-main"><strong>' + esc(handle) + '</strong>' +
-      '<span class="mono">' + esc(lvl.title) + ' · уровень ' + lvl.level + '</span></div>' +
+      '<span class="mono">' + esc(lvl.title) + ' · уровень ' + lvl.level +
+      (streak > 1 ? ' · <span class="rw-streak" title="подряд идущие дни входа">🔥 ' + streak + '</span>' : '') + '</span></div>' +
       '<div class="rw-balance-coins"><b>' + t.coins + ' ◈</b><span>на счету</span></div>' +
       '<div class="rw-balance-xp"><b>' + t.xp + '</b><span>XP</span></div>' +
       '</div>' +
