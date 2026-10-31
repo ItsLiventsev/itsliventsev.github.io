@@ -245,6 +245,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/stands/office/rewards.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/stands/ops/crew-ops.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>

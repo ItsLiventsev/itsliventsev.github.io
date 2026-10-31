@@ -25,8 +25,8 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 74, 'HTML страниц должно быть 74, фактически ' + allHtml.length);
-ok(standsHtml.length === 51, 'stands-страниц 51, фактически ' + standsHtml.length);
+ok(allHtml.length === 75, 'HTML страниц должно быть 75, фактически ' + allHtml.length);
+ok(standsHtml.length === 52, 'stands-страниц 52, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 70, 'sitemap URL = 70, фактически ' + locs.length);
+ok(locs.length === 71, 'sitemap URL = 71, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -163,7 +163,7 @@ for (const f of allHtml) {
 }
 /* реестр dom-kit-страниц = 37 stands + admin */
 const dkPages = allHtml.filter(f => read(f).includes('dom-kit.js'));
-ok(dkPages.length === 51, 'dom-kit подключён на 51 странице (50 stands + admin), фактически ' + dkPages.length);
+ok(dkPages.length === 52, 'dom-kit подключён на 52 страницах (51 stands + admin), фактически ' + dkPages.length);
 
 /* 15. Нарратив */
 ok(read('stands/index.html').includes('uni-flow'), 'нет схемы вселенных uni-flow');
@@ -221,7 +221,17 @@ const offEng = read('assets/office-engine.js');
 const offKit = read('assets/office-kit.js');
 ok(/profile: 'office-profile'/.test(offEng) && /ledger: 'office-ledger'/.test(offEng) && /submissions: 'office-submissions'/.test(offEng), 'ключи OFFICE не изолированы префиксом office-');
 ok(!/ops-profile|stands-submissions/.test(offEng), 'office-engine пересекается с чужими ключами');
-ok(offEng.includes("schema: 'office-bundle/1'") && offKit.includes("schema: 'office-submission/1'"), 'схемы office-артефактов потеряны');
+ok(offEng.includes("schema: 'office-bundle/2'") && offKit.includes("schema: 'office-submission/1'"), 'схемы office-артефактов потеряны');
+ok(offEng.includes('REWARDS_OFFICE') && offEng.includes("'office-claims'") && offEng.includes('function createClaim') && offEng.includes('function cancelClaim') && offEng.includes('function refundClaim'), 'office-engine: биржа ОфисПолиса неполна');
+ok(offEng.includes('function importBundle') && offEng.includes('migrating'), 'office-engine: нет переноса прогресса');
+/* единый движок трёх бирж */
+const rwp = read('assets/rewards-page.js');
+ok(rwp.includes('UNIVERSES') && rwp.includes("data-rewards") && rwp.includes('league') && rwp.includes('ops') && rwp.includes('office'), 'rewards-page.js: не единый движок трёх бирж');
+ok(rwp.includes('data-cancel') && rwp.includes('data-refund') && rwp.includes('data-reward'), 'rewards-page.js: нет ордерных действий');
+ok(read('stands/rewards.html').includes('data-rewards="league"') && !read('stands/rewards.html').includes('rewards-page.js?v=20261031ae'), 'rewards.html: нет маркера вселенной');
+ok(read('stands/ops/rewards.html').includes('data-rewards="ops"') && read('stands/ops/rewards.html').includes('data-standings="ops-claims"') && !read('stands/ops/rewards.html').includes('ops-rewards-page.js'), 'ops/rewards.html: не подключён единый движок');
+ok(read('stands/office/rewards.html').includes('data-rewards="office"') && read('stands/office/rewards.html').includes('data-standings="office-claims"') && read('stands/office/rewards.html').includes('rewards-page.js'), 'office/rewards.html: не подключён единый движок');
+ok(!read('stands/ops/rewards.html').includes('id="gate-form"'), 'ops/rewards.html: гейт-форма дублирует консоль (риск crash renderDashboard)');
 ok(offKit.includes("'officekit:'") && offKit.includes('#office-data') && offKit.includes('OFFICE.award'), 'office-kit не использует officekit:/OFFICE');
 for (const f of walk('stands/office', /\.html$/)) {
   const c = read(f);
@@ -418,7 +428,7 @@ ok(oe.includes("'ops-bundle/3'") && oe.includes('crewsSnapshot'), 'ops-engine.js
 ok(oe.includes('REWARDS_OPS') && oe.includes('createOpsClaim') && oe.includes('cancelOpsClaim') && oe.includes('refundOpsClaim') && oe.includes('function importBundle'), 'ops-engine.js: биржа ДатаПолиса или импорт бандлов неполны');
 ok(oe.includes('migrating') && oe.includes('ev.profileId = me.id'), 'ops-engine.js: перенос прогресса без перепривязки профиля');
 ok(oe.includes("'ops-claims'"), 'ops-engine.js: нет хранилища ордеров ops-claims');
-ok(read('stands/ops/rewards.html').includes('ops-rewards-page.js') && read('stands/ops/rewards.html').includes('data-standings="ops-claims"'), 'ops/rewards.html: не подключены движок биржи и общий список');
+ok(read('stands/ops/rewards.html').includes('data-standings="ops-claims"') && read('stands/ops/rewards.html').includes('rewards-page.js'), 'ops/rewards.html: не подключены движок биржи и общий список');
 ok(read('stands/ops/index.html').includes('href="rewards.html"') && read('stands/ops/crew-ops.html').includes('href="rewards.html"'), 'ops: нет навигации на биржу ДатаПолиса');
 ok(read('admin.html').includes('ops-claims-tbody') && read('assets/submissions.js').includes('renderOpsClaims') && read('assets/submissions.js').includes('ops-bundle\\/[123]'), 'admin: нет приёма ордеров ДатаПолиса');
 ok(read('assets/standings.js').includes('renderDatapolisClaims'), 'standings.js: нет рендера ордеров ДатаПолиса');

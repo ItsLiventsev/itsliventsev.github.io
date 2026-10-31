@@ -41,7 +41,7 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"проекты","item":"https://itsliventsev.github.io/projects.html"},{"@type":"ListItem","position":3,"name":"учебные вселенные","item":"https://itsliventsev.github.io/stands/index.html"},{"@type":"ListItem","position":4,"name":"ДатаПолис","item":"https://itsliventsev.github.io/stands/ops/index.html"},{"@type":"ListItem","position":5,"name":"ДатаПолис · биржа привилегий · обмен неткоинов эксплуатации","item":"https://itsliventsev.github.io/stands/ops/rewards.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="flat-scope" data-accent="cyan">
+<body class="flat-scope" data-accent="cyan" data-rewards="ops">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: правила обмена читайте ниже, сам обмен работает только с JavaScript.</div></noscript>
 
@@ -100,38 +100,26 @@
       публикуются на общем стенде.
     </p>
 
-    <!-- Гейт профиля -->
-    <section id="orw-gate" class="lab-panel lab-panel--narrow" hidden>
-      <div class="lp-head"><span>вход в кабинет · пропуск инженера</span><span class="kind-badge">профиль</span></div>
+    <!-- Гейт: без профиля инженера обмен недоступен -->
+    <section class="lab-panel" id="rw-gate" hidden>
+      <div class="lp-head"><span>вход в кабинет</span><span class="kind-badge">нужен профиль</span></div>
       <div class="lp-body">
-        <form class="flat-form" id="gate-form">
-          <div class="flat-field">
-            <label for="p-name">ФИО</label>
-            <input class="flat-input" id="p-name" type="text" autocomplete="name" placeholder="Иванов Иван Иванович" required>
-          </div>
-          <div class="flat-field">
-            <label for="p-group">учебная группа</label>
-            <input class="flat-input" id="p-group" type="text" placeholder="ИС-21, СА-22…" list="group-list" required>
-            <datalist id="group-list"><option value="ИС-21"></option><option value="ИС-22"></option><option value="СА-21"></option></datalist>
-          </div>
-          <div class="flat-field">
-            <label>маскот-инженер (можно сменить позже)</label>
-            <div id="mascot-host"></div>
-            <p class="flat-caption">Хэндл вида «волк #7» — ваше имя в операциях и разборах.</p>
-          </div>
-          <button class="flat-btn" type="submit">войти в кабинет →</button>
-          <p class="ops-msg" id="gate-msg" role="status"></p>
-        </form>
+        <p>Биржа работает с профилем инженера ДатаПолиса: баланс и ордера привязаны к хэндлу (маскот + номер).
+        Сначала выйдите на смену в консоли — первый вход уже даст +10 XP и +2 ◈.</p>
+        <div class="flat-row">
+          <a class="flat-btn" href="index.html">войти в консоль →</a>
+          <a class="flat-btn ghost" href="crew-ops.html">операции экипажа</a>
+        </div>
       </div>
     </section>
 
     <!-- Биржа -->
-    <section id="orw-body" hidden>
+    <section id="rw-body" hidden>
       <section class="lab-panel st-mb-7" aria-label="Баланс инженера">
         <div class="lp-head"><span>ваш счёт</span><span class="kind-badge">эксплуатация</span></div>
         <div class="lp-body">
-          <div id="orw-balance"></div>
-          <p class="ops-msg" id="orw-msg" role="status"></p>
+          <div id="rw-balance"></div>
+          <p class="ops-msg" id="rw-msg" role="status"></p>
         </div>
       </section>
 
@@ -140,7 +128,7 @@
         <h2>каталог наград</h2>
         <span class="st-section-tag">цены в неткоинах</span>
       </div>
-      <section class="st-mb-7" id="orw-catalog"></section>
+      <section class="st-mb-7" id="rw-catalog"></section>
 
       <div class="st-section-head">
         <span class="st-section-num">02</span>
@@ -149,7 +137,7 @@
       </div>
       <section class="lab-panel st-mb-7">
         <div class="lp-body">
-          <div id="orw-my-claims"></div>
+          <div id="rw-my-claims"></div>
           <p class="admin-hint">Ордер уезжает преподавателю в ops-бандле: консоль ДатаПолиса → экспорт, или кодом артефактов
           на занятии. Как только решение принято и стенд опубликован — статус появится здесь.</p>
         </div>
@@ -226,8 +214,7 @@
 <script src="../../assets/ops-engine.js?v=20261031af"></script>
 <script src="../../assets/dom-kit.js?v=20261031af"></script>
 <script src="../../assets/standings.js?v=20261031af"></script>
-<script src="../../assets/ops-hub.js?v=20261031af"></script>
-<script src="../../assets/ops-rewards-page.js?v=20261031af"></script>
+<script src="../../assets/rewards-page.js?v=20261031af"></script>
 <script src="../../assets/shared-chrome.js?v=20261031af"></script>
 </body>
 </html>
