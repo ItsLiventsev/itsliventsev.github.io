@@ -274,3 +274,25 @@
     main.insertBefore(card, main.firstChild);
   }
 })();
+
+/* ==========================================================================
+   Кинетическая типографика: --sk (0..1 по первым ~480px скролла)
+   для hero-заголовков (transform/opacity только). reduced-motion — off.
+   ========================================================================== */
+(function () {
+  'use strict';
+  if (typeof window === 'undefined' || typeof document === 'undefined' || typeof location === 'undefined') return;
+  var mq = (typeof window.matchMedia === 'function') ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  if (mq && mq.matches) return;
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var y = window.scrollY || window.pageYOffset || 0;
+    var k = Math.max(0, Math.min(1, y / 480));
+    document.documentElement.style.setProperty('--sk', k.toFixed(3));
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+})();

@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031aj';
+const VERSION = '20261031ak';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -408,6 +408,18 @@ ok(stCss.includes('.bento-cell:hover') && stCss.includes('grid-template-columns:
 ok(stCss.includes('.flat-scope ::selection') && siteCss.includes('::selection'), 'нет акцентного выделения текста');
 ok(stCss.includes('scrollbar-width: thin') && siteCss.includes('scrollbar-width: thin'), 'нет тонких скроллбаров');
 ok(stCss.includes('.st-footer { border-top: 0') && siteCss.includes('.site-footer { border-top: 0'), 'футеры без градиентной линейки');
+/* дизайн 2026 · волна 4: баблы вместо квадратов + фиксы UX */
+ok(stCss.includes('--st-radius: 14px') && !stCss.includes('--st-radius: 2px'), 'stands.css: радиус-революция не проведена (остались 2px)');
+ok(stCss.includes('.flat-scope .st-topnav { scrollbar-width: none;'), 'stands.css: скроллбар навигации снова виден');
+ok(/\.flat-btn\[disabled\] \{[^}]*color: var\(--st-faint\)/.test(stCss), 'stands.css: белый текст на disabled-кнопках биржи');
+ok(stCss.includes('.flat-btn, .st-topnav a, .st-section-num,') && stCss.includes('border-radius: 999px'), 'stands.css: пилюли не применены');
+ok(stCss.includes('.st-hero-index, .flat-index { border-radius: 1.25rem; }'), 'stands.css: hero-индекс не скруглён');
+ok(siteCss.includes('--sk: 0') && siteCss.includes('translateY(calc(var(--sk) * -16px))'), 'site.css: кинетическая типографика не подключена');
+ok(siteCss.includes('clamp(2.4rem, 7vw, 4.25rem)'), 'site.css: hero-заголовок не укрупнён (гигантизм текста)');
+ok(siteCss.includes('rgba(14, 165, 233, .07)'), 'site.css: нет тёпло-холодного aurora');
+ok(siteCss.includes('.brand-cursor, #title-mark, .cursor-green') && siteCss.includes('-webkit-text-fill-color: currentColor'), 'site.css: каретки/курсоры не исключены из градиента');
+ok(siteCss.includes('.btn, .icon-btn, .chip, .faq-toc a { border-radius: 999px; }'), 'site.css: кнопки основной площадки не пилюли');
+ok(read('assets/shared-chrome.js').includes("setProperty('--sk'") && read('assets/shared-chrome.js').includes('prefers-reduced-motion'), 'shared-chrome.js: нет кинетического скролл-движка');
 for (const eng of ['assets/league.js', 'assets/ops-engine.js', 'assets/office-engine.js']) {
   ok(read(eng).includes('function loginStreak') && read(eng).includes('loginStreak: loginStreak'), eng + ': нет единой механики streak');
 }
@@ -421,7 +433,7 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031ai') && !c.includes('?v=20261031ah') && !c.includes('?v=20261031ag'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031aj') && !c.includes('?v=20261031ai') && !c.includes('?v=20261031ah'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
