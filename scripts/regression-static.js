@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031aw';
+const VERSION = '20261031ax';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031av') && !c.includes('?v=20261031au') && !c.includes('?v=20261031at'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031aw') && !c.includes('?v=20261031av') && !c.includes('?v=20261031au'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -708,6 +708,16 @@ ok(siteCss.includes('width: 2.75rem;\n  height: 2.75rem;'), 'to-top: тач-це
 ok(siteCss.includes('animation-timeline: scroll(root block)') && siteCss.includes('@keyframes neo-scroll-progress'), 'нет CSS-first скролл-прогресса');
 ok(!read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html').includes('text-[15px]'), 'статья: кегль 15px на мобиле не устранён');
 ok(exists('docs/design-system.md') && read('docs/design-system.md').includes('Наследуемость'), 'docs/design-system.md отсутствует или неполон');
+
+/* дизайн 2026 · волна 17: mechanics — reduce-safe прогресс, единый hover */
+ok(/@media \(prefers-reduced-motion: reduce\) \{\n    \.scroll-progress \{ animation: none; \}\n  \}/.test(siteCss), 'site.css: прогресс не защищён от reduce-заморозки');
+ok(read('assets/site.js').includes("CSS.supports('animation-timeline: scroll()')") && read('assets/site.js').includes('!cssDriven'), 'site.js: нет guard против дубля CSS-прогресса');
+const upHover = siteCss.split('\n').filter(l => /:hover[^{]*\{[^}]*translateY\(-\dpx/.test(l));
+ok(upHover.length === 0, 'site.css: hover-подъёмы вверх не унифицированы: ' + upHover.join(' | '));
+ok(siteCss.includes('a.p-card:hover { transform: translate(-2px, -2px);') && siteCss.includes('.pub-card:hover {\n  transform: translate(-2px, -2px);'), 'site.css: карточки p/pub не в единой hover-механике');
+ok(siteCss.includes('.esp-stat:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink);') && siteCss.includes('.step-card:hover { transform: translate(-2px, -2px);'), 'site.css: esp-stat/step-card не в единой hover-механике');
+ok(!siteCss.includes('scale(1.03)') && !siteCss.includes('scale(1.08)'), 'site.css: «парящие» scale-hover не убраны');
+ok(siteCss.includes('border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard); }\n.card:hover'), 'site.css: transition карточек теряет рамку/фон');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

@@ -336,7 +336,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
   box-shadow: var(--shadow-card);
   transition: color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease);
 }
-.icon-btn:hover { color: var(--accent); border-color: var(--accent-border); transform: translateY(-1px); }
+.icon-btn:hover { color: var(--accent); border-color: var(--accent-border); }
 .icon-btn:active { transform: translateY(0) scale(.94); }
 .icon-btn svg { width: 1.05rem; height: 1.05rem; }
 
@@ -360,7 +360,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
   cursor: pointer;
   transition: color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), background var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease);
 }
-.lang-btn:hover { color: var(--accent); border-color: var(--accent-border); transform: translateY(-1px); }
+.lang-btn:hover { color: var(--accent); border-color: var(--accent-border); }
 
 /* Бургер: скрыт на десктопе, появляется на мобильных (см. media ниже).
    Собственные классы .burger-* — никаких пересечений с другими системами. */
@@ -619,7 +619,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
   transition: color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease);
 }
 .tag-hash::before { content: '#'; color: var(--accent); margin-right: .18rem; font-weight: 700; }
-.tag-hash:hover { color: var(--accent); border-color: var(--accent-border); transform: translateY(-1px); background: var(--accent-soft); }
+.tag-hash:hover { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
 
 /* Тех-тег с тултипом */
 .tech-tag {
@@ -707,9 +707,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 }
 a.card { text-decoration: none; color: inherit; }
 a.card:hover, .card.hoverable:hover {
-  transform: translateY(-3px);
   border-color: var(--accent-border);
-  box-shadow: var(--shadow-hover);
 }
 .card-dashed { border-style: dashed; }
 
@@ -850,7 +848,7 @@ code, .code {
   cursor: pointer;
   transition: transform var(--dur-base) var(--ease), background var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
 }
-.filter-btn:hover { transform: translateY(-1px); }
+
 .filter-btn.is-active {
   background: var(--accent) !important;
   border-color: var(--neo-ink) !important;
@@ -967,7 +965,7 @@ code, .code {
   transform-origin: left;
   transition: transform var(--dur-slow) var(--ease);
 }
-a.p-card:hover { transform: translateY(-3px); background: var(--surface-2); box-shadow: var(--shadow-hover); border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 32%, var(--border)); }
+a.p-card:hover { transform: translate(-2px, -2px); background: var(--surface-2); box-shadow: var(--shadow-hover); border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 45%, var(--neo-ink)); }
 a.p-card:hover::before { transform: scaleX(1); }
 .p-card.is-active {
   border-color: var(--accent-border);
@@ -1273,7 +1271,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   border-radius: var(--radius);
   transition: transform var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease-standard);
 }
-.esp-stat:hover { transform: translateY(-4px); border-color: var(--neo-rose); }
+.esp-stat:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); border-color: var(--neo-rose); }
 .esp-stat-num {
   font-family: var(--font-mono);
   font-size: clamp(2rem, 4.5vw, 2.9rem);
@@ -1301,7 +1299,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease-standard);
   white-space: nowrap;
 }
-.game-tag:hover { transform: translateY(-3px) scale(1.03); }
+.game-tag:hover { border-color: currentColor; }
 .game-cs   { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .28); }
 .game-dota { color: #a83a12; background: rgba(228, 87, 46, .1); border-color: rgba(228, 87, 46, .28); }
 .game-lol  { color: #cf4a18; background: rgba(207, 74, 24, .1);  border-color: rgba(207, 74, 24, .28); }
@@ -1355,7 +1353,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   transition: transform var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease-standard);
   height: 100%;
 }
-.step-card:hover { transform: translateY(-3px); border-color: var(--neo-verm); }
+.step-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); border-color: var(--neo-verm); }
 .step-card-num {
   display: inline-flex;
   align-items: center;
@@ -1479,7 +1477,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   min-height: 100%;
   transition: border-color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease);
 }
-.slot-card:hover { border-color: var(--accent-border); background: var(--accent-soft); transform: translateY(-2px); }
+.slot-card:hover { border-color: var(--accent-border); background: var(--accent-soft); transform: translate(-2px, -2px); }
 .slot-plus {
   width: 2.1rem;
   height: 2.1rem;
@@ -2037,7 +2035,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   transition: transform var(--dur-slow) var(--ease), border-color var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
 }
 .pub-card:hover {
-  transform: translateY(-3px);
+  transform: translate(-2px, -2px);
   border-color: var(--accent-border);
   box-shadow: var(--shadow-hover);
 }
@@ -2453,7 +2451,7 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
   transition: transform var(--dur-base) var(--ease), background-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
 }
 .nav-bubble:empty { display: none; }
-.nav-link:hover .nav-bubble.is-filled { transform: translateY(-1px) scale(1.08); }
+.nav-link:hover .nav-bubble.is-filled { border-color: currentColor; }
 .nav-bubble.bubble-rose.is-filled    { background: rgba(244, 63, 94, .1);  border-color: rgba(244, 63, 94, .3);  color: #e11d48; }
 .nav-bubble.bubble-orange.is-filled  { background: rgba(234, 88, 12, .1);  border-color: rgba(234, 88, 12, .3);  color: #ea580c; }
 .nav-bubble.bubble-green.is-filled   { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .32); color: #047857; }
@@ -2613,7 +2611,7 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
   border: 1px solid var(--accent-border);
   transition: transform var(--dur-base) var(--ease);
 }
-.fn-ref:hover { transform: translateY(-2px); text-decoration: none; }
+.fn-ref:hover { text-decoration: underline; }
 
 /* --- Ряд быстрых пузырей-разделов на главной --- */
 .quick-bubbles { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.4rem; }
@@ -3090,7 +3088,7 @@ body {
   box-shadow: var(--neo-hard);
   background: var(--neo-surface);
 }
-.card { transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard); }
+.card { transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard); }
 .card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
 .card-dashed { border-style: dashed; }
 .hero-panel { transform: rotate(-.6deg); }
@@ -3437,5 +3435,10 @@ html, body { overflow-x: hidden; overflow-x: clip; }
   @keyframes neo-scroll-progress {
     from { transform: scaleX(0); }
     to { transform: scaleX(1); }
+  }
+  /* reduce: глобальный .01ms-гаситель заморозил бы bar на scaleX(1) —
+     возвращаем управление JS-движку (точный индикатор без анимации) */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-progress { animation: none; }
   }
 }

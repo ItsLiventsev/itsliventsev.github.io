@@ -127,12 +127,16 @@ document.documentElement.classList.add('js-enabled');
   const readPercent = document.getElementById('read-percent');
   const toTop = document.getElementById('to-top');
   let ticking = false;
+  /* Волнa 17: если прогресс ведёт CSS animation-timeline (и reduce не выключил
+     его), inline transform не пишем — JS-движок остаётся только фолбэком */
+  const cssDriven = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline: scroll()')
+    && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   function update() {
     ticking = false;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-    if (progress) progress.style.transform = 'scaleX(' + (pct / 100) + ')';
+    if (progress && !cssDriven) progress.style.transform = 'scaleX(' + (pct / 100) + ')';
     if (readPercent) readPercent.textContent = Math.round(pct) + '%';
     if (toTop) toTop.classList.toggle('show', window.scrollY > 600);
   }
