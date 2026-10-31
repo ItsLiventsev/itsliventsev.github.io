@@ -1098,7 +1098,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   align-items: center;
   gap: .3rem;
 }
-.tag-blue   { color: #60a5fa; background: rgba(96, 165, 250, .09);  border-color: rgba(96, 165, 250, .22); }
+.tag-blue   { color: #cf4a18; background: rgba(207, 74, 24, .09);  border-color: rgba(207, 74, 24, .22); }
 .tag-green  { color: #4ade80; background: rgba(74, 222, 128, .09);  border-color: rgba(74, 222, 128, .22); }
 .tag-purple { color: #c084fc; background: rgba(192, 132, 252, .09); border-color: rgba(192, 132, 252, .22); }
 .tag-orange { color: #fb923c; background: rgba(251, 146, 60, .09);  border-color: rgba(251, 146, 60, .22); }
@@ -2960,8 +2960,7 @@ body {
 /* Тёпло-холодный aurora: к оранжевому акценту добавляем холодное пятно */
 body {
   background-image:
-    radial-gradient(60rem 34rem at 88% -8rem, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%),
-    radial-gradient(46rem 30rem at 4% 2rem, rgba(14, 165, 233, .07), transparent 70%);
+    radial-gradient(60rem 34rem at 88% -8rem, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%);
 }
 
 /* Пилюли: кнопки и чипы основной площадки */
@@ -2991,8 +2990,7 @@ body {
 body {
   background-image:
     radial-gradient(60rem 34rem at 88% -8rem, color-mix(in srgb, var(--accent) 10%, transparent), transparent 72%),
-    radial-gradient(50rem 36rem at -12% 10%, color-mix(in srgb, var(--aur-violet) 9%, transparent), transparent 72%),
-    radial-gradient(40rem 30rem at 62% 108%, rgba(14, 165, 233, .08), transparent 74%);
+    radial-gradient(50rem 36rem at -12% 10%, color-mix(in srgb, var(--aur-violet) 9%, transparent), transparent 72%);
 }
 
 /* Контрастная пара: серифный италик внутри гротеск-заголовков */
@@ -3432,3 +3430,6 @@ main a:not(.btn):not(.icon-btn):not(.nav-link):not(.flat-btn):not(.p-arrow):not(
 :root[data-theme="dark"] ::selection { background: #7a4553; color: #f6f1e6; }
 
 .notice-warn, .callout-warn { border-left: 6px solid var(--neo-verm); }
+
+/* NEO UNIFY · волна 8: глобальный header на страницах стендов */
+@media (max-width: 720px) { .st-global-header .site-nav { display: none; } }

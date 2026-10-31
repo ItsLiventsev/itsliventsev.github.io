@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031an';
+const VERSION = '20261031ao';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -416,7 +416,7 @@ ok(stCss.includes('.flat-btn, .st-topnav a, .st-section-num,') && stCss.includes
 ok(stCss.includes('.st-hero-index, .flat-index { border-radius: 1.25rem; }'), 'stands.css: hero-индекс не скруглён');
 ok(siteCss.includes('--sk: 0') && siteCss.includes('translateY(calc(var(--sk) * -16px))'), 'site.css: кинетическая типографика не подключена');
 ok(siteCss.includes('clamp(2.4rem, 7vw, 4.25rem)'), 'site.css: hero-заголовок не укрупнён (гигантизм текста)');
-ok(siteCss.includes('rgba(14, 165, 233, .07)'), 'site.css: нет тёпло-холодного aurora');
+ok(siteCss.includes('radial-gradient(60rem 34rem at 88% -8rem, color-mix(in srgb, var(--accent) 8%, transparent)'), 'site.css: тёплое поле aurora утрачено');
 ok(siteCss.includes('.brand-cursor, #title-mark, .cursor-green') && siteCss.includes('-webkit-text-fill-color: currentColor'), 'site.css: каретки/курсоры не исключены из градиента');
 ok(siteCss.includes('.btn, .icon-btn, .chip, .faq-toc a { border-radius: 999px; }'), 'site.css: кнопки основной площадки не пилюли');
 ok(read('assets/shared-chrome.js').includes("setProperty('--sk'") && read('assets/shared-chrome.js').includes('prefers-reduced-motion'), 'shared-chrome.js: нет кинетического скролл-движка');
@@ -439,13 +439,13 @@ ok(!read('index.html').includes('ticker') && !read('index.html').includes('hero-
 ok(read('assets/shared-chrome.js').includes("setProperty('--sq'") && read('assets/shared-chrome.js').includes('(y - lastY) / 90'), 'shared-chrome.js: нет скоростного канала --sq');
 ok(stCss.includes(':root { --st-radius: 14px; }'), 'stands.css: вселенные не переведены на стикер-радиус');
 ok(stCss.includes("font-family: var(--font-display)") && stCss.includes('.zt-serif'), 'stands.css: заголовки вселенных без NEO-пары');
-ok(siteCss.includes("--aur-violet: #7c3aed") && stCss.includes("--st-aur-violet: #7c3aed"), 'нет фиолетового поля палитры');
-ok(siteCss.includes('radial-gradient(50rem 36rem at -12% 10%') && stCss.includes('radial-gradient(46rem 32rem at -12% 12%'), 'aurora v2: нет фиолетового поля');
-ok(stCss.includes('rgba(14, 165, 233, .09)') && siteCss.includes('rgba(14, 165, 233, .08)'), 'aurora v2: нет небесного поля');
+ok(!stCss.includes('#5b9dff') && !stCss.includes('#2b63c8') && !stCss.includes('#fbbf24') && !stCss.includes('#2563eb'), 'stands.css: синий/жёлтый не выведены из палитры стендов');
+ok(stCss.includes('radial-gradient(var(--grid-dot') && siteCss.includes('.st-global-header .site-nav'), 'нет унификации: сито на стендах или mobile-правило общего header');
+ok(!siteCss.includes('rgba(14, 165, 233, .07)') && !siteCss.includes('rgba(14, 165, 233, .08)'), 'site.css: небесное (синее) поле aurora не удалено');
 ok(!siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: outline-слова есть, мёртвый ht-serif удалён');
 ok(siteCss.includes('-webkit-text-stroke') && siteCss.includes('calc((var(--sk) - .5) * 70px)'), 'site.css: outline-слова без кинетики');
 ok(siteCss.includes('linear-gradient(115deg, var(--accent) 15%, var(--aur-violet))'), 'site.css: кнопка без тёпло-холодного градиента');
-ok(stCss.includes('linear-gradient(115deg, var(--st-btn-bg) 15%'), 'stands.css: кнопки вселенных без градиента');
+ok(stCss.includes('.flat-btn { background: var(--st-btn-bg); }') && stCss.includes('position: sticky;'), 'stands.css: кнопки не солидные или топбар не липкий');
 ok(read('index.html').includes('ht-tagline') && read('index.html').includes('giant-word--right'), 'index.html: нет теглайна в большом тексте и outline-слов');
 ok(read('blog.html').includes('ht-word') && read('articles.html').includes('ht-word'), 'blog/articles: заголовки не переведены на крупный ht-word');
 ok(read('stands/index.html').includes('zt-serif'), 'stands/index.html: нет серифных акцентов зон');
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031am') && !c.includes('?v=20261031al') && !c.includes('?v=20261031ak'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031an') && !c.includes('?v=20261031am') && !c.includes('?v=20261031al'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -488,17 +488,17 @@ ok(read('stands/index.html').includes('rewards.html') && read('stands/index.html
 /* унифицированное меню: «биржа» в топнаве всех страниц СетьПолиса, ops и office */
 for (const navPg of ['stands/setpolis.html', 'stands/league.html', 'stands/teams.html', 'stands/glossary.html', 'stands/rewards.html']) {
   const c = read(navPg);
-  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>', c.indexOf('st-topnav')));
   ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
 }
 for (const navPg of ['stands/ops/index.html', 'stands/ops/crew-ops.html', 'stands/ops/rewards.html']) {
   const c = read(navPg);
-  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>', c.indexOf('st-topnav')));
   ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
 }
 for (const navPg of ['stands/office/index.html', 'stands/office/rewards.html']) {
   const c = read(navPg);
-  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>', c.indexOf('st-topnav')));
   ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
 }
 ok(read('assets/submissions.js').includes("'standings', 'standings.json'"), 'submissions.js: публикация стенда не на standings/standings.json');
@@ -548,6 +548,22 @@ ok(siteCss.includes('--accent: #ff7a47;') && !siteCss.includes('#3b82f6'), 'site
 ok(siteCss.includes('.note-card[data-type="digest"]  { --note-accent: #c2410c; }'), 'site.css: синий не выведен из типов заметок');
 ok(stCss.includes(':root { --st-radius: 14px; }') && stCss.includes('border-radius: 999px'), 'stands.css: нет casual-пилюль');
 for (const f of ['assets/site.css']) { const c = read(f); ok(!c.includes('Playfair'), f + ': остался Playfair'); }
+
+/* дизайн 2026 · волна 8: унификация — общий header на стендах, проекты чисты */
+let uniCnt = 0;
+for (const f of standsHtml) if (read(f).includes('st-global-header')) uniCnt++;
+ok(uniCnt === standsHtml.length, 'стенды с общим header: ' + uniCnt + ' из ' + standsHtml.length);
+for (const f of standsHtml.filter(x => x.split('/').length === 3)) {
+  ok(read(f).includes('href="../../index.html" class="logo"'), f + ': глобальный header без учёта глубины');
+}
+ok(stCss.includes('.flat-scope .site-header {\n  position: static;') && stCss.includes('.st-topbar {\n  position: sticky;'), 'stands.css: header/topbar не разведены по слоям');
+ok(stCss.includes('--st-bg: #f4efe4') && stCss.includes('--st-bg: #14110a'), 'stands.css: фон стендов не переведён на бумагу NEO');
+ok(stCss.includes('--st-win: #d6c9b2') && stCss.includes('--st-win: #6b5d45'), 'stands.css: Windows-метки не выведены из синего');
+ok(stCss.includes('--st-accent: #a83a12') && stCss.includes('--st-accent: #ff8a54'), 'stands.css: дефолтный акцент не переведён на коралл');
+ok(stCss.includes('--st-accent: #fb923c') && !stCss.includes('#fcd34d'), 'stands.css: янтарный (жёлтый) акцент офиса не переведён на оранжевый');
+ok(stCss.includes('.uni-card--netpolis { --card-accent: #0f766e; }'), 'stands.css: карточка СетПолиса не на teal');
+ok(!read('projects.html').includes('system-badge') && !read('projects.html').includes('#3b82f6') && !read('projects.html').includes('#2563eb'), 'projects.html: остались бейдж system:// или синие акценты');
+ok(siteCss.includes('.tag-blue   { color: #cf4a18;'), 'site.css: tag-blue не перекрашен');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

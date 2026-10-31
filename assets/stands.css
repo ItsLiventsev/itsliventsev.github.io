@@ -37,18 +37,18 @@
   --st-text-2: #b8c2cc;
   --st-muted: #8a95a1;
   --st-faint: #828d9a; /* 5.74:1 на --st-bg — запас над AA 4.5 */
-  --st-accent: #5b9dff;
+  --st-accent: #ff8a54;
   --st-accent-2: #86b6ff;
   /* Поверхность интерактивных элементов с гарантированным AA-контрастом текста */
   --st-btn-bg: #3a6fd8;
   --st-btn-text: #ffffff;
-  --st-accent-soft: rgba(91, 157, 255, .1);
+  --st-accent-soft: rgba(255, 138, 84, .1);
   --st-ok: #34d399;
   --st-ok-soft: rgba(52, 211, 153, .1);
   --st-on-ok: #06231a;
   --st-bad: #f87171;
   --st-bad-soft: rgba(248, 113, 113, .1);
-  --st-warn: #fbbf24;
+  --st-warn: #fb923c;
   --st-cyan: #4cc2ff;
   --st-radius: 14px;
   --st-gap: 1.1rem;
@@ -124,7 +124,7 @@
   --st-p3: #facc15; --st-p3-text: #fde68a; --st-p3-soft: rgba(250, 204, 21, .1);  --st-p3-line: rgba(250, 204, 21, .34);
   /* Платформенные метки Linux/Windows */
   --st-linux: #2dd4bf; --st-linux-soft: rgba(45, 212, 191, .1);
-  --st-win: #93c5fd;   --st-win-soft: rgba(147, 197, 253, .1);
+  --st-win: #d6c9b2;   --st-win-soft: rgba(214, 201, 178, .1);
   color-scheme: dark;
 }
 
@@ -995,10 +995,10 @@ html[data-theme="light"] .flat-scope {
   --st-text-2: #2f3945;
   --st-muted: #4d5967;
   --st-faint: #5f6b79;
-  --st-accent: #2b63c8;
-  --st-accent-2: #1d56bd;
-  --st-accent-soft: rgba(47, 111, 224, .09);
-  --st-btn-bg: #2b63c8;
+  --st-accent: #a83a12;
+  --st-accent-2: #cf4a18;
+  --st-accent-soft: rgba(168, 58, 18, .09);
+  --st-btn-bg: #cf4a18;
   --st-btn-text: #ffffff;
   --st-ok: #047857;
   --st-on-ok: #ffffff;
@@ -1012,7 +1012,7 @@ html[data-theme="light"] .flat-scope {
   --st-p2: #c2410c; --st-p2-text: #c2410c; --st-p2-soft: rgba(234, 88, 12, .09);  --st-p2-line: rgba(194, 65, 12, .35);
   --st-p3: #b45309; --st-p3-text: #a16207; --st-p3-soft: rgba(180, 83, 9, .1);   --st-p3-line: rgba(180, 83, 9, .35);
   --st-linux: #0f766e; --st-linux-soft: rgba(13, 148, 136, .1);
-  --st-win: #1d4ed8;   --st-win-soft: rgba(37, 99, 235, .1);
+  --st-win: #6b5d45;   --st-win-soft: rgba(107, 93, 69, .1);
   color-scheme: light;
 }
 html[data-theme="light"] body.flat-scope {
@@ -1057,9 +1057,9 @@ html[data-theme="light"] .flat-scope[data-accent="teal"] {
   --st-btn-text: #ffffff;
 }
 .flat-scope[data-accent="amber"] {
-  --st-accent: #fbbf24;
-  --st-accent-2: #fcd34d;
-  --st-accent-soft: rgba(251, 191, 36, .1);
+  --st-accent: #fb923c;
+  --st-accent-2: #fdba74;
+  --st-accent-soft: rgba(251, 146, 60, .12);
   --st-btn-bg: #b45309;
   --st-btn-text: #ffffff;
 }
@@ -2074,9 +2074,9 @@ a.uni-flow-link:focus-visible { outline: 2px solid var(--st-accent-2); outline-o
   .uni-flow-arrow { transform: rotate(90deg); justify-content: center; padding: var(--st-sp-1) 0; }
 }
 .uni-card { min-height: 100%; }
-.uni-card--netpolis { --card-accent: #2563eb; }
+.uni-card--netpolis { --card-accent: #0f766e; }
 .uni-card--office { --card-accent: #b45309; border-color: color-mix(in srgb, #b45309 30%, var(--st-line)); }
-html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color: color-mix(in srgb, #fbbf24 30%, var(--st-line)); }
+html[data-theme="dark"] .uni-card--office { --card-accent: #fb923c; border-color: color-mix(in srgb, #fb923c 30%, var(--st-line)); }
 .uni-card--ops { --card-accent: #0d9488; border-color: color-mix(in srgb, #0d9488 30%, var(--st-line)); }
 .uni-title { display: flex; align-items: baseline; gap:var(--st-sp-2); flex-wrap: wrap; }
 .code-sup {
@@ -2468,45 +2468,6 @@ html[data-theme="light"] body.flat-scope {
 /* Мягкая типографика заголовков панелей: без uppercase-жёсткости чипов не трогаем */
 
 /* ==========================================================================
-   Дизайн 2026 · волна 5: насыщенный aurora, серифная пара, градиент кнопок
-   ========================================================================== */
-:root, html[data-theme="light"] .flat-scope {
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --st-aur-violet: #7c3aed;
-  --st-aur-sky: #0ea5e9;
-}
-
-/* Aurora v2 вселенных: три поля поверх сетки (обе темы) */
-body.flat-scope {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
-    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 13%, transparent), transparent 70%),
-    radial-gradient(46rem 32rem at -12% 12%, color-mix(in srgb, var(--st-aur-violet) 11%, transparent), transparent 72%),
-    radial-gradient(38rem 26rem at 66% 110%, rgba(14, 165, 233, .09), transparent 74%);
-  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 36px 36px, 36px 36px, auto, auto, auto;
-}
-html[data-theme="light"] body.flat-scope {
-  background-image:
-    linear-gradient(rgba(15, 23, 42, .045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, .045) 1px, transparent 1px),
-    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 14%, transparent), transparent 70%),
-    radial-gradient(46rem 32rem at -12% 12%, color-mix(in srgb, var(--st-aur-violet) 11%, transparent), transparent 72%),
-    radial-gradient(38rem 26rem at 66% 110%, rgba(14, 165, 233, .1), transparent 74%);
-  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 36px 36px, 36px 36px, auto, auto, auto;
-}
-
-/* Серифный акцент в заголовках зон хаба */
-.zt-serif { font-style: italic; }
-
-/* Кнопка-плитка: градиент вселенной → фиолетовый */
-.flat-btn {
-  background: linear-gradient(115deg, var(--st-btn-bg) 15%, var(--st-aur-violet, #6d28d9));
-}
-
-/* ==========================================================================
    NEO 2026 · волна 6: вселенные — жёсткая геометрия поверх палитры юниверсов
    ========================================================================== */
 :root {
@@ -2594,4 +2555,61 @@ input, select, textarea { border-radius: 10px; }
 /* Мягкие дуотон-блоки поверх палитры юниверсов */
 .bento-cell {
   background-image: linear-gradient(150deg, color-mix(in srgb, var(--st-accent, #888) 9%, transparent), transparent 62%);
+}
+
+/* ==========================================================================
+   NEO UNIFY 2026 · волна 8: стенды = единый дизайн с сайтом.
+   Бумага + чернильное сито, Unbounded, жёсткие тени, общий header сверху,
+   st-topbar — липкая поднавигация раздела.
+   ========================================================================== */
+:root, html[data-theme="light"] .flat-scope {
+  --font-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
+}
+:root { --st-bg: #14110a; color-scheme: dark; }
+html[data-theme="light"] .flat-scope, html:not([data-theme="dark"]) { --st-bg: #f4efe4; }
+body.flat-scope {
+  background-image: radial-gradient(var(--grid-dot, rgba(239, 232, 214, .11)) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+html[data-theme="light"] body.flat-scope {
+  background-image: radial-gradient(rgba(26, 22, 12, .13) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+/* Общий header сайта сверху: статичный, чернильная линия снизу */
+.flat-scope .site-header {
+  position: static;
+  background: var(--st-bg);
+  border-bottom: 2px solid color-mix(in srgb, currentColor 80%, transparent);
+  box-shadow: none;
+}
+/* Поднавигация стендов: липкая под общим header */
+.st-topbar {
+  position: sticky;
+  background: var(--st-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.flat-scope .st-wrap { padding-top: var(--st-sp-6) !important; }
+
+/* Панели и модули: чернильная рамка + жёсткая тень + стикер-радиус */
+.panel, .st-panel, .rw-card, .flat-module, .st-hero, .uni-card {
+  border: 2px solid color-mix(in srgb, currentColor 55%, transparent);
+  border-radius: var(--st-radius);
+  box-shadow: var(--st-hard);
+}
+.flat-btn { background: var(--st-btn-bg); }
+.zt-serif { font-style: normal; }
+.flat-scope h1 {
+  text-shadow: 4px 4px 0 color-mix(in srgb, var(--st-accent, #ff8a54) 34%, transparent);
+}
+
+/* Ссылки контента: чернила с коралловым маркером на hover */
+.flat-scope main a:not([class]):hover,
+.flat-scope .st-panel a:not([class]):hover {
+  background: linear-gradient(transparent 55%, var(--st-accent-soft, rgba(255, 138, 84, .14)) 55%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flat-scope h1 { text-shadow: none; }
 }
