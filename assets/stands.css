@@ -50,7 +50,7 @@
   --st-bad-soft: rgba(248, 113, 113, .1);
   --st-warn: #fbbf24;
   --st-cyan: #4cc2ff;
-  --st-radius: 2px;
+  --st-radius: 14px;
   --st-gap: 1.1rem;
   /* Spacing-шкала: 8 ступеней, дробные отступы округляются к ближайшей */
   --st-sp-1: .25rem;
@@ -772,7 +772,7 @@ a.flat-module:hover, a.flat-module:focus-visible {
   --st-bad: #dc2626;
   --st-bad-soft: rgba(220, 38, 38, .06);
   --st-cyan: var(--accent);
-  --st-radius: 2px;
+  --st-radius: 14px;
 }
 [data-theme="dark"] #submissions-card,
 [data-theme="dark"] #presence-card,
@@ -2434,3 +2434,35 @@ html[data-theme="light"] body.flat-scope {
 
 /* Серия входов (streak): мягкая акцентная метка */
 .rw-streak { color: var(--st-accent); font-weight: 700; white-space: nowrap; }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 4: «баблы, без квадратов» + фиксы UX
+   Радиус-революция: всё живое округляется, кнопки/чипы — пилюли.
+   ========================================================================== */
+
+/* Фикс: глобальный thin-скроллбар (волна 3) сделал видимым скрытый
+   скролл навигации — прячем обратно с приоритетом */
+.flat-scope .st-topnav { scrollbar-width: none; scrollbar-color: transparent transparent; }
+
+/* Фикс: текст disabled-кнопок биржи был белым на светлой подложке */
+.flat-btn[disabled] {
+  background: var(--st-inset);
+  color: var(--st-faint);
+  border-color: var(--st-line);
+}
+.rw-card .flat-btn[disabled] { color: var(--st-faint); }
+
+/* Радиус-революция: панели, карточки, окна — скругления 2026 */
+:root, html[data-theme="light"] .flat-scope { --st-radius: 14px; }
+.lab-panel, .quest-card, .ops-cocard, .bento-cell, .rw-card {
+  box-shadow: 0 20px 44px -34px rgba(2, 8, 23, .5);
+}
+
+/* Пилюли: кнопки, навигация, чипы, бейджи */
+.flat-btn, .st-topnav a, .st-section-num,
+.flat-badge, .kind-badge, .ops-role-chip { border-radius: 999px; }
+.st-hero-index, .flat-index { border-radius: 1.25rem; }
+.flat-input, .ops-participants, .exchange-grid textarea { border-radius: 12px; }
+.st-brand-mark { border-radius: 10px; }
+
+/* Мягкая типографика заголовков панелей: без uppercase-жёсткости чипов не трогаем */
