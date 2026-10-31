@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b0e11">
+<meta name="theme-color" content="#14110a">
 <meta name="color-scheme" content="dark light">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <title>Ввод рабочих станций в домен · ДатаПолис · itsliventsev</title>
@@ -13,10 +13,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261031ba">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261031ba">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261031ba">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031ba">
+<link rel="stylesheet" href="../../assets/site.css?v=20261031bb">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261031bb">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261031bb">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031bb">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-domain-join.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -113,12 +113,12 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261031ba"></script>
-<script src="../../assets/ops-engine.js?v=20261031ba"></script>
-<script src="../../assets/dom-kit.js?v=20261031ba"></script>
-<script src="../../assets/stands.js?v=20261031ba"></script>
+<script src="../../assets/mascots.js?v=20261031bb"></script>
+<script src="../../assets/ops-engine.js?v=20261031bb"></script>
+<script src="../../assets/dom-kit.js?v=20261031bb"></script>
+<script src="../../assets/stands.js?v=20261031bb"></script>
 <script type="application/json" id="ops-data">{"id": "ops-domain-join", "sprint": 2, "hours": "4 ч", "coins": "70", "mascot": "fox", "who": "лис Итан — да, тот самый из СетьПолиса, теперь на сопровождении", "title": "Ввод рабочих станций в домен", "lead": "ALT Workstation и Windows 11 в одном каталоге: доменный вход и единые политики.", "story": "Итан, знакомый по СетьПолису по DHCP и сетям, перешёл в эксплуатацию и теперь вводит рабочие станции в домен. Вы пройдёте его путём: подключите ALT Workstation к Samba AD и Windows 11 к тому же каталогу, проверите единый доменный вход и поймёте, как гетерогенный парк живёт под единой учётной записью.", "theory": [{"h": "Доменный вход на ALT", "p": "Рабочая станция настраивается на DNS контроллера, затем входит в домен через Realm/SSSD или инструменты Samba. После входа доменный пользователь получает сессию и home-каталог.", "code": "# apt-get install samba-client sssd-ad\n# realm discover datapolis.local\n# realm join datapolis.local\n# getent passwd ivanov@datapolis.local"}, {"h": "Windows 11 в домене", "p": "Клиент указывает DNS контроллера и присоединяется к домену через System Properties или PowerShell. После перезагрузки доступен вход доменной учёткой, политики GPO применяются автоматически.", "code": "Add-Computer -DomainName datapolis.local -Restart"}, {"h": "Проверка единого каталога", "p": "Один пользователь логинится и на ALT, и на Windows; группы и политики тянутся из одного источника. Это и есть ценность домена для эксплуатации — учётка выдаётся и отзывается в одном месте.", "note": "Пасхалка: Итан упоминает, что в СетьПолисе адрес этой станции выдавал тот самый DHCP-сервер."}], "commands": [{"linux": "realm join domain.local", "windows": "Add-Computer -DomainName", "what": "ввод в домен"}, {"linux": "realm list", "windows": "systeminfo | findstr Domain", "what": "проверка членства"}, {"linux": "getent passwd user@DOMAIN", "windows": "whoami /fqdn", "what": "доменная учётка на станции"}, {"linux": "sssd.conf / systemctl sssd", "windows": "Services · Netlogon", "what": "служба каталога клиента"}, {"linux": "journalctl -u sssd", "windows": "eventvwr · Security", "what": "диагностика доменного входа"}, {"linux": "realm leave", "windows": "Remove-Computer", "what": "вывод из домена (откат)"}], "tasks": [{"id": "t1", "text": "Настройте DNS ALT Workstation на контроллер домена и выполните realm discover"}, {"id": "t2", "text": "Введите ALT-станцию в домен и проверьте getent доменной учётки"}, {"id": "t3", "text": "Войдите доменным пользователем на ALT и проверьте home-каталог"}, {"id": "t4", "text": "Введите Windows 11 в тот же домен через Add-Computer и перезагрузите"}, {"id": "t5", "text": "Войдите той же учёткой на Windows и сопоставьте SID/группы"}, {"id": "t6", "text": "Проверьте применение базовой политики (блокировка экрана) на обеих ОС"}, {"id": "t7", "text": "Отработайте откат: выведите станцию из домена и верните обратно"}], "ticket": {"type": "request", "priority": "P3", "title": "Подключить новые рабочие станции к каталогу", "text": "Отдел закупок получил машины на ALT Workstation и Windows 11. Введите их в существующий домен, чтобы сотрудники входили едиными учётными записями и получали политики безопасности.", "deliverables": ["Два доменных входа (ALT и Windows) одной учёткой", "Подтверждение применения политики", "Процедура отката вывода из домена"]}, "runbook": {"title": "Ввод рабочей станции в домен", "steps": ["Указать DNS контроллера", "Проверить разрешение SRV-записей", "Выполнить join и перезагрузить", "Войти доменной учёткой и проверить политики", "Зафиксировать станцию в каталоге"]}, "quiz": [{"q": "Какой DNS должен быть указан у станции перед вводом в домен?", "options": ["Любой публичный", "DNS контроллера домена", "Провайдерский только", "DNS не нужен для домена"], "answer": 1, "explain": "Клиент находит контроллер через SRV-записи, их отдаёт доменный DNS."}, {"q": "Командлет ввода Windows в домен?", "options": ["Join-Domain", "Add-Computer", "Set-ADClient", "Enter-Domain"], "answer": 1, "explain": "Add-Computer -DomainName ... -Restart выполняет присоединение."}, {"q": "Что даёт единый доменный вход на разных ОС?", "options": ["Одинаковые обои", "Одну учётку, группы и политики для всего парка", "Удаление локальных дисков", "Только почту"], "answer": 1, "explain": "В этом смысл каталога: централизованная идентичность в гетерогенной среде."}, {"q": "Как откатить неудачный ввод станции?", "options": ["Переустановить ОС", "realm leave / Remove-Computer и проверить локальный вход", "Сменить MAC-адрес", "Отключить интернет"], "answer": 1, "explain": "Вывод из домена возвращает станцию к локальным учётным записям."}], "reflection": ["Где доменный вход настроить проще — на ALT или Windows, и почему?", "Какие симптомы у станции, которая «потеряла» доменный DNS?", "Как единый каталог меняет процедуру увольнения сотрудника?"], "sprintTitle": "Учёт"}</script>
-<script src="../../assets/ops-kit.js?v=20261031ba"></script>
-<script src="../../assets/shared-chrome.js?v=20261031ba"></script>
+<script src="../../assets/ops-kit.js?v=20261031bb"></script>
+<script src="../../assets/shared-chrome.js?v=20261031bb"></script>
 </body>
 </html>
