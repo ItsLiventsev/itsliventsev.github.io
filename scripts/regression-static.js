@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031aq';
+const VERSION = '20261031ar';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031ap') && !c.includes('?v=20261031ao') && !c.includes('?v=20261031an'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031aq') && !c.includes('?v=20261031ap') && !c.includes('?v=20261031ao'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -603,6 +603,37 @@ ok(!read('assets/admin.js').includes('cdn.tailwindcss.com') && !read('assets/adm
 ok(read('assets/admin.js').includes('Golos+Text'), 'admin.js: шаблон не переведён на пару NEO');
 ok(siteCss.includes('::placeholder { color: var(--muted); opacity: 1; }') && siteCss.includes('@media (pointer: coarse)'), 'site.css: нет плейсхолдеров/тач-зон');
 ok(stCss.includes('.flat-scope ::placeholder') && stCss.includes('min-height: 44px'), 'stands.css: нет плейсхолдеров/тач-зон');
+
+/* дизайн 2026 · волна 11: inherit — единые h1, палитра вместо tailwind-цветов */
+let dhCnt = 0, twColor = 0;
+for (const f of allHtml) {
+  const c = read(f);
+  if (c.includes('dark-hero-title')) dhCnt++;
+  if (/text-(blue|emerald|rose|red|indigo|purple|sky|amber|teal|cyan|yellow)-[0-9]{3}/.test(c)) twColor++;
+}
+ok(dhCnt === 0, 'страниц с мёртвым dark-hero-title: ' + dhCnt);
+ok(twColor === 0, 'страниц с жёсткими tailwind-цветами: ' + twColor);
+ok(!siteCss.includes('dark-hero-title'), 'site.css: мёртвые правила dark-hero-title не удалены');
+for (const f of ['projects.html', 'archive.html', 'stands/index.html', 'projects/esports.html']) {
+  ok(read(f).includes('ht-word'), f + ': заголовок не в едином приёме ht-word');
+}
+ok(read('articles.html').includes('class="stat-num"') && siteCss.includes('.stat-num'), 'articles: стат-цифры не в Unbounded');
+ok(!read('articles.html').includes('text-blue-600') && !read('index.html').includes('text-emerald-600'), 'жёсткие цвета стат/маркеров не вычищены');
+ok(siteCss.includes('.cursor-purple { color: #c2527a; }') && siteCss.includes('.cursor-orange { color: #96602a; }'), 'site.css: курсоры терминала не переведены на палитру');
+ok(siteCss.includes('.scroll-progress {\n  height: 3px;\n  background: var(--neo-verm);'), 'site.css: прогресс чтения не в NEO');
+ok(siteCss.includes('#to-top {\n  border-radius: var(--radius-sm);\n  border: 2px solid var(--neo-ink);'), 'site.css: кнопка наверх не в NEO');
+
+/* дизайн 2026 · волна 11 (часть 2): полная зачистка старой палитры */
+const staleHex = /(1e40af|3b82f6|2563eb|60a5fa|93c5fd|7c3aed|8b5cf6|6d28d9|a78bfa|818cf8|f59e0b|fbbf24|c4b5fd)/;
+ok(!staleHex.test(siteCss), 'site.css: остались жёсткие hex старой (сине-фиолетово-жёлтой) палитры');
+ok(!/rgba\((37, 99, 235|59, 130, 246|139, 92, 246|96, 165, 250|129, 140, 248|251, 191, 36|245, 158, 11)/.test(siteCss), 'site.css: остались rgba старой палитры');
+ok(!staleHex.test(stCss), 'stands.css: остались hex старой палитры');
+ok(siteCss.includes('.light-band {\n  background: var(--neo-surface);') && siteCss.includes('.color-band {\n  border-radius: var(--radius);\n  padding: clamp(1.5rem, 3vw, 2rem);\n  background: linear-gradient(135deg, var(--neo-leaf-tint), var(--neo-rose-tint));'), 'site.css: банды esports не переведены на NEO');
+ok(siteCss.includes('radial-gradient(circle at 72% 18%, rgba(95, 133, 82, .4)') && siteCss.includes('box-shadow: var(--neo-hard);\n  display: flex;'), 'site.css: hero-panel не переведён на NEO-дуотон');
+ok(siteCss.includes('--aur-violet: #c2527a;'), 'site.css: фиолетовое поле aurora не переведено на розу');
+ok(siteCss.includes('.game-hs   { color: #96602a;') && siteCss.includes('.game-lol  { color: #cf4a18;'), 'site.css: игровые теги не в палитре');
+ok(siteCss.includes('.split-bar .seg-theory { background: linear-gradient(90deg, #cf4a18, #96602a); }'), 'site.css: сплит-бар не в палитре');
+ok(!siteCss.includes('text-indigo'), 'site.css: мёртвые tailwind-переопределения индиго живы');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
