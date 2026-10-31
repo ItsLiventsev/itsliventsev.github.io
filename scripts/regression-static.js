@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ba';
+const VERSION = '20261031bb';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -455,7 +455,7 @@ for (const eng of ['assets/league.js', 'assets/ops-engine.js', 'assets/office-en
 ok(read('assets/rewards-page.js').includes('rw-streak') && read('assets/league-page.js').includes('серия'), 'нет отображения серии входов');
 ok(!siteCss.includes('.text-gradient') && !read('projects/esports.html').includes('text-gradient'), 'градиентный текст не удалён');
 ok(siteCss.includes('--fs-body: 1rem'), 'тело меньше 16px');
-ok(siteCss.includes('--accent: #c2410c'), 'оранжевый акцент не AA (светлая тема)');
+ok(siteCss.includes('--accent: #a83a12'), 'оранжевый акцент не AA (светлая тема)');
 ok(siteCss.includes(':root[data-theme="dark"] .btn-primary'), 'тёмная тема: нет тёмного текста на главных кнопках');
 ok(stCss.includes('--st-accent: #0f766e'), 'teal стендов не AA в светлой теме');
 ok(!siteCss.includes('wght@300') && read('index.html').includes('Unbounded:wght@500;700;900') && !read('index.html').includes('Inter:wght@') && !read('index.html').includes('Playfair'), 'NEO: старые гарнитуры Inter/Playfair не удалены из шрифтовой строки');
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031az') && !c.includes('?v=20261031ay') && !c.includes('?v=20261031ax'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ba') && !c.includes('?v=20261031az') && !c.includes('?v=20261031ay'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -757,6 +757,21 @@ ok(siteCss.includes('a.p-card:hover .p-title, a.p-card:focus-visible .p-title,')
 ok(stCss.includes('.crew-card:hover, .uni-card:hover {\n  transform: translate(-2px, -2px);') && stCss.includes('.quest-card:not(.is-locked):hover { transform: translate(-2px, -2px); }'), 'stands.css: crew/uni/quest не в диагональной механике');
 ok(!stCss.includes('.bento-cell:hover, .bento-cell:focus-visible {\n  transform: translateY(-3px);'), 'stands.css: мёртвый translateY bento не вычищен');
 ok(!read('archive.html').includes('220,38,38') && !read('archive.html').includes('#f87171'), 'archive.html: легаси-красные инлайны не переведены на вермильон');
+
+
+/* дизайн 2026 · волна 21: CHROME — пилюли CASUAL, крошки, браузерный хром */
+const twStatus = siteCss.match(/#(?:ea580c|b45309|047857|e11d48|dc2626|fb923c|fb7185|34d399|be123c|f43f5e|fda4af|9a3412|fdba74|d97706)/g);
+ok(!twStatus, 'site.css: tailwind-статусные хексы не выведены: ' + (twStatus || []).slice(0, 6).join(' '));
+ok(!siteCss.includes('--accent-gradient'), 'site.css: --accent-gradient не удалён из системы акцентов');
+ok(/\.scroll-progress \{[^}]*background: var\(--accent\);/.test(siteCss), 'site.css: база scroll-progress не на solid --accent');
+ok(siteCss.includes(".pill-orange  { background: rgba(228, 87, 46, .07)") && siteCss.includes(".pill-amber   { background: rgba(150, 96, 42, .08)") && siteCss.includes(".pill-emerald { background: rgba(79, 122, 68, .08)"), 'site.css: пилюли не в палитре CASUAL (verm/cocoa/sage)');
+ok(siteCss.includes('.crumbs {') && siteCss.includes(".crumbs .sep { color: var(--neo-verm); font-weight: 700; }"), 'site.css: нет компонента крошек .crumbs');
+ok(read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html').includes('class="crumbs mb-5"'), 'статья: крошки не на .crumbs');
+ok(read('blog/2026-10-26-kak-ustroen-etot-blog.html').includes('class="crumbs mb-6"') && read('blog/2026-10-26-kak-ustroen-etot-blog.html').includes('aria-current="page"'), 'заметка: крошки не на .crumbs');
+const noMeta = ['index.html', 'projects.html', 'blog.html', 'stands/index.html', 'admin.html'].filter(f => !read(f).includes('name="theme-color"'));
+ok(noMeta.length === 0, 'theme-color отсутствует: ' + noMeta.join(', '));
+ok(!read('index.html').includes('content="#fafafa"') && !read('stands/index.html').includes('content="#0b0e11"'), 'theme-color: легаси-хексы #fafafa/#0b0e11 не выведены');
+ok(read('assets/site.js').includes("theme === 'dark' ? '#14110a' : '#f4efe4'"), 'site.js: синк theme-color не в бумажных тонах');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
