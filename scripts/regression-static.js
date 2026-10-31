@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031af';
+const VERSION = '20261031ag';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -414,6 +414,22 @@ ok(read('stands/rewards.html').includes('rewards-page.js') && read('stands/rewar
 ok(read('stands/teams.html').includes('data-standings="tribes"') && read('stands/teams.html').includes('data-standings="members"'), 'teams.html: нет живого командного зачёта');
 ok(read('stands/league.html').includes('data-standings="tribes"'), 'league.html: нет публичного стенда');
 ok(read('stands/index.html').includes('rewards.html') && read('stands/index.html').includes('ops/crew-ops.html'), 'stands/index.html: нет блока общей экономики');
+/* унифицированное меню: «биржа» в топнаве всех страниц СетьПолиса, ops и office */
+for (const navPg of ['stands/setpolis.html', 'stands/league.html', 'stands/teams.html', 'stands/glossary.html', 'stands/rewards.html']) {
+  const c = read(navPg);
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
+}
+for (const navPg of ['stands/ops/index.html', 'stands/ops/crew-ops.html', 'stands/ops/rewards.html']) {
+  const c = read(navPg);
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
+}
+for (const navPg of ['stands/office/index.html', 'stands/office/rewards.html']) {
+  const c = read(navPg);
+  const nav = c.slice(c.indexOf('st-topnav'), c.indexOf('</nav>'));
+  ok(nav.includes('href="rewards.html"'), navPg + ': топнав без «биржи»');
+}
 ok(read('assets/submissions.js').includes("'standings', 'standings.json'"), 'submissions.js: публикация стенда не на standings/standings.json');
 ok(read('admin.html').includes('standings-publish') && read('admin.html').includes('claims-tbody'), 'admin.html: нет публикации стенда и карточки ордеров');
 ok(read('assets/submissions.js').includes("renderClaims();") && read('assets/submissions.js').includes("league-bundle\\/[123]"), 'submissions.js: ордера не обновляются после импорта бандлов v3');
