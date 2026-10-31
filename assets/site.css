@@ -134,8 +134,8 @@ body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --acce
   --hero-panel-1: #17171f;
   --hero-panel-2: #0d0d12;
   --success-text: #34d399;
-  --warn-text: #fbbf24;
-  --info-text: #93c5fd;
+  --warn-text: #fb923c;
+  --info-text: #d9a066;
   --danger-text: #fb7185;
 }
 
@@ -530,7 +530,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .btn-gradient {
   border: none;
   color: #fff;
-  background: linear-gradient(92deg, var(--accent), #8b5cf6);
+  background: linear-gradient(92deg, var(--accent), var(--neo-rose));
 }
 .btn-gradient:hover { color: #fff; box-shadow: 0 14px 34px -12px var(--accent-border); border-color: transparent; }
 /* Призрачная кнопка без фона */
@@ -567,7 +567,7 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 }
 .pill-neutral { background: var(--surface-2); border-color: var(--border); color: var(--muted); }
 .pill-accent  { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
-.pill-blue    { background: rgba(37, 99, 235, .07);  border-color: rgba(37, 99, 235, .22);  color: #2563eb; }
+.pill-blue    { background: rgba(207, 74, 24, .07);  border-color: rgba(207, 74, 24, .22);  color: #a83a12; }
 .pill-indigo  { background: rgba(79, 70, 229, .07);  border-color: rgba(79, 70, 229, .22);  color: #4f46e5; }
 .pill-orange  { background: rgba(234, 88, 12, .07);  border-color: rgba(234, 88, 12, .22);  color: #ea580c; }
 .pill-amber   { background: rgba(217, 119, 6, .08);  border-color: rgba(217, 119, 6, .25);  color: #b45309; }
@@ -577,14 +577,14 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .pill-purple  { background: rgba(126, 34, 206, .07);  border-color: rgba(126, 34, 206, .22); color: #7e22ce; }
 
 /* В тёмной теме цветные пилюли становятся светлее для контраста */
-[data-theme="dark"] .pill-blue    { color: #60a5fa; background: rgba(96, 165, 250, .1);  border-color: rgba(96, 165, 250, .25); }
+[data-theme="dark"] .pill-blue    { color: #ff8a54; background: rgba(255, 138, 84, .1);  border-color: rgba(255, 138, 84, .25); }
 [data-theme="dark"] .pill-emerald { color: #34d399; background: rgba(52, 211, 153, .1);  border-color: rgba(52, 211, 153, .25); }
 [data-theme="dark"] .pill-orange  { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .25); }
 [data-theme="dark"] .pill-red,
 [data-theme="dark"] .pill-rose    { color: #fb7185; background: rgba(251, 113, 133, .1);  border-color: rgba(251, 113, 133, .25); }
 [data-theme="dark"] .pill-purple  { color: #c084fc; background: rgba(192, 132, 252, .1);  border-color: rgba(192, 132, 252, .25); }
-[data-theme="dark"] .pill-amber   { color: #fbbf24; background: rgba(251, 191, 36, .1);  border-color: rgba(251, 191, 36, .25); }
-[data-theme="dark"] .pill-indigo  { color: #818cf8; background: rgba(129, 140, 248, .1);  border-color: rgba(129, 140, 248, .25); }
+[data-theme="dark"] .pill-amber   { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .25); }
+[data-theme="dark"] .pill-indigo  { color: #e08aa6; background: rgba(224, 138, 166, .1);  border-color: rgba(224, 138, 166, .25); }
 [data-theme="dark"] .pill-neutral { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); color: var(--muted); }
 
 /* Чип (технология, код-тег) — мягкая органичная плашка */
@@ -779,19 +779,19 @@ details.accordion[open] .acc-wrap.is-closing { grid-template-rows: 0fr; }
   margin-bottom: .5rem;
   font-weight: 600;
 }
-.notice-info { background: rgba(37, 99, 235, .05); border-color: rgba(37, 99, 235, .22); }
+.notice-info { background: rgba(150, 96, 42, .05); border-color: rgba(150, 96, 42, .22); }
 .notice-info .notice-label { color: #1d4ed8; }
 .notice-warn { background: rgba(217, 119, 6, .06); border: 1px dashed rgba(217, 119, 6, .35); }
 .notice-warn .notice-label { color: #b45309; }
 .notice-quest {
-  background: linear-gradient(135deg, rgba(37, 99, 235, .07), rgba(99, 102, 241, .07));
-  border-color: rgba(37, 99, 235, .25);
+  background: linear-gradient(135deg, rgba(194, 82, 122, .07), rgba(150, 96, 42, .06));
+  border-color: rgba(194, 82, 122, .25);
 }
-.notice-quest .notice-label, .notice-quest h3 { color: #1e40af; }
+.notice-quest .notice-label, .notice-quest h3 { color: #9c3d5f; }
 .notice-rose { background: rgba(225, 29, 72, .05); border: 1px dashed rgba(225, 29, 72, .3); }
 .notice-rose .notice-label { color: #be123c; }
 [data-theme="dark"] .notice-info,
-[data-theme="dark"] .notice-quest { background: rgba(59, 130, 246, .07); }
+[data-theme="dark"] .notice-quest { background: rgba(194, 82, 122, .07); }
 
 /* ---------- 11. Таблицы и код ---------- */
 .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); }
@@ -950,21 +950,12 @@ code, .code {
   box-shadow: 0 0 0 0 rgba(16, 185, 129, .5);
 }
 
-.dark-hero-title {
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: clamp(2.6rem, 7vw, 5rem);
-  letter-spacing: var(--ls-display-tight);
-  line-height: 1;
-  text-transform: lowercase;
-  color: var(--text);
-}
 #title-mark { display: inline-block; min-width: 2.4ch; color: var(--accent); transition: color var(--dur-base) var(--ease-standard); }
-.cursor-green { color: #10b981; }
-.cursor-red { color: #ef4444; }
+.cursor-green { color: #4f7a44; }
+.cursor-red { color: #e4572e; }
 .cursor-blue { color: #c2527a; }
-.cursor-purple { color: #8b5cf6; }
-.cursor-orange { color: #f59e0b; }
+.cursor-purple { color: #c2527a; }
+.cursor-orange { color: #96602a; }
 
 /* Плавающие терминальные команды */
 .floating-elements { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -1008,8 +999,8 @@ code, .code {
 a.p-card:hover { transform: translateY(-3px); background: var(--surface-2); box-shadow: var(--shadow-hover); border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 32%, var(--border)); }
 a.p-card:hover::before { transform: scaleX(1); }
 .p-card.is-active {
-  border-color: rgba(59, 130, 246, .28);
-  background: linear-gradient(180deg, rgba(59, 130, 246, .06) 0%, var(--surface) 100%);
+  border-color: var(--accent-border);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--surface) 100%);
 }
 .p-card.is-soon {
   border-style: dashed;
@@ -1068,7 +1059,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 .p-status-ready { background: rgba(5, 150, 105, .1); color: #047857; border-color: rgba(5, 150, 105, .28); }
 .p-status-soon { background: rgba(217, 119, 6, .08); color: #b45309; border-color: rgba(217, 119, 6, .25); }
 [data-theme="dark"] .p-status-ready { background: rgba(52, 211, 153, .12); color: #34d399; border-color: rgba(52, 211, 153, .3); }
-[data-theme="dark"] .p-status-soon { background: rgba(251, 191, 36, .1); color: #fbbf24; border-color: rgba(251, 191, 36, .28); }
+[data-theme="dark"] .p-status-soon { background: rgba(251, 146, 60, .1); color: #fb923c; border-color: rgba(251, 146, 60, .28); }
 
 .p-tag {
   font-family: var(--font-mono);
@@ -1123,8 +1114,8 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   letter-spacing: var(--ls-kicker);
   text-transform: uppercase;
   color: var(--accent);
-  background: rgba(59, 130, 246, .1);
-  border: 1px solid rgba(59, 130, 246, .28);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
   padding: .32rem .72rem;
   border-radius: var(--radius-pill);
   margin-bottom: .65rem;
@@ -1143,17 +1134,17 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 .zone-desc { font-size: var(--fs-small); color: var(--muted); max-width: 42rem; margin: .5rem 0 0; line-height: var(--lh-text); }
 
 .p-status-new {
-  background: rgba(139, 92, 246, .1);
-  color: #6d28d9;
-  border: 1px solid rgba(139, 92, 246, .28);
+  background: rgba(194, 82, 122, .1);
+  color: #9c3d5f;
+  border: 1px solid rgba(194, 82, 122, .28);
 }
 [data-theme="dark"] .p-status-new {
-  color: #a78bfa;
-  background: rgba(139, 92, 246, .14);
-  border-color: rgba(139, 92, 246, .35);
+  color: #e08aa6;
+  background: rgba(224, 138, 166, .14);
+  border-color: rgba(224, 138, 166, .35);
 }
 .p-status-archive { background: rgba(217, 119, 6, .08); color: #b45309; border-color: rgba(217, 119, 6, .25); }
-[data-theme="dark"] .p-status-archive { background: rgba(245, 158, 11, .14); color: #fbbf24; border-color: rgba(245, 158, 11, .35); }
+[data-theme="dark"] .p-status-archive { background: rgba(251, 146, 60, .14); color: #fb923c; border-color: rgba(251, 146, 60, .35); }
 
 /* Честная заглушка: ещё не ссылка, просто место под будущий проект */
 .p-card.is-stub {
@@ -1222,12 +1213,12 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   min-height: 340px;
   height: 100%;
   overflow: hidden;
-  border: 1px solid rgba(139, 92, 246, .32);
+  border: 2px solid var(--neo-ink);
   background:
-    radial-gradient(circle at 72% 18%, rgba(139, 92, 246, .38), transparent 60%),
-    radial-gradient(circle at 18% 88%, rgba(59, 130, 246, .3), transparent 55%),
+    radial-gradient(circle at 72% 18%, rgba(95, 133, 82, .4), transparent 60%),
+    radial-gradient(circle at 18% 88%, rgba(194, 82, 122, .34), transparent 55%),
     linear-gradient(160deg, var(--hero-panel-1), var(--hero-panel-2));
-  box-shadow: 0 32px 70px -32px rgba(139, 92, 246, .5);
+  box-shadow: var(--neo-hard);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1265,14 +1256,14 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 
 /* ---------- Светлая секция внутри тёмной страницы ---------- */
 .light-band {
-  background: linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%);
-  color: #18181b;
-  border-radius: var(--radius-lg);
-  border: 1px solid #e4e4e7;
+  background: var(--neo-surface);
+  color: var(--neo-ink);
+  border-radius: var(--radius);
+  border: 2px solid var(--neo-ink);
   padding: clamp(1.75rem, 4vw, 2.75rem);
-  box-shadow: 0 28px 60px -32px rgba(0, 0, 0, .65);
+  box-shadow: var(--neo-hard);
 }
-.light-band h2, .light-band h3 { color: #18181b; }
+.light-band h2, .light-band h3 { color: var(--neo-ink); }
 
 /* Светлые карточки внутри светлой секции */
 .light-card {
@@ -1287,18 +1278,19 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 
 /* ---------- Цветная секция-баннер ---------- */
 .color-band {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
   padding: clamp(1.5rem, 3vw, 2rem);
-  background: linear-gradient(135deg, rgba(59, 130, 246, .16), rgba(139, 92, 246, .16) 45%, rgba(244, 114, 182, .13));
-  border: 1px solid rgba(139, 92, 246, .3);
+  background: linear-gradient(135deg, var(--neo-leaf-tint), var(--neo-rose-tint));
+  border: 2px solid var(--neo-ink);
+  box-shadow: var(--neo-hard-sm);
 }
 
 /* Тонированная панель (дисциплины) */
 .tint-panel {
   border-radius: var(--radius);
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(139, 92, 246, .1), rgba(59, 130, 246, .05));
-  border: 1px solid rgba(139, 92, 246, .22);
+  background: linear-gradient(135deg, var(--neo-rose-tint), var(--neo-leaf-tint));
+  border: 2px solid var(--neo-ink);
 }
 
 /* ---------- Статистика ---------- */
@@ -1310,14 +1302,14 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   border-radius: var(--radius);
   transition: transform var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease-standard);
 }
-.esp-stat:hover { transform: translateY(-4px); border-color: rgba(139, 92, 246, .4); }
+.esp-stat:hover { transform: translateY(-4px); border-color: var(--neo-rose); }
 .esp-stat-num {
   font-family: var(--font-mono);
   font-size: clamp(2rem, 4.5vw, 2.9rem);
   font-weight: 800;
   line-height: 1;
   margin-bottom: .5rem;
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  background: linear-gradient(135deg, var(--neo-verm), var(--neo-rose));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1340,10 +1332,10 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 }
 .game-tag:hover { transform: translateY(-3px) scale(1.03); }
 .game-cs   { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .28); }
-.game-dota { color: #f87171; background: rgba(248, 113, 113, .1); border-color: rgba(248, 113, 113, .28); }
-.game-lol  { color: #60a5fa; background: rgba(96, 165, 250, .1);  border-color: rgba(96, 165, 250, .28); }
+.game-dota { color: #a83a12; background: rgba(228, 87, 46, .1); border-color: rgba(228, 87, 46, .28); }
+.game-lol  { color: #cf4a18; background: rgba(207, 74, 24, .1);  border-color: rgba(207, 74, 24, .28); }
 .game-val  { color: #f472b6; background: rgba(244, 114, 182, .1); border-color: rgba(244, 114, 182, .28); }
-.game-hs   { color: #fbbf24; background: rgba(251, 191, 36, .1);  border-color: rgba(251, 191, 36, .28); }
+.game-hs   { color: #96602a; background: rgba(150, 96, 42, .1);  border-color: rgba(150, 96, 42, .28); }
 
 /* ---------- Таймлайн ---------- */
 .esp-timeline { position: relative; padding-left: 1.9rem; }
@@ -1368,14 +1360,14 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   width: 12px;
   height: 12px;
   border-radius: var(--radius-pill);
-  background: var(--accent, #8b5cf6);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--accent, #8b5cf6);
+  background: var(--accent, #cf4a18);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--accent, #cf4a18);
 }
 .esp-tl-date {
   font-family: var(--font-mono);
   font-size: var(--fs-mini);
   font-weight: 700;
-  color: #a78bfa;
+  color: #c2527a;
   letter-spacing: var(--ls-fine);
   margin-bottom: .35rem;
 }
@@ -1392,7 +1384,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   transition: transform var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease-standard);
   height: 100%;
 }
-.step-card:hover { transform: translateY(-3px); border-color: rgba(96, 165, 250, .4); }
+.step-card:hover { transform: translateY(-3px); border-color: var(--neo-verm); }
 .step-card-num {
   display: inline-flex;
   align-items: center;
@@ -1401,8 +1393,8 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   font-weight: 700;
   letter-spacing: var(--ls-kicker);
   color: var(--accent);
-  background: linear-gradient(135deg, rgba(96, 165, 250, .18), rgba(167, 139, 250, .18));
-  border: 1px solid rgba(96, 165, 250, .3);
+  background: linear-gradient(135deg, var(--neo-leaf-tint), var(--neo-rose-tint));
+  border: 1px solid var(--neo-ink);
   padding: .32rem .68rem;
   border-radius: var(--radius-pill);
   margin-bottom: .8rem;
@@ -1410,8 +1402,8 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 
 /* ---------- Полоса теория/практика ---------- */
 .split-bar { display: flex; height: 12px; border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--border); }
-.split-bar .seg-theory { background: linear-gradient(90deg, #60a5fa, #818cf8); }
-.split-bar .seg-practice { background: linear-gradient(90deg, #a78bfa, #f472b6); }
+.split-bar .seg-theory { background: linear-gradient(90deg, #cf4a18, #96602a); }
+.split-bar .seg-practice { background: linear-gradient(90deg, #4f7a44, #c2527a); }
 
 /* ---------- Карточки итогов ---------- */
 .result-done {
@@ -1419,8 +1411,8 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   background: linear-gradient(180deg, rgba(16, 185, 129, .07), var(--surface) 60%);
 }
 .result-growth {
-  border-color: rgba(245, 158, 11, .32);
-  background: linear-gradient(180deg, rgba(245, 158, 11, .07), var(--surface) 60%);
+  border-color: rgba(207, 74, 24, .32);
+  background: linear-gradient(180deg, rgba(207, 74, 24, .07), var(--surface) 60%);
 }
 
 /* ---------- Достижение ---------- */
@@ -1429,8 +1421,9 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
   overflow: hidden;
   border-radius: var(--radius-lg);
   padding: clamp(1.75rem, 4vw, 2.5rem);
-  background: linear-gradient(135deg, rgba(251, 191, 36, .14), rgba(245, 158, 11, .05));
-  border: 1px solid rgba(251, 191, 36, .38);
+  background: linear-gradient(135deg, var(--neo-sand-tint), var(--neo-surface));
+  border: 2px solid var(--neo-ink);
+  box-shadow: var(--neo-hard-sm);
 }
 .trophy-card::after {
   content: '🏆';
@@ -1644,8 +1637,7 @@ figure figcaption, .fig-cap {
 
 /* Тёмная тема: хардкод Tailwind-цветов из разметки */
 :root[data-theme="dark"] .text-emerald-600 { color: #34d399 !important; }
-:root[data-theme="dark"] .text-indigo-600 { color: #a5b4fc !important; }
-:root[data-theme="dark"] .text-blue-600 { color: #60a5fa !important; }
+:root[data-theme="dark"] .text-blue-600 { color: #ff8a54 !important; }
 :root[data-theme="dark"] .text-rose-600 { color: #fb7185 !important; }
 :root[data-theme="dark"] .text-red-500 { color: #f87171 !important; }
 :root[data-theme="dark"] .bg-red-50 { background: rgba(248, 113, 113, .12) !important; border-color: rgba(248, 113, 113, .3) !important; }
@@ -2004,12 +1996,12 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
 }
 /* Палитра типов — одинаково читается в обеих темах */
 .note-card[data-type="note"]    { --note-accent: #f43f5e; }
-.note-card[data-type="thought"] { --note-accent: #8b5cf6; }
+.note-card[data-type="thought"] { --note-accent: #c2527a; }
 .note-card[data-type="digest"]  { --note-accent: #c2410c; }
 .note-card[data-type="extra"]   { --note-accent: #10b981; }
 :root[data-theme="dark"] .note-card[data-type="note"]    { --note-accent: #fb7185; }
 :root[data-theme="dark"] .note-card[data-type="thought"] { --note-accent: #c084fc; }
-:root[data-theme="dark"] .note-card[data-type="digest"]  { --note-accent: #60a5fa; }
+:root[data-theme="dark"] .note-card[data-type="digest"]  { --note-accent: #ff8a54; }
 :root[data-theme="dark"] .note-card[data-type="extra"]   { --note-accent: #34d399; }
 
 .note-meta {
@@ -2503,11 +2495,11 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
 .nav-bubble.bubble-rose.is-filled    { background: rgba(244, 63, 94, .1);  border-color: rgba(244, 63, 94, .3);  color: #e11d48; }
 .nav-bubble.bubble-orange.is-filled  { background: rgba(234, 88, 12, .1);  border-color: rgba(234, 88, 12, .3);  color: #ea580c; }
 .nav-bubble.bubble-green.is-filled   { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .32); color: #047857; }
-.nav-bubble.bubble-blue.is-filled    { background: rgba(37, 99, 235, .1);  border-color: rgba(37, 99, 235, .3);  color: #2563eb; }
+.nav-bubble.bubble-blue.is-filled    { background: rgba(207, 74, 24, .1);  border-color: rgba(207, 74, 24, .3);  color: #a83a12; }
 :root[data-theme="dark"] .nav-bubble.bubble-rose.is-filled   { color: #fb7185; }
 :root[data-theme="dark"] .nav-bubble.bubble-orange.is-filled { color: #fb923c; }
 :root[data-theme="dark"] .nav-bubble.bubble-green.is-filled  { color: #34d399; }
-:root[data-theme="dark"] .nav-bubble.bubble-blue.is-filled   { color: #60a5fa; }
+:root[data-theme="dark"] .nav-bubble.bubble-blue.is-filled   { color: #ff8a54; }
 @media (max-width: 880px) {
   .nav-bubble { min-width: 1.35rem; height: 1.35rem; font-size: var(--fs-micro); }
 }
@@ -2694,7 +2686,7 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
 
 /* 27.1 Один источник акцентного свечения для всех интерактивных поверхностей */
 :root { --glow-accent: 0 12px 30px -14px var(--accent-border); }
-:root[data-theme="dark"] { --glow-accent: 0 14px 38px -14px rgba(96, 165, 250, .5); }
+:root[data-theme="dark"] { --glow-accent: 0 14px 38px -14px rgba(255, 138, 84, .45); }
 
 .btn-primary:hover,
 .btn-gradient:hover { box-shadow: var(--shadow-hover), var(--glow-accent); }
@@ -2780,7 +2772,7 @@ body[data-accent="sage"] .ambient .orb { background: #10b981; }
 .dot-green { background: #10b981; }
 .dot-amber { background: #d97706; }
 .dot-red   { background: #dc2626; }
-[data-theme="dark"] .dot-amber { background: #fbbf24; }
+[data-theme="dark"] .dot-amber { background: #fb923c; }
 
 /* 28.4 Моно-глиф в заголовке секции вместо эмодзи */
 .h2-glyph {
@@ -2804,7 +2796,7 @@ body[data-accent="sage"] .ambient .orb { background: #10b981; }
 .rank-glyph.rg-2 { color: #71717a; }
 .rank-glyph.rg-3 { color: #9a3412; }
 .rank-glyph.rg-top { color: var(--accent); }
-[data-theme="dark"] .rank-glyph.rg-1 { color: #fbbf24; }
+[data-theme="dark"] .rank-glyph.rg-1 { color: #fb923c; }
 [data-theme="dark"] .rank-glyph.rg-3 { color: #fdba74; }
 
 /* 28.6 Носрипт-плашка */
@@ -2927,7 +2919,7 @@ body {
 :root { --sk: 0; }
 
 /* Кинетический hero: заголовок всплывает и растворяется при скролле */
-.hero-title, .dark-hero-title {
+.hero-title {
   font-size: clamp(2.4rem, 7vw, 4.25rem);
   background: linear-gradient(98deg, var(--text) 42%, var(--accent) 92%);
   -webkit-background-clip: text;
@@ -2964,7 +2956,7 @@ body {
    гигантские outline-слова. Кинетика использует --sk из shared-chrome.
    ========================================================================== */
 :root {
-  --aur-violet: #7c3aed;
+  --aur-violet: #c2527a;
   --aur-sky: #0ea5e9;
 }
 
@@ -3179,14 +3171,6 @@ body {
   transform: translateX(calc(var(--sk, 0) * 14px));
   opacity: 1;
   color: var(--neo-ink-2);
-}
-.dark-hero-title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  background: none;
-  -webkit-text-fill-color: currentColor;
-  color: var(--neo-ink);
-  text-shadow: 5px 5px 0 var(--neo-leaf);
 }
 
 
@@ -3422,3 +3406,29 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 @media (pointer: coarse) {
   .btn, .icon-btn, .lang-btn, .filter-btn { min-height: 44px; }
 }
+
+/* ==========================================================================
+   INHERIT 2026 · волна 11: единые заголовки, стат-цифры, хром в NEO
+   ========================================================================== */
+/* Цифры статистики: Unbounded вместо «пластика» */
+.stat-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  margin-bottom: .3rem;
+}
+/* Прогресс чтения: чернильно-вермильоновая нить вместо старого градиента */
+.scroll-progress {
+  height: 3px;
+  background: var(--neo-verm);
+}
+/* Кнопка «наверх»: стикер в общей системе */
+#to-top {
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--neo-ink);
+  box-shadow: var(--neo-hard-sm);
+  background: var(--neo-surface);
+}
+#to-top:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); }
