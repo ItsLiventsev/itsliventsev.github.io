@@ -52,7 +52,6 @@
   /* --ease — историческое имя, остаётся алиасом стандартной кривой */
   --ease: var(--ease-standard);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* Единая типошкала мягкой системы (имена и ступени согласуются с STAND//LAB) */
   --fs-micro: .68rem;
   --fs-mini: .75rem;
@@ -894,18 +893,6 @@ code, .code {
 .marquee-content { flex-shrink: 0; display: flex; gap: 2rem; }
 
 /* ---------- 14. Подвал ---------- */
-.site-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 1.5rem;
-  margin-top: 2.5rem;
-  border-top: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: var(--fs-mini);
-  color: var(--faint);
-  text-align: center;
-}
 
 /* Кнопка «наверх» */
 #to-top {
@@ -2540,9 +2527,9 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
   margin-left: .35rem;
   padding: .18rem .55rem;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   background: var(--surface-2);
-  color: var(--faint);
+  color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--fs-micro);
   font-weight: 600;
@@ -2935,7 +2922,6 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--border-strong, #94a3b8) transparent;
 }
-.site-footer { border-top: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, var(--border)) 0, var(--border) 38%) left top / 100% 1px no-repeat; }
 
 /* ==========================================================================
    Дизайн 2026 · волна 4: кинетическая типографика, тёпло-холодный
@@ -3005,22 +2991,6 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Гигантские outline-слова: брутализм-акценты с кинетикой от --sk */
-.giant-word {
-  font-family: var(--font-mono);
-  font-size: clamp(4.5rem, 17vw, 13rem);
-  font-weight: 800;
-  line-height: .92;
-  letter-spacing: -.045em;
-  text-transform: lowercase;
-  color: transparent;
-  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent) 42%, transparent);
-  transform: translateX(calc((var(--sk) - .5) * 70px));
-  user-select: none;
-  pointer-events: none;
-  margin: -1.2rem 0 -1.6rem;
-}
-.giant-word--right { text-align: right; transform: translateX(calc((.5 - var(--sk)) * 70px)); }
 
 /* Кнопка-градиент: тёплый → фиолетовый (неожиданный переход) */
 .btn-primary {
@@ -3090,8 +3060,8 @@ body {
   --neo-verm-ink: #ff8a54;
   --neo-hard: 6px 6px 0 0 rgba(239, 232, 214, .3);
   --neo-hard-sm: 4px 4px 0 0 rgba(239, 232, 214, .3);
-  --neo-footer-bg: #efe8d6;
-  --neo-footer-text: #14110a;
+  --neo-footer-bg: #201b10;
+  --neo-footer-text: #efe8d6;
   --bg: var(--neo-paper);
   --surface: var(--neo-surface);
   --surface-2: var(--neo-surface-2);
@@ -3260,10 +3230,18 @@ main a:not(.btn):not(.icon-btn):not(.nav-link):not(.flat-btn):not(.p-arrow):not(
 
 /* Футер: чернильная полоса с вермильоновой кромкой */
 .site-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.5rem;
+  margin-top: 2.5rem;
   background: var(--neo-footer-bg);
   color: var(--neo-footer-text);
   border-top: 4px solid var(--neo-verm);
   box-shadow: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mini);
+  text-align: center;
 }
 .site-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .site-footer a:hover { color: var(--neo-leaf); }
@@ -3433,3 +3411,12 @@ main a:not(.btn):not(.icon-btn):not(.nav-link):not(.flat-btn):not(.p-arrow):not(
 
 /* NEO UNIFY · волна 8: глобальный header на страницах стендов */
 @media (max-width: 720px) { .st-global-header .site-nav { display: none; } }
+
+/* ==========================================================================
+   POLISH 2026 · волна 9: находки аудита — мобайл, тени, полировка
+   ========================================================================== */
+html, body { overflow-x: hidden; overflow-x: clip; }
+@media (max-width: 640px) {
+  .giant-word { display: none; }
+  .bg-glyphs { display: none; }
+}

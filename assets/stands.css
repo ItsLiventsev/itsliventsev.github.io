@@ -2473,9 +2473,9 @@ html[data-theme="light"] body.flat-scope {
 :root {
   --font-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
   --st-radius: 0px;
-  --st-hard: 5px 5px 0 0 rgba(0, 0, 0, .75);
+  --st-hard: 5px 5px 0 0 var(--st-hard-color);
 }
-html[data-theme="light"] .flat-scope { --st-hard: 5px 5px 0 0 rgba(26, 22, 12, .8); }
+html[data-theme="light"] .flat-scope { --st-hard: 5px 5px 0 0 rgba(26, 22, 12, .8); --st-hard-color: rgba(26, 22, 12, .8); }
 
 /* Сетка вместо aurora: чертёжная клетка без градиентных полей */
 body.flat-scope {
@@ -2513,8 +2513,8 @@ body.flat-scope {
   transition: transform var(--dur-fast, 120ms) var(--ease-standard, ease),
               box-shadow var(--dur-fast, 120ms) var(--ease-standard, ease);
 }
-.flat-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 rgba(0, 0, 0, .75); }
-.flat-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 rgba(0, 0, 0, .75); }
+.flat-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 var(--st-hard-color); }
+.flat-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--st-hard-color); }
 .flat-btn[disabled] { box-shadow: none; transform: none; }
 
 /* Топбар: жёсткая линия вместо стекла */
@@ -2528,7 +2528,7 @@ body.flat-scope {
   transition: transform var(--dur-fast, 120ms) var(--ease-standard, ease),
               box-shadow var(--dur-fast, 120ms) var(--ease-standard, ease);
 }
-.bento-cell:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 rgba(0, 0, 0, .75); }
+.bento-cell:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 var(--st-hard-color); }
 
 /* Панели и инпуты: прямые углы */
 .panel, .st-panel, .rw-card, .st-hero-index { border-radius: 0; }
@@ -2542,7 +2542,7 @@ input, select, textarea { border-radius: 0; }
 /* ==========================================================================
    NEO CASUAL 2026 · волна 7: вселенные — скругления-стикеры, мягкие блоки
    ========================================================================== */
-:root { --st-radius: 14px; }
+:root { --st-radius: 14px; --st-hard-color: rgba(239, 232, 214, .3); }
 
 .flat-btn, .bento-cell, .panel, .st-panel, .rw-card, .st-hero-index,
 .flat-badge, .kind-badge, .st-section-num, .ops-role-chip {
