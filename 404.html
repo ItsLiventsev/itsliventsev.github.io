@@ -11,15 +11,14 @@
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://cdn.tailwindcss.com">
-<script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},8000);document.head.appendChild(s);})();</script>
+<script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},3000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031aa">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031aa">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031aa">
-<link rel="stylesheet" href="assets/flow.css?v=20261031aa">
+<link rel="stylesheet" href="assets/site.css?v=20261031ab">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031ab">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031ab">
   <meta property="og:type" content="website">
   <meta property="og:title" content="404 · страница не найдена · itsliventsev">
   <meta property="og:description" content="Такой страницы нет — но есть рабочие разделы сайта.">
@@ -33,7 +32,7 @@
 </head>
 <body class="bg-grid" data-accent="blue">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
 
 <!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
 <div class="ambient" aria-hidden="true">
@@ -84,7 +83,7 @@
           <p style="color:var(--danger-text);">HTTP/1.1 404 Not Found</p>
           <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> echo $EXCEPTION</p>
           <p style="color:var(--text-2);">Страница переехала, не существовала или была удалена при уборке.</p>
-          <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> ls /suggestions <span class="title-mark blink" aria-hidden="true">▌</span></p>
+          <p style="color:var(--muted);"><span style="color:var(--accent);">$</span> ls /suggestions <span class="title-mark" aria-hidden="true">▌</span></p>
         </div>
       </section>
 
@@ -113,10 +112,9 @@
   </footer>
 </div>
 
-<script src="assets/mascots.js?v=20261031aa"></script>
+<script src="assets/mascots.js?v=20261031ab"></script>
 <script>try { document.getElementById('error-mascot').innerHTML = MASCOTS.svg('owl', { size: 72, floating: true }); } catch (e) {}</script>
-<script src="assets/site.js?v=20261031aa"></script>
-<script src="assets/shared-chrome.js?v=20261031aa"></script>
-<script src="assets/flow.js?v=20261031aa"></script>
+<script src="assets/site.js?v=20261031ab"></script>
+<script src="assets/shared-chrome.js?v=20261031ab"></script>
 </body>
 </html>
