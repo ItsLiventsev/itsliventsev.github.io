@@ -2199,3 +2199,96 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
   .rw-grid { grid-template-columns: 1fr; }
   .rw-balance-coins, .rw-balance-xp { text-align: left; }
 }
+
+/* ==========================================================================
+   Дизайн 2026 · стекло 2.0, живые отклики, hero
+   Политика обновлена владельцем сайта: backdrop-filter разрешён — только
+   внутри @supports с деградацией на сплошную поверхность. AA-контраст,
+   reduce-motion и compositor-only анимации неизменны; подсветки статичны.
+   ========================================================================== */
+:root { --st-glass-blur: 14px; }
+
+/* Шапка вселенных: стеклянная поверхность над контентом */
+.st-topbar {
+  background: color-mix(in srgb, var(--st-bg) 80%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--st-line-strong) 88%, transparent);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .st-topbar {
+    background: color-mix(in srgb, var(--st-bg) 64%, transparent);
+    -webkit-backdrop-filter: blur(var(--st-glass-blur)) saturate(1.35);
+    backdrop-filter: blur(var(--st-glass-blur)) saturate(1.35);
+  }
+  .st-topbar.is-scrolled {
+    background: color-mix(in srgb, var(--st-bg) 82%, transparent);
+  }
+}
+
+/* Hero: статичная акцентная подсветка + крупный дисплейный заголовок */
+.st-hero, .flat-head { position: relative; isolation: isolate; }
+.st-hero::before {
+  content: ""; position: absolute; z-index: -1;
+  top: -1.25rem; left: -1rem; width: min(38rem, 72%); height: calc(100% + 2.5rem);
+  background: radial-gradient(60% 85% at 22% 12%,
+    color-mix(in srgb, var(--st-accent) 15%, transparent), transparent 72%);
+  pointer-events: none;
+}
+.st-hero h1, .flat-head h1 { font-size: clamp(1.7rem, 4.6vw, 2.65rem); }
+.st-hero-index, .flat-index { background: color-mix(in srgb, var(--st-bg) 72%, transparent); }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .st-hero-index, .flat-index {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Единый микро-отклик карточек: подъём на hover, пружина на press */
+.rw-card, .ops-cocard, .ach-card, .lg-award, .quest-card {
+  transition: transform var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard),
+              box-shadow var(--dur-fast) var(--ease-standard);
+}
+.rw-card:hover, .lg-award:hover, .ach-card.is-unlocked:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--st-accent) 45%, var(--st-line-strong));
+  box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--st-accent) 55%, transparent);
+}
+.ops-cocard:hover, .quest-card:hover {
+  border-color: color-mix(in srgb, var(--st-accent-2) 55%, var(--st-line-strong));
+}
+.rw-card:focus-within, .ops-cocard:focus-within {
+  border-color: color-mix(in srgb, var(--st-accent) 60%, var(--st-line-strong));
+}
+.rw-card:active, .ach-card:active, .lg-award:active { transform: translateY(-1px) scale(.985); }
+
+/* Карточка «продолжить с места» (LMS-персонализация) */
+.resume-card {
+  display: flex; align-items: center; gap: var(--st-sp-3); flex-wrap: wrap;
+  border: 1px solid color-mix(in srgb, var(--st-accent) 38%, var(--st-line-strong));
+  border-left: 3px solid var(--st-accent);
+  border-radius: var(--st-radius);
+  background: color-mix(in srgb, var(--st-accent) 7%, var(--st-panel));
+  padding: var(--st-sp-3) var(--st-sp-4);
+  margin: 0 0 var(--st-sp-5);
+}
+.resume-card-label {
+  font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700;
+  letter-spacing: var(--st-ls-kicker, .08em); text-transform: uppercase;
+  color: var(--st-accent);
+}
+.resume-card-link {
+  font-weight: 700; color: var(--st-text); text-decoration: none;
+  padding: var(--st-sp-1) var(--st-sp-2); min-height: 2.75rem;
+  display: inline-flex; align-items: center;
+}
+.resume-card-link:hover { color: var(--st-accent); }
+.resume-card-link:focus-visible { outline: 2px solid var(--st-accent); outline-offset: 2px; }
+.resume-card-when { font-family: var(--st-mono); font-size: var(--st-fs-micro); color: var(--st-faint); }
+.resume-card-reset {
+  margin-left: auto;
+  font-family: var(--st-mono); font-size: var(--st-fs-micro); font-weight: 700;
+  color: var(--st-faint); background: none; border: 1px solid var(--st-line-strong);
+  border-radius: var(--st-radius); padding: var(--st-sp-1) var(--st-sp-3);
+  min-height: 2.75rem; cursor: pointer;
+}
+.resume-card-reset:hover { color: var(--st-bad, #b91c1c); border-color: var(--st-bad, #b91c1c); }
