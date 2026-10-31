@@ -340,6 +340,21 @@
     return { xp: xp, coins: coins, level: levelOf(xp) };
   }
   var _lastLogin = {};
+  /* Серия входов (streak): подряд идущие дни с наградой login.
+     Если сегодня входа ещё нет, серия считается со вчера — вечерняя
+     смена не рвёт серию. */
+  function loginStreak(profileId) {
+    var days = {};
+    ledger().forEach(function (e) {
+      if (e.profileId === profileId && e.type === 'login' && e.at) days[e.at.slice(0, 10)] = true;
+    });
+    function fmt(d) { return d.toISOString().slice(0, 10); }
+    var streak = 0;
+    var d = new Date();
+    if (!days[fmt(d)]) d.setDate(d.getDate() - 1);
+    while (days[fmt(d)]) { streak++; d.setDate(d.getDate() - 1); }
+    return streak;
+  }
   function dailyLogin(profileId) {
     var day = new Date().toISOString().slice(0, 10);
     if (_lastLogin[profileId] === day) return { duplicated: true };
@@ -651,7 +666,7 @@
     crewFor: crewFor, levelOf: levelOf, handleFor: handleFor,
     getProfile: getProfile, ensureProfile: ensureProfile, updateProfile: updateProfile,
     setMascot: setMascot, publicStudent: publicStudent,
-    ledger: ledger, award: award, totals: totals, dailyLogin: dailyLogin,
+    ledger: ledger, award: award, totals: totals, dailyLogin: dailyLogin, loginStreak: loginStreak,
     prpBalance: prpBalance, earnPrp: earnPrp, spendPrp: spendPrp,
     submissions: submissions, addSubmission: addSubmission, bestSubmission: bestSubmission,
     tickets: tickets, createTicket: createTicket, getTicket: getTicket, updateTicket: updateTicket,

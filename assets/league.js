@@ -195,6 +195,21 @@
     write(KEYS.ledger, log);
     return { duplicated: false, event: event };
   }
+  /* Серия входов (streak): подряд идущие дни с наградой login.
+     Если сегодня входа ещё нет, серия считается со вчера — вечерняя
+     смена не рвёт серию. */
+  function loginStreak(profileId) {
+    var days = {};
+    ledger().forEach(function (e) {
+      if (e.profileId === profileId && e.type === 'login' && e.at) days[e.at.slice(0, 10)] = true;
+    });
+    function fmt(d) { return d.toISOString().slice(0, 10); }
+    var streak = 0;
+    var d = new Date();
+    if (!days[fmt(d)]) d.setDate(d.getDate() - 1);
+    while (days[fmt(d)]) { streak++; d.setDate(d.getDate() - 1); }
+    return streak;
+  }
   function dailyLogin(profileId) {
     var day = new Date().toISOString().slice(0, 10);
     return award(profileId, 'login', 'login:' + day);
@@ -724,7 +739,7 @@
     ledger: ledger,
     totals: totals,
     award: award,
-    dailyLogin: dailyLogin,
+    dailyLogin: dailyLogin, loginStreak: loginStreak,
     submissions: submissions,
     addSubmission: addSubmission,
     bestSubmission: bestSubmission,

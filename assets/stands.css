@@ -2364,3 +2364,73 @@ html[data-theme="light"] body.flat-scope {
     backdrop-filter: blur(10px) saturate(1.25);
   }
 }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 3: bento-хаб и микро-детали
+   ========================================================================== */
+
+/* Bento-дашборд экосистемы на хабе вселенных */
+.bento {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--st-sp-3);
+}
+.bento-cell {
+  position: relative; overflow: hidden;
+  grid-column: span 2; min-height: 9rem;
+  display: flex; flex-direction: column; gap: var(--st-sp-2);
+  padding: var(--st-sp-4) var(--st-sp-5);
+  background: color-mix(in srgb, var(--st-panel) 86%, transparent);
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard),
+              border-color var(--dur-fast) var(--ease-standard),
+              box-shadow var(--dur-fast) var(--ease-standard);
+}
+.bento-cell--wide { grid-column: span 4; }
+.bento-cell::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(18rem 9rem at 88% -20%,
+    color-mix(in srgb, var(--st-accent) 14%, transparent), transparent 70%);
+  opacity: 0; transition: opacity var(--dur-fast) var(--ease-standard);
+}
+.bento-cell:hover, .bento-cell:focus-visible {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--st-accent) 50%, var(--st-line-strong));
+  box-shadow: 0 16px 34px -20px color-mix(in srgb, var(--st-accent) 70%, transparent);
+}
+.bento-cell:hover::after, .bento-cell:focus-visible::after { opacity: 1; }
+.bento-cell:focus-visible { outline: 2px solid var(--st-accent); outline-offset: 2px; }
+.bento-num {
+  font-size: 1.5rem; font-weight: 700; color: var(--st-accent);
+  font-family: var(--st-mono);
+}
+.bento-title { font-size: var(--st-fs-h4, 1.06rem); font-weight: 800; color: var(--st-text); }
+.bento-desc { font-size: var(--st-fs-sm, .875rem); color: var(--st-muted); line-height: 1.55; }
+.bento-go {
+  position: absolute; right: var(--st-sp-4); bottom: var(--st-sp-3);
+  font-family: var(--st-mono); font-size: 1.3rem; color: var(--st-faint);
+  transition: color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+.bento-cell:hover .bento-go { color: var(--st-accent); transform: translateX(3px); }
+@media (max-width: 900px) {
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .bento-cell, .bento-cell--wide { grid-column: span 1; }
+  .bento-cell--wide:first-child { grid-column: span 2; }
+}
+@media (max-width: 560px) {
+  .bento-cell, .bento-cell--wide, .bento-cell--wide:first-child { grid-column: span 1; }
+}
+
+/* Микро-детали: выделение текста, скроллбары, футер, чипы секций */
+.flat-scope ::selection { background: color-mix(in srgb, var(--st-accent) 32%, transparent); }
+.flat-scope * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--st-line-strong) transparent;
+}
+.st-footer { border-top: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--st-accent) 40%, var(--st-line)) 0, var(--st-line) 38%) left top / 100% 1px no-repeat; }
+.st-section-num {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--st-accent) 16%, var(--st-panel)), var(--st-panel));
+  border-color: color-mix(in srgb, var(--st-accent) 35%, var(--st-line-strong));
+}
+
+/* Серия входов (streak): мягкая акцентная метка */
+.rw-streak { color: var(--st-accent); font-weight: 700; white-space: nowrap; }

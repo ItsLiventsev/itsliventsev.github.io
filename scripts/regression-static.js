@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ai';
+const VERSION = '20261031aj';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -402,6 +402,16 @@ ok(siteCss.includes('radial-gradient(60rem 34rem at 88% -8rem') && siteCss.inclu
 ok(stCss.includes('.resume-card') && read('assets/shared-chrome.js').includes('stands-last-'), 'нет механики «продолжить с места»');
 ok(stCss.includes('clamp(1.7rem, 4.6vw, 2.65rem)'), 'stands.css: hero-заголовок не масштабирован (дизайн 2026)');
 ok(stCss.includes('.rw-card:hover') && stCss.includes('.ops-cocard:hover'), 'stands.css: нет микро-отклика карточек');
+/* дизайн 2026 · волна 3: bento-хаб и микро-детали */
+ok(read('stands/index.html').includes('bento-cell--wide') && read('stands/index.html').includes('экосистема практики'), 'stands/index.html: bento-хаб не собран');
+ok(stCss.includes('.bento-cell:hover') && stCss.includes('grid-template-columns: repeat(6, 1fr)'), 'stands.css: нет стилей bento');
+ok(stCss.includes('.flat-scope ::selection') && siteCss.includes('::selection'), 'нет акцентного выделения текста');
+ok(stCss.includes('scrollbar-width: thin') && siteCss.includes('scrollbar-width: thin'), 'нет тонких скроллбаров');
+ok(stCss.includes('.st-footer { border-top: 0') && siteCss.includes('.site-footer { border-top: 0'), 'футеры без градиентной линейки');
+for (const eng of ['assets/league.js', 'assets/ops-engine.js', 'assets/office-engine.js']) {
+  ok(read(eng).includes('function loginStreak') && read(eng).includes('loginStreak: loginStreak'), eng + ': нет единой механики streak');
+}
+ok(read('assets/rewards-page.js').includes('rw-streak') && read('assets/league-page.js').includes('серия'), 'нет отображения серии входов');
 ok(!siteCss.includes('.text-gradient') && !read('projects/esports.html').includes('text-gradient'), 'градиентный текст не удалён');
 ok(siteCss.includes('--fs-body: 1rem'), 'тело меньше 16px');
 ok(siteCss.includes('--accent: #c2410c'), 'оранжевый акцент не AA (светлая тема)');
@@ -411,7 +421,7 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031ah') && !c.includes('?v=20261031ag') && !c.includes('?v=20261031ac'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ai') && !c.includes('?v=20261031ah') && !c.includes('?v=20261031ag'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */

@@ -2912,3 +2912,13 @@ body {
   box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--accent) 80%, transparent),
               0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
 }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 3: микро-детали основной площадки
+   ========================================================================== */
+::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong, #94a3b8) transparent;
+}
+.site-footer { border-top: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, var(--border)) 0, var(--border) 38%) left top / 100% 1px no-repeat; }

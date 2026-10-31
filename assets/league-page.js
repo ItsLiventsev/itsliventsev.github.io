@@ -43,6 +43,7 @@
     var ordersInWork = LEAGUE.myClaims
       ? LEAGUE.myClaims(profile.id).filter(function (c) { return c.status === 'local' || c.status === 'rejected'; }).length
       : 0;
+    var streak = LEAGUE.loginStreak ? LEAGUE.loginStreak(profile.id) : 0;
     var tribe = LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
     var handle = LEAGUE.handleFor(profile);
     $('lg-name').textContent = profile.name;
@@ -66,6 +67,7 @@
       ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег' +
       ' · обменяй неткоины на <a href="rewards.html">бирже привилегий</a>' +
       (ordersInWork ? ' · ордеров в работе: ' + ordersInWork : '') +
+      (streak > 1 ? ' · <span class="rw-streak">🔥 серия: ' + streak + ' дн.</span>' : '') +
       '</p>';
   }
 
