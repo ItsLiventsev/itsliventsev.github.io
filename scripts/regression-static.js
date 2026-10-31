@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031at';
+const VERSION = '20261031au';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031as') && !c.includes('?v=20261031ar') && !c.includes('?v=20261031aq'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031at') && !c.includes('?v=20261031as') && !c.includes('?v=20261031ar'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -657,6 +657,16 @@ ok(siteCss.includes('.light-card:hover { transform: translate(-2px, -2px); box-s
 let twGrad = 0;
 const gradBtn = /linear-gradient\([^)]*\)[^}]*;?\s*\n?\s*border[^:]*:[^;]*;/;
 ok(!/(?:^|[},\\s])\\.(?:btn|btn-primary|btn-ghost|btn-danger|btn-lg|btn-sm|flat-btn|filter-btn)[^{}]*\\{[^{}]*linear-gradient/.test(siteCss + stCss), 'на кнопках остались градиентные фоны');
+
+/* дизайн 2026 · волна 14: navigation-case в NEO, адаптация */
+ok(!siteCss.includes('nav-glass'), 'site.css: стекло кейса навигации не вычищено');
+ok(siteCss.split('blur(70px)').length === 2, 'site.css: blur-поля вне reduce-блока живы');
+ok(siteCss.includes('.nav-hero-title {\n  font-family: var(--font-display);') && siteCss.includes('radial-gradient(22rem 12rem at 88% -6rem'), 'site.css: hero кейса не в NEO');
+ok(siteCss.includes('.sign-card:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 0 var(--neo-ink); }'), 'site.css: карточки знаков не в NEO');
+ok(siteCss.includes('box-shadow: var(--neo-hard-sm);\n  max-width: calc(100vw - 2rem);'), 'site.css: док-меню кейса не в NEO');
+ok(siteCss.includes('.stair-badge.letter { background: var(--nav-graphite);') && siteCss.includes('--nav-mint-ink'), 'site.css: контрасты кейса не подняты');
+ok(stCss.includes('.flat-scope :focus-visible'), 'stands.css: нет единого фокуса');
+ok(siteCss.includes('env(safe-area-inset-bottom'), 'site.css: нет safe-area для фиксированного хрома');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

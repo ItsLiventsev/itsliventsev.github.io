@@ -2662,3 +2662,6 @@ html[data-theme="light"] body.flat-scope {
 @media (prefers-reduced-motion: reduce) {
   .flat-btn, .theme-toggle, .quest-card, .ops-cocard, .rw-card, .lg-award, .ach-card { transform: none !important; }
 }
+
+/* Волна 14: единый фокус на стендах + safe-area */
+.flat-scope :focus-visible { outline: 3px solid var(--st-accent); outline-offset: 2px; }
