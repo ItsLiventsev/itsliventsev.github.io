@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ag';
+const VERSION = '20261031ah';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -380,9 +380,20 @@ ok(/hero-lead[\s\S]{0,600}?href="stands\/index.html" class="btn btn-primary btn-
 ok(read('faq.html').includes('btn btn-primary btn-sm" href="stands/index.html"'), 'faq.html: нет верхней кнопки стендов');
 
 /* 24. Дизайн-качество: AA-контраст акцентов, нет стекла, тело от 16px */
-for (const cf of ['site.css', 'stands.css', 'ops.css', 'office.css', 'shared-chrome.css', 'tw-fallback.css']) {
-  ok(!read('assets/' + cf).includes('backdrop-filter'), cf + ': остался backdrop-filter (стекло)');
+/* 24a. Стекло 2.0 (политика 2026, снят запрет владельцем): blur только
+   с @supports-деградацией, -webkit-префиксом и полупрозрачной подложкой */
+for (const cf of ['site.css', 'stands.css', 'ops.css', 'office.css', 'shared-chrome.css']) {
+  const css = read('assets/' + cf);
+  if (css.includes('backdrop-filter')) {
+    ok(/@supports[^{]*backdrop-filter/.test(css), cf + ': backdrop-filter без @supports-деградации');
+    ok(css.includes('-webkit-backdrop-filter'), cf + ': blur без -webkit- префикса');
+    ok(css.includes('color-mix(in srgb'), cf + ': стекло без полупрозрачной подложки color-mix');
+  }
 }
+ok(stCss.includes('--st-glass-blur: 14px'), 'stands.css: нет токена --st-glass-blur');
+ok(stCss.includes('.resume-card') && read('assets/shared-chrome.js').includes('stands-last-'), 'нет механики «продолжить с места»');
+ok(stCss.includes('clamp(1.7rem, 4.6vw, 2.65rem)'), 'stands.css: hero-заголовок не масштабирован (дизайн 2026)');
+ok(stCss.includes('.rw-card:hover') && stCss.includes('.ops-cocard:hover'), 'stands.css: нет микро-отклика карточек');
 ok(!siteCss.includes('.text-gradient') && !read('projects/esports.html').includes('text-gradient'), 'градиентный текст не удалён');
 ok(siteCss.includes('--fs-body: 1rem'), 'тело меньше 16px');
 ok(siteCss.includes('--accent: #c2410c'), 'оранжевый акцент не AA (светлая тема)');
@@ -392,7 +403,7 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031ac') && !c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ag') && !c.includes('?v=20261031ac') && !c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
