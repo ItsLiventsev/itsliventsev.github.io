@@ -186,3 +186,91 @@
     document.addEventListener('focusin', fromEvent, { passive: true });
   })();
 })();
+
+/* ==========================================================================
+   Продолжить с места: последняя учебная страница вселенной
+   Записываем (только факты навигации: файл, заголовок, дата) визиты
+   лабораторных страниц; на консолях вселенных показываем карточку
+   «продолжить» со ссылкой и кнопкой скрытия. Ключи по вселенным:
+   stands-last-net / -ops / -office. Ноль зависимостей, без сети.
+   ========================================================================== */
+(function () {
+  'use strict';
+  if (typeof location === 'undefined' || typeof document === 'undefined') return; /* Node/тесты */
+  var SERVICE = {
+    'index.html': 1, 'setpolis.html': 1, 'league.html': 1, 'teams.html': 1,
+    'glossary.html': 1, 'rewards.html': 1, 'crew-ops.html': 1
+  };
+  function universeOf(pathname) {
+    if (pathname.indexOf('/stands/ops/') >= 0) return 'ops';
+    if (pathname.indexOf('/stands/office/') >= 0) return 'office';
+    if (pathname.indexOf('/stands/') >= 0) return 'net';
+    return null;
+  }
+  function fileOf(pathname) {
+    var parts = pathname.split('/');
+    return parts[parts.length - 1] || '';
+  }
+  var uni = universeOf(location.pathname);
+  if (!uni) return;
+  var key = 'stands-last-' + uni;
+  var file = fileOf(location.pathname);
+  var isService = !!SERVICE[file] || file === 'index.html';
+
+  /* Запись визита учебной страницы */
+  if (!isService && /\.html$/.test(file)) {
+    try {
+      var h1 = document.querySelector('h1');
+      localStorage.setItem(key, JSON.stringify({
+        f: file,
+        t: (h1 && h1.textContent.trim().slice(0, 80)) || document.title,
+        at: new Date().toISOString()
+      }));
+    } catch (err) { /* приватный режим */ }
+  }
+
+  /* Карточка «продолжить» на консоли вселенной */
+  var isConsole = (uni === 'net') ? file === 'setpolis.html' : file === 'index.html';
+  if (!isConsole) return;
+  var raw = null;
+  try { raw = localStorage.getItem(key); } catch (err) {}
+  if (!raw) return;
+  var entry = null;
+  try { entry = JSON.parse(raw); } catch (err) { return; }
+  if (!entry || !entry.f || entry.f === file) return;
+
+  var main = document.getElementById('main-content');
+  if (!main) return;
+  var card = document.createElement('section');
+  card.className = 'lab-panel resume-card';
+  var label = document.createElement('span');
+  label.className = 'resume-card-label';
+  label.textContent = 'продолжить';
+  var link = document.createElement('a');
+  link.className = 'resume-card-link';
+  link.href = entry.f;
+  link.textContent = entry.t || entry.f;
+  var when = document.createElement('span');
+  when.className = 'resume-card-when';
+  try { when.textContent = new Date(entry.at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }); }
+  catch (err) { when.textContent = ''; }
+  var reset = document.createElement('button');
+  reset.type = 'button';
+  reset.className = 'resume-card-reset';
+  reset.textContent = 'скрыть';
+  reset.addEventListener('click', function () {
+    try { localStorage.removeItem(key); } catch (err) {}
+    if (card.parentNode) card.parentNode.removeChild(card);
+  });
+  card.appendChild(label);
+  card.appendChild(link);
+  card.appendChild(when);
+  card.appendChild(reset);
+  var crumbs = main.querySelector('.st-crumbs');
+  if (crumbs && crumbs.parentNode) {
+    if (crumbs.nextSibling) crumbs.parentNode.insertBefore(card, crumbs.nextSibling);
+    else crumbs.parentNode.appendChild(card);
+  } else {
+    main.insertBefore(card, main.firstChild);
+  }
+})();
