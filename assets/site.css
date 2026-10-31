@@ -888,8 +888,8 @@ code, .code {
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 60;
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
@@ -1918,7 +1918,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   z-index: 10;                      /* над .floating-elements (z-index:0) */
 }
 /* Мера чтения для длинных текстов внутри широкой рамки */
-.prose-measure { max-width: 46rem;   /* ~736px: комфортная длина строки */ }
+.prose-measure { max-width: 40rem;   /* ~640px: 75-80 знаков строки — редакционная норма */ }
 .prose-measure.centered { margin-inline: auto; }
 
 /* === Блог: плотная мозаика мелких карточек-заметок === */
@@ -3061,9 +3061,9 @@ body {
   box-shadow: 0 0 0 0 var(--neo-ink);
 }
 .btn-primary {
-  background: var(--neo-leaf);
+  background: var(--neo-ink);
   border-color: var(--neo-ink);
-  color: #1a160c;
+  color: var(--neo-paper);
 }
 .btn-primary:hover {
   background: var(--neo-verm);
@@ -3071,7 +3071,7 @@ body {
   color: #1a160c;
 }
 .btn-ghost { background: transparent; }
-.btn-ghost:hover { background: var(--neo-leaf); }
+.btn-ghost:hover { background: var(--neo-leaf-tint); }
 
 /* Чипы и теги: прямоугольные штампы */
 .chip, .chip-sm, .kind-badge, .flat-badge {
@@ -3426,3 +3426,16 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 /* FAQ: аккордеон в общей системе — крупнее и спокойнее */
 .faq-summary { font-size: 1.02rem; padding: 1.05rem 1.15rem; }
 .faq-answer { font-size: 1rem; line-height: 1.65; }
+
+/* Волна 16: скролл-прогресс на CSS animation-timeline (прогрессивное улучшение;
+   в браузерах без поддержки работает JS-движок site.js) */
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: neo-scroll-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes neo-scroll-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}

@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031av';
+const VERSION = '20261031aw';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -430,7 +430,7 @@ ok(siteCss.includes('--radius: 16px') && siteCss.includes('--radius-pill: 999px'
 ok(siteCss.includes('--shadow-card: var(--neo-hard)') && siteCss.includes('6px 6px 0 0 #1a160c'), 'site.css: нет жёстких offset-теней');
 ok(siteCss.includes('--border: #1a160c') && siteCss.includes('--border-strong: #1a160c'), 'site.css: чернильные рамки не включены');
 ok(siteCss.includes('.btn:active') && siteCss.includes('transform: translate(2px, 2px)'), 'site.css: нет микро-взаимодействия нажатия кнопок');
-ok(siteCss.includes('.btn-primary {\n  background: var(--neo-leaf)') && siteCss.includes('.btn-primary:hover {\n  background: var(--neo-verm)'), 'site.css: primary-кнопка без перехода шалфей->коралл');
+ok(siteCss.includes('.btn-primary {\n  background: var(--neo-ink)') && siteCss.includes('.btn-primary:hover {\n  background: var(--neo-verm)'), 'site.css: primary-кнопка без перехода чернила->верм');
 ok(!siteCss.includes('.ticker') , 'site.css: тикер не удалён');
 ok(siteCss.includes("skewX(calc(var(--sk, 0) * -2.4deg + var(--sq, 0) * -3deg))"), 'site.css: hero без скоростного наклона --sq');
 ok(siteCss.includes('.nf-code') && siteCss.includes('.nf-title') && read('404.html').includes('nf-code'), '404: нет новой композиции nf-code');
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031au') && !c.includes('?v=20261031at') && !c.includes('?v=20261031as'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031av') && !c.includes('?v=20261031au') && !c.includes('?v=20261031at'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -687,6 +687,27 @@ ok(stCss.includes('.uni-card--office { --card-accent: #96602a;'), 'stands.css: �
 
 ok(!read('stands/index.html').includes('system-badge') && !read('stands/index.html').includes('system://'), 'stands/index: бейдж system://training-universes не удалён');
 ok(!siteCss.includes('.system-badge'), 'site.css: мёртвый CSS system-badge не удалён');
+
+/* дизайн 2026 · волна 16: system-audit — контраст расчётом, типографика чтения */
+function crLum(hex) {
+  const h = hex.replace('#', '');
+  const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  return 0.2126 * f(parseInt(h.slice(0, 2), 16)) + 0.7152 * f(parseInt(h.slice(2, 4), 16)) + 0.0722 * f(parseInt(h.slice(4, 6), 16));
+}
+function crRatio(a, b) {
+  const [l1, l2] = [crLum(a), crLum(b)].sort((x, y) => y - x);
+  return (l1 + 0.05) / (l2 + 0.05);
+}
+ok(crRatio('#f4efe4', '#1a160c') >= 7, 'контраст бумага/чернила < AAA');
+ok(crRatio('#ffffff', '#cf4a18') >= 4.5 && crRatio('#ffffff', '#96602a') >= 4.5 && crRatio('#ffffff', '#4f7a44') >= 4.5, 'is-active фильтров: белый на акцентах < AA');
+ok(crRatio('#1a160c', '#e4572e') >= 4.5, 'hover btn-primary (чернила на верм) < AA');
+ok(crRatio('#f4efe4', '#1a160c') >= 4.5, 'btn-primary (бумага на чернилах) < AA');
+ok(siteCss.includes('.btn-primary {\n  background: var(--neo-ink);') && siteCss.includes('.btn-ghost:hover { background: var(--neo-leaf-tint); }'), 'кнопки не переведены на AA-пары (чернильная primary, тинт-ghost)');
+ok(siteCss.includes('.prose-measure { max-width: 40rem;'), 'длина строки чтения не приведена к редакционной норме');
+ok(siteCss.includes('width: 2.75rem;\n  height: 2.75rem;'), 'to-top: тач-цель < 44px');
+ok(siteCss.includes('animation-timeline: scroll(root block)') && siteCss.includes('@keyframes neo-scroll-progress'), 'нет CSS-first скролл-прогресса');
+ok(!read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html').includes('text-[15px]'), 'статья: кегль 15px на мобиле не устранён');
+ok(exists('docs/design-system.md') && read('docs/design-system.md').includes('Наследуемость'), 'docs/design-system.md отсутствует или неполон');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
