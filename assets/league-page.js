@@ -77,7 +77,7 @@
     var unlocked = list.filter(function (a) { return a.unlocked; }).length;
     box.innerHTML = list.map(function (a) {
       return '<div class="ach-card ' + (a.unlocked ? 'is-unlocked' : 'is-locked') + '" title="' + esc(a.desc) + '">' +
-        '<span class="ach-icon">' + a.icon + '</span>' +
+        '<span class="ach-icon" aria-hidden="true">' + a.icon + '</span>' +
         '<div><h4>' + esc(a.title) + '</h4><p>' + esc(a.desc) + '</p></div></div>';
     }).join('') +
     '<p class="admin-hint">открыто ' + unlocked + ' из ' + list.length + ' — бейджи считаются только из фактических действий, нарисовать их нельзя</p>';

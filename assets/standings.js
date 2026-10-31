@@ -98,8 +98,9 @@
     return '<div class="std-table-wrap"><table class="std-table">' +
       '<thead><tr><th>трайб</th><th>опыт</th><th>неткоины</th><th>работ</th><th>состав</th><th class="std-col-bar">копилка опыта</th></tr></thead><tbody>' +
       rows.map(function (r, i) {
+        var head = medals[i] ? '<span aria-hidden="true">' + medals[i] + '</span> ' : (i + 1) + '. ';
         return '<tr>' +
-          '<td class="std-place">' + (medals[i] || (i + 1) + '.') + ' ' + esc(r.name || r.id) + '</td>' +
+          '<td class="std-place">' + head + esc(r.name || r.id) + '</td>' +
           '<td class="mono">' + num(r.xp) + '</td>' +
           '<td class="mono">' + num(r.coins) + ' ◈</td>' +
           '<td class="mono">' + num(r.works) + '</td>' +
@@ -191,10 +192,11 @@
     var table = '<div class="std-table-wrap"><table class="std-table">' +
       '<thead><tr><th>экипаж</th><th>очков</th><th class="std-col-bar">копилка экипажа</th></tr></thead><tbody>' +
       dp.crews.slice().sort(function (a, b) { return b.points - a.points; }).map(function (c, i) {
+        var head = medals[i] ? '<span aria-hidden="true">' + medals[i] + '</span> ' : (i + 1) + '. ';
         return '<tr>' +
-          '<td class="std-place">' + (medals[i] || (i + 1) + '.') + ' ' + esc(c.name || c.id) + '</td>' +
+          '<td class="std-place">' + head + esc(c.name || c.id) + '</td>' +
           '<td class="mono">' + num(c.points) + '</td>' +
-          '<td class="std-col-bar"><span class="std-bar"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
+          '<td class="std-col-bar"><span class="std-bar" aria-hidden="true"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
           '</tr>';
       }).join('') + '</tbody></table></div>';
     return '<p class="list-lead"><strong>экипажи ДатаПолиса · очки за операции</strong></p>' + table + opsLine;
