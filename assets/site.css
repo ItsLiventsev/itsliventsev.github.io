@@ -3442,3 +3442,74 @@ html, body { overflow-x: hidden; overflow-x: clip; }
     .scroll-progress { animation: none; }
   }
 }
+
+/* ==========================================================================
+   MISPRINT 2026 · волна 18: display-подложки чтения, misprint-секции,
+   reveal зон — единая дисплейная система на всех страницах
+   ========================================================================== */
+/* Заголовок статьи: та же листовая подложка и кинетика, что у hero
+   (масштаб мягче: дрейф 10px / наклон -1.2deg против 26px / -2.4deg) */
+.article-title {
+  text-shadow: 5px 5px 0 var(--neo-leaf);
+  transform: translateX(calc(var(--sk, 0) * 10px)) skewX(calc(var(--sk, 0) * -1.2deg));
+  animation: display-in .42s var(--ease) backwards;
+}
+/* Зоны (projects/stands) и esp-секции: крупный дисплей с общей подложкой */
+.zone-title {
+  font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.04;
+  text-shadow: 5px 5px 0 var(--neo-leaf);
+}
+.esp-title {
+  font-weight: 900;
+  letter-spacing: -.02em;
+  text-shadow: 4px 4px 0 var(--neo-leaf);
+}
+/* Serif-вставки внутри дисплейных заголовков — без листовой подложки */
+.zone-title .zt-serif, .esp-title .zt-serif, .article-title .zt-serif { text-shadow: none; }
+
+/* Секционные заголовки чтения (статья, архив, заметки, превью админки):
+   misprint — контур + ацидовый сдвиг, наследник .giant-word */
+.prose-neo h2, .prose-measure h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  text-transform: lowercase;
+  text-shadow: 4px 4px 0 rgba(216, 242, 75, .5);
+}
+/* Номерные и служебные span внутри misprint-заголовков: чистый моно */
+.prose-neo h2 span, .prose-measure h2 span { text-shadow: none; }
+@supports (-webkit-text-stroke: 1px #000) {
+  .prose-neo h2, .prose-measure h2 {
+    color: transparent;
+    -webkit-text-stroke: 1.4px var(--neo-ink);
+  }
+  .prose-neo h2 span, .prose-measure h2 span { color: var(--faint); -webkit-text-stroke: 0; }
+}
+
+/* Появление дисплейных заголовков при входе в кадр (прогрессивное;
+   в браузерах без view() заголовки просто видимы сразу) */
+@supports (animation-timeline: view()) {
+  .zone-title, .esp-title, .prose-neo h2, .prose-measure h2 {
+    animation: display-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+  /* reduce: глобальный .01ms-гаситель не должен замораживать заголовки
+     в скрытом состоянии (урок волны 17) */
+  @media (prefers-reduced-motion: reduce) {
+    .zone-title, .esp-title, .prose-neo h2, .prose-measure h2 { animation: none; }
+  }
+}
+@keyframes display-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+/* reduce: без входной анимации и кинетики заголовка статьи */
+@media (prefers-reduced-motion: reduce) {
+  .article-title { animation: none; transform: none; }
+}
