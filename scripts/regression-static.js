@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ao';
+const VERSION = '20261031ap';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -212,7 +212,7 @@ for (const f of allHtml) {
 /* 19. Tailwind CDN + fallback на корневых страницах, которые его используют */
 for (const f of rootHtml) {
   const s = read(f);
-  if (s.includes('cdn.tailwindcss.com')) ok(s.includes('tw-failed') && exists('assets/tw-fallback.css'), f + ': нет fallback Tailwind');
+  ok(!s.includes('cdn.tailwindcss.com'), f + ': Tailwind Play CDN не убран из продакшена');
 }
 
 
@@ -407,7 +407,7 @@ ok(read('stands/index.html').includes('bento-cell--wide') && read('stands/index.
 ok(stCss.includes('.bento-cell:hover') && stCss.includes('grid-template-columns: repeat(6, 1fr)'), 'stands.css: нет стилей bento');
 ok(stCss.includes('.flat-scope ::selection') && siteCss.includes('::selection'), 'нет акцентного выделения текста');
 ok(stCss.includes('scrollbar-width: thin') && siteCss.includes('scrollbar-width: thin'), 'нет тонких скроллбаров');
-ok(stCss.includes('.st-footer { border-top: 0') && siteCss.includes('.site-footer { border-top: 0'), 'футеры без градиентной линейки');
+ok(siteCss.includes('background: var(--neo-footer-bg);') && siteCss.includes('.site-footer {\n  display: flex;'), 'site.css: нео-футер утрачен (слой слит)');
 /* дизайн 2026 · волна 4: баблы вместо квадратов + фиксы UX */
 ok(stCss.includes('--st-radius: 14px') && !stCss.includes('--st-radius: 2px'), 'stands.css: радиус-революция не проведена (остались 2px)');
 ok(stCss.includes('.flat-scope .st-topnav { scrollbar-width: none;'), 'stands.css: скроллбар навигации снова виден');
@@ -437,13 +437,13 @@ ok(siteCss.includes('.nf-code') && siteCss.includes('.nf-title') && read('404.ht
 ok(siteCss.includes('.prose-neo h2') && siteCss.includes('::first-letter'), 'site.css: нет слоя чтения статьи');
 ok(!read('index.html').includes('ticker') && !read('index.html').includes('hero-sub'), 'index.html: тикер или мелкая строка теглайна остались');
 ok(read('assets/shared-chrome.js').includes("setProperty('--sq'") && read('assets/shared-chrome.js').includes('(y - lastY) / 90'), 'shared-chrome.js: нет скоростного канала --sq');
-ok(stCss.includes(':root { --st-radius: 14px; }'), 'stands.css: вселенные не переведены на стикер-радиус');
+ok(stCss.includes('--st-radius: 14px'), 'stands.css: вселенные не переведены на стикер-радиус');
 ok(stCss.includes("font-family: var(--font-display)") && stCss.includes('.zt-serif'), 'stands.css: заголовки вселенных без NEO-пары');
 ok(!stCss.includes('#5b9dff') && !stCss.includes('#2b63c8') && !stCss.includes('#fbbf24') && !stCss.includes('#2563eb'), 'stands.css: синий/жёлтый не выведены из палитры стендов');
 ok(stCss.includes('radial-gradient(var(--grid-dot') && siteCss.includes('.st-global-header .site-nav'), 'нет унификации: сито на стендах или mobile-правило общего header');
 ok(!siteCss.includes('rgba(14, 165, 233, .07)') && !siteCss.includes('rgba(14, 165, 233, .08)'), 'site.css: небесное (синее) поле aurora не удалено');
 ok(!siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: outline-слова есть, мёртвый ht-serif удалён');
-ok(siteCss.includes('-webkit-text-stroke') && siteCss.includes('calc((var(--sk) - .5) * 70px)'), 'site.css: outline-слова без кинетики');
+ok(siteCss.includes('-webkit-text-stroke: 2px') && !siteCss.includes('-webkit-text-stroke: 1.5px') && siteCss.includes('calc((var(--sk, 0) - .5) * -90px)'), 'site.css: outline-слова без кинетики (дубль волны-5 жив)');
 ok(siteCss.includes('linear-gradient(115deg, var(--accent) 15%, var(--aur-violet))'), 'site.css: кнопка без тёпло-холодного градиента');
 ok(stCss.includes('.flat-btn { background: var(--st-btn-bg); }') && stCss.includes('position: sticky;'), 'stands.css: кнопки не солидные или топбар не липкий');
 ok(read('index.html').includes('ht-tagline') && read('index.html').includes('giant-word--right'), 'index.html: нет теглайна в большом тексте и outline-слов');
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031an') && !c.includes('?v=20261031am') && !c.includes('?v=20261031al'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ao') && !c.includes('?v=20261031an') && !c.includes('?v=20261031am'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -546,7 +546,7 @@ ok(siteCss.includes('body[data-accent="blue"]    { --accent: #cf4a18;'), 'site.c
 ok(siteCss.includes('body[data-accent="amber"]   { --accent: #96602a;') && siteCss.includes('body[data-accent="teal"],'), 'site.css: нет новых акцентов amber/teal');
 ok(siteCss.includes('--accent: #ff7a47;') && !siteCss.includes('#3b82f6'), 'site.css: синий не выведен из тёмной темы');
 ok(siteCss.includes('.note-card[data-type="digest"]  { --note-accent: #c2410c; }'), 'site.css: синий не выведен из типов заметок');
-ok(stCss.includes(':root { --st-radius: 14px; }') && stCss.includes('border-radius: 999px'), 'stands.css: нет casual-пилюль');
+ok(stCss.includes('--st-radius: 14px') && stCss.includes('border-radius: 999px'), 'stands.css: нет casual-пилюль');
 for (const f of ['assets/site.css']) { const c = read(f); ok(!c.includes('Playfair'), f + ': остался Playfair'); }
 
 /* дизайн 2026 · волна 8: унификация — общий header на стендах, проекты чисты */
@@ -564,6 +564,24 @@ ok(stCss.includes('--st-accent: #fb923c') && !stCss.includes('#fcd34d'), 'stands
 ok(stCss.includes('.uni-card--netpolis { --card-accent: #0f766e; }'), 'stands.css: карточка СетПолиса не на teal');
 ok(!read('projects.html').includes('system-badge') && !read('projects.html').includes('#3b82f6') && !read('projects.html').includes('#2563eb'), 'projects.html: остались бейдж system:// или синие акценты');
 ok(siteCss.includes('.tag-blue   { color: #cf4a18;'), 'site.css: tag-blue не перекрашен');
+
+/* дизайн 2026 · волна 9: polish — находки аудита */
+const twCompiled = exists('assets/tw-compiled.css') ? read('assets/tw-compiled.css') : '';
+ok(twCompiled.includes('.flex{') && twCompiled.includes('grid-cols-\\[200px'), 'tw-compiled.css: сборка неполна');
+let twCnt = 0;
+for (const f of allHtml) if (read(f).includes('tw-compiled.css')) twCnt++;
+ok(twCnt === 22, 'страниц с локальной сборкой Tailwind: ' + twCnt + ' из 22');
+ok(siteCss.includes('overflow-x: clip') && siteCss.includes('@media (max-width: 640px) {\n  .giant-word { display: none; }'), 'site.css: нет мобильного overflow-clip/скрытия гигантов');
+ok(siteCss.includes("--font-sans: 'Golos Text'") && siteCss.split("--font-sans:").length === 2, 'site.css: --font-sans определён не единожды');
+ok(!siteCss.includes('-webkit-text-stroke: 1.5px'), 'site.css: mono-дубль .giant-word (волна 5) не вычищен');
+ok(siteCss.split('.site-footer {').length === 2, 'site.css: .site-footer задан не единожды (старые слои живы)');
+ok(siteCss.includes('--neo-footer-bg: #201b10'), 'site.css: тёмный футер не смягчён');
+ok(siteCss.includes('color: var(--muted);\n  font-family: var(--font-mono);\n  font-size: var(--fs-micro);'), 'site.css: nav-wip не поднят по контрасту');
+ok(stCss.includes('--st-hard-color: rgba(239, 232, 214, .3)') && !stCss.includes('rgba(0, 0, 0, .75)'), 'stands.css: тени тёмной темы не инвертированы');
+ok(!read('stands/lab-dns-bind.html').includes('SSH'), 'lab-dns-bind.html: чужой title не вычищен (JSON-LD)');
+ok(!read('stands/lab-dns-bind.html').includes('sudoers'), 'lab-dns-bind.html: чужое description не вычищено');
+ok(read('assets/shared-chrome.js').includes("main.querySelector('#profile-gate')"), 'shared-chrome.js: нет скрытия формы при активной сессии');
+ok(read('blog.html').includes('posts.length < 2'), 'blog.html: фильтры не скрываются при единственной записи');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

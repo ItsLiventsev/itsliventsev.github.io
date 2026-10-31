@@ -266,6 +266,9 @@
   card.appendChild(link);
   card.appendChild(when);
   card.appendChild(reset);
+  /* активная сессия: форма входа скрыта, чтобы не спорить с «продолжить» */
+  var gate = main.querySelector('#profile-gate');
+  if (gate) gate.hidden = true;
   var crumbs = main.querySelector('.st-crumbs');
   if (crumbs && crumbs.parentNode) {
     if (crumbs.nextSibling) crumbs.parentNode.insertBefore(card, crumbs.nextSibling);
