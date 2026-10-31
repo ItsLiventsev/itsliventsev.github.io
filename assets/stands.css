@@ -1091,12 +1091,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
    12. Маскоты: моргание, покачивание, приветствие, облачка реплик
    ========================================================================== */
 .mc-svg { display: block; }
-.mc-float { animation: mc-float 3.4s ease-in-out infinite; }
-.mc-eye { transform-box: fill-box; transform-origin: center; animation: mc-blink 5.2s infinite; }
-.mc-wave { transform-box: fill-box; transform-origin: 70% 90%; animation: mc-wave 2.6s ease-in-out infinite; }
-@keyframes mc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-@keyframes mc-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } 97% { transform: scaleY(1); } }
-@keyframes mc-wave { 0%, 70%, 100% { transform: rotate(0); } 78% { transform: rotate(-14deg); } 86% { transform: rotate(8deg); } 94% { transform: rotate(-6deg); } }
+.mc-float, .mc-eye, .mc-wave { animation: none; }
 
 .mc-speech { display: flex;gap:var(--st-sp-4); align-items: flex-start; }
 .mc-speech.is-right { flex-direction: row-reverse; }
@@ -1315,22 +1310,15 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 /* Мигающий курсор терминала */
 .lt-input-row::after {
   content: '▌'; color: var(--st-accent);
-  animation: cursor-blink 1.1s steps(2, start) infinite;
   align-self: center;
 }
 .lt-input-row:focus-within::after { opacity: 1; }
-@keyframes cursor-blink { 50% { opacity: 0; } }
 
 /* --------------------------------------------------------------------------
    17. Ambient-слой стендов: контейнер. Содержимое (.amb-glyph, .flow-bubble)
    создаёт flow.js и полностью стилизует flow.css — единый источник правил.
    Чистый декор: aria-hidden, pointer-events:none, не перехватывает фокус.
    -------------------------------------------------------------------------- */
-.st-ambient {
-  position: fixed; inset: 0; z-index: 0; overflow: hidden;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce) { .st-ambient { display: none; } }
 
 /* Маскоты в интерактивных контейнерах «оживают» только на hover/focus:
    по умолчанию пауза, непрерывно живёт лишь маскот в брифе (.mc-speech-avatar) */
@@ -1345,19 +1333,12 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 .id-card-top:focus-within .mc-eye { animation-play-state: running; }
 
 /* Онлайн-точка дышит */
-.ps-dot.is-online { animation: dot-pulse 2s ease-in-out infinite; }
-@keyframes dot-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--st-ok-soft); } 50% { box-shadow: 0 0 0 5px transparent; } }
+.ps-dot.is-online { /* статичная зелёная точка */ }
 
 /* Карточки квестов: подъём и бегущая полоса */
 .quest-card { transition: transform var(--dur-base) var(--st-ease, var(--ease-standard)), border-color var(--dur-base) var(--ease-standard); }
 .quest-card:not(.is-locked):hover { transform: translateY(-3px); }
-.quest-card .quest-progress i { position: relative; overflow: hidden; }
-.quest-card .quest-progress i::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-  transform: translateX(-100%); animation: sheen 3.2s ease-in-out infinite;
-}
-@keyframes sheen { 0%, 60% { transform: translateX(-100%); } 100% { transform: translateX(120%); } }
+.quest-card .quest-progress i { overflow: hidden; }
 
 /* Кнопки: отклик и бегущая обводка на главном действии */
 .flat-btn { transition: transform var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard); }
@@ -1387,7 +1368,6 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 
 @media (prefers-reduced-motion: reduce) {
   .mc-float, .mc-eye, .mc-wave, .ps-dot.is-online, .lt-input-row::after,
-  .quest-card .quest-progress i::after, .feed-list li,
   .st-modal:not([hidden]) .st-modal-box, .tab-pane { animation: none; }
   .quest-card:not(.is-locked):hover { transform: none; }
 }
@@ -1468,9 +1448,8 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 .topo-plate.is-on { border-color: var(--st-accent); background: var(--st-accent-soft); transform: translateY(-2px); }
 .topo-plate.is-on::before {
   content: ''; position: absolute; inset: -1px; border-radius: var(--st-radius);
-  border: 1px solid var(--st-accent); animation: plate-ring 2.4s ease-in-out infinite;
+  /* статичное кольцо активной плитки */
 }
-@keyframes plate-ring { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }
 .topo-plate.is-done { border-color: var(--st-ok); }
 .topo-plate.is-done::after { content: '✓'; position: absolute; top: -.6rem; right: -.45rem; width: 1.25rem; height: 1.25rem; display: flex; align-items: center; justify-content: center; background: var(--st-ok); color: var(--st-on-ok); border-radius: 50%; font-size:var(--st-fs-mini); font-weight: 800; animation: mark-pop var(--dur-slow) ease; }
 .topo-hint { margin:var(--st-sp-4) 0 0; font-size:var(--st-fs-small); color: var(--st-muted); text-align: center; }
@@ -1754,9 +1733,8 @@ p { overflow-wrap: break-word; }
 .ps-dot.is-online { position: relative; }
 .ps-dot.is-online::after {
   content: ''; position: absolute; inset: -3px; border-radius: 50%;
-  border: 1px solid var(--st-ok); animation: ps-ping 2.2s ease-out infinite;
+  /* статичная рамка присутствия */
 }
-@keyframes ps-ping { 0% { transform: scale(.6); opacity: .9; } 80%, 100% { transform: scale(1.9); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .ps-dot.is-online::after { animation: none; } }
 
 /* Лаунчер контрольного теста: заметная «станция», а не бледная плашка */
@@ -2122,3 +2100,33 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
 @media (max-width: 900px) { .uni-mini-grid { grid-template-columns: 1fr; } }
 .uni-mini .p-title { font-size:var(--st-fs-lead);margin:var(--st-sp-3) 0 var(--st-sp-2); }
 /* .st-footer-updated общий — единое правило в shared-chrome.css */
+
+/* ---------- Тактильность (из flow.css): отклик только на действие ---------- */
+/* Скользящий индикатор пункта навигации через scaleX — без сдвига строки */
+.st-topnav a { position: relative; }
+.st-topnav a::after {
+  content: '';
+  position: absolute;
+  left: .7rem; right: .7rem; bottom: .22rem;
+  height: 2px;
+  background: var(--st-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.st-topnav a:hover::after,
+.st-topnav a:focus-visible::after,
+.st-topnav a[aria-current]::after { transform: scaleX(1); }
+
+/* Hover-подъём карточек и пружина нажатия */
+.crew-card:hover, .uni-card:hover {
+  transform: translateY(-4px);
+  transition: transform var(--dur-base) var(--ease-spring),
+              box-shadow var(--dur-base) var(--ease-standard),
+              border-color var(--dur-base) var(--ease-standard);
+}
+.flat-btn:active, .quest-card:active { transform: scale(.97); }
+
+/* Тост: выезд сверху при показе */
+.toast { transform: translateY(-10px) scale(.98); }
+.toast.is-show { transform: translateY(0) scale(1); }

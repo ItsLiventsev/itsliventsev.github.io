@@ -1,328 +1,350 @@
 /* ==========================================================================
-   itsliventsev · локальный fallback Tailwind-утилит
-   Включается ТОЛЬКО при недоступности cdn.tailwindcss.com: загрузчик в <head>
-   вешает класс .tw-failed на <html> (onerror или таймаут 8 с). Пока CDN
-   доступен, файл не влияет на страницу.
+   itsliventsev · базовый слой Tailwind-утилит (локальный)
+   Применяется ВСЕГДА: страница корректно свёрстана ещё до того, как
+   cdn.tailwindcss.com ответит (а если CDN недоступен — так и останется
+   на этом слое; загрузчик в <head> держит таймаут 3 с и вешает маркер
+   .tw-failed). Tailwind CDN генерирует те же классы и подключается
+   позже, поэтому значения совпадают и подмена незаметна.
    Покрывает ровно тот набор утилит, что используется в HTML проекта;
    произвольные значения ([...]) сопоставляются через [class~="..."].
    ========================================================================== */
 
 /* ---------- 0. Мини-preflight (Tailwind CDN обычно приносит свой) ---------- */
-html.tw-failed *,
-html.tw-failed *::before,
-html.tw-failed *::after { box-sizing: border-box; border-width: 0; border-style: solid; }
-html.tw-failed body { margin: 0; line-height: 1.5; }
-html.tw-failed h1, html.tw-failed h2, html.tw-failed h3, html.tw-failed h4,
-html.tw-failed h5, html.tw-failed h6, html.tw-failed p,
-html.tw-failed blockquote, html.tw-failed dl, html.tw-failed dd,
-html.tw-failed figure, html.tw-failed ol, html.tw-failed ul,
-html.tw-failed pre { margin: 0; }
-html.tw-failed ol, html.tw-failed ul { padding: 0; list-style: none; }
-html.tw-failed img, html.tw-failed svg, html.tw-failed video,
-html.tw-failed canvas { display: block; max-width: 100%; height: auto; }
-html.tw-failed button, html.tw-failed input, html.tw-failed select,
-html.tw-failed textarea { font: inherit; color: inherit; margin: 0;
+*,
+*::before,
+*::after { box-sizing: border-box; border-width: 0; border-style: solid; }
+body { margin: 0; line-height: 1.5; }
+h1, h2, h3, h4,
+h5, h6, p,
+blockquote, dl, dd,
+figure, ol, ul,
+pre { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+img, svg, video,
+canvas { display: block; max-width: 100%; height: auto; }
+button, input, select,
+textarea { font: inherit; color: inherit; margin: 0;
   background-color: transparent; background-image: none; }
-html.tw-failed button, html.tw-failed [role="button"] { cursor: pointer; }
-html.tw-failed button:disabled, html.tw-failed [role="button"][aria-disabled="true"] { cursor: default; }
-html.tw-failed a { color: inherit; text-decoration: inherit; }
-html.tw-failed table { border-collapse: collapse; }
+button, [role="button"] { cursor: pointer; }
+button:disabled, [role="button"][aria-disabled="true"] { cursor: default; }
+a { color: inherit; text-decoration: inherit; }
+table { border-collapse: collapse; }
 
 /* ---------- 1. Display и flex/grid ---------- */
-html.tw-failed .block { display: block; }
-html.tw-failed .hidden { display: none; }
-html.tw-failed .flex { display: flex; }
-html.tw-failed .inline-flex { display: inline-flex; }
-html.tw-failed .grid { display: grid; }
-html.tw-failed .flex-1 { flex: 1 1 0%; }
-html.tw-failed .shrink-0 { flex-shrink: 0; }
-html.tw-failed .flex-row { flex-direction: row; }
-html.tw-failed .flex-col { flex-direction: column; }
-html.tw-failed .flex-wrap { flex-wrap: wrap; }
-html.tw-failed .items-start { align-items: flex-start; }
-html.tw-failed .items-end { align-items: flex-end; }
-html.tw-failed .items-center { align-items: center; }
-html.tw-failed .items-baseline { align-items: baseline; }
-html.tw-failed .justify-start { justify-content: flex-start; }
-html.tw-failed .justify-end { justify-content: flex-end; }
-html.tw-failed .justify-center { justify-content: center; }
-html.tw-failed .justify-between { justify-content: space-between; }
-html.tw-failed .justify-around { justify-content: space-around; }
-html.tw-failed .self-start { align-self: flex-start; }
-html.tw-failed .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-html.tw-failed .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-html.tw-failed .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-html.tw-failed .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-html.tw-failed .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.block { display: block; }
+.hidden { display: none; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.flex-1 { flex: 1 1 0%; }
+.shrink-0 { flex-shrink: 0; }
+.flex-row { flex-direction: row; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.items-center { align-items: center; }
+.items-baseline { align-items: baseline; }
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.self-start { align-self: flex-start; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
 /* ---------- 2. Отступы (шкала Tailwind: 1 = .25rem) ---------- */
-html.tw-failed .m-0 { margin: 0; }
-html.tw-failed .mx-auto { margin-left: auto; margin-right: auto; }
-html.tw-failed .ml-2 { margin-left: .5rem; }
-html.tw-failed .ml-4 { margin-left: 1rem; }
-html.tw-failed .mr-1\.5 { margin-right: .375rem; }
-html.tw-failed .mt-0 { margin-top: 0; }
-html.tw-failed .mt-0\.5 { margin-top: .125rem; }
-html.tw-failed .mt-1 { margin-top: .25rem; }
-html.tw-failed .mt-1\.5 { margin-top: .375rem; }
-html.tw-failed .mt-2 { margin-top: .5rem; }
-html.tw-failed .mt-2\.5 { margin-top: .625rem; }
-html.tw-failed .mt-3 { margin-top: .75rem; }
-html.tw-failed .mt-4 { margin-top: 1rem; }
-html.tw-failed .mt-5 { margin-top: 1.25rem; }
-html.tw-failed .mt-8 { margin-top: 2rem; }
-html.tw-failed .mt-10 { margin-top: 2.5rem; }
-html.tw-failed .mt-14 { margin-top: 3.5rem; }
-html.tw-failed .mb-0 { margin-bottom: 0; }
-html.tw-failed .mb-1 { margin-bottom: .25rem; }
-html.tw-failed .mb-1\.5 { margin-bottom: .375rem; }
-html.tw-failed .mb-2 { margin-bottom: .5rem; }
-html.tw-failed .mb-2\.5 { margin-bottom: .625rem; }
-html.tw-failed .mb-3 { margin-bottom: .75rem; }
-html.tw-failed .mb-4 { margin-bottom: 1rem; }
-html.tw-failed .mb-5 { margin-bottom: 1.25rem; }
-html.tw-failed .mb-6 { margin-bottom: 1.5rem; }
-html.tw-failed .mb-7 { margin-bottom: 1.75rem; }
-html.tw-failed .mb-8 { margin-bottom: 2rem; }
-html.tw-failed .mb-10 { margin-bottom: 2.5rem; }
-html.tw-failed .mb-12 { margin-bottom: 3rem; }
-html.tw-failed .mb-16 { margin-bottom: 4rem; }
-html.tw-failed .my-6 { margin-top: 1.5rem; margin-bottom: 1.5rem; }
-html.tw-failed .my-8 { margin-top: 2rem; margin-bottom: 2rem; }
-html.tw-failed .my-14 { margin-top: 3.5rem; margin-bottom: 3.5rem; }
+.m-0 { margin: 0; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.ml-2 { margin-left: .5rem; }
+.ml-4 { margin-left: 1rem; }
+.mr-1\.5 { margin-right: .375rem; }
+.mt-0 { margin-top: 0; }
+.mt-0\.5 { margin-top: .125rem; }
+.mt-1 { margin-top: .25rem; }
+.mt-1\.5 { margin-top: .375rem; }
+.mt-2 { margin-top: .5rem; }
+.mt-2\.5 { margin-top: .625rem; }
+.mt-3 { margin-top: .75rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-5 { margin-top: 1.25rem; }
+.mt-8 { margin-top: 2rem; }
+.mt-10 { margin-top: 2.5rem; }
+.mt-14 { margin-top: 3.5rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: .25rem; }
+.mb-1\.5 { margin-bottom: .375rem; }
+.mb-2 { margin-bottom: .5rem; }
+.mb-2\.5 { margin-bottom: .625rem; }
+.mb-3 { margin-bottom: .75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-5 { margin-bottom: 1.25rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-7 { margin-bottom: 1.75rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mb-16 { margin-bottom: 4rem; }
+.my-6 { margin-top: 1.5rem; margin-bottom: 1.5rem; }
+.my-8 { margin-top: 2rem; margin-bottom: 2rem; }
+.my-14 { margin-top: 3.5rem; margin-bottom: 3.5rem; }
 
-html.tw-failed .p-0 { padding: 0; }
-html.tw-failed .p-2 { padding: .5rem; }
-html.tw-failed .p-3 { padding: .75rem; }
-html.tw-failed .p-3\.5 { padding: .875rem; }
-html.tw-failed .p-4 { padding: 1rem; }
-html.tw-failed .p-5 { padding: 1.25rem; }
-html.tw-failed .p-6 { padding: 1.5rem; }
-html.tw-failed .p-7 { padding: 1.75rem; }
-html.tw-failed .p-9 { padding: 2.25rem; }
-html.tw-failed .px-1 { padding-left: .25rem; padding-right: .25rem; }
-html.tw-failed .px-1\.5 { padding-left: .375rem; padding-right: .375rem; }
-html.tw-failed .px-4 { padding-left: 1rem; padding-right: 1rem; }
-html.tw-failed .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-html.tw-failed .py-0\.5 { padding-top: .125rem; padding-bottom: .125rem; }
-html.tw-failed .py-1\.5 { padding-top: .375rem; padding-bottom: .375rem; }
-html.tw-failed .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
-html.tw-failed .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
-html.tw-failed .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-html.tw-failed .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-html.tw-failed .pt-0\.5 { padding-top: .125rem; }
-html.tw-failed .pt-1 { padding-top: .25rem; }
-html.tw-failed .pt-6 { padding-top: 1.5rem; }
-html.tw-failed .pb-4 { padding-bottom: 1rem; }
-html.tw-failed .pb-10 { padding-bottom: 2.5rem; }
-html.tw-failed .pl-3 { padding-left: .75rem; }
-html.tw-failed .pl-5 { padding-left: 1.25rem; }
+.p-0 { padding: 0; }
+.p-2 { padding: .5rem; }
+.p-3 { padding: .75rem; }
+.p-3\.5 { padding: .875rem; }
+.p-4 { padding: 1rem; }
+.p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem; }
+.p-7 { padding: 1.75rem; }
+.p-9 { padding: 2.25rem; }
+.px-1 { padding-left: .25rem; padding-right: .25rem; }
+.px-1\.5 { padding-left: .375rem; padding-right: .375rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+.py-0\.5 { padding-top: .125rem; padding-bottom: .125rem; }
+.py-1\.5 { padding-top: .375rem; padding-bottom: .375rem; }
+.py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+.py-3 { padding-top: .75rem; padding-bottom: .75rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.pt-0\.5 { padding-top: .125rem; }
+.pt-1 { padding-top: .25rem; }
+.pt-6 { padding-top: 1.5rem; }
+.pb-4 { padding-bottom: 1rem; }
+.pb-10 { padding-bottom: 2.5rem; }
+.pl-3 { padding-left: .75rem; }
+.pl-5 { padding-left: 1.25rem; }
 
-html.tw-failed .gap-0 { gap: 0; }
-html.tw-failed .gap-1 { gap: .25rem; }
-html.tw-failed .gap-1\.5 { gap: .375rem; }
-html.tw-failed .gap-2 { gap: .5rem; }
-html.tw-failed .gap-2\.5 { gap: .625rem; }
-html.tw-failed .gap-3 { gap: .75rem; }
-html.tw-failed .gap-4 { gap: 1rem; }
-html.tw-failed .gap-5 { gap: 1.25rem; }
-html.tw-failed .gap-6 { gap: 1.5rem; }
-html.tw-failed .gap-12 { gap: 3rem; }
-html.tw-failed .gap-x-2 { column-gap: .5rem; }
-html.tw-failed .gap-x-3 { column-gap: .75rem; }
-html.tw-failed .gap-x-4 { column-gap: 1rem; }
-html.tw-failed .gap-y-1 { row-gap: .25rem; }
-html.tw-failed .gap-y-1\.5 { row-gap: .375rem; }
-html.tw-failed .gap-y-2 { row-gap: .5rem; }
+.gap-0 { gap: 0; }
+.gap-1 { gap: .25rem; }
+.gap-1\.5 { gap: .375rem; }
+.gap-2 { gap: .5rem; }
+.gap-2\.5 { gap: .625rem; }
+.gap-3 { gap: .75rem; }
+.gap-4 { gap: 1rem; }
+.gap-5 { gap: 1.25rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-12 { gap: 3rem; }
+.gap-x-2 { column-gap: .5rem; }
+.gap-x-3 { column-gap: .75rem; }
+.gap-x-4 { column-gap: 1rem; }
+.gap-y-1 { row-gap: .25rem; }
+.gap-y-1\.5 { row-gap: .375rem; }
+.gap-y-2 { row-gap: .5rem; }
 
 /* space-y: отступ между прямыми потомками (как в Tailwind) */
-html.tw-failed [class~="space-y-0.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .125rem; }
-html.tw-failed [class~="space-y-1"] > :not([hidden]) ~ :not([hidden]) { margin-top: .25rem; }
-html.tw-failed [class~="space-y-1.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .375rem; }
-html.tw-failed [class~="space-y-2"] > :not([hidden]) ~ :not([hidden]) { margin-top: .5rem; }
-html.tw-failed [class~="space-y-2.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .625rem; }
-html.tw-failed [class~="space-y-3"] > :not([hidden]) ~ :not([hidden]) { margin-top: .75rem; }
-html.tw-failed [class~="space-y-4"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
-html.tw-failed [class~="space-y-6"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+[class~="space-y-0.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .125rem; }
+[class~="space-y-1"] > :not([hidden]) ~ :not([hidden]) { margin-top: .25rem; }
+[class~="space-y-1.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .375rem; }
+[class~="space-y-2"] > :not([hidden]) ~ :not([hidden]) { margin-top: .5rem; }
+[class~="space-y-2.5"] > :not([hidden]) ~ :not([hidden]) { margin-top: .625rem; }
+[class~="space-y-3"] > :not([hidden]) ~ :not([hidden]) { margin-top: .75rem; }
+[class~="space-y-4"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+[class~="space-y-6"] > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
 
 /* ---------- 3. Размеры ---------- */
-html.tw-failed .w-2 { width: .5rem; }
-html.tw-failed .w-3 { width: .75rem; }
-html.tw-failed .w-5 { width: 1.25rem; }
-html.tw-failed .w-6 { width: 1.5rem; }
-html.tw-failed .w-7 { width: 1.75rem; }
-html.tw-failed .w-8 { width: 2rem; }
-html.tw-failed .w-11 { width: 2.75rem; }
-html.tw-failed .w-36 { width: 9rem; }
-html.tw-failed .w-full { width: 100%; }
-html.tw-failed .min-w-0 { min-width: 0; }
-html.tw-failed .h-2 { height: .5rem; }
-html.tw-failed .h-2\.5 { height: .625rem; }
-html.tw-failed .h-3 { height: .75rem; }
-html.tw-failed .h-40 { height: 10rem; }
-html.tw-failed .h-full { height: 100%; }
-html.tw-failed .max-w-md { max-width: 28rem; }
-html.tw-failed .max-w-2xl { max-width: 42rem; }
-html.tw-failed .max-w-3xl { max-width: 48rem; }
-html.tw-failed [class~="min-h-[92vh]"] { min-height: 92vh; }
+.w-2 { width: .5rem; }
+.w-3 { width: .75rem; }
+.w-5 { width: 1.25rem; }
+.w-6 { width: 1.5rem; }
+.w-7 { width: 1.75rem; }
+.w-8 { width: 2rem; }
+.w-11 { width: 2.75rem; }
+.w-36 { width: 9rem; }
+.w-full { width: 100%; }
+.min-w-0 { min-width: 0; }
+.h-2 { height: .5rem; }
+.h-2\.5 { height: .625rem; }
+.h-3 { height: .75rem; }
+.h-40 { height: 10rem; }
+.h-full { height: 100%; }
+.max-w-md { max-width: 28rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-3xl { max-width: 48rem; }
+[class~="min-h-[92vh]"] { min-height: 92vh; }
 
 /* ---------- 4. Типографика ---------- */
-html.tw-failed .text-xs { font-size: .75rem; line-height: 1rem; }
-html.tw-failed .text-sm { font-size: .875rem; line-height: 1.25rem; }
-html.tw-failed .text-base { font-size: 1rem; line-height: 1.5rem; }
-html.tw-failed .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-html.tw-failed .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-html.tw-failed .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-html.tw-failed .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-html.tw-failed .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-html.tw-failed .text-5xl { font-size: 3rem; line-height: 1; }
-html.tw-failed .text-6xl { font-size: 3.75rem; line-height: 1; }
-html.tw-failed [class~="text-[10px]"] { font-size: 10px; }
-html.tw-failed [class~="text-[11px]"] { font-size: 11px; }
-html.tw-failed [class~="text-[13px]"] { font-size: 13px; }
-html.tw-failed [class~="text-[15px]"] { font-size: 15px; }
-html.tw-failed [class~="text-[16px]"] { font-size: 16px; }
-html.tw-failed [class~="text-[34px]"] { font-size: 34px; }
-html.tw-failed .font-medium { font-weight: 500; }
-html.tw-failed .font-semibold { font-weight: 600; }
-html.tw-failed .font-bold { font-weight: 700; }
-html.tw-failed .font-extrabold { font-weight: 800; }
-html.tw-failed .leading-none { line-height: 1; }
-html.tw-failed .leading-snug { line-height: 1.375; }
-html.tw-failed .leading-relaxed { line-height: 1.625; }
-html.tw-failed .leading-8 { line-height: 2rem; }
-html.tw-failed .tracking-tight { letter-spacing: -.025em; }
-html.tw-failed .tracking-wider { letter-spacing: .05em; }
-html.tw-failed .tracking-widest { letter-spacing: .1em; }
-html.tw-failed [class~="tracking-[0.16em]"] { letter-spacing: .16em; }
-html.tw-failed .uppercase { text-transform: uppercase; }
-html.tw-failed .italic { font-style: italic; }
-html.tw-failed .underline { text-decoration-line: underline; }
-html.tw-failed .no-underline { text-decoration-line: none; }
-html.tw-failed .line-through { text-decoration-line: line-through; }
-html.tw-failed .underline-offset-2 { text-underline-offset: 2px; }
-html.tw-failed .text-center { text-align: center; }
-html.tw-failed .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-html.tw-failed .whitespace-nowrap { white-space: nowrap; }
-html.tw-failed .break-all { overflow-wrap: anywhere; word-break: break-word; }
-html.tw-failed .select-none { user-select: none; }
-html.tw-failed .list-none { list-style: none; }
+.text-xs { font-size: .75rem; line-height: 1rem; }
+.text-sm { font-size: .875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.text-5xl { font-size: 3rem; line-height: 1; }
+.text-6xl { font-size: 3.75rem; line-height: 1; }
+[class~="text-[10px]"] { font-size: 10px; }
+[class~="text-[11px]"] { font-size: 11px; }
+[class~="text-[13px]"] { font-size: 13px; }
+[class~="text-[15px]"] { font-size: 15px; }
+[class~="text-[16px]"] { font-size: 16px; }
+[class~="text-[34px]"] { font-size: 34px; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+.leading-none { line-height: 1; }
+.leading-snug { line-height: 1.375; }
+.leading-relaxed { line-height: 1.625; }
+.leading-8 { line-height: 2rem; }
+.tracking-tight { letter-spacing: -.025em; }
+.tracking-wider { letter-spacing: .05em; }
+.tracking-widest { letter-spacing: .1em; }
+[class~="tracking-[0.16em]"] { letter-spacing: .16em; }
+.uppercase { text-transform: uppercase; }
+.italic { font-style: italic; }
+.underline { text-decoration-line: underline; }
+.no-underline { text-decoration-line: none; }
+.line-through { text-decoration-line: line-through; }
+.underline-offset-2 { text-underline-offset: 2px; }
+.text-center { text-align: center; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.whitespace-nowrap { white-space: nowrap; }
+.break-all { overflow-wrap: anywhere; word-break: break-word; }
+.select-none { user-select: none; }
+.list-none { list-style: none; }
 /* отступ спискам дают pl-* (как в Tailwind), preflight обнуляет родной padding */
-html.tw-failed .list-disc { list-style: disc; }
-html.tw-failed .list-decimal { list-style: decimal; }
-html.tw-failed .opacity-80 { opacity: .8; }
+.list-disc { list-style: disc; }
+.list-decimal { list-style: decimal; }
+.opacity-80 { opacity: .8; }
 
 /* текстовые цвета */
-html.tw-failed .text-zinc-400 { color: #a1a1aa; }
-html.tw-failed .text-zinc-700 { color: #3f3f46; }
-html.tw-failed .text-zinc-900 { color: #18181b; }
-html.tw-failed .text-blue-600 { color: #2563eb; }
-html.tw-failed .text-emerald-600 { color: #059669; }
-html.tw-failed .text-indigo-500 { color: #6366f1; }
-html.tw-failed .text-indigo-600 { color: #4f46e5; }
-html.tw-failed .text-red-500 { color: #ef4444; }
-html.tw-failed .text-rose-600 { color: #e11d48; }
-html.tw-failed [class~="text-[var(--accent)]"] { color: var(--accent); }
-html.tw-failed [class~="text-[var(--faint)]"] { color: var(--faint); }
-html.tw-failed [class~="text-[var(--muted)]"] { color: var(--muted); }
-html.tw-failed [class~="text-[var(--text)]"] { color: var(--text); }
-html.tw-failed [class~="text-[var(--text-2)]"] { color: var(--text-2); }
-html.tw-failed [class~="hover:text-[var(--accent)]"]:hover { color: var(--accent); }
-html.tw-failed [class~="hover:text-[var(--text)]"]:hover { color: var(--text); }
-html.tw-failed .group:hover [class~="group-hover:text-[var(--accent)]"] { color: var(--accent); }
-html.tw-failed [class~="marker:text-sm"]::marker { font-size: .875rem; }
-html.tw-failed [class~="marker:text-[var(--faint)]"]::marker { color: var(--faint); }
+.text-zinc-400 { color: #a1a1aa; }
+.text-zinc-700 { color: #3f3f46; }
+.text-zinc-900 { color: #18181b; }
+.text-blue-600 { color: #2563eb; }
+.text-emerald-600 { color: #059669; }
+.text-indigo-500 { color: #6366f1; }
+.text-indigo-600 { color: #4f46e5; }
+.text-red-500 { color: #ef4444; }
+.text-rose-600 { color: #e11d48; }
+[class~="text-[var(--accent)]"] { color: var(--accent); }
+[class~="text-[var(--faint)]"] { color: var(--faint); }
+[class~="text-[var(--muted)]"] { color: var(--muted); }
+[class~="text-[var(--text)]"] { color: var(--text); }
+[class~="text-[var(--text-2)]"] { color: var(--text-2); }
+[class~="hover:text-[var(--accent)]"]:hover { color: var(--accent); }
+[class~="hover:text-[var(--text)]"]:hover { color: var(--text); }
+.group:hover [class~="group-hover:text-[var(--accent)]"] { color: var(--accent); }
+[class~="marker:text-sm"]::marker { font-size: .875rem; }
+[class~="marker:text-[var(--faint)]"]::marker { color: var(--faint); }
 
 /* ---------- 5. Фоны, рамки, радиусы, тени ---------- */
-html.tw-failed .bg-orange-300 { background-color: #fdba74; }
-html.tw-failed .bg-orange-400 { background-color: #fb923c; }
-html.tw-failed .bg-orange-500 { background-color: #f97316; }
-html.tw-failed .bg-red-50 { background-color: #fef2f2; }
-html.tw-failed .bg-zinc-300 { background-color: #d4d4d8; }
-html.tw-failed .bg-zinc-400 { background-color: #a1a1aa; }
-html.tw-failed [class~="bg-[var(--surface)]"] { background-color: var(--surface); }
-html.tw-failed [class~="bg-[var(--surface-2)]"] { background-color: var(--surface-2); }
+.bg-orange-300 { background-color: #fdba74; }
+.bg-orange-400 { background-color: #fb923c; }
+.bg-orange-500 { background-color: #f97316; }
+.bg-red-50 { background-color: #fef2f2; }
+.bg-zinc-300 { background-color: #d4d4d8; }
+.bg-zinc-400 { background-color: #a1a1aa; }
+[class~="bg-[var(--surface)]"] { background-color: var(--surface); }
+[class~="bg-[var(--surface-2)]"] { background-color: var(--surface-2); }
 
-html.tw-failed .border { border: 1px solid var(--border, #e5e7eb); }
-html.tw-failed .border-t { border-top: 1px solid var(--border, #e5e7eb); }
-html.tw-failed .border-b { border-bottom: 1px solid var(--border, #e5e7eb); }
-html.tw-failed .border-y { border-top: 1px solid var(--border, #e5e7eb); border-bottom: 1px solid var(--border, #e5e7eb); }
-html.tw-failed .border-l-2 { border-left: 2px solid var(--border, #e5e7eb); }
-html.tw-failed .border-red-200 { border-color: #fecaca; }
-html.tw-failed [class~="border-[var(--border)]"] { border-color: var(--border); }
-html.tw-failed [class~="border-[var(--border-strong)]"] { border-color: var(--border-strong); }
+.border { border: 1px solid var(--border, #e5e7eb); }
+.border-t { border-top: 1px solid var(--border, #e5e7eb); }
+.border-b { border-bottom: 1px solid var(--border, #e5e7eb); }
+.border-y { border-top: 1px solid var(--border, #e5e7eb); border-bottom: 1px solid var(--border, #e5e7eb); }
+.border-l-2 { border-left: 2px solid var(--border, #e5e7eb); }
+.border-red-200 { border-color: #fecaca; }
+[class~="border-[var(--border)]"] { border-color: var(--border); }
+[class~="border-[var(--border-strong)]"] { border-color: var(--border-strong); }
 
-html.tw-failed .rounded-sm { border-radius: .125rem; }
-html.tw-failed .rounded { border-radius: .25rem; }
-html.tw-failed .rounded-lg { border-radius: .5rem; }
-html.tw-failed .rounded-2xl { border-radius: 1rem; }
-html.tw-failed .rounded-full { border-radius: 9999px; }
-html.tw-failed .rounded-t-sm { border-top-left-radius: .125rem; border-top-right-radius: .125rem; }
-html.tw-failed .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / .05); }
+.rounded-sm { border-radius: .125rem; }
+.rounded { border-radius: .25rem; }
+.rounded-lg { border-radius: .5rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-full { border-radius: 9999px; }
+.rounded-t-sm { border-top-left-radius: .125rem; border-top-right-radius: .125rem; }
+.shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / .05); }
 
 /* ---------- 6. Позиционирование, прочее ---------- */
-html.tw-failed .relative { position: relative; }
-html.tw-failed .absolute { position: absolute; }
-html.tw-failed .sticky { position: sticky; }
-html.tw-failed .z-10 { z-index: 10; }
-html.tw-failed .top-0 { top: 0; }
-html.tw-failed .top-24 { top: 6rem; }
-html.tw-failed .left-1\/2 { left: 50%; }
-html.tw-failed .overflow-hidden { overflow: hidden; }
-html.tw-failed .cursor-default { cursor: default; }
-html.tw-failed .cursor-pointer { cursor: pointer; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.sticky { position: sticky; }
+.z-10 { z-index: 10; }
+.top-0 { top: 0; }
+.top-24 { top: 6rem; }
+.left-1\/2 { left: 50%; }
+.overflow-hidden { overflow: hidden; }
+.cursor-default { cursor: default; }
+.cursor-pointer { cursor: pointer; }
 
 /* ---------- 7. Адаптивные варианты (sm:640, md:768, lg:1024) ---------- */
 @media (min-width: 640px) {
-  html.tw-failed [class~="sm:flex-row"] { flex-direction: row; }
-  html.tw-failed [class~="sm:items-start"] { align-items: flex-start; }
-  html.tw-failed [class~="sm:justify-between"] { justify-content: space-between; }
-  html.tw-failed [class~="sm:gap-2"] { gap: .5rem; }
-  html.tw-failed [class~="sm:gap-3"] { gap: .75rem; }
-  html.tw-failed [class~="sm:gap-4"] { gap: 1rem; }
-  html.tw-failed [class~="sm:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  html.tw-failed [class~="sm:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  html.tw-failed [class~="sm:grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  html.tw-failed [class~="sm:mb-12"] { margin-bottom: 3rem; }
-  html.tw-failed [class~="sm:p-5"] { padding: 1.25rem; }
-  html.tw-failed [class~="sm:p-6"] { padding: 1.5rem; }
-  html.tw-failed [class~="sm:p-7"] { padding: 1.75rem; }
-  html.tw-failed [class~="sm:p-9"] { padding: 2.25rem; }
-  html.tw-failed [class~="sm:px-5"] { padding-left: 1.25rem; padding-right: 1.25rem; }
-  html.tw-failed [class~="sm:text-xs"] { font-size: .75rem; line-height: 1rem; }
-  html.tw-failed [class~="sm:text-sm"] { font-size: .875rem; line-height: 1.25rem; }
-  html.tw-failed [class~="sm:text-base"] { font-size: 1rem; line-height: 1.5rem; }
-  html.tw-failed [class~="sm:text-2xl"] { font-size: 1.5rem; line-height: 2rem; }
-  html.tw-failed [class~="sm:text-4xl"] { font-size: 2.25rem; line-height: 2.5rem; }
-  html.tw-failed [class~="sm:text-5xl"] { font-size: 3rem; line-height: 1; }
+  [class~="sm:flex-row"] { flex-direction: row; }
+  [class~="sm:items-start"] { align-items: flex-start; }
+  [class~="sm:justify-between"] { justify-content: space-between; }
+  [class~="sm:gap-2"] { gap: .5rem; }
+  [class~="sm:gap-3"] { gap: .75rem; }
+  [class~="sm:gap-4"] { gap: 1rem; }
+  [class~="sm:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [class~="sm:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  [class~="sm:grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  [class~="sm:mb-12"] { margin-bottom: 3rem; }
+  [class~="sm:p-5"] { padding: 1.25rem; }
+  [class~="sm:p-6"] { padding: 1.5rem; }
+  [class~="sm:p-7"] { padding: 1.75rem; }
+  [class~="sm:p-9"] { padding: 2.25rem; }
+  [class~="sm:px-5"] { padding-left: 1.25rem; padding-right: 1.25rem; }
+  [class~="sm:text-xs"] { font-size: .75rem; line-height: 1rem; }
+  [class~="sm:text-sm"] { font-size: .875rem; line-height: 1.25rem; }
+  [class~="sm:text-base"] { font-size: 1rem; line-height: 1.5rem; }
+  [class~="sm:text-2xl"] { font-size: 1.5rem; line-height: 2rem; }
+  [class~="sm:text-4xl"] { font-size: 2.25rem; line-height: 2.5rem; }
+  [class~="sm:text-5xl"] { font-size: 3rem; line-height: 1; }
 }
 @media (min-width: 768px) {
-  html.tw-failed [class~="md:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  html.tw-failed [class~="md:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  html.tw-failed [class~="md:grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  html.tw-failed [class~="md:w-6"] { width: 1.5rem; }
-  html.tw-failed [class~="md:w-11"] { width: 2.75rem; }
-  html.tw-failed [class~="md:text-sm"] { font-size: .875rem; line-height: 1.25rem; }
-  html.tw-failed [class~="md:text-base"] { font-size: 1rem; line-height: 1.5rem; }
-  html.tw-failed [class~="md:text-lg"] { font-size: 1.125rem; line-height: 1.75rem; }
-  html.tw-failed [class~="md:text-xl"] { font-size: 1.25rem; line-height: 1.75rem; }
-  html.tw-failed [class~="md:text-3xl"] { font-size: 1.875rem; line-height: 2.25rem; }
-  html.tw-failed [class~="md:text-4xl"] { font-size: 2.25rem; line-height: 2.5rem; }
-  html.tw-failed [class~="md:text-6xl"] { font-size: 3.75rem; line-height: 1; }
-  html.tw-failed [class~="md:text-[16px]"] { font-size: 16px; }
-  html.tw-failed [class~="md:text-[34px]"] { font-size: 34px; }
+  [class~="md:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [class~="md:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  [class~="md:grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  [class~="md:w-6"] { width: 1.5rem; }
+  [class~="md:w-11"] { width: 2.75rem; }
+  [class~="md:text-sm"] { font-size: .875rem; line-height: 1.25rem; }
+  [class~="md:text-base"] { font-size: 1rem; line-height: 1.5rem; }
+  [class~="md:text-lg"] { font-size: 1.125rem; line-height: 1.75rem; }
+  [class~="md:text-xl"] { font-size: 1.25rem; line-height: 1.75rem; }
+  [class~="md:text-3xl"] { font-size: 1.875rem; line-height: 2.25rem; }
+  [class~="md:text-4xl"] { font-size: 2.25rem; line-height: 2.5rem; }
+  [class~="md:text-6xl"] { font-size: 3.75rem; line-height: 1; }
+  [class~="md:text-[16px]"] { font-size: 16px; }
+  [class~="md:text-[34px]"] { font-size: 34px; }
 }
 @media (min-width: 1024px) {
-  html.tw-failed [class~="lg:flex-col"] { flex-direction: column; }
-  html.tw-failed [class~="lg:gap-0"] { gap: 0; }
-  html.tw-failed [class~="lg:gap-12"] { gap: 3rem; }
-  html.tw-failed [class~="lg:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  html.tw-failed [class~="lg:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  html.tw-failed [class~="lg:grid-cols-5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  html.tw-failed [class~="lg:grid-cols-[200px_minmax(0,1fr)]"] { grid-template-columns: 200px minmax(0, 1fr); }
-  html.tw-failed [class~="lg:mb-0"] { margin-bottom: 0; }
-  html.tw-failed [class~="lg:pl-3"] { padding-left: .75rem; }
-  html.tw-failed [class~="lg:py-1.5"] { padding-top: .375rem; padding-bottom: .375rem; }
-  html.tw-failed [class~="lg:border-l-2"] { border-left: 2px solid var(--border, #e5e7eb); }
-  html.tw-failed [class~="lg:top-24"] { top: 6rem; }
+  [class~="lg:flex-col"] { flex-direction: column; }
+  [class~="lg:gap-0"] { gap: 0; }
+  [class~="lg:gap-12"] { gap: 3rem; }
+  [class~="lg:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [class~="lg:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  [class~="lg:grid-cols-5"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  [class~="lg:grid-cols-[200px_minmax(0,1fr)]"] { grid-template-columns: 200px minmax(0, 1fr); }
+  [class~="lg:mb-0"] { margin-bottom: 0; }
+  [class~="lg:pl-3"] { padding-left: .75rem; }
+  [class~="lg:py-1.5"] { padding-top: .375rem; padding-bottom: .375rem; }
+  [class~="lg:border-l-2"] { border-left: 2px solid var(--border, #e5e7eb); }
+  [class~="lg:top-24"] { top: 6rem; }
 }
+
+/* ---------- 6. Дробная шкала и вертикальный ритм (дополнили инвентарём) ---------- */
+.gap-1\.5 { gap: .375rem; }
+.gap-2\.5 { gap: .625rem; }
+.p-3\.5 { padding: .875rem; }
+.mt-0\.5 { margin-top: .125rem; }
+.mt-1\.5 { margin-top: .375rem; }
+.mt-2\.5 { margin-top: .625rem; }
+.mb-1\.5 { margin-bottom: .375rem; }
+.mb-2\.5 { margin-bottom: .625rem; }
+.mr-1\.5 { margin-right: .375rem; }
+.h-2\.5 { height: .625rem; }
+.space-y-0\.5 > * + * { margin-top: .125rem; }
+.space-y-1 > * + * { margin-top: .25rem; }
+.space-y-1\.5 > * + * { margin-top: .375rem; }
+.space-y-2 > * + * { margin-top: .5rem; }
+.space-y-2\.5 > * + * { margin-top: .625rem; }
+.space-y-3 > * + * { margin-top: .75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }

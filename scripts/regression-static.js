@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031aa';
+const VERSION = '20261031ab';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -31,7 +31,7 @@ ok(standsHtml.length === 48, 'stands-страниц 48, фактически ' +
 /* 2. Версия ассетов */
 for (const f of allHtml) {
   const s = read(f);
-  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad') && !s.includes('?v=20261028ae') && !s.includes('?v=20261028af'), f + ': устаревшая версия ассета');
+  ok(!s.includes('?v=20261028z') && !s.includes('?v=20261028aa') && !s.includes('?v=20261028ab') && !s.includes('?v=20261028ac') && !s.includes('?v=20261028ad') && !s.includes('?v=20261028ae') && !s.includes('?v=20261028af') && !s.includes('?v=20261031aa'), f + ': устаревшая версия ассета');
   const local = s.match(/(?:src|href)="(?:\.\.\/)*assets\/[^"]+\?v=([^"]+)"/g) || [];
   for (const m of local) ok(m.includes('?v=' + VERSION), f + ': версия не ' + VERSION + ' в ' + m);
 }
@@ -120,9 +120,8 @@ ok(!stCss.includes('min(1180px'), 'stands.css: осталась хардкод-�
 for (const [n, s] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss]]) {
   ok(s.includes('prefers-reduced-motion'), n + ': нет prefers-reduced-motion');
 }
-ok(stCss.includes('.st-ambient { display: none; }'), 'ambient не отключается при reduced-motion');
-ok(/\.st-ambient\s*{[^}]*pointer-events:\s*none/.test(stCss), 'ambient без pointer-events:none');
-ok(standsJs.includes("aria-hidden") && standsJs.includes('initAmbient'), 'ambient не aria-hidden/не инициализируется');
+/* ambient-слой удалён: никаких движущихся глифов и пузырей */
+ok(!stCss.includes('.st-ambient') && !standsJs.includes('initAmbient') && !siteCss.includes('flow-bubble'), 'ambient-слой не удалён до конца');
 
 /* 12. OG-картинки по вселенным */
 ok(exists('assets/og.png') && exists('assets/og-stands.png') && exists('assets/og-ops.png') && exists('assets/og-office.png'), 'OG PNG отсутствуют');
@@ -182,8 +181,7 @@ for (const f of allHtml) {
   if (s.includes('fonts.googleapis.com')) ok(s.includes('preconnect') && s.includes('rel="preload"'), f + ': нет preconnect/preload шрифтов');
 }
 ok(!siteCss.includes('font-weight: 750'), 'остался несуществующий вес 750');
-ok(standsJs.includes('startViewTransition'), 'stands.js: нет View Transitions с фолбэком');
-ok(read('assets/site.js').includes('startViewTransition'), 'site.js: нет View Transitions');
+ok(!standsJs.includes('startViewTransition') && !read('assets/site.js').includes('startViewTransition'), 'View Transitions не выключены в JS');
 ok(stCss.includes('st-topnav::-webkit-scrollbar') && stCss.includes('overflow-x: auto'), 'мобильная навигация без горизонтального скролла');
 
 /* 17. Доступность и канон */
@@ -264,8 +262,7 @@ ok(siteCss.includes('--ease-exit') && siteCss.includes('--ease-emphasized'), 'н
 ok(stCss.includes('--st-dur-base: var(--dur-base)') && stCss.includes('--st-ease-exit: var(--ease-exit)'), 'в stands.css нет motion-алиасов');
 ok(siteCss.includes('--header-h-sm') && siteCss.includes('--header-h-md') && siteCss.includes('--header-h-lg'), 'нет токенов высоты шапки');
 /* никаких числовых длительностей в transition — только var(--dur-*) или 0s/none */
-const flowCss = read('assets/flow.css');
-for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss], ['flow.css', flowCss]]) {
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
   c.split('\n').forEach((line, i) => {
     if (line.includes('transition') && /(?<![\w-])\d*\.?\d+s/.test(line)) {
       ok(false, n + ':' + (i + 1) + ' числовая длительность в transition: ' + line.trim().slice(0, 80));
@@ -273,7 +270,7 @@ for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', 
   });
 }
 /* запрещённые для переходов свойства: layout двигается только transform'ом */
-for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss], ['flow.css', flowCss]]) {
+for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', opsCss], ['shared-chrome.css', sharedCss]]) {
   c.split('\n').forEach((line, i) => {
     if (/transition[^;]*(?<![\w-])(width|height|top|left|right|bottom|max-height)(?![\w-])/.test(line)) {
       ok(false, n + ':' + (i + 1) + ' transition геометрии: ' + line.trim().slice(0, 80));
@@ -283,9 +280,8 @@ for (const [n, c] of [['site.css', siteCss], ['stands.css', stCss], ['ops.css', 
 /* прогресс-бары живут на scaleX(var(--p)), а не на width */
 ok(/\.xp-bar i[^{]*\{[^}]*scaleX\(var\(--p/.test(stCss), 'xp-bar не переведён на scaleX(var(--p))');
 ok(!/style\.width/.test(read('assets/stands.js') + read('assets/ops-kit.js') + read('assets/office-kit.js') + read('assets/lab-kit.js')), 'JS всё ещё анимирует style.width');
-/* View Transitions и именованные элементы хрома */
-ok(sharedCss.includes('@view-transition') && sharedCss.includes('view-transition-name: chrome-brand')
-  && sharedCss.includes('view-transition-name: chrome-theme'), 'нет View Transitions хрома');
+/* Межстраничные анимации выключены целиком */
+ok(!sharedCss.includes('@view-transition') && !sharedCss.includes('view-transition-name'), 'View Transitions хрома не удалены');
 /* общий хром подключён на всех страницах после остальных стилей
    (редирект-заглушка projects/glossary.html живёт без общих ассетов) */
 const chromePages = allHtml.filter(f => f !== 'projects/glossary.html'
@@ -297,7 +293,6 @@ for (const f of allHtml) {
   const chromePos = c.indexOf('shared-chrome.css');
   const scopePos = Math.max(c.indexOf('stands.css'), c.indexOf('site.css'));
   ok(chromePos > scopePos, f + ': shared-chrome.css должен идти после scope-стилей');
-  ok(c.indexOf('flow.css') > chromePos, f + ': flow.css должен идти после shared-chrome.css');
 }
 /* reduced-motion: глобальный сброс и точечные гарантии видимости */
 ok(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*animation-duration: ?\.01ms/.test(siteCss), 'нет глобального reduced-motion сброса');
@@ -317,51 +312,42 @@ ok(!stCss.includes('.reveal'), 'stands.css: остались правила .rev
 ok(!siteCss.includes('.chart-bar { height: var(--h); transform: scaleY(0)'), 'site.css: график снова прячется до reveal');
 
 
-/* 22. Тактильный слой flow: ambient, меню, модалки; входных анимаций нет */
-ok(flowCss.includes('--ease-spring') && flowCss.includes('--flow-glass'), 'flow.css: нет токенов spring/glass');
-ok(!flowCss.includes('--flow-rise') && !flowCss.includes('--flow-step')
-  && !flowCss.includes('--flow-blur') && !flowCss.includes('--flow-dur') && !flowCss.includes('--flow-cap'),
-  'flow.css: остались мёртвые токены входных анимаций');
-ok(stCss.includes('--st-dur-base') && flowCss.includes('var(--dur-slow)'), 'flow не наследует базовые dur-токены');
-/* keyframes flow.css не двигают layout: только transform/opacity/filter/clip-path */
-const keyframeBlocks = flowCss.match(/@keyframes[^{]+\{[\s\S]*?\n\}/g) || [];
-ok(keyframeBlocks.length >= 4, 'flow.css: ожидались 4+ keyframes, фактически ' + keyframeBlocks.length);
-for (const block of keyframeBlocks) {
-  ok(!/(?<![\w-])(width|height|top|left|right|bottom|margin|padding)(?![\w-])\s*:/.test(block),
-    'flow keyframe двигает геометрию: ' + block.split('{')[0].trim());
-}
-/* flow.js — только ambient и параллакс: никаких IO и скрытых состояний */
-const flowJs = read('assets/flow.js');
-ok(!flowJs.includes('IntersectionObserver') && !flowJs.includes('data-flow'), 'flow.js: осталась логика входных анимаций');
-ok(flowJs.includes('st-ambient') && flowJs.includes('flow-bubble') && flowJs.includes('flow-parallax'), 'flow.js: потерян ambient-слой');
-ok(flowJs.includes("prefers-reduced-motion") && flowJs.includes("(pointer: fine)"), 'flow.js: нет guard reduced-motion/pointer:fine');
-ok(flowJs.includes("aria-hidden"), 'flow.js: инжект ambient без aria-hidden');
-/* подключение flow последним на всех страницах */
-const flowPages = allHtml.filter(f => {
-  const c = read(f);
-  return c.includes('assets/flow.css') && c.includes('assets/flow.js');
-});
-ok(flowPages.length === allHtml.length - 1, 'flow подключён не на всех страницах кроме заглушки: ' + (allHtml.length - 1 - flowPages.length));
+/* 22. Статичный рендер: межстраничных и входных анимаций нет вообще */
+ok(!exists('assets/flow.js') && !exists('assets/flow.css'), 'flow-файлы не удалены');
 for (const f of allHtml) {
   const c = read(f);
-  if (!c.includes('assets/flow.css')) continue; // редирект-заглушка без ассетов
-  ok(c.indexOf('flow.css') > c.indexOf('shared-chrome.css'), f + ': flow.css должен идти после shared-chrome.css');
-  ok(c.indexOf('flow.js') > c.indexOf('shared-chrome.js'), f + ': flow.js должен идти после shared-chrome.js');
-}
-/* во всей разметке не осталось атрибутов и классов входных анимаций */
-for (const f of allHtml) {
-  const c = read(f);
+  ok(!c.includes('flow.css') && !c.includes('flow.js'), f + ': подключены flow-ассеты');
   ok(!c.includes('data-flow') && !c.includes('data-mark'), f + ': остались атрибуты входных анимаций');
   ok(!/class="[^"]*\b(reveal|stagger)\b/.test(c), f + ': остались классы reveal/stagger');
+  ok(!/class="hero-title[^"]*text-(?:3xl|4xl|5xl|6xl)/.test(c), f + ': hero-title с Tailwind-размером вместо единого токена');
 }
-/* ambient и модалки отключаются при reduced-motion */
-ok(/prefers-reduced-motion[\s\S]*st-ambient[\s\S]*display: none/.test(flowCss), 'flow.css: ambient не отключается при reduced-motion');
-/* Шапки — фиксированный хром поверх страниц, с резервированием места */
-ok(/\.site-header\s*\{[^}]*position:\s*fixed/.test(siteCss), 'site.css: .site-header не fixed');
-ok(siteCss.includes('padding-top: var(--header-reserve)'), 'site.css: page-wrap без резерва под шапку');
-ok(/\.st-topbar\s*\{[^}]*position:\s*fixed/.test(stCss), 'stands.css: .st-topbar не fixed');
-ok(/\.st-wrap\s*\{[^}]*padding:calc\(var\(--st-header-h\)/.test(stCss), 'stands.css: st-wrap без резерва под топбар');
-
+/* в CSS не осталось входных/фоновых keyframes: список удалённых систем */
+const motionCss = siteCss + stCss + opsCss + sharedCss;
+for (const kf of ['page-in', 'note-in', 'pub-in', 'marquee-scroll', 'status-pulse', 'emoji-float',
+  'glyph-drift', 'glyph-float', 'orb-drift', 'nav-hero-anim', 'mc-float', 'mc-blink', 'mc-wave',
+  'dot-pulse', 'cursor-blink', 'plate-ring', 'ps-ping', 'flow-glyph-drift', 'flow-bubble-float',
+  'flow-rise', 'flow-pop', 'flow-modal-in', 'flow-menu-in']) {
+  ok(!motionCss.includes('@keyframes ' + kf), 'CSS: остался keyframes ' + kf);
+}
+/* бесконечных фоновых анимаций нет: infinite остаётся только у функциональных
+   индикаторов (загрузка/лоадер) — skeleton/spin */
+for (const line of (siteCss + '\n' + stCss).split('\n')) {
+  if (/animation:[^;]*infinite/.test(line)) {
+    ok(/skeleton|spin|party/.test(line), 'site/stands: декоративная infinite-анимация: ' + line.trim().slice(0, 80));
+  }
+}
+/* отсутствие VT-именования во всех CSS */
+ok(!siteCss.includes('view-transition') && !stCss.includes('view-transition'), 'CSS: остались view-transition правила');
+/* tw-fallback — базовый слой: работает без маркера .tw-failed */
+const twFb = read('assets/tw-fallback.css');
+ok(!twFb.includes('html.tw-failed .'), 'tw-fallback всё ещё требует маркер .tw-failed');
+ok(twFb.includes('.grid {') && twFb.includes('.flex {'), 'tw-fallback: нет базовых display-утилит');
+ok(twFb.includes('space-y-3'), 'tw-fallback: нет вертикального ритма space-y');
+/* загрузчик Tailwind: таймаут 3с (маркер .tw-failed остаётся) */
+for (const f of rootHtml) {
+  const c = read(f);
+  if (c.includes('cdn.tailwindcss.com')) ok(c.includes('},3000)'), f + ': таймаут Tailwind не 3с');
+}
 
 /* 23. Единый глоссарий, тренажёры netsys, навигация FAQ */
 const stubHtml = read('projects/glossary.html');
@@ -379,6 +365,9 @@ ok(read('projects.html').includes('netsys_trainer') && read('sitemap.html').incl
 ok(read('projects.html').includes('3 из 6 доступно'), 'projects.html: счётчик зоны 01 не обновлён');
 ok(JSON.parse(read('feed-counts.json')).projects === 4, 'feed-counts: projects должен быть 4');
 ok(read('faq.html').includes('href="#faq-start"') && read('faq.html').includes('глоссарий · 69 терминов'), 'faq.html: нет оглавления или обновлённой кнопки');
+/* важное «выше»: hero-действия на projects и faq на первом экране */
+ok(/hero-lead[\s\S]{0,600}?href="stands\/index.html" class="btn btn-primary btn-sm"/.test(read('projects.html')), 'projects.html: нет hero-кнопки стендов');
+ok(read('faq.html').includes('btn btn-primary btn-sm" href="stands/index.html"'), 'faq.html: нет верхней кнопки стендов');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

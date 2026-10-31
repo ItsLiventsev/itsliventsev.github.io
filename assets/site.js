@@ -41,26 +41,8 @@ document.documentElement.classList.add('js-enabled');
     const btn = e.target.closest('.theme-toggle');
     if (!btn) return;
     const next = currentTheme() === 'dark' ? 'light' : 'dark';
-    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // View Transitions: круговое раскрытие новой темы от кнопки.
-    // Браузеры без API (или с reduced-motion) получают мгновенное переключение.
-    if (!reduceMotion && document.startViewTransition) {
-      const rect = btn.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-      const maxRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-      const transition = document.startViewTransition(() => applyTheme(next, true));
-      transition.ready.then(() => {
-        document.documentElement.animate(
-          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`] },
-          // Длительность совпадает с --dur-base и прокруткой иконки theme-toggle
-          { duration: 220, easing: 'cubic-bezier(.2, .8, .2, 1)', pseudoElement: '::view-transition-new(root)' }
-        );
-      }).catch(() => {});
-    } else {
-      applyTheme(next, true);
-    }
+    // Переключение мгновенное: межстраничные/круговые анимации выключены
+    applyTheme(next, true);
   });
 
   // Синхронизация между вкладками
