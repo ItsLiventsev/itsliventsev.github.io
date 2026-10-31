@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ab';
+const VERSION = '20261031ac';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -368,6 +368,22 @@ ok(read('faq.html').includes('href="#faq-start"') && read('faq.html').includes('
 /* важное «выше»: hero-действия на projects и faq на первом экране */
 ok(/hero-lead[\s\S]{0,600}?href="stands\/index.html" class="btn btn-primary btn-sm"/.test(read('projects.html')), 'projects.html: нет hero-кнопки стендов');
 ok(read('faq.html').includes('btn btn-primary btn-sm" href="stands/index.html"'), 'faq.html: нет верхней кнопки стендов');
+
+/* 24. Дизайн-качество: AA-контраст акцентов, нет стекла, тело от 16px */
+for (const cf of ['site.css', 'stands.css', 'ops.css', 'office.css', 'shared-chrome.css', 'tw-fallback.css']) {
+  ok(!read('assets/' + cf).includes('backdrop-filter'), cf + ': остался backdrop-filter (стекло)');
+}
+ok(!siteCss.includes('.text-gradient') && !read('projects/esports.html').includes('text-gradient'), 'градиентный текст не удалён');
+ok(siteCss.includes('--fs-body: 1rem'), 'тело меньше 16px');
+ok(siteCss.includes('--accent: #c2410c'), 'оранжевый акцент не AA (светлая тема)');
+ok(siteCss.includes(':root[data-theme="dark"] .btn-primary'), 'тёмная тема: нет тёмного текста на главных кнопках');
+ok(stCss.includes('--st-accent: #0f766e'), 'teal стендов не AA в светлой теме');
+ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;500;600;700;800'), 'Inter: лишнее начертание 300');
+for (const f of allHtml) {
+  const c = read(f);
+  ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
+  ok(!c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
+}
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
