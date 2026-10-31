@@ -13,10 +13,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261031an">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261031an">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261031an">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031an">
+<link rel="stylesheet" href="../../assets/site.css?v=20261031ao">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261031ao">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261031ao">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031ao">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-final.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -45,6 +45,17 @@
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: лабораторная сервисного центра работает только с включённым JavaScript.</div></noscript>
 
+<header class="site-header st-global-header">
+  <a href="../../index.html" class="logo">~/itsliventsev</a>
+  <nav class="site-nav" aria-label="Основная навигация">
+    <a href="../../index.html" class="nav-link">главная</a>
+    <a href="../../blog.html" class="nav-link">заметки</a>
+    <a href="../../articles.html" class="nav-link">статьи</a>
+    <a href="../../projects.html" class="nav-link">проекты</a>
+    <a href="../../archive.html" class="nav-link">архив</a>
+    <a href="../../sitemap.html" class="nav-link">карта</a>
+  </nav>
+</header>
 <header class="st-topbar">
   <div class="st-topbar-in">
     <a class="st-brand" href="../index.html"><span class="st-brand-mark">←</span><span>itsliventsev</span><span class="st-brand-sep">/</span><span class="st-brand-sub">ДатаПолис</span></a>
@@ -102,12 +113,12 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261031an"></script>
-<script src="../../assets/ops-engine.js?v=20261031an"></script>
-<script src="../../assets/dom-kit.js?v=20261031an"></script>
-<script src="../../assets/stands.js?v=20261031an"></script>
+<script src="../../assets/mascots.js?v=20261031ao"></script>
+<script src="../../assets/ops-engine.js?v=20261031ao"></script>
+<script src="../../assets/dom-kit.js?v=20261031ao"></script>
+<script src="../../assets/stands.js?v=20261031ao"></script>
 <script type="application/json" id="ops-data">{"id": "ops-final", "sprint": 5, "hours": "12 ч (3 спринт-цикла)", "coins": "200", "mascot": "wolf", "who": "вся дежурная смена ДатаПолиса — приёмка проекта", "title": "Комплексный проект · запуск сервиса под ключ", "lead": "Итоговый сервисный проект: бэклог, релиз, дежурство, SLA и postmortem командой.", "story": "Финал. Заказчик — знакомый по практике завод «Промприбор» — отдаёт ДатаПолису сервис на сопровождение под ключ: каталог пользователей, DNS и время, файловое хранилище, веб-портал за reverse proxy, мониторинг с алертами, бэкапы и защищённый удалённый доступ. Команда ведёт проект как боевой: бэклог на три спринта, релиз через CAB, дежурство с учебным P1 и postmortem. Пасхалка для выпускников СетьПолиса: сетевую инфраструктуру под этот сервис когда-то настроили Итан и Клешня — теперь её принимаете на сопровождение вы.", "theory": [{"h": "Сервисный бэклог и спринты", "p": "Проект делится на управляемые задачи с приоритетами и владельцами. Каждый спринт даёт рабочий инкремент и демо. Definition of Done включает runbook, схему, мониторинг и план отката."}, {"h": "Запуск и дежурство", "p": "Релиз проходит через CAB, затем сервис встаёт на дежурство: алерты, регламент реакции, эскалация P1. Учебная тревога проверяет готовность команды и runbook."}, {"h": "Приёмка по SLA и ретроспектива", "p": "Сервис принимается по измеримым критериям: доступность, время реакции, восстановление после сбоя. Завершает проект blameless postmortem и ретроспектива: плюсы, минусы, улучшения.", "note": "Это мостик между вселенными: СетьПолис строил инфраструктуру, ОфисПолис готовил документы и инструкции, ДатаПолис принимает всё на сопровождение."}], "commands": [{"linux": "ansible all -m ping", "windows": "Test-Connection", "what": "готовность узлов к работам"}, {"linux": "samba-tool / dig / chronyc", "windows": "Get-ADUser / nslookup / w32tm", "what": "каталог, имена и время"}, {"linux": "docker compose ps / nginx -t", "windows": "Get-Service / iisreset", "what": "статус веб-сервиса"}, {"linux": "journalctl -u <unit>", "windows": "Get-WinEvent", "what": "логи приёмки и инцидента"}, {"linux": "prometheus targets / grafana", "windows": "Performance Monitor", "what": "наблюдение за сервисом"}, {"linux": "rsync/cyberbackup restore", "windows": "wbadmin start recovery", "what": "проверка восстановления"}], "tasks": [{"id": "t1", "text": "Спринт 1: соберите бэклог, роли и сервисный каталог, проведите инвентаризацию"}, {"id": "t2", "text": "Спринт 1: разверните каталог пользователей (Samba AD), DNS и синхронизацию времени"}, {"id": "t3", "text": "Спринт 2: настройте файловое хранилище с правами групп и доменный вход станций"}, {"id": "t4", "text": "Спринт 2: выпустите веб-портал в контейнере за nginx reverse proxy с планом отката"}, {"id": "t5", "text": "Спринт 3: включите мониторинг, алерты, бэкапы и усиленный удалённый доступ"}, {"id": "t6", "text": "Спринт 3: проведите релиз через CAB и защитите сервис по чек-листу DoD"}, {"id": "t7", "text": "Дежурство: отработайте учебный P1 по ролям с таймлайном и восстановлением"}, {"id": "t8", "text": "Финал: blameless postmortem, ретроспектива и защита проекта с демо"}], "ticket": {"type": "incident", "priority": "P1", "title": "Принять сервис заказчика на сопровождение под ключ", "text": "Сквозной проект: от приёмки инфраструктуры до дежурства с SLA. Завершается учебным P1-инцидентом, который команда закрывает по ролям, и postmortem. Оцениваются и работоспособность, и эксплуатационная зрелость.", "deliverables": ["Сервис по матрице доступности и DoD", "Runbook, схема, мониторинг и план отката", "Постмортем P1 и ретроспектива команды"]}, "runbook": {"title": "Эксплуатация сервиса после запуска", "steps": ["Проверить каталог, DNS, время и доменные входы", "Убедиться в здоровье веб-стека и reverse proxy", "Проверить алерты, бэкапы и журнал дежурства", "Отреагировать на P1 по ролям и восстановить сервис", "Закрыть смену разбором и обновить базу знаний"]}, "rca": true, "quiz": [{"q": "Что входит в Definition of Done сервиса?", "options": ["Только рабочий сайт", "Runbook, схема, мониторинг, бэкап и план отката", "Красивая презентация", "Список участников"], "answer": 1, "explain": "Эксплуатационная готовность измеряется сопровождаемостью, а не только запуском."}, {"q": "Кто координирует команду во время учебного P1?", "options": ["Product Owner", "Incident Commander", "Случайный наблюдатель", "Заказчик"], "answer": 1, "explain": "IC ведёт war room, scribe фиксирует таймлайн, дежурный восстанавливает."}, {"q": "Зачем проекту postmortem без поиска виноватых?", "options": ["Чтобы забыть инцидент", "Найти системные причины и защититься на будущее", "Чтобы назначить штраф", "Это формальность"], "answer": 1, "explain": "Blameless-культура превращает сбой в улучшение процесса."}, {"q": "Как связаны СетьПолис и ДатаПолис в проекте?", "options": ["Никак", "Первый строил инфраструктуру, второй принимает её на сопровождение", "Это конкуренты", "Один заменяет другой"], "answer": 1, "explain": "Единая история: от настройки сети к её эксплуатации."}], "reflection": ["Какая роль в команде подошла вам больше всего и почему?", "Какой runbook оказался самым важным во время P1?", "Что вы измените в следующем сервисном проекте после ретроспективы?"], "sprintTitle": "Изменения и релиз"}</script>
-<script src="../../assets/ops-kit.js?v=20261031an"></script>
-<script src="../../assets/shared-chrome.js?v=20261031an"></script>
+<script src="../../assets/ops-kit.js?v=20261031ao"></script>
+<script src="../../assets/shared-chrome.js?v=20261031ao"></script>
 </body>
 </html>
