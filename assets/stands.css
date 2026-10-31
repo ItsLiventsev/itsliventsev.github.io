@@ -208,9 +208,7 @@ body.flat-scope::before {
 .st-topbar {
   /* Фиксированный хром: не течёт с контентом и стабилен в View Transition */
   position: fixed; top: 0; left: 0; right: 0; z-index: var(--st-z-topbar);
-  background: rgba(11, 14, 17, .82);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: var(--st-bg);  /* сплошная поверхность: стекло убрано */
   border-bottom: 1px solid var(--st-line-strong);
   transition: box-shadow var(--dur-fast) var(--ease-standard),
               border-color var(--dur-fast) var(--ease-standard),
@@ -1051,8 +1049,8 @@ html[data-theme="light"] .flat-scope .lt-screen::-webkit-scrollbar-track { backg
   --st-btn-text: #06201d;
 }
 html[data-theme="light"] .flat-scope[data-accent="teal"] {
-  --st-accent: #0d9488;
-  --st-accent-2: #0f766e;
+  --st-accent: #0f766e;   /* 5.0:1 на светлом фоне — AA */
+  --st-accent-2: #0d9488;
   --st-accent-soft: rgba(13, 148, 136, .09);
   --st-cyan: #0e7490;
   --st-btn-bg: #0f766e;
@@ -1286,7 +1284,6 @@ a.quest-card { text-decoration: none; color: inherit; }
 /* ==========================================================================
    15. Светлая топ-панель, футер и адаптация хрома страницы под тему
    ========================================================================== */
-html[data-theme="light"] .st-topbar { background: rgba(255, 255, 255, .78); }
 html[data-theme="light"] .st-brand-mark { background: #fff; }
 html[data-theme="light"] .flat-profile,
 html[data-theme="light"] .step-nav { background: var(--st-panel); }
@@ -2130,3 +2127,9 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
 /* Тост: выезд сверху при показе */
 .toast { transform: translateY(-10px) scale(.98); }
 .toast.is-show { transform: translateY(0) scale(1); }
+
+/* ---------- Тач-цели ≥ 44px: чипы оглавления словаря, навигация топбара ---------- */
+@media (pointer: coarse) {
+  .glossary-toc a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .st-topnav a { padding-block: .65rem; }
+}
