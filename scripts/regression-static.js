@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ax';
+const VERSION = '20261031ay';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031aw') && !c.includes('?v=20261031av') && !c.includes('?v=20261031au'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ax') && !c.includes('?v=20261031aw') && !c.includes('?v=20261031av'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -718,6 +718,17 @@ ok(siteCss.includes('a.p-card:hover { transform: translate(-2px, -2px);') && sit
 ok(siteCss.includes('.esp-stat:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink);') && siteCss.includes('.step-card:hover { transform: translate(-2px, -2px);'), 'site.css: esp-stat/step-card не в единой hover-механике');
 ok(!siteCss.includes('scale(1.03)') && !siteCss.includes('scale(1.08)'), 'site.css: «парящие» scale-hover не убраны');
 ok(siteCss.includes('border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard); }\n.card:hover'), 'site.css: transition карточек теряет рамку/фон');
+
+
+/* дизайн 2026 · волна 18: misprint-дисплей чтения, подложки зон/статей */
+ok(siteCss.includes('.article-title {\n  text-shadow: 5px 5px 0 var(--neo-leaf);') && siteCss.includes('transform: translateX(calc(var(--sk, 0) * 10px)) skewX(calc(var(--sk, 0) * -1.2deg));'), 'site.css: заголовок статьи без листовой подложки/кинетики hero');
+ok(siteCss.includes('font-size: clamp(1.9rem, 4.2vw, 2.7rem);') && /\.zone-title \{[^}]*font-weight: 900;[^}]*text-shadow: 5px 5px 0 var\(--neo-leaf\);/.test(siteCss), 'site.css: зоны не переведены на крупный дисплей с подложкой');
+ok(/\.esp-title \{[^}]*font-weight: 900;[^}]*text-shadow: 4px 4px 0 var\(--neo-leaf\);/.test(siteCss), 'site.css: esp-секции без подложки');
+ok(siteCss.includes('.zone-title .zt-serif, .esp-title .zt-serif, .article-title .zt-serif { text-shadow: none; }'), 'site.css: serif-вставки не изолированы от подложки');
+ok(/\.prose-neo h2, \.prose-measure h2 \{[^}]*text-transform: lowercase;[^}]*text-shadow: 4px 4px 0 rgba\(216, 242, 75, \.5\);/.test(siteCss), 'site.css: секции чтения без misprint-базы');
+ok(/@supports \(-webkit-text-stroke: 1px #000\) \{\s*\.prose-neo h2, \.prose-measure h2 \{\s*color: transparent;\s*-webkit-text-stroke: 1\.4px var\(--neo-ink\);/.test(siteCss) && siteCss.includes('-webkit-text-stroke: 0; }'), 'site.css: misprint без stroke-guard/fallback');
+ok(/\(animation-timeline: view\(\)\)[\s\S]{0,700}prefers-reduced-motion[\s\S]{0,220}animation: none;/.test(siteCss), 'site.css: view()-reveal без reduce-исключения (урок 17)');
+ok(/@media \(prefers-reduced-motion: reduce\) \{\s*\.article-title \{ animation: none; transform: none; \}\s*\}/.test(siteCss), 'site.css: заголовок статьи без reduce-сброса');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
