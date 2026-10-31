@@ -2133,3 +2133,65 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
   .glossary-toc a { min-height: 2.75rem; display: inline-flex; align-items: center; }
   .st-topnav a { padding-block: .65rem; }
 }
+
+/* ---------- Биржа привилегий и публичный стенд лиги ---------- */
+.rw-balance {
+  display: flex; align-items: center; gap: var(--st-sp-4); flex-wrap: wrap;
+  border: 1px solid var(--st-line-strong); border-left: 3px solid var(--st-accent);
+  border-radius: var(--st-radius); background: var(--st-panel);
+  padding: var(--st-sp-4) var(--st-sp-5);
+}
+.rw-balance-main { display: flex; flex-direction: column; gap: .2rem; margin-right: auto; }
+.rw-balance-main strong { font-size: var(--st-fs-title); }
+.rw-balance-coins b, .rw-balance-xp b { font-size: 1.3rem; font-family: var(--st-mono); display: block; }
+.rw-balance-coins span, .rw-balance-xp span { font-size: var(--st-fs-mini); color: var(--st-faint); }
+.rw-balance-coins { text-align: right; }
+
+.rw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: var(--st-sp-3); }
+.rw-card {
+  border: 1px solid var(--st-line-strong); border-radius: var(--st-radius);
+  background: var(--st-panel); padding: var(--st-sp-4);
+  display: flex; flex-direction: column; gap: var(--st-sp-2);
+}
+.rw-card.is-locked { opacity: .72; }
+.rw-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--st-sp-2); }
+.rw-price { font-family: var(--st-mono); font-weight: 700; color: var(--st-accent); white-space: nowrap; }
+.rw-note { margin: 0; font-size: var(--st-fs-body); color: var(--st-text-2); line-height: 1.55; flex: 1 1 auto; }
+.rw-card .flat-btn { align-self: flex-start; }
+.rw-card .flat-btn[disabled] { opacity: .55; cursor: default; }
+
+.rw-claims, .std-claims { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--st-sp-2); }
+.rw-claims li {
+  display: flex; align-items: center; gap: var(--st-sp-3); flex-wrap: wrap;
+  border: 1px solid var(--st-line); border-radius: var(--st-radius);
+  background: var(--st-inset); padding: var(--st-sp-2) var(--st-sp-3);
+}
+.rw-claim-status { margin-left: auto; font-size: var(--st-fs-mini); color: var(--st-faint); }
+
+.std-meta { font-family: var(--st-mono); font-size: var(--st-fs-mini); color: var(--st-faint); margin: 0 0 var(--st-sp-3); }
+.std-table-wrap { overflow-x: auto; }
+.std-table { width: 100%; border-collapse: collapse; font-size: var(--st-fs-body); }
+.std-table th, .std-table td { text-align: left; padding: var(--st-sp-2) var(--st-sp-3); border-bottom: 1px solid var(--st-line); white-space: nowrap; }
+.std-table th { font-family: var(--st-mono); font-size: var(--st-fs-mini); text-transform: lowercase; letter-spacing: var(--st-ls-kicker, .06em); color: var(--st-faint); font-weight: 700; }
+.std-table td.mono { font-family: var(--st-mono); }
+.std-place { font-weight: 700; }
+.std-col-bar { min-width: 9rem; }
+.std-bar { display: block; height: .55rem; background: var(--st-inset); border: 1px solid var(--st-line); border-radius: 999px; overflow: hidden; }
+.std-bar-fill { display: block; height: 100%; width: 100%; background: var(--st-accent); transform: scaleX(var(--p, 0)); transform-origin: 0 50%; transition: transform var(--dur-slow) var(--ease-standard); }
+.std-empty { border: 1px dashed var(--st-line-strong); border-radius: var(--st-radius); padding: var(--st-sp-5); }
+.std-empty-title { margin: 0 0 var(--st-sp-1); font-family: var(--st-mono); font-weight: 700; }
+.std-empty-hint { margin: 0; color: var(--st-text-2); font-size: var(--st-fs-body); line-height: 1.6; }
+.std-claim {
+  display: flex; align-items: center; gap: var(--st-sp-3); flex-wrap: wrap;
+  border: 1px solid var(--st-line); border-left-width: 3px; border-radius: var(--st-radius);
+  background: var(--st-inset); padding: var(--st-sp-2) var(--st-sp-3);
+}
+.std-claim.is-ok { border-left-color: var(--st-ok); }
+.std-claim.is-bad { border-left-color: var(--st-bad); }
+.std-claim.is-wait { border-left-color: var(--st-warn, var(--st-accent)); }
+.std-claim-status { margin-left: auto; font-size: var(--st-fs-mini); color: var(--st-faint); }
+.std-status { min-height: 1.25em; font-size: var(--st-fs-small); color: var(--st-accent); }
+@media (max-width: 640px) {
+  .rw-grid { grid-template-columns: 1fr; }
+  .rw-balance-coins, .rw-balance-xp { text-align: left; }
+}
