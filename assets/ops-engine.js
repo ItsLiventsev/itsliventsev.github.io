@@ -23,7 +23,8 @@
     postmortems: 'ops-postmortems',
     role: 'ops-role',
     crewOps: 'ops-crew-ops',
-    crewPoints: 'ops-crew-points'
+    crewPoints: 'ops-crew-points',
+    claims: 'ops-claims'
   };
 
   var memory = {};
@@ -150,6 +151,88 @@
   }
   function crewOpsDone() { return read(KEYS.crewOps + '-done', []); }
 
+  /* ----------------------------- Биржа привилегий ДатаПолиса -----------------------------
+     Неткоины эксплуатации тратятся на реальную поддержку: выбор заявки,
+     подсказка наставника, выход из дежурства. «Журнальные» награды
+     (точка, пересдача, балл) стоят столько же, сколько в СетьПолисе —
+     политика цен едина для вселенных. Ордера едут преподавателю в ops-бандле. */
+  var REWARDS_OPS = {
+    'ticket-pick':   { coins: 20,  title: 'Первый выбор заявки',      note: 'на разборе выбираете кейс по вкусу' },
+    'mentor-hint':   { coins: 25,  title: 'Подсказка наставника',    note: 'наводящая подсказка по инциденту до эскалации' },
+    'deadline-plus': { coins: 30,  title: '+1 день на задачу спринта', note: 'перенос личного срока по задаче спринта' },
+    'point-wipe':    { coins: 40,  title: 'Не ставить точку',        note: 'аннулирование одного замечания в журнале' },
+    'standby-skip':  { coins: 45,  title: 'Выход из дежурства',      note: 'разовое освобождение от смены по графику' },
+    'rescue':        { coins: 60,  title: 'Спасательная круглая',    note: 'пересдача двойки без журнальной записи' },
+    'grade-plus':    { coins: 150, title: '+1 балл к четвертной',    note: 'прибавка один балл к оценке за период' }
+  };
+  function opsClaims() { return read(KEYS.claims, []); }
+  function myOpsClaims(profileId) {
+    return opsClaims().filter(function (c) { return c.profileId === profileId; });
+  }
+  function createOpsClaim(profileId, rewardId) {
+    var reward = REWARDS_OPS[rewardId];
+    if (!reward) throw new Error('неизвестная награда: ' + rewardId);
+    var profile = getProfile();
+    if (myOpsClaims(profileId).some(function (c) { return c.rewardId === rewardId && c.status === 'local'; })) {
+      throw new Error('ордер на «' + reward.title + '» уже ждёт подтверждения');
+    }
+    var balance = totals(profileId).coins;
+    if (balance < reward.coins) {
+      throw new Error('не хватает неткоинов: нужно ' + reward.coins + ' ◈, на счету ' + balance + ' ◈');
+    }
+    var claim = {
+      id: uid('ocl'), profileId: profileId, rewardId: rewardId,
+      handle: handleFor(profile).text, status: 'local',
+      at: nowISO()
+    };
+    write(KEYS.claims, opsClaims().concat([claim]));
+    award(profileId, 'rewardSpend', null, {
+      xp: 0, coins: -reward.coins,
+      note: 'ордер №' + claim.id.slice(-4) + ': ' + reward.title
+    });
+    return claim;
+  }
+  /* Отмена до решения преподавателя: «передумал» — монеты возвращаются. */
+  function cancelOpsClaim(claimId) {
+    var list = opsClaims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status !== 'local') throw new Error('отменить можно только ордер, который ещё ждёт подтверждения');
+    var reward = REWARDS_OPS[claim.rewardId];
+    claim.status = 'cancelled';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'отмена ордера №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  /* Возврат монет после отклонения преподавателем. */
+  function refundOpsClaim(claimId) {
+    var list = opsClaims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status === 'refunded') return { duplicated: true };
+    if (claim.status !== 'rejected') throw new Error('вернуть монеты можно только по отклонённому ордеру');
+    var reward = REWARDS_OPS[claim.rewardId];
+    claim.status = 'refunded';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'возврат по ордеру №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  function setOpsClaimStatus(claimId, status) {
+    var list = opsClaims();
+    var found = false;
+    list.forEach(function (c) { if (c.id === claimId) { c.status = status; c.decidedAt = nowISO(); found = true; } });
+    if (found) write(KEYS.claims, list);
+    return found;
+  }
+
   /* Роли ротационные: на один спринт/дежурство, не пожизненные */
   var ROLES = [
     { id: 'ic', name: 'Incident Commander', note: 'ведёт war room и принимает решение по инциденту' },
@@ -235,7 +318,11 @@
   /* ----------------------------- Журнал, XP, неткоины ----------------------------- */
   function ledger() { return read(KEYS.ledger, []); }
   function award(profileId, type, dedupKey, extra) {
-    var spec = AWARDS[type];
+    /* Произвольные coins в extra (траты/возвраты биржи) переопределяют каталог:
+       списания остаются в общем журнале опыта. */
+    var spec = (extra && typeof extra.coins === 'number')
+      ? { xp: extra.xp || 0, coins: extra.coins, note: extra.note || 'начисление' }
+      : AWARDS[type];
     if (!spec) throw new Error('неизвестная награда ' + type);
     var log = ledger();
     if (dedupKey && log.some(function (e) { return e.profileId === profileId && e.dedupKey === dedupKey; })) {
@@ -454,11 +541,80 @@
   /* ----------------------------- Бандлы и сброс ----------------------------- */
   function exportBundle(profile) {
     return {
-      schema: 'ops-bundle/2', exportedAt: nowISO(), student: publicStudent(profile),
+      schema: 'ops-bundle/3', exportedAt: nowISO(), student: publicStudent(profile),
       profile: getProfile(), ledger: ledger(), submissions: submissions(),
       tickets: tickets(), runbooks: runbooks(), postmortems: postmortems(),
-      crewOpsDone: crewOpsDone(), crewPoints: crewPointsMap()
+      crewOpsDone: crewOpsDone(), crewPoints: crewPointsMap(), claims: opsClaims()
     };
+  }
+  /* Перенос прогресса ДатаПолиса на другое устройство / к преподавателю.
+     Слияние по id; события журнала дополнительно дедупятся по
+     (profileId, dedupKey) — входы/награды с двух устройств не задваиваются. */
+  function importBundle(bundle) {
+    if (!bundle || !/^ops-bundle\/[123]$/.test(bundle.schema)) {
+      throw new Error('ожидался ops-bundle/1, /2 или /3');
+    }
+    var report = { ledger: 0, submissions: 0, tickets: 0, runbooks: 0, postmortems: 0, crewOpsDone: 0, claims: 0 };
+
+    /* Перенос тем же человеком (id на устройствах различается, ФИО совпадает):
+       события перепривязываются к текущему профилю, иначе баланс не «переедет».
+       Бандлы других студентов ложатся со своими id — их totals не смешиваются. */
+    var me = getProfile();
+    var migrating = !!(me && bundle.profile && bundle.profile.name === me.name && bundle.profile.id !== me.id);
+
+    var log = ledger();
+    (bundle.ledger || []).forEach(function (e) {
+      if (!e || !e.id || isDemoRecord(e)) return;
+      var ev = Object.assign({}, e);
+      if (migrating) ev.profileId = me.id;
+      var dup = log.some(function (x) {
+        return x.id === ev.id ||
+          (ev.dedupKey && x.profileId === ev.profileId && x.dedupKey === ev.dedupKey) ||
+          (ev.type === 'login' && x.type === 'login' && ev.at && x.at && ev.at.slice(0, 10) === x.at.slice(0, 10) && x.profileId === ev.profileId);
+      });
+      if (!dup) { log.push(ev); report.ledger++; }
+    });
+    write(KEYS.ledger, log);
+
+    [['submissions', 'submissions'], ['tickets', 'tickets'], ['runbooks', 'runbooks'], ['postmortems', 'postmortems']]
+      .forEach(function (pair) {
+        var key = pair[0], store = pair[1];
+        var list = read(KEYS[store], []);
+        var added = 0;
+        (bundle[key] || []).forEach(function (item) {
+          if (!item || !item.id || isDemoRecord(item)) return;
+          var known = list.some(function (x) { return x.id === item.id; });
+          if (!known) { list.push(item); added++; }
+        });
+        if (added) write(KEYS[store], list);
+        report[key] = added;
+      });
+
+    var opsLog = crewOpsDone();
+    var opsAdded = 0;
+    (bundle.crewOpsDone || []).forEach(function (d) {
+      if (!d || !d.id || opsLog.some(function (x) { return x.id === d.id; })) return;
+      opsLog.push(d); opsAdded++;
+    });
+    if (opsAdded) write(KEYS.crewOps + '-done', opsLog);
+    report.crewOpsDone = opsAdded;
+
+    /* Ордера: слияние по id (при миграции — перепривязка к текущему профилю),
+       чужое решение старше локального «ждёт» */
+    (bundle.claims || []).forEach(function (c) {
+      if (!c || !c.id || !c.rewardId) return;
+      var cl = Object.assign({}, c);
+      if (migrating) cl.profileId = me.id;
+      var list = opsClaims();
+      var known = null;
+      list.forEach(function (x) { if (x.id === cl.id) known = x; });
+      if (!known) { list.push(cl); report.claims++; }
+      else if ((cl.decidedAt || '') > (known.decidedAt || '') && known.status === 'local') {
+        known.status = cl.status; known.decidedAt = cl.decidedAt || known.decidedAt;
+      }
+      write(KEYS.claims, list);
+    });
+    return report;
   }
   function resetAll() {
     Object.keys(KEYS).forEach(function (k) { storage.removeItem(KEYS[k]); });
@@ -484,11 +640,13 @@
       ledger().forEach(function (e) { if (e.profileId === p.id) xp += e.xp || 0; });
       members.push({ handle: handleFor(p).text, crewId: p.crewId, xp: xp });
     }
-    return { crews: crews, opsDone: opsCount, opsTitles: opsTitles, members: members };
+    var claims = opsClaims().filter(function (c) { return c.status !== 'cancelled'; })
+      .map(function (c) { return { id: c.id, handle: c.handle, rewardId: c.rewardId, status: c.status, at: c.at }; });
+    return { crews: crews, opsDone: opsCount, opsTitles: opsTitles, members: members, claims: claims };
   }
 
   return {
-    KEYS: KEYS, CREWS: CREWS, ROLES: ROLES, LEVELS: LEVELS, AWARDS: AWARDS, CREW_OPS: CREW_OPS,
+    KEYS: KEYS, CREWS: CREWS, ROLES: ROLES, LEVELS: LEVELS, AWARDS: AWARDS, CREW_OPS: CREW_OPS, REWARDS_OPS: REWARDS_OPS,
     SLA_MIN: SLA_MIN, TICKET_TYPES: TICKET_TYPES, PRP_CAP: PRP_CAP, INITIAL_PRP: INITIAL_PRP,
     crewFor: crewFor, levelOf: levelOf, handleFor: handleFor,
     getProfile: getProfile, ensureProfile: ensureProfile, updateProfile: updateProfile,
@@ -506,6 +664,10 @@
     exportBundle: exportBundle, resetAll: resetAll, isDemoRecord: isDemoRecord,
     crewOpsCatalog: crewOpsCatalog, crewSteps: crewSteps, setCrewStep: setCrewStep,
     crewPointsMap: crewPointsMap, addCrewPoints: addCrewPoints,
-    closeCrewOp: closeCrewOp, crewOpsDone: crewOpsDone, crewsSnapshot: crewsSnapshot
+    closeCrewOp: closeCrewOp, crewOpsDone: crewOpsDone, crewsSnapshot: crewsSnapshot,
+    opsClaims: opsClaims, myOpsClaims: myOpsClaims,
+    createOpsClaim: createOpsClaim, cancelOpsClaim: cancelOpsClaim,
+    refundOpsClaim: refundOpsClaim, setOpsClaimStatus: setOpsClaimStatus,
+    importBundle: importBundle
   };
 });
