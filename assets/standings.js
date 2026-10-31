@@ -98,8 +98,9 @@
     return '<div class="std-table-wrap"><table class="std-table">' +
       '<thead><tr><th>трайб</th><th>опыт</th><th>неткоины</th><th>работ</th><th>состав</th><th class="std-col-bar">копилка опыта</th></tr></thead><tbody>' +
       rows.map(function (r, i) {
+        var head = medals[i] ? '<span aria-hidden="true">' + medals[i] + '</span> ' : (i + 1) + '. ';
         return '<tr>' +
-          '<td class="std-place">' + (medals[i] || (i + 1) + '.') + ' ' + esc(r.name || r.id) + '</td>' +
+          '<td class="std-place">' + head + esc(r.name || r.id) + '</td>' +
           '<td class="mono">' + num(r.xp) + '</td>' +
           '<td class="mono">' + num(r.coins) + ' ◈</td>' +
           '<td class="mono">' + num(r.works) + '</td>' +
@@ -151,6 +152,29 @@
     }).join('') + '</ul>';
   }
 
+  /* Ордера ДатаПолиса (snap.datapolis.claims): решения преподавателя по бирже эксплуатации */
+  function datapolisClaimsList(snap) {
+    var dp = snap && snap.datapolis;
+    var rows = (dp && dp.claims) || [];
+    if (!rows.length) return '<p class="std-empty-hint">ордеров ДатаПолиса ещё не было — обменяйте неткоины эксплуатации на <a href="ops/rewards.html">бирже ДатаПолиса</a>.</p>';
+    var titles = {
+      'ticket-pick': 'первый выбор заявки', 'mentor-hint': 'подсказка наставника',
+      'deadline-plus': '+1 день на задачу спринта', 'point-wipe': 'не ставить точку',
+      'standby-skip': 'выход из дежурства', 'rescue': 'спасательная круглая',
+      'grade-plus': '+1 балл к четвертной'
+    };
+    function title(id) {
+      return (root.OPS && OPS.REWARDS_OPS && OPS.REWARDS_OPS[id] && OPS.REWARDS_OPS[id].title) || titles[id] || id;
+    }
+    return '<ul class="std-claims">' + rows.map(function (c) {
+      var cls = c.status === 'approved' ? 'is-ok' : c.status === 'rejected' ? 'is-bad' : 'is-wait';
+      var label = c.status === 'approved' ? 'выдано' : c.status === 'rejected' ? 'отклонено' : c.status === 'refunded' ? 'возвращено' : 'ждёт подтверждения';
+      return '<li class="std-claim ' + cls + '"><span class="mono">' + esc(c.handle || '') + '</span>' +
+        '<span>' + esc(title(c.rewardId)) + '</span>' +
+        '<span class="std-claim-status">' + label + '</span></li>';
+    }).join('') + '</ul>';
+  }
+
   /* Экипажи ДатаПолиса: очки команд и проведённые операции (snap.datapolis) */
   function opsCrewsTable(snap) {
     var dp = snap && snap.datapolis;
@@ -168,10 +192,11 @@
     var table = '<div class="std-table-wrap"><table class="std-table">' +
       '<thead><tr><th>экипаж</th><th>очков</th><th class="std-col-bar">копилка экипажа</th></tr></thead><tbody>' +
       dp.crews.slice().sort(function (a, b) { return b.points - a.points; }).map(function (c, i) {
+        var head = medals[i] ? '<span aria-hidden="true">' + medals[i] + '</span> ' : (i + 1) + '. ';
         return '<tr>' +
-          '<td class="std-place">' + (medals[i] || (i + 1) + '.') + ' ' + esc(c.name || c.id) + '</td>' +
+          '<td class="std-place">' + head + esc(c.name || c.id) + '</td>' +
           '<td class="mono">' + num(c.points) + '</td>' +
-          '<td class="std-col-bar"><span class="std-bar"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
+          '<td class="std-col-bar"><span class="std-bar" aria-hidden="true"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
           '</tr>';
       }).join('') + '</tbody></table></div>';
     return '<p class="list-lead"><strong>экипажи ДатаПолиса · очки за операции</strong></p>' + table + opsLine;
@@ -187,6 +212,7 @@
       else if (kind === 'members') el.innerHTML = membersTable(snap, { limit: limit || 20 });
       else if (kind === 'claims') el.innerHTML = claimsList(snap);
       else if (kind === 'ops-crews') el.innerHTML = opsCrewsTable(snap);
+      else if (kind === 'ops-claims') el.innerHTML = datapolisClaimsList(snap);
       else if (kind === 'meta') el.innerHTML = snap ? metaLine(snap) : '';
       el.classList.add('std-ready');
     });
@@ -209,6 +235,7 @@
     renderMembers: membersTable,
     renderClaims: claimsList,
     renderOpsCrews: opsCrewsTable,
+    renderDatapolisClaims: datapolisClaimsList,
     hydrate: hydrate,
     autoInit: autoInit,
     REWARD_TITLES: REWARD_TITLES

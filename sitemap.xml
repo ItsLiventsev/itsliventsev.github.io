@@ -335,6 +335,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/stands/ops/rewards.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/stands/rewards.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>

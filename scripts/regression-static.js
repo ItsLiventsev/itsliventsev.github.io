@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ae';
+const VERSION = '20261031af';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -25,8 +25,8 @@ const standsHtml = allHtml.filter(f => f.startsWith('stands/'));
 const rootHtml = allHtml.filter(f => !f.startsWith('stands/'));
 
 /* 1. Инвентарь */
-ok(allHtml.length === 73, 'HTML страниц должно быть 73, фактически ' + allHtml.length);
-ok(standsHtml.length === 50, 'stands-страниц 50, фактически ' + standsHtml.length);
+ok(allHtml.length === 74, 'HTML страниц должно быть 74, фактически ' + allHtml.length);
+ok(standsHtml.length === 51, 'stands-страниц 51, фактически ' + standsHtml.length);
 
 /* 2. Версия ассетов */
 for (const f of allHtml) {
@@ -100,7 +100,7 @@ for (const m of q3) {
 /* 9. Sitemap */
 const sm = read('sitemap.xml');
 const locs = (sm.match(/<loc>[^<]+<\/loc>/g) || []).map(l => l.replace(/<\/?loc>/g, ''));
-ok(locs.length === 69, 'sitemap URL = 67, фактически ' + locs.length);
+ok(locs.length === 70, 'sitemap URL = 70, фактически ' + locs.length);
 ok(!/(404|admin|league)/.test(sm), 'sitemap содержит 404/admin/league');
 for (const u of locs) {
   const rel = u.replace('https://itsliventsev.github.io/', '').replace(/^$/, 'index.html');
@@ -163,7 +163,7 @@ for (const f of allHtml) {
 }
 /* реестр dom-kit-страниц = 37 stands + admin */
 const dkPages = allHtml.filter(f => read(f).includes('dom-kit.js'));
-ok(dkPages.length === 50, 'dom-kit подключён на 50 страницах (49 stands + admin), фактически ' + dkPages.length);
+ok(dkPages.length === 51, 'dom-kit подключён на 51 странице (50 stands + admin), фактически ' + dkPages.length);
 
 /* 15. Нарратив */
 ok(read('stands/index.html').includes('uni-flow'), 'нет схемы вселенных uni-flow');
@@ -414,7 +414,14 @@ ok(read('admin.html').includes('assets/ops-engine.js'), 'admin.html: ops-engine 
 const oe = read('assets/ops-engine.js');
 ok(oe.includes('CREW_OPS') && oe.includes('closeCrewOp') && oe.includes('ops-crew-points'), 'ops-engine.js: нет командных операций');
 ok(oe.includes('crewop:') && oe.includes("W' + w"), 'ops-engine.js: нет недельного дедупа операций');
-ok(oe.includes("'ops-bundle/2'") && oe.includes('crewsSnapshot'), 'ops-engine.js: бандл ops не v2 или нет снапшота экипажей');
+ok(oe.includes("'ops-bundle/3'") && oe.includes('crewsSnapshot'), 'ops-engine.js: бандл ops не v3 или нет снапшота экипажей');
+ok(oe.includes('REWARDS_OPS') && oe.includes('createOpsClaim') && oe.includes('cancelOpsClaim') && oe.includes('refundOpsClaim') && oe.includes('function importBundle'), 'ops-engine.js: биржа ДатаПолиса или импорт бандлов неполны');
+ok(oe.includes('migrating') && oe.includes('ev.profileId = me.id'), 'ops-engine.js: перенос прогресса без перепривязки профиля');
+ok(oe.includes("'ops-claims'"), 'ops-engine.js: нет хранилища ордеров ops-claims');
+ok(read('stands/ops/rewards.html').includes('ops-rewards-page.js') && read('stands/ops/rewards.html').includes('data-standings="ops-claims"'), 'ops/rewards.html: не подключены движок биржи и общий список');
+ok(read('stands/ops/index.html').includes('href="rewards.html"') && read('stands/ops/crew-ops.html').includes('href="rewards.html"'), 'ops: нет навигации на биржу ДатаПолиса');
+ok(read('admin.html').includes('ops-claims-tbody') && read('assets/submissions.js').includes('renderOpsClaims') && read('assets/submissions.js').includes('ops-bundle\\/[123]'), 'admin: нет приёма ордеров ДатаПолиса');
+ok(read('assets/standings.js').includes('renderDatapolisClaims'), 'standings.js: нет рендера ордеров ДатаПолиса');
 ok(read('stands/ops/crew-ops.html').includes('ops-hub.js') && read('stands/ops/crew-ops.html').includes('crew-ops-root'), 'crew-ops.html: не подключён движок кабинета');
 ok(read('stands/ops/crew-ops.html').includes('data-standings="ops-crews"') && read('stands/ops/crew-ops.html').includes('standings.js'), 'crew-ops.html: нет командного зачёта экипажей');
 ok(read('assets/standings.js').includes('renderOpsCrews') && read('assets/standings.js').includes('opsCrewsTable'), 'standings.js: нет рендера экипажей ДатаПолиса');
