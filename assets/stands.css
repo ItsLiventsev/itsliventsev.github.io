@@ -208,9 +208,7 @@ body.flat-scope::before {
 .st-topbar {
   /* Фиксированный хром: не течёт с контентом и стабилен в View Transition */
   position: fixed; top: 0; left: 0; right: 0; z-index: var(--st-z-topbar);
-  background: rgba(11, 14, 17, .82);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: var(--st-bg);  /* сплошная поверхность: стекло убрано */
   border-bottom: 1px solid var(--st-line-strong);
   transition: box-shadow var(--dur-fast) var(--ease-standard),
               border-color var(--dur-fast) var(--ease-standard),
@@ -1286,7 +1284,6 @@ a.quest-card { text-decoration: none; color: inherit; }
 /* ==========================================================================
    15. Светлая топ-панель, футер и адаптация хрома страницы под тему
    ========================================================================== */
-html[data-theme="light"] .st-topbar { background: rgba(255, 255, 255, .78); }
 html[data-theme="light"] .st-brand-mark { background: #fff; }
 html[data-theme="light"] .flat-profile,
 html[data-theme="light"] .step-nav { background: var(--st-panel); }

@@ -19,7 +19,7 @@
   --grid-dot: rgba(24, 24, 27, .055);
   --shadow-card: 0 1px 2px rgba(24, 24, 27, .05);
   --shadow-hover: 0 16px 36px -16px rgba(24, 24, 27, .18);
-  --header-bg: rgba(255, 255, 255, .82);
+  --header-bg: #ffffff;  /* сплошная поверхность: стекло убрано */
   --tooltip-bg: #18181b;
   --tooltip-text: #ffffff;
   --radius: 16px;
@@ -117,7 +117,7 @@ body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --acce
   --grid-dot: rgba(255, 255, 255, .05);
   --shadow-card: none;
   --shadow-hover: 0 28px 56px -28px rgba(0, 0, 0, .85);
-  --header-bg: rgba(13, 13, 16, .72);
+  --header-bg: #0f0f13;  /* сплошная поверхность: стекло убрано */
   /* Акцент по умолчанию для тёмной темы; per-page акценты уточняются ниже */
   --accent: #3b82f6;
   --accent-hover: #60a5fa;
@@ -256,8 +256,6 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
   min-height: var(--header-h-lg);
   padding: .55rem .7rem .55rem 1.05rem;
   background: var(--header-bg);
-  -webkit-backdrop-filter: blur(16px) saturate(170%);
-  backdrop-filter: blur(16px) saturate(170%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
@@ -398,8 +396,6 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
     gap: .15rem;
     padding: .55rem;
     background: var(--header-bg);
-    -webkit-backdrop-filter: blur(16px) saturate(170%);
-    backdrop-filter: blur(16px) saturate(170%);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-hover);
@@ -1211,13 +1207,6 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 }
 
 /* Градиентный заголовок */
-.text-gradient {
-  background: linear-gradient(92deg, #60a5fa 0%, #a78bfa 35%, #f472b6 70%, #fbbf24 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 /* ---------- Hero: текст + декоративная панель ---------- */
 .esp-hero {
   display: grid;
@@ -1682,8 +1671,8 @@ figure figcaption, .fig-cap {
   --nav-blue-deep: #4f73ad;
   --nav-mint: #4abea0;
   --nav-graphite: #4e5658;
-  --nav-glass: color-mix(in srgb, var(--surface) 62%, transparent);
-  --nav-glass-strong: color-mix(in srgb, var(--surface) 80%, transparent);
+  --nav-glass: var(--surface-2);        /* сплошная поверхность */
+  --nav-glass-strong: var(--surface);   /* сплошная поверхность */
   --nav-line: color-mix(in srgb, var(--nav-blue) 28%, var(--border));
 }
 
@@ -1712,8 +1701,6 @@ figure figcaption, .fig-cap {
   border-radius: var(--radius-lg);
   border: 1px solid var(--nav-line);
   background: var(--nav-glass);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  backdrop-filter: blur(18px) saturate(150%);
   padding: clamp(2rem, 6vw, 4.25rem);
   margin-bottom: 3.5rem;
 }
@@ -1767,8 +1754,6 @@ figure figcaption, .fig-cap {
 /* Стеклянная панель */
 .glass {
   background: var(--nav-glass);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  backdrop-filter: blur(16px) saturate(150%);
   border: 1px solid var(--nav-line);
   border-radius: var(--radius-lg);
   padding: 1.6rem;
@@ -1812,8 +1797,6 @@ figure figcaption, .fig-cap {
   border-radius: var(--radius);
   border: 1px solid var(--nav-line);
   background: var(--nav-glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 .stair-badges { display: inline-flex; gap: .45rem; flex-shrink: 0; }
 .stair-badge {
@@ -1890,8 +1873,6 @@ figure figcaption, .fig-cap {
   padding: .4rem;
   border-radius: var(--radius-pill);
   background: var(--nav-glass-strong);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
-  backdrop-filter: blur(20px) saturate(170%);
   border: 1px solid var(--nav-line);
   box-shadow: 0 18px 44px -16px rgba(24, 24, 27, .35);
   max-width: calc(100vw - 2rem);
@@ -1929,8 +1910,6 @@ figure figcaption, .fig-cap {
   border-radius: var(--radius);
   background: var(--nav-glass);
   border: 1px solid var(--nav-line);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 .flow-step-num {
   font-family: var(--font-mono);
@@ -2333,8 +2312,6 @@ textarea.admin-input { resize: vertical; line-height: var(--lh-text); }
   padding: .4rem;
   margin-bottom: 1.5rem;
   background: var(--header-bg);
-  -webkit-backdrop-filter: blur(16px) saturate(170%);
-  backdrop-filter: blur(16px) saturate(170%);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-card);
