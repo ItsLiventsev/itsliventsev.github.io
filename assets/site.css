@@ -1916,7 +1916,10 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   z-index: 10;                      /* над .floating-elements (z-index:0) */
 }
 /* Мера чтения для длинных текстов внутри широкой рамки */
-.prose-measure { max-width: 40rem;   /* ~640px: 75-80 знаков строки — редакционная норма */ }
+.prose-measure { max-width: 44rem;   /* ~700px: строка не пустует на широких экранах, норма чтения держится */ }
+/* Шапка статьи: крошки, мета и ЗАГОЛОВОК шире меры текста — длинные названия
+   не ломаются в колонку (место справа используется, меньше высоты) */
+.prose-head { max-width: 60rem; }
 .prose-measure.centered { margin-inline: auto; }
 
 /* === Блог: плотная мозаика мелких карточек-заметок === */
@@ -2147,11 +2150,7 @@ h2, h3 { line-height: var(--lh-tight); }
 
 /* Типографика контента постов (общая для блога и статей) */
 .prose-measure article h2 {
-  font-size: clamp(1.2rem, 2.6vw, 1.5rem);
-  font-weight: 800;
-  letter-spacing: var(--ls-heading);
-  color: var(--text);
-  margin: 2rem 0 .8rem;
+  margin: 2rem 0 .8rem;  /* размер/вес/подложка — в дисплей-канонах волны 19 */
 }
 .prose-measure article h3 {
   font-size: var(--fs-title);
@@ -3471,25 +3470,23 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 .zone-title .zt-serif, .esp-title .zt-serif, .article-title .zt-serif { text-shadow: none; }
 
 /* Секционные заголовки чтения (статья, архив, заметки, превью админки):
-   misprint — контур + ацидовый сдвиг, наследник .giant-word */
-.prose-neo h2, .prose-measure h2 {
+   общие каноны — solid ink + листовая подложка, как у зон и hero.
+   Волна 18 пробовала контур (misprint) — на reading-размере не читался.
+   Покрываем и .prose-measure article h2 (статья), иначе его
+   специфичность перебивает дисплей обратно на 1.2rem */
+.prose-neo h2, .prose-measure h2, .prose-measure article h2 {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
-  line-height: 1.15;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  line-height: 1.18;
   letter-spacing: -.02em;
   text-transform: lowercase;
-  text-shadow: 4px 4px 0 rgba(216, 242, 75, .5);
+  color: var(--neo-ink);
+  text-shadow: 4px 4px 0 var(--neo-leaf);
 }
-/* Номерные и служебные span внутри misprint-заголовков: чистый моно */
-.prose-neo h2 span, .prose-measure h2 span { text-shadow: none; }
-@supports (-webkit-text-stroke: 1px #000) {
-  .prose-neo h2, .prose-measure h2 {
-    color: transparent;
-    -webkit-text-stroke: 1.4px var(--neo-ink);
-  }
-  .prose-neo h2 span, .prose-measure h2 span { color: var(--faint); -webkit-text-stroke: 0; }
-}
+/* ▚-маркер и номерные span — без подложки */
+.prose-neo h2::before { text-shadow: none; }
+.prose-neo h2 span, .prose-measure h2 span, .prose-measure article h2 span { text-shadow: none; }
 
 /* Появление дисплейных заголовков при входе в кадр (прогрессивное;
    в браузерах без view() заголовки просто видимы сразу) */

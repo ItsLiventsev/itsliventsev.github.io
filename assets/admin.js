@@ -144,10 +144,10 @@ ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="imag
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261031ay">
-<link rel="stylesheet" href="${prefix}assets/tw-fallback.css?v=20261031ay">
-<link rel="stylesheet" href="${prefix}assets/shared-chrome.css?v=20261031ay">
-<link rel="stylesheet" href="${prefix}assets/tw-compiled.css?v=20261031ay">
+<link rel="stylesheet" href="${prefix}assets/site.css?v=20261031az">
+<link rel="stylesheet" href="${prefix}assets/tw-fallback.css?v=20261031az">
+<link rel="stylesheet" href="${prefix}assets/shared-chrome.css?v=20261031az">
+<link rel="stylesheet" href="${prefix}assets/tw-compiled.css?v=20261031az">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -223,8 +223,8 @@ ${bodyHtml}
 
 </div>
 
-<script src="${prefix}assets/site.js?v=20261031ay"></script>
-<script src="${prefix}assets/shared-chrome.js?v=20261031ay"></script>
+<script src="${prefix}assets/site.js?v=20261031az"></script>
+<script src="${prefix}assets/shared-chrome.js?v=20261031az"></script>
 </body>
 </html>
 `;
