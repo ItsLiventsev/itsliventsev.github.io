@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031as';
+const VERSION = '20261031at';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -398,7 +398,7 @@ ok(stCss.includes('left bottom / 100% 1px'), 'stands.css: нет градиен�
 ok(stCss.includes('.st-topnav a:hover::after'), 'stands.css: нет выезжающего подчёркивания навигации');
 ok(stCss.includes('.flat-btn:hover:not([disabled])') && stCss.includes('linear-gradient(135deg'), 'stands.css: кнопки без градиента и свечения');
 ok(stCss.includes('.rw-balance, .resume-card'), 'stands.css: фичер-карточки без стекла');
-ok(siteCss.includes('radial-gradient(60rem 34rem at 88% -8rem') && siteCss.includes('.btn-primary:hover:not([disabled])'), 'site.css: нет aurora/свечения основной площадки');
+ok(siteCss.includes('radial-gradient(60rem 34rem at 88% -8rem'), 'site.css: нет тёплого поля aurora');
 ok(stCss.includes('.resume-card') && read('assets/shared-chrome.js').includes('stands-last-'), 'нет механики «продолжить с места»');
 ok(stCss.includes('clamp(1.7rem, 4.6vw, 2.65rem)'), 'stands.css: hero-заголовок не масштабирован (дизайн 2026)');
 ok(stCss.includes('.rw-card:hover') && stCss.includes('.ops-cocard:hover'), 'stands.css: нет микро-отклика карточек');
@@ -444,7 +444,7 @@ ok(stCss.includes('radial-gradient(var(--grid-dot') && siteCss.includes('.st-glo
 ok(!siteCss.includes('rgba(14, 165, 233, .07)') && !siteCss.includes('rgba(14, 165, 233, .08)'), 'site.css: небесное (синее) поле aurora не удалено');
 ok(!siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: outline-слова есть, мёртвый ht-serif удалён');
 ok(siteCss.includes('-webkit-text-stroke: 2px') && !siteCss.includes('-webkit-text-stroke: 1.5px') && siteCss.includes('calc((var(--sk, 0) - .5) * -90px)'), 'site.css: outline-слова без кинетики (дубль волны-5 жив)');
-ok(siteCss.includes('linear-gradient(115deg, var(--accent) 15%, var(--aur-violet))'), 'site.css: кнопка без тёпло-холодного градиента');
+
 ok(stCss.includes('.flat-btn { background: var(--st-btn-bg); }') && stCss.includes('position: sticky;'), 'stands.css: кнопки не солидные или топбар не липкий');
 ok(read('index.html').includes('ht-tagline') && read('index.html').includes('giant-word--right'), 'index.html: нет теглайна в большом тексте и outline-слов');
 ok(read('blog.html').includes('ht-word') && read('articles.html').includes('ht-word'), 'blog/articles: заголовки не переведены на крупный ht-word');
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031ar') && !c.includes('?v=20261031aq') && !c.includes('?v=20261031ap'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031as') && !c.includes('?v=20261031ar') && !c.includes('?v=20261031aq'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -642,6 +642,21 @@ ok(siteCss.includes('.article-title {') && siteCss.includes('text-wrap: balance'
 ok(siteCss.includes('.zone-title, .esp-title, .p-title {\n  font-family: var(--font-display);'), 'site.css: заголовки секций/карточек не в дисплейной паре');
 ok(siteCss.includes('.prose-neo p { text-wrap: pretty; }'), 'site.css: абзацы чтения без pretty');
 ok(read('blog.html').includes('ht-word') && read('articles.html').includes('ht-word'), 'списки: ht-word утрачен');
+
+/* дизайн 2026 · волна 13: buttons — единая система, ноль переливов */
+ok(!siteCss.includes('--glow-accent') && !stCss.includes('--glow-accent'), 'глоу-переменная не удалена из CSS');
+ok(!siteCss.includes('btn-gradient') && !siteCss.includes('linear-gradient(92deg, var(--accent)'), 'site.css: градиентная кнопка не удалена');
+ok(!siteCss.includes('linear-gradient(115deg, var(--accent) 15%') && !siteCss.includes('#5b21b6'), 'site.css: хвост градиентной btn-primary (волна 5) жив');
+ok(!siteCss.includes('0 12px 28px -12px color-mix(in srgb, var(--accent)') && !stCss.includes('0 12px 28px -12px color-mix(in srgb, var(--st-accent)'), 'глоу-хвост волны 4 на btn-primary/flat-btn жив');
+ok(!stCss.includes('0 6px 18px -8px var(--st-accent)') && !stCss.includes('0 14px 30px -18px color-mix(in srgb, var(--st-accent)'), 'стенды: мягкие свечения кнопок/карточек наград живы');
+ok(siteCss.includes('.quick-bubble {') && siteCss.includes('.quick-bubble:active { transform: translate(2px, 2px);'), 'site.css: quick-bubble не в единой системе нажатия');
+ok(siteCss.includes('color: #fff !important;\n  box-shadow: var(--neo-hard-sm);\n}'), 'site.css: is-active фильтр без жёсткой тени');
+ok(stCss.includes('.flat-btn:hover:not([disabled]),\n.flat-btn:focus-visible:not([disabled]) {\n  transform: translate(-2px, -2px);'), 'stands.css: нет финального слова каскада для flat-btn');
+ok(stCss.includes('.theme-toggle:active { transform: translate(1px, 1px);'), 'stands.css: theme-toggle вне системы нажатия');
+ok(siteCss.includes('.light-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); }'), 'site.css: light-card hover не в NEO');
+let twGrad = 0;
+const gradBtn = /linear-gradient\([^)]*\)[^}]*;?\s*\n?\s*border[^:]*:[^;]*;/;
+ok(!/(?:^|[},\\s])\\.(?:btn|btn-primary|btn-ghost|btn-danger|btn-lg|btn-sm|flat-btn|filter-btn)[^{}]*\\{[^{}]*linear-gradient/.test(siteCss + stCss), 'на кнопках остались градиентные фоны');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
