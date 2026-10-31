@@ -2077,7 +2077,7 @@ a.uni-flow-link:focus-visible { outline: 2px solid var(--st-accent-2); outline-o
 }
 .uni-card { min-height: 100%; }
 .uni-card--netpolis { --card-accent: #0f766e; }
-.uni-card--office { --card-accent: #b45309; border-color: color-mix(in srgb, #b45309 30%, var(--st-line)); }
+.uni-card--office { --card-accent: #96602a; border-color: color-mix(in srgb, #96602a 30%, var(--st-line)); }
 html[data-theme="dark"] .uni-card--office { --card-accent: #fb923c; border-color: color-mix(in srgb, #fb923c 30%, var(--st-line)); }
 .uni-card--ops { --card-accent: #0d9488; border-color: color-mix(in srgb, #0d9488 30%, var(--st-line)); }
 .uni-title { display: flex; align-items: baseline; gap:var(--st-sp-2); flex-wrap: wrap; }

@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031au';
+const VERSION = '20261031av';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031at') && !c.includes('?v=20261031as') && !c.includes('?v=20261031ar'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031au') && !c.includes('?v=20261031at') && !c.includes('?v=20261031as'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -667,6 +667,26 @@ ok(siteCss.includes('box-shadow: var(--neo-hard-sm);\n  max-width: calc(100vw - 
 ok(siteCss.includes('.stair-badge.letter { background: var(--nav-graphite);') && siteCss.includes('--nav-mint-ink'), 'site.css: контрасты кейса не подняты');
 ok(stCss.includes('.flat-scope :focus-visible'), 'stands.css: нет единого фокуса');
 ok(siteCss.includes('env(safe-area-inset-bottom'), 'site.css: нет safe-area для фиксированного хрома');
+
+/* дизайн 2026 · волна 15: inherit2 — инлайны, легенды, утилиты */
+const stalePal = /#(3b82f6|2563eb|8b5cf6|a78bfa|c084fc|60a5fa|93c5fd|7c3aed|6d28d9|ec4899|f472b6|0ea5e9|f59e0b|fbbf24|10b981)/;
+ok(!stalePal.test(siteCss), 'site.css: вернулась старая палитра (hex)');
+let hexHtml = 0;
+for (const f of allHtml) {
+  if (stalePal.test(read(f))) hexHtml++;
+}
+ok(hexHtml === 0, 'страниц со старыми hex в разметке: ' + hexHtml);
+ok(!read('projects/esports.html').includes('linear-gradient(92deg,#3b82f6'), 'esports: инлайновый градиент CTA не удалён');
+ok(read('projects/esports.html').split('style="').length - 1 <= 20, 'esports: инлайны не сконвертированы в утилиты');
+ok(read('sitemap.html').split('style="').length - 1 === 0, 'sitemap: инлайны color:var(--muted) не сконвертированы');
+ok(siteCss.includes('.ink-muted { color: var(--muted); }') && siteCss.includes('.fs-1 { font-size: 1rem; }'), 'site.css: нет утилит наследственности');
+ok(siteCss.includes('.note-card[data-type="extra"]   { --note-accent: #4f7a44; }') && !siteCss.includes('--note-accent: #34d399'), 'site.css: типы заметок не в NEO (тёмные варианты)');
+ok(read('blog.html').includes('background:var(--neo-verm);"') && !read('blog.html').includes('background:#8b5cf6'), 'blog: легенда типов не синхронна с CSS');
+ok(siteCss.includes('.faq-summary { font-size: 1.02rem;'), 'site.css: FAQ не укрупнён');
+ok(stCss.includes('.uni-card--office { --card-accent: #96602a;'), 'stands.css: офис-карточка светлой темы не в какао');
+
+ok(!read('stands/index.html').includes('system-badge') && !read('stands/index.html').includes('system://'), 'stands/index: бейдж system://training-universes не удалён');
+ok(!siteCss.includes('.system-badge'), 'site.css: мёртвый CSS system-badge не удалён');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
