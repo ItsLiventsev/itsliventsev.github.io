@@ -421,6 +421,10 @@ for (const term of ['биржа привилегий', 'ордер', 'опера
   ok(read('stands/glossary.html').includes(term), 'в глоссарии нет термина: ' + term);
 }
 ok(read('faq.html').includes('faq-rewards') && read('faq.html').includes('06 · технические требования'), 'faq.html: нет раздела наград или сбита нумерация');
+ok(read('sitemap.html').includes('stands/rewards.html') && read('sitemap.html').includes('stands/ops/crew-ops.html'), 'sitemap.html: нет биржи или операций экипажа');
+ok(read('stands/teams.html').includes('живой командный зачёт (04) подгружается'), 'teams.html: noscript-бар не предупреждает о живом разделе');
+ok(read('stands/league.html').includes('list-lead st-mt-4') && !read('stands/league.html').includes('style="font-size:1rem;"'), 'league.html: inline-стили в блоке стенда');
+ok(read('stands/index.html').includes('биржей') && read('stands/index.html').includes('операции экипажа: смена вахты'), 'stands/index.html: карточки вселенных без новых механик');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
