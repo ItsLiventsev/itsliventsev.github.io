@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ar';
+const VERSION = '20261031as';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031aq') && !c.includes('?v=20261031ap') && !c.includes('?v=20261031ao'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ar') && !c.includes('?v=20261031aq') && !c.includes('?v=20261031ap'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -634,6 +634,14 @@ ok(siteCss.includes('--aur-violet: #c2527a;'), 'site.css: фиолетовое �
 ok(siteCss.includes('.game-hs   { color: #96602a;') && siteCss.includes('.game-lol  { color: #cf4a18;'), 'site.css: игровые теги не в палитре');
 ok(siteCss.includes('.split-bar .seg-theory { background: linear-gradient(90deg, #cf4a18, #96602a); }'), 'site.css: сплит-бар не в палитре');
 ok(!siteCss.includes('text-indigo'), 'site.css: мёртвые tailwind-переопределения индиго живы');
+
+/* дизайн 2026 · волна 12: typо — дисплейная типографика чтения */
+const art = read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html');
+ok(art.includes('<h1 class="article-title mb-6">') && !art.includes('md:text-[34px]'), 'статья: заголовок не переведён на article-title');
+ok(siteCss.includes('.article-title {') && siteCss.includes('text-wrap: balance'), 'site.css: нет article-title с балансировкой строк');
+ok(siteCss.includes('.zone-title, .esp-title, .p-title {\n  font-family: var(--font-display);'), 'site.css: заголовки секций/карточек не в дисплейной паре');
+ok(siteCss.includes('.prose-neo p { text-wrap: pretty; }'), 'site.css: абзацы чтения без pretty');
+ok(read('blog.html').includes('ht-word') && read('articles.html').includes('ht-word'), 'списки: ht-word утрачен');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
