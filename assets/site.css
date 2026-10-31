@@ -513,8 +513,6 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .btn:hover {
   color: var(--accent);
   border-color: var(--accent-border);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
 }
 .btn:active { transform: translateY(0) scale(.97); }
 .btn .arrow { transition: transform var(--dur-base) var(--ease); }
@@ -596,7 +594,6 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 }
 .chip-sm { padding: .24rem .62rem; font-size: var(--fs-mini); }
 .chip:hover {
-  transform: translateY(-2px);
   color: var(--accent);
   border-color: var(--accent-border);
   background: var(--accent-soft);
@@ -1953,7 +1950,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   opacity: .9;
 }
 .note-card:hover {
-  transform: translateY(-4px);
+  transform: translate(-2px, -2px);
   border-color: color-mix(in srgb, var(--note-accent) 45%, var(--border));
   box-shadow: var(--shadow-hover);
 }
@@ -2812,7 +2809,7 @@ section[id], .scroll-mt-24 { scroll-margin-top: 5.5rem; }
 /* ---------- 29. Тактильность: отклик только на действие пользователя ----------
    Hover-подъём и нажатие — без ambient-движения. Только transform/тень. */
 .p-card:hover {
-  transform: translateY(-4px);
+  transform: translate(-2px, -2px);
   transition: transform var(--dur-base) var(--ease-spring),
               box-shadow var(--dur-base) var(--ease-standard),
               border-color var(--dur-base) var(--ease-standard);
@@ -3509,4 +3506,19 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 /* reduce: без входной анимации и кинетики заголовка статьи */
 @media (prefers-reduced-motion: reduce) {
   .article-title { animation: none; transform: none; }
+}
+
+/* ==========================================================================
+   HERITAGE 2026 · волна 20: наследственность — футер, титулы карточек
+   ========================================================================== */
+/* Заголовки карточек — в дисплейной паре сайта (как зоны, секции, hero) */
+.p-title, .note-title, .pub-title, .admin-card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+/* Карточка кликабельна — титул отвечает на наведение (паритет с pub-card) */
+a.p-card:hover .p-title, a.p-card:focus-visible .p-title,
+.note-card:hover .note-title, .note-card:focus-visible .note-title {
+  color: var(--accent);
 }

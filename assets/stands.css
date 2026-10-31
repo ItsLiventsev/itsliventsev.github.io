@@ -1336,7 +1336,7 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
 
 /* Карточки квестов: подъём и бегущая полоса */
 .quest-card { transition: transform var(--dur-base) var(--st-ease, var(--ease-standard)), border-color var(--dur-base) var(--ease-standard); }
-.quest-card:not(.is-locked):hover { transform: translateY(-3px); }
+.quest-card:not(.is-locked):hover { transform: translate(-2px, -2px); }
 .quest-card .quest-progress i { overflow: hidden; }
 
 /* Кнопки: отклик и бегущая обводка на главном действии */
@@ -1400,7 +1400,7 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
   color: var(--st-muted); cursor: pointer;
   transition: color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard), background-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
 }
-.lg-tab:hover { color: var(--st-accent-2); border-color: var(--st-accent); transform: translateY(-1px); }
+.lg-tab:hover { color: var(--st-accent-2); border-color: var(--st-accent); transform: translate(-2px, -2px); }
 .lg-tab.is-active { color: var(--st-btn-text); background: var(--st-btn-bg); border-color: var(--st-btn-bg); font-weight: 700; }
 .lg-tab .tab-count { font-size:var(--st-fs-mini); opacity: .75; margin-left:var(--st-sp-1); }
 .lg-pane { display: none; }
@@ -1478,7 +1478,7 @@ html[data-theme="light"] .st-footer { color: var(--st-faint); }
   display: flex; flex-direction: column; gap:var(--st-sp-2);
   transition: border-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
 }
-.skill-card:hover { border-color: var(--st-accent); transform: translateY(-2px); }
+.skill-card:hover { border-color: var(--st-accent); transform: translate(-2px, -2px); }
 .skill-card-head { display: flex; align-items: flex-start; justify-content: space-between;gap:var(--st-sp-3); }
 .skill-task { font-size:var(--st-fs-body); line-height: var(--st-lh-ui); color: var(--st-text); font-weight: 600; }
 .skill-bubble {
@@ -1742,7 +1742,7 @@ p { overflow-wrap: break-word; }
   background: linear-gradient(0deg, var(--st-accent-soft), var(--st-accent-soft)), var(--st-panel-2);
   transition: border-color var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
 }
-.quiz-launch:hover { border-left-color: var(--st-accent-2); transform: translateY(-1px); }
+.quiz-launch:hover { border-left-color: var(--st-accent-2); transform: translate(-2px, -2px); }
 .quiz-launch .ql-info h3 { font-family: var(--st-mono); letter-spacing: var(--st-ls-fine); }
 .quiz-launch .flat-btn { flex: 0 0 auto; }
 
@@ -2123,7 +2123,7 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fb923c; border-color
 
 /* Hover-подъём карточек и пружина нажатия */
 .crew-card:hover, .uni-card:hover {
-  transform: translateY(-4px);
+  transform: translate(-2px, -2px);
   transition: transform var(--dur-base) var(--ease-spring),
               box-shadow var(--dur-base) var(--ease-standard),
               border-color var(--dur-base) var(--ease-standard);
@@ -2386,7 +2386,6 @@ html[data-theme="light"] body.flat-scope {
   opacity: 0; transition: opacity var(--dur-fast) var(--ease-standard);
 }
 .bento-cell:hover, .bento-cell:focus-visible {
-  transform: translateY(-3px);
   border-color: color-mix(in srgb, var(--st-accent) 50%, var(--st-line-strong));
   box-shadow: 0 16px 34px -20px color-mix(in srgb, var(--st-accent) 70%, transparent);
 }
