@@ -2873,3 +2873,12 @@ section[id], .scroll-mt-24 { scroll-margin-top: 5.5rem; }
 }
 .btn:active, .icon-btn:active, .nav-burger:active,
 .stack-tab:active, .p-card:active { transform: scale(.97); }
+
+/* ---------- 30. Крупные цели нажатия на тач-устройствах ---------- */
+/* WCAG 2.2: интерактивные цели ≥ 44×44px на сенсорных экранах */
+@media (pointer: coarse) {
+  .icon-btn { width: 2.75rem; height: 2.75rem; }
+  .btn-sm { padding-block: .75rem; }
+  .faq-toc a { padding-block: .75rem; }
+  .footer-nav a { padding-block: .6rem; }
+}

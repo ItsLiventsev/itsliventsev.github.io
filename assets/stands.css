@@ -2127,3 +2127,9 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
 /* Тост: выезд сверху при показе */
 .toast { transform: translateY(-10px) scale(.98); }
 .toast.is-show { transform: translateY(0) scale(1); }
+
+/* ---------- Тач-цели ≥ 44px: чипы оглавления словаря, навигация топбара ---------- */
+@media (pointer: coarse) {
+  .glossary-toc a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .st-topnav a { padding-block: .65rem; }
+}
