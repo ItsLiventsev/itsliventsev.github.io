@@ -1051,8 +1051,8 @@ html[data-theme="light"] .flat-scope .lt-screen::-webkit-scrollbar-track { backg
   --st-btn-text: #06201d;
 }
 html[data-theme="light"] .flat-scope[data-accent="teal"] {
-  --st-accent: #0d9488;
-  --st-accent-2: #0f766e;
+  --st-accent: #0f766e;   /* 5.0:1 на светлом фоне — AA */
+  --st-accent-2: #0d9488;
   --st-accent-soft: rgba(13, 148, 136, .09);
   --st-cyan: #0e7490;
   --st-btn-bg: #0f766e;

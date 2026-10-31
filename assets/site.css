@@ -14,8 +14,8 @@
   --border-strong: #d4d4d8;
   --text: #18181b;
   --text-2: #3f3f46;
-  --muted: #71717a;
-  --faint: #a1a1aa;
+  --muted: #66666e;  /* 5.2:1 на surface-2 — AA для текста */
+  --faint: #8e8e96;  /* декоративный ярус, 3.2:1 */
   --grid-dot: rgba(24, 24, 27, .055);
   --shadow-card: 0 1px 2px rgba(24, 24, 27, .05);
   --shadow-hover: 0 16px 36px -16px rgba(24, 24, 27, .18);
@@ -56,9 +56,9 @@
   /* Единая типошкала мягкой системы (имена и ступени согласуются с STAND//LAB) */
   --fs-micro: .68rem;
   --fs-mini: .75rem;
-  --fs-small: .82rem;
-  --fs-body: .92rem;
-  --fs-lead: 1rem;
+  --fs-small: .875rem;  /* текст карточек 14px */
+  --fs-body: 1rem;      /* тело от 16px */
+  --fs-lead: 1.125rem;  /* лид 18px */
   --fs-title: 1.15rem;
   --fs-h3: 1.4rem;
   --fs-h2: 1.7rem;
@@ -91,11 +91,15 @@
   --danger-text: #be123c;
 }
 
+/* Текст главных кнопок в тёмной теме — тёмный на ярком акценте
+   (акценты страниц уточняются в блоке тёмной темы ниже). */
+:root[data-theme="dark"] .btn-primary { color: #0b0b0e; }
+:root[data-theme="dark"] .btn-primary:hover { color: #0b0b0e; }
+
 /* Акцентные палитры страниц */
 body[data-accent="blue"]    { --accent: #2563eb; --accent-hover: #1d4ed8; --accent-soft: rgba(37, 99, 235, .08);  --accent-border: rgba(37, 99, 235, .25); --accent-gradient: linear-gradient(90deg, #2563eb, #60a5fa, #93c5fd); }
 body[data-accent="rose"]    { --accent: #e11d48; --accent-hover: #be123c; --accent-soft: rgba(225, 29, 72, .07);  --accent-border: rgba(225, 29, 72, .25); --accent-gradient: linear-gradient(90deg, #f43f5e, #fb7185, #fda4af); }
-body[data-accent="orange"]  { --accent: #ea580c; --accent-hover: #c2410c; --accent-soft: rgba(234, 88, 12, .07);  --accent-border: rgba(234, 88, 12, .25); --accent-gradient: linear-gradient(90deg, #f97316, #fb923c, #fdba74); }
-body[data-accent="emerald"] { --accent: #059669; --accent-hover: #047857; --accent-soft: rgba(5, 150, 105, .08);  --accent-border: rgba(5, 150, 105, .25); --accent-gradient: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); }
+body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --accent-soft: rgba(194, 65, 12, .07);  --accent-border: rgba(194, 65, 12, .25); --accent-gradient: linear-gradient(90deg, #c2410c, #ea580c, #fb923c); }
 
 /* ---------- 2. Токены: тёмная тема (переключатель, запоминается) ---------- */
 :root[data-theme="dark"] {
@@ -109,7 +113,7 @@ body[data-accent="emerald"] { --accent: #059669; --accent-hover: #047857; --acce
   --text: #fafafa;
   --text-2: #d4d4d8;
   --muted: #94949d;
-  --faint: #5c5c66;
+  --faint: #74747e;  /* декоративный ярус, 4.1:1 */
   --grid-dot: rgba(255, 255, 255, .05);
   --shadow-card: none;
   --shadow-hover: 0 28px 56px -28px rgba(0, 0, 0, .85);
@@ -146,10 +150,6 @@ body[data-accent="emerald"] { --accent: #059669; --accent-hover: #047857; --acce
 :root[data-theme="dark"] body[data-accent="orange"] {
   --accent: #fb923c; --accent-hover: #fdba74;
   --accent-soft: rgba(251, 146, 60, .14); --accent-border: rgba(251, 146, 60, .32);
-}
-:root[data-theme="dark"] body[data-accent="emerald"] {
-  --accent: #34d399; --accent-hover: #6ee7b7;
-  --accent-soft: rgba(52, 211, 153, .14); --accent-border: rgba(52, 211, 153, .32);
 }
 
 /* Плавная смена темы (без рывков на интерактиве).
@@ -1739,7 +1739,7 @@ figure figcaption, .fig-cap {
 .nav-hero > * { position: relative; z-index: 1; }
 .nav-hero-title {
   font-size: clamp(2.1rem, 5.5vw, 3.9rem);
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: var(--ls-display-tight);
   line-height: var(--lh-display);
   color: var(--text);
@@ -2114,7 +2114,7 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
 .pub-index {
   font-family: var(--font-mono);
   font-size: var(--fs-h2);
-  font-weight: 300;
+  font-weight: 400;
   color: var(--faint);
   line-height: 1;
   padding-top: .15rem;
@@ -2528,7 +2528,7 @@ section[id^="faq-"] { scroll-margin-top: calc(var(--header-reserve) + .5rem); }
 .nav-link:hover .nav-bubble.is-filled { transform: translateY(-1px) scale(1.08); }
 .nav-bubble.bubble-rose.is-filled    { background: rgba(244, 63, 94, .1);  border-color: rgba(244, 63, 94, .3);  color: #e11d48; }
 .nav-bubble.bubble-orange.is-filled  { background: rgba(234, 88, 12, .1);  border-color: rgba(234, 88, 12, .3);  color: #ea580c; }
-.nav-bubble.bubble-green.is-filled   { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .32); color: #059669; }
+.nav-bubble.bubble-green.is-filled   { background: rgba(16, 185, 129, .1); border-color: rgba(16, 185, 129, .32); color: #047857; }
 .nav-bubble.bubble-blue.is-filled    { background: rgba(37, 99, 235, .1);  border-color: rgba(37, 99, 235, .3);  color: #2563eb; }
 :root[data-theme="dark"] .nav-bubble.bubble-rose.is-filled   { color: #fb7185; }
 :root[data-theme="dark"] .nav-bubble.bubble-orange.is-filled { color: #fb923c; }
