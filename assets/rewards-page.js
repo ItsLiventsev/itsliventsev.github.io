@@ -124,6 +124,83 @@
     }).join('') + '</ul>';
   }
 
+
+  /* ==========================================================================
+     Перенос профиля между устройствами (волна 10): экспорт/импорт JSON.
+     Ключи вселенной: league = stands-* + league-*; ops = ops-*; office = office-*.
+     Файл подписан (app/v/universe), импорт чужой вселенной отклоняется.
+     ========================================================================== */
+  var IO_KEYS = {
+    league: function (k) { return k === 'stands-profile' || k === 'stands-submissions' || (k.indexOf('league-') === 0 && k.indexOf('-admin') < 0); },
+    ops: function (k) { return k.indexOf('ops-') === 0; },
+    office: function (k) { return k.indexOf('office-') === 0; }
+  };
+  function collectProfile(uni) {
+    var test = IO_KEYS[uni], out = {};
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (test(k)) out[k] = localStorage.getItem(k);
+      }
+    } catch (e) {}
+    return out;
+  }
+  function mountIO() {
+    var box = $('rw-balance');
+    if (!box || box.getAttribute('data-io') === '1') return;
+    var uni = document.body.getAttribute('data-rewards');
+    if (!IO_KEYS[uni]) return;
+    box.setAttribute('data-io', '1');
+    box.insertAdjacentHTML('beforeend',
+      '<div class="rw-io"><span class="rw-io-label">перенос профиля</span>' +
+      '<button type="button" class="rw-io-btn" data-io-act="export">экспорт .json</button>' +
+      '<button type="button" class="rw-io-btn" data-io-act="import">импорт</button>' +
+      '<input type="file" accept="application/json,.json" class="rw-io-file" hidden aria-hidden="true" tabindex="-1">' +
+      '<span class="rw-io-msg" role="status" aria-live="polite"></span></div>');
+    var file = box.querySelector('.rw-io-file');
+    var msg = box.querySelector('.rw-io-msg');
+    function say(t) { if (msg) msg.textContent = t; }
+    box.addEventListener('click', function (e) {
+      var act = e.target.getAttribute && e.target.getAttribute('data-io-act');
+      if (act === 'export') {
+        var data = collectProfile(uni), n = 0;
+        for (var k in data) { if (Object.prototype.hasOwnProperty.call(data, k)) n++; }
+        if (!n) { say('профиль пуст — нечего выгружать'); return; }
+        var blob = new Blob([JSON.stringify({ app: 'itsliventsev', v: 1, universe: uni, exportedAt: new Date().toISOString(), data: data }, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'itsliventsev-' + uni + '-profile.json';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); if (a.parentNode) a.parentNode.removeChild(a); }, 500);
+        say('выгружено ключей: ' + n);
+      } else if (act === 'import') {
+        file.click();
+      }
+    });
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0];
+      if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        try {
+          var parsed = JSON.parse(String(fr.result));
+          if (!parsed || parsed.app !== 'itsliventsev' || parsed.v !== 1 || !parsed.data) throw new Error('bad');
+          if (parsed.universe !== uni) { say('файл из другой вселенной: ' + parsed.universe); return; }
+          var n = 0;
+          for (var k in parsed.data) {
+            if (Object.prototype.hasOwnProperty.call(parsed.data, k) && IO_KEYS[uni](k)) {
+              try { localStorage.setItem(k, parsed.data[k]); n++; } catch (e) {}
+            }
+          }
+          say('профиль восстановлен, ключей: ' + n + ' · обновляю…');
+          setTimeout(function () { location.reload(); }, 900);
+        } catch (err) { say('не похоже на файл профиля itsliventsev'); }
+      };
+      fr.readAsText(f);
+      file.value = '';
+    });
+  }
   function render() {
     if (!$('rw-body')) return;
     if (!profile) { gate(true); return; }
@@ -131,6 +208,7 @@
     $('rw-balance').innerHTML = balanceCard();
     $('rw-catalog').innerHTML = catalog();
     $('rw-my-claims').innerHTML = myClaimsList();
+    mountIO();
   }
 
   function bind() {

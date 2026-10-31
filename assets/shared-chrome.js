@@ -308,3 +308,60 @@
   }, { passive: true });
   update();
 })();
+
+/* ==========================================================================
+   Пасхалки (волна 10, общий JS): клик по тегам, вечеринка по логотипу
+   (5 кликов), код Konami. При prefers-reduced-motion остаётся статика.
+   Элемент #secret-message опционален (страница может его не иметь).
+   ========================================================================== */
+(function () {
+  'use strict';
+  if (typeof document === 'undefined') return;
+  var reduce = (typeof window.matchMedia === 'function') && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tags = document.querySelectorAll('.tech-tag');
+  for (var i = 0; i < tags.length; i++) {
+    tags[i].addEventListener('click', function () {
+      if (reduce) return;
+      var el = this;
+      el.classList.add('bounce-click');
+      setTimeout(function () { el.classList.remove('bounce-click'); }, 400);
+    });
+  }
+  function stopParty() {
+    document.body.classList.remove('party-mode');
+    var sm = document.getElementById('secret-message');
+    if (sm) sm.classList.remove('visible');
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') stopParty();
+  });
+  var logo = document.querySelector('#logo, .logo');
+  var clicks = 0;
+  if (logo) logo.addEventListener('click', function () {
+    clicks++;
+    if (clicks >= 5 && !reduce) {
+      document.body.classList.add('party-mode');
+      setTimeout(function () { document.body.classList.remove('party-mode'); }, 3000);
+      clicks = 0;
+    }
+  });
+  var konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+  var ki = 0;
+  document.addEventListener('keydown', function (e) {
+    if (e.code === konami[ki]) {
+      ki++;
+      if (ki === konami.length) {
+        ki = 0;
+        if (reduce) return;
+        var sm = document.getElementById('secret-message');
+        if (sm) sm.classList.add('visible');
+        document.body.classList.add('party-mode');
+        setTimeout(stopParty, 5000);
+      }
+    } else ki = 0;
+  });
+  try {
+    console.log('%c🦀 привет, разработчик!', 'font-size:14px;color:#e4572e;font-weight:bold');
+    console.log('%ckonami: ↑↑↓↓←→←→BA · или 5 кликов по логотипу', 'font-size:11px;color:#a89f86');
+  } catch (err) {}
+})();

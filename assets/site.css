@@ -96,11 +96,9 @@
 :root[data-theme="dark"] .btn-primary:hover { color: #0b0b0e; }
 
 /* Акцентные палитры страниц */
-body[data-accent="blue"]    { --accent: #cf4a18; --accent-hover: #a83a12; --accent-soft: rgba(207, 74, 24, .08);  --accent-border: rgba(207, 74, 24, .25); --accent-gradient: linear-gradient(90deg, #cf4a18, #e4572e, #f08a5c); }
-body[data-accent="amber"]   { --accent: #96602a; --accent-hover: #7a4d20; --accent-soft: rgba(150, 96, 42, .08);  --accent-border: rgba(150, 96, 42, .25); --accent-gradient: linear-gradient(90deg, #96602a, #b07a3c, #cfa05e); }
-body[data-accent="teal"],
-body[data-accent="cyan"],
-body[data-accent="emerald"] { --accent: #4f7a44; --accent-hover: #3f6336; --accent-soft: rgba(95, 133, 82, .09);  --accent-border: rgba(95, 133, 82, .25); --accent-gradient: linear-gradient(90deg, #4f7a44, #6f9a5f, #9fc48e); }
+body[data-accent="rust"]   { --accent: #cf4a18; --accent-hover: #a83a12; --accent-soft: rgba(207, 74, 24, .08);  --accent-border: rgba(207, 74, 24, .25); --accent-gradient: linear-gradient(90deg, #cf4a18, #e4572e, #f08a5c); }
+body[data-accent="cocoa"]  { --accent: #96602a; --accent-hover: #7a4d20; --accent-soft: rgba(150, 96, 42, .08);  --accent-border: rgba(150, 96, 42, .25); --accent-gradient: linear-gradient(90deg, #96602a, #b07a3c, #cfa05e); }
+body[data-accent="sage"]    { --accent: #4f7a44; --accent-hover: #3f6336; --accent-soft: rgba(95, 133, 82, .09);  --accent-border: rgba(95, 133, 82, .25); --accent-gradient: linear-gradient(90deg, #4f7a44, #6f9a5f, #9fc48e); }
 body[data-accent="rose"]    { --accent: #e11d48; --accent-hover: #be123c; --accent-soft: rgba(225, 29, 72, .07);  --accent-border: rgba(225, 29, 72, .25); --accent-gradient: linear-gradient(90deg, #f43f5e, #fb7185, #fda4af); }
 body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --accent-soft: rgba(194, 65, 12, .07);  --accent-border: rgba(194, 65, 12, .25); --accent-gradient: linear-gradient(90deg, #c2410c, #ea580c, #fb923c); }
 
@@ -142,7 +140,7 @@ body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --acce
 }
 
 /* Per-page акценты в тёмной теме: сохраняем цветовую идентичность разделов */
-:root[data-theme="dark"] body[data-accent="blue"] {
+:root[data-theme="dark"] body[data-accent="rust"] {
   --accent: #ff7a47; --accent-hover: #ffa07a;
   --accent-soft: rgba(255, 122, 71, .14); --accent-border: rgba(255, 122, 71, .32);
 }
@@ -154,13 +152,11 @@ body[data-accent="orange"]  { --accent: #c2410c; --accent-hover: #9a3412; --acce
   --accent: #fb923c; --accent-hover: #fdba74;
   --accent-soft: rgba(251, 146, 60, .14); --accent-border: rgba(251, 146, 60, .32);
 }
-:root[data-theme="dark"] body[data-accent="amber"] {
+:root[data-theme="dark"] body[data-accent="cocoa"] {
   --accent: #d9a066; --accent-hover: #e6b584;
   --accent-soft: rgba(217, 160, 102, .14); --accent-border: rgba(217, 160, 102, .32);
 }
-:root[data-theme="dark"] body[data-accent="teal"],
-:root[data-theme="dark"] body[data-accent="cyan"],
-:root[data-theme="dark"] body[data-accent="emerald"] {
+:root[data-theme="dark"] body[data-accent="sage"] {
   --accent: #9fc48e; --accent-hover: #b7d6a8;
   --accent-soft: rgba(159, 196, 142, .14); --accent-border: rgba(159, 196, 142, .32);
 }
@@ -2728,7 +2724,7 @@ h2.mono { margin: 0; }
 
 /* 27.4 Ambient на сервисных и проектных страницах: тот же слой,
    на тесных экранах орбы мягче (базовое правило уже в секции 26) */
-body[data-accent="emerald"] .ambient .orb { background: #10b981; }
+body[data-accent="sage"] .ambient .orb { background: #10b981; }
 
 /* 27.5 Водяные глифы в hero подстраниц: чуть компактнее, чем на лентах */
 .prose-measure .hero .bg-glyph:nth-child(1) { font-size: clamp(4.5rem, 12vw, 8rem); top: -1.5rem; }
@@ -3419,4 +3415,10 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 @media (max-width: 640px) {
   .giant-word { display: none; }
   .bg-glyphs { display: none; }
+}
+
+/* POLISH · волна 10: плейсхолдеры, тач-зоны */
+::placeholder { color: var(--muted); opacity: 1; }
+@media (pointer: coarse) {
+  .btn, .icon-btn, .lang-btn, .filter-btn { min-height: 44px; }
 }
