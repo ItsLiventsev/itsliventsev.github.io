@@ -2962,3 +2962,67 @@ body {
 .brand-cursor, #title-mark, .cursor-green, .cursor-red, .cursor-blue {
   -webkit-text-fill-color: currentColor;
 }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 5: полная переделка — контрастная пара шрифтов,
+   насыщенный тёпло-холодный aurora, градиентные кнопки, кинетические
+   гигантские outline-слова. Кинетика использует --sk из shared-chrome.
+   ========================================================================== */
+:root {
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --aur-violet: #7c3aed;
+  --aur-sky: #0ea5e9;
+}
+
+/* Aurora v2: три поля — тёплый акцент, фиолетовый, небесный (статично) */
+body {
+  background-image:
+    radial-gradient(60rem 34rem at 88% -8rem, color-mix(in srgb, var(--accent) 10%, transparent), transparent 72%),
+    radial-gradient(50rem 36rem at -12% 10%, color-mix(in srgb, var(--aur-violet) 9%, transparent), transparent 72%),
+    radial-gradient(40rem 30rem at 62% 108%, rgba(14, 165, 233, .08), transparent 74%);
+}
+
+/* Контрастная пара: серифный италик внутри гротеск-заголовков */
+.ht-serif, .zt-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0;
+  background: linear-gradient(97deg, var(--accent) 10%, var(--aur-violet) 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-title .ht-serif {
+  display: block;
+  font-size: .52em;
+  line-height: 1.08;
+  margin: .55rem 0 0 min(13%, 7.5rem);
+}
+
+/* Гигантские outline-слова: брутализм-акценты с кинетикой от --sk */
+.giant-word {
+  font-family: var(--font-mono);
+  font-size: clamp(4.5rem, 17vw, 13rem);
+  font-weight: 800;
+  line-height: .92;
+  letter-spacing: -.045em;
+  text-transform: lowercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent) 42%, transparent);
+  transform: translateX(calc((var(--sk) - .5) * 70px));
+  user-select: none;
+  pointer-events: none;
+  margin: -1.2rem 0 -1.6rem;
+}
+.giant-word--right { text-align: right; transform: translateX(calc((.5 - var(--sk)) * 70px)); }
+
+/* Кнопка-градиент: тёплый → фиолетовый (неожиданный переход) */
+.btn-primary {
+  background: linear-gradient(115deg, var(--accent) 15%, var(--aur-violet));
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background: linear-gradient(115deg, var(--accent-hover) 15%, #5b21b6);
+  border-color: transparent;
+}

@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ak';
+const VERSION = '20261031al';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -420,6 +420,18 @@ ok(siteCss.includes('rgba(14, 165, 233, .07)'), 'site.css: нет тёпло-х�
 ok(siteCss.includes('.brand-cursor, #title-mark, .cursor-green') && siteCss.includes('-webkit-text-fill-color: currentColor'), 'site.css: каретки/курсоры не исключены из градиента');
 ok(siteCss.includes('.btn, .icon-btn, .chip, .faq-toc a { border-radius: 999px; }'), 'site.css: кнопки основной площадки не пилюли');
 ok(read('assets/shared-chrome.js').includes("setProperty('--sk'") && read('assets/shared-chrome.js').includes('prefers-reduced-motion'), 'shared-chrome.js: нет кинетического скролл-движка');
+/* дизайн 2026 · волна 5: контрастная пара, трёхцветный aurora, кинетические outline-слова */
+ok(siteCss.includes("--font-display: 'Playfair Display'") && stCss.includes("--font-display: 'Playfair Display'"), 'нет токена серифной пары --font-display');
+ok(siteCss.includes("--aur-violet: #7c3aed") && stCss.includes("--st-aur-violet: #7c3aed"), 'нет фиолетового поля палитры');
+ok(siteCss.includes('radial-gradient(50rem 36rem at -12% 10%') && stCss.includes('radial-gradient(46rem 32rem at -12% 12%'), 'aurora v2: нет фиолетового поля');
+ok(stCss.includes('rgba(14, 165, 233, .09)') && siteCss.includes('rgba(14, 165, 233, .08)'), 'aurora v2: нет небесного поля');
+ok(siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: нет сериф-акцентов и outline-слов');
+ok(siteCss.includes('-webkit-text-stroke') && siteCss.includes('calc((var(--sk) - .5) * 70px)'), 'site.css: outline-слова без кинетики');
+ok(siteCss.includes('linear-gradient(115deg, var(--accent) 15%, var(--aur-violet))'), 'site.css: кнопка без тёпло-холодного градиента');
+ok(stCss.includes('linear-gradient(115deg, var(--st-btn-bg) 15%'), 'stands.css: кнопки вселенных без градиента');
+ok(read('index.html').includes('ht-serif') && read('index.html').includes('giant-word--right'), 'index.html: нет серифной строки hero и outline-слов');
+ok(read('blog.html').includes('ht-serif') && read('articles.html').includes('ht-serif'), 'blog/articles: заголовки не в серифной паре');
+ok(read('stands/index.html').includes('zt-serif'), 'stands/index.html: нет серифных акцентов зон');
 for (const eng of ['assets/league.js', 'assets/ops-engine.js', 'assets/office-engine.js']) {
   ok(read(eng).includes('function loginStreak') && read(eng).includes('loginStreak: loginStreak'), eng + ': нет единой механики streak');
 }
@@ -433,7 +445,8 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031aj') && !c.includes('?v=20261031ai') && !c.includes('?v=20261031ah'), f + ': не поднята версия ассетов');
+  if (c.includes('fonts.googleapis.com')) ok(c.includes('Playfair+Display:ital'), f + ': нет серифной пары Playfair Display italic');
+  ok(!c.includes('?v=20261031ak') && !c.includes('?v=20261031aj') && !c.includes('?v=20261031ai'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
