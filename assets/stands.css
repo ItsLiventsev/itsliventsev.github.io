@@ -2577,3 +2577,21 @@ input, select, textarea { border-radius: 0; }
 @media (prefers-reduced-motion: reduce) {
   .flat-btn, .bento-cell { transform: none !important; }
 }
+
+/* ==========================================================================
+   NEO CASUAL 2026 · волна 7: вселенные — скругления-стикеры, мягкие блоки
+   ========================================================================== */
+:root { --st-radius: 14px; }
+
+.flat-btn, .bento-cell, .panel, .st-panel, .rw-card, .st-hero-index,
+.flat-badge, .kind-badge, .st-section-num, .ops-role-chip {
+  border-radius: var(--st-radius);
+}
+.flat-btn, .kind-badge, .ops-role-chip { border-radius: 999px; }
+.st-topnav { border-radius: var(--st-radius); }
+input, select, textarea { border-radius: 10px; }
+
+/* Мягкие дуотон-блоки поверх палитры юниверсов */
+.bento-cell {
+  background-image: linear-gradient(150deg, color-mix(in srgb, var(--st-accent, #888) 9%, transparent), transparent 62%);
+}
