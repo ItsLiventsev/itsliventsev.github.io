@@ -2466,3 +2466,42 @@ html[data-theme="light"] body.flat-scope {
 .st-brand-mark { border-radius: 10px; }
 
 /* Мягкая типографика заголовков панелей: без uppercase-жёсткости чипов не трогаем */
+
+/* ==========================================================================
+   Дизайн 2026 · волна 5: насыщенный aurora, серифная пара, градиент кнопок
+   ========================================================================== */
+:root, html[data-theme="light"] .flat-scope {
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --st-aur-violet: #7c3aed;
+  --st-aur-sky: #0ea5e9;
+}
+
+/* Aurora v2 вселенных: три поля поверх сетки (обе темы) */
+body.flat-scope {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
+    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 13%, transparent), transparent 70%),
+    radial-gradient(46rem 32rem at -12% 12%, color-mix(in srgb, var(--st-aur-violet) 11%, transparent), transparent 72%),
+    radial-gradient(38rem 26rem at 66% 110%, rgba(14, 165, 233, .09), transparent 74%);
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 36px 36px, 36px 36px, auto, auto, auto;
+}
+html[data-theme="light"] body.flat-scope {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .045) 1px, transparent 1px),
+    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 14%, transparent), transparent 70%),
+    radial-gradient(46rem 32rem at -12% 12%, color-mix(in srgb, var(--st-aur-violet) 11%, transparent), transparent 72%),
+    radial-gradient(38rem 26rem at 66% 110%, rgba(14, 165, 233, .1), transparent 74%);
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 36px 36px, 36px 36px, auto, auto, auto;
+}
+
+/* Серифный акцент в заголовках зон хаба */
+.zt-serif { font-style: italic; }
+
+/* Кнопка-плитка: градиент вселенной → фиолетовый */
+.flat-btn {
+  background: linear-gradient(115deg, var(--st-btn-bg) 15%, var(--st-aur-violet, #6d28d9));
+}

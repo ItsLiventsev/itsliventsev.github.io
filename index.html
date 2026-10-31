@@ -13,11 +13,11 @@
 <script>/* Tailwind Play CDN грузится асинхронно: при блокировке CDN страница не виснет, через onerror/таймаут включается локальный fallback (html.tw-failed, assets/tw-fallback.css) */(function(){var d=document.documentElement,s=document.createElement("script");s.src="https://cdn.tailwindcss.com";s.async=true;s.onload=function(){clearTimeout(t);};s.onerror=function(){d.classList.add("tw-failed");};var t=setTimeout(function(){if(!window.tailwind)d.classList.add("tw-failed");},3000);document.head.appendChild(s);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031ak">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031ak">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031ak">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap"></noscript>
+<link rel="stylesheet" href="assets/site.css?v=20261031al">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031al">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031al">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -93,7 +93,10 @@
       <span class="bg-glyph">#</span>
       <span class="bg-glyph">{ }</span>
     </div>
-    <h1 class="hero-title">itsliventsev<span class="brand-cursor" aria-hidden="true">_</span></h1>
+    <h1 class="hero-title">
+        <span class="ht-name">itsliventsev<span class="brand-cursor" aria-hidden="true">_</span></span>
+        <em class="ht-serif">сети · системы · IT-образование</em>
+      </h1>
     <p class="hero-sub text-xs sm:text-sm md:text-base" data-i18n="tagline">// заметки · статьи · проекты · учебные материалы</p>
     <div class="quick-bubbles">
       <a href="blog.html" class="quick-bubble is-wip"><span class="qb-glyph">~</span> <span data-i18n="qb_blog">заметки</span> <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
@@ -149,6 +152,7 @@
 
   <!-- Materials -->
   <section id="resources" class="mb-10 sm:mb-12 scroll-mt-24">
+<div class="giant-word" aria-hidden="true">сети</div>
     <h2 class="section-label" data-i18n="res_title">материалы для студентов</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
       <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
@@ -212,6 +216,7 @@
 
   <!-- Contacts -->
   <section class="mb-10">
+<div class="giant-word giant-word--right" aria-hidden="true">данные</div>
     <h2 class="section-label" data-i18n="contact_title">контакты</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
       <a href="mailto:livencev01@ya.ru" class="card sheen group block p-3.5">
@@ -254,7 +259,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261031ak"></script>
+<script src="assets/site.js?v=20261031al"></script>
 <script>
   /* Пасхалки: клик по тегам, вечеринка по логотипу, код Konami.
      При prefers-reduced-motion остаётся только статичная подсветка. */
@@ -355,6 +360,6 @@
   }
 </script>
 
-<script src="assets/shared-chrome.js?v=20261031ak"></script>
+<script src="assets/shared-chrome.js?v=20261031al"></script>
 </body>
 </html>
