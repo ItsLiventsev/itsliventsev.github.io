@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031am';
+const VERSION = '20261031an';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -421,34 +421,33 @@ ok(siteCss.includes('.brand-cursor, #title-mark, .cursor-green') && siteCss.incl
 ok(siteCss.includes('.btn, .icon-btn, .chip, .faq-toc a { border-radius: 999px; }'), 'site.css: кнопки основной площадки не пилюли');
 ok(read('assets/shared-chrome.js').includes("setProperty('--sk'") && read('assets/shared-chrome.js').includes('prefers-reduced-motion'), 'shared-chrome.js: нет кинетического скролл-движка');
 /* дизайн 2026 · волна 5: контрастная пара, трёхцветный aurora, кинетические outline-слова */
-ok(siteCss.includes("--font-display: 'Playfair Display'") && stCss.includes("--font-display: 'Playfair Display'"), 'нет токена серифной пары --font-display');
 /* дизайн 2026 · волна 6: NEO — нео-брутализм с нуля (бумага/чернила/жёсткие тени) */
 ok(siteCss.includes("--font-sans: 'Golos Text'") && siteCss.includes("--font-display: 'Unbounded'"), 'site.css: нет пары NEO Unbounded+Golos Text');
-ok(siteCss.includes('--neo-paper: #f4efe4') && siteCss.includes('--neo-ink: #1a160c') && siteCss.includes('--neo-acid: #d8f24b'), 'site.css: нет NEO-палитры (бумага/чернила/ацид)');
-ok(siteCss.includes('--neo-verm: #e84b0c') && siteCss.includes('--neo-indigo: #4338ca'), 'site.css: нет вермильона/индиго');
-ok(siteCss.includes(':root[data-theme="dark"] {\n  --neo-paper: #14110a;'), 'site.css: нет тёмной NEO-темы');
-ok(siteCss.includes('--radius: 0px') && siteCss.includes('--radius-pill: 0px'), 'site.css: радиусы не обнулены');
+ok(siteCss.includes('--neo-paper: #f4efe4') && siteCss.includes('--neo-ink: #1a160c') && siteCss.includes('--neo-leaf: #5f8552'), 'site.css: нет NEO-палитры (бумага/чернила/шалфей)');
+ok(siteCss.includes('--neo-verm: #e4572e') && siteCss.includes('--neo-rose: #c2527a') && !siteCss.includes('d8f24b') && !siteCss.includes('4338ca'), 'site.css: жёлтый/синий не выведены из палитры');
+ok(siteCss.includes(':root[data-theme="dark"] {\n  --neo-leaf: #7ba36a;') && siteCss.includes('--neo-paper: #14110a;'), 'site.css: нет тёмной NEO-темы');
+ok(siteCss.includes('--radius: 16px') && siteCss.includes('--radius-pill: 999px'), 'site.css: нет casual-скруглений');
 ok(siteCss.includes('--shadow-card: var(--neo-hard)') && siteCss.includes('6px 6px 0 0 #1a160c'), 'site.css: нет жёстких offset-теней');
 ok(siteCss.includes('--border: #1a160c') && siteCss.includes('--border-strong: #1a160c'), 'site.css: чернильные рамки не включены');
 ok(siteCss.includes('.btn:active') && siteCss.includes('transform: translate(2px, 2px)'), 'site.css: нет микро-взаимодействия нажатия кнопок');
-ok(siteCss.includes('.btn-primary {\n  background: var(--neo-acid)') && siteCss.includes('.btn-primary:hover {\n  background: var(--neo-verm)'), 'site.css: primary-кнопка без перехода ацид->вермильон');
-ok(siteCss.includes('.ticker-track {') && siteCss.includes('translateX(calc(var(--sk, 0) * -130px))'), 'site.css: тикер без скролл-кинетики');
+ok(siteCss.includes('.btn-primary {\n  background: var(--neo-leaf)') && siteCss.includes('.btn-primary:hover {\n  background: var(--neo-verm)'), 'site.css: primary-кнопка без перехода шалфей->коралл');
+ok(!siteCss.includes('.ticker') , 'site.css: тикер не удалён');
 ok(siteCss.includes("skewX(calc(var(--sk, 0) * -2.4deg + var(--sq, 0) * -3deg))"), 'site.css: hero без скоростного наклона --sq');
 ok(siteCss.includes('.nf-code') && siteCss.includes('.nf-title') && read('404.html').includes('nf-code'), '404: нет новой композиции nf-code');
 ok(siteCss.includes('.prose-neo h2') && siteCss.includes('::first-letter'), 'site.css: нет слоя чтения статьи');
-ok(read('index.html').includes('ticker-track'), 'index.html: нет тикера в hero');
+ok(!read('index.html').includes('ticker') && !read('index.html').includes('hero-sub'), 'index.html: тикер или мелкая строка теглайна остались');
 ok(read('assets/shared-chrome.js').includes("setProperty('--sq'") && read('assets/shared-chrome.js').includes('(y - lastY) / 90'), 'shared-chrome.js: нет скоростного канала --sq');
-ok(stCss.includes('--st-radius: 0px') || stCss.includes('--st-radius:0px'), 'stands.css: радиусы вселенных не обнулены');
+ok(stCss.includes(':root { --st-radius: 14px; }'), 'stands.css: вселенные не переведены на стикер-радиус');
 ok(stCss.includes("font-family: var(--font-display)") && stCss.includes('.zt-serif'), 'stands.css: заголовки вселенных без NEO-пары');
 ok(siteCss.includes("--aur-violet: #7c3aed") && stCss.includes("--st-aur-violet: #7c3aed"), 'нет фиолетового поля палитры');
 ok(siteCss.includes('radial-gradient(50rem 36rem at -12% 10%') && stCss.includes('radial-gradient(46rem 32rem at -12% 12%'), 'aurora v2: нет фиолетового поля');
 ok(stCss.includes('rgba(14, 165, 233, .09)') && siteCss.includes('rgba(14, 165, 233, .08)'), 'aurora v2: нет небесного поля');
-ok(siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: нет сериф-акцентов и outline-слов');
+ok(!siteCss.includes('.ht-serif') && siteCss.includes('.giant-word'), 'site.css: outline-слова есть, мёртвый ht-serif удалён');
 ok(siteCss.includes('-webkit-text-stroke') && siteCss.includes('calc((var(--sk) - .5) * 70px)'), 'site.css: outline-слова без кинетики');
 ok(siteCss.includes('linear-gradient(115deg, var(--accent) 15%, var(--aur-violet))'), 'site.css: кнопка без тёпло-холодного градиента');
 ok(stCss.includes('linear-gradient(115deg, var(--st-btn-bg) 15%'), 'stands.css: кнопки вселенных без градиента');
-ok(read('index.html').includes('ht-serif') && read('index.html').includes('giant-word--right'), 'index.html: нет серифной строки hero и outline-слов');
-ok(read('blog.html').includes('ht-serif') && read('articles.html').includes('ht-serif'), 'blog/articles: заголовки не в серифной паре');
+ok(read('index.html').includes('ht-tagline') && read('index.html').includes('giant-word--right'), 'index.html: нет теглайна в большом тексте и outline-слов');
+ok(read('blog.html').includes('ht-word') && read('articles.html').includes('ht-word'), 'blog/articles: заголовки не переведены на крупный ht-word');
 ok(read('stands/index.html').includes('zt-serif'), 'stands/index.html: нет серифных акцентов зон');
 for (const eng of ['assets/league.js', 'assets/ops-engine.js', 'assets/office-engine.js']) {
   ok(read(eng).includes('function loginStreak') && read(eng).includes('loginStreak: loginStreak'), eng + ': нет единой механики streak');
@@ -464,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Unbounded:wght@500;700;900') && c.includes('Golos+Text:wght@400'), f + ': нет пары NEO Unbounded+Golos Text');
-  ok(!c.includes('?v=20261031al') && !c.includes('?v=20261031ak') && !c.includes('?v=20261031aj'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031am') && !c.includes('?v=20261031al') && !c.includes('?v=20261031ak'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -538,6 +537,17 @@ ok(read('sitemap.html').includes('stands/rewards.html') && read('sitemap.html').
 ok(read('stands/teams.html').includes('живой командный зачёт (04) подгружается'), 'teams.html: noscript-бар не предупреждает о живом разделе');
 ok(read('stands/league.html').includes('list-lead st-mt-4') && !read('stands/league.html').includes('style="font-size:1rem;"'), 'league.html: inline-стили в блоке стенда');
 ok(read('stands/index.html').includes('биржей') && read('stands/index.html').includes('операции экипажа: смена вахты'), 'stands/index.html: карточки вселенных без новых механик');
+
+/* дизайн 2026 · волна 7: casual — блоки-цвета, ремап акцентов, буквицы */
+ok(siteCss.includes('--neo-leaf-tint') && siteCss.includes('--neo-rose-tint') && siteCss.includes('.light-card {\n  background: linear-gradient'), 'site.css: нет цветных блоков (Craft-стиль)');
+ok(siteCss.includes('.note-excerpt::first-letter') && siteCss.includes('.prose-neo > p:first-of-type'), 'site.css: нет буквиц и лида');
+ok(siteCss.includes('.ht-tagline') && siteCss.includes('.ht-slash'), 'site.css: нет типографской композиции hero');
+ok(siteCss.includes('body[data-accent="blue"]    { --accent: #cf4a18;'), 'site.css: blue-акцент не ремапнут на коралл');
+ok(siteCss.includes('body[data-accent="amber"]   { --accent: #96602a;') && siteCss.includes('body[data-accent="teal"],'), 'site.css: нет новых акцентов amber/teal');
+ok(siteCss.includes('--accent: #ff7a47;') && !siteCss.includes('#3b82f6'), 'site.css: синий не выведен из тёмной темы');
+ok(siteCss.includes('.note-card[data-type="digest"]  { --note-accent: #c2410c; }'), 'site.css: синий не выведен из типов заметок');
+ok(stCss.includes(':root { --st-radius: 14px; }') && stCss.includes('border-radius: 999px'), 'stands.css: нет casual-пилюль');
+for (const f of ['assets/site.css']) { const c = read(f); ok(!c.includes('Playfair'), f + ': остался Playfair'); }
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
