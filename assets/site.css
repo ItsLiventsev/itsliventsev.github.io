@@ -561,13 +561,13 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 .pill-neutral { background: var(--surface-2); border-color: var(--border); color: var(--muted); }
 .pill-accent  { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
 .pill-blue    { background: rgba(207, 74, 24, .07);  border-color: rgba(207, 74, 24, .22);  color: #a83a12; }
-.pill-indigo  { background: rgba(79, 70, 229, .07);  border-color: rgba(79, 70, 229, .22);  color: #4f46e5; }
+.pill-indigo  { background: rgba(194, 82, 122, .08);  border-color: rgba(194, 82, 122, .25);  color: #9c3d5f; }
 .pill-orange  { background: rgba(234, 88, 12, .07);  border-color: rgba(234, 88, 12, .22);  color: #ea580c; }
 .pill-amber   { background: rgba(217, 119, 6, .08);  border-color: rgba(217, 119, 6, .25);  color: #b45309; }
 .pill-emerald { background: rgba(5, 150, 105, .08);  border-color: rgba(5, 150, 105, .24);  color: #047857; }
 .pill-rose    { background: rgba(225, 29, 72, .07);   border-color: rgba(225, 29, 72, .22);  color: #e11d48; }
 .pill-red     { background: rgba(220, 38, 38, .07);   border-color: rgba(220, 38, 38, .22);  color: #dc2626; }
-.pill-purple  { background: rgba(126, 34, 206, .07);  border-color: rgba(126, 34, 206, .22); color: #7e22ce; }
+.pill-purple  { background: rgba(194, 82, 122, .08);  border-color: rgba(194, 82, 122, .25);  color: #9c3d5f; }
 
 /* В тёмной теме цветные пилюли становятся светлее для контраста */
 [data-theme="dark"] .pill-blue    { color: #ff8a54; background: rgba(255, 138, 84, .1);  border-color: rgba(255, 138, 84, .25); }
@@ -575,9 +575,9 @@ section[id], [id].scroll-anchor { scroll-margin-top: 96px; }
 [data-theme="dark"] .pill-orange  { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .25); }
 [data-theme="dark"] .pill-red,
 [data-theme="dark"] .pill-rose    { color: #fb7185; background: rgba(251, 113, 133, .1);  border-color: rgba(251, 113, 133, .25); }
-[data-theme="dark"] .pill-purple  { color: #c084fc; background: rgba(192, 132, 252, .1);  border-color: rgba(192, 132, 252, .25); }
+[data-theme="dark"] .pill-purple  { background: rgba(194, 82, 122, .08);  border-color: rgba(194, 82, 122, .25);  color: #9c3d5f; }
 [data-theme="dark"] .pill-amber   { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .25); }
-[data-theme="dark"] .pill-indigo  { color: #e08aa6; background: rgba(224, 138, 166, .1);  border-color: rgba(224, 138, 166, .25); }
+[data-theme="dark"] .pill-indigo  { background: rgba(194, 82, 122, .08);  border-color: rgba(194, 82, 122, .25);  color: #9c3d5f; }
 [data-theme="dark"] .pill-neutral { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .1); color: var(--muted); }
 
 /* Чип (технология, код-тег) — мягкая органичная плашка */
@@ -920,27 +920,6 @@ code, .code {
 .prose-p { margin-bottom: 1.1em; line-height: var(--lh-prose); }
 
 /* ---------- 17. Страница проектов (тёмная тема) ---------- */
-.system-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  padding: .4rem .85rem;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: var(--fs-micro);
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-}
-.system-badge::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  background: #10b981;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, .5);
-}
 
 #title-mark { display: inline-block; min-width: 2.4ch; color: var(--accent); transition: color var(--dur-base) var(--ease-standard); }
 .cursor-green { color: #4f7a44; }
@@ -1066,9 +1045,9 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 }
 .tag-blue   { color: #cf4a18; background: rgba(207, 74, 24, .09);  border-color: rgba(207, 74, 24, .22); }
 .tag-green  { color: #4ade80; background: rgba(74, 222, 128, .09);  border-color: rgba(74, 222, 128, .22); }
-.tag-purple { color: #c084fc; background: rgba(192, 132, 252, .09); border-color: rgba(192, 132, 252, .22); }
+.tag-purple { color: #9c3d5f; background: rgba(194, 82, 122, .09); border-color: rgba(194, 82, 122, .25); }
 .tag-orange { color: #fb923c; background: rgba(251, 146, 60, .09);  border-color: rgba(251, 146, 60, .22); }
-.tag-pink   { color: #fb7185; background: rgba(251, 113, 133, .09); border-color: rgba(251, 113, 133, .22); }
+.tag-pink   { color: #9c3d5f; background: rgba(194, 82, 122, .09); border-color: rgba(194, 82, 122, .25); }
 .tag-plain  { color: var(--muted); background: var(--ghost-bg); border-color: var(--border); }
 
 .p-counter {
@@ -1326,7 +1305,7 @@ a.p-card:hover .p-arrow { transform: translateX(4px); }
 .game-cs   { color: #fb923c; background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .28); }
 .game-dota { color: #a83a12; background: rgba(228, 87, 46, .1); border-color: rgba(228, 87, 46, .28); }
 .game-lol  { color: #cf4a18; background: rgba(207, 74, 24, .1);  border-color: rgba(207, 74, 24, .28); }
-.game-val  { color: #f472b6; background: rgba(244, 114, 182, .1); border-color: rgba(244, 114, 182, .28); }
+.game-val  { color: #c2527a; background: rgba(194, 82, 122, .1); border-color: rgba(194, 82, 122, .28); }
 .game-hs   { color: #96602a; background: rgba(150, 96, 42, .1);  border-color: rgba(150, 96, 42, .28); }
 
 /* ---------- Таймлайн ---------- */
@@ -1978,14 +1957,14 @@ body:has(.bottom-dock) #to-top { bottom: 6rem; }
   box-shadow: var(--shadow-hover);
 }
 /* Палитра типов — одинаково читается в обеих темах */
-.note-card[data-type="note"]    { --note-accent: #f43f5e; }
+.note-card[data-type="note"]    { --note-accent: var(--neo-verm); }
 .note-card[data-type="thought"] { --note-accent: #c2527a; }
 .note-card[data-type="digest"]  { --note-accent: #c2410c; }
-.note-card[data-type="extra"]   { --note-accent: #10b981; }
-:root[data-theme="dark"] .note-card[data-type="note"]    { --note-accent: #fb7185; }
-:root[data-theme="dark"] .note-card[data-type="thought"] { --note-accent: #c084fc; }
+.note-card[data-type="extra"]   { --note-accent: #4f7a44; }
+:root[data-theme="dark"] .note-card[data-type="note"]    { --note-accent: #ff8a54; }
+:root[data-theme="dark"] .note-card[data-type="thought"] { --note-accent: #e08aa6; }
 :root[data-theme="dark"] .note-card[data-type="digest"]  { --note-accent: #ff8a54; }
-:root[data-theme="dark"] .note-card[data-type="extra"]   { --note-accent: #34d399; }
+:root[data-theme="dark"] .note-card[data-type="extra"]   { --note-accent: #9fc48e; }
 
 .note-meta {
   display: flex;
@@ -2697,7 +2676,7 @@ h2.mono { margin: 0; }
 
 /* 27.4 Ambient на сервисных и проектных страницах: тот же слой,
    на тесных экранах орбы мягче (базовое правило уже в секции 26) */
-body[data-accent="sage"] .ambient .orb { background: #10b981; }
+body[data-accent="sage"] .ambient .orb { background: #4f7a44; }
 
 /* 27.5 Водяные глифы в hero подстраниц: чуть компактнее, чем на лентах */
 .prose-measure .hero .bg-glyph:nth-child(1) { font-size: clamp(4.5rem, 12vw, 8rem); top: -1.5rem; }
@@ -2750,7 +2729,7 @@ body[data-accent="sage"] .ambient .orb { background: #10b981; }
   background: var(--faint);
   flex: 0 0 auto;
 }
-.dot-green { background: #10b981; }
+.dot-green { background: #4f7a44; }
 .dot-amber { background: #d97706; }
 .dot-red   { background: #dc2626; }
 [data-theme="dark"] .dot-amber { background: #fb923c; }
@@ -2934,7 +2913,6 @@ body {
    ========================================================================== */
 :root {
   --aur-violet: #c2527a;
-  --aur-sky: #0ea5e9;
 }
 
 /* Aurora v2: три поля — тёплый акцент, фиолетовый, небесный (статично) */
@@ -3433,3 +3411,18 @@ html, body { overflow-x: hidden; overflow-x: clip; }
   right: calc(1.5rem + env(safe-area-inset-right, 0px));
 }
 .bottom-dock { bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px)); }
+
+/* ==========================================================================
+   INHERIT2 2026 · волна 15: утилиты вместо инлайнов, служебные экраны
+   ========================================================================== */
+.ink { color: var(--text); }
+.ink-2 { color: var(--text-2); }
+.ink-muted { color: var(--muted); }
+.ink-faint { color: var(--faint); }
+.ink-rose { color: var(--neo-rose); }
+.fs-1 { font-size: 1rem; }
+.fs-105 { font-size: 1.05rem; }
+.fs-098 { font-size: .98rem; }
+/* FAQ: аккордеон в общей системе — крупнее и спокойнее */
+.faq-summary { font-size: 1.02rem; padding: 1.05rem 1.15rem; }
+.faq-answer { font-size: 1rem; line-height: 1.65; }
