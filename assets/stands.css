@@ -2292,3 +2292,75 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fbbf24; border-color
   min-height: 2.75rem; cursor: pointer;
 }
 .resume-card-reset:hover { color: var(--st-bad, #b91c1c); border-color: var(--st-bad, #b91c1c); }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 2: aurora-фон, градиентные заголовки, свечение
+   Всё статично (ambient-движения нет), reduced-motion не затронут.
+   Градиенты заголовков — крупный дисплейный текст: старт от основного
+   цвета текста (полный контраст), хвост в акцент (≥3:1 на крупном).
+   ========================================================================== */
+
+/* Aurora: два мягких цветовых пятна поверх сетки терминала */
+body.flat-scope {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
+    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 9%, transparent), transparent 70%),
+    radial-gradient(46rem 28rem at -10% 6rem, color-mix(in srgb, var(--st-accent-2) 7%, transparent), transparent 72%);
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+  background-size: 36px 36px, 36px 36px, auto, auto;
+}
+html[data-theme="light"] body.flat-scope {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .045) 1px, transparent 1px),
+    radial-gradient(52rem 30rem at 84% -6rem, color-mix(in srgb, var(--st-accent) 10%, transparent), transparent 70%),
+    radial-gradient(46rem 28rem at -10% 6rem, color-mix(in srgb, var(--st-accent-2) 8%, transparent), transparent 72%);
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+  background-size: 36px 36px, 36px 36px, auto, auto;
+}
+
+/* Дисплейные заголовки: от цвета текста к акценту (живые градиенты, статика) */
+.st-hero h1, .flat-head h1 {
+  background: linear-gradient(96deg, var(--st-text) 46%, var(--st-accent) 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Линейка секций: акцент растворяется в базовой линии */
+.st-section-head {
+  border-bottom-color: transparent;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--st-accent) 55%, var(--st-line)) 0,
+    var(--st-line) 42%) left bottom / 100% 1px no-repeat;
+}
+
+/* Навигация: подчёркивание выезжает при наведении и фокусе */
+.st-topnav a:hover::after, .st-topnav a:focus-visible::after { transform: scaleX(1); }
+
+/* Индекс hero: мягкое акцентное свечение (статичная тень) */
+.st-hero-index, .flat-index {
+  box-shadow: 0 0 26px -10px color-mix(in srgb, var(--st-accent) 65%, transparent);
+}
+
+/* Кнопки-плитки: градиентная поверхность и свечение на hover */
+.flat-btn {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--st-btn-bg) 90%, #fff), var(--st-btn-bg));
+}
+.flat-btn.ghost { background: var(--st-panel); }
+.flat-btn:hover:not([disabled]) {
+  box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--st-accent) 80%, transparent),
+              0 0 0 1px color-mix(in srgb, var(--st-accent) 35%, transparent);
+}
+.flat-btn[disabled] { background: var(--st-inset); }
+
+/* Стеклянные фичер-карточки: баланс биржи и «продолжить с места» */
+.rw-balance, .resume-card { background: color-mix(in srgb, var(--st-panel) 78%, transparent); }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .rw-balance, .resume-card {
+    -webkit-backdrop-filter: blur(10px) saturate(1.25);
+    backdrop-filter: blur(10px) saturate(1.25);
+  }
+}

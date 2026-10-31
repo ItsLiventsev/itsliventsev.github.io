@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ah';
+const VERSION = '20261031ai';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -391,6 +391,14 @@ for (const cf of ['site.css', 'stands.css', 'ops.css', 'office.css', 'shared-chr
   }
 }
 ok(stCss.includes('--st-glass-blur: 14px'), 'stands.css: нет токена --st-glass-blur');
+/* дизайн 2026 · волна 2: aurora, градиентные заголовки, свечение */
+ok(stCss.includes('radial-gradient(52rem 30rem at 84% -6rem'), 'stands.css: нет aurora-фона вселенных');
+ok(stCss.includes('background-clip: text') && stCss.includes('linear-gradient(96deg, var(--st-text) 46%'), 'stands.css: градиентные дисплейные заголовки потеряны');
+ok(stCss.includes('left bottom / 100% 1px'), 'stands.css: нет градиентной линейки секций');
+ok(stCss.includes('.st-topnav a:hover::after'), 'stands.css: нет выезжающего подчёркивания навигации');
+ok(stCss.includes('.flat-btn:hover:not([disabled])') && stCss.includes('linear-gradient(135deg'), 'stands.css: кнопки без градиента и свечения');
+ok(stCss.includes('.rw-balance, .resume-card'), 'stands.css: фичер-карточки без стекла');
+ok(siteCss.includes('radial-gradient(60rem 34rem at 88% -8rem') && siteCss.includes('.btn-primary:hover:not([disabled])'), 'site.css: нет aurora/свечения основной площадки');
 ok(stCss.includes('.resume-card') && read('assets/shared-chrome.js').includes('stands-last-'), 'нет механики «продолжить с места»');
 ok(stCss.includes('clamp(1.7rem, 4.6vw, 2.65rem)'), 'stands.css: hero-заголовок не масштабирован (дизайн 2026)');
 ok(stCss.includes('.rw-card:hover') && stCss.includes('.ops-cocard:hover'), 'stands.css: нет микро-отклика карточек');
@@ -403,7 +411,7 @@ ok(!siteCss.includes('wght@300') && read('index.html').includes('Inter:wght@400;
 for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
-  ok(!c.includes('?v=20261031ag') && !c.includes('?v=20261031ac') && !c.includes('?v=20261031ab'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031ah') && !c.includes('?v=20261031ag') && !c.includes('?v=20261031ac'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */

@@ -2898,3 +2898,17 @@ section[id], .scroll-mt-24 { scroll-margin-top: 5.5rem; }
     background: color-mix(in srgb, var(--header-bg) 84%, transparent);
   }
 }
+
+/* ==========================================================================
+   Дизайн 2026 · волна 2: aurora основной площадки и свечение кнопок
+   Статичные градиенты без анимаций; контраст текста не изменён.
+   ========================================================================== */
+body {
+  background-image: radial-gradient(60rem 34rem at 88% -8rem,
+    color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%);
+  background-repeat: no-repeat;
+}
+.btn-primary:hover:not([disabled]) {
+  box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--accent) 80%, transparent),
+              0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
