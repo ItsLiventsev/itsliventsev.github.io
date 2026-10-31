@@ -394,6 +394,8 @@ ok(lgNew.includes("claim.status !== 'local'") && lgNew.includes("claim.status !=
 ok(lgNew.includes("bonus трайба".replace('bonus','бонус')) || lgNew.includes('бонус трайба'), 'league.js: нет PRP-бонуса за ревью своему трайбу');
 ok(lgNew.includes('standingsSnapshot') && lgNew.includes("schema: 'standings/1'"), 'league.js: нет снапшота стенда');
 ok(lgNew.includes("'league-bundle/3'"), 'league.js: бандлы не v3');
+ok(lgNew.includes("'streak-7'") && lgNew.includes("'tribe-mentor'") && lgNew.includes('mentorReviews >= 3'), 'league.js: нет достижений за серию входов и наставничество');
+ok(lgNew.includes('checks[\'tribe-mentor\']'), 'league.js: tribe-mentor не в checks');
 ok(lgNew.includes('report.claims++'), 'league.js: importBundle не мерджит ордера');
 const std = read('assets/standings.js');
 ok(std.includes('standings/standings.json') && std.includes('standings/1'), 'standings.js: неверный источник стенда');
@@ -406,7 +408,8 @@ ok(read('assets/submissions.js').includes("'standings', 'standings.json'"), 'sub
 ok(read('admin.html').includes('standings-publish') && read('admin.html').includes('claims-tbody'), 'admin.html: нет публикации стенда и карточки ордеров');
 ok(read('assets/submissions.js').includes("renderClaims();") && read('assets/submissions.js').includes("league-bundle\\/[123]"), 'submissions.js: ордера не обновляются после импорта бандлов v3');
 ok(read('assets/rewards-page.js').includes('data-cancel'), 'rewards-page.js: нет кнопки отмены ордера');
-ok(read('assets/league-page.js').includes('rewardSpend'), 'league-page.js: биржевые события журнала без названий');
+ok(read('assets/league-page.js').includes('rewardSpend') && read('assets/league-page.js').includes('rewards.html'), 'league-page.js: журнал биржи без названий или нет ссылки на биржу');
+ok(read('assets/league-page.js').includes('ordersInWork'), 'league-page.js: нет статуса ордеров на странице лиги');
 ok(read('admin.html').includes('assets/ops-engine.js'), 'admin.html: ops-engine не подключён для снапшота ДатаПолиса');
 const oe = read('assets/ops-engine.js');
 ok(oe.includes('CREW_OPS') && oe.includes('closeCrewOp') && oe.includes('ops-crew-points'), 'ops-engine.js: нет командных операций');

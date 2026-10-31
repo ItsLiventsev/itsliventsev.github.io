@@ -443,8 +443,10 @@
     { id: 'fair-reviewer', icon: '⚖️', title: 'Справедливый глаз', desc: 'рейтинг справедливости не ниже 85' },
     { id: 'kind-reviewer', icon: '💬', title: 'Доброе слово', desc: 'рейтинг доброжелательности не ниже 85' },
     { id: 'prp-rich', icon: '🪙', title: 'Капитал доверия', desc: 'накопить 8 PRP проверками коллег' },
+    { id: 'tribe-mentor', icon: '🛡️', title: 'Наставник трайба', desc: 'три ревью коллегам своего трайба' },
     { id: 'early-bird', icon: '🐦', title: 'Ранняя пташка', desc: 'начать работу до 9:00' },
     { id: 'streak-3', icon: '🔥', title: 'На три дня', desc: 'заходить на стенды три разных дня' },
+    { id: 'streak-7', icon: '⚡', title: 'Неделя силы', desc: 'заходить на стенды семь разных дней' },
     { id: 'level-3', icon: '🎓', title: 'Администратор сети', desc: 'достичь третьего уровня' }
   ];
   function achievements(profileId) {
@@ -472,8 +474,17 @@
       'prp-rich': prpBalance(profileId) >= 8,
       'early-bird': early,
       'streak-3': Object.keys(loginDays).length >= 3,
+      'streak-7': Object.keys(loginDays).length >= 7,
       'level-3': totals(profileId).level.level >= 3
     };
+    /* Наставничество: ревью коллегам своего трайба (сам себе не считается) */
+    var mentorReviews = 0;
+    myReviews.forEach(function (r) {
+      if (r.reviewer && r.reviewee && r.reviewer.group && r.reviewee.group &&
+          r.reviewer.id !== r.reviewee.id &&
+          tribeFor(r.reviewer.group).id === tribeFor(r.reviewee.group).id) mentorReviews++;
+    });
+    checks['tribe-mentor'] = mentorReviews >= 3;
     return ACHIEVEMENTS.map(function (a) {
       return Object.assign({}, a, { unlocked: !!checks[a.id] });
     });

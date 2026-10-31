@@ -40,6 +40,9 @@
   function renderLevel() {
     var t = LEAGUE.totals(profile.id);
     var lv = t.level;
+    var ordersInWork = LEAGUE.myClaims
+      ? LEAGUE.myClaims(profile.id).filter(function (c) { return c.status === 'local' || c.status === 'rejected'; }).length
+      : 0;
     var tribe = LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
     var handle = LEAGUE.handleFor(profile);
     $('lg-name').textContent = profile.name;
@@ -60,7 +63,10 @@
       bar(lv.progress, lv.next ? 'до L' + (lv.level + 1) + ' «' + lv.next + '» · ' + lv.into + '/' + lv.span + ' XP' : 'максимальный уровень') +
       '<p class="admin-hint">всего опыта: <strong>' + t.xp + ' XP</strong>' +
       (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') +
-      ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег</p>';
+      ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег' +
+      ' · обменяй неткоины на <a href="rewards.html">бирже привилегий</a>' +
+      (ordersInWork ? ' · ордеров в работе: ' + ordersInWork : '') +
+      '</p>';
   }
 
   /* ----------------------------- 06 · достижения ----------------------------- */
