@@ -475,6 +475,8 @@
     }).filter(function (c) { return c.points > 0; });
     var opsCount = {};
     crewOpsDone().forEach(function (d) { if (opsCount[d.opId]) opsCount[d.opId]++; else opsCount[d.opId] = 1; });
+    var opsTitles = {};
+    CREW_OPS.forEach(function (o) { opsTitles[o.id] = o.title; });
     var members = [];
     var p = getProfile();
     if (p && p.id) {
@@ -482,7 +484,7 @@
       ledger().forEach(function (e) { if (e.profileId === p.id) xp += e.xp || 0; });
       members.push({ handle: handleFor(p).text, crewId: p.crewId, xp: xp });
     }
-    return { crews: crews, opsDone: opsCount, members: members };
+    return { crews: crews, opsDone: opsCount, opsTitles: opsTitles, members: members };
   }
 
   return {

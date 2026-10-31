@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031ad';
+const VERSION = '20261031ae';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -389,10 +389,13 @@ for (const f of allHtml) {
 const lgNew = read('assets/league.js');
 ok(lgNew.includes("claims: 'league-claims'") && lgNew.includes('REWARDS'), 'league.js: нет биржи привилегий');
 ok(lgNew.includes("'point-wipe'") && lgNew.includes("'rescue'") && lgNew.includes("'grade-plus'"), 'league.js: нет наград «точка/двойка/четвертная»');
-ok(lgNew.includes('createClaim') && lgNew.includes('refundClaim') && lgNew.includes('dedup') === false ? true : true, 'league.js: API ордеров');
+ok(lgNew.includes('function createClaim') && lgNew.includes('function cancelClaim') && lgNew.includes('function refundClaim') && lgNew.includes('function setClaimStatus'), 'league.js: API ордеров (создание/отмена/возврат/решение) неполон');
+ok(lgNew.includes("claim.status !== 'local'") && lgNew.includes("claim.status !== 'rejected'"), 'league.js: семантика отмены/возврата ордеров нарушена');
 ok(lgNew.includes("bonus трайба".replace('bonus','бонус')) || lgNew.includes('бонус трайба'), 'league.js: нет PRP-бонуса за ревью своему трайбу');
 ok(lgNew.includes('standingsSnapshot') && lgNew.includes("schema: 'standings/1'"), 'league.js: нет снапшота стенда');
 ok(lgNew.includes("'league-bundle/3'"), 'league.js: бандлы не v3');
+ok(lgNew.includes("'streak-7'") && lgNew.includes("'tribe-mentor'") && lgNew.includes('mentorReviews >= 3'), 'league.js: нет достижений за серию входов и наставничество');
+ok(lgNew.includes('checks[\'tribe-mentor\']'), 'league.js: tribe-mentor не в checks');
 ok(lgNew.includes('report.claims++'), 'league.js: importBundle не мерджит ордера');
 const std = read('assets/standings.js');
 ok(std.includes('standings/standings.json') && std.includes('standings/1'), 'standings.js: неверный источник стенда');
@@ -403,17 +406,29 @@ ok(read('stands/league.html').includes('data-standings="tribes"'), 'league.html:
 ok(read('stands/index.html').includes('rewards.html') && read('stands/index.html').includes('ops/crew-ops.html'), 'stands/index.html: нет блока общей экономики');
 ok(read('assets/submissions.js').includes("'standings', 'standings.json'"), 'submissions.js: публикация стенда не на standings/standings.json');
 ok(read('admin.html').includes('standings-publish') && read('admin.html').includes('claims-tbody'), 'admin.html: нет публикации стенда и карточки ордеров');
+ok(read('assets/submissions.js').includes("renderClaims();") && read('assets/submissions.js').includes("league-bundle\\/[123]"), 'submissions.js: ордера не обновляются после импорта бандлов v3');
+ok(read('assets/rewards-page.js').includes('data-cancel'), 'rewards-page.js: нет кнопки отмены ордера');
+ok(read('assets/league-page.js').includes('rewardSpend') && read('assets/league-page.js').includes('rewards.html'), 'league-page.js: журнал биржи без названий или нет ссылки на биржу');
+ok(read('assets/league-page.js').includes('ordersInWork'), 'league-page.js: нет статуса ордеров на странице лиги');
 ok(read('admin.html').includes('assets/ops-engine.js'), 'admin.html: ops-engine не подключён для снапшота ДатаПолиса');
 const oe = read('assets/ops-engine.js');
 ok(oe.includes('CREW_OPS') && oe.includes('closeCrewOp') && oe.includes('ops-crew-points'), 'ops-engine.js: нет командных операций');
 ok(oe.includes('crewop:') && oe.includes("W' + w"), 'ops-engine.js: нет недельного дедупа операций');
 ok(oe.includes("'ops-bundle/2'") && oe.includes('crewsSnapshot'), 'ops-engine.js: бандл ops не v2 или нет снапшота экипажей');
 ok(read('stands/ops/crew-ops.html').includes('ops-hub.js') && read('stands/ops/crew-ops.html').includes('crew-ops-root'), 'crew-ops.html: не подключён движок кабинета');
+ok(read('stands/ops/crew-ops.html').includes('data-standings="ops-crews"') && read('stands/ops/crew-ops.html').includes('standings.js'), 'crew-ops.html: нет командного зачёта экипажей');
+ok(read('assets/standings.js').includes('renderOpsCrews') && read('assets/standings.js').includes('opsCrewsTable'), 'standings.js: нет рендера экипажей ДатаПолиса');
+ok(read('assets/ops-engine.js').includes('opsTitles'), 'ops-engine.js: снапшот без названий операций');
+ok(read('stands/teams.html').includes('data-standings="ops-crews"'), 'teams.html: экипажи не показаны рядом с трайбами');
 ok(read('stands/ops/index.html').includes('crew-ops.html'), 'ops/index.html: нет входа на операции экипажа');
 for (const term of ['биржа привилегий', 'ордер', 'операция экипажа', 'очки экипажа', 'стенд лиги']) {
   ok(read('stands/glossary.html').includes(term), 'в глоссарии нет термина: ' + term);
 }
 ok(read('faq.html').includes('faq-rewards') && read('faq.html').includes('06 · технические требования'), 'faq.html: нет раздела наград или сбита нумерация');
+ok(read('sitemap.html').includes('stands/rewards.html') && read('sitemap.html').includes('stands/ops/crew-ops.html'), 'sitemap.html: нет биржи или операций экипажа');
+ok(read('stands/teams.html').includes('живой командный зачёт (04) подгружается'), 'teams.html: noscript-бар не предупреждает о живом разделе');
+ok(read('stands/league.html').includes('list-lead st-mt-4') && !read('stands/league.html').includes('style="font-size:1rem;"'), 'league.html: inline-стили в блоке стенда');
+ok(read('stands/index.html').includes('биржей') && read('stands/index.html').includes('операции экипажа: смена вахты'), 'stands/index.html: карточки вселенных без новых механик');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

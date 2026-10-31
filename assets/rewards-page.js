@@ -71,9 +71,12 @@
       var label = c.status === 'approved' ? 'выдано преподавателем ✓'
         : c.status === 'rejected' ? 'отклонён — монеты можно вернуть'
         : c.status === 'refunded' ? 'монеты возвращены'
+        : c.status === 'cancelled' ? 'отменён — монеты возвращены'
         : 'ждёт подтверждения преподавателя';
       var action = (c.status === 'rejected')
         ? ' <button class="flat-btn ghost" type="button" data-refund="' + esc(c.id) + '">вернуть ' + r.coins + ' ◈</button>'
+        : (c.status === 'local')
+        ? ' <button class="flat-btn ghost" type="button" data-cancel="' + esc(c.id) + '">передумать, вернуть ' + r.coins + ' ◈</button>'
         : '';
       return '<li><span class="mono">№' + esc(c.id.slice(-4)) + '</span>' +
         '<strong>' + esc(r.title) + '</strong>' +
@@ -104,6 +107,12 @@
       var refundId = e.target.getAttribute && e.target.getAttribute('data-refund');
       if (refundId && profile) {
         try { L().refundClaim(refundId); render(); say('Монеты возвращены на счёт.', 'ok'); }
+        catch (err) { say(err.message, 'bad'); }
+        return;
+      }
+      var cancelId = e.target.getAttribute && e.target.getAttribute('data-cancel');
+      if (cancelId && profile) {
+        try { L().cancelClaim(cancelId); render(); say('Ордер отменён, монеты вернулись на счёт.', 'ok'); }
         catch (err) { say(err.message, 'bad'); }
       }
     });

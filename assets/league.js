@@ -443,8 +443,10 @@
     { id: 'fair-reviewer', icon: '⚖️', title: 'Справедливый глаз', desc: 'рейтинг справедливости не ниже 85' },
     { id: 'kind-reviewer', icon: '💬', title: 'Доброе слово', desc: 'рейтинг доброжелательности не ниже 85' },
     { id: 'prp-rich', icon: '🪙', title: 'Капитал доверия', desc: 'накопить 8 PRP проверками коллег' },
+    { id: 'tribe-mentor', icon: '🛡️', title: 'Наставник трайба', desc: 'три ревью коллегам своего трайба' },
     { id: 'early-bird', icon: '🐦', title: 'Ранняя пташка', desc: 'начать работу до 9:00' },
     { id: 'streak-3', icon: '🔥', title: 'На три дня', desc: 'заходить на стенды три разных дня' },
+    { id: 'streak-7', icon: '⚡', title: 'Неделя силы', desc: 'заходить на стенды семь разных дней' },
     { id: 'level-3', icon: '🎓', title: 'Администратор сети', desc: 'достичь третьего уровня' }
   ];
   function achievements(profileId) {
@@ -472,8 +474,17 @@
       'prp-rich': prpBalance(profileId) >= 8,
       'early-bird': early,
       'streak-3': Object.keys(loginDays).length >= 3,
+      'streak-7': Object.keys(loginDays).length >= 7,
       'level-3': totals(profileId).level.level >= 3
     };
+    /* Наставничество: ревью коллегам своего трайба (сам себе не считается) */
+    var mentorReviews = 0;
+    myReviews.forEach(function (r) {
+      if (r.reviewer && r.reviewee && r.reviewer.group && r.reviewee.group &&
+          r.reviewer.id !== r.reviewee.id &&
+          tribeFor(r.reviewer.group).id === tribeFor(r.reviewee.group).id) mentorReviews++;
+    });
+    checks['tribe-mentor'] = mentorReviews >= 3;
     return ACHIEVEMENTS.map(function (a) {
       return Object.assign({}, a, { unlocked: !!checks[a.id] });
     });
@@ -521,13 +532,31 @@
     });
     return claim;
   }
+  /* Отмена до решения преподавателя: «передумал» — монеты возвращаются,
+     в публичном стенде отменённый ордер не участвует. */
+  function cancelClaim(claimId) {
+    var list = claims();
+    var claim = null;
+    list.forEach(function (c) { if (c.id === claimId) claim = c; });
+    if (!claim) throw new Error('ордер не найден');
+    if (claim.status !== 'local') throw new Error('отменить можно только ордер, который ещё ждёт подтверждения');
+    var reward = REWARDS[claim.rewardId];
+    claim.status = 'cancelled';
+    write(KEYS.claims, list);
+    award(claim.profileId, 'rewardRefund', null, {
+      xp: 0, coins: reward ? reward.coins : 0,
+      note: 'отмена ордера №' + claim.id.slice(-4)
+    });
+    return { refunded: true };
+  }
+  /* Возврат монет после отклонения преподавателем. */
   function refundClaim(claimId) {
     var list = claims();
     var claim = null;
     list.forEach(function (c) { if (c.id === claimId) claim = c; });
     if (!claim) throw new Error('ордер не найден');
-    if (claim.status === 'approved') throw new Error('одобренный ордер нельзя вернуть');
     if (claim.status === 'refunded') return { duplicated: true };
+    if (claim.status !== 'rejected') throw new Error('вернуть монеты можно только по отклонённому ордеру');
     var reward = REWARDS[claim.rewardId];
     claim.status = 'refunded';
     write(KEYS.claims, list);
@@ -604,7 +633,7 @@
       generatedAt: new Date().toISOString(),
       period: period || (new Date().getFullYear() + ' · ' + (Math.floor(new Date().getMonth() / 3) + 1) + '-й квартал'),
       setpolis: { members: members, tribes: tribes },
-      claims: claims().map(function (c) {
+      claims: claims().filter(function (c) { return c.status !== 'cancelled'; }).map(function (c) {
         return { id: c.id, handle: c.handle, rewardId: c.rewardId, status: c.status, at: c.at };
       }),
       totals: { xp: totalXp, coins: totalCoins, works: submissions().length, reviews: reviews().length }
@@ -722,6 +751,7 @@
     claims: claims,
     myClaims: myClaims,
     createClaim: createClaim,
+    cancelClaim: cancelClaim,
     refundClaim: refundClaim,
     setClaimStatus: setClaimStatus,
     exportBundle: exportBundle,

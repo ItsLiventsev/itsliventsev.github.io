@@ -40,6 +40,9 @@
   function renderLevel() {
     var t = LEAGUE.totals(profile.id);
     var lv = t.level;
+    var ordersInWork = LEAGUE.myClaims
+      ? LEAGUE.myClaims(profile.id).filter(function (c) { return c.status === 'local' || c.status === 'rejected'; }).length
+      : 0;
     var tribe = LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
     var handle = LEAGUE.handleFor(profile);
     $('lg-name').textContent = profile.name;
@@ -60,7 +63,10 @@
       bar(lv.progress, lv.next ? 'до L' + (lv.level + 1) + ' «' + lv.next + '» · ' + lv.into + '/' + lv.span + ' XP' : 'максимальный уровень') +
       '<p class="admin-hint">всего опыта: <strong>' + t.xp + ' XP</strong>' +
       (lv.next ? ' · следующий уровень «' + esc(lv.next) + '»' : '') +
-      ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег</p>';
+      ' · PRP тратятся при сдаче на взаимную проверку и возвращаются за проверку работ коллег' +
+      ' · обменяй неткоины на <a href="rewards.html">бирже привилегий</a>' +
+      (ordersInWork ? ' · ордеров в работе: ' + ordersInWork : '') +
+      '</p>';
   }
 
   /* ----------------------------- 06 · достижения ----------------------------- */
@@ -99,7 +105,8 @@
     var awardNames = {
       login: 'ежедневный вход', submit: 'сдача лабораторной', standReady: 'стенд на 100%',
       autotests: 'все автотесты', quizPerfect: 'тест без ошибок',
-      review: 'взаимная оценка', expertReview: 'экспертная оценка'
+      review: 'взаимная оценка', expertReview: 'экспертная оценка',
+      rewardSpend: 'обмен на бирже привилегий', rewardRefund: 'возврат по ордеру'
     };
     $('lg-awards').innerHTML = Object.keys(LEAGUE.AWARDS).map(function (k) {
       var a = LEAGUE.AWARDS[k];
@@ -112,7 +119,8 @@
     $('lg-ledger').innerHTML = rows.length ? rows.map(function (e) {
       return '<tr><td class="mono">' + fmt(e.at) + '</td><td>' + esc(awardNames[e.type] || e.note || e.type) + '</td>' +
         '<td class="mono">' + esc(e.standId ? standName(e.standId) : '—') + '</td>' +
-        '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">+' + (e.coins || 0) + ' ◈</td></tr>';
+        '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">' +
+        ((e.coins || 0) >= 0 ? '+' : '') + (e.coins || 0) + ' ◈</td></tr>';
     }).join('') : '<tr><td colspan="5" class="admin-hint table-empty">// событий пока нет — выполните лабораторную на стенде</td></tr>';
   }
 
