@@ -2505,3 +2505,75 @@ html[data-theme="light"] body.flat-scope {
 .flat-btn {
   background: linear-gradient(115deg, var(--st-btn-bg) 15%, var(--st-aur-violet, #6d28d9));
 }
+
+/* ==========================================================================
+   NEO 2026 · волна 6: вселенные — жёсткая геометрия поверх палитры юниверсов
+   ========================================================================== */
+:root {
+  --font-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
+  --st-radius: 0px;
+  --st-hard: 5px 5px 0 0 rgba(0, 0, 0, .75);
+}
+html[data-theme="light"] .flat-scope { --st-hard: 5px 5px 0 0 rgba(26, 22, 12, .8); }
+
+/* Сетка вместо aurora: чертёжная клетка без градиентных полей */
+body.flat-scope {
+  background-image:
+    linear-gradient(rgba(127, 127, 127, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 127, 127, .07) 1px, transparent 1px);
+  background-repeat: repeat;
+  background-size: 36px 36px;
+}
+
+/* Заголовки вселенных: Unbounded, сериф-класс перекрашен в NEO-штамп */
+.flat-scope h1, .flat-scope h2, .flat-scope h3 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.015em; }
+.zt-serif {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 600;
+  font-size: .72em;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: var(--st-accent, currentColor);
+  color: var(--st-accent, currentColor);
+}
+.zt-serif::before { content: "▸ "; }
+
+/* Кнопки и бейджи: чернильная рамка + жёсткая тень + нажатие */
+.flat-btn, .flat-badge, .kind-badge, .st-section-num, .ops-role-chip {
+  border-radius: var(--st-radius);
+}
+.flat-btn {
+  border: 2px solid color-mix(in srgb, currentColor 65%, transparent);
+  box-shadow: var(--st-hard);
+  transition: transform var(--dur-fast, 120ms) var(--ease-standard, ease),
+              box-shadow var(--dur-fast, 120ms) var(--ease-standard, ease);
+}
+.flat-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 rgba(0, 0, 0, .75); }
+.flat-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 rgba(0, 0, 0, .75); }
+.flat-btn[disabled] { box-shadow: none; transform: none; }
+
+/* Топбар: жёсткая линия вместо стекла */
+.st-topnav { border-radius: 0; border-bottom: 2px solid color-mix(in srgb, currentColor 35%, transparent); }
+
+/* Bento: острые ячейки, подъём с тенью */
+.bento-cell {
+  border-radius: 0;
+  border: 2px solid color-mix(in srgb, currentColor 45%, transparent);
+  box-shadow: var(--st-hard);
+  transition: transform var(--dur-fast, 120ms) var(--ease-standard, ease),
+              box-shadow var(--dur-fast, 120ms) var(--ease-standard, ease);
+}
+.bento-cell:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 rgba(0, 0, 0, .75); }
+
+/* Панели и инпуты: прямые углы */
+.panel, .st-panel, .rw-card, .st-hero-index { border-radius: 0; }
+input, select, textarea { border-radius: 0; }
+
+/* Reduce: без трансформаций */
+@media (prefers-reduced-motion: reduce) {
+  .flat-btn, .bento-cell { transform: none !important; }
+}

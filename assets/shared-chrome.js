@@ -284,15 +284,24 @@
   if (typeof window === 'undefined' || typeof document === 'undefined' || typeof location === 'undefined') return;
   var mq = (typeof window.matchMedia === 'function') ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
   if (mq && mq.matches) return;
-  var ticking = false;
+  var raf = 0, lastY = window.scrollY || window.pageYOffset || 0, vel = 0;
   function update() {
-    ticking = false;
+    raf = 0;
     var y = window.scrollY || window.pageYOffset || 0;
     var k = Math.max(0, Math.min(1, y / 480));
-    document.documentElement.style.setProperty('--sk', k.toFixed(3));
+    /* --sq: скорость скролла -1..1 (сглаженная) — наклон/сдвиг гигантов */
+    var dv = Math.max(-1, Math.min(1, (y - lastY) / 90));
+    lastY = y;
+    vel += (dv - vel) * 0.25;
+    if (Math.abs(vel) < 0.002) vel = 0;
+    var st = document.documentElement.style;
+    st.setProperty('--sk', k.toFixed(3));
+    st.setProperty('--sq', vel.toFixed(3));
+    /* докрутываем затухание скорости, иначе наклон замрёт на месте */
+    if (vel !== 0 && !raf) raf = window.requestAnimationFrame(update);
   }
   window.addEventListener('scroll', function () {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+    if (!raf) raf = window.requestAnimationFrame(update);
   }, { passive: true });
   update();
 })();
