@@ -18,14 +18,14 @@ class Extract(HTMLParser):
         self.text = []
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        if tag in ('script', 'style', 'noscript', 'svg'):
+        if tag in ('script', 'style', 'noscript', 'svg', 'header', 'nav', 'footer'):
             self.skip += 1
         if tag == 'title': self.title_depth += 1
         if tag == 'h1': self.h1_depth += 1
         if tag == 'meta' and attrs.get('name', '').lower() == 'description':
             self.description = attrs.get('content', '')
     def handle_endtag(self, tag):
-        if tag in ('script', 'style', 'noscript', 'svg') and self.skip: self.skip -= 1
+        if tag in ('script', 'style', 'noscript', 'svg', 'header', 'nav', 'footer') and self.skip: self.skip -= 1
         if tag == 'title' and self.title_depth: self.title_depth -= 1
         if tag == 'h1' and self.h1_depth: self.h1_depth -= 1
     def handle_data(self, data):

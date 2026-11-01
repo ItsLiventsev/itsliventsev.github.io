@@ -71,14 +71,15 @@
     }
     var matches = entries.map(function (entry) {
       var title = normalize(entry.title), category = normalize(entry.category), content = normalize(entry.content);
+      var matched = 0;
       var score = terms.reduce(function (sum, term) {
-        if (title.includes(term)) return sum + (title.startsWith(term) ? 8 : 5);
-        if (category.includes(term)) return sum + 3;
-        if (content.includes(term)) return sum + 1;
+        if (title.includes(term)) { matched++; return sum + (title.startsWith(term) ? 8 : 5); }
+        if (category.includes(term)) { matched++; return sum + 3; }
+        if (content.includes(term)) { matched++; return sum + 1; }
         return sum;
       }, 0);
-      return { entry: entry, score: score };
-    }).filter(function (result) { return result.score > 0; })
+      return { entry: entry, score: score, matched: matched };
+    }).filter(function (result) { return result.matched === terms.length; })
       .sort(function (a, b) { return b.score - a.score || a.entry.title.localeCompare(b.entry.title, 'ru'); })
       .slice(0, 9);
     if (!matches.length) {
