@@ -771,3 +771,19 @@ html { scroll-behavior: smooth; }
 .ws-sidebar { gap: 10px !important; padding: 14px 10px 14px !important; height: 100dvh; }
 .ws-nav-group { padding: 6px !important; border-radius: 14px !important; }
 [data-ws-on-page-nav] { max-height: none !important; overflow: visible !important; }
+
+/* === Autonomous Polish Home: Bento densify + staggered entrance + soft shadows === */
+.ws-home-hero { gap: 12px; }
+.ws-home-copy, .ws-overview-card { border-radius: 20px !important; box-shadow: 0 4px 12px rgba(16,24,40,.05) !important; }
+[data-ws-activity-card], [data-ws-activity-feed] { border-radius: 20px !important; box-shadow: 0 4px 16px rgba(16,24,40,.05) !important; }
+/* staggered entrance for Bento cells */
+.ws-project-card, .ws-course-card, .ws-panel, #stack .ws-skill-card {
+  animation: ws-enter 480ms cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: calc(var(--stagger,0) * 60ms);
+}
+@media (prefers-reduced-motion: reduce) { .ws-project-card, .ws-course-card { animation: none !important; } }
+/* improve readability on all inner pages — max 72ch */
+.ws-content[data-ws-editorial] p, .ws-content p { max-width: 72ch; }
+/* breadcrumb + on-page toc polish */
+.ws-breadcrumbs { font-size: 11px; letter-spacing: .02em; }
+.ws-section-nav { gap: 2px; }

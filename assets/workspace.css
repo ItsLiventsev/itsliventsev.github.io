@@ -631,3 +631,30 @@ a > .ws-inline-icon:last-child { margin-inline-start: .22em; }
 /* v4 spring indicator */
 .ws-nav-indicator { transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 220ms ease, height 220ms ease; }
 .ws-nav-link:focus-visible { outline-offset: 2px; }
+
+/* === Autonomous Polish 2026-11-02: view transitions + grain + focus + nav spring v2 === */
+@supports (view-transition-name: root) {
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) { animation: ws-vt-out 180ms cubic-bezier(.2,.8,.2,1) both; }
+    ::view-transition-new(root) { animation: ws-vt-in 220ms cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes ws-vt-out { from { opacity:1; transform: translateY(0); } to { opacity:0; transform: translateY(-6px); } }
+    @keyframes ws-vt-in { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+    .ws-page-content { view-transition-name: page-content; }
+  }
+}
+/* cozy grain texture — ultra-subtle paper */
+body.ws-ready::before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  opacity:.035; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+}
+.ws-shell, .ws-workspace, .ws-sidebar, .ws-page-content { position:relative; z-index:1; }
+/* focus ring — accessible, soft */
+*:focus-visible { outline: 2px solid color-mix(in srgb, var(--ws-accent) 55%, transparent); outline-offset: 2px; border-radius: 6px; }
+/* nav indicator — Motion Primitives spring v2, anchor-positioning progressive */
+.ws-nav-indicator { transition: transform 420ms cubic-bezier(.34,1.56,.64,1), opacity 220ms ease, height 220ms ease; }
+@supports (anchor-name: --nav) { .ws-nav-link { anchor-name: --nav-anchor; } }
+/* card Soft UI — larger radii 16-20px, layered shadows, 3D hover subtle */
+[data-ws-surface], .ws-panel, .ws-course-card { border-radius: 18px !important; }
+.ws-project-card.ws-project-featured { border-radius: 20px !important; box-shadow: 0 8px 24px rgba(16,24,40,.06), 0 2px 8px rgba(16,24,40,.04) !important; }
+.ws-project-card:hover { transform: translateY(-3px) scale(1.005); }

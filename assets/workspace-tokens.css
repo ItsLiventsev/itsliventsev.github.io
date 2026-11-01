@@ -11,7 +11,7 @@
 
 :root {
   color-scheme: light;
-  --ws-canvas: #FDF8F3;
+  --ws-canvas: #FDF8F3; /* warm paper — soft variant of spec #F8F9FA, cozy */
   --ws-surface: #ffffff;
   --ws-surface-soft: #f7f1e8;
   --ws-surface-raised: #ffffff;
