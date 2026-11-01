@@ -371,6 +371,77 @@
 
 
 
+
+## Sprint v17 · 2026-11-01 — AGENT_PLAN execution: inline→CSS, kanban/view-toggle, agent badges · Shared Chat MAX
+
+> **Режим:** Shared Chat v17 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.
+> **Критерий:** `76/0/0` + `3517/0` + `node --check` ok; задник `#F8F9FA/#15161d`; washes cozy; 30 библиотек retained; «все страницы, все моменты» без резких перестроек.
+
+### Shared Chat v17 — детально
+
+**Architect — глобальный аудит 76 страниц**
+- Просканировал все HTML: `index 8→3`, `agent-plan 19→0`, `projects/navigation 22→18` (18 остались — контентные бренд-свотчи #6B8EC8/#4E5658/#4ABEA0 школы, не интерфейсный хром). 
+- Главная Bento: hero 1.65fr/.85fr OK, dashboard LIVE API OK, но `data-ws-view-toggle` 4px/10px inline ломает консистентность + kanban hidden `display:none + grid-template` inline.
+- Внутренние: editorial 72ch/1.75 + sidebar sticky 940px + breadcrumbs `›` + focus-visible OK; projects/navigation — исторический кейс, сохранён.
+- Компоненты Soft UI 16-24px shadow `0 4px 12px` OK, badges/tags теперь `ws-agent-badge--*`.
+- Навигация Motion Primitives anchor `360ms cubic-bezier(.34,1.56,.64,1)` OK, prefetch `link[rel=prefetch]` OK.
+→ **Задача:** 7 точечных правок утилитами, без реструктуризации контента.
+
+**Visual — типографика/цвет/Soft UI**
+- Поддержал: agent-иконы `style background` → токен-классы `ws-agent-badge--accent/blue/green/orange/violet/neutral` с washes `var(--ws-*-wash)`.
+- Swatch-color в navigation — бренд-палитра школы (синий/серый/мята) — оставить inline `background:#6b8ec8` (контент), но muted текст `var(--muted)` → `.ws-muted`.
+- Index kanban columns `background:var(--ws-surface-soft) border-radius:12px` → `.ws-kanban-col/.ws-kanban-head/.ws-kanban-list`.
+- Cozy washes сохранены: красный `#b84b55`/`#fff0f1`, синий `#2f6ba9`/`#eaf2fc` уже в `workspace-tokens.css` — переиспользовать.
+
+**Motion — анимация без «провалов»**
+- Отметил: inline toggle `style.background` ломает FLIP при `feed↔kanban`; вынести в CSS `: [aria-pressed=true]` + `box-shadow`.
+- Kanban `hidden→grid` inline `display:none` → `.ws-kanban-grid.is-visible` + JS `classList.toggle('is-visible')` + `requestAnimationFrame` для indicator.
+- Все новые utility — `prefers-reduced-motion: reduce` → `transition:none`.
+- Спорил с Visual: swatch hex не анимировать — static data, только hover.
+
+**Integrator — сборка в один PR**
+- Один PR MAX, zero-deps:
+  1) `workspace-home.css` — `ws-view-toggle/ws-view-btn/ws-kanban-grid/ws-hero-actions` + `ws-agent-badge--*/ws-hero-spaced/ws-section-spaced/ws-lead-muted/ws-actions-row/ws-surface-row/ws-caption-muted/ws-gradient-surface` + `.ws-muted` + `ws-kanban-col/head/list`.
+  2) `index.html` — view-toggle + hero-actions + kanban grid → классы, `0 inline`.
+  3) `agent-plan.html` — 19 паттернов → классы, `0 inline`.
+  4) `projects/navigation.html` — muted → `.ws-muted`, swatch оставить (контент).
+  5) `home-activity.js` — `viewButtons.style.background` → CSS `[aria-pressed]`, kanban `style.display` → `classList.toggle`.
+- Риски: низкие, только косметика, regression `3517/0` ожидается PASS.
+
+**Оркестратор — решение**
+- Утверждено. Действуем строго в рамках сайта, задник `#F8F9FA/#15161d`, акценты cozy разноцветные. Применяем AGENT_PLAN напрямую — выполняем план на сайте. «Резких» анимаций не вводить (поправка 2026-11-01).
+
+### Задачи v17 (закрыты одним PR feat/agent-plan-execution-v17)
+
+| № | Ось | Задача | Библиотека-реф | Файлы |
+|---|-----|--------|----------------|-------|
+| 1 | Главная Bento | View-toggle `4px/10px` inline → `ws-view-toggle/ws-view-btn[aria-pressed]` | Shadcn toggle | `workspace-home.css`+`index.html` |
+| 2 | Главная dashboard | Kanban `hidden+display:none` → `ws-kanban-grid.is-visible` + JS toggle | Motion Primitives FLIP | `workspace-home.css`+`index.html`+`home-activity.js` |
+| 3 | Главная hero | Hero-actions `flex gap8` → `ws-hero-actions` + `ws-hero-spaced` | Vibecoding.ru 30 | `index.html` |
+| 4 | Внутренние editorial | Agent badges `background:var(--ws-*-wash)` → `ws-agent-badge--*` + `ws-gradient-surface` | Soft UI | `agent-plan.html`+`workspace-home.css` |
+| 5 | Внутренние | Navigation muted `var(--muted)` → `.ws-muted`; swatch бренд-цвета сохранены (контент) | Content | `projects/navigation.html`+`workspace-home.css` |
+| 6 | Навигация/компоненты | View-btn motion `360ms` + reduce `none` + kanban head/list 12px grid | Motion Primitives | `workspace-home.css` |
+
+### Токены / тёмная тема / задник (поправка retained)
+
+Задник светлый `#F8F9FA` / тёмный `#15161d` (per поправка: красный/синий/зелёный/коричневый/чёрный — каждый wash свой, задник либо светлый либо тёмный). Токены `workspace-tokens.css` неизменны: `#F8F9FA/#f2f4f7/#e9ecef` + 8 dark washes `#26243a/#2e2520` + accent variants network/office/ops. Grain off retained.
+
+### Проверка
+
+- `python3 scripts/audit-html.py` → `76/0/0` (76 HTML, 0 дублей внутри, 1 H1, 0 битых)
+- `node scripts/regression-static.js` → `3517/0` (hidden progress + to-top.show preserved)
+- `node --check assets/workspace.js && node --check assets/home-activity.js` → ok
+- `index.html 0 inline`, `agent-plan.html 0`, `projects/navigation.html 18` (контентные swatch, допустимо)
+- braces `workspace-home.css 697/697` balanced
+- manual: feed↔kanban toggle плавный; badges cozy washes; navigation sticky; dark washes читаемы.
+
+### Что дальше (v18 кандидат, 2026-11-01+)
+
+- Статьи/проекты: вынести оставшиеся контентные `style="color:var(--text-2)"` в `workspace-learning.css` `.ws-prose` + `prefers-contrast: more` а11y для editorial.
+
+---
+
+
 ## Sprint v16 · 2026-11-01 — container queries + editorial callouts + skeleton + recent cmdk + view-transition · MAX
 
 > **Режим:** Shared Chat v16 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.

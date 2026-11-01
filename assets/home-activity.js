@@ -384,11 +384,10 @@
     viewButtons.forEach(btn => btn.addEventListener('click', () => {
       const view = btn.getAttribute('data-ws-view');
       viewButtons.forEach(b => b.setAttribute('aria-pressed', String(b===btn)));
-      viewButtons.forEach(b => b.style.background = b===btn ? 'var(--ws-surface)' : 'transparent');
       if (kanbanRoot) {
         const isKanban = view==='kanban';
         kanbanRoot.hidden = !isKanban;
-        kanbanRoot.style.display = isKanban ? 'grid' : 'none';
+        kanbanRoot.classList.toggle('is-visible', isKanban);
         if (timeline) timeline.style.display = isKanban ? 'none' : 'grid';
         const ticker = root.querySelector('[data-ws-activity-ticker]');
         if (ticker) ticker.style.display = isKanban ? 'none' : 'block';
