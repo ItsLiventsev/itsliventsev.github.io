@@ -220,3 +220,16 @@
 4. axe-core a11y audit: Alt+Shift+A lazy-load axe 4.10 → console.table violations, для CI можно добавить npm axe.
 
 **Метрики:** 76/0/0, 3517/0, dark intact, focus AA, view-transitions kept.
+
+## Sprint v9 — Editorial Clarity & Motion Refinement (2026-11-02, branch arena/a61b8719)
+
+**Shared Chat v9:**
+- Architect: Глобальный аудит 76 страниц показал: scroll-progress оставил мёртвый DOM, editorial prose без лимита 72ch → тяжело читать длинные статьи, kanban hover без глубины, фокус-кольцо слабое, индикатор без anchor-прогрессии.
+- Visual: Prose 72ch + 1.75 interline + balance headings, блокquote accent, code 12px mono, cards 16px + shadow 0 4px 12px rgba(16,24,40,.05) → hover 0 8px 20px .08, kanban колонки + shadow, #F8F9FA сохранён.
+- Motion: Индикатор spring 360ms cubic-bezier(.34,1.56,.64,1) + @supports anchor-name progressive (top/height 400ms spring), kanban lift 2px, focus-visible 2px accent.
+- Integrator: Проверка 3517/0, audit 76/0/0, reduced-motion intact, scroll-progress остаётся hidden per spec (to-top button), view-transitions 180/220ms kept, dark intact. Утверждено.
+
+**Что сделано:**
+1. Навигация: индикатор Motion Primitives spring + anchor-positioning progressive.
+2. Дашборд: kanban 3-кол polish + shadows + responsive.
+3. Стилистика: editorial prose 72ch, Soft UI 16px shadow 0 4px 12px, focus-visible AA.

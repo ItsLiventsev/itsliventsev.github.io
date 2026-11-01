@@ -62,8 +62,12 @@ body.ws-ready {
   opacity: 0;
   pointer-events: none;
   transform: translateY(0);
-  transition: transform 320ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease, height 200ms ease;
+  transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 200ms ease, height 200ms ease;
   will-change: transform;
+}
+@supports (anchor-name: --ws-active) {
+  .ws-nav-link[aria-current="page"] { anchor-name: --ws-active; }
+  .ws-nav-indicator { position-anchor: --ws-active; top: anchor(top); height: anchor-size(height); transform: none; transition: top 400ms cubic-bezier(.34,1.56,.64,1), height 200ms ease, opacity 200ms ease; }
 }
 .ws-nav-group:hover .ws-nav-indicator,
 .ws-nav-group:focus-within .ws-nav-indicator { opacity: 1; }
