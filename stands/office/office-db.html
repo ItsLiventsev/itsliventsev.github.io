@@ -11,13 +11,13 @@
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=20261031bc">
-<link rel="stylesheet" href="../../assets/stands.css?v=20261031bc">
-<link rel="stylesheet" href="../../assets/ops.css?v=20261031bc">
-<link rel="stylesheet" href="../../assets/office.css?v=20261031bc">
-<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031bc">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/site.css?v=20261031bd">
+<link rel="stylesheet" href="../../assets/stands.css?v=20261031bd">
+<link rel="stylesheet" href="../../assets/ops.css?v=20261031bd">
+<link rel="stylesheet" href="../../assets/office.css?v=20261031bd">
+<link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031bd">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/office/office-db.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -119,12 +119,12 @@
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=20261031bc"></script>
-<script src="../../assets/office-engine.js?v=20261031bc"></script>
-<script src="../../assets/dom-kit.js?v=20261031bc"></script>
-<script src="../../assets/stands.js?v=20261031bc"></script>
+<script src="../../assets/mascots.js?v=20261031bd"></script>
+<script src="../../assets/office-engine.js?v=20261031bd"></script>
+<script src="../../assets/dom-kit.js?v=20261031bd"></script>
+<script src="../../assets/stands.js?v=20261031bd"></script>
 <script type="application/json" id="office-data">{"id":"office-db","sprint":4,"hours":"5 ч","coins":"85","mascot":"wolf","who":"волк Тихон — держит базы в порядке: ключи, связи и никакого дубляжа","title":"Работа с базами данных","lead":"Таблицы и связи, нормализация, формы, запросы (QBE и SQL), отчёты в LibreOffice Base и Access.","story":"Учебная часть вела записи в одной гигантской таблице: один студент дублировался в шести строках, а опечатка в названии группы ломала фильтры. Тихон разбирает базу по нормальным таблицам со связями «один ко многим», формы для ввода и запросы, которые отвечают на вопросы без ручного перебора.","theory":[{"h":"Таблицы, ключи и нормализация","p":"Каждая сущность — своя таблица: студенты, группы, работы. Первичный ключ однозначно задаёт запись, внешний ключ ссылается на неё из другой таблицы. Первая нормальная форма убирает списки в ячейке, вторая убирает повторяющиеся факты — дубликаты исчезают.","code":"-- пример связи и запроса\nCREATE TABLE groups (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL\n);\n-- students.group_id -> groups.id"},{"h":"Формы и проверка ввода","p":"Форма — дружелюбный ввод данных вместо голой таблицы: выпадающие списки, обязательные поля, маски. Ограничения на уровне таблицы не пускают NULL в ключевое поле и неверные форматы даты.","note":"Целостность данных защищают на входе: исправлять опечатки в тысяче строк в разы дороже."},{"h":"Запросы и отчёты","p":"QBE-конструктор собирает запрос кликами, SQL — тот же запрос текстом: SELECT с JOIN связывает таблицы, WHERE фильтрует, GROUP BY считает итоги. Отчёт форматирует выдачу для печати с группировкой и итогами.","code":"SELECT g.name, COUNT(s.id) AS students\nFROM groups g\nLEFT JOIN students s ON s.group_id = g.id\nGROUP BY g.name\nORDER BY students DESC;"}],"reference":[{"lo":"LibreOffice Base","ms":"Microsoft Access","what":"настольная СУБД с формами"},{"lo":"Инструменты · Связи","ms":"Работа с базами · Схема данных","what":"визуальные связи таблиц"},{"lo":"Создание · Форма","ms":"Создание · Мастер форм","what":"ввод через интерфейс"},{"lo":"Запрос в режиме конструктора (QBE)","ms":"Конструктор запросов","what":"выборки без написания SQL"},{"lo":"Запрос на SQL","ms":"Запрос SQL","what":"JOIN, WHERE, GROUP BY"},{"lo":"Отчёты · Мастер отчётов","ms":"Создание · Мастер отчётов","what":"печать с итогами"}],"tasks":[{"id":"t1","text":"Спроектируйте 3–4 таблицы (студенты, группы, работы, оценки) с первичными ключами"},{"id":"t2","text":"Постройте связи один-ко-многим и включите целостность данных"},{"id":"t3","text":"Заполните 15–20 записей через форму со списками и обязательными полями"},{"id":"t4","text":"Соберите QBE-запрос: фильтр по группе и сортировка по дате"},{"id":"t5","text":"Напишите SQL с JOIN и GROUP BY: число студентов по группам"},{"id":"t6","text":"Сформируйте отчёт с группировкой и итогами, экспортируйте в PDF"}],"quiz":[{"q":"Зачем данные раскладывают по разным таблицам со связями?","options":["Чтобы было сложнее","Убрать дубли и обеспечить целостность","Чтобы замедлить запросы","Это устаревший приём"],"answer":1,"explain":"Нормализация устраняет повторяющиеся факты: правка названия группы происходит в одной записи."},{"q":"Что такое внешний ключ?","options":["Пароль к базе","Поле, ссылающееся на первичный ключ другой таблицы","Резервная копия","Тип шрифта"],"answer":1,"explain":"Внешний ключ строит связь один-ко-многим и не даёт ссылаться на несуществующую запись."},{"q":"Форма в базе данных нужна, чтобы…","options":["Украсить таблицу","Вводить данные контролируемо: списки, маски, обязательные поля","Удалить связи","Заменить запросы"],"answer":1,"explain":"Форма ловит ошибки на входе и делает ввод доступным неподготовленному пользователю."},{"q":"Что делает SQL-конструкция GROUP BY?","options":["Удаляет группы","Сворачивает строки в группы и считает по ним итоги","Группирует окна приложения","Сортирует по алфавиту только"],"answer":1,"explain":"GROUP BY в паре с COUNT/SUM даёт сводки, например число студентов в каждой группе."}],"reflection":["Какой список в учебной части вы первым делом превратили бы в базу?","Какие ошибки ввода отсеет форма, но не голая таблица?","Как объяснить разницу между запросом и отчётом коллеге?"],"sprintTitle":"Графика и базы"}</script>
-<script src="../../assets/office-kit.js?v=20261031bc"></script>
-<script src="../../assets/shared-chrome.js?v=20261031bc"></script>
+<script src="../../assets/office-kit.js?v=20261031bd"></script>
+<script src="../../assets/shared-chrome.js?v=20261031bd"></script>
 </body>
 </html>
