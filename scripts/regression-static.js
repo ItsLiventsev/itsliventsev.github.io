@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031be';
+const VERSION = '20261031bf';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Source+Serif+4:ital,opsz,wght@0,8..60,600') && c.includes('Golos+Text:wght@400'), f + ': нет пары SOFT Source Serif 4+Golos Text');
-  ok(!c.includes('?v=20261031bd') && !c.includes('?v=20261031bc') && !c.includes('?v=20261031bb'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031be') && !c.includes('?v=20261031bd') && !c.includes('?v=20261031bc'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -563,7 +563,7 @@ ok(stCss.includes('--st-accent: #a83a12') && stCss.includes('--st-accent: #ff8a5
 ok(stCss.includes('--st-accent: #fb923c') && !stCss.includes('#fcd34d'), 'stands.css: янтарный (жёлтый) акцент офиса не переведён на оранжевый');
 ok(stCss.includes('.uni-card--netpolis { --card-accent: #0f766e; }'), 'stands.css: карточка СетПолиса не на teal');
 ok(!read('projects.html').includes('system-badge') && !read('projects.html').includes('#3b82f6') && !read('projects.html').includes('#2563eb'), 'projects.html: остались бейдж system:// или синие акценты');
-ok(siteCss.includes('.tag-blue   { color: #cf4a18;'), 'site.css: tag-blue не перекрашен');
+ok(siteCss.includes('.tag-verm   { color: var(--tone-verm);') && !siteCss.includes('.tag-blue'), 'site.css: tag-verm не на токене / остался tag-blue');
 
 /* дизайн 2026 · волна 9: polish — находки аудита */
 const twCompiled = exists('assets/tw-compiled.css') ? read('assets/tw-compiled.css') : '';
@@ -619,7 +619,7 @@ for (const f of ['projects.html', 'archive.html', 'stands/index.html', 'projects
 }
 ok(read('articles.html').includes('class="stat-num"') && siteCss.includes('.stat-num'), 'articles: стат-цифры не в дисплейной гарнитуре');
 ok(!read('articles.html').includes('text-blue-600') && !read('index.html').includes('text-emerald-600'), 'жёсткие цвета стат/маркеров не вычищены');
-ok(siteCss.includes('.cursor-purple { color: #c2527a; }') && siteCss.includes('.cursor-orange { color: #96602a; }'), 'site.css: курсоры терминала не переведены на палитру');
+ok(!siteCss.includes('.cursor-purple') && !siteCss.includes('.cursor-orange') && !siteCss.includes('.cursor-red') && !siteCss.includes('.cursor-blue'), 'site.css: мёртвые курсоры терминала не удалены');
 ok(siteCss.includes('.scroll-progress {\n  height: 3px;\n  background: var(--neo-verm);'), 'site.css: прогресс чтения не в NEO');
 ok(siteCss.includes('#to-top {\n  border-radius: var(--radius-sm);\n  border: 2px solid var(--neo-ink);'), 'site.css: кнопка наверх не в NEO');
 
@@ -631,8 +631,8 @@ ok(!staleHex.test(stCss), 'stands.css: остались hex старой пал�
 ok(siteCss.includes('.light-band {\n  background: var(--neo-surface);') && siteCss.includes('.color-band {\n  border-radius: var(--radius);\n  padding: clamp(1.5rem, 3vw, 2rem);\n  background: linear-gradient(135deg, var(--neo-leaf-tint), var(--neo-rose-tint));'), 'site.css: банды esports не переведены на NEO');
 ok(siteCss.includes('radial-gradient(circle at 72% 18%, rgba(95, 133, 82, .4)') && siteCss.includes('box-shadow: var(--neo-hard);\n  display: flex;'), 'site.css: hero-panel не переведён на NEO-дуотон');
 ok(siteCss.includes('--aur-violet: #c2527a;'), 'site.css: фиолетовое поле aurora не переведено на розу');
-ok(siteCss.includes('.game-hs   { color: #96602a;') && siteCss.includes('.game-lol  { color: #cf4a18;'), 'site.css: игровые теги не в палитре');
-ok(siteCss.includes('.split-bar .seg-theory { background: linear-gradient(90deg, #cf4a18, #96602a); }'), 'site.css: сплит-бар не в палитре');
+ok(siteCss.includes('.game-hs   { color: var(--tone-cocoa);') && siteCss.includes('.game-lol  { color: var(--tone-verm);'), 'site.css: игровые теги не на токенах');
+ok(siteCss.includes('.split-bar .seg-theory { background: linear-gradient(90deg, var(--tone-verm), var(--tone-cocoa)); }'), 'site.css: сплит-бар не на токенах');
 ok(!siteCss.includes('text-indigo'), 'site.css: мёртвые tailwind-переопределения индиго живы');
 
 /* дизайн 2026 · волна 12: typо — дисплейная типографика чтения */
@@ -650,7 +650,7 @@ ok(!siteCss.includes('linear-gradient(115deg, var(--accent) 15%') && !siteCss.in
 ok(!siteCss.includes('0 12px 28px -12px color-mix(in srgb, var(--accent)') && !stCss.includes('0 12px 28px -12px color-mix(in srgb, var(--st-accent)'), 'глоу-хвост волны 4 на btn-primary/flat-btn жив');
 ok(!stCss.includes('0 6px 18px -8px var(--st-accent)') && !stCss.includes('0 14px 30px -18px color-mix(in srgb, var(--st-accent)'), 'стенды: мягкие свечения кнопок/карточек наград живы');
 ok(siteCss.includes('.quick-bubble {') && siteCss.includes('.quick-bubble:active { transform: translate(2px, 2px);'), 'site.css: quick-bubble не в единой системе нажатия');
-ok(siteCss.includes('color: #fff !important;\n  box-shadow: var(--neo-hard-sm);\n}'), 'site.css: is-active фильтр без жёсткой тени');
+ok(siteCss.includes('color: var(--tone-contrast) !important;\n  box-shadow: var(--neo-hard-sm);\n}'), 'site.css: is-active фильтр не на токенах');
 ok(stCss.includes('.flat-btn:hover:not([disabled]),\n.flat-btn:focus-visible:not([disabled]) {\n  transform: translate(-2px, -2px);'), 'stands.css: нет финального слова каскада для flat-btn');
 ok(stCss.includes('.theme-toggle:active { transform: translate(1px, 1px);'), 'stands.css: theme-toggle вне системы нажатия');
 ok(siteCss.includes('.light-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--neo-ink); }'), 'site.css: light-card hover не в NEO');
@@ -796,7 +796,7 @@ ok(siteCss.includes('--neo-paper: #f7f6f2;') && siteCss.includes('--neo-surface:
 ok(siteCss.includes('--neo-hard: 0 4px 20px rgba(20, 18, 12, .05);') && siteCss.includes('--shadow-hover: 0 14px 36px rgba(20, 18, 12, .10);'), 'site.css: жёсткие офсеты не заменены мягкими тенями');
 ok(siteCss.includes('--border: rgba(26, 22, 12, .10);') && siteCss.includes('--border-strong: rgba(26, 22, 12, .22);'), 'site.css: рамки не переведены на hairline');
 ok(/body \{ background-image: none; \}/.test(siteCss), 'site.css: aurora-тинты фона не выключены');
-ok(siteCss.includes('.btn-primary { background: var(--neo-ink); border-color: transparent; color: #fff; }'), 'site.css: primary-кнопка не тёмная pill');
+ok(siteCss.includes('.btn-primary { background: var(--neo-ink); border-color: transparent; color: var(--tone-contrast); }'), 'site.css: primary-кнопка не тёмная pill');
 ok(siteCss.includes('border-radius: 999px;\n  box-shadow: 0 2px 10px rgba(20, 18, 12, .05);'), 'site.css: кнопки не в pill-системе с мягкой тенью');
 ok(/\.hero-title, \.article-title, \.zone-title, \.esp-title,\n\.prose-neo h2, \.prose-measure h2, \.prose-measure article h2 \{\s*text-shadow: none;\s*-webkit-text-stroke: 0;/.test(siteCss), 'site.css: дисплей-заголовки не сняты с контура/сдвигов');
 ok(siteCss.includes('.giant-word, .giant-word--right {\n  color: rgba(26, 22, 12, .05);'), 'site.css: гигантские слова не переведены в ghost');
@@ -826,6 +826,29 @@ const crumbArchives = ['computer-networks', 'info-encoding', 'intro-to-databases
 const noCrumbs = crumbArchives.filter(n => !read('archive/' + n + '.html').includes('class="crumbs mb-6"'));
 ok(noCrumbs.length === 0, 'крошки отсутствуют в методичках: ' + noCrumbs.join(', '));
 ok(read('AUDIT_REPORT.md').includes('Фаза 2 (волна 24, выполнена)'), 'AUDIT_REPORT: фаза 2 не отмечена выполненной');
+
+
+/* дизайн 2026 · волна 25: TOKENS — тона, шкала дисплея, Avatar, чистка */
+for (const t of ['--tone-ink', '--tone-ink-hover', '--tone-contrast', '--tone-verm:', '--tone-verm-ink', '--tone-verm-bright', '--tone-rose:', '--tone-rose-ink', '--tone-rose-bright', '--tone-cocoa:', '--tone-cocoa-ink', '--tone-cocoa-bright', '--tone-sage:', '--tone-sage-ink', '--tone-sage-bright']) {
+  ok(siteCss.includes(t), 'site.css: нет тона-токена ' + t);
+}
+for (const t of ['--ds-hero', '--ds-1:', '--ds-2:', '--ds-3:', '--ds-4:', '--lh-hero', '--lh-zone', '--lh-article', '--lh-h2', '--ls-display']) {
+  ok(siteCss.includes(t), 'site.css: нет токена шкалы ' + t);
+}
+ok(siteCss.includes('.hero-title { font-size: var(--ds-hero);') && siteCss.includes('.zone-title { font-size: var(--ds-1);') && siteCss.includes('.article-title { font-size: var(--ds-2);'), 'site.css: шкала не приложена к hero/зонам/статье');
+ok(/\.prose-neo h2, \.prose-measure h2, \.prose-measure article h2 \{\s*font-size: var\(--ds-3\);/.test(siteCss) && siteCss.includes('.p-title, .note-title, .pub-title, .admin-card-title { font-size: var(--ds-4); }'), 'site.css: шкала не приложена к секциям/титулам');
+for (const hx of ['#1d4ed8', '#4ade80', '#e4e4e7', '#5f8552;', '#71717a', '#18181b', '#f4efe4;', '#3a3526;', '#e4572e', '#0b0b0e', '#1e1b4b', '#e0e7ff']) {
+  ok(!siteCss.split('\n').filter(l => !(l.includes('--') && l.includes(':') && l.includes('#'))).some(l => l.includes(hx)), 'site.css: легаси-хекс не дотокенизирован: ' + hx);
+}
+for (const d of ['.cta-card', '.stub-mark', '.stub-note', '.icon-tile', '.pull-quote', '.footnotes', '.surface-translucent', '.summary-card', '.article-body', '.fig-cap', 'text-blue-600', 'text-emerald-600', 'text-red-500', 'text-rose-600', 'bg-red-50', 'border-red-200']) {
+  ok(!siteCss.includes(d), 'site.css: мёртвый селектор не удалён: ' + d);
+}
+ok(siteCss.includes('.brand-cursor, #title-mark, .cursor-green {'), 'site.css: text-fill-исключение потеряно при чистке');
+ok(siteCss.includes('.avatar {') && siteCss.includes('.avatar-verm') && siteCss.includes('.avatar-sage') && siteCss.includes('.avatar-cocoa') && siteCss.includes('.article-authors'), 'site.css: компонент Avatar неполон');
+const art25 = read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html');
+ok(art25.includes('class="article-authors"') && (art25.match(/class="avatar avatar-/g) || []).length === 3 && art25.includes('aria-hidden="true"'), 'статья: авторы не на чипах с Avatar (3 шт)');
+ok(siteCss.includes('.tag-verm   { color: var(--tone-verm);') && !siteCss.includes('.tag-blue'), 'site.css: tag-verm/tag-blue не решены');
+ok(siteCss.includes('.notice-info .notice-label { color: var(--nav-mint-ink); }'), 'site.css: синий лейбл notice-info не выведен');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

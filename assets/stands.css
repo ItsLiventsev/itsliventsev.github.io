@@ -1286,7 +1286,7 @@ a.quest-card { text-decoration: none; color: inherit; }
 /* ==========================================================================
    15. Светлая топ-панель, футер и адаптация хрома страницы под тему
    ========================================================================== */
-html[data-theme="light"] .st-brand-mark { background: #fff; }
+html[data-theme="light"] .st-brand-mark { background: var(--tone-contrast); }
 html[data-theme="light"] .flat-profile,
 html[data-theme="light"] .step-nav { background: var(--st-panel); }
 html[data-theme="light"] .st-footer { color: var(--st-faint); }
@@ -2293,7 +2293,7 @@ html[data-theme="dark"] .uni-card--office { --card-accent: #fb923c; border-color
   border-radius: var(--st-radius); padding: var(--st-sp-1) var(--st-sp-3);
   min-height: 2.75rem; cursor: pointer;
 }
-.resume-card-reset:hover { color: var(--st-bad, #b91c1c); border-color: var(--st-bad, #b91c1c); }
+.resume-card-reset:hover { color: var(--st-bad, var(--tone-verm-ink)); border-color: var(--st-bad, var(--tone-verm-ink)); }
 
 /* ==========================================================================
    Дизайн 2026 · волна 2: aurora-фон, градиентные заголовки, свечение
@@ -2593,7 +2593,7 @@ html[data-theme="light"] body.flat-scope {
 .flat-btn { background: var(--st-btn-bg); }
 .zt-serif { font-style: normal; }
 .flat-scope h1 {
-  text-shadow: 4px 4px 0 color-mix(in srgb, var(--st-accent, #ff8a54) 34%, transparent);
+  text-shadow: 4px 4px 0 color-mix(in srgb, var(--st-accent, var(--tone-verm-bright)) 34%, transparent);
 }
 
 /* Ссылки контента: чернила с коралловым маркером на hover */
