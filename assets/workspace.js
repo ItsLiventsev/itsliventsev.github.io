@@ -47,13 +47,13 @@
       return cleanLabel(heading.innerText || heading.textContent).length > 1;
     });
     const seen = new Set();
-    const sectionNav = document.createElement('nav');
-    sectionNav.className = 'ws-section-nav'; sectionNav.dataset.wsOnPageNav = 'true';
-    sectionNav.setAttribute('aria-label', 'На этой странице');
+    const sectionGroup = document.createElement('div');
+    sectionGroup.className = 'ws-nav-group'; sectionGroup.dataset.variant='onpage'; sectionGroup.dataset.wsOnPageNav='true';
     const sectionCaption = document.createElement('p');
-    sectionCaption.className = 'ws-section-nav-label';
-    sectionCaption.textContent = 'На этой странице';
-    sectionNav.appendChild(sectionCaption);
+    sectionCaption.className = 'ws-sidebar-caption'; sectionCaption.textContent = 'На этой странице';
+    sectionGroup.appendChild(sectionCaption);
+    const sectionNav = document.createElement('nav');
+    sectionNav.className = 'ws-section-nav ws-nav'; sectionNav.setAttribute('aria-label', 'На этой странице');
     headings.forEach((heading, index) => {
       let id = heading.id;
       if (!id) {
@@ -72,7 +72,7 @@
       link.textContent = sentenceCase(heading.innerText || heading.textContent);
       sectionNav.appendChild(link);
     });
-    if (seen.size > 1) sidebar.appendChild(sectionNav);
+    if (seen.size > 1) { sectionGroup.appendChild(sectionNav); sidebar.appendChild(sectionGroup); if (sidebar._attachIndicator) sidebar._attachIndicator(sectionNav); }
   }
   function generatedBreadcrumbs() {
     if (!isNestedPage) return null;
@@ -155,25 +155,61 @@
   collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = iconMarkup('chevron-left');
   sidebarHead.append(brand, collapse);
   sidebar.appendChild(sidebarHead);
-  const caption = document.createElement('p');
-  caption.className = 'ws-sidebar-caption'; caption.textContent = 'РАЗДЕЛЫ САЙТА'; sidebar.appendChild(caption);
-  const nav = document.createElement('nav'); nav.className = 'ws-nav'; nav.setAttribute('aria-label', 'Основные разделы');
+  // — Agentic redesign: three visually separated pill groups with moving indicator
+  function attachIndicator(navEl) {
+    const indicator = document.createElement('div');
+    indicator.className = 'ws-nav-indicator';
+    indicator.setAttribute('aria-hidden','true');
+    navEl.prepend(indicator);
+    let active = navEl.querySelector('[aria-current="page"]');
+    const links = [...navEl.querySelectorAll('.ws-nav-link, .ws-section-link')];
+    if (!links.length) return;
+    function moveTo(el) {
+      if (!el || !navEl.contains(el)) return;
+      const top = el.offsetTop;
+      const h = el.offsetHeight;
+      indicator.style.transform = 'translateY(' + top + 'px)';
+      indicator.style.height = h + 'px';
+      navEl.classList.add('is-indicator-active');
+    }
+    function leave() {
+      if (active) moveTo(active); else { indicator.style.opacity='0'; navEl.classList.remove('is-indicator-active'); }
+    }
+    if (active) requestAnimationFrame(()=> moveTo(active));
+    links.forEach(link=>{
+      link.addEventListener('mouseenter', ()=> { link.classList.add('is-hovered'); moveTo(link); });
+      link.addEventListener('mouseleave', ()=> { link.classList.remove('is-hovered'); });
+      link.addEventListener('focus', ()=> moveTo(link));
+    });
+    navEl.addEventListener('mouseleave', leave);
+    navEl.addEventListener('focusout', ()=> { setTimeout(leave, 10); });
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(()=> { if (active) moveTo(active); });
+      ro.observe(navEl);
+    }
+  }
+  const generalGroup = document.createElement('div'); generalGroup.className='ws-nav-group'; generalGroup.dataset.variant='general';
+  const caption = document.createElement('p'); caption.className='ws-sidebar-caption'; caption.textContent='Общее меню'; generalGroup.appendChild(caption);
+  const nav = document.createElement('nav'); nav.className='ws-nav'; nav.setAttribute('aria-label', 'Основные разделы');
   navItems.forEach(item => {
-    const link = document.createElement('a'); link.href = item.href; link.className = 'ws-nav-link';
-    if (item.test(pathname)) link.setAttribute('aria-current', 'page');
-    const icon = document.createElement('span'); icon.className = 'ws-nav-icon'; icon.setAttribute('aria-hidden', 'true');
-    icon.innerHTML = iconMarkup(icons[item.icon]);
-    const label = document.createElement('span'); label.className = 'ws-nav-label'; label.textContent = item.label;
-    link.append(icon, label); nav.appendChild(link);
+    const link = document.createElement('a'); link.href=item.href; link.className='ws-nav-link';
+    if (item.test(pathname)) link.setAttribute('aria-current','page');
+    const icon=document.createElement('span'); icon.className='ws-nav-icon'; icon.setAttribute('aria-hidden','true'); icon.innerHTML=iconMarkup(icons[item.icon]);
+    const label=document.createElement('span'); label.className='ws-nav-label'; label.textContent=item.label;
+    link.append(icon,label); nav.appendChild(link);
   });
-  sidebar.appendChild(nav);
+  generalGroup.appendChild(nav);
+  sidebar.appendChild(generalGroup);
+  attachIndicator(nav);
+
+  const learningGroup = document.createElement('div'); learningGroup.className='ws-nav-group ws-learning-links'; learningGroup.dataset.variant='directions';
+  learningGroup.innerHTML = '<p class="ws-sidebar-caption">Направления</p><nav class="ws-nav" aria-label="Направления"><a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a><a class="ws-nav-link" href="/stands/office/index.html"' + (pathname.startsWith('/stands/office') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-orange" aria-hidden="true"></span><span class="ws-nav-label">ОфисПолис</span></a><a class="ws-nav-link" href="/stands/ops/index.html"' + (pathname.startsWith('/stands/ops') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-blue" aria-hidden="true"></span><span class="ws-nav-label">ДатаПолис</span></a></nav>';
+  const learningNavInner = learningGroup.querySelector('.ws-nav');
+  sidebar.appendChild(learningGroup);
+  attachIndicator(learningNavInner);
+  sidebar._attachIndicator = attachIndicator;
+  // original section nav will be added after this as third group
   addSectionNavigation();
-  const learningNav = document.createElement('div'); learningNav.className = 'ws-learning-links';
-  learningNav.innerHTML = '<p class="ws-sidebar-caption">НАПРАВЛЕНИЯ</p>'
-    + '<a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a>'
-    + '<a class="ws-nav-link" href="/stands/office/index.html"' + (pathname.startsWith('/stands/office') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-orange" aria-hidden="true"></span><span class="ws-nav-label">ОфисПолис</span></a>'
-    + '<a class="ws-nav-link" href="/stands/ops/index.html"' + (pathname.startsWith('/stands/ops') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-blue" aria-hidden="true"></span><span class="ws-nav-label">ДатаПолис</span></a>';
-  sidebar.appendChild(learningNav);
   const sidebarBottom = document.createElement('div'); sidebarBottom.className = 'ws-sidebar-bottom';
   sidebarBottom.innerHTML = '<div class="ws-sidebar-card"><strong>Портфолио</strong><p>Проекты, публикации и практические материалы.</p></div>';
   sidebar.appendChild(sidebarBottom);
