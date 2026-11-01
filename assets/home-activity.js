@@ -127,7 +127,7 @@
     currentData = data;
     const value = data.count >= 100 ? '100+' : String(data.count);
     if (countNode) {
-      countNode.textContent = value;
+      if(window.__wsAnimateNumber) window.__wsAnimateNumber(countNode, parseInt(value,10)||0); else countNode.textContent = value;
       countNode.setAttribute('aria-label', words().count(data.count));
     }
     const latest = data.latest;
@@ -301,6 +301,52 @@
         }
       });
     });
+
+  // ── v14: BroadcastChannel для синхронизации канбана между вкладками ──
+  (function initKanbanSync(){
+    if (!('BroadcastChannel' in window) || !kanbanRoot) return;
+    var ch = new BroadcastChannel('ws-kanban-v14');
+    var STORAGE_KEY = 'ws:kanban:order:v13';
+    ch.onmessage = function(ev){
+      if (!ev.data || ev.data.type !== 'kanban:update') return;
+      // другой таб переместил — показываем мягкий индикатор
+      var note = root.querySelector('[data-ws-activity-status]');
+      if (note) { var prev=note.textContent; note.textContent='Канбан обновлён в другой вкладке · '+ new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}); setTimeout(function(){ note.textContent=prev; }, 2500); }
+    };
+    var origPersist = window.__wsKanbanPersist || null;
+    // Hook persist via mutation: observe storage
+    window.addEventListener('storage', function(e){
+      if (e.key === STORAGE_KEY) ch.postMessage({type:'kanban:update', at: Date.now()});
+    });
+    // Also post after local drop
+    var _post = function(){ try{ ch.postMessage({type:'kanban:update', at: Date.now()}); }catch(e){} };
+    // Wrap existing persist by listening to dragend globally
+    document.addEventListener('dragend', function(){ setTimeout(_post, 80); });
+  })();
+
+  // ── v14: number ticker для метрик (countNode) ──
+  (function initTicker(){
+    if (!countNode) return;
+    function animateNumber(el, to){
+      if (!el || isNaN(to)) return;
+      var from = 0;
+      var m = el.textContent.match(/\d+/);
+      if (m) from = parseInt(m[0],10) || 0;
+      if (from === to || reduceMotion) { el.textContent = to; return; }
+      var start = performance.now(), dur = 900;
+      function frame(now){
+        var p = Math.min(1, (now - start)/dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var cur = Math.round(from + (to - from)*eased);
+        el.textContent = String(cur);
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    // expose for dashboard fetch
+    window.__wsAnimateNumber = animateNumber;
+  })();
+
     updateCounts();
   })();
 

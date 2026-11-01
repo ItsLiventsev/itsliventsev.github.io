@@ -1001,3 +1001,13 @@ html { scroll-behavior: smooth; }
 
 /* ── v13: publication-row focus + keyboard ── */
 .ws-publication-row:focus-within { border-color: var(--ws-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ws-accent) 16%, transparent); }
+
+
+/* ── v14: metric ticker ── */
+[data-ws-activity-count] { font-variant-numeric: tabular-nums; transition: color 300ms ease; }
+[data-ws-activity-count].is-updating { color: var(--ws-accent); }
+
+/* ── v14: publication row improved hover (cozy) ── */
+.ws-publication-row { position: relative; overflow: hidden; }
+.ws-publication-row::before { content: ''; position: absolute; inset: 0 0 0 auto; width: 3px; background: var(--ws-accent); opacity: 0; transition: opacity 180ms; }
+.ws-publication-row:hover::before, .ws-publication-row:focus-within::before { opacity: 1; }
