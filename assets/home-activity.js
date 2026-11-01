@@ -39,7 +39,7 @@
   }
 
   const apiUrl = 'https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits';
-  const cacheKey = 'itsliventsev-home-activity-v1';
+  const cacheKey = 'itsliventsev-home-activity-v2';
   const freshForMs = 15 * 60 * 1000;
   const staleForMs = 24 * 60 * 60 * 1000;
   const windowMs = 30 * 24 * 60 * 60 * 1000;
@@ -98,27 +98,13 @@
   let activeFilter = 'all';
   setSkeleton(true);
 
-  // — feed mock data (Kokonut AI State like fast chips + Timeline)
-  const feedSeed = [
-    { id:'ui-refresh', tag:'frontend', status:'done', time:'2 мин назад', ago:2 },
-    { id:'feed-ticker', tag:'design', status:'done', time:'18 мин назад', ago:18 },
-    { id:'nav-indicator', tag:'frontend', status:'progress', time:'1 ч назад', ago:60 },
-    { id:'chart', tag:'infra', status:'done', time:'3 ч назад', ago:180 },
-    { id:'bento', tag:'design', status:'done', time:'сегодня 11:04', ago:300 },
-    { id:'a11y', tag:'frontend', status:'review', time:'сегодня 09:30', ago:420 },
-    { id:'perf', tag:'bugfix', status:'progress', time:'вчера', ago:900 },
-    { id:'content', tag:'content', status:'done', time:'вчера', ago:1000 },
-    { id:'timeline', tag:'ops', status:'done', time:'2 дня назад', ago:2880 },
-    { id:'docs', tag:'infra', status:'review', time:'3 дня назад', ago:4320 }
-  ];
-
   function statusLabel(kind) {
     const s = words().statuses;
     return s[kind] || s.done;
   }
   function titleOf(entry) {
     const dict = words().feedTitle[entry.id];
-    if (!dict) return entry.id;
+    if (!dict) return entry.title || entry.id;
     return language()==='en' ? dict.en : dict.ru;
   }
   function formatDate(value) {
@@ -380,10 +366,10 @@
       if (!list) return;
       list.innerHTML = groups[k].map(it => {
         const tagColor = { frontend:'var(--ws-blue-wash)', design:'var(--ws-violet-wash)', infra:'var(--ws-green-wash)', bugfix:'var(--ws-red-wash)', content:'var(--ws-mustard-wash)', ops:'var(--ws-slate-wash)' }[it.tag] || 'var(--ws-surface)';
-        return '<div data-kanban-card data-kanban-id="'+it.id+'" role="listitem" data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+(words().feedTitle[it.id]?.[language()]||it.id)+'</strong></div>';
+        return '<div data-kanban-card data-kanban-id="'+it.id+'" role="listitem" data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+escapeHtml(titleOf(it))+'</strong></div>';
       }).join('');
     });
-    // Restore the locally saved example board, without changing the public feed.
+    // Restore the saved board arrangement without changing the feed.
     try {
       const saved = JSON.parse(localStorage.getItem('ws:kanban:order:v13') || 'null');
       if (saved && saved.payload) Object.keys(kanbanLists).forEach(key => {
@@ -415,7 +401,25 @@
   }
 
   // — ticker + timeline renderer
-  let feedData = feedSeed.map(s=>({ ...s, status:s.status })); // clone
+  let feedData = [];
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
+  }
+  function classifyCommit(title) {
+    if (/fix|исправ|ошиб|баг/i.test(title)) return 'bugfix';
+    if (/design|style|css|дизайн|оформл|визуал/i.test(title)) return 'design';
+    if (/content|docs|текст|материал|документ/i.test(title)) return 'content';
+    if (/frontend|интерфейс|ui|верстк|навигац/i.test(title)) return 'frontend';
+    return 'update';
+  }
+  function updateFeed(commits) {
+    feedData = commits.filter(commit => commit && /^[a-f0-9]{40}$/i.test(commit.sha || '') && typeof commit.title === 'string' && commit.title && !Number.isNaN(Date.parse(commit.date))).slice(0, 15).map(commit => ({
+      id: commit.sha, title: commit.title, tag: classifyCommit(commit.title),
+      status: 'done', time: formatDate(commit.date), date: commit.date
+    }));
+    renderTicker(); renderTimeline(); renderKanban(feedData);
+    if (!feedData.length && timeline) timeline.textContent = language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.';
+  }
   function renderTicker() {
     if (!tickerTrack) return;
     tickerTrack.innerHTML='';
@@ -454,8 +458,8 @@
             <span data-ws-activity-tag role="button" tabindex="0" data-tag="${item.tag}">#${item.tag}</span>
             <span data-ws-activity-status data-kind="${item.status}">${statusLabel(item.status)}</span>
           </div>
-          <strong>${titleOf(item)}</strong>
-          <small>${item.time} · итерация #${String(idx+1).padStart(2,'0')}</small>
+          <strong><a href="https://github.com/ItsLiventsev/itsliventsev.github.io/commit/${item.id}" target="_blank" rel="noopener">${escapeHtml(titleOf(item))}</a></strong>
+          <small>GitHub · ${item.id.slice(0,7)}</small>
         </div>
         <time data-ws-activity-item-time>${item.time}</time>
       `;
@@ -519,7 +523,7 @@
     if (!Array.isArray(commits)) throw new TypeError('Unexpected GitHub response');
     const parsed = commits.map(item=>{
       const date = item && item.commit && ((item.commit.committer && item.commit.committer.date) || (item.commit.author && item.commit.author.date));
-      return item && /^[a-f0-9]{40}$/i.test(item.sha||'') && date && !Number.isNaN(Date.parse(date)) ? { sha:item.sha, date: new Date(date).toISOString() } : null;
+      return item && /^[a-f0-9]{40}$/i.test(item.sha||'') && date && !Number.isNaN(Date.parse(date)) ? { sha:item.sha, date: new Date(date).toISOString(), title: String(item.commit.message || '').split('\n')[0].slice(0, 200) } : null;
     }).filter(Boolean);
     commitsCache = parsed;
     return { count: parsed.length, latest: parsed[0]||null };
@@ -539,12 +543,13 @@
       saveCache(data, commitsCache);
       render(data, data.count ? 'ready' : 'empty');
       renderChart(commitsCache);
+      updateFeed(commitsCache);
     } finally { clearTimeout(timeout); }
   }
 
   // initial paint
   renderTicker();
-  renderTimeline();
+  if (timeline) timeline.textContent = language() === 'en' ? 'Loading changes…' : 'Загружаю изменения…';
   renderKanban(feedData);
   renderChart([]);
   // — animated cycle (Agent-Motion: sequential highlight + dash flow)
@@ -572,17 +577,18 @@
     const state = cached.age < freshForMs ? 'cached' : 'stale';
     render(cached.data, state);
     renderChart(commitsCache);
+    updateFeed(commitsCache);
   } else setState('loading');
 
   if (!cached || cached.age >= freshForMs) loadActivity().catch(()=>{
     if (currentData) setState('stale');
-    else setState('error');
+    else { setState('error'); if (timeline) timeline.textContent = language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'; }
     renderChart(commitsCache);
   });
 
   window.addEventListener('itsliventsev:languagechange', ()=>{
     if (currentData) render(currentData, currentState); else setState(currentState);
-    renderTicker(); renderTimeline(); renderKanban(feedData); renderChart(commitsCache);
+    updateFeed(commitsCache); renderChart(commitsCache);
   });
 
 })();

@@ -1,5 +1,5 @@
 // itsliventsev PWA — offline stands + dashboard, 2026 (v2)
-const CACHE = 'itsliventsev-v3';
+const CACHE = 'itsliventsev-v4';
 const PRECACHE = [
   '/', '/index.html',
   '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
