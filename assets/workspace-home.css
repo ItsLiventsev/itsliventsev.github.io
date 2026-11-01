@@ -80,3 +80,16 @@
 @media (max-width: 1100px) { .ws-skill-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ws-home-hero { grid-template-columns: minmax(0, 1.4fr) minmax(230px, .8fr); } }
 @media (max-width: 800px) { .ws-home-hero, .ws-dashboard-grid { grid-template-columns: 1fr; } .ws-learning-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ws-course-card:last-child { grid-column: 1 / -1; } .ws-experience-grid { grid-template-columns: 1fr 1fr; } .ws-experience-grid > :last-child { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .ws-home-copy { min-height: 0; padding: 24px 20px; } .ws-home-copy h1 { font-size: 34px; } .ws-home-copy > p { font-size: 12px; } .ws-overview-card { padding: 18px; } .ws-learning-grid, .ws-skill-grid, .ws-resource-grid, .ws-experience-grid, .ws-contact-grid { grid-template-columns: 1fr; } .ws-course-card:last-child, .ws-experience-grid > :last-child { grid-column: auto; } .ws-section { margin-top: 26px; } .ws-section-heading { align-items: flex-start; } .ws-section-heading h2 { font-size: 18px; } .ws-section-heading > .ws-inline-link { font-size: 10px; white-space: nowrap; } .ws-home-root > .ws-footer { margin-inline: 14px; } }
+
+/* Compact, factual author summary: numbers and labels have distinct visual weight. */
+[data-ws-profile-list] { gap: 12px; }
+[data-ws-profile-list] > div { grid-template-columns: minmax(78px,.72fr) minmax(0,1.28fr); gap: 10px; }
+[data-ws-profile-list] > div:first-child strong { color: var(--ws-accent); font-size: 21px; }
+[data-ws-profile-list] > div:not(:first-child) strong { color: var(--ws-ink-soft); font-size: 12px; font-weight: 750; letter-spacing: 0; }
+[data-ws-profile-list] span { line-height: 1.5; }
+.ws-resource-row { border-radius: 9px; transition: background var(--ws-motion), transform var(--ws-motion); }
+.ws-resource-row:hover { background: var(--ws-surface-soft); transform: translateX(2px); }
+@media (max-width: 560px) {
+  [data-ws-profile-list] > div { grid-template-columns: minmax(76px,.6fr) minmax(0,1.4fr); }
+  .ws-resource-row:hover { transform: none; }
+}

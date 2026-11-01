@@ -31,9 +31,9 @@ ok(stands.length === 52, 'ожидалось 52 учебных маршрута,
 for (const file of contentPages) {
   const source = read(file);
   ok(source.includes('/assets/workspace-tokens.css?v=20261101r4'), file + ': отсутствуют новые токены');
-  ok(source.includes('/assets/workspace.css?v=20261101r4'), file + ': отсутствует новая система компонентов');
-  ok(source.includes('/assets/workspace-learning.css?v=20261101r4'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261101r4'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('/assets/workspace.css?v=20261101r5'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261101r5'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261101r5'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
@@ -95,11 +95,19 @@ ok(!read('assets/shared-chrome.js').includes('window.scrollTo(0, start + delta *
 ok(!shell.includes("mark.textContent = 'i'") && !ui.includes('.ws-brand-mark'), 'в общей навигации остался монограммный I вместо ника');
 ok(ui.includes(':root[data-theme="dark"] :is([data-ws-action="primary"], .ws-button-primary)') && ui.includes('color: var(--ws-canvas) !important'), 'dark-mode primary controls need readable text contrast');
 const homePage = read('index.html');
-ok(homePage.includes('Обучаю будущих') && homePage.includes('сети и системное администрирование') && homePage.includes('технологии искусственного интеллекта') && !homePage.includes('Ваше пространство'), 'главная должна спокойно представлять автора и его профессиональные направления');
+ok(homePage.includes('Помогаю студентам') && homePage.includes('осваивать сети и системы') && homePage.includes('изучаю постепенно') && !homePage.includes('<strong>СПО</strong>') && !homePage.includes('<strong>IT</strong>') && !homePage.includes('Ваше пространство'), 'главная должна спокойно и конкретно представлять автора без бессмысленно выделенных сокращений');
 ok(homePage.indexOf('ws-dashboard-grid') < homePage.indexOf('learning-title'), 'персональный профиль и проекты должны идти до блока пространств');
+ok(shell.includes('wsSidebarBrand') && shell.includes('РАЗДЕЛЫ САЙТА') && shell.includes("label: 'Архив'"), 'у боковой навигации должен быть брендинг, непустая шапка и согласованные названия разделов');
+ok(shell.includes('isNestedPage') && !shell.includes('decodeURIComponent(pathname'), 'верхнеуровневые страницы не должны повторять заголовок, а fallback не должен показывать pathname');
+ok(shell.includes('generatedBreadcrumbs') && shell.includes('На этой странице'), 'контекстная навигация должна строить breadcrumbs и оглавление текущей страницы');
+ok(read('archive.html').includes('<span class="ht-word">Архив</span>') && read('archive.html').includes('Учебные программы и методика'), 'архив должен использовать единый регистр и новые названия категорий');
+ok(read('projects/esports.html').includes('data-ws-esports-strip') && !read('projects/esports.html').includes('marquee-content'), 'список дисциплин в киберспорте не должен дублироваться');
+ok(learningUi.includes('[data-ws-esports-hero]') && learningUi.includes('[data-ws-esports-strip]'), 'странице киберспорта нужны компоненты новой системы');
+ok(ui.includes('[data-ws-callout]') && ui.includes('[data-ws-archive-summary]'), 'общая архитектура должна оформлять дисклеймеры и адаптивные архивные карточки');
 for (const id of ['about', 'projects', 'practice', 'resources', 'experience', 'contact']) {
-  ok(homePage.includes('id="' + id + '"') && shell.includes("['" + id + "'"), 'главная: отсутствует якорь локальной навигации ' + id);
+  ok(homePage.includes('id="' + id + '"'), 'главная: отсутствует якорь локальной навигации ' + id);
 }
+ok(shell.includes("main.querySelectorAll('h2')") && shell.includes('addSectionNavigation') && shell.includes('ws-section-link'), 'оглавление должно динамически собираться из заголовков текущей страницы');
 for (const font of ['manrope-cyrillic-wght-normal.woff2', 'manrope-latin-wght-normal.woff2', 'jetbrains-mono-cyrillic-wght-normal.woff2', 'jetbrains-mono-latin-wght-normal.woff2']) {
   ok(exists('assets/fonts/' + font) && tokens.includes(font), 'локальный набор шрифтов неполон: ' + font);
 }
@@ -121,11 +129,11 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261101r4', 'assets/workspace-learning.css?v=20261101r4', 'assets/workspace.js?v=20261101r4']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261101r5', 'assets/workspace-learning.css?v=20261101r5', 'assets/workspace.js?v=20261101r5']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r4') && officeBuilder.includes('assets/workspace.js?v=20261101r4'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace.css?v=20261101r5') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r5') && officeBuilder.includes('assets/workspace.js?v=20261101r5'), 'build-office.js: генератор не создаёт страницы на новом shell');
 for (const [name, template] of [['admin.js', adminTemplate], ['build-office.js', officeBuilder]]) {
   ok(template.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !template.includes('fonts.googleapis.com'), name + ': generated pages must use local fonts without Google Fonts');
 }
