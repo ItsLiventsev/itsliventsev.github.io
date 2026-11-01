@@ -351,3 +351,88 @@
   [data-ws-activity-ticker-label] { display:none; }
   [data-ws-activity-ticker-track] { padding-left:0; }
 }
+
+/* v2: ЦИКЛ РАБОТЫ + Лента рядом в 2 колонки — структурнее и компактнее (Agent-Layout) */
+[data-ws-activity] { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 980px) {
+  [data-ws-activity] { grid-template-columns: 380px minmax(0, 1fr); align-items: start; }
+  [data-ws-activity-header] { grid-column: 1 / -1; }
+  [data-ws-activity-card] { grid-column: 1; position: sticky; top: 78px; }
+  [data-ws-activity-feed] { grid-column: 2; min-height: 100%; }
+}
+@media (max-width: 979px) {
+  [data-ws-activity-card], [data-ws-activity-feed] { grid-column: 1; }
+}
+
+/* compact card paddings */
+[data-ws-activity-card] {
+  display: flex !important;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px !important;
+  grid-template-columns: unset !important;
+  align-items: stretch !important;
+}
+[data-ws-activity-intro] { display: grid; gap: 8px; }
+[data-ws-activity-copy] { margin: 0; font-size: 12px; line-height: 1.65; }
+[data-ws-activity-cycle] { gap: 6px; padding: 8px 10px; border: 1px dashed var(--ws-line); border-radius: 10px; background: var(--ws-surface-soft); }
+[data-ws-activity-cycle] span { font-size: 10px; }
+[data-ws-activity-metrics] { gap: 8px; }
+[data-ws-activity-metric] { min-height: 78px; padding: 10px 12px; }
+[data-ws-activity-metric] > strong, [data-ws-activity-metric] > time { font-size: 20px; }
+[data-ws-activity-chart] { margin-top: 6px; padding: 10px; }
+[data-ws-activity-chart-grid] { height: 48px; gap: 4px; }
+[data-ws-activity-bar-label] { font-size: 9px; }
+[data-ws-activity-actions] { gap: 8px; margin-top: 6px; }
+[data-ws-activity-note] { margin-top: 6px; font-size: 9px; line-height: 1.5; }
+
+/* feed compact */
+[data-ws-activity-feed] { padding: 16px !important; gap: 12px; }
+[data-ws-activity-feed-head] { gap: 8px; }
+[data-ws-activity-feed-title] { font-size: 13px; }
+[data-ws-activity-filter] { min-height: 26px; padding: 4px 9px; font-size: 9px; }
+[data-ws-activity-ticker] { padding: 8px 0; }
+[data-ws-activity-ticker-track] { gap: 6px; }
+[data-ws-activity-pill] { padding: 5px 9px; font-size: 10px; }
+[data-ws-activity-timeline] { gap: 8px; max-height: 520px; overflow: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: transparent transparent; }
+[data-ws-activity-timeline]:hover { scrollbar-color: var(--ws-line-strong) transparent; }
+[data-ws-activity-timeline]::-webkit-scrollbar { width: 4px; }
+[data-ws-activity-timeline]::-webkit-scrollbar-thumb { background: transparent; border-radius: 99px; }
+[data-ws-activity-timeline]:hover::-webkit-scrollbar-thumb { background: var(--ws-line-strong); }
+[data-ws-activity-item] { padding: 10px 12px; gap: 10px; border-radius: 12px; }
+[data-ws-activity-item-body] strong { font-size: 11.5px; }
+[data-ws-activity-item-body] small { font-size: 9.5px; }
+
+/* animated cycle (Kokonut/AI State + Magic) */
+[data-ws-activity-cycle] { position: relative; overflow: hidden; }
+[data-ws-activity-cycle] span:nth-child(even) { animation: ws-cycle-arrow 1.4s ease-in-out infinite; }
+[data-ws-activity-cycle] span:nth-child(even):nth-child(2) { animation-delay: 0ms; }
+[data-ws-activity-cycle] span:nth-child(even):nth-child(4) { animation-delay: 200ms; }
+[data-ws-activity-cycle] span:nth-child(even):nth-child(6) { animation-delay: 400ms; }
+@keyframes ws-cycle-arrow { 0%,100% { transform: translateX(0); opacity: .7; } 50% { transform: translateX(3px); opacity: 1; } }
+[data-ws-activity-cycle].is-active { border-color: var(--ws-accent); background: var(--ws-accent-wash); }
+
+/* pulse dot enhanced (React Bits / Magic UI) */
+[data-ws-activity-dot][data-live="true"]::after {
+  content:""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid var(--ws-accent); opacity: 0; animation: ws-ping 1.8s cubic-bezier(0,0,.2,1) infinite;
+}
+[data-ws-activity-dot][data-live="true"] { position: relative; }
+@keyframes ws-ping { 75%,100% { transform: scale(2); opacity: 0; } }
+
+/* shimmer on activity card (Magic UI) */
+[data-ws-activity-card]::after {
+  content:""; position:absolute; inset:0; pointer-events:none; border-radius:20px;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+  transform: translateX(-100%); opacity:0; transition: opacity 300ms;
+}
+[data-ws-activity-card]:hover::after { opacity:1; animation: ws-shimmer 1.6s ease; }
+
+/* timeline item entrance stagger + parallax micro */
+[data-ws-activity-item] { will-change: transform, opacity; }
+[data-ws-activity-item]:nth-child(1) { animation-delay: 0ms; }
+[data-ws-activity-item]:nth-child(2) { animation-delay: 40ms; }
+[data-ws-activity-item]:nth-child(3) { animation-delay: 80ms; }
+[data-ws-activity-item]:nth-child(4) { animation-delay: 120ms; }
+[data-ws-activity-item]:nth-child(5) { animation-delay: 160ms; }
+
