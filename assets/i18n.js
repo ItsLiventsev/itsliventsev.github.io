@@ -26,6 +26,7 @@
     lang = lang === 'ru' ? 'en' : 'ru';
     try { localStorage.setItem('itsliventsev-lang', lang); } catch (e) {}
     apply();
+    window.dispatchEvent(new CustomEvent('itsliventsev:languagechange', { detail: { lang: lang } }));
   }
   window.I18N = {
     register: function (d) { dict = d; apply(); },
