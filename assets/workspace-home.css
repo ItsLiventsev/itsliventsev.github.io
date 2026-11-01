@@ -1011,3 +1011,16 @@ html { scroll-behavior: smooth; }
 .ws-publication-row { position: relative; overflow: hidden; }
 .ws-publication-row::before { content: ''; position: absolute; inset: 0 0 0 auto; width: 3px; background: var(--ws-accent); opacity: 0; transition: opacity 180ms; }
 .ws-publication-row:hover::before, .ws-publication-row:focus-within::before { opacity: 1; }
+
+
+/* ── v15: scroll-spy TOC active ── */
+.ws-section-nav a.is-active { color: var(--ws-accent); font-weight: 700; }
+.ws-section-nav a.is-active::before { content: '›'; margin-right: 6px; color: var(--ws-accent); }
+
+/* ── v15: to-top progress ring (SVG) ── */
+#to-top { position: fixed; inset: auto 20px 20px auto; z-index: 40; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 999px; background: var(--ws-surface); border: 1px solid var(--ws-line); box-shadow: var(--ws-shadow-md); opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity 220ms, transform 220ms, visibility 220ms; }
+#to-top.is-visible, body.ws-ready #to-top.show { opacity: 1; visibility: visible; transform: none; }
+#to-top svg { width: 18px; height: 18px; }
+
+/* ── v15: home editorial print ── */
+@media print { .ws-home-hero, .ws-dashboard-grid { break-inside: avoid; } }
