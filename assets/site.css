@@ -3607,3 +3607,136 @@ a.p-card:hover .p-title, a.p-card:focus-visible .p-title,
     .prose-measure article h2 { animation: none; }
   }
 }
+
+/* ==========================================================================
+   SOFT 2026 · волна 23: тотальный редизайн — мягкий SaaS
+   Белые поверхности на воздушном фоне, мягкие тени вместо жёстких офсетов,
+   hairline-рамки, pill-кнопки, serif-дисплей, пастельные маркер-бары.
+   Контент, структура, доступность и механики волн 16–17 не меняются.
+   ========================================================================== */
+:root {
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --neo-paper: #f7f6f2;          /* воздух: светлый тёплый нейтралитет */
+  --neo-surface: #ffffff;        /* белоснежные карточки */
+  --neo-surface-2: #f2f0ea;
+  --neo-hard: 0 4px 20px rgba(20, 18, 12, .05);
+  --neo-hard-sm: 0 2px 10px rgba(20, 18, 12, .05);
+  --shadow-card: 0 4px 20px rgba(20, 18, 12, .05);
+  --shadow-hover: 0 14px 36px rgba(20, 18, 12, .10);
+  --border: rgba(26, 22, 12, .10);
+  --border-strong: rgba(26, 22, 12, .22);
+  --grid-dot: rgba(26, 22, 12, .07);
+  --radius: 20px;
+  --radius-lg: 24px;
+  --radius-sm: 12px;
+  --header-bg: rgba(255, 255, 255, .85);
+  --neo-footer-bg: #ffffff;
+  --neo-footer-text: var(--neo-ink);
+  --accent-border: rgba(26, 22, 12, .22);
+}
+:root[data-theme="dark"] {
+  --neo-hard: 0 4px 20px rgba(0, 0, 0, .35);
+  --neo-hard-sm: 0 2px 10px rgba(0, 0, 0, .35);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, .35);
+  --shadow-hover: 0 14px 36px rgba(0, 0, 0, .50);
+  --border: rgba(239, 232, 214, .14);
+  --border-strong: rgba(239, 232, 214, .28);
+  --neo-footer-bg: #1e1a12;
+  --neo-footer-text: var(--neo-paper);
+}
+/* Aurora-тинты фона выключены: чистый воздух */
+body { background-image: none; }
+
+/* Рамки: чернильные 2px уходят, остаются hairline; «квадрат» NEO скругляется */
+.card, .note-card, .pub-card, .p-card, .slot-card, .light-card, .hero-panel, .glass,
+.swatch, .stair-row, .flow-step, .flow-rule, .game-tag, .nav-hero, .sign-card,
+.bottom-dock, #to-top, .callout, .notice, .code-block, kbd, blockquote,
+.faq-summary, .faq-toc, .summary-card, .step-card, .esp-stat, .quick-bubble, .site-footer {
+  border-width: 1px;
+}
+input[type="text"], input[type="email"], input[type="search"], input[type="password"],
+input[type="url"], input[type="number"], textarea, select {
+  border-width: 1px;
+  border-radius: var(--radius-xs);
+}
+blockquote, .faq-summary, .faq-toc, .summary-card, kbd, pre { border-radius: var(--radius-sm); }
+.code-block { border-radius: var(--radius); }
+#to-top { border-radius: 999px; }
+.sign-card, .bottom-dock { border-radius: var(--radius); }
+.faq-summary:hover { background: var(--neo-surface-2); }
+.divider { border-top-width: 1px; }
+.site-header { box-shadow: 0 2px 14px rgba(20, 18, 12, .04); }
+
+/* Кнопки: pill-система, тёмная primary, мягкий отклик */
+.btn, .btn-primary, .btn-ghost, .btn-danger, .btn-sm, .btn-lg, .icon-btn, .lang-btn,
+.filter-btn, .quick-bubble, .theme-toggle {
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(20, 18, 12, .05);
+}
+.btn:hover, .btn-primary:hover, .icon-btn:hover, .lang-btn:hover, .filter-btn:hover,
+.quick-bubble:hover, .theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(20, 18, 12, .12);
+}
+.btn:active, .btn-primary:active, .icon-btn:active, .lang-btn:active,
+.filter-btn:active, .quick-bubble:active, .theme-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(20, 18, 12, .08);
+}
+.btn-primary { background: var(--neo-ink); border-color: transparent; color: #fff; }
+.btn-primary:hover { background: #3a3526; border-color: transparent; color: #fff; }
+
+/* Единый hover-механика мягкого канона: lift −2px + мягкая тень */
+a.card:hover, .card.hoverable:hover, .card:hover, a.p-card:hover, .p-card:hover,
+.note-card:hover, .pub-card:hover, .step-card:hover, .esp-stat:hover, .slot-card:hover,
+.glass:hover, .swatch:hover, #to-top:hover, .sign-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Дисплей: serif, solid ink; контуры и ацид-сдвиги сняты */
+.hero-title, .article-title, .zone-title, .esp-title,
+.prose-neo h2, .prose-measure h2, .prose-measure article h2 {
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  color: var(--neo-ink);
+}
+.zt-serif {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--neo-verm-ink);
+}
+:root[data-theme="dark"] .zt-serif { color: #ff8a54; }
+/* Гигантские слова — ghost-ватермарка (паттерн Corebit) */
+.giant-word, .giant-word--right {
+  color: rgba(26, 22, 12, .05);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  opacity: 1;
+}
+:root[data-theme="dark"] .giant-word, :root[data-theme="dark"] .giant-word--right {
+  color: rgba(239, 232, 214, .06);
+}
+/* Пастельные маркер-бары вместо сдвигов: ротация --mis сохранена */
+.zone-title::after, .esp-title::after {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--mis, var(--mis-lime));
+  margin-top: .6rem;
+}
+.prose-neo h2::after, .prose-measure h2::after, .prose-measure article h2::after {
+  content: '';
+  display: block;
+  width: 34px;
+  flex-basis: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--mis, var(--mis-lime));
+  margin-top: .45rem;
+}
+.prose-measure article h2 { flex-wrap: wrap; }

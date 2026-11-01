@@ -2664,3 +2664,23 @@ html[data-theme="light"] body.flat-scope {
 
 /* Волна 14: единый фокус на стендах + safe-area */
 .flat-scope :focus-visible { outline: 3px solid var(--st-accent); outline-offset: 2px; }
+
+/* ==========================================================================
+   SOFT 2026 · волна 23: стенды — мягкий слой поверх flat-системы
+   ========================================================================== */
+:root { --st-radius: 18px; --st-hard-color: transparent; }
+html[data-theme="light"] .flat-scope {
+  --st-hard: 0 4px 20px rgba(20, 18, 12, .05);
+  --st-hard-color: transparent;
+}
+.rw-card:hover, .lg-award:hover, .ach-card.is-unlocked:hover,
+.crew-card:hover, .uni-card:hover, .bento-cell:hover, .bento-cell:focus-visible,
+.quest-card:not(.is-locked):hover, .lg-tab:hover, .skill-card:hover,
+.quiz-launch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(20, 18, 12, .10);
+}
+.flat-scope .theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(20, 18, 12, .12);
+}
