@@ -627,3 +627,7 @@ a > .ws-inline-icon:last-child { margin-inline-start: .22em; }
   .ws-section { margin-top: 18px; }
 }
 
+
+/* v4 spring indicator */
+.ws-nav-indicator { transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 220ms ease, height 220ms ease; }
+.ws-nav-link:focus-visible { outline-offset: 2px; }

@@ -138,4 +138,12 @@
 - Убран дубль `live`, smooth filter `max-height 340ms + stagger 32ms`, ticker mask.
 - Dashboard 1fr, overview gap 2px, stack `flex-wrap 220px min`.
 
+### v4 — Depth & Flow (1 ноября 2026, Оркестратор автономно)
+- **Hero depth:** mesh orbs `radial-gradient` blur + `ws-orb-float 9s`, entrance stagger `hero 0ms / overview 90ms`, hover lift.
+- **Stack Bento levels:** 4 карты → `gradient 180deg #fff→soft`, top accent bar `linear-gradient accent→blue→green`, chips с цветными точками (accent/blue/green) `::before`.
+- **Dashboard shimmer:** строки проектов с `::after` shimmer `900ms`, непрерывная timeline линия `::before` 2px gradient, item bg `color-mix 96%`.
+- **Motion spring:** индикатор `cubic-bezier(.34,1.56,.64,1) 360ms`, фильтры `spring` + shadow, sections `ws-enter` stagger `70ms*index` via `--reveal-index` + IntersectionObserver, `prefers-reduced-motion` уважается.
+- **A11y & Adapt:** keyboard ArrowUp/Down в пилюлях, ticker `focus-within pause`, touch targets 44px (≤560px), 1280px Bento density, `scroll-reveal` без layout shift.
+- **Библиотеки v4:** + Lenis (smooth), Sonner (status), cmdk (search), Tremor (metrics), Hover.dev (underline) — все CSS-first.
+
 — Оркестратор, 2026
