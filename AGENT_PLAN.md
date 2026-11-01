@@ -192,3 +192,15 @@
 
 Критерий: PR содержит отчёт 4 агентов в описании (шаблон PR).
 
+
+## Sprint v7.1 — revert canvas to light (2026-11-02 feedback)
+
+Пользователь: «фон переделай обратно на просто светлый, а то не красиво» — скриншот показал warm #FDF8F3 дает желтоватый оттенок, хуже читаемость.
+
+**Shared Chat:**
+- Architect: warm перегружает, контраст теней теряется на #FDF8F3, spec #F8F9FA чистый светлый — лучше для Bento.
+- Visual: согласен, возвращаем #F8F9FA + #f2f4f7 soft + #e9ecef line, grain отключаем.
+- Motion: оставляем spring/stagger/view-transitions — не зависит от фона.
+- Integrator: проверил контраст AA, темная тема без изменений.
+
+**Решение:** --ws-canvas #F8F9FA, --ws-surface-soft #f2f4f7, --ws-line #e9ecef, grain opacity 0. Следующая итерация: канбан-доска, i18n EN, PWA offline, axe-core audit.

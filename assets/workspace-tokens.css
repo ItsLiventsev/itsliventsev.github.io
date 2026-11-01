@@ -11,16 +11,16 @@
 
 :root {
   color-scheme: light;
-  --ws-canvas: #FDF8F3; /* warm paper — soft variant of spec #F8F9FA, cozy */
+  --ws-canvas: #F8F9FA;
   --ws-surface: #ffffff;
-  --ws-surface-soft: #f7f1e8;
+  --ws-surface-soft: #f2f4f7;
   --ws-surface-raised: #ffffff;
   --ws-ink: #1a1c1e;
   --ws-ink-soft: #4f515d;
   --ws-muted: #5f616e;
   --ws-faint: #6b6d78;
-  --ws-line: #ebe7e1;
-  --ws-line-strong: #ddd8d1;
+  --ws-line: #e9ecef;
+  --ws-line-strong: #dee2e6;
   --ws-accent: #3f766b;
   --ws-accent-hover: #315f56;
   --ws-accent-wash: #eaf4f0;
