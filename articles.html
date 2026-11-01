@@ -13,8 +13,8 @@
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r4">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r5">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r5">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r6">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r6">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/articles.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -54,4 +54,4 @@
  fetch('articles/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];document.getElementById('pub-count').textContent=posts.length;document.getElementById('stat-articles').textContent=posts.length;document.getElementById('stat-conf').textContent=posts.filter(p=>p.type==='conference').length;document.getElementById('stat-minutes').textContent=posts.reduce((n,p)=>n+(parseInt(String(p.readtime||'').match(/\d+/)||0,10)||0),0)||'—';const years=posts.map(p=>String(p.date||'').match(/\d{4}/)).filter(Boolean).map(x=>Number(x[0]));document.getElementById('stat-year').textContent=years.length?Math.min(...years):'—';const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{document.getElementById('pub-count').textContent='0';list.innerHTML='<div class="ws-empty">Публикации пока не загрузились. Индекс будет доступен при открытии страницы.</div>';});
 })();
 </script>
-<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261101r5"></script></body></html>
+<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261101r6"></script></body></html>

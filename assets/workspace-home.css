@@ -9,8 +9,8 @@
 .ws-hero-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
 .ws-button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 9px 15px; border: 1px solid var(--ws-line); border-radius: var(--ws-pill); background: var(--ws-surface); color: var(--ws-ink); text-decoration: none; font-size: 12px; font-weight: 750; transition: transform var(--ws-motion), box-shadow var(--ws-motion), background var(--ws-motion); }
 .ws-button:hover { transform: translateY(-1px); box-shadow: var(--ws-shadow-sm); }
-.ws-button-primary { border-color: var(--ws-accent); background: var(--ws-accent); color: white; }
-.ws-button-primary:hover { background: var(--ws-accent-hover); color: white; }
+.ws-button-primary { border-color: var(--ws-accent); background: var(--ws-accent); color: #fff !important; }
+.ws-button-primary:hover { background: var(--ws-accent-hover); color: #fff !important; }
 .ws-overview-card { display: flex; flex-direction: column; justify-content: center; padding: 24px; border: 1px solid var(--ws-line); border-radius: 20px; background: var(--ws-surface); box-shadow: var(--ws-shadow-sm); }
 .ws-overview-head { display: flex; align-items: center; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid var(--ws-line); font-weight: 750; }
 .ws-overview-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 10px; background: var(--ws-accent-wash); color: var(--ws-accent); font-size: 18px; }
