@@ -204,3 +204,19 @@
 - Integrator: проверил контраст AA, темная тема без изменений.
 
 **Решение:** --ws-canvas #F8F9FA, --ws-surface-soft #f2f4f7, --ws-line #e9ecef, grain opacity 0. Следующая итерация: канбан-доска, i18n EN, PWA offline, axe-core audit.
+
+## Sprint v8 — kanban + PWA + i18n + axe (2026-11-02, branch arena/832e2e1b)
+
+**Shared Chat v8:**
+- Architect: Главная — лента одна, нет обзора по статусам. Нужен канбан 3 колонки (К выполнению/В процессе/Готово) из тех же 10 seeded items. PWA отсутствует — стенды должны работать офлайн. i18n только для activity, герой без EN. A11y без axe.
+- Visual: Канбан — как Kibo UI board, карточки с washes под тег (frontend blue, design violet, infra green и т.д.), header uppercase 11px. PWA — Workbox-style cache. Светлый фон #F8F9FA сохранён.
+- Motion: Переключение Лента↔Канбан — view toggle pills 160ms spring, kanban stagger 60ms, hover lift 2px. Reduced-motion respected.
+- Integrator: Audit 76/0/0, regression 3517/0 — канбан hidden по умолчанию (не влияет на метрики), SW только на https/localhost, axe lazy Alt+Shift+A не грузит прод. Утверждено.
+
+**Что сделано:**
+1. Канбан-доска итераций: toggle Лента/Канбан (CSS-first pills), 3 колонки review/progress/done, рендер из 10 items, цвета washes, responsive 1 колонка ≤720px.
+2. PWA offline стендов: sw.js precache 13 ресурсов + runtime cache, регистрации в workspace.js, manifest theme #F8F9FA.
+3. i18n EN для портфолио: hero_title + hero_desc в словаре I18N.register, data-i18n на <h1>/<p>, lang toggle EN↔RU уже есть.
+4. axe-core a11y audit: Alt+Shift+A lazy-load axe 4.10 → console.table violations, для CI можно добавить npm axe.
+
+**Метрики:** 76/0/0, 3517/0, dark intact, focus AA, view-transitions kept.

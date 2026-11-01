@@ -48,8 +48,8 @@
     <section class="ws-home-hero" id="about" aria-labelledby="home-title">
       <div class="ws-home-copy">
         <span class="ws-eyebrow"><span class="ws-status-dot"></span> itsliventsev · мастер производственного обучения</span>
-        <h1 id="home-title">Помогаю студентам<br><span>осваивать сети и системы.</span></h1>
-        <p>Работаю с сетевой инфраструктурой и системным администрированием, а в обучении опираюсь на практические задачи. Возможности искусственного интеллекта изучаю постепенно и использую там, где это уместно.</p>
+        <h1 id="home-title" data-i18n="hero_title">Помогаю студентам<br><span>осваивать сети и системы.</span></h1>
+        <p data-i18n="hero_desc">Работаю с сетевой инфраструктурой и системным администрированием, а в обучении опираюсь на практические задачи. Возможности искусственного интеллекта изучаю постепенно и использую там, где это уместно.</p>
         <div class="ws-hero-actions">
           <a class="ws-button ws-button-primary" href="#experience">Мой опыт <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></span></a>
           <a class="ws-button" href="#contact">Связаться</a>
@@ -115,6 +115,11 @@
       <article data-ws-activity-feed data-ws-surface aria-label="Лента изменений">
         <div data-ws-activity-feed-head>
           <div data-ws-activity-feed-title>Лента изменений <span data-ws-activity-live><i aria-hidden="true"></i> LIVE</span></div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <div data-ws-view-toggle style="display:flex; gap:4px; background:var(--ws-surface-soft); padding:3px; border-radius:999px;">
+            <button type="button" data-ws-view="feed" aria-pressed="true" style="padding:4px 10px; border-radius:999px; border:0; background:var(--ws-surface); font-size:12px; font-weight:600;">Лента</button>
+            <button type="button" data-ws-view="kanban" aria-pressed="false" style="padding:4px 10px; border-radius:999px; border:0; background:transparent; font-size:12px; font-weight:500;">Канбан</button>
+          </div>
           <div data-ws-activity-filters aria-label="Фильтр по хештегу">
             <button type="button" data-ws-activity-filter data-filter="all" aria-pressed="true">Все</button>
             <button type="button" data-ws-activity-filter data-filter="frontend">#frontend</button>
@@ -122,12 +127,18 @@
             <button type="button" data-ws-activity-filter data-filter="bugfix">#bugfix</button>
             <button type="button" data-ws-activity-filter data-filter="content">#content</button>
           </div>
+          </div>
         </div>
         <div data-ws-activity-ticker aria-label="Быстро меняющиеся плашки">
           <span data-ws-activity-ticker-label>Сейчас в работе</span>
           <div data-ws-activity-ticker-track></div>
         </div>
         <div data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
+        <div data-ws-activity-kanban hidden style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:12px;">
+          <div data-ws-kanban-col data-status="review" style="background:var(--ws-surface-soft); border-radius:12px; padding:10px; min-height:120px; border:1px solid var(--ws-line);"><div style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px;">⏳ К выполнению <span data-kanban-count="review"></span></div><div data-kanban-list="review" style="display:grid; gap:6px;"></div></div>
+          <div data-ws-kanban-col data-status="progress" style="background:var(--ws-surface-soft); border-radius:12px; padding:10px; min-height:120px; border:1px solid var(--ws-line);"><div style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px;">🔄 В процессе <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" style="display:grid; gap:6px;"></div></div>
+          <div data-ws-kanban-col data-status="done" style="background:var(--ws-surface-soft); border-radius:12px; padding:10px; min-height:120px; border:1px solid var(--ws-line);"><div style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px;">✅ Готово <span data-kanban-count="done"></span></div><div data-kanban-list="done" style="display:grid; gap:6px;"></div></div>
+        </div>
       </article>
     </section>
 
@@ -226,5 +237,17 @@ window.I18N.register({
 <script src="assets/shared-chrome.js?v=20261101r1"></script>
 <script src="assets/workspace.js?v=20261101r6"></script>
 <script src="assets/home-activity.js?v=20261101r1" defer></script>
+
+<script>
+// axe-core audit loader (dev, press Alt+Shift+A)
+document.addEventListener('keydown', function(e){
+  if (e.altKey && e.shiftKey && e.key.toLowerCase()==='a') {
+    if (window.axe) { window.axe.run().then(r=>console.table(r.violations)); return; }
+    var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/axe-core@4.10/axe.min.js';
+    s.onload=function(){ axe.run().then(r=>{ console.log('[axe] violations', r.violations); alert('axe: '+r.violations.length+' violations — see console'); }); };
+    document.head.appendChild(s);
+  }
+});
+</script>
 </body>
 </html>
