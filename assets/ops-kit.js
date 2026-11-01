@@ -82,7 +82,7 @@
     }
     function theoryHtml() {
       if (!cfg.theory || !cfg.theory.length) return '';
-      return '<section class="lab-panel" id="ops-theory"><div class="lp-head"><span>теория и опорные конспекты</span><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
+      return '<section class="lab-panel" id="ops-theory"><div class="lp-head"><h2>теория и опорные конспекты</h2><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
         cfg.theory.map(function (b, i) {
           return '<article class="theory-block"><h3><span class="theory-num">// ' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
             (b.code ? '<pre class="lab-codeblock"><code>' + esc(b.code) + '</code></pre>' : '') +
@@ -150,9 +150,9 @@
       return '<section class="lab-panel rca-box" id="ops-rca"><div class="lp-head"><span>postmortem · разбор без вины</span><span class="kind-badge">blameless</span></div><div class="lp-body">' +
         '<div class="blameless-note"><span>🛡</span><span>Цель разбора — найти <strong>причину и защиту на будущее</strong>, а не виноватого. Ошибка сотрудника — это дефект процесса, который чинится системно.</span></div>' +
         '<div class="rca-fields">' +
-        '<div><label>что произошло и влияние (какие сервисы/пользователи затронуты)</label><textarea class="flat-input" data-rca="impact" rows="2">' + esc((state.rcaFields || {}).impact || '') + '</textarea></div>' +
-        '<div><label>корневая причина (root cause)</label><textarea class="flat-input" data-rca="cause" rows="2">' + esc((state.rcaFields || {}).cause || '') + '</textarea></div>' +
-        '<div><label>меры на будущее (конкретные действия и сроки)</label><textarea class="flat-input" data-rca="actions" rows="2">' + esc((state.rcaFields || {}).actions || '') + '</textarea></div>' +
+        '<div><label for="ops-rca-impact">что произошло и влияние (какие сервисы/пользователи затронуты)</label><textarea id="ops-rca-impact" class="flat-input" data-rca="impact" rows="2">' + esc((state.rcaFields || {}).impact || '') + '</textarea></div>' +
+        '<div><label for="ops-rca-cause">корневая причина (root cause)</label><textarea id="ops-rca-cause" class="flat-input" data-rca="cause" rows="2">' + esc((state.rcaFields || {}).cause || '') + '</textarea></div>' +
+        '<div><label for="ops-rca-actions">меры на будущее (конкретные действия и сроки)</label><textarea id="ops-rca-actions" class="flat-input" data-rca="actions" rows="2">' + esc((state.rcaFields || {}).actions || '') + '</textarea></div>' +
         '</div><button class="flat-btn ghost" type="button" id="ops-rca-save">сохранить postmortem</button>' +
         '<p class="ops-msg" id="ops-rca-msg" role="status"></p></div></section>';
     }

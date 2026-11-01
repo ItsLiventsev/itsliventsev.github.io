@@ -245,7 +245,7 @@
   }
   topbar.appendChild(topContext);
   const actions = document.createElement('div'); actions.className = 'ws-topbar-actions';
-  const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger';
+  const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger'; searchButton.setAttribute('aria-label', 'Поиск по материалам, Ctrl K');
   searchButton.innerHTML = '<span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><span class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>';
   actions.appendChild(searchButton);
   if (languageButton) actions.appendChild(languageButton);
@@ -274,6 +274,7 @@
 
   if (contextBar) {
     contextBar.className = 'ws-context-nav';
+    contextBar.setAttribute('role', 'presentation');
     const inner = contextBar.querySelector('.st-topbar-in'); if (inner) inner.className = 'ws-context-inner';
     const contextBrand = contextBar.querySelector('.st-brand'); if (contextBrand) contextBrand.remove();
     const contextLinks = contextBar.querySelector('.st-topnav'); if (contextLinks) contextLinks.className = 'ws-context-links';
@@ -294,6 +295,9 @@
       if (!table.parentElement?.hasAttribute('data-ws-table-wrap')) {
         const wrapper = document.createElement('div');
         wrapper.setAttribute('data-ws-table-wrap', 'true');
+        wrapper.setAttribute('tabindex', '0');
+        wrapper.setAttribute('role', 'group');
+        wrapper.setAttribute('aria-label', 'Таблица: горизонтальная прокрутка');
         table.parentNode.insertBefore(wrapper, table);
         wrapper.appendChild(table);
       }
@@ -412,7 +416,7 @@
   }
   syncRail();
 
-  const overlay = document.createElement('div'); overlay.className = 'ws-overlay'; overlay.setAttribute('aria-hidden', 'true'); body.appendChild(overlay);
+  const overlay = document.createElement('div'); overlay.className = 'ws-overlay'; overlay.setAttribute('aria-hidden', 'true'); shell.appendChild(overlay);
   function setDrawer(open) {
     const wasOpen = sidebar.dataset.open === 'true';
     sidebar.dataset.open = open ? 'true' : 'false'; overlay.dataset.open = open ? 'true' : 'false';
@@ -688,7 +692,7 @@
       document.documentElement.style.setProperty('--read-progress', p.toFixed(4));
       // to-top visibility
       var topBtn = document.getElementById('to-top');
-      if (topBtn) topBtn.classList.toggle('is-visible', window.scrollY > 320); topBtn.classList.toggle('show', window.scrollY > 320, window.scrollY > 320);
+      if (topBtn) { topBtn.classList.toggle('is-visible', window.scrollY > 320); topBtn.classList.toggle('show', window.scrollY > 320); }
       // scroll-spy fallback (if no IntersectionObserver for sections)
       if (!('IntersectionObserver' in window)) {
         var sections = document.querySelectorAll('.ws-section[id], section[id], h2[id], h3[id]');
@@ -819,7 +823,7 @@
     all('.cab-grid > aside').forEach(el => el.setAttribute('data-ws-profile-summary', 'true'));
     all('.cab-grid > section').forEach(el => el.setAttribute('data-ws-quest-panel', 'true'));
     all('#profile-change').forEach(el => el.setAttribute('data-ws-profile-edit', 'true'));
-    all('#cab-id-card').forEach(el => el.setAttribute('data-ws-id-card', 'true'));
+    all('#cab-id-card, #id-card').forEach(el => el.setAttribute('data-ws-id-card', 'true'));
     all('.id-card-top').forEach(el => el.setAttribute('data-ws-id-header', 'true'));
     all('.id-stats > .id-collapse').forEach(el => el.setAttribute('data-ws-stat-list', 'true'));
     all('.id-stat').forEach(el => el.setAttribute('data-ws-id-stat', 'true'));
@@ -898,6 +902,8 @@
     all('.flat-row, .step-card').forEach(el => el.setAttribute('data-ws-row', 'true'));
     all('.lab-progress, .xp-bar, .lg-bar, .quest-progress').forEach(el => el.setAttribute('data-ws-progress', 'true'));
     all('.lp-head').forEach(el => el.setAttribute('data-ws-panel-head', 'true'));
+    // Dynamically rendered lesson code must be scrollable with a keyboard.
+    all('pre').forEach(el => { if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0'); });
     all('.lp-body').forEach(el => el.setAttribute('data-ws-panel-body', 'true'));
     all('.lab-layout, .ops-board, .flat-grid--cards, .lab-steps').forEach(el => el.setAttribute('data-ws-grid', 'cards'));
     all('.cmd-duo, .plus-minus, .rca-fields').forEach(el => el.setAttribute('data-ws-grid', 'two'));

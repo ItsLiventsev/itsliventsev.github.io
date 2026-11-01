@@ -13,9 +13,9 @@
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r4">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r6">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r6">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261101r6">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r1">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <!-- SEO:AUTO:START -->
@@ -57,7 +57,7 @@
           <a class="ws-button" href="#contact">Связаться</a>
         </div>
       </div>
-      <aside class="ws-overview-card" aria-label="Коротко обо мне">
+      <div class="ws-overview-card" role="group" aria-label="Коротко обо мне">
         <div class="ws-overview-head">Коротко обо мне</div>
         <div class="ws-stat-grid" data-ws-profile-list>
           <div><strong>5+</strong><span>лет в профессиональном обучении</span></div>
@@ -69,7 +69,7 @@
           <li><span aria-hidden="true">•</span> Победитель «Московские профессионалы»</li>
         </ul>
         <a href="#experience" class="ws-inline-link">Опыт и квалификация <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
-      </aside>
+      </div>
     </section>
 
     <section class="ws-section" id="activity" data-ws-activity aria-labelledby="activity-title">
@@ -132,15 +132,15 @@
           </div>
           </div>
         </div>
-        <div data-ws-activity-ticker aria-label="Последние изменения">
+        <div data-ws-activity-ticker>
           <span data-ws-activity-ticker-label>Последние изменения</span>
           <div data-ws-activity-ticker-track></div>
         </div>
         <div data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
         <div data-ws-activity-kanban hidden class="ws-kanban-grid">
-          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list"></div></div>
-          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list"></div></div>
-          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✓ Изменения <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list"></div></div>
+          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list" role="list"></div></div>
+          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list" role="list"></div></div>
+          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✓ Изменения <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list" role="list"></div></div>
         </div>
       </article>
     </section>
@@ -238,11 +238,11 @@ window.I18N.register({
 });
 </script>
 <script src="assets/shared-chrome.js?v=20261101r1"></script>
-<script src="assets/workspace.js?v=20261101r6"></script>
-<script src="assets/home-activity.js?v=20261101r1" defer></script>
+<script src="assets/workspace.js?v=20261102r1"></script>
+<script src="assets/home-activity.js?v=20261102r1" defer></script>
 
 <script>
-// axe-core audit — расширенный: Alt+Shift+A, автозапуск на localhost, бейдж + консольный отчёт
+// axe-core audit — Alt+Shift+A, бейдж + консольный отчёт
 (function(){
   var AXE_URL='https://cdn.jsdelivr.net/npm/axe-core@4.10/axe.min.js';
   function badge(text, bg){ var b=document.createElement('div'); b.id='ws-a11y-badge'; b.setAttribute('role','status'); b.setAttribute('aria-live','polite'); b.style.cssText='position:fixed;right:16px;bottom:72px;z-index:80;max-width:320px;padding:10px 12px;border-radius:12px;border:1px solid var(--ws-line);background:'+bg+';color:var(--ws-ink);font:700 11px/1.4 var(--ws-font);box-shadow:var(--ws-shadow-md)'; b.textContent=text; document.body.appendChild(b); setTimeout(function(){ b.style.opacity='0'; b.style.transition='opacity 400ms ease'; setTimeout(function(){ b.remove(); }, 500); }, 5200); return b; }
@@ -257,8 +257,6 @@ window.I18N.register({
     var s=document.createElement('script'); s.src=AXE_URL; s.onload=exec; s.onerror=function(){ badge('a11y: не удалось загрузить axe-core', '#ffeef0'); }; document.head.appendChild(s);
   }
   document.addEventListener('keydown', function(e){ if(e.altKey && e.shiftKey && e.key.toLowerCase()==='a'){ e.preventDefault(); runAxe(); } });
-  // автозапуск на localhost / 127.0.0.1
-  if(location.hostname==='localhost' || location.hostname==='127.0.0.1'){ window.addEventListener('load', function(){ setTimeout(runAxe, 1200); }); }
   // кнопка в футере (если есть .ws-footer)
   window.addEventListener('DOMContentLoaded', function(){
     var footer = document.querySelector('.ws-footer');

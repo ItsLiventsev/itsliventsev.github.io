@@ -101,7 +101,7 @@
     /* ----------------------------- Теория ----------------------------- */
     function theoryHtml() {
       if (!cfg.theory || !cfg.theory.length) return '';
-      return '<section class="lab-panel" id="lk-theory"><div class="lp-head"><span>теория и опорные конспекты</span>' +
+      return '<section class="lab-panel" id="lk-theory"><div class="lp-head"><h2>теория и опорные конспекты</h2>' +
         '<span class="flat-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
         cfg.theory.map(function (b, i) {
           return '<article class="theory-block">' +

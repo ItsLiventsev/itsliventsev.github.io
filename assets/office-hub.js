@@ -48,6 +48,9 @@
 
   function renderDashboard(p) {
     $('gate').hidden = true; $('dash').hidden = false;
+    var nameField = $('fp-name'), groupField = $('fp-group');
+    if (nameField) nameField.textContent = p.name;
+    if (groupField) groupField.textContent = p.group;
     OFFICE.dailyLogin(p.id);
     var t = OFFICE.totals(p.id);
     var subs = OFFICE.submissions().filter(function (s) { return s.student.id === p.id; });
@@ -146,7 +149,7 @@
     if (changeBtn) changeBtn.addEventListener('click', function () {
       var p = OFFICE.getProfile();
       var name = prompt('ФИО', p.name), group = prompt('Учебная группа', p.group);
-      if (name && group) { OFFICE.updateProfile({ name: name.trim(), group: group.trim() }); renderDashboard(OFFICE.getProfile()); }
+      if (name && group && name.trim() && group.trim()) { OFFICE.updateProfile({ name: name.trim(), group: group.trim() }); renderDashboard(OFFICE.getProfile()); }
     });
   }
 

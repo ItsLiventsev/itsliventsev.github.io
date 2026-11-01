@@ -1,9 +1,12 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v6';
+const CACHE = 'itsliventsev-v7';
 const PRECACHE = [
   '/', '/index.html', '/assets/offline.html',
   '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
-  '/assets/workspace.js', '/assets/i18n.js', '/assets/home-activity.js',
+  '/assets/workspace.js', '/assets/i18n.js', '/assets/home-activity.js', '/assets/site.js', '/assets/shared-chrome.js',
+  '/assets/search-index.json',
+  '/assets/fonts/manrope-cyrillic-wght-normal.woff2', '/assets/fonts/manrope-latin-wght-normal.woff2',
+  '/assets/fonts/jetbrains-mono-cyrillic-wght-normal.woff2', '/assets/fonts/jetbrains-mono-latin-wght-normal.woff2',
   '/assets/icons.svg', '/assets/favicon.svg',
   '/projects.html', '/articles.html', '/blog.html', '/archive.html',
   '/stands/index.html', '/faq.html', '/sitemap.html', '/site.webmanifest'
@@ -30,13 +33,18 @@ self.addEventListener('fetch', event => {
       const response = await fetch(request);
       if (response.ok) {
         const copy = response.clone();
-        event.waitUntil(caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {}));
+        await caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {});
       }
       return response;
     } catch (_) {
       const cache = await caches.open(CACHE);
       const cached = await cache.match(request);
       if (cached) return cached;
+      // HTML uses ?v= cache busters while the installation cache uses clean paths.
+      if (url.pathname.startsWith('/assets/') && /\.(?:js|css)$/.test(url.pathname) && url.searchParams.has('v') && [...url.searchParams.keys()].every(key => key === 'v')) {
+        const versionless = await cache.match(url.pathname);
+        if (versionless) return versionless;
+      }
       if (request.mode === 'navigate') {
         const offline = await cache.match('/assets/offline.html');
         if (offline) return offline;

@@ -82,7 +82,7 @@
     }
     function theoryHtml() {
       if (!cfg.theory || !cfg.theory.length) return '';
-      return '<section class="lab-panel" id="office-theory"><div class="lp-head"><span>теория и опорные конспекты</span><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
+      return '<section class="lab-panel" id="office-theory"><div class="lp-head"><h2>теория и опорные конспекты</h2><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
         cfg.theory.map(function (b, i) {
           return '<article class="theory-block"><h3><span class="theory-num">// ' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
             (b.code ? '<pre class="lab-codeblock"><code>' + esc(b.code) + '</code></pre>' : '') +
