@@ -16,6 +16,18 @@
   const filterButtons = root.querySelectorAll('[data-ws-activity-filter]');
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+  // ── v13: scroll-reveal for course/skill/resource cards ──
+  (function initReveal(){
+    var els = document.querySelectorAll('.ws-course-card, #stack .ws-skill-card, .ws-resource-grid a, .ws-contact-grid a, [data-ws-activity-card], [data-ws-activity-feed]');
+    if (!els.length || !('IntersectionObserver' in window)) return;
+    els.forEach(function(el,i){ el.classList.add('ws-reveal'); el.style.setProperty('--reveal-index', String(i % 6)); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, {threshold: 0.12, rootMargin: '0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  })();
+
   const historyUrl = 'https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main';
   const apiUrl = 'https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits';
   const cacheKey = 'itsliventsev-home-activity-v1';
@@ -180,6 +192,118 @@
     progress: root.querySelector('[data-kanban-list="progress"]'),
     done: root.querySelector('[data-kanban-list="done"]')
   };
+
+  // ── v13: Kanban drag-n-drop (native HTML5, no deps, persists to localStorage) ──
+  (function initKanbanDnD(){
+    if (!kanbanRoot || !kanbanLists.review) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var STORAGE_KEY = 'ws:kanban:order:v13';
+    function persist(){
+      try {
+        var payload = {};
+        Object.keys(kanbanLists).forEach(function(k){
+          var list = kanbanLists[k];
+          if (!list) return;
+          payload[k] = Array.from(list.querySelectorAll('[data-kanban-card]')).map(function(card){ return card.getAttribute('data-kanban-id') || card.textContent.trim().slice(0,64); });
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({at: new Date().toISOString(), payload: payload}));
+      } catch(e){}
+    }
+    function makeDraggable(card){
+      if (!card || card.getAttribute('draggable') === 'true') return;
+      card.setAttribute('draggable','true');
+      card.setAttribute('tabindex','0');
+      card.setAttribute('aria-grabbed','false');
+      card.setAttribute('data-kanban-card','true');
+      if (!card.getAttribute('data-kanban-id')) card.setAttribute('data-kanban-id', 'k-'+Math.random().toString(36).slice(2,8));
+      card.addEventListener('dragstart', function(e){
+        card.classList.add('is-dragging');
+        card.setAttribute('aria-grabbed','true');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', card.getAttribute('data-kanban-id'));
+        setTimeout(function(){ card.style.opacity='.6'; }, 0);
+      });
+      card.addEventListener('dragend', function(){
+        card.classList.remove('is-dragging');
+        card.setAttribute('aria-grabbed','false');
+        card.style.opacity='';
+        document.querySelectorAll('.ws-kanban-col').forEach(function(c){ c.classList.remove('is-drop-target'); });
+        persist();
+      });
+      // Keyboard: Ctrl+Arrow to move between columns
+      card.addEventListener('keydown', function(e){
+        if (!(e.ctrlKey && (e.key==='ArrowRight' || e.key==='ArrowLeft' || e.key==='ArrowUp' || e.key==='ArrowDown'))) return;
+        e.preventDefault();
+        var cols = ['review','progress','done'];
+        var curColKey = Object.keys(kanbanLists).find(function(k){ return kanbanLists[k] && kanbanLists[k].contains(card); });
+        if (!curColKey) return;
+        var idx = cols.indexOf(curColKey);
+        var nextKey = null;
+        if (e.key==='ArrowRight' || e.key==='ArrowDown') nextKey = cols[Math.min(idx+1, cols.length-1)];
+        else nextKey = cols[Math.max(idx-1, 0)];
+        if (nextKey && nextKey!==curColKey && kanbanLists[nextKey]) {
+          kanbanLists[nextKey].appendChild(card);
+          card.focus();
+          updateCounts();
+          persist();
+        }
+      });
+    }
+    function updateCounts(){
+      Object.keys(kanbanLists).forEach(function(k){
+        var list = kanbanLists[k]; var cnt = kanbanCounts[k];
+        if (!list || !cnt) return;
+        cnt.textContent = String(list.querySelectorAll('[data-kanban-card]').length);
+      });
+    }
+    // Enhance existing cards
+    document.querySelectorAll('[data-kanban-list] [data-ws-timeline-item], [data-kanban-list] .ws-timeline-item, [data-kanban-list] [role="listitem"]')
+      .forEach(function(el){ el.setAttribute('data-kanban-card','true'); makeDraggable(el); });
+    // Observe future cards rendered by home-activity
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        Array.prototype.forEach.call(m.addedNodes||[], function(n){
+          if (!n.querySelectorAll) return;
+          if (n.matches && n.matches('[data-kanban-card], [data-ws-timeline-item]')) makeDraggable(n);
+          n.querySelectorAll && n.querySelectorAll('[data-ws-timeline-item], [role="listitem"], .ws-kanban-card').forEach(makeDraggable);
+        });
+      });
+    });
+    if (kanbanRoot) mo.observe(kanbanRoot, {childList:true, subtree:true});
+    // Columns as drop targets
+    Object.values(kanbanLists).forEach(function(col){
+      if (!col) return;
+      col.classList.add('ws-kanban-col');
+      // Ensure header has count styling if missing
+      if (!col.querySelector('.ws-kanban-col-header')) {
+        // header already in markup; just ensure class
+      }
+      col.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; col.classList.add('is-drop-target'); });
+      col.addEventListener('dragleave', function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove('is-drop-target'); });
+      col.addEventListener('drop', function(e){
+        e.preventDefault();
+        col.classList.remove('is-drop-target');
+        var id = e.dataTransfer.getData('text/plain');
+        var card = id && document.querySelector('[data-kanban-id="'+ id.replace(/"/g,'\\"') +'"]');
+        if (card) {
+          // Insert before closest card under cursor
+          var after = null;
+          var cards = Array.from(col.querySelectorAll('[data-kanban-card]'));
+          var y = e.clientY;
+          for (var i=0;i<cards.length;i++){
+            var r = cards[i].getBoundingClientRect();
+            if (y < r.top + r.height/2) { after = cards[i]; break; }
+          }
+          if (after) col.insertBefore(card, after);
+          else col.appendChild(card);
+          updateCounts();
+          persist();
+        }
+      });
+    });
+    updateCounts();
+  })();
+
   const kanbanCounts = {
     review: root.querySelector('[data-kanban-count="review"]'),
     progress: root.querySelector('[data-kanban-count="progress"]'),
