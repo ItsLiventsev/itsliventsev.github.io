@@ -509,6 +509,32 @@
   });
 
 
+
+  /* ── v13: offline banner + shell state ── */
+  (function initOffline(){
+    var banner = document.createElement('div');
+    banner.className = 'ws-offline-banner';
+    banner.setAttribute('role','status');
+    banner.setAttribute('aria-live','polite');
+    banner.innerHTML = '<span aria-hidden="true">◉</span> Нет соединения — показываем сохранённую версию. <button type="button">Обновить</button>';
+    var btn = banner.querySelector('button');
+    btn.addEventListener('click', function(){ location.reload(); });
+    var shell = document.querySelector('.ws-shell') || document.body;
+    // insert as first child of body for sticky
+    if (document.body.firstChild) document.body.insertBefore(banner, document.body.firstChild);
+    else document.body.appendChild(banner);
+    function sync(){
+      var online = navigator.onLine;
+      banner.classList.toggle('is-visible', !online);
+      document.documentElement.classList.toggle('is-offline', !online);
+      if (shell) shell.classList.toggle('is-offline', !online);
+      try { localStorage.setItem('ws:offline:last', JSON.stringify({online: online, at: new Date().toISOString()})); } catch(e){}
+    }
+    window.addEventListener('online', sync);
+    window.addEventListener('offline', sync);
+    sync();
+  })();
+
   /* ── Aceternity 3D tilt: mouse tracking + glare ── */
   (function initTilt(){
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -570,6 +596,37 @@
       });
       obs.observe(document.body, {childList:true, subtree:true});
     }
+  })();
+
+
+  /* ── v13: prefetch as <link rel="prefetch"> (auditable) ── */
+  (function initPrefetch(){
+    var seen = new Set();
+    function prefetch(href){
+      if (!href || seen.has(href)) return;
+      try {
+        var u = new URL(href, location.origin);
+        if (u.origin !== location.origin) return;
+        if (!/\.html$/.test(u.pathname) && u.pathname !== '/' && !u.pathname.endsWith('/')) return;
+        seen.add(href);
+        var link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = u.pathname + u.search;
+        link.as = 'document';
+        document.head.appendChild(link);
+        fetch(u.pathname, {method:'GET', credentials:'same-origin'}).catch(()=>{});
+        // mark for visual debug
+        document.querySelectorAll('a[href="'+ u.pathname.replace(/"/g, '\\"') +'"]').forEach(function(a){ a.setAttribute('data-prefetched','true'); });
+      } catch(e){}
+    }
+    document.addEventListener('mouseover', function(e){
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (a && a.href) prefetch(a.getAttribute('href'));
+    }, {passive:true});
+    document.addEventListener('focusin', function(e){
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (a && a.href) prefetch(a.getAttribute('href'));
+    });
   })();
 
   function decorate(scope) {

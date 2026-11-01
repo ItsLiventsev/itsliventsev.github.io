@@ -294,3 +294,47 @@
 10. Global motion stagger + ticker + lift
 
 
+
+## Sprint v13 · 2026-11-01 — kanban DnD + offline-first + reveal stagger + SW dedupe · MAX
+
+> **Режим:** Shared Chat v13 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.
+> **Критерий:** `76/0/0` + `3517/0` остаются зелёными; no layout shift; задник `#F8F9FA` / `#15161d` retained.
+
+### Shared Chat v13
+
+**Architect** — аудит v12 закрыт (Aceternity tilt + cmdk + cozy dark + axe ✓). Нашёл 5 polish-щелей: kanban колонки статичны (нет DnD), dashboard падает offline без баннера/caches, курс-карточки появляются без stagger, SW precache дублирует `/blog.html`, prefetch не оставляет `<link rel="prefetch">` (не аудируется).
+
+**Visual** (Aceternity / Magic UI / Shadcn) — kanban колонки `border: dashed 1px` → `is-drop-target` solid + wash; карточка `cursor: grab` → `grabbing` + `rotate(.6deg)` как в Trello; offline banner sticky top `#fff8e1` / dark `#2e2712`; sparkline bar `::after data-tip` tooltip.
+
+**Motion** (Motion Primitives + Lenis) — reveal `IntersectionObserver 12%` + `rootMargin -40px` + `--reveal-index * 70ms`; kanban `opacity .6 scale(.98) 160ms`; offline banner `translateY(-100%) → 0 220ms`; всё `prefers-reduced-motion: reduce` → instant. Только `transform/opacity`.
+
+**Integrator** — свёл в один PR без зависимостей (zero-deps, native HTML5 DnD + IO): `workspace-home.css` kanban/offline/reveal/tooltip + `workspace.css` prefetch/offline shell + `sw.js` dedupe + GitHub API cache + `workspace.js` prefetch link + offline banner + `home-activity.js` reveal + kanban DnD (keyboard `Ctrl+Arrow`, `localStorage ws:kanban:order:v13`).
+
+**Оркестратор** — утвердил MAX, запретил layout shift, потребовал `node --check` обоих JS + `audit 76/0/0`.
+
+### Задачи v13 (закрыты одним PR)
+
+| № | Ось | Задача | Реф |
+|---|-----|--------|-----|
+| 1 | Главная kanban | Native HTML5 drag: `draggable`, `is-dragging opacity .6 rotate`, `is-drop-target` dashed→solid, `Ctrl+Arrow` keyboard, `localStorage` persist | Trello / Shadcn kanban |
+| 2 | Главная reveal | `IntersectionObserver` stagger `--reveal-index*70ms` для course/skill/resource + activity cards | Motion Primitives stagger |
+| 3 | Главная offline | `ws-offline-banner` sticky + `navigator.onLine` + `online/offline` + `ws:offline:last` | Offline-first |
+| 4 | Навигация | `<link rel="prefetch" as="document">` on hover/focus + `data-prefetched` | Preline |
+| 5 | Компоненты | SW dedupe: убрать дубль `/blog.html` + GitHub API network-first + `SKIP_WAITING` | PWA v2 |
+| 6 | Компоненты | Sparkline bar tooltip `::after attr(data-tip)` + publication-row `:focus-within` | Tremor |
+
+### Тёмная тема / задник
+
+Задник остаётся светлый `#F8F9FA` / тёмный `#15161d`; акценты cozy 8 washes в dark (v12) без изменений. Offline banner в dark `#2e2712/#5a4a1e`.
+
+### Проверка
+
+- `python3 scripts/audit-html.py` → `76/0/0` ; `node scripts/regression-static.js` → `3517/0`
+- `node --check assets/workspace.js && node --check assets/home-activity.js` → ok
+- manual: kanban drag desktop + keyboard `Ctrl+→/←`; reveal при скролле; offline toggle (DevTools offline) → banner; search `Ctrl+K` retained.
+
+### Следующий кандидат v14
+
+- Command palette `⌘K` → actions (навигация без мыши) + dashboard realtime via `BroadcastChannel` между вкладками.
+
+---
