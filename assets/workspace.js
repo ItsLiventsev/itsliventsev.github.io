@@ -158,57 +158,47 @@
   // — Agentic redesign: three visually separated pill groups with moving indicator
   // v18: единый индикатор на весь сайдбар — плашка скользит между всеми группами, меняет цвет
   function attachIndicator(navEl) {
-    // создаём один индикатор на сайдбар, а не на каждую группу
     if (!sidebar._indicator) {
       const ind = document.createElement('div');
       ind.className = 'ws-nav-indicator';
-      ind.setAttribute('aria-hidden','true');
+      ind.setAttribute('aria-hidden', 'true');
       sidebar.prepend(ind);
       sidebar._indicator = ind;
     }
     const indicator = sidebar._indicator;
-    // обновляем variant при ховере
-    function variantFor(el){
-      const group = el.closest('.ws-nav-group');
-      if (!group) return 'general';
-      return group.dataset.variant || 'general';
-    }
-    // собираем все ссылки сайдбара для единой логики leave
-    let active = sidebar.querySelector('[aria-current="page"]');
     function moveTo(el) {
       if (!el || !sidebar.contains(el)) return;
-      // offset относительно сайдбара, а не группы
-      const sTop = sidebar.getBoundingClientRect().top;
-      const eRect = el.getBoundingClientRect();
-      const top = eRect.top - sTop + sidebar.scrollTop;
-      const h = el.offsetHeight;
-      indicator.style.transform = 'translateY(' + top + 'px)';
-      indicator.style.height = h + 'px';
+      const base = sidebar.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      indicator.style.left = (rect.left - base.left - sidebar.clientLeft + sidebar.scrollLeft) + 'px';
+      indicator.style.width = rect.width + 'px';
+      indicator.style.transform = 'translateY(' + (rect.top - base.top - sidebar.clientTop + sidebar.scrollTop) + 'px)';
+      indicator.style.height = rect.height + 'px';
       indicator.style.opacity = '1';
-      indicator.setAttribute('data-variant', variantFor(el));
-      sidebar.classList.add('is-indicator-active');
+      indicator.dataset.variant = el.closest('.ws-nav-group')?.dataset.variant || 'general';
+      sidebar._indicatorTarget = el;
     }
-    function leave() {
-      if (active) moveTo(active); else { indicator.style.opacity='0'; sidebar.classList.remove('is-indicator-active'); }
+    function restore() {
+      const focused = sidebar.querySelector('.ws-nav-link:focus, .ws-section-link:focus');
+      const hovered = sidebar.querySelector('.ws-nav-link:hover, .ws-section-link:hover');
+      const active = sidebar.querySelector('.ws-nav-link[aria-current="page"]');
+      const target = hovered || focused || active;
+      if (target) moveTo(target); else indicator.style.opacity = '0';
     }
-    if (active) requestAnimationFrame(()=> moveTo(active));
-    // делегируем на группу, но движение — по сайдбару
-    const links = [...navEl.querySelectorAll('.ws-nav-link, .ws-section-link')];
-    if (!links.length) return;
-    links.forEach(link=>{
-      link.addEventListener('mouseenter', ()=> { link.classList.add('is-hovered'); moveTo(link); });
-      link.addEventListener('mouseleave', ()=> { link.classList.remove('is-hovered'); });
-      link.addEventListener('focus', ()=> moveTo(link));
+    navEl.querySelectorAll('.ws-nav-link, .ws-section-link').forEach(link => {
+      link.addEventListener('mouseenter', () => moveTo(link));
+      link.addEventListener('focus', () => moveTo(link));
     });
-    navEl.addEventListener('mouseleave', leave);
-    navEl.addEventListener('focusout', ()=> { setTimeout(leave, 10); });
+    navEl.addEventListener('mouseleave', restore);
+    navEl.addEventListener('focusout', () => requestAnimationFrame(restore));
     if (window.ResizeObserver) {
-      const ro = new ResizeObserver(()=> { if (active) moveTo(active); });
-      ro.observe(sidebar);
-      ro.observe(navEl);
+      const observer = new ResizeObserver(() => {
+        if (sidebar._indicatorTarget) moveTo(sidebar._indicatorTarget);
+      });
+      observer.observe(navEl);
+      observer.observe(sidebar);
     }
-    // также слушаем скролл сайдбара
-    sidebar.addEventListener('scroll', ()=> { if (active && indicator.style.opacity==='1') moveTo(active); }, {passive:true});
+    requestAnimationFrame(restore);
   }
   const generalGroup = document.createElement('div'); generalGroup.className='ws-nav-group'; generalGroup.dataset.variant='general';
   const caption = document.createElement('p'); caption.className='ws-sidebar-caption'; caption.textContent='Общее меню'; generalGroup.appendChild(caption);

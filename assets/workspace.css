@@ -54,13 +54,12 @@ body.ws-ready {
   font-weight: 800;
   letter-spacing: .1em;
 }
-.ws-sidebar { position: relative; }
 .ws-sidebar .ws-nav-group { position: relative; }
 .ws-nav { position: relative; display: grid; gap: 3px; }
 /* единый индикатор — один на весь сайдбар, цвет меняется по секции */
 .ws-nav-indicator {
   position: absolute;
-  left: 0; right: 0;
+  top: 0; left: 0; z-index: 1;
   height: 42px;
   border-radius: 10px;
   background: var(--ws-accent-wash);
@@ -74,10 +73,6 @@ body.ws-ready {
 .ws-nav-indicator[data-variant="general"] { background: var(--ws-accent-wash); border-color: color-mix(in srgb, var(--ws-accent) 14%, transparent); }
 .ws-nav-indicator[data-variant="directions"] { background: var(--ws-violet-wash); border-color: color-mix(in srgb, var(--ws-violet) 14%, transparent); }
 .ws-nav-indicator[data-variant="onpage"] { background: var(--ws-orange-wash); border-color: color-mix(in srgb, var(--ws-orange) 14%, transparent); }
-@supports (anchor-name: --ws-active) {
-  .ws-nav-link[aria-current="page"] { anchor-name: --ws-active; }
-  .ws-nav-indicator { position-anchor: --ws-active; top: anchor(top); height: anchor-size(height); transform: none; transition: top 400ms cubic-bezier(.34,1.56,.64,1), height 200ms ease, opacity 200ms ease; }
-}
 .ws-nav-group:hover .ws-nav-indicator,
 .ws-nav-group:focus-within .ws-nav-indicator { opacity: 1; }
 .ws-nav-group.is-indicator-active .ws-nav-indicator { opacity: 1; }
@@ -800,3 +795,10 @@ html { transition: background-color 220ms ease, color 220ms ease; }
 [data-ws-brand], .st-brand { font-family: var(--ws-font); font-weight: 800; letter-spacing: -.04em; }
 .flat-scope :is(header, nav) { font-family: var(--ws-font); }
 .st-topbar a { font-size: 13px; font-weight: 600; }
+
+/* Keep the travelling highlight above group backgrounds and below links. */
+.ws-nav-group { animation: none; }
+.ws-nav-group .ws-nav { z-index: 2; }
+.ws-section-link { position: relative; z-index: 1; }
+.ws-nav-indicator { transition: transform 360ms ease, width 220ms ease, height 220ms ease, opacity 200ms ease, background 220ms ease, border-color 220ms ease; }
+@media (prefers-reduced-motion: reduce) { .ws-nav-indicator { transition: none; } }
