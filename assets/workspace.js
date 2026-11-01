@@ -439,6 +439,33 @@
       sectionTargets.forEach(target => sectionObserver.observe(target));
     }
   }
+  // v4: scroll reveal — set --reveal-index for stagger (Orchestrator)
+  try {
+    const sections = [...document.querySelectorAll('.ws-section, .ws-dashboard-grid, .ws-home-hero')];
+    sections.forEach((el, i) => el.style.setProperty('--reveal-index', String(i)));
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-revealed'); io.unobserve(e.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      sections.forEach(s => io.observe(s));
+    }
+  } catch(_){}
+
+  // v4: keyboard arrow nav for sidebar groups
+  try {
+    document.querySelectorAll('.ws-nav-group').forEach(group => {
+      const links = [...group.querySelectorAll('.ws-nav-link, .ws-section-link')];
+      group.addEventListener('keydown', e => {
+        if (!['ArrowDown','ArrowUp'].includes(e.key)) return;
+        const idx = links.indexOf(document.activeElement);
+        if (idx === -1) return;
+        e.preventDefault();
+        const next = e.key === 'ArrowDown' ? (idx+1)%links.length : (idx-1+links.length)%links.length;
+        links[next].focus();
+      });
+    });
+  } catch(_){}
+
   collapse.addEventListener('click', () => {
     const compact = document.documentElement.classList.toggle('ws-mode-compact');
     try { localStorage.setItem('workspace-rail', compact ? 'compact' : 'expanded'); } catch (error) { /* private browsing */ }
