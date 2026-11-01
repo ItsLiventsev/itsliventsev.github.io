@@ -548,3 +548,132 @@ html { scroll-behavior: smooth; }
   [data-ws-activity-filter] { min-height: 32px; padding: 6px 12px; }
   .ws-nav-link { min-height: 44px; }
 }
+
+/* === v5: Cozy Accents — warm canvas, multi-accent cozy palette === */
+/* canvas warm paper — subtle texture */
+.ws-shell, .ws-workspace { background: var(--ws-canvas); }
+.ws-page-content { position:relative; }
+
+/* hero cozy: warm paper + terracotta/brown/blue orbs */
+.ws-home-copy { background: linear-gradient(180deg, #fff 0%, #fffefb 100%); border-color: var(--ws-line); }
+.ws-home-copy::after {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--ws-terracotta) 12%, transparent), transparent 62%),
+              radial-gradient(closest-side, color-mix(in srgb, var(--ws-blue) 9%, transparent), transparent 68%),
+              radial-gradient(closest-side, color-mix(in srgb, var(--ws-brown) 10%, transparent), transparent 70%);
+  opacity:.85; filter: blur(20px);
+}
+.ws-home-copy .ws-eyebrow .ws-status-dot { background: var(--ws-terracotta); box-shadow: 0 0 0 4px var(--ws-terracotta-wash); animation: ws-pulse-cozy 2s ease-in-out infinite; }
+@keyframes ws-pulse-cozy { 0%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--ws-terracotta) 35%, transparent);} 70%{box-shadow:0 0 0 8px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+
+/* overview-card cozy — warm divider + achievement dots brown */
+.ws-overview-card { background: linear-gradient(180deg, #fff 0%, #fffaf5 100%); }
+.ws-overview-head { border-color: var(--ws-line); color: var(--ws-brown); }
+.ws-overview-achievements li span { color: var(--ws-brown) !important; }
+.ws-overview-card .ws-inline-link { color: var(--ws-brown); }
+.ws-overview-card .ws-inline-link:hover { color: var(--ws-terracotta); }
+
+/* activity header — cozy pill brown accent */
+[data-ws-activity-badge] { background: var(--ws-brown-wash); border-color: color-mix(in srgb, var(--ws-brown) 18%, transparent); color: var(--ws-brown); }
+[data-ws-activity-dot][data-live="true"] { background: var(--ws-brown); }
+[data-ws-activity-dot][data-live="true"]::after { border-color: var(--ws-brown); }
+
+/* dashboard projects — each row distinct cozy icon wash */
+.ws-resource-purple { background: var(--ws-violet-wash) !important; color: var(--ws-violet) !important; }
+.ws-resource-green { background: var(--ws-green-wash) !important; color: var(--ws-green) !important; }
+.ws-resource-blue { background: var(--ws-blue-wash) !important; color: var(--ws-blue) !important; }
+.ws-resource-amber { background: var(--ws-brown-wash) !important; color: var(--ws-brown) !important; }
+.ws-panel-large { border-top: 3px solid var(--ws-violet-wash); }
+
+/* practice — 3 cozy Bento: violet / terracotta / blue with warm top accent */
+.ws-course-card { background: #fff; border-top: 3px solid var(--ws-line); }
+.ws-course-violet { border-top-color: var(--ws-violet); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-violet-wash) 55%, #fff) 0%, #fff 58%); }
+.ws-course-violet .ws-course-icon { background: var(--ws-violet-wash); color: var(--ws-violet); }
+.ws-course-orange { border-top-color: var(--ws-terracotta); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-terracotta-wash) 60%, #fff) 0%, #fff 58%); }
+.ws-course-orange .ws-course-icon { background: var(--ws-terracotta-wash); color: var(--ws-terracotta); }
+.ws-course-blue { border-top-color: var(--ws-blue); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 60%, #fff) 0%, #fff 58%); }
+.ws-course-blue .ws-course-icon { background: var(--ws-blue-wash); color: var(--ws-blue); }
+.ws-course-card:hover { border-top-color: currentColor; }
+
+/* resources — 6 cards cozy accents per index */
+.ws-resource-grid a { border-top: 3px solid var(--ws-line); position:relative; overflow:hidden; }
+.ws-resource-grid a:nth-child(1) { border-top-color: var(--ws-violet); }
+.ws-resource-grid a:nth-child(2) { border-top-color: var(--ws-green); }
+.ws-resource-grid a:nth-child(3) { border-top-color: var(--ws-terracotta); }
+.ws-resource-grid a:nth-child(4) { border-top-color: var(--ws-blue); }
+.ws-resource-grid a:nth-child(5) { border-top-color: var(--ws-mustard); }
+.ws-resource-grid a:nth-child(6) { border-top-color: var(--ws-brown); }
+.ws-resource-grid a:nth-child(1) b { color: var(--ws-violet); }
+.ws-resource-grid a:nth-child(2) b { color: var(--ws-green); }
+.ws-resource-grid a:nth-child(3) b { color: var(--ws-terracotta); }
+.ws-resource-grid a:nth-child(4) b { color: var(--ws-blue); }
+.ws-resource-grid a:nth-child(5) b { color: var(--ws-brown); }
+.ws-resource-grid a:nth-child(6) b { color: var(--ws-slate); }
+
+/* experience — 3 panels cozy top borders: brown / green / blue */
+.ws-experience-grid .ws-panel:nth-child(1) { border-top: 3px solid var(--ws-brown); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-brown-wash) 45%, #fff) 0%, #fff 65%); }
+.ws-experience-grid .ws-panel:nth-child(2) { border-top: 3px solid var(--ws-green); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-green-wash) 50%, #fff) 0%, #fff 65%); }
+.ws-experience-grid .ws-panel:nth-child(3) { border-top: 3px solid var(--ws-blue); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 45%, #fff) 0%, #fff 65%); }
+.ws-experience-grid .ws-panel:nth-child(1) .ws-eyebrow { color: var(--ws-brown); }
+.ws-experience-grid .ws-panel:nth-child(2) .ws-eyebrow { color: var(--ws-green); }
+.ws-experience-grid .ws-panel:nth-child(3) .ws-eyebrow { color: var(--ws-blue); }
+
+/* stack — 4 cozy skill cards: languages red, infra blue, network green, tools black/brown */
+#stack .ws-skill-card:nth-child(1) { border-top: 3px solid var(--ws-red); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-red-wash) 55%, #fff) 0%, #fff 70%); }
+#stack .ws-skill-card:nth-child(2) { border-top: 3px solid var(--ws-blue); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 50%, #fff) 0%, #fff 70%); }
+#stack .ws-skill-card:nth-child(3) { border-top: 3px solid var(--ws-green); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-green-wash) 50%, #fff) 0%, #fff 70%); }
+#stack .ws-skill-card:nth-child(4) { border-top: 3px solid var(--ws-black); background: linear-gradient(180deg, color-mix(in srgb, var(--ws-black-wash) 70%, #fff) 0%, #fff 70%); }
+#stack .ws-skill-card:nth-child(1) h3 { color: var(--ws-red); }
+#stack .ws-skill-card:nth-child(2) h3 { color: var(--ws-blue); }
+#stack .ws-skill-card:nth-child(3) h3 { color: var(--ws-green); }
+#stack .ws-skill-card:nth-child(4) h3 { color: var(--ws-black); }
+#stack .ws-chip-list span:nth-child(3n+1) { color: var(--ws-red); }
+#stack .ws-chip-list span:nth-child(3n+2) { color: var(--ws-blue); }
+#stack .ws-chip-list span:nth-child(3n) { color: var(--ws-brown); }
+#stack .ws-skill-card:nth-child(4) .ws-chip-list span { color: var(--ws-slate); }
+#stack .ws-skill-card::after { background: linear-gradient(90deg, var(--ws-red) 0%, var(--ws-blue) 35%, var(--ws-green) 65%, var(--ws-brown) 100%); }
+
+/* contact — 4 cozy: email red, edu blue, github black, portfolio brown */
+.ws-contact-grid a { border-top: 3px solid var(--ws-line); border-radius: 14px; padding: 16px; background: #fff; transition: transform var(--ws-motion), box-shadow var(--ws-motion), border-color var(--ws-motion); }
+.ws-contact-grid a:nth-child(1) { border-top-color: var(--ws-red); }
+.ws-contact-grid a:nth-child(2) { border-top-color: var(--ws-blue); }
+.ws-contact-grid a:nth-child(3) { border-top-color: var(--ws-black); }
+.ws-contact-grid a:nth-child(4) { border-top-color: var(--ws-brown); }
+.ws-contact-grid a:nth-child(1) small { color: var(--ws-red); }
+.ws-contact-grid a:nth-child(2) small { color: var(--ws-blue); }
+.ws-contact-grid a:nth-child(3) small { color: var(--ws-slate); }
+.ws-contact-grid a:nth-child(4) small { color: var(--ws-brown); }
+.ws-contact-grid a:hover { transform: translateY(-2px); box-shadow: var(--ws-shadow-md); }
+
+/* section headings — cozy eyebrow dots */
+.ws-section .ws-eyebrow { position:relative; padding-left: 12px; }
+.ws-section .ws-eyebrow::before { content:""; position:absolute; left:0; top:50%; width:6px; height:6px; border-radius:50%; transform:translateY(-50%); background: currentColor; opacity:.9; }
+#activity .ws-eyebrow { color: var(--ws-brown); }
+#projects .ws-eyebrow { color: var(--ws-violet); }
+#practice .ws-eyebrow { color: var(--ws-terracotta); }
+#resources .ws-eyebrow { color: var(--ws-green); }
+#experience .ws-eyebrow { color: var(--ws-blue); }
+#stack .ws-eyebrow { color: var(--ws-red); }
+#contact .ws-eyebrow { color: var(--ws-brown); }
+
+/* activity timeline — cozy status colors with brown for review */
+[data-ws-activity-item][data-status="review"] [data-ws-activity-item-line]::after { background: var(--ws-brown); box-shadow: 0 0 0 3px var(--ws-brown-wash); }
+
+/* filters cozy */
+[data-ws-activity-filter][aria-pressed="true"] { background: var(--ws-black); border-color: var(--ws-black); color: #fff; }
+
+/* cozy footer */
+.ws-home-root > .ws-footer { border-color: var(--ws-line); background: color-mix(in srgb, var(--ws-surface-soft) 60%, transparent); border-radius: 14px; padding: 16px 18px; margin-top: 22px; }
+
+/* dark cozy — keep canvas dark, surfaces warm dark */
+:root[data-theme="dark"] .ws-home-copy { background: linear-gradient(180deg, var(--ws-surface) 0%, color-mix(in srgb, var(--ws-surface-soft) 80%, transparent) 100%); }
+:root[data-theme="dark"] .ws-overview-card { background: var(--ws-surface); }
+:root[data-theme="dark"] .ws-course-card,
+:root[data-theme="dark"] #stack .ws-skill-card,
+:root[data-theme="dark"] .ws-experience-grid .ws-panel,
+:root[data-theme="dark"] .ws-contact-grid a { background: var(--ws-surface); }
+
+/* adaptation — cozy density keeps readability on tiny screens */
+@media (max-width: 560px) {
+  #stack .ws-skill-card { flex: 1 1 100%; }
+  .ws-course-card { border-top-width: 3px; }
+}

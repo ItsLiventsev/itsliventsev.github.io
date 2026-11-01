@@ -146,4 +146,12 @@
 - **A11y & Adapt:** keyboard ArrowUp/Down в пилюлях, ticker `focus-within pause`, touch targets 44px (≤560px), 1280px Bento density, `scroll-reveal` без layout shift.
 - **Библиотеки v4:** + Lenis (smooth), Sonner (status), cmdk (search), Tremor (metrics), Hover.dev (underline) — все CSS-first.
 
+### v5 — Cozy Accents (1 ноября 2026, запрос: больше акцентных cozy цветов — красный/синий/зелёный/коричневый/чёрный, задник светлый/тёмный по теме)
+- **Токены:** canvas `#FDF8F3` warm paper (light) / `#15161d` (dark), + `brown #7A4A2E`, `terracotta #B4533A`, `mustard #8A7A1F`, `violet #6654C4`, `slate #4A5568`, `black #0F0F10` с wash; shadows мягкие.
+- **Hero cozy:** `linear #fff→#fffefb`, orbs terracotta/blue/brown `blur 20px float 9s`, dot `pulse-cozy 2s terracotta`.
+- **Проекты/Практика/Ресурсы:** каждая Bento-карта свой top-border 3px + gradient wash (violet/green/terracotta/blue/mustard/brown) — сразу видно красный-синий-зелёный-коричневый-чёрный, но карточки белые, задник светлый.
+- **Опыт + Stack + Контакты:** 3 панели опыта (brown/green/blue), 4 skill-карты (red/blue/green/black) + цветные точки chips, 4 контакта (red/blue/black/brown) с hover lift.
+- **Мелочи cozy:** eyebrow точка `::before` per section, footer `soft 60%` radius 14px, activity review→brown, filter active→black.
+- **Адаптация:** 390/768/1280, touch 44px, dark-тема cozy wash `#2e2520` etc., `prefers-reduced-motion`, без layout shift.
+
 — Оркестратор, 2026
