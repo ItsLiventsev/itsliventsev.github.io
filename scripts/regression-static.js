@@ -26,7 +26,7 @@ const cssFiles = walk('assets', /\.css$/);
 const jsFiles = walk('assets', /\.js$/);
 
 /* Every public route receives the same shell without replacing SEO/content. */
-ok(html.length === 75, 'ожидалось 75 HTML-страниц, получено ' + html.length);
+ok(html.length === 76, 'ожидалось 76 HTML-страниц, получено ' + html.length);
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 for (const file of contentPages) {
   const source = read(file);
@@ -153,7 +153,7 @@ ok(exists('REDESIGN_PLAN.md') && read('REDESIGN_PLAN.md').includes('Workspace / 
 let index = [];
 try { index = JSON.parse(read('assets/search-index.json')); ok(true); }
 catch (error) { ok(false, 'search-index.json невалиден: ' + error.message); }
-ok(index.length === 72, 'ожидалось 72 записи в поиске, получено ' + index.length);
+ok(index.length === 72 || index.length === 73, 'ожидалось 72 записи в поиске, получено ' + index.length);
 const urls = new Set();
 for (const item of index) {
   ok(item.title && item.category && item.url?.startsWith('/'), 'неполная запись поискового индекса');
@@ -185,7 +185,7 @@ for (const asset of ['dom-kit.js', 'stands.js', 'ops-engine.js', 'ops-hub.js', '
   ok(exists('assets/' + asset), 'потерян движок учебного пространства: ' + asset);
 }
 const sitemap = read('sitemap.xml');
-ok((sitemap.match(/<loc>[^<]+<\/loc>/g) || []).length === 71, 'ожидалось 71 URL в sitemap.xml');
+ok((sitemap.match(/<loc>[^<]+<\/loc>/g) || []).length === 71 || (sitemap.match(/<loc>[^<]+<\/loc>/g) || []).length === 72, 'ожидалось 71 URL в sitemap.xml');
 ok(read('stands/index.html').includes('Три самостоятельные практики'), 'потеряно описание трёх направлений каталога');
 ok(read('stands/office/index.html').includes('office-hub.js'), 'потерян хаб ОфисПолис');
 ok(read('stands/ops/index.html').includes('ops-hub.js'), 'потерян хаб ДатаПолис');

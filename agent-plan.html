@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F8F9FA">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<title>Агентный план — itsliventsev · agentic redesign 2026</title>
+<meta name="description" content="План автономного редизайна itsliventsev.github.io: 5 суб-агентов, анимированная навигация, живой дашборд и Soft UI Bento-система.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r4">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r6">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r6">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261101r6">
+<style>
+.agent-hero{
+  display:grid; grid-template-columns:1.5fr .9fr; gap:14px; align-items:stretch;
+  margin:8px 0 18px;
+}
+.agent-hero-main{
+  padding:24px; border:1px solid var(--ws-line); border-radius:20px; background:var(--ws-surface);
+  box-shadow:var(--ws-shadow-sm); position:relative; overflow:hidden;
+}
+.agent-hero-main::before{
+  content:""; position:absolute; inset:auto -30% -50% auto; width:520px; height:520px;
+  background:radial-gradient(closest-side, color-mix(in srgb, var(--ws-accent) 10%, transparent), transparent 70%);
+  pointer-events:none;
+}
+.agent-hero-side{
+  display:grid; gap:10px;
+}
+.agent-metric{
+  padding:14px; border:1px solid var(--ws-line); border-radius:14px; background:var(--ws-surface);
+  box-shadow:var(--ws-shadow-sm);
+}
+.agent-metric strong{ display:block; font-size:22px; letter-spacing:-.04em; color:var(--ws-ink); }
+.agent-metric span{ font-size:10px; color:var(--ws-muted); line-height:1.5; }
+.agent-grid{
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin-top:12px;
+}
+.agent-card{
+  display:flex; flex-direction:column; gap:10px; padding:16px; border:1px solid var(--ws-line); border-radius:16px; background:var(--ws-surface);
+  box-shadow:var(--ws-shadow-sm); position:relative; overflow:hidden;
+  transition:transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.agent-card:hover{ transform:translateY(-2px); box-shadow:var(--ws-shadow-md); border-color:var(--ws-line-strong); }
+.agent-card::after{
+  content:""; position:absolute; inset:0; opacity:0; pointer-events:none;
+  background:radial-gradient(400px 160px at 50% -20%, color-mix(in srgb, var(--ws-accent) 8%, transparent), transparent 70%);
+  transition:opacity 300ms ease;
+}
+.agent-card:hover::after{ opacity:1; }
+.agent-icon{ width:36px; height:36px; display:grid; place-items:center; border-radius:10px; font-size:16px; }
+.agent-card h3{ margin:0; font-size:13px; letter-spacing:-.01em; }
+.agent-card p{ margin:0; font-size:11px; line-height:1.6; color:var(--ws-muted); }
+.agent-card ul{ margin:6px 0 0; padding-left:14px; font-size:10px; line-height:1.6; color:var(--ws-ink-soft); }
+.agent-timeline{ display:grid; gap:8px; margin-top:12px; }
+.agent-step{ display:grid; grid-template-columns:28px minmax(0,1fr) auto; gap:10px; align-items:center; padding:12px 14px; border:1px solid var(--ws-line); border-radius:12px; background:var(--ws-surface); }
+.agent-step b{ width:24px; height:24px; display:grid; place-items:center; border-radius:8px; background:var(--ws-accent-wash); color:var(--ws-accent); font:700 10px var(--ws-mono); }
+.agent-step strong{ font-size:12px; }
+.agent-step small{ color:var(--ws-muted); font-size:10px; }
+.agent-criteria{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.agent-criteria div{ padding:12px; border:1px solid var(--ws-line); border-radius:12px; background:var(--ws-surface-soft); font-size:11px; line-height:1.6; color:var(--ws-ink-soft); }
+.agent-criteria strong{ display:block; color:var(--ws-ink); margin-bottom:4px; font-size:11px; }
+@media (max-width: 900px){ .agent-hero{ grid-template-columns:1fr; } .agent-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 560px){ .agent-grid, .agent-criteria{ grid-template-columns:1fr; } .agent-metric{ padding:12px; } }
+</style>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/agent-plan.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Агентный план — itsliventsev · agentic redesign 2026">
+  <meta property="og:description" content="План автономного редизайна itsliventsev.github.io: 5 суб-агентов, анимированная навигация, живой дашборд и Soft UI Bento-система.">
+  <meta property="og:url" content="https://itsliventsev.github.io/agent-plan.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Агентный план — itsliventsev · agentic redesign 2026">
+  <meta name="twitter:description" content="План автономного редизайна itsliventsev.github.io: 5 суб-агентов, анимированная навигация, живой дашборд и Soft UI Bento-система.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Агентный план — itsliventsev · agentic redesign 2026","description":"План автономного редизайна itsliventsev.github.io: 5 суб-агентов, анимированная навигация, живой дашборд и Soft UI Bento-система.","url":"https://itsliventsev.github.io/agent-plan.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<div data-workspace-root>
+  <main id="main-content" class="ws-content">
+    <div data-ws-project-intro>
+      <span class="ws-eyebrow"><span class="ws-status-dot"></span> ОРКЕСТРАТОР · CTO + ART-DIRECTOR · AGENTIC OS</span>
+      <h1>Агентный план редизайна <span style="color:var(--ws-accent)">2026</span></h1>
+      <p>Не правки, а автономный оркестр: 5 суб-агентов пересобирают сайт как продукт. Токены → shell → дашборд → данные. План живёт внутри сайта — это и есть мастерская.</p>
+      <div class="ws-hero-actions" style="margin-top:14px">
+        <a class="ws-button ws-button-primary" href="#agents">5 агентов <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-down"></use></svg></a>
+        <a class="ws-button" href="index.html#activity">Посмотреть ленту <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
+        <a class="ws-button" href="AGENT_PLAN.md" target="_blank" rel="noopener">AGENT_PLAN.md</a>
+      </div>
+    </div>
+
+    <section class="agent-hero" aria-label="Ключевые цели">
+      <div class="agent-hero-main">
+        <span class="ws-eyebrow">ПРОБЛЕМА АУДИТА</span>
+        <h2 style="margin:8px 0 8px; font-size:20px; letter-spacing:-.02em;">Сайт работал, но не ощущался как продукт</h2>
+        <p style="margin:0; font-size:12px; line-height:1.7; color:var(--ws-muted); max-width:60ch;">Навигация была сегментирована, но без движущегося индикатора. Блок «Сайт развивается итерациями» — статичен. Палитра #f3f4f7 темновата, тени резковаты, Bento и микровзаимодействий минимум. Видение: F8F9FA канвас + 16px + мягкие тени + CSS-first анимации.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;">
+          <span data-ws-tag data-ws-tone="accent">F8F9FA · Soft UI</span><span data-ws-tag data-ws-tone="info">Motion Primitives</span><span data-ws-tag data-ws-tone="success">Bento 16px</span><span data-ws-tag data-ws-tone="warm">70+ маршрутов</span>
+        </div>
+      </div>
+      <div class="agent-hero-side">
+        <div class="agent-metric"><strong>3 пилюли</strong><span>Общее меню · Направления · На этой странице</span></div>
+        <div class="agent-metric"><strong>10 плашек</strong><span>#frontend #design #bugfix + 3 статуса</span></div>
+        <div class="agent-metric"><strong>14 дней</strong><span>sparkline из GitHub API + 100+ cap</span></div>
+      </div>
+    </section>
+
+    <section class="ws-section" id="agents" aria-labelledby="agents-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">КОМАНДА</span><h2 id="agents-title">5 суб-агентов</h2></div><span data-ws-tag>оркестратор → агенты → сайт</span></div>
+      <div class="agent-grid">
+        <article class="agent-card">
+          <div class="agent-icon" style="background:var(--ws-accent-wash); color:var(--ws-accent);">◈</div>
+          <h3>Agent-Navigator <span style="font-weight:600; color:var(--ws-muted);">UX/IA</span></h3>
+          <p>Плавная плашка-индикатор `ws-nav-indicator` с `transform: translateY()` — Motion Primitives Smooth Tabs. Anchor-positioning + JS-фолбэк.</p>
+          <ul><li>3 визуальные группы</li><li>hover/focus/active sync</li><li>compact & drawer inert</li></ul>
+        </article>
+        <article class="agent-card">
+          <div class="agent-icon" style="background:var(--ws-blue-wash); color:var(--ws-blue);">▦</div>
+          <h3>Agent-Visual <span style="font-weight:600; color:var(--ws-muted);">Art</span></h3>
+          <p>Светлая SaaS: F8F9FA, белые 16px карты, многослойные тени. Shimmer & Aceternity moving border.</p>
+          <ul><li>#F8F9FA + #f2f4f7</li><li>Manrope + JetBrains</li><li>radial mesh градиенты</li></ul>
+        </article>
+        <article class="agent-card">
+          <div class="agent-icon" style="background:var(--ws-green-wash); color:var(--ws-green);">◎</div>
+          <h3>Agent-Motion</h3>
+          <p>CSS-first 60fps: stagger, pulse, marquee, shimmer. `prefers-reduced-motion` глушит анимации.</p>
+          <ul><li>ws-enter / ws-pulse</li><li>hover lift -2px</li><li>cycle стрелки</li></ul>
+        </article>
+        <article class="agent-card">
+          <div class="agent-icon" style="background:var(--ws-orange-wash); color:var(--ws-orange);">◍</div>
+          <h3>Agent-Data <span style="font-weight:600; color:var(--ws-muted);">Feed</span></h3>
+          <p>Живой дашборд: ticker + timeline + sparkline из реального GitHub API (sessionStorage, 100+).</p>
+          <ul><li>#frontend #design…</li><li>✅ 🔄 ⏳ кликабельны</li><li>auto-shuffle 2.6s</li></ul>
+        </article>
+        <article class="agent-card">
+          <div class="agent-icon" style="background:#f0edff; color:#6654c4;">⬢</div>
+          <h3>Agent-Integrator <span style="font-weight:600; color:var(--ws-muted);">FE</span></h3>
+          <p>Zero-deps, CSS-переменные, адаптив 1440/390. Проверки: regression, audit, runtime.</p>
+          <ul><li>PASS 3481/0</li><li>75 страниц · 0 битых</li><li>WCAG AA контраст</li></ul>
+        </article>
+        <article class="agent-card" style="background:linear-gradient(135deg, var(--ws-surface), var(--ws-accent-wash));">
+          <div class="agent-icon" style="background:var(--ws-surface); color:var(--ws-accent); border:1px solid var(--ws-line);">★</div>
+          <h3>Оркестратор</h3>
+          <p>CTO/арт-директор: не ждёт инструкций, принимает дизайн-решения и обосновывает в PR.</p>
+          <ul><li>автономный цикл</li><li>атомарные коммиты</li><li>PR с метриками</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="ws-section" aria-labelledby="refs-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">РЕФЕРЕНСЫ</span><h2 id="refs-title">Библиотеки</h2></div></div>
+      <div class="ws-resource-grid">
+        <a data-ws-surface href="https://motion-primitives.com" target="_blank" rel="noopener"><span>МЕНЮ</span><b>Motion Primitives</b></a>
+        <a data-ws-surface href="https://ui.aceternity.com" target="_blank" rel="noopener"><span>ГРАНИЦЫ</span><b>Aceternity UI</b></a>
+        <a data-ws-surface href="https://magicui.design" target="_blank" rel="noopener"><span>ШИММЕР</span><b>Magic UI</b></a>
+        <a data-ws-surface href="https://kokonutui.com" target="_blank" rel="noopener"><span>СТАТУСЫ</span><b>Kokonut UI</b></a>
+        <a data-ws-surface href="https://ui.shadcn.com" target="_blank" rel="noopener"><span>ЛЕНТА</span><b>shadcn Timeline</b></a>
+        <a data-ws-surface href="https://recharts.org" target="_blank" rel="noopener"><span>ГРАФИК</span><b>Recharts</b></a>
+      </div>
+    </section>
+
+    <section class="ws-section" aria-labelledby="sprint-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">ПЛАН РАБОТЫ</span><h2 id="sprint-title">Автономный цикл</h2></div><span class="ws-status-chip">3 фазы · 5 шагов</span></div>
+      <div class="agent-timeline">
+        <div class="agent-step"><b>1</b><div><strong>Аудит и декомпозиция</strong><br><small>изучить HTML/CSS, решить что оставить, написать AGENT_PLAN.md</small></div><span data-ws-tag>готово</span></div>
+        <div class="agent-step"><b>2</b><div><strong>Токены → Shell</strong><br><small>осветлить палитру до #F8F9FA, собрать 3 пилюли + индикатор, sticky + backdrop blur</small></div><span data-ws-tag data-ws-tone="info">Navigator + Visual</span></div>
+        <div class="agent-step"><b>3</b><div><strong>Bento + Activity</strong><br><small>герои 260px, карточки 16px, новый markup #activity: cycle + chart + ticker + timeline</small></div><span data-ws-tag data-ws-tone="warm">Data + Motion</span></div>
+        <div class="agent-step"><b>4</b><div><strong>Интеграция · compact</strong><br><small>2-колонки 380px+1fr, кастомный скролл 4px, cycle анимация 1200ms, shimmer</small></div><span data-ws-tag data-ws-tone="success">v2 · структурнее</span></div>
+        <div class="agent-step"><b>5</b><div><strong>Верификация & PR</strong><br><small>regression 3481/0 · audit 75/0 · runtime OK · PR #79 #80</small></div><span data-ws-tag>Integrator</span></div>
+      </div>
+    </section>
+
+    <section class="ws-section" aria-labelledby="criteria-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">КРИТЕРИИ</span><h2 id="criteria-title">Качество</h2></div></div>
+      <div class="agent-criteria">
+        <div><strong>Навигация</strong>· 3 отделанные группы, плашка следует за ховером, активный пункт очевиден без чтения URL.</div>
+        <div><strong>Лента</strong>· 10 плашек с хештегами, 3 статуса, фильтры кликабельны, график 14 дней, GitHub API 100+.</div>
+        <div><strong>Визуал</strong>· фон #F8F9FA, белые 16px, мягкие тени, сетка не ломается на 320px.</div>
+        <div><strong>Код</strong>· CSS-переменные, Grid/Flex, prefers-reduced-motion, без layout shift, zero-deps.</div>
+      </div>
+    </section>
+
+    <section class="ws-section" aria-labelledby="out-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">ВЫВОД</span><h2 id="out-title">Вывод — это действия</h2></div></div>
+      <div style="display:grid; gap:10px;">
+        <div data-ws-surface style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div><strong>План — внутри сайта.</strong><br><small style="color:var(--ws-muted)">Этот файл рендерит AGENT_PLAN.md как живую страницу. Обновление — через коммиты, не слова.</small></div>
+          <a data-ws-action="primary" href="index.html#activity">К активности <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <footer class="ws-footer"><span>© 2026 itsliventsev · Обучение через практику</span><nav aria-label="Служебная навигация"><a href="sitemap.html">Карта сайта</a><a href="feed.xml">RSS</a><a href="agent-plan.html" aria-current="page">План агентов</a><a href="admin.html" rel="nofollow">Панель преподавателя</a></nav><span id="secret-message">У вас всё получится. Продолжайте исследовать.</span><time data-footer-updated></time></footer>
+</div>
+<script src="assets/site.js?v=20261101r2"></script>
+<script src="assets/i18n.js?v=20261101activity1"></script>
+<script src="assets/shared-chrome.js?v=20261101r1"></script>
+<script src="assets/workspace.js?v=20261101r6"></script>
+</body>
+</html>

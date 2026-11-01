@@ -309,11 +309,12 @@
 [data-ws-activity-item] {
   display:grid; grid-template-columns: 28px minmax(0,1fr) auto; gap:12px; align-items:center;
   padding:12px 14px; border:1px solid var(--ws-line); border-radius:14px; background: var(--ws-surface);
-  transition: transform var(--ws-motion), box-shadow var(--ws-motion), border-color var(--ws-motion), opacity 300ms;
+  overflow:hidden; max-height:120px;
+  transition: transform var(--ws-motion), box-shadow var(--ws-motion), border-color var(--ws-motion), opacity 300ms ease, max-height 340ms cubic-bezier(.2,.8,.2,1), margin 300ms ease, padding 300ms ease, border-width 300ms ease;
   opacity:0; transform: translateY(8px); animation: ws-enter 420ms cubic-bezier(.2,.8,.2,1) forwards;
 }
 [data-ws-activity-item]:hover { transform: translateY(-1px); border-color: var(--ws-line-strong); box-shadow: var(--ws-shadow-sm); }
-[data-ws-activity-item][data-filtered="true"] { display:none; }
+[data-ws-activity-item][data-filtered="true"] { max-height:0; opacity:0; padding-top:0; padding-bottom:0; margin:0; border-width:0; transform:scale(.98); pointer-events:none; overflow:hidden; }
 [data-ws-activity-item-line] { width:2px; height:100%; min-height:32px; justify-self:center; border-radius:2px; background: var(--ws-line); position:relative; }
 [data-ws-activity-item-line]::after {
   content:""; position:absolute; left:50%; top:50%; width:10px; height:10px; transform:translate(-50%,-50%);
@@ -435,4 +436,44 @@
 [data-ws-activity-item]:nth-child(3) { animation-delay: 80ms; }
 [data-ws-activity-item]:nth-child(4) { animation-delay: 120ms; }
 [data-ws-activity-item]:nth-child(5) { animation-delay: 160ms; }
+
+
+/* === v3: Index optimization — activity top, merged profile, compact stack === */
+/* dashboard now single wide card */
+.ws-dashboard-grid { grid-template-columns: 1fr; }
+.ws-dashboard-grid .ws-panel-large { grid-column: 1 / -1; }
+
+/* overview merged: tighter, bento with achievements */
+.ws-overview-card { gap: 2px; }
+.ws-overview-achievements li { transition: color 150ms ease, transform 150ms ease; }
+.ws-overview-achievements li:hover { color: var(--ws-ink); transform: translateX(2px); }
+
+/* stack compact: inline pills bar, not 4 big cards */
+#stack .ws-skill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+#stack .ws-skill-card { flex: 1 1 220px; min-width: 180px; padding: 12px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; }
+#stack .ws-skill-card h3 { margin: 0; font-size: 11px; color: var(--ws-muted); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+#stack .ws-chip-list span { font-size: 9.5px; padding: 4px 7px; border-radius: 99px; background: var(--ws-surface-soft); border: 1px solid transparent; transition: all 160ms ease; }
+#stack .ws-chip-list span:hover { background: var(--ws-accent-wash); color: var(--ws-accent); border-color: var(--ws-accent-wash); transform: translateY(-1px); }
+
+/* activity moved top: reduce top margin, tighter heading */
+#activity { margin-top: 16px; }
+#activity .ws-section-heading { margin-bottom: 8px; }
+
+/* smooth everywhere: no harsh jumps */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference){
+  .ws-panel, .ws-skill-card, .ws-course-card, .ws-resource-grid a, .ws-contact-grid a, [data-ws-activity-card], [data-ws-activity-feed] {
+    transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, border-color 220ms ease, background 220ms ease;
+  }
+}
+
+/* ticker duplication fix: ensure no flicker, masks */
+[data-ws-activity-ticker] { -webkit-mask: linear-gradient(90deg, transparent 0, black 6%, black 94%, transparent 100%); mask: linear-gradient(90deg, transparent 0, black 6%, black 94%, transparent 100%); }
+[data-ws-activity-ticker-track] { will-change: transform; }
+
+/* feed filters: pill morph, not jump */
+[data-ws-activity-filter] { transition: all 200ms cubic-bezier(.2,.8,.2,1); }
+[data-ws-activity-filter]:active { transform: scale(.96); }
+
+
 

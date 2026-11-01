@@ -228,12 +228,17 @@
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
     });
-    // update timeline visibility without full rerender
+    // smooth stagger: animate visibility, container height follows gently
     if (timeline) {
-      [...timeline.children].forEach(row=>{
+      const rows = [...timeline.children];
+      rows.forEach((row, i)=>{
         const rowTag = row.dataset.tag;
-        if (tag==='all' || rowTag===tag) row.removeAttribute('data-filtered');
-        else row.setAttribute('data-filtered','true');
+        const shouldShow = tag==='all' || rowTag===tag;
+        // stagger 40ms per item for fluid motion
+        setTimeout(()=>{
+          if (shouldShow) row.removeAttribute('data-filtered');
+          else row.setAttribute('data-filtered','true');
+        }, i*32);
       });
     }
     // highlight ticker active
