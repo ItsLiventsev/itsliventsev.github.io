@@ -1024,3 +1024,53 @@ html { scroll-behavior: smooth; }
 
 /* ── v15: home editorial print ── */
 @media print { .ws-home-hero, .ws-dashboard-grid { break-inside: avoid; } }
+
+
+/* ── v16: Container Queries — Bento hero адаптируется к контейнеру, не viewport ── */
+.ws-home-root { container-type: inline-size; container-name: home; }
+@container home (max-width: 720px) {
+  .ws-home-hero { grid-template-columns: 1fr !important; }
+  .ws-home-copy h1 { font-size: clamp(26px, 7vw, 34px); }
+  .ws-dashboard-grid { grid-template-columns: 1fr !important; }
+}
+@container home (max-width: 520px) {
+  .ws-learning-grid { grid-template-columns: 1fr !important; }
+  .ws-overview-card { padding: 14px; }
+}
+
+/* ── v16: Editorial — footnotes + callouts + inline TOC collapse ── */
+.ws-footnote { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin: 0 2px; border-radius: 999px; background: var(--ws-accent-wash); border: 1px solid color-mix(in srgb, var(--ws-accent) 18%, transparent); color: var(--ws-accent); font: 700 10px var(--ws-mono); vertical-align: super; cursor: help; }
+.ws-callout { display: flex; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--ws-line); background: var(--ws-surface); box-shadow: var(--ws-shadow-sm); }
+.ws-callout--info { border-color: var(--ws-blue); background: var(--ws-blue-wash); }
+.ws-callout--warn { border-color: #c9a43a; background: #fffbe6; }
+.ws-callout--success { border-color: var(--ws-green); background: var(--ws-green-wash); }
+.ws-callout__icon { flex: 0 0 20px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--ws-surface); border: 1px solid var(--ws-line); }
+.ws-callout__body { flex: 1; min-width: 0; font-size: 12px; line-height: 1.6; }
+.ws-callout__body strong { font-size: 12px; }
+:root[data-theme="dark"] .ws-callout--warn { background: #2e2712; border-color: #5a4a1e; color: #f3d58b; }
+.ws-inline-toc { display: none; margin: 16px 0; border: 1px solid var(--ws-line); border-radius: 12px; background: var(--ws-surface); overflow: hidden; }
+.ws-inline-toc summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; font: 700 11px var(--ws-font); letter-spacing: .06em; text-transform: uppercase; color: var(--ws-muted); cursor: pointer; }
+.ws-inline-toc summary::-webkit-details-marker { display: none; }
+.ws-inline-toc[open] summary { border-bottom: 1px solid var(--ws-line); background: var(--ws-surface-soft); }
+.ws-inline-toc nav { padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+.ws-inline-toc a { padding: 8px 10px; border-radius: 8px; color: var(--ws-ink-soft); font-size: 12px; text-decoration: none; }
+.ws-inline-toc a:hover { background: var(--ws-surface-soft); color: var(--ws-ink); }
+.ws-inline-toc a.is-active { background: var(--ws-accent-wash); color: var(--ws-accent); font-weight: 700; }
+@media (max-width: 940px) { .ws-inline-toc { display: block; } }
+
+/* ── v16: Skeleton shimmer for async dashboard ── */
+.ws-skeleton { position: relative; overflow: hidden; background: var(--ws-surface-soft); border-radius: 8px; min-height: 14px; }
+.ws-skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.6) 50%, transparent 100%); background-size: 200% 100%; animation: ws-skeleton-shimmer 1.4s ease-in-out infinite; }
+@keyframes ws-skeleton-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.ws-skeleton--text { height: 12px; border-radius: 6px; }
+.ws-skeleton--heading { height: 18px; border-radius: 6px; width: 60%; }
+.ws-skeleton--card { height: 84px; border-radius: 12px; }
+:root[data-theme="dark"] .ws-skeleton::after { background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.08) 50%, transparent 100%); background-size: 200% 100%; }
+@media (prefers-reduced-motion: reduce) { .ws-skeleton::after { animation: none !important; } }
+
+/* ── v16: View-transition polish — page-content cross-document ── */
+@supports (view-transition-name: root) {
+  html { view-transition-name: none; }
+  .ws-page-content { view-transition-name: page-content; }
+  ::view-transition-group(page-content) { animation-duration: 320ms; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+}

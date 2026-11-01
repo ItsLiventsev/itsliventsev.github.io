@@ -759,3 +759,13 @@ input:focus, select:focus, textarea:focus, [data-ws-surface] input:focus { borde
 a[data-prefetched="true"] { text-decoration-thickness: 2px; }
 /* ── v13: ws-shell offline state ── */
 .ws-shell.is-offline { --ws-rail: var(--ws-rail); }
+
+
+/* ── v16: cmdk recent pages chip ── */
+.ws-search-recent { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 10px 0; }
+.ws-search-recent a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--ws-surface-soft); border: 1px solid var(--ws-line); color: var(--ws-muted); font: 600 11px var(--ws-font); text-decoration: none; transition: background 140ms, border-color 140ms; }
+.ws-search-recent a:hover { background: var(--ws-surface); border-color: var(--ws-line-strong); color: var(--ws-ink); }
+.ws-search-recent a small { font: 10px var(--ws-mono); opacity: .7; }
+/* ── v16: theme transition polish ── */
+html { transition: background-color 220ms ease, color 220ms ease; }
+@media (prefers-reduced-motion: reduce) { html { transition: none !important; } }
