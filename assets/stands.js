@@ -854,7 +854,7 @@
   function initGreeting(profile) {
     var dashboard = $('cab-dashboard');
     if (!dashboard || !profile) return;
-    if (dashboard.previousElementSibling && dashboard.previousElementSibling.classList.contains('greet-card')) return;
+    if (dashboard.querySelector('.greet-card')) return;
     var today = new Date().toISOString().slice(0, 10);
     var flag = Store.get('stands-greet');
     var mascotId = profile.mascotId || (window.LEAGUE && window.LEAGUE.MASCOTS[0].id) || 'raccoon';
@@ -871,7 +871,7 @@
           '<button class="flat-btn ghost greet-close" type="button">свернуть</button>' +
         '</div>' +
       '</div>';
-    dashboard.parentNode.insertBefore(card, dashboard);
+    dashboard.insertBefore(card, dashboard.firstElementChild);
     card.querySelector('.greet-close').addEventListener('click', function () {
       card.classList.add('is-dismissed');
       Store.set('stands-greet', { date: today });

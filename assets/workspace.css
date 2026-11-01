@@ -141,6 +141,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .ws-mode-compact .ws-sidebar { padding-inline: 10px; }
 .ws-mode-compact .ws-nav-link { justify-content: center; padding-inline: 8px; }
 .ws-mode-compact .ws-nav-label, .ws-mode-compact .ws-sidebar-caption, .ws-mode-compact .ws-sidebar-card { display: none; }
+@media (min-width: 941px) { .ws-mode-compact .ws-section-nav { display: none; } }
 .ws-mode-compact .ws-sidebar-head { justify-content: center; padding-inline: 0; }
 .ws-mode-drawer { overflow: hidden; }
 .ws-mode-drawer .ws-sidebar { position: fixed; inset: 0 auto 0 0; width: min(300px, calc(100vw - 48px)); height: 100dvh; transform: translateX(-102%); box-shadow: var(--ws-shadow-lg); transition: transform 220ms ease; }
