@@ -74,7 +74,6 @@
     });
     if (seen.size > 1) sidebar.appendChild(sectionNav);
   }
-  addSectionNavigation();
   function generatedBreadcrumbs() {
     if (!isNestedPage) return null;
     const items = [];
@@ -168,6 +167,7 @@
     link.append(icon, label); nav.appendChild(link);
   });
   sidebar.appendChild(nav);
+  addSectionNavigation();
   const learningNav = document.createElement('div'); learningNav.className = 'ws-learning-links';
   learningNav.innerHTML = '<p class="ws-sidebar-caption">НАПРАВЛЕНИЯ</p>'
     + '<a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a>'
