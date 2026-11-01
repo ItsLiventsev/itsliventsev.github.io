@@ -13,8 +13,8 @@
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r4">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r6">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r6">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/blog.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -47,4 +47,4 @@
 (function(){const labels={note:'Заметка',thought:'Мысль',digest:'Подборка',extra:'Доп. материал'};const grid=document.getElementById('note-grid'),filters=document.getElementById('note-filters'),counter=document.getElementById('feed-count');let posts=[];const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});};function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);grid.innerHTML=items.length?items.map(p=>'<a class="ws-note-card" data-ws-surface href="blog/'+esc(p.file)+'"><span class="ws-publication-meta"><span class="ws-tag ws-tag-blue">'+esc(labels[p.type]||p.type)+'</span><span>'+esc(date(p.date))+'</span></span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).slice(0,3).map(t=>'<span>#'+esc(t)+'</span>').join('')+'</span><span class="ws-card-footer">Открыть заметку <b>→</b></span></a>').join(''):'<div class="ws-empty">В этой категории пока нет записей.</div>';}
 filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});fetch('blog/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];counter.textContent=posts.length;const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{counter.textContent='0';grid.innerHTML='<div class="ws-empty">Заметки пока не загрузились.</div>';});})();
 </script>
-<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261101r6"></script></body></html>
+<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261102r1"></script></body></html>

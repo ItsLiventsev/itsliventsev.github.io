@@ -53,6 +53,9 @@
 
   function renderDashboard(p) {
     $('gate').hidden = true; $('dash').hidden = false;
+    var nameField = $('fp-name'), groupField = $('fp-group');
+    if (nameField) nameField.textContent = p.name;
+    if (groupField) groupField.textContent = p.group;
     OPS.dailyLogin(p.id);
     var t = OPS.totals(p.id), crew = OPS.CREWS.filter(function (c) { return c.id === p.crewId; })[0] || OPS.CREWS[0];
     var role = OPS.currentRole();
@@ -69,12 +72,13 @@
       '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div></div></div>';
 
     $('role-ribbon').innerHTML =
-      '<span class="rr-label">роль этой смены</span><span class="rr-name">' + esc(role.name) + '</span>' +
+      '<span class="rr-label">роль этой смены</span><span class="rr-name" aria-live="polite">' + esc(role.name) + '</span>' +
       '<span class="rr-note">' + esc(role.note) + '. Роли ротируются — никто не закреплён за одной функцией навсегда.</span>' +
       '<button class="flat-btn ghost" type="button" id="role-rotate">ротировать роль ↻</button>';
     $('role-rotate').addEventListener('click', function () {
-      var next = OPS.rotateRole(); renderDashboard(p);
-      $('role-ribbon').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      OPS.rotateRole(); renderDashboard(p);
+      $('role-rotate').focus({ preventScroll: true });
+      $('role-ribbon').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
     });
 
     var dutyDay = $('duty-day');
@@ -252,7 +256,7 @@
     if (changeBtn) changeBtn.addEventListener('click', function () {
       var p = OPS.getProfile();
       var name = prompt('ФИО', p.name), group = prompt('Учебная группа', p.group);
-      if (name && group) { OPS.updateProfile({ name: name.trim(), group: group.trim() }); renderDashboard(OPS.getProfile()); }
+      if (name && group && name.trim() && group.trim()) { OPS.updateProfile({ name: name.trim(), group: group.trim() }); renderDashboard(OPS.getProfile()); }
     });
     var go = $('code-go'), input = $('code-input'), msg = $('code-msg');
     if (go) go.addEventListener('click', function () {

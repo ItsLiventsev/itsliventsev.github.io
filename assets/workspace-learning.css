@@ -401,3 +401,11 @@ button[data-ws-glossary-filter]:focus-visible, [data-ws-glossary-toc] a:focus-vi
 .lp-head { gap:12px; flex-wrap:wrap; min-width:0; }
 .lp-head span:first-child { min-width:0; overflow-wrap:anywhere; }
 .ops-msg, .st-init-error { overflow-wrap:anywhere; word-break:break-word; }
+
+/* DataPolis shift role: real hub markup, with room for long names and notes. */
+.role-ribbon { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 12px; padding: 16px; }
+.role-ribbon .rr-label { color: var(--ws-muted); font-size: 10px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+.role-ribbon .rr-name { grid-column: 1; color: var(--ws-accent); font-size: 16px; font-weight: 750; overflow-wrap: anywhere; }
+.role-ribbon .rr-note { grid-column: 1; min-width: 0; color: var(--ws-ink-soft); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
+.role-ribbon #role-rotate { grid-column: 2; grid-row: 1 / 4; min-width: 0; }
+@media (max-width: 560px) { .role-ribbon { grid-template-columns: minmax(0,1fr); } .role-ribbon #role-rotate { grid-column: 1; grid-row: auto; justify-self: start; } }

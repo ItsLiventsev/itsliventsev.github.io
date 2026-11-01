@@ -4,12 +4,12 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const listeners = {};
-const stores = new Map([['unrelated-app', new Map()], ['itsliventsev-v4', new Map()], ['itsliventsev-v5', new Map()]]);
+const stores = new Map([['unrelated-app', new Map()], ['itsliventsev-v4', new Map()], ['itsliventsev-v5', new Map()], ['itsliventsev-v6', new Map()]]);
 const cache = {
-  async add(url) { if (url === '/faq.html') throw Error('unavailable'); stores.get('itsliventsev-v6').set(url, new Response(url)); },
-  async put(request, response) { stores.get('itsliventsev-v6').set(typeof request === 'string' ? request : request.url, response); },
-  async match(request) { return stores.get('itsliventsev-v6').get(typeof request === 'string' ? request : request.url); },
-  async keys() { return [...stores.get('itsliventsev-v6').keys()]; }
+  async add(url) { if (url === '/faq.html') throw Error('unavailable'); stores.get('itsliventsev-v7').set(url, new Response(url)); },
+  async put(request, response) { stores.get('itsliventsev-v7').set(typeof request === 'string' ? request : request.url, response); },
+  async match(request) { return stores.get('itsliventsev-v7').get(typeof request === 'string' ? request : request.url); },
+  async keys() { return [...stores.get('itsliventsev-v7').keys()]; }
 };
 const caches = {
   async open(name) { if (!stores.has(name)) stores.set(name, new Map()); return cache; },
@@ -29,10 +29,12 @@ async function request(url, mode = 'cors') {
 }
 (async () => {
   await lifecycle('install'); assert(skipped);
-  assert(stores.get('itsliventsev-v6').has('/index.html')); // one failed file does not discard the rest
-  await lifecycle('activate'); assert(claimed); assert(!stores.has('itsliventsev-v4')); assert(!stores.has('itsliventsev-v5')); assert(stores.has('unrelated-app'));
+  assert(stores.get('itsliventsev-v7').has('/index.html')); // one failed file does not discard the rest
+  await lifecycle('activate'); assert(claimed); assert(!stores.has('itsliventsev-v4')); assert(!stores.has('itsliventsev-v5')); assert(!stores.has('itsliventsev-v6')); assert(stores.has('unrelated-app'));
   let response = await request('https://site.test/missing.js');
   assert.equal(response.status, 503); assert.match(response.headers.get('content-type'), /text\/plain/);
+  response = await request('https://site.test/assets/workspace.css?v=20261102r1'); assert.equal(await response.text(), '/assets/workspace.css');
+  response = await request('https://site.test/assets/workspace.css?v=20261102r1&other=2'); assert.equal(response.status, 503);
   response = await request('https://site.test/unknown', 'navigate'); assert.equal(await response.text(), '/assets/offline.html');
   assert.equal(await request('https://api.github.com/repos/example'), null);
   network = async () => new Response('fresh');

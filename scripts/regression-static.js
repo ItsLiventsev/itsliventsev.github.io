@@ -33,9 +33,9 @@ ok(stands.length === 52, 'ожидалось 52 учебных маршрута,
 for (const file of contentPages) {
   const source = read(file);
   ok(source.includes('/assets/workspace-tokens.css?v=20261101r4'), file + ': отсутствуют новые токены');
-  ok(source.includes('/assets/workspace.css?v=20261101r6'), file + ': отсутствует новая система компонентов');
-  ok(source.includes('/assets/workspace-learning.css?v=20261101r6'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261101r6'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('/assets/workspace.css?v=20261102r1'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261102r1'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261102r1'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
@@ -86,7 +86,7 @@ for (const hook of ['data-ws-profile-gate', 'data-ws-profile-form', 'data-ws-das
 }
 ok(read('stands/setpolis.html').includes('role="group" aria-labelledby="mascot-label"') && read('stands/setpolis.html').includes('assets/stands.js?v=20261101r4'), 'выбор маскота должен иметь доступное групповое имя, а профильный скрипт — актуальный cache bust');
 ok(ui.includes('.ws-mode-compact .ws-section-nav') && ui.includes('display: none;'), 'свёрнутый desktop sidebar не должен показывать обрезанную навигацию по секциям');
-ok(shell.includes('class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>') && !shell.includes("searchButton.setAttribute('aria-label'"), 'имя кнопки поиска должно формироваться из видимой подписи и подсказки клавиатуры');
+ok(shell.includes('class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>') && shell.includes("searchButton.setAttribute('aria-label'"), 'имя кнопки поиска должно оставаться доступным на мобильных устройствах');
 ok(read('stands/setpolis.html').includes('<h2>роадмап практики · пять спринтов</h2>'), 'раздел роадмапа должен задавать корректный порядок заголовков');
 for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', 'IntersectionObserver', '.ws-section-nav', 'scroll-margin-top', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
   ok(shell.includes(behavior) || ui.includes(behavior), 'workspace shell: отсутствует функциональный контракт ' + behavior);
@@ -99,7 +99,7 @@ ok(ui.includes(':root[data-theme="dark"] :is([data-ws-action="primary"], .ws-but
 const homePage = read('index.html');
 const activityScript = read('assets/home-activity.js');
 ok(homePage.includes('id="activity"') && homePage.includes('data-ws-activity-count') && homePage.includes('Сайт развивается итерациями'), 'на главной нужен внизу прозрачный блок итерационной работы и реальной активности');
-ok(homePage.includes('assets/home-activity.js?v=20261101r1') && homePage.includes('assets/i18n.js?v=20261101activity1') && homePage.includes('workspace-home.css?v=20261101r6') && read('stands/index.html').includes('workspace-home.css?v=20261101r6'), 'главная и каталог должны загружать актуальные ресурсы activity-компонента');
+ok(homePage.includes('assets/home-activity.js?v=20261102r1') && homePage.includes('assets/i18n.js?v=20261101activity1') && homePage.includes('workspace-home.css?v=20261102r1') && read('stands/index.html').includes('workspace-home.css?v=20261102r1'), 'главная и каталог должны загружать актуальные ресурсы activity-компонента');
 ok(activityScript.includes('api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits') && activityScript.includes("url.searchParams.set('sha', 'main')") && activityScript.includes("url.searchParams.set('since', since)"), 'счётчик должен получать историю коммитов основной ветки за скользящие 30 дней');
 ok(activityScript.includes("url.searchParams.set('per_page', '100')") && activityScript.includes("'100+'" ) && activityScript.includes('sessionStorage') && activityScript.includes('freshForMs'), 'счётчик должен консервативно обозначать лимит и кэшировать запрос без постоянного хранилища');
 ok(activityScript.includes("setState('error')") && activityScript.includes('historyUrl') && homePage.includes('data-ws-activity-history'), 'при недоступности GitHub сводка должна деградировать без потери прямой ссылки на историю');
@@ -141,11 +141,11 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261101r6', 'assets/workspace-learning.css?v=20261101r6', 'assets/workspace.js?v=20261101r6']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261102r1', 'assets/workspace-learning.css?v=20261102r1', 'assets/workspace.js?v=20261102r1']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace.css?v=20261101r6') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r6') && officeBuilder.includes('assets/workspace.js?v=20261101r6'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace.css?v=20261102r1') && officeBuilder.includes('assets/workspace-learning.css?v=20261102r1') && officeBuilder.includes('assets/workspace.js?v=20261102r1'), 'build-office.js: генератор не создаёт страницы на новом shell');
 for (const [name, template] of [['admin.js', adminTemplate], ['build-office.js', officeBuilder]]) {
   ok(template.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !template.includes('fonts.googleapis.com'), name + ': generated pages must use local fonts without Google Fonts');
 }

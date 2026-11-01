@@ -177,7 +177,7 @@
       bar.style.height = h + '%';
       bar.style.minHeight = '8px';
       bar.title = `${v} ${language()==='en' ? 'commits' : 'коммитов'}`;
-      bar.setAttribute('aria-label', bar.title);
+      bar.setAttribute('aria-hidden', 'true');
       bar.setAttribute('data-tip', bar.title); chartGrid.appendChild(bar);
     });
     // Animate in staggered if not reduced
@@ -230,6 +230,22 @@
       card.setAttribute('aria-grabbed','false');
       card.setAttribute('data-kanban-card','true');
       if (!card.getAttribute('data-kanban-id')) card.setAttribute('data-kanban-id', 'k-'+Math.random().toString(36).slice(2,8));
+      var controls = document.createElement('div');
+      controls.className = 'ws-kanban-move';
+      ['left', 'right'].forEach(function(direction){
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.kanbanMove = direction;
+        button.textContent = direction === 'left' ? '←' : '→';
+        button.addEventListener('click', function(){
+          moveCard(card, direction === 'left' ? -1 : 1);
+          var fallback = controls.querySelector('[data-kanban-move="' + (direction === 'left' ? 'right' : 'left') + '"]');
+          (button.disabled && fallback ? fallback : button).focus();
+        });
+        controls.appendChild(button);
+      });
+      card.appendChild(controls);
+      updateMoveControls();
       card.addEventListener('dragstart', function(e){
         card.classList.add('is-dragging');
         card.setAttribute('aria-grabbed','true');
@@ -244,25 +260,42 @@
         document.querySelectorAll('.ws-kanban-col').forEach(function(c){ c.classList.remove('is-drop-target'); });
         persist();
       });
-      // Keyboard: Ctrl+Arrow to move between columns
+      // Keyboard: Ctrl+Arrow moves the focused card between columns.
       card.addEventListener('keydown', function(e){
-        if (!(e.ctrlKey && (e.key==='ArrowRight' || e.key==='ArrowLeft' || e.key==='ArrowUp' || e.key==='ArrowDown'))) return;
+        if (e.target !== card || !(e.ctrlKey && (e.key==='ArrowRight' || e.key==='ArrowLeft' || e.key==='ArrowUp' || e.key==='ArrowDown'))) return;
         e.preventDefault();
-        var cols = ['review','progress','done'];
-        var curColKey = Object.keys(kanbanLists).find(function(k){ return kanbanLists[k] && kanbanLists[k].contains(card); });
-        if (!curColKey) return;
-        var idx = cols.indexOf(curColKey);
-        var nextKey = null;
-        if (e.key==='ArrowRight' || e.key==='ArrowDown') nextKey = cols[Math.min(idx+1, cols.length-1)];
-        else nextKey = cols[Math.max(idx-1, 0)];
-        if (nextKey && nextKey!==curColKey && kanbanLists[nextKey]) {
-          kanbanLists[nextKey].appendChild(card);
-          card.focus();
-          updateCounts();
-          persist();
-        }
+        moveCard(card, (e.key==='ArrowRight' || e.key==='ArrowDown') ? 1 : -1);
+        card.focus();
       });
     }
+    function moveCard(card, direction){
+      var cols = ['review', 'progress', 'done'];
+      var current = cols.findIndex(function(key){ return kanbanLists[key] && kanbanLists[key].contains(card); });
+      var next = current + direction;
+      if (current < 0 || next < 0 || next >= cols.length || !kanbanLists[cols[next]]) return;
+      kanbanLists[cols[next]].appendChild(card);
+      updateCounts();
+      updateMoveControls();
+      persist();
+    }
+    function updateMoveControls(){
+      var cols = ['review', 'progress', 'done'];
+      var labels = language() === 'en' ? ['Favorites', 'Review', 'Changes'] : ['Избранное', 'Изучить', 'Изменения'];
+      cols.forEach(function(key, index){
+        if (!kanbanLists[key]) return;
+        kanbanLists[key].querySelectorAll('[data-kanban-card]').forEach(function(card){
+          ['left', 'right'].forEach(function(direction){
+            var button = card.querySelector('[data-kanban-move="'+direction+'"]');
+            if (!button) return;
+            var target = index + (direction === 'left' ? -1 : 1);
+            button.disabled = target < 0 || target >= cols.length;
+            var title = labels[target] || labels[index];
+            button.setAttribute('aria-label', (language() === 'en' ? 'Move to ' : 'Переместить в «') + title + (language() === 'en' ? '' : '»'));
+          });
+        });
+      });
+    }
+
     function updateCounts(){
       Object.keys(kanbanLists).forEach(function(k){
         var list = kanbanLists[k]; var cnt = kanbanCounts[k];
@@ -311,32 +344,16 @@
           if (after) col.insertBefore(card, after);
           else col.appendChild(card);
           updateCounts();
+          updateMoveControls();
           persist();
         }
       });
     });
 
-  // ── v14: BroadcastChannel для синхронизации канбана между вкладками ──
-  (function initKanbanSync(){
-    if (!('BroadcastChannel' in window) || !kanbanRoot) return;
-    var ch = new BroadcastChannel('ws-kanban-v14');
-    var STORAGE_KEY = 'ws:kanban:order:v13';
-    ch.onmessage = function(ev){
-      if (!ev.data || ev.data.type !== 'kanban:update') return;
-      // другой таб переместил — показываем мягкий индикатор
-      var note = root.querySelector('[data-ws-activity-status]');
-      if (note) { var prev=note.textContent; note.textContent='Канбан обновлён в другой вкладке · '+ new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}); setTimeout(function(){ note.textContent=prev; }, 2500); }
-    };
-    var origPersist = window.__wsKanbanPersist || null;
-    // Hook persist via mutation: observe storage
-    window.addEventListener('storage', function(e){
-      if (e.key === STORAGE_KEY) ch.postMessage({type:'kanban:update', at: Date.now()});
-    });
-    // Also post after local drop
-    var _post = function(){ try{ ch.postMessage({type:'kanban:update', at: Date.now()}); }catch(e){} };
-    // Wrap existing persist by listening to dragend globally
-    document.addEventListener('dragend', function(){ setTimeout(_post, 80); });
-  })();
+  // Storage events are delivered to other tabs; actually apply the saved order.
+  window.addEventListener('storage', function(event) {
+    if (event.key === STORAGE_KEY && feedData.length) renderKanban(feedData);
+  });
 
   // ── v14: number ticker для метрик (countNode) ──
   (function initTicker(){
@@ -422,13 +439,21 @@
     if (/frontend|интерфейс|ui|верстк|навигац/i.test(title)) return 'frontend';
     return 'update';
   }
+  function showTimelineMessage(message) {
+    if (!timeline) return;
+    timeline.replaceChildren();
+    const item = document.createElement('div');
+    item.setAttribute('role', 'listitem');
+    item.textContent = message;
+    timeline.appendChild(item);
+  }
   function updateFeed(commits) {
     feedData = commits.filter(commit => commit && /^[a-f0-9]{40}$/i.test(commit.sha || '') && typeof commit.title === 'string' && commit.title && !Number.isNaN(Date.parse(commit.date))).slice(0, 15).map(commit => ({
       id: commit.sha, title: commit.title, tag: classifyCommit(commit.title),
       status: 'done', time: formatDate(commit.date), date: commit.date
     }));
     renderTicker(); renderTimeline(); renderKanban(feedData); updateFilterEmpty();
-    if (!feedData.length && timeline) timeline.textContent = language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.';
+    if (!feedData.length) showTimelineMessage(language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.');
   }
   function renderTicker() {
     if (!tickerTrack) return;
@@ -486,31 +511,55 @@
     filterEmpty.hidden = !noMatches || (kanbanRoot && !kanbanRoot.hidden);
     filterEmpty.textContent = language() === 'en' ? 'No changes for this filter.' : 'По этому фильтру изменений нет.';
   }
+  let filterAnimation = 0;
   function setFilter(tag) {
+    const animation = ++filterAnimation;
+    const startHeight = timeline && !reduceMotion ? timeline.getBoundingClientRect().height : 0;
     activeFilter = tag;
     updateFilterEmpty();
     filterButtons.forEach(btn=>{
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
     });
-    if (timeline) {
-      const rows = [...timeline.children];
-      rows.forEach((row,i)=>{
-        const show = tag==='all' || row.dataset.tag===tag;
-        if (show) {
-          row.removeAttribute('data-filtered');
-          if (!reduceMotion) {
-            row.style.opacity='0'; row.style.transform='translateY(4px)';
-            requestAnimationFrame(()=> requestAnimationFrame(()=>{
-              row.style.transition='opacity 280ms ease '+(i*28)+'ms, transform 320ms cubic-bezier(.2,.8,.2,1) '+(i*28)+'ms';
-              row.style.opacity='1'; row.style.transform='translateY(0)';
-              setTimeout(()=>{ row.style.transition=''; row.style.opacity=''; row.style.transform=''; }, 500+(i*28));
-            }));
-          }
-        } else {
-          row.setAttribute('data-filtered','true');
-        }
+    if (timeline && feedData.length) {
+      // Measure the natural height after filtering, then animate from the current
+      // height. A newer filter supersedes the pending animation and cleanup.
+      timeline.style.transition = 'none';
+      timeline.style.height = '';
+      timeline.style.overflow = '';
+      [...timeline.children].forEach(row => {
+        row.toggleAttribute('data-filtered', tag !== 'all' && row.dataset.tag !== tag);
+        if (row.hasAttribute('data-filtered')) row.setAttribute('data-filtered', 'true');
       });
+      const endHeight = timeline.getBoundingClientRect().height;
+      if (!reduceMotion && startHeight && Math.abs(startHeight - endHeight) > 1) {
+        timeline.style.overflow = 'hidden';
+        timeline.style.height = startHeight + 'px';
+        void timeline.offsetHeight;
+        timeline.style.transition = 'height 340ms cubic-bezier(.2,.8,.2,1)';
+        let finished = false;
+        requestAnimationFrame(() => {
+          if (!finished && animation === filterAnimation) timeline.style.height = endHeight + 'px';
+        });
+        const finish = () => {
+          finished = true;
+          timeline.removeEventListener('transitionend', onEnd);
+          if (animation !== filterAnimation) return;
+          timeline.style.height = '';
+          timeline.style.overflow = '';
+          timeline.style.transition = '';
+        };
+        const onEnd = event => {
+          if (event.target === timeline && event.propertyName === 'height') finish();
+        };
+        timeline.addEventListener('transitionend', onEnd);
+        // Also release the fixed height if the browser suppresses transitions.
+        setTimeout(finish, 1500);
+      } else {
+        timeline.style.height = '';
+        timeline.style.overflow = '';
+        timeline.style.transition = '';
+      }
     }
     if (tickerTrack) {
       [...tickerTrack.children].forEach(pill=>{
@@ -567,7 +616,7 @@
 
   // initial paint
   renderTicker();
-  if (timeline) timeline.textContent = language() === 'en' ? 'Loading changes…' : 'Загружаю изменения…';
+  showTimelineMessage(language() === 'en' ? 'Loading changes…' : 'Загружаю изменения…');
   renderKanban(feedData);
   renderChart([]);
   // — animated cycle (Agent-Motion: sequential highlight + dash flow)
@@ -600,13 +649,15 @@
 
   if (!cached || cached.age >= freshForMs) loadActivity().catch(()=>{
     if (currentData) setState('stale');
-    else { setState('error'); if (timeline) timeline.textContent = language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'; }
+    else { setState('error'); showTimelineMessage(language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'); }
     renderChart(commitsCache);
   });
 
   window.addEventListener('itsliventsev:languagechange', ()=>{
     if (currentData) render(currentData, currentState); else setState(currentState);
-    updateFeed(commitsCache); renderChart(commitsCache);
+    if (currentData) updateFeed(commitsCache);
+    else showTimelineMessage(currentState === 'loading' ? (language() === 'en' ? 'Loading changes…' : 'Загружаю изменения…') : (language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'));
+    renderChart(commitsCache);
   });
 
 })();

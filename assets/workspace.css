@@ -339,7 +339,7 @@ body.ws-ready #to-top.show { opacity: 1; visibility: visible; pointer-events: au
 @media (max-width: 560px) { .ws-editorial-summary { gap: 7px; } .ws-editorial-summary article { padding: 11px; } .ws-editorial-summary strong { font-size: 18px; } .ws-note-grid { grid-template-columns: 1fr; } .ws-notes-note { align-items: flex-start; flex-wrap: wrap; } .ws-notes-note > div { width: calc(100% - 55px); } .ws-notes-note > .ws-inline-link { margin-inline-start: 50px; } .ws-publication-row { grid-template-columns: 22px minmax(0,1fr) 12px; gap: 8px; padding: 13px !important; } }
 .ws-error-card { min-height: min(62vh,560px); display: grid; grid-template-columns: minmax(180px,.7fr) minmax(0,1fr); align-items: center; gap: clamp(22px,5vw,64px); max-width: 1040px; margin: 7vh auto; padding: clamp(24px,5vw,60px); border: 1px solid var(--ws-line); border-radius: var(--ws-r-4); background: var(--ws-surface); box-shadow: var(--ws-shadow-md); }
 .ws-error-visual { display: grid; justify-items: center; gap: 0; }
-.ws-error-number { color: var(--ws-accent-wash); font-size: clamp(80px,14vw,170px); font-weight: 850; line-height: .9; letter-spacing: -.1em; }
+.ws-error-number { color: var(--ws-accent); font-size: clamp(80px,14vw,170px); font-weight: 850; line-height: .9; letter-spacing: -.1em; }
 .ws-error-visual #error-mascot { width: 90px; height: 80px; margin-top: -20px; }
 .ws-error-card h1 { margin: 6px 0 10px; font-size: clamp(26px,3.5vw,42px); }
 .ws-error-card p { max-width: 490px; margin: 0; color: var(--ws-muted); font-size: 13px; line-height: 1.7; }
@@ -705,7 +705,7 @@ body.ws-ready::before {
   opacity:0; mix-blend-mode: multiply;
   background-image: none;
 }
-.ws-shell, .ws-workspace, .ws-sidebar, .ws-page-content { position:relative; z-index:1; }
+.ws-shell, .ws-workspace, .ws-page-content { position:relative; z-index:1; }
 /* focus ring — accessible, soft */
 *:focus-visible { outline: 2px solid color-mix(in srgb, var(--ws-accent) 55%, transparent); outline-offset: 2px; border-radius: 6px; }
 /* nav indicator — Motion Primitives spring v2, anchor-positioning progressive */
@@ -802,3 +802,7 @@ html { transition: background-color 220ms ease, color 220ms ease; }
 .ws-section-link { position: relative; z-index: 1; }
 .ws-nav-indicator { transition: transform 360ms ease, width 220ms ease, height 220ms ease, opacity 200ms ease, background 220ms ease, border-color 220ms ease; }
 @media (prefers-reduced-motion: reduce) { .ws-nav-indicator { transition: none; } }
+
+[data-ws-table-wrap]:focus-visible { outline: 3px solid var(--ws-accent); outline-offset: 3px; }
+
+.ws-content pre:focus-visible { outline: 3px solid var(--ws-accent); outline-offset: 3px; }
