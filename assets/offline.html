@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Нет соединения · itsliventsev</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; background: #f8f9fa; color: #252b32; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; min-height: 100dvh; margin: 0; display: grid; place-items: center; padding: 24px; }
+    main { width: min(100%, 480px); padding: clamp(24px, 6vw, 40px); border: 1px solid #dfe4e5; border-radius: 24px; background: #fff; box-shadow: 0 12px 40px rgba(29, 49, 45, .08); }
+    .mark { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: #e3f2ec; color: #206750; font-size: 24px; }
+    h1 { font-size: clamp(24px, 5vw, 30px); line-height: 1.2; letter-spacing: -.03em; margin: 20px 0 12px; }
+    p { line-height: 1.6; color: #59616a; margin: 0 0 24px; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; }
+    a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 16px; border: 1px solid #cbd7d2; border-radius: 12px; color: #206750; text-decoration: none; font-weight: 650; }
+    a:first-child { background: #206750; border-color: #206750; color: white; }
+    a:focus-visible { outline: 3px solid #69ac94; outline-offset: 3px; }
+    @media (prefers-color-scheme: dark) {
+      :root { background: #161a1b; color: #eff4f2; }
+      main { background: #222827; border-color: #35433d; }
+      p { color: #bac8c1; }
+      a { color: #a7d7c3; border-color: #536b60; }
+      a:first-child { color: #fff; }
+      .mark { background: #29463b; color: #a7d7c3; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="mark" aria-hidden="true">↗</span>
+    <h1>Нет соединения</h1>
+    <p>Эта страница пока недоступна без интернета. Проверьте соединение и попробуйте ещё раз.</p>
+    <nav aria-label="Действия">
+      <a href="">Попробовать снова</a>
+      <a href="/">На главную</a>
+    </nav>
+  </main>
+</body>
+</html>

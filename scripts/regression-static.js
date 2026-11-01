@@ -20,13 +20,15 @@ function walk(dir, pattern) {
   return output;
 }
 const html = walk('.', /\.html$/);
-const contentPages = html;
+// The standalone offline fallback must work without the workspace shell.
+const contentPages = html.filter(file => file !== 'assets/offline.html');
 const stands = html.filter(file => file.startsWith('stands/'));
 const cssFiles = walk('assets', /\.css$/);
 const jsFiles = walk('assets', /\.js$/);
 
 /* Every public route receives the same shell without replacing SEO/content. */
-ok(html.length === 76, 'ожидалось 76 HTML-страниц, получено ' + html.length);
+ok(contentPages.length === 76, 'ожидалось 76 HTML-страниц, получено ' + contentPages.length);
+ok(exists('assets/offline.html'), 'нет автономной страницы для офлайн-перехода');
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 for (const file of contentPages) {
   const source = read(file);

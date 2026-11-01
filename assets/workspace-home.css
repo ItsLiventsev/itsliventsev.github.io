@@ -521,7 +521,7 @@ html { scroll-behavior: smooth; }
 [data-ws-activity-timeline] { position:relative; }
 [data-ws-activity-timeline]::before { content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background: linear-gradient(180deg, var(--ws-line), transparent 96%); border-radius:2px; }
 [data-ws-activity-item] { position:relative; background: color-mix(in srgb, var(--ws-surface) 96%, var(--ws-canvas)); }
-[data-ws-activity-item]:hover { background: #fff; }
+[data-ws-activity-item]:hover { background: var(--ws-surface-raised); }
 [data-ws-activity-item][data-status="done"] { border-inline-start-color: color-mix(in srgb, var(--ws-green) 22%, var(--ws-line)); }
 
 /* ticker mask already exists — enhance fade + focus */
@@ -705,9 +705,9 @@ html { scroll-behavior: smooth; }
 [data-ws-activity-cycle] > span[aria-hidden] { color: var(--ws-faint); font-size: 12px; padding:0 1px; background: transparent; border:none; }
 
 /* metrics — two distinct cozy accents */
-[data-ws-activity-metric]:nth-child(1) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-violet-wash) 55%, #fff) 0%, #fff 75%); border-top: 2px solid var(--ws-violet); }
+[data-ws-activity-metric]:nth-child(1) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-violet-wash) 55%, var(--ws-surface)) 0%, var(--ws-surface) 75%); border-top: 2px solid var(--ws-violet); }
 [data-ws-activity-metric]:nth-child(1) strong { color: var(--ws-violet); }
-[data-ws-activity-metric]:nth-child(2) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 55%, #fff) 0%, #fff 75%); border-top: 2px solid var(--ws-blue); }
+[data-ws-activity-metric]:nth-child(2) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 55%, var(--ws-surface)) 0%, var(--ws-surface) 75%); border-top: 2px solid var(--ws-blue); }
 [data-ws-activity-metric]:nth-child(2) time { color: var(--ws-blue); }
 
 /* chart — colorful bars per activity intensity (cycle palette) */
@@ -1131,3 +1131,15 @@ html { scroll-behavior: smooth; }
 [data-ws-activity-ticker]:focus-within [data-ws-activity-ticker-track] { animation-play-state: paused; }
 
 .ws-activity-filter-empty { color: var(--ws-muted); font-size: 13px; margin: 14px 0; }
+
+/* Long commit titles must remain readable at any width. */
+[data-ws-activity-item] { max-height: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-ws-activity-ticker] { overflow-x: auto; }
+  [data-ws-activity-ticker-track] { animation: none !important; }
+  [data-ws-activity-pill][aria-hidden="true"] { display: none; }
+}
+
+/* In dark mode inverted controls need dark text on the light ink/accent fill. */
+:root[data-theme="dark"] :is([data-ws-activity-pill][data-active="true"], [data-ws-activity-pill][data-active="true"] b, [data-ws-activity-pill][data-active="true"] em, [data-ws-activity-filter][aria-pressed="true"], .ws-filter[aria-pressed="true"]) { color: var(--ws-canvas); }
+:root[data-theme="dark"] .ws-button-primary, :root[data-theme="dark"] .ws-button-primary:hover { color: var(--ws-canvas) !important; }

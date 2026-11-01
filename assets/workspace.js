@@ -208,6 +208,7 @@
     if (item.test(pathname)) link.setAttribute('aria-current','page');
     const icon=document.createElement('span'); icon.className='ws-nav-icon'; icon.setAttribute('aria-hidden','true'); icon.innerHTML=iconMarkup(icons[item.icon]);
     const label=document.createElement('span'); label.className='ws-nav-label'; label.textContent=item.label;
+    link.setAttribute('aria-label', item.label);
     link.append(icon,label); nav.appendChild(link);
   });
   generalGroup.appendChild(nav);
@@ -217,6 +218,7 @@
   const learningGroup = document.createElement('div'); learningGroup.className='ws-nav-group ws-learning-links'; learningGroup.dataset.variant='directions';
   learningGroup.innerHTML = '<p class="ws-sidebar-caption">Направления</p><nav class="ws-nav" aria-label="Направления"><a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a><a class="ws-nav-link" href="/stands/office/index.html"' + (pathname.startsWith('/stands/office') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-orange" aria-hidden="true"></span><span class="ws-nav-label">ОфисПолис</span></a><a class="ws-nav-link" href="/stands/ops/index.html"' + (pathname.startsWith('/stands/ops') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-blue" aria-hidden="true"></span><span class="ws-nav-label">ДатаПолис</span></a></nav>';
   const learningNavInner = learningGroup.querySelector('.ws-nav');
+  learningNavInner.querySelectorAll('.ws-nav-link').forEach(link => link.setAttribute('aria-label', cleanLabel(link.textContent)));
   sidebar.appendChild(learningGroup);
   attachIndicator(learningNavInner);
   sidebar._attachIndicator = attachIndicator;
@@ -402,10 +404,13 @@
   document.documentElement.dataset.workspaceReady = 'true';
   let savedRail = 'expanded';
   try { savedRail = localStorage.getItem('workspace-rail') || 'expanded'; } catch (error) { /* private browsing */ }
-  const startCompact = savedRail === 'compact';
-  document.documentElement.classList.toggle('ws-mode-compact', startCompact);
-  collapse.setAttribute('aria-expanded', startCompact ? 'false' : 'true');
-  collapse.setAttribute('aria-label', startCompact ? 'Развернуть навигацию' : 'Свернуть навигацию');
+  function syncRail() {
+    const compact = savedRail === 'compact' && window.innerWidth > 940;
+    document.documentElement.classList.toggle('ws-mode-compact', compact);
+    collapse.setAttribute('aria-expanded', compact ? 'false' : 'true');
+    collapse.setAttribute('aria-label', compact ? 'Развернуть навигацию' : 'Свернуть навигацию');
+  }
+  syncRail();
 
   const overlay = document.createElement('div'); overlay.className = 'ws-overlay'; overlay.setAttribute('aria-hidden', 'true'); body.appendChild(overlay);
   function setDrawer(open) {
@@ -479,12 +484,11 @@
   } catch(_){}
 
   collapse.addEventListener('click', () => {
-    const compact = document.documentElement.classList.toggle('ws-mode-compact');
-    try { localStorage.setItem('workspace-rail', compact ? 'compact' : 'expanded'); } catch (error) { /* private browsing */ }
-    collapse.setAttribute('aria-expanded', compact ? 'false' : 'true');
-    collapse.setAttribute('aria-label', compact ? 'Развернуть навигацию' : 'Свернуть навигацию');
+    savedRail = savedRail === 'compact' ? 'expanded' : 'compact';
+    try { localStorage.setItem('workspace-rail', savedRail); } catch (error) { /* private browsing */ }
+    syncRail();
   });
-  window.addEventListener('resize', () => { if (window.innerWidth > 940) setDrawer(false); }, { passive: true });
+  window.addEventListener('resize', () => { syncRail(); if (window.innerWidth > 940) setDrawer(false); }, { passive: true });
 
   const searchDialog = document.createElement('dialog'); searchDialog.className = 'ws-search-dialog'; searchDialog.setAttribute('aria-label', 'Поиск по сайту — cmdk palette (Ctrl+K)');
   searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Поиск или > команды — начните печатать…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox" aria-label="Результаты поиска"></div><div class="ws-search-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> навигация · <kbd>↵</kbd> открыть · <kbd>Esc</kbd> закрыть</span><span data-ws-search-hint>Введите запрос</span></div>';
@@ -945,7 +949,7 @@
 })();
 
 // PWA registration — offline stands (v8)
-if ('serviceWorker' in navigator && location.protocol === 'https:' || location.hostname === 'localhost') {
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(()=>{});
   });
