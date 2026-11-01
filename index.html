@@ -116,7 +116,7 @@
       </article>
       <article data-ws-activity-feed data-ws-surface aria-label="Лента изменений">
         <div data-ws-activity-feed-head>
-          <div data-ws-activity-feed-title>Примеры итераций <span data-ws-activity-live>ДЕМО</span></div>
+          <div data-ws-activity-feed-title>Лента изменений</div>
           <div class="ws-hero-actions">
           <div data-ws-view-toggle class="ws-view-toggle">
             <button type="button" data-ws-view="feed" aria-pressed="true" class="ws-view-btn">Лента</button>
@@ -124,6 +124,7 @@
           </div>
           <div data-ws-activity-filters aria-label="Фильтр по хештегу">
             <button type="button" data-ws-activity-filter data-filter="all" aria-pressed="true">Все</button>
+            <button type="button" data-ws-activity-filter data-filter="update">#update</button>
             <button type="button" data-ws-activity-filter data-filter="frontend">#frontend</button>
             <button type="button" data-ws-activity-filter data-filter="design">#design</button>
             <button type="button" data-ws-activity-filter data-filter="bugfix">#bugfix</button>
@@ -131,16 +132,15 @@
           </div>
           </div>
         </div>
-        <p class="ws-activity-demo-note">Примеры задач интерфейса, не живая история изменений. Канбан сохраняется только в этом браузере.</p>
-        <div data-ws-activity-ticker aria-label="Примеры задач">
-          <span data-ws-activity-ticker-label>Примеры задач</span>
+        <div data-ws-activity-ticker aria-label="Последние изменения">
+          <span data-ws-activity-ticker-label>Последние изменения</span>
           <div data-ws-activity-ticker-track></div>
         </div>
         <div data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
         <div data-ws-activity-kanban hidden class="ws-kanban-grid">
-          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">⏳ К выполнению <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list"></div></div>
-          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">🔄 В процессе <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list"></div></div>
-          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✅ Готово <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list"></div></div>
+          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list"></div></div>
+          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list"></div></div>
+          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✓ Изменения <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list"></div></div>
         </div>
       </article>
     </section>
