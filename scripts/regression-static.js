@@ -95,6 +95,14 @@ ok(!read('assets/shared-chrome.js').includes('window.scrollTo(0, start + delta *
 ok(!shell.includes("mark.textContent = 'i'") && !ui.includes('.ws-brand-mark'), 'в общей навигации остался монограммный I вместо ника');
 ok(ui.includes(':root[data-theme="dark"] :is([data-ws-action="primary"], .ws-button-primary)') && ui.includes('color: var(--ws-canvas) !important'), 'dark-mode primary controls need readable text contrast');
 const homePage = read('index.html');
+const activityScript = read('assets/home-activity.js');
+ok(homePage.includes('id="activity"') && homePage.includes('data-ws-activity-count') && homePage.includes('Сайт развивается итерациями'), 'на главной нужен внизу прозрачный блок итерационной работы и реальной активности');
+ok(homePage.includes('assets/home-activity.js?v=20261101r1') && homePage.includes('assets/i18n.js?v=20261101activity1') && homePage.includes('workspace-home.css?v=20261101r6') && read('stands/index.html').includes('workspace-home.css?v=20261101r6'), 'главная и каталог должны загружать актуальные ресурсы activity-компонента');
+ok(activityScript.includes('api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits') && activityScript.includes("url.searchParams.set('sha', 'main')") && activityScript.includes("url.searchParams.set('since', since)"), 'счётчик должен получать историю коммитов основной ветки за скользящие 30 дней');
+ok(activityScript.includes("url.searchParams.set('per_page', '100')") && activityScript.includes("'100+'" ) && activityScript.includes('sessionStorage') && activityScript.includes('freshForMs'), 'счётчик должен консервативно обозначать лимит и кэшировать запрос без постоянного хранилища');
+ok(activityScript.includes("setState('error')") && activityScript.includes('historyUrl') && homePage.includes('data-ws-activity-history'), 'при недоступности GitHub сводка должна деградировать без потери прямой ссылки на историю');
+ok(homeUi.includes('[data-ws-activity-card]') && homeUi.includes('[data-ws-activity-metrics]') && homeUi.includes('@media (max-width: 800px)'), 'activity panel должен использовать дизайн-токены Workspace и адаптивную сетку');
+ok(homePage.includes("activity_title:'Сайт развивается итерациями'") && homePage.includes("activity_title:'The site evolves by iteration'") && read('assets/i18n.js').includes("itsliventsev:languagechange"), 'activity panel должен переводиться и обновлять динамический статус при смене языка');
 ok(homePage.includes('Помогаю студентам') && homePage.includes('осваивать сети и системы') && homePage.includes('изучаю постепенно') && !homePage.includes('<strong>СПО</strong>') && !homePage.includes('<strong>IT</strong>') && !homePage.includes('Ваше пространство'), 'главная должна спокойно и конкретно представлять автора без бессмысленно выделенных сокращений');
 ok(homePage.indexOf('ws-dashboard-grid') < homePage.indexOf('learning-title'), 'персональный профиль и проекты должны идти до блока пространств');
 ok(shell.includes('wsSidebarBrand') && shell.includes('РАЗДЕЛЫ САЙТА') && shell.includes("label: 'Архив'"), 'у боковой навигации должен быть брендинг, непустая шапка и согласованные названия разделов');
@@ -106,7 +114,7 @@ ok(read('archive.html').includes('<span class="ht-word">Архив</span>') && r
 ok(read('projects/esports.html').includes('data-ws-esports-strip') && !read('projects/esports.html').includes('marquee-content'), 'список дисциплин в киберспорте не должен дублироваться');
 ok(learningUi.includes('[data-ws-esports-hero]') && learningUi.includes('[data-ws-esports-strip]'), 'странице киберспорта нужны компоненты новой системы');
 ok(ui.includes('[data-ws-callout]') && ui.includes('[data-ws-archive-summary]'), 'общая архитектура должна оформлять дисклеймеры и адаптивные архивные карточки');
-for (const id of ['about', 'projects', 'practice', 'resources', 'experience', 'contact']) {
+for (const id of ['about', 'projects', 'practice', 'resources', 'experience', 'contact', 'activity']) {
   ok(homePage.includes('id="' + id + '"'), 'главная: отсутствует якорь локальной навигации ' + id);
 }
 ok(shell.includes("main.querySelectorAll('h2')") && shell.includes('addSectionNavigation') && shell.includes('ws-section-link'), 'оглавление должно динамически собираться из заголовков текущей страницы');
