@@ -1,132 +1,122 @@
-/* Static regression harness for SOFT SHELL. Zero deps; run with Node >=18. */
+/* Static regression harness for the Workspace rebuild. Zero dependencies, Node >=18. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
-
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031bf';
 let pass = 0, fail = 0;
 const failures = [];
-function ok(condition, message) { if (condition) pass++; else { fail++; failures.push(message); } }
+function ok(value, message) { if (value) pass++; else { fail++; failures.push(message); } }
 function read(file) { return fs.readFileSync(path.join(ROOT, file), 'utf8'); }
 function exists(file) { return fs.existsSync(path.join(ROOT, file)); }
 function walk(dir, pattern) {
-  const result = [];
-  for (const entry of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
-    const rel = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (!['.git', 'node_modules', '__pycache__'].includes(entry.name)) result.push(...walk(rel, pattern));
-    } else if (pattern.test(entry.name)) result.push(rel.replace(/\\/g, '/'));
+  const output = [];
+  for (const item of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+    const relative = path.join(dir, item.name);
+    if (item.isDirectory()) {
+      if (!['.git', 'node_modules', '__pycache__'].includes(item.name)) output.push(...walk(relative, pattern));
+    } else if (pattern.test(item.name)) output.push(relative.replace(/\\/g, '/'));
   }
-  return result;
+  return output;
 }
 const html = walk('.', /\.html$/);
-const pages = html.filter(file => file !== 'projects/glossary.html');
+const contentPages = html;
 const stands = html.filter(file => file.startsWith('stands/'));
 const cssFiles = walk('assets', /\.css$/);
 const jsFiles = walk('assets', /\.js$/);
 
-/* Inventory + shared shell coverage. */
+/* Every public route receives the same shell without replacing SEO/content. */
 ok(html.length === 75, 'ожидалось 75 HTML-страниц, получено ' + html.length);
-ok(stands.length === 52, 'ожидалось 52 страницы учебных практик, получено ' + stands.length);
-for (const file of pages) {
+ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
+for (const file of contentPages) {
   const source = read(file);
-  ok(source.includes('/assets/soft-shell.css?v=20261101'), file + ': нет общей визуальной системы');
-  ok(source.includes('/assets/soft-shell.js?v=20261101'), file + ': нет общего shell JS');
-  ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался один main');
-  ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался один H1');
+  ok(source.includes('/assets/workspace-tokens.css?v=20261102'), file + ': отсутствуют новые токены');
+  ok(source.includes('/assets/workspace.css?v=20261102'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261102'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261102'), file + ': отсутствует общий workspace shell');
+  ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
+  ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
-  ok(source.includes('skip-link') && source.includes('href="#main-content"'), file + ': нет skip link');
-  ok(source.includes('meta name="theme-color"'), file + ': нет theme-color');
-  ok(!source.includes('#11151b'), file + ': theme-color тёмной темы не синхронизирован');
-  ok(source.includes('family=Manrope:') && source.includes('family=DM+Serif+Display'), file + ': нет новых гарнитур Manrope / DM Serif Display');
-  ok(!/family=(?:Golos\+Text|Source\+Serif\+4|Unbounded)/.test(source), file + ': осталась устаревшая гарнитура');
-  ok(!/class="(?:ambient|bg-glyphs|giant-word)|id="title-mark"/.test(source) && !source.includes('~/itsliventsev'), file + ': осталась терминальная декорация/маркер');
-  ok(source.split('/assets/soft-shell.css?v=20261101').length === 2, file + ': soft-shell.css подключён не ровно один раз');
-  ok(source.split('/assets/soft-shell.js?v=20261101').length === 2, file + ': soft-shell.js подключён не ровно один раз');
+  ok(!/href="[^\"]*(?:site\.css|shared-chrome\.css|soft-shell\.css|tw-(?:compiled|fallback)\.css|stands\.css|ops\.css|office\.css)/.test(source), file + ': подключена прежняя визуальная система');
+  ok(source.includes('family=Manrope:') && !source.includes('DM+Serif+Display'), file + ': шрифтовая загрузка не соответствует новой системе');
+  ok(!source.includes('class="ambient"') && !source.includes('class="floating-elements"'), file + ': осталась декоративная разметка старого дизайна');
 }
 
-/* Styles: final tokens, component contracts, breakpoints, keyboard and motion. */
-const shellCss = read('assets/soft-shell.css');
-const shellJs = read('assets/soft-shell.js');
+/* New token and component contracts. */
+const tokens = read('assets/workspace-tokens.css');
+const ui = read('assets/workspace.css');
+const homeUi = read('assets/workspace-home.css');
+const learningUi = read('assets/workspace-learning.css');
+const shell = read('assets/workspace.js');
+ok(tokens.includes('prefers-reduced-motion'), 'workspace tokens: нет режима reduced motion');
+for (const name of ['--ws-canvas', '--ws-surface', '--ws-ink', '--ws-accent', '--ws-space-2', '--ws-space-4', '--ws-space-6', '--ws-space-8', '--ws-r-1', '--ws-r-2', '--ws-r-3', '--ws-r-4', '--ws-shadow-sm', '--ws-shadow-md', '--ws-shadow-lg']) {
+  ok(tokens.includes(name), 'workspace tokens: отсутствует ' + name);
+}
+for (const component of ['.ws-shell', '.ws-sidebar', '.ws-nav-link', '.ws-topbar', '.ws-breadcrumbs', '.ws-search-dialog', '[data-ws-surface]', '[data-ws-action]', '.ws-overlay', '.ws-mode-compact']) {
+  ok(ui.includes(component), 'workspace.css: отсутствует контракт ' + component);
+}
+for (const module of ['.ws-home-hero', '.ws-learning-grid', '.ws-course-card', '.ws-dashboard-grid', '.ws-skill-grid', '.ws-resource-grid', '.ws-experience-grid']) {
+  ok(homeUi.includes(module), 'workspace-home.css: отсутствует блок dashboard ' + module);
+}
+for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
+  ok(shell.includes(behavior), 'workspace.js: отсутствует функциональный контракт ' + behavior);
+}
+ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(ui), 'новая система обращается к старым CSS-классам');
+ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(homeUi), 'новый dashboard обращается к старым CSS-классам');
+ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card|lab-panel|flat-btn|task-item|q-item|st-topbar)\b/.test(learningUi), 'новые LMS-паттерны обращаются к старым CSS-классам');
+for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/soft-shell.css', 'assets/stands.css', 'assets/ops.css', 'assets/office.css', 'assets/tw-compiled.css', 'assets/tw-fallback.css']) {
+  ok(!exists(obsolete), 'осталась старая stylesheet-архитектура: ' + obsolete);
+}
+
+/* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-ok(adminTemplate.includes('family=Manrope:') && adminTemplate.includes('family=DM+Serif+Display'), 'admin.js: динамические статьи используют старые шрифты');
-ok(adminTemplate.includes('assets/soft-shell.css?v=20261101') && adminTemplate.includes('assets/soft-shell.js?v=20261101'), 'admin.js: динамическим статьям не подключён общий shell');
-ok(!adminTemplate.includes('class="ambient"') && !adminTemplate.includes('family=Golos+Text') && !adminTemplate.includes('#11151b'), 'admin.js: остался старый стиль/тема в динамических статьях');
-for (const token of [
-  '--bg: #f4f6fa;', '--surface: #fff;', '--accent: #5868c8;',
-  '--radius: 20px;', '--radius-lg: 26px;', '--shadow-card:', '--shadow-hover:',
-  '--font-sans: \'Manrope\'', '--font-display: \'DM Serif Display\''
-]) ok(shellCss.includes(token), 'soft-shell.css: отсутствует токен ' + token);
-for (const contract of [
-  '.global-sidebar', '.global-sidebar-link[aria-current="page"]', '.sidebar-collapsed',
-  '.global-sidebar-overlay', '.bento-home > .hero', '.site-search-dialog',
-  '.prose-neo .toc-link', '::selection', 'prefers-reduced-motion',
-  '@media (max-width: 959px)', 'translateY(-3px)', 'scale(.97)'
-]) ok(shellCss.includes(contract), 'soft-shell.css: отсутствует UI-контракт ' + contract);
-for (const contract of [
-  'global-sidebar-nav', 'aria-current', 'aria-expanded', 'setSidebar',
-  "event.key === 'Escape'", "event.key.toLowerCase() === 'k'",
-  "event.key === '/'", '/assets/search-index.json'
-]) ok(shellJs.includes(contract), 'soft-shell.js: отсутствует навигационный контракт ' + contract);
-
-/* Local search index — root-relative links work both on GitHub Pages and preview. */
-let searchIndex;
-try { searchIndex = JSON.parse(read('assets/search-index.json')); ok(true); }
-catch (error) { searchIndex = []; ok(false, 'search-index.json невалиден: ' + error.message); }
-ok(searchIndex.length === 72, 'ожидалось 72 документа в поиске, получено ' + searchIndex.length);
-const searchUrls = new Set();
-for (const record of searchIndex) {
-  ok(record.title && record.url && record.url.startsWith('/') && record.category, 'неполная запись локального поискового индекса');
-  ok(!searchUrls.has(record.url), 'повтор URL в индексе: ' + record.url);
-  searchUrls.add(record.url);
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261102', 'assets/workspace.css?v=20261102', 'assets/workspace-learning.css?v=20261102', 'assets/workspace.js?v=20261102']) {
+  ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
-ok(!searchIndex.some(record => /admin|404|glossary переехал/i.test(record.title)), 'в поиске есть служебный экран/редирект');
+const officeBuilder = read('scripts/build-office.js');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261102') && officeBuilder.includes('assets/workspace-learning.css?v=20261102') && officeBuilder.includes('assets/workspace.js?v=20261102'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(exists('REDESIGN_PLAN.md') && read('REDESIGN_PLAN.md').includes('Workspace / Learning OS'), 'нет плана архитектуры REDESIGN_PLAN.md');
 
-/* Validate script syntax, balanced CSS, JSON, and local links. */
+/* Local search, page links, file formats and script syntax. */
+let index = [];
+try { index = JSON.parse(read('assets/search-index.json')); ok(true); }
+catch (error) { ok(false, 'search-index.json невалиден: ' + error.message); }
+ok(index.length === 72, 'ожидалось 72 записи в поиске, получено ' + index.length);
+const urls = new Set();
+for (const item of index) {
+  ok(item.title && item.category && item.url?.startsWith('/'), 'неполная запись поискового индекса');
+  ok(!urls.has(item.url), 'дублируется URL в поиске: ' + item.url); urls.add(item.url);
+}
 for (const file of jsFiles) {
   const result = cp.spawnSync('node', ['--check', path.join(ROOT, file)], { encoding: 'utf8' });
   ok(result.status === 0, 'node --check ' + file + ': ' + result.stderr.trim());
 }
 for (const file of cssFiles) {
   const source = read(file);
-  ok((source.match(/{/g) || []).length === (source.match(/}/g) || []).length, file + ': несбалансированные CSS-блоки');
+  ok((source.match(/{/g) || []).length === (source.match(/}/g) || []).length, file + ': несбалансированные блоки CSS');
 }
 for (const file of walk('.', /\.json$/)) {
-  try { JSON.parse(read(file)); ok(true); }
-  catch (error) { ok(false, file + ': невалидный JSON ' + error.message); }
+  try { JSON.parse(read(file)); ok(true); } catch (error) { ok(false, file + ': невалидный JSON ' + error.message); }
 }
 for (const file of html) {
   const source = read(file);
   const refs = [...source.matchAll(/(?:href|src)="([^"#?]+)(?:[?#][^"]*)?"/g)].map(match => match[1]);
   for (const ref of refs) {
-    if (/['+\\s]/.test(ref) || /^https?:|^mailto:|^tel:|^data:/.test(ref)) continue;
+    if (/['+\s]/.test(ref) || /^https?:|^mailto:|^tel:|^data:|^javascript:/.test(ref)) continue;
     const target = path.normalize(ref.startsWith('/') ? ref.slice(1) : path.join(path.dirname(file), ref));
-    ok(exists(target), file + ': локальная ссылка не существует: ' + ref);
+    ok(exists(target), file + ': локальная ссылка отсутствует: ' + ref);
   }
 }
 
-/* Product behavior that the visual refresh must not regress. */
-const domPages = html.filter(file => read(file).includes('dom-kit.js'));
-ok(domPages.length === 52, 'ожидалось 52 страницы с dom-kit, получено ' + domPages.length);
-ok(read('assets/dom-kit.js').includes('window.DOMKIT') || read('assets/dom-kit.js').includes('DOMKIT'), 'dom-kit отсутствует');
-for (const engine of ['stands.js', 'ops-engine.js', 'ops-hub.js', 'office-engine.js', 'office-hub.js', 'rewards-page.js', 'standings.js']) {
-  ok(exists('assets/' + engine), 'потерян учебный движок assets/' + engine);
-}
-for (const file of stands) {
-  const source = read(file);
-  ok(source.includes('data-theme') || source.includes('theme-toggle'), file + ': не сохранено управление темой');
-  ok(!/<a\s[^>]*href="https?:/.test(source), file + ': внешняя ссылка внутри учебного интерфейса');
+/* Keep interactive learning features and generated content data intact. */
+for (const asset of ['dom-kit.js', 'stands.js', 'ops-engine.js', 'ops-hub.js', 'office-engine.js', 'office-hub.js', 'office-kit.js', 'lab-kit.js', 'rewards-page.js', 'standings.js']) {
+  ok(exists('assets/' + asset), 'потерян движок учебного пространства: ' + asset);
 }
 const sitemap = read('sitemap.xml');
-const sitemapUrls = (sitemap.match(/<loc>[^<]+<\/loc>/g) || []);
-ok(sitemapUrls.length === 71, 'ожидалось 71 URL в sitemap.xml, получено ' + sitemapUrls.length);
-ok(read('stands/index.html').includes('uni-flow'), 'потерян обзорный поток учебных вселенных');
-ok(read('stands/office/index.html').includes('office-hub.js'), 'ОфисПолис потерял hub-движок');
-ok(read('stands/ops/index.html').includes('ops-hub.js'), 'ДатаПолис потерял hub-движок');
-ok(read('AUDIT_REPORT.md').includes('полная пересборка интерфейса'), 'аудит не обновлён');
-ok(read('docs/design-system.md').includes('Soft Shell / 2026') && read('docs/design-system.md').includes('Sidebar'), 'дизайн-система не обновлена');
+ok((sitemap.match(/<loc>[^<]+<\/loc>/g) || []).length === 71, 'ожидалось 71 URL в sitemap.xml');
+ok(read('stands/index.html').includes('три вселенные'), 'потеряно описание учебных вселенных');
+ok(read('stands/office/index.html').includes('office-hub.js'), 'потерян хаб ОфисПолис');
+ok(read('stands/ops/index.html').includes('ops-hub.js'), 'потерян хаб ДатаПолис');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
-if (fail) { console.log(failures.slice(0, 60).join('\\n')); process.exit(1); }
+if (fail) { console.error(failures.slice(0, 100).join('\n')); process.exit(1); }

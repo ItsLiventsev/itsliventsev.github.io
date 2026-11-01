@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4f6fa">
+<meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#111722");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
 <title>проекты · itsliventsev</title>
 <meta name="description" content="Учебные материалы для студентов и личные проекты: глоссарий, тренажёры по сетевым технологиям, виртуальные стенды, киберспортивное направление в образовательной организации.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031bf">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031bf">
-<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/projects.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -42,280 +41,33 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"проекты","description":"Учебные материалы для студентов и личные проекты: глоссарий, тренажёры по сетевым технологиям, виртуальные стенды, киберспортивное направление в образовательной организации.","url":"https://itsliventsev.github.io/projects.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="rust">
+<body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<!-- Плавающие терминальные команды -->
-<div class="floating-elements" aria-hidden="true">
-  <div class="float-item left">sudo apt-get update && sudo apt-get upgrade</div>
-  <div class="float-item left">git commit -m "fix: critical bug"</div>
-  <div class="float-item left">docker run -it --rm ubuntu:latest</div>
-  <div class="float-item left">kubectl apply -f deployment.yaml</div>
-  <div class="float-item left">systemctl restart nginx</div>
-  <div class="float-item left">chmod +x script.sh && ./script.sh</div>
-  <div class="float-item left">ps aux | grep python</div>
-
-  <div class="float-item right">ssh root@192.168.1.1</div>
-  <div class="float-item right">ping -c 4 google.com</div>
-  <div class="float-item right">netstat -tulpn</div>
-  <div class="float-item right">grep -r "error" /var/log</div>
-  <div class="float-item right">tail -f /var/log/syslog</div>
-  <div class="float-item right">nmap -sV 192.168.1.0/24</div>
-  <div class="float-item right">tcpdump -i eth0</div>
+<div data-workspace-root>
+  <main id="main-content" class="ws-content">
+    <header class="ws-page-heading"><span class="ws-eyebrow">КАТАЛОГ · УЧЕБНЫЙ ПРОЦЕСС И ПРОЕКТЫ</span><h1>Проекты</h1><p>Учебные материалы для студентов и личные проекты — с понятным статусом и прямым переходом к результату.</p></header>
+    <section class="ws-section" aria-labelledby="learning-projects-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">МАТЕРИАЛЫ ДЛЯ СТУДЕНТОВ</span><h2 id="learning-projects-title">Учебный процесс</h2></div><span class="ws-status-chip">3 материала доступны</span></div>
+      <div class="ws-project-grid">
+        <a data-ws-surface href="stands/glossary.html" class="ws-project-card"><div class="ws-project-top"><span class="ws-project-index">01</span><span class="ws-tag ws-tag-green">Готово</span></div><h3>Глоссарий практик</h3><p>Единый словарь: 69 терминов в семи разделах — команды и роли, сети, документы и данные, геймификация, технический язык. Поиск, фильтры по вселенным и пометки новых терминов.</p><div class="ws-chip-list"><span>Сети</span><span>ОС</span><span>Базы данных</span></div><span class="ws-card-footer">Открыть справочник <b>→</b></span></a>
+        <a data-ws-surface href="https://itsliventsev.github.io/netsys_trainer/" target="_blank" rel="noopener" class="ws-project-card"><div class="ws-project-top"><span class="ws-project-index">02</span><span class="ws-tag ws-tag-blue">Интерактив</span></div><h3>Тренажёры по сетевым технологиям</h3><p>Обжим витой пары и монтаж сетевых розеток: семь этапов, режимы тренировки и экзамена, автоматический отчёт и 100-балльная шкала с передачей оценки в МЭШ.</p><div class="ws-chip-list"><span>Сети</span><span>Практика</span><span>МЭШ</span></div><span class="ws-card-footer">Открыть тренажёры <b>↗</b></span></a>
+        <article data-ws-surface class="ws-project-card"><div class="ws-project-top"><span class="ws-project-index">03</span><span class="ws-tag ws-tag-orange">В архиве</span></div><h3>Компьютерные сети</h3><p>LAN, MAN, WAN, линии связи и сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p><div class="ws-chip-list"><span>Топология</span><span>Архив</span></div><span class="ws-card-footer">Материалы сохранены в архиве</span></article>
+        <a data-ws-surface href="stands/index.html" class="ws-project-card"><div class="ws-project-top"><span class="ws-project-index">04</span><span class="ws-tag ws-tag-green">Готово</span></div><h3>Виртуальные учебные пространства</h3><p>СетьПолис — настройка сети, ОфисПолис — цифровое рабочее место, ДатаПолис — эксплуатация и дежурства. Профили студентов, автосохранение, симуляторы и автоматическая проверка заданий.</p><div class="ws-chip-list"><span>3 пространства</span><span>41 практическая работа</span><span>Интерактив</span></div><span class="ws-card-footer">Открыть практику <b>→</b></span></a>
+        <article data-ws-surface class="ws-project-card ws-project-placeholder"><div class="ws-project-top"><span class="ws-project-index">05</span><span class="ws-tag">План</span></div><h3>Следующий модуль</h3><p>Место зарезервировано. Тема появится, когда накопится достаточно практики и материала.</p><span class="ws-card-footer">Зарезервированное место · не ссылка</span></article>
+        <article data-ws-surface class="ws-project-card ws-project-placeholder"><div class="ws-project-top"><span class="ws-project-index">06</span><span class="ws-tag">Идея</span></div><h3>Идея без названия</h3><p>Пока это только карточка. Однажды она может стать проектом — или остаться честной заглушкой.</p><span class="ws-card-footer">Зарезервированное место · не ссылка</span></article>
+      </div>
+    </section>
+    <section class="ws-section" aria-labelledby="experience-projects-title">
+      <div class="ws-section-heading"><div><span class="ws-eyebrow">ПОРТФОЛИО</span><h2 id="experience-projects-title">Проекты и практики</h2></div><span class="ws-section-note">Завершённый опыт остаётся частью истории</span></div>
+      <div class="ws-project-grid ws-project-grid-featured">
+        <a data-ws-surface href="projects/esports.html" class="ws-project-card ws-project-featured"><div class="ws-project-top"><span class="ws-project-index">01</span><span class="ws-tag ws-tag-purple">Завершён · 2020–2025</span></div><h3>Киберспортивное направление в образовательной организации</h3><p>С нуля собрал киберспортивную программу и сборные колледжа: пять дисциплин, городские лиги МСКЛ и МШКЛ, внутренние чемпионаты и бронза Main Stage по CS:GO. Проект завершён со сменой места работы — кейс фиксирует весь путь.</p><div class="ws-chip-list"><span>Киберспорт</span><span>Команды</span><span>Турниры</span></div><span class="ws-card-footer">Открыть кейс <b>→</b></span></a>
+        <a data-ws-surface href="projects/navigation.html" class="ws-project-card ws-project-featured"><div class="ws-project-top"><span class="ws-project-index">02</span><span class="ws-tag ws-tag-blue">2023–2024 · первый опыт</span></div><h3>Оформление навигации отделения колледжа</h3><p>Система поэтажных и дверных указателей для корпуса колледжа: три цвета, два шрифта, семь типов табличек. Знаки приняли, напечатали и смонтировали.</p><div class="ws-chip-list"><span>Навигация</span><span>Графический дизайн</span><span>Печать и монтаж</span></div><span class="ws-card-footer">Открыть кейс <b>→</b></span></a>
+        <article data-ws-surface class="ws-project-card ws-project-placeholder"><div class="ws-project-top"><span class="ws-project-index">03</span><span class="ws-tag">В разработке</span></div><h3>Новый проект</h3><p>Слот под следующую историю. Подробности появятся здесь, когда проект будет готов к показу.</p><span class="ws-card-footer">Зарезервированное место · не ссылка</span></article>
+        <article data-ws-surface class="ws-project-card ws-project-placeholder"><div class="ws-project-top"><span class="ws-project-index">04</span><span class="ws-tag">Идея</span></div><h3>Без названия пока</h3><p>Резервная ячейка зоны проектов. Хорошие идеи любят готовые места.</p><span class="ws-card-footer">Зарезервированное место · не ссылка</span></article>
+      </div>
+    </section>
+  </main>
+  <footer class="ws-footer"><span>© 2026 itsliventsev · Проекты и практика</span><nav><a href="index.html">Главная</a><a href="sitemap.html">Карта сайта</a><a href="feed.xml">RSS</a></nav><span data-footer-updated></span></footer>
 </div>
-
-<div class="page-wrap">
-
-  <!-- Header -->
-  <header class="site-header">
-    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-        <nav class="site-nav" aria-label="Основная навигация">
-      <a href="index.html" class="nav-link">главная</a>
-      <a href="blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="projects.html" class="nav-link active" aria-current="page">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content">
-
-  <!-- Hero -->
-  <section class="mb-12 glyph-scope">
-<h1 class="hero-title mb-5"><span class="ht-word">проекты</span></h1>
-    <p class="mono text-xs sm:text-sm mb-4" style="color: var(--muted);">// учебные материалы · личные проекты · завершённые практики</p>
-    <p class="hero-lead">
-      Две зоны: учебный процесс — материалы для студентов, и проекты — то, чем занимался и занимаюсь вне аудиторий. Готовое сразу открывается, остальное честно помечено как заглушка.
-    </p>
-    <div class="flex flex-wrap gap-2" style="margin-top:1.25rem;">
-      <a href="stands/index.html" class="btn btn-primary btn-sm">виртуальные стенды →</a>
-      <a href="stands/glossary.html" class="btn btn-sm">глоссарий · 69 терминов</a>
-      <a href="https://itsliventsev.github.io/netsys_trainer/" target="_blank" rel="noopener" class="btn btn-sm">тренажёры по сетям ↗</a>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ================= ZONE 01 · УЧЕБНЫЙ ПРОЦЕСС ================= -->
-  <section class="zone" id="zone-edu">
-    <div class="zone-head">
-      <div>
-        <h2 class="zone-title">учебный процесс</h2>
-        <p class="zone-desc">Материалы для студентов: справочники, курсы и лабораторные, которые можно использовать прямо на паре или дома.</p>
-      </div>
-      <div class="p-counter mono">3 из 6 доступно</div>
-    </div>
-
-    <div class="bento-grid">
-
-      <!-- 01: Glossary (active, wide) — единый словарь в системе стендов -->
-      <a href="stands/glossary.html" class="p-card wide is-active sheen" style="--card-accent: #cf4a18;">
-        <div class="p-card-head">
-          <span class="p-num">01</span>
-          <span class="p-status p-status-ready">готово ✓</span>
-        </div>
-        <h3 class="p-title">Глоссарий</h3>
-        <p class="p-desc">Единый словарь практик: 69 терминов в семи разделах — команды и роли, сети, документы и данные, геймификация, технический язык. Фильтры по вселенным, поиск и пометки «новое» у свежих добавлений.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-verm">сети</span>
-          <span class="p-tag tag-green">ос</span>
-          <span class="p-tag tag-purple">бд</span>
-        </div>
-        <div class="p-footer">
-          <span>справочник · открыт</span>
-          <span class="p-arrow">→</span>
-        </div>
-      </a>
-
-      <!-- 02: netsys_trainer — внешняя серия тренажёров -->
-      <a href="https://itsliventsev.github.io/netsys_trainer/" target="_blank" rel="noopener" class="p-card sheen" style="--card-accent: #4f7a44;">
-        <div class="p-card-head">
-          <span class="p-num">02</span>
-          <span class="p-status-row">
-            <span class="p-status p-status-new">новое</span>
-            <span class="p-status p-status-ready">готово ✓</span>
-          </span>
-        </div>
-        <h3 class="p-title">Тренажёры по сетевым технологиям</h3>
-        <p class="p-desc">Отдельная серия интерактивных тренажёров: обжим витой пары и монтаж сетевых розеток. Семь этапов с прогрессом, режимы тренировки и экзамена, автоматический отчёт и 100-балльная шкала с отправкой оценки в МЭШ.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">сети</span>
-          <span class="p-tag tag-plain">практика</span>
-          <span class="p-tag tag-plain">МЭШ</span>
-        </div>
-        <div class="p-footer">
-          <span>тренажёры · внешний проект</span>
-          <span class="p-arrow">↗</span>
-        </div>
-      </a>
-
-      <!-- 03: Networks -->
-      <div class="p-card is-soon">
-        <div class="p-card-head">
-          <span class="p-num">03</span>
-          <span class="p-status-row">
-            <span class="p-status p-status-new">новое</span>
-            <span class="p-status p-status-soon">в разработке</span>
-          </span>
-        </div>
-        <h3 class="p-title">Компьютерные сети</h3>
-        <p class="p-desc">LAN, MAN, WAN, линии связи и сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">сети</span>
-          <span class="p-tag tag-plain">топология</span>
-        </div>
-        <div class="p-footer"><span>черновик уже в архиве</span></div>
-      </div>
-
-      <!-- 04: Virtual stands -->
-      <a href="stands/index.html" class="p-card sheen" style="--card-accent: #cf4a18;">
-        <div class="p-card-head">
-          <span class="p-num">04</span>
-          <span class="p-status-row">
-            <span class="p-status p-status-new">новое</span>
-            <span class="p-status p-status-ready">готово ✓</span>
-          </span>
-        </div>
-        <h3 class="p-title">Виртуальные стенды</h3>
-        <p class="p-desc">Три учебные вселенные в браузере: СетьПолис — настройка сети (15 работ), ОфисПолис — профессия оператора ЭВМ, документы и данные (10 работ), ДатаПолис — эксплуатация и дежурства (16 работ). Профиль студента, автосохранение, терминал-симулятор и проверка в стиле CI.</p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-plain">3 вселенные</span>
-          <span class="p-tag tag-plain">41 работа</span>
-          <span class="p-tag tag-plain">интерактив</span>
-        </div>
-        <div class="p-footer">
-          <span>стенд · открыт</span>
-          <span class="p-arrow">→</span>
-        </div>
-      </a>
-
-      <!-- 04: honest stub -->
-      <div class="slot-card" role="note" aria-label="зарезервированное место под модуль">
-        <span class="slot-plus">+</span>
-        <h3 class="slot-title">Следующий модуль</h3>
-        <p class="p-desc" style="margin:0;">Место зарезервировано. Тема появится, как только дойдут руки и практика.</p>
-        <p class="slot-note">// это заглушка, а не кнопка</p>
-      </div>
-
-      <!-- 05: honest stub -->
-      <div class="slot-card" role="note" aria-label="зарезервированное место под идею">
-        <span class="slot-plus">+</span>
-        <h3 class="slot-title">Идея без названия</h3>
-        <p class="p-desc" style="margin:0;">Пока просто карточка. Однажды она станет ссылкой — если нет, так и останется частью истории.</p>
-        <p class="slot-note">// честная заглушка</p>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ================= ZONE 02 · ПРОЕКТЫ И ПРАКТИКИ ================= -->
-  <section class="zone" id="zone-projects">
-    <div class="zone-head">
-      <div>
-        <h2 class="zone-title">проекты и практики</h2>
-        <p class="zone-desc">Чем занимался вне аудиторий: направления, события и эксперименты. Завершённые проекты остаются здесь как опыт — даже если путь в них уже пройден.</p>
-      </div>
-      <div class="p-counter mono">2 из 4 доступно</div>
-    </div>
-
-    <div class="bento-grid">
-
-      <!-- 01: Esports (completed, wide) -->
-      <a href="projects/esports.html" class="p-card wide sheen" style="--card-accent: #c2527a;">
-        <div class="p-card-head">
-          <span class="p-num">01</span>
-          <span class="p-status-row">
-            <span class="p-status p-status-archive">завершён · 2020–2025</span>
-            <span class="p-status p-status-ready">опыт ✓</span>
-          </span>
-        </div>
-        <h3 class="p-title">Киберспортивное направление в образовательной организации</h3>
-        <p class="p-desc">
-          С нуля собрал киберспортивную программу и сборные колледжа: 5 дисциплин, городские лиги МСКЛ и МШКЛ, внутренние чемпионаты и бронза Main Stage по CS:GO.
-          Проект завершён со сменой места работы — страница зафиксировала весь путь.
-        </p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-purple">киберспорт</span>
-          <span class="p-tag tag-pink">команды</span>
-          <span class="p-tag tag-orange">турниры</span>
-        </div>
-        <div class="p-footer">
-          <span>кейс · лендинг проекта</span>
-          <span class="p-arrow">→</span>
-        </div>
-      </a>
-
-      <!-- 02: Navigation signs (first design experience) -->
-      <a href="projects/navigation.html" class="p-card wide sheen" style="--card-accent: #6b8ec8;">
-        <div class="p-card-head">
-          <span class="p-num">02</span>
-          <span class="p-status-row">
-            <span class="p-status p-status-new">первый опыт</span>
-            <span class="p-status p-status-archive">2023–2024</span>
-          </span>
-        </div>
-        <h3 class="p-title">Оформление навигации отделения</h3>
-        <p class="p-desc">
-          Проба пера в графическом дизайне между парами: система поэтажных и дверных знаков для корпуса колледжа.
-          Не авторский продукт, а рабочая задача — но знаки приняли, распечатали и смонтировали. Три цвета, два шрифта, семь типов табличек.
-        </p>
-        <div class="flex flex-wrap gap-1.5 mt-4">
-          <span class="p-tag tag-verm">навигация</span>
-          <span class="p-tag tag-green">печать</span>
-          <span class="p-tag tag-plain">первый дизайн</span>
-        </div>
-        <div class="p-footer">
-          <span>кейс · стеклянный лендинг</span>
-          <span class="p-arrow">→</span>
-        </div>
-      </a>
-
-      <!-- 03: stub -->
-      <div class="slot-card" role="note" aria-label="зарезервированное место под проект">
-        <span class="slot-plus">+</span>
-        <h3 class="slot-title">Новый проект</h3>
-        <p class="p-desc" style="margin:0;">Слот под следующую историю. Уже вынашивается — детали появятся первыми здесь.</p>
-        <p class="slot-note">// заглушка · будет ссылкой</p>
-      </div>
-
-      <!-- 04: stub -->
-      <div class="slot-card" role="note" aria-label="зарезервированное место под идею">
-        <span class="slot-plus">+</span>
-        <h3 class="slot-title">Без названия пока</h3>
-        <p class="p-desc" style="margin:0;">Резервная ячейка зоны проектов. Пусть будет — хорошие идеи любят готовые места.</p>
-        <p class="slot-note">// честная заглушка</p>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Footer -->
-    </main>
-
-<footer class="site-footer">
-    <span>© 2026 itsliventsev · проекты</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="index.html">главная</a> <a href="sitemap.html">карта сайта</a> <a href="feed.xml">rss</a> <a href="admin.html" rel="nofollow">admin</a></nav>
-    <span data-footer-updated class="footer-updated"></span>
-  </footer>
-
-</div>
-
-<script src="assets/site.js?v=20261031bf"></script>
-<script src="assets/shared-chrome.js?v=20261031bf"></script>
-<script src="/assets/soft-shell.js?v=20261101"></script>
-</body>
-</html>
+<script src="assets/site.js?v=20261031bf"></script><script src="assets/shared-chrome.js?v=20261031bf"></script><script src="assets/workspace.js?v=20261102"></script>
+</body></html>

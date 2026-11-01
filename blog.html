@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4f6fa">
+<meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#111722");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
 <title>заметки · itsliventsev</title>
 <meta name="description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031bf">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031bf">
-<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/blog.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -42,183 +41,13 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"заметки","description":"Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.","url":"https://itsliventsev.github.io/blog.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="rose">
-<a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <!-- Header -->
-  <header class="site-header">
-    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-        <nav class="site-nav" aria-label="Основная навигация">
-      <a href="index.html" class="nav-link">главная</a>
-      <a href="blog.html" class="nav-link is-wip active" aria-current="page">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content">
-
-  <!-- Hero -->
-  <section class="hero">
-<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-      <div class="flex-1">
-        <h1 class="hero-title">
-          <span class="ht-word">заметки</span>
-        </h1>
-        <p class="hero-sub text-xs sm:text-sm md:text-base">// заметки на полях · короткое и живое</p>
-      </div>
-      <span class="pill pill-neutral self-start shadow-sm">
-        записей в архиве: <strong id="feed-count" style="color:var(--accent);">…</strong>
-      </span>
-    </div>
-    <p class="text-sm md:text-base leading-relaxed max-w-3xl" style="color:var(--text-2);">
-      Сюда попадает всё короткое: заметки с пар и лабораторных, разборы ошибок студентов, мысли про IT-образование,
-      подборки и мини-дополнения. Если заметка вырастет — она переедет в <a href="articles.html" class="nav-link" style="padding:.1rem .35rem;">статьи</a>
-      или <a href="projects.html" class="nav-link" style="padding:.1rem .35rem;">проекты</a>. Здесь — журнал моментов.
-    </p>
-  </section>
-
-  <!-- Статус раздела: в разработке -->
-  <section class="notice notice-wip mb-7" aria-label="Статус раздела">
-    <p class="notice-label">// статус раздела · в разработке</p>
-    <p class="m-0 text-sm" style="color:var(--text-2);line-height:1.75;">
-      Раздел «заметки» сейчас в разработке: опубликованные записи носят архивный характер и пока не
-      актуализируются. Актуальные практики — в <a href="stands/index.html" class="nav-link is-wip" style="padding:.1rem .35rem;">виртуальных стендах</a>,
-      завершённые тексты — в <a href="articles.html" class="nav-link" style="padding:.1rem .35rem;">статьях</a>.
-    </p>
-  </section>
-
-  <!-- Filters (кнопки достраиваются скриптом под реальные типы) -->
-  <section class="mb-7">
-    <div class="feed-filters" id="note-filters">
-      <button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>
-    </div>
-  </section>
-
-  <!-- Лента заметок: карточки рендерятся из blog/posts.json (раздел в разработке — приглушён) -->
-  <section class="mb-8 wip-feed">
-    <div id="note-grid" class="note-grid" aria-live="polite">
-      <!-- Статический фолбэк, если JS не выполнился -->
-      <div class="feed-empty">
-        <strong>лента подгружается…</strong><br>
-        если это сообщение зависло — откройте страницу с включённым JavaScript
-      </div>
-    </div>
-  </section>
-
-  <!-- Типы записей -->
-  <section class="mb-10">
-    <h2 class="section-label">какие бывают записи</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:var(--neo-verm);"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">заметка</div></div>
-      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:var(--neo-rose);"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">мысль</div></div>
-      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#c2410c;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">подборка</div></div>
-      <div class="card p-3.5 text-center"><div class="w-2 h-2 rounded-full mx-auto mb-2" style="background:#4f7a44;"></div><div class="mono text-[11px] font-bold" style="color:var(--text-2);">доп. материал</div></div>
-    </div>
-  </section>
-
-  <p class="feed-note mb-10">
-    // индекс ленты собирается автоматически: новый .html в папке blog/ после пуша сам станет карточкой
-    (<span class="note-type-label" style="color:var(--faint);">scripts/build-post-index.js</span> + GitHub Actions)
-  </p>
-
-    </main>
-
-<footer class="site-footer">
-    <span>© 2026 itsliventsev · заметки</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="index.html">главная</a> <a href="projects.html">проекты</a> <a href="sitemap.html">карта сайта</a> <a href="feed.xml">rss</a> <a href="admin.html" rel="nofollow">admin</a></nav>
-    <span data-footer-updated class="footer-updated"></span>
-  </footer>
-
-</div>
-
+<body><a class="skip-link" href="#main-content">перейти к содержанию</a><div data-workspace-root><main id="main-content" class="ws-content">
+<header class="ws-page-heading"><span class="ws-eyebrow">ЗАПИСИ · МЫСЛИ · ПОДБОРКИ</span><h1>Заметки</h1><p>Короткие записи с занятий, наблюдения и дополнительные материалы. Большие завершённые тексты собраны в разделе статей.</p></header>
+<section class="ws-notes-note" data-ws-surface><span class="ws-note-icon">✎</span><div><strong>Рабочий блокнот</strong><p>Здесь появляются небольшие записи и дополнения к практикумам. Материалы публикуются по мере подготовки.</p></div><a class="ws-inline-link" href="articles.html">К статьям →</a></section>
+<section class="ws-section"><div class="ws-section-heading"><div><span class="ws-eyebrow">ЛЕНТА</span><h2>Последние заметки <span class="ws-count" id="feed-count">…</span></h2></div><div class="ws-filter-row" id="note-filters"><button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button></div></div><div class="ws-note-grid" id="note-grid" aria-live="polite"><div class="ws-empty">Загружаем заметки…</div></div></section>
+</main><footer class="ws-footer"><span>© 2026 itsliventsev · Заметки</span><nav><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a></nav><span data-footer-updated></span></footer></div>
 <script>
-/* ---------- Лента заметок: рендер из blog/posts.json ---------- */
-(function () {
-  const TYPE_LABELS = { note: 'заметка', thought: 'мысль', digest: 'подборка', extra: 'доп. материал' };
-  const grid = document.getElementById('note-grid');
-  const filters = document.getElementById('note-filters');
-  const counter = document.getElementById('feed-count');
-  let posts = [];
-
-  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-  function fmtDate(d) {
-    if (!d) return '';
-    if (/^\d{4}$/.test(d)) return d;
-    const dt = new Date(d + 'T00:00:00');
-    if (isNaN(dt)) return d;
-    return dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  function card(p) {
-    const tags = (p.tags || []).slice(0, 3).map((t) => '<span class="note-tag">#' + esc(t) + '</span>').join('');
-    return '<a class="note-card" data-type="' + esc(p.type) + '" href="blog/' + esc(p.file) + '">'
-      + '<div class="note-meta"><span class="note-type-dot"></span>'
-      + '<span class="note-type-label">' + esc(TYPE_LABELS[p.type] || p.type) + '</span>'
-      + '<span class="note-date">' + esc(fmtDate(p.date)) + '</span></div>'
-      + '<h3 class="note-title">' + esc(p.title) + '</h3>'
-      + (p.excerpt ? '<p class="note-excerpt">' + esc(p.excerpt) + '</p>' : '')
-      + (tags ? '<div class="note-tags">' + tags + '</div>' : '')
-      + '</a>';
-  }
-
-  function render(type) {
-    const list = type === 'all' ? posts : posts.filter((p) => p.type === type);
-    grid.innerHTML = list.length
-      ? list.map(card).join('')
-      : '<div class="feed-empty">// в этой категории пока пусто · загляните в «все»</div>';
-  }
-
-  filters.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-type-filter]');
-    if (!btn) return;
-    filters.querySelectorAll('.filter-btn').forEach((b) => {
-      b.classList.remove('is-active');
-      b.classList.add('pill-neutral');
-    });
-    btn.classList.add('is-active');
-    btn.classList.remove('pill-neutral');
-    render(btn.dataset.typeFilter);
-  });
-
-  fetch('blog/posts.json')
-    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then((data) => {
-      posts = Array.isArray(data) ? data : [];
-      counter.textContent = posts.length;
-      // фильтры только под реально существующие типы
-      const types = [...new Set(posts.map((p) => p.type))];
-      filters.innerHTML = '<button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>'
-        + types.map((t) => '<button class="pill pill-neutral filter-btn" type="button" data-type-filter="'
-          + esc(t) + '">' + esc(TYPE_LABELS[t] || t) + '</button>').join('');
-      render('all');
-      // фильтры не имеют смысла на единственной записи
-      if (posts.length < 2) filters.hidden = true;
-    })
-    .catch(() => {
-      counter.textContent = '0';
-      grid.innerHTML = '<div class="feed-empty"><strong>здесь пока пусто</strong><br>'
-        + 'новый html-файл в папке blog/ после пуша сам появится этой лентой</div>';
-    });
-})();
+(function(){const labels={note:'Заметка',thought:'Мысль',digest:'Подборка',extra:'Доп. материал'};const grid=document.getElementById('note-grid'),filters=document.getElementById('note-filters'),counter=document.getElementById('feed-count');let posts=[];const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});};function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);grid.innerHTML=items.length?items.map(p=>'<a class="ws-note-card" data-ws-surface href="blog/'+esc(p.file)+'"><span class="ws-publication-meta"><span class="ws-tag ws-tag-blue">'+esc(labels[p.type]||p.type)+'</span><span>'+esc(date(p.date))+'</span></span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).slice(0,3).map(t=>'<span>#'+esc(t)+'</span>').join('')+'</span><span class="ws-card-footer">Открыть заметку <b>→</b></span></a>').join(''):'<div class="ws-empty">В этой категории пока нет записей.</div>';}
+filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});fetch('blog/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];counter.textContent=posts.length;const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{counter.textContent='0';grid.innerHTML='<div class="ws-empty">Заметки пока не загрузились.</div>';});})();
 </script>
-<script src="assets/site.js?v=20261031bf"></script>
-<script src="assets/shared-chrome.js?v=20261031bf"></script>
-<script src="/assets/soft-shell.js?v=20261101"></script>
-</body>
-</html>
+<script src="assets/site.js?v=20261031bf"></script><script src="assets/shared-chrome.js?v=20261031bf"></script><script src="assets/workspace.js?v=20261102"></script></body></html>

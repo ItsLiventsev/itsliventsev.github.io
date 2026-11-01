@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4f6fa">
+<meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#111722");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
 <title>статьи · itsliventsev</title>
 <meta name="description" content="Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031bf">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031bf">
-<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031bf">
-<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261102">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/articles.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -42,195 +41,20 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"статьи","description":"Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.","url":"https://itsliventsev.github.io/articles.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="orange">
-<a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <!-- Header -->
-  <header class="site-header">
-    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-        <nav class="site-nav" aria-label="Основная навигация">
-      <a href="index.html" class="nav-link">главная</a>
-      <a href="blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="articles.html" class="nav-link active" aria-current="page">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content">
-
-  <!-- Hero -->
-  <section class="hero">
-<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-      <div class="flex-1">
-        <h1 class="hero-title">
-          <span class="ht-word">статьи</span>
-        </h1>
-        <p class="hero-sub text-xs sm:text-sm md:text-base">// завершённые тексты · публикации · методички</p>
-      </div>
-      <span class="pill pill-neutral self-start shadow-sm">
-        всего статей: <strong id="pub-count" style="color:var(--accent);">…</strong>
-      </span>
-    </div>
-    <p class="text-sm md:text-base leading-relaxed max-w-3xl" style="color:var(--text-2);">
-      В отличие от <a href="blog.html" class="nav-link is-wip" style="padding:.1rem .35rem;">заметок</a>, сюда попадают только готовые тексты:
-      методические материалы, статьи конференций и сборников. То, что прошло редактуру, опубликовано и работает.
-    </p>
-  </section>
-
-  <!-- Filters -->
-  <section class="mb-8">
-    <div class="feed-filters" id="pub-filters">
-      <button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>
-    </div>
-  </section>
-
-  <!-- Лента публикаций: рендер из articles/posts.json -->
-  <section class="mb-10">
-    <div id="pub-list" class="pub-list" aria-live="polite">
-      <div class="feed-empty">
-        <strong>лента подгружается…</strong><br>
-        если это сообщение зависло — откройте страницу с включённым JavaScript
-      </div>
-    </div>
-  </section>
-
-  <!-- Статистика -->
-  <section class="mb-10">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
-      <div class="card hoverable p-4 text-center cursor-default">
-        <div class="stat-num" style="color:var(--neo-verm);" id="stat-articles">—</div>
-        <div class="mono text-[10px]" style="color:var(--faint);">статей</div>
-      </div>
-      <div class="card hoverable p-4 text-center cursor-default">
-        <div class="stat-num" style="color:var(--neo-verm);" id="stat-conf">—</div>
-        <div class="mono text-[10px]" style="color:var(--faint);">конференций</div>
-      </div>
-      <div class="card hoverable p-4 text-center cursor-default">
-        <div class="stat-num" style="color:var(--neo-leaf);" id="stat-minutes">—</div>
-        <div class="mono text-[10px]" style="color:var(--faint);">мин. чтения</div>
-      </div>
-      <div class="card hoverable p-4 text-center cursor-default">
-        <div class="stat-num" style="color:var(--neo-rose);" id="stat-year">—</div>
-        <div class="mono text-[10px]" style="color:var(--faint);">год начала</div>
-      </div>
-    </div>
-  </section>
-
-  <p class="feed-note mb-10">
-    // индекс публикаций собирается автоматически: новый .html в папке articles/ после пуша сам станет строкой ленты
-  </p>
-
-    </main>
-
-<footer class="site-footer">
-    <span>© 2026 itsliventsev · статьи</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="index.html">главная</a> <a href="projects.html">проекты</a> <a href="sitemap.html">карта сайта</a> <a href="feed.xml">rss</a> <a href="admin.html" rel="nofollow">admin</a></nav>
-    <span data-footer-updated class="footer-updated"></span>
-  </footer>
-
-</div>
-
+<body><a class="skip-link" href="#main-content">перейти к содержанию</a><div data-workspace-root><main id="main-content" class="ws-content">
+<header class="ws-page-heading"><span class="ws-eyebrow">ПУБЛИКАЦИИ · МЕТОДИЧЕСКИЕ МАТЕРИАЛЫ</span><h1>Статьи</h1><p>Завершённые тексты, материалы конференций и методические разработки — то, что прошло редактуру и опубликовано.</p></header>
+<section class="ws-editorial-summary" aria-label="Статистика публикаций"><article data-ws-surface><small>ПУБЛИКАЦИИ</small><strong id="stat-articles">—</strong></article><article data-ws-surface><small>КОНФЕРЕНЦИИ</small><strong id="stat-conf">—</strong></article><article data-ws-surface><small>МИНУТ ЧТЕНИЯ</small><strong id="stat-minutes">—</strong></article><article data-ws-surface><small>ПЕРВАЯ ПУБЛИКАЦИЯ</small><strong id="stat-year">—</strong></article></section>
+<section class="ws-section"><div class="ws-section-heading"><div><span class="ws-eyebrow">БИБЛИОТЕКА ТЕКСТОВ</span><h2>Все публикации <span class="ws-count" id="pub-count">…</span></h2></div><div class="ws-filter-row" id="pub-filters"><button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button></div></div><div class="ws-publications" id="pub-list" aria-live="polite"><div class="ws-empty">Загружаем список публикаций…</div></div></section>
+</main><footer class="ws-footer"><span>© 2026 itsliventsev · Публикации</span><nav><a href="index.html">Главная</a><a href="projects.html">Проекты</a><a href="feed.xml">RSS</a></nav><span data-footer-updated></span></footer></div>
 <script>
-/* ---------- Лента статей: рендер из articles/posts.json ---------- */
-(function () {
-  const TYPE_LABELS = { conference: 'конференция', methodical: 'методичка', book: 'книга/сборник' };
-  const TYPE_PILL = { conference: 'pill-indigo', methodical: 'pill-amber', book: 'pill-purple' };
-  const list = document.getElementById('pub-list');
-  const filters = document.getElementById('pub-filters');
-  let posts = [];
-
-  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const pad = (n) => String(n).padStart(2, '0');
-
-  function fmtDate(d) {
-    if (!d) return '';
-    if (/^\d{4}$/.test(d)) return d;
-    const dt = new Date(d + 'T00:00:00');
-    return isNaN(dt) ? d : dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-  }
-
-  function row(p, i) {
-    const meta = [];
-    meta.push('<span class="pill ' + (TYPE_PILL[p.type] || 'pill-neutral') + '">' + esc(TYPE_LABELS[p.type] || p.type) + '</span>');
-    if (p.date) meta.push('<span class="dot"></span><span>' + esc(fmtDate(p.date)) + '</span>');
-    if (p.readtime) meta.push('<span class="dot"></span><span>≈ ' + esc(p.readtime) + ' чтения</span>');
-    if (p.source) meta.push('<span class="dot"></span><span>' + esc(p.source) + '</span>');
-    const tags = (p.tags || []).map((t) => '<span class="tag-hash">' + esc(t) + '</span>').join('');
-    return '<a class="pub-card" data-type="' + esc(p.type) + '" href="articles/' + esc(p.file) + '">'
-      + '<div class="pub-index">' + pad(i + 1) + '</div>'
-      + '<div>'
-      + '<div class="article-meta">' + meta.join('') + '</div>'
-      + '<h2 class="pub-title">' + esc(p.title) + '</h2>'
-      + (p.excerpt ? '<p class="pub-abstract">' + esc(p.excerpt) + '</p>' : '')
-      + '<div class="pub-foot">'
-      + '<div class="hash-row">' + tags + '</div>'
-      + '<span class="arrow-link">читать статью <span>→</span></span>'
-      + '</div></div></a>';
-  }
-
-  function render(type) {
-    const items = type === 'all' ? posts : posts.filter((p) => p.type === type);
-    list.innerHTML = items.length
-      ? items.map(row).join('')
-      : '<div class="feed-empty">// в этой категории пока пусто · загляните в раздел «все»</div>';
-  }
-
-  function fillStats() {
-    document.getElementById('pub-count').textContent = posts.length;
-    document.getElementById('stat-articles').textContent = posts.length;
-    document.getElementById('stat-conf').textContent = posts.filter((p) => p.type === 'conference').length;
-    const minutes = posts.reduce((sum, p) => sum + (parseInt(String(p.readtime || '').match(/\d+/) || 0, 10) || 0), 0);
-    document.getElementById('stat-minutes').textContent = minutes || '—';
-    const years = posts.map((p) => String(p.date || '').match(/\d{4}/)).filter(Boolean).map((m) => m[0]);
-    document.getElementById('stat-year').textContent = years.length ? Math.min.apply(null, years) : '—';
-  }
-
-  filters.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-type-filter]');
-    if (!btn) return;
-    filters.querySelectorAll('.filter-btn').forEach((b) => {
-      b.classList.remove('is-active');
-      b.classList.add('pill-neutral');
-    });
-    btn.classList.add('is-active');
-    btn.classList.remove('pill-neutral');
-    render(btn.dataset.typeFilter);
-  });
-
-  fetch('articles/posts.json')
-    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then((data) => {
-      posts = Array.isArray(data) ? data : [];
-      fillStats();
-      const types = [...new Set(posts.map((p) => p.type))];
-      filters.innerHTML = '<button class="pill filter-btn is-active" type="button" data-type-filter="all">все</button>'
-        + types.map((t) => '<button class="pill pill-neutral filter-btn" type="button" data-type-filter="'
-          + esc(t) + '">' + esc(TYPE_LABELS[t] || t) + '</button>').join('');
-      render('all');
-    })
-    .catch(() => {
-      document.getElementById('pub-count').textContent = '0';
-      list.innerHTML = '<div class="feed-empty"><strong>публикаций пока нет</strong><br>'
-        + 'новый html-файл в папке articles/ после пуша сам появится этой лентой</div>';
-    });
+(function(){
+ const labels={conference:'Конференция',methodical:'Методический материал',book:'Книга / сборник'};
+ const list=document.getElementById('pub-list'), filters=document.getElementById('pub-filters'); let posts=[];
+ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
+ function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);list.innerHTML=items.length?items.map((p,i)=>'<a class="ws-publication-row" data-ws-surface href="articles/'+esc(p.file)+'"><span class="ws-publication-index">'+String(i+1).padStart(2,'0')+'</span><span class="ws-publication-copy"><span class="ws-publication-meta"><span class="ws-tag ws-tag-purple">'+esc(labels[p.type]||p.type)+'</span>'+(p.date?'<span>'+esc(date(p.date))+'</span>':'')+(p.readtime?'<span>≈ '+esc(p.readtime)+' чтения</span>':'')+'</span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join('')+'</span></span><span class="ws-publication-arrow" aria-hidden="true">↗</span></a>').join(''):'<div class="ws-empty">В этой категории пока нет публикаций.</div>';}
+ filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});
+ fetch('articles/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];document.getElementById('pub-count').textContent=posts.length;document.getElementById('stat-articles').textContent=posts.length;document.getElementById('stat-conf').textContent=posts.filter(p=>p.type==='conference').length;document.getElementById('stat-minutes').textContent=posts.reduce((n,p)=>n+(parseInt(String(p.readtime||'').match(/\d+/)||0,10)||0),0)||'—';const years=posts.map(p=>String(p.date||'').match(/\d{4}/)).filter(Boolean).map(x=>Number(x[0]));document.getElementById('stat-year').textContent=years.length?Math.min(...years):'—';const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{document.getElementById('pub-count').textContent='0';list.innerHTML='<div class="ws-empty">Публикации пока не загрузились. Индекс будет доступен при открытии страницы.</div>';});
 })();
 </script>
-<script src="assets/site.js?v=20261031bf"></script>
-<script src="assets/shared-chrome.js?v=20261031bf"></script>
-<script src="/assets/soft-shell.js?v=20261101"></script>
-</body>
-</html>
+<script src="assets/site.js?v=20261031bf"></script><script src="assets/shared-chrome.js?v=20261031bf"></script><script src="assets/workspace.js?v=20261102"></script></body></html>
