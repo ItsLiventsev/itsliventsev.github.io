@@ -133,7 +133,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4f6fa">
+<meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>${esc(d.title)} · itsliventsev</title>
@@ -142,13 +142,11 @@
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="${prefix}assets/site.css?v=20261031bb">
-<link rel="stylesheet" href="${prefix}assets/tw-fallback.css?v=20261031bb">
-<link rel="stylesheet" href="${prefix}assets/shared-chrome.css?v=20261031bb">
-<link rel="stylesheet" href="${prefix}assets/tw-compiled.css?v=20261031bb">
-<link rel="stylesheet" href="${prefix}assets/soft-shell.css?v=20261101">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261102">
+<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261102">
+<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261102">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -217,7 +215,7 @@ ${bodyHtml}
 
 <script src="${prefix}assets/site.js?v=20261031bb"></script>
 <script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
-<script src="${prefix}assets/soft-shell.js?v=20261101"></script>
+<script src="${prefix}assets/workspace.js?v=20261102"></script>
 </body>
 </html>
 `;

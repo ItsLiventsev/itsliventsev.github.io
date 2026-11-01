@@ -243,20 +243,21 @@
   if (!main) return;
   var card = document.createElement('section');
   card.className = 'lab-panel resume-card';
+  card.setAttribute('data-ws-resume', 'true');
   var label = document.createElement('span');
-  label.className = 'resume-card-label';
+  label.setAttribute('data-ws-resume-label', 'true');
   label.textContent = 'продолжить';
   var link = document.createElement('a');
-  link.className = 'resume-card-link';
+  link.setAttribute('data-ws-resume-link', 'true');
   link.href = entry.f;
   link.textContent = entry.t || entry.f;
   var when = document.createElement('span');
-  when.className = 'resume-card-when';
+  when.setAttribute('data-ws-resume-when', 'true');
   try { when.textContent = new Date(entry.at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }); }
   catch (err) { when.textContent = ''; }
   var reset = document.createElement('button');
   reset.type = 'button';
-  reset.className = 'resume-card-reset';
+  reset.setAttribute('data-ws-resume-reset', 'true');
   reset.textContent = 'скрыть';
   reset.addEventListener('click', function () {
     try { localStorage.removeItem(key); } catch (err) {}

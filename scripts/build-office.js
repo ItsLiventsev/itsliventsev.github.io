@@ -389,20 +389,19 @@ function shell(cfg, n) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b0e11">
+<meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="dark light">
-<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<script>(function(){try{if(localStorage.getItem('itsliventsev-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}catch(e){}})();</script>
 <title>${cfg.title} · ОфисПолис · itsliventsev</title>
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/site.css?v=${VERSION}">
-<link rel="stylesheet" href="../../assets/stands.css?v=${VERSION}">
-<link rel="stylesheet" href="../../assets/ops.css?v=${VERSION}">
-<link rel="stylesheet" href="../../assets/office.css?v=${VERSION}">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102">
+<link rel="stylesheet" href="../../assets/workspace.css?v=20261102">
+<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261102">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -477,6 +476,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=${VERSION}"></script>
+<script src="../../assets/workspace.js?v=20261102"></script>
 </body>
 </html>
 `;
