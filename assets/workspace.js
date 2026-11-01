@@ -475,7 +475,7 @@
   window.addEventListener('resize', () => { if (window.innerWidth > 940) setDrawer(false); }, { passive: true });
 
   const searchDialog = document.createElement('dialog'); searchDialog.className = 'ws-search-dialog'; searchDialog.setAttribute('aria-label', 'Поиск по сайту — cmdk palette (Ctrl+K)');
-  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Статья, проект или учебный модуль — начните печатать…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox" aria-label="Результаты поиска"></div><div class="ws-search-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> навигация · <kbd>↵</kbd> открыть · <kbd>Esc</kbd> закрыть</span><span data-ws-search-hint>Введите запрос</span></div>';
+  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Поиск или > команды — начните печатать…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox" aria-label="Результаты поиска"></div><div class="ws-search-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> навигация · <kbd>↵</kbd> открыть · <kbd>Esc</kbd> закрыть</span><span data-ws-search-hint>Введите запрос</span></div>';
   body.appendChild(searchDialog);
   const searchInput = searchDialog.querySelector('.ws-search-input'); const searchResults = searchDialog.querySelector('.ws-search-results'); const searchHint = searchDialog.querySelector('[data-ws-search-hint]');
   let searchData = null, loading = false, activeIndex = -1;
@@ -484,7 +484,45 @@
   function setActive(n){ var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(!els.length){ activeIndex=-1; return; } activeIndex=Math.max(0,Math.min(n,els.length-1)); els.forEach(function(el,i){ el.classList.toggle('is-active',i===activeIndex); el.setAttribute('aria-selected',i===activeIndex?'true':'false'); if(i===activeIndex) el.scrollIntoView({block:'nearest'}); }); }
   function normalize(value) { return String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }
   function openSearch() { if (searchDialog.open) { searchInput.focus(); return; } if (searchDialog.showModal) searchDialog.showModal(); else searchDialog.setAttribute('open', ''); searchInput.focus(); searchInput.select(); if (!searchData && !loading) { loading = true; searchResults.innerHTML = '<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('search') + '</div>Загружаем индекс…</div>'; fetch('/assets/search-index.json').then(function(r){ return r.json(); }).then(function(data){ searchData=Array.isArray(data)?data:(data.items||[]); loading=false; renderSearch(searchInput.value); }).catch(function(){ loading=false; searchResults.innerHTML='<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('close') + '</div>Индекс поиска недоступен.</div>'; }); } }
+
+  /* ── v14: command palette actions (prefix > ) ── */
+  var CMD_ACTIONS = [
+    {id:'go-projects', label:'Перейти в Проекты', desc:'Открыть /projects.html', icon:'projects', hotkey:'G P', run:function(){ location.href='/projects.html'; }},
+    {id:'go-articles', label:'Перейти в Статьи', desc:'Открыть /articles.html', icon:'document', hotkey:'G A', run:function(){ location.href='/articles.html'; }},
+    {id:'go-notes', label:'Перейти в Заметки', desc:'Открыть /blog.html', icon:'notes', hotkey:'G N', run:function(){ location.href='/blog.html'; }},
+    {id:'go-archive', label:'Перейти в Архив', desc:'Открыть /archive.html', icon:'archive', hotkey:'G H', run:function(){ location.href='/archive.html'; }},
+    {id:'toggle-theme', label:'Переключить тему', desc:'Светлая ↔ тёмная', icon:'moon', hotkey:'T', run:function(){ var btn=document.querySelector('.theme-toggle'); if(btn) btn.click(); else { var d=document.documentElement; if(d.dataset.theme==='dark') delete d.dataset.theme; else d.dataset.theme='dark'; } }},
+    {id:'toggle-compact', label:'Свернуть боковую панель', desc:'Компактный режим навигации', icon:'chevron-left', hotkey:'[', run:function(){ var b=document.querySelector('.ws-collapse'); if(b) b.click(); }},
+    {id:'clear-kanban', label:'Сбросить канбан', desc:'Очистить локальный порядок колонок', icon:'close', run:function(){ try{ localStorage.removeItem('ws:kanban:order:v13'); }catch(e){} location.reload(); }},
+    {id:'run-a11y', label:'Запустить a11y аудит', desc:'axe-core проверка страницы', icon:'search', hotkey:'Alt+Shift+A', run:function(){ var ev=new KeyboardEvent('keydown',{key:'a',altKey:true,shiftKey:true}); document.dispatchEvent(ev); }},
+    {id:'copy-link', label:'Копировать ссылку', desc:'Скопировать URL страницы', icon:'document', run:function(){ navigator.clipboard && navigator.clipboard.writeText(location.href); }},
+    {id:'scroll-top', label:'Наверх страницы', desc:'Плавная прокрутка', icon:'arrow-up', run:function(){ window.scrollTo({top:0, behavior:'smooth'}); }},
+  ];
+  function renderCommands(filter){
+    var terms = filter.toLocaleLowerCase('ru-RU').trim().replace(/^>/,'').trim().split(/\s+/).filter(Boolean);
+    var scored = CMD_ACTIONS.map(function(a){ var hay=(a.label+' '+a.desc).toLocaleLowerCase('ru-RU'); var score= terms.length? 0 : 1; terms.forEach(function(t){ if(hay.indexOf(t)!==-1) score+=1; else score=-1; }); return {a:a, score:score}; }).filter(function(x){ return x.score>=0; });
+    searchResults.replaceChildren();
+    if(!scored.length){ var empty=document.createElement('div'); empty.className='ws-empty'; empty.textContent='Команд не найдено.'; searchResults.appendChild(empty); if(searchHint) searchHint.textContent='0 команд'; activeIndex=-1; return; }
+    var cap=document.createElement('div'); cap.className='ws-search-group-caption'; cap.textContent='Команды'; searchResults.appendChild(cap);
+    scored.forEach(function(entry){
+      var act=entry.a;
+      var link=document.createElement('a'); link.className='ws-search-result'; link.href='#'; link.setAttribute('role','option'); link.setAttribute('data-cmd', act.id);
+      var ic=document.createElement('span'); ic.className='ws-search-result-ic'; ic.innerHTML=iconMarkup(act.icon);
+      var body=document.createElement('span'); body.className='ws-search-result-body';
+      var title=document.createElement('strong'); title.textContent=act.label;
+      var meta=document.createElement('small'); meta.textContent=act.desc + (act.hotkey ? ' · ' + act.hotkey : '');
+      body.append(title, meta);
+      var pill=document.createElement('span'); pill.className='ws-search-result-meta'; pill.textContent= act.hotkey || '↵';
+      link.append(ic, body, pill);
+      link.addEventListener('click', function(e){ e.preventDefault(); var found=CMD_ACTIONS.find(function(x){ return x.id===act.id; }); if(found) { searchDialog.close && searchDialog.close(); found.run(); } });
+      searchResults.appendChild(link);
+    });
+    if(searchHint) searchHint.textContent=scored.length+' команд';
+    activeIndex=-1; setActive(0);
+  }
+
   function renderSearch(query) {
+    if (query.trim().startsWith('>')) { renderCommands(query); return; }
     if (!searchData) return;
     var terms = normalize(query).split(/\s+/).filter(Boolean);
     if (!terms.length) { searchResults.innerHTML = '<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('search') + '</div>Начните вводить запрос — проекты, статьи, заметки<br><small style="color:var(--ws-muted);margin-top:6px;display:block;">Используйте <kbd>↑</kbd> <kbd>↓</kbd> для навигации · <kbd>Esc</kbd> закрыть</small></div>'; if(searchHint) searchHint.textContent='Введите запрос'; activeIndex=-1; return; }
@@ -498,7 +536,7 @@
   }
   searchButton.addEventListener('click', openSearch);
   searchInput.addEventListener('input', function(){ renderSearch(searchInput.value); });
-  searchInput.addEventListener('keydown', function(e){ var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(e.key==='ArrowDown'){ e.preventDefault(); setActive(activeIndex+1); } else if(e.key==='ArrowUp'){ e.preventDefault(); setActive(activeIndex-1); } else if(e.key==='Enter'){ if(activeIndex>=0 && els[activeIndex]){ e.preventDefault(); var href=els[activeIndex].getAttribute('href'); if(href) window.location.href=href; } else if(els.length===1){ e.preventDefault(); window.location.href=els[0].getAttribute('href'); } } });
+  searchInput.addEventListener('keydown', function(e){ var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(e.key==='ArrowDown'){ e.preventDefault(); setActive(activeIndex+1); } else if(e.key==='ArrowUp'){ e.preventDefault(); setActive(activeIndex-1); } else if(e.key==='Enter'){ if(activeIndex>=0 && els[activeIndex]){ e.preventDefault(); var cmd=els[activeIndex].getAttribute('data-cmd'); if(cmd){ var act=CMD_ACTIONS.find(function(x){ return x.id===cmd; }); if(act) { searchDialog.close && searchDialog.close(); act.run(); } return; } var href=els[activeIndex].getAttribute('href'); if(href && href!=='#') window.location.href=href; else els[activeIndex].click(); } else if(els.length===1){ e.preventDefault(); var only=els[0]; var ocmd=only.getAttribute('data-cmd'); if(ocmd){ var a2=CMD_ACTIONS.find(function(x){ return x.id===ocmd; }); if(a2) { searchDialog.close && searchDialog.close(); a2.run(); } } else if(only.getAttribute('href') && only.getAttribute('href')!=='#') window.location.href=only.getAttribute('href'); else only.click(); } } });
   searchDialog.addEventListener('click', function(event){ if(event.target===searchDialog) searchDialog.close && searchDialog.close(); });
   searchDialog.addEventListener('close', function(){ if(searchHint) searchHint.textContent='Введите запрос'; });
   searchDialog.querySelector('form').addEventListener('submit', function(event){ event.preventDefault(); var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(activeIndex>=0 && els[activeIndex]) window.location.href=els[activeIndex].getAttribute('href'); else if(els.length) window.location.href=els[0].getAttribute('href'); else if(searchDialog.close) searchDialog.close(); });

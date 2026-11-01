@@ -333,6 +333,42 @@
 - `node --check assets/workspace.js && node --check assets/home-activity.js` → ok
 - manual: kanban drag desktop + keyboard `Ctrl+→/←`; reveal при скролле; offline toggle (DevTools offline) → banner; search `Ctrl+K` retained.
 
+
+## Sprint v14 · 2026-11-01 — command palette + realtime BroadcastChannel + ticker · MAX
+
+> **Режим:** Shared Chat v14 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.
+> **Критерий:** `76/0/0` + `3517/0` + `node --check` ok; задник `#F8F9FA/#15161d` retained.
+
+### Shared Chat v14
+
+**Architect** — аудит v13 закрыт (kanban DnD + offline + reveal + SW dedupe ✓). Нашёл 3 щели: поиск только ищет без действий; канбан не синкается между вкладками; метрики прыгают резко.
+
+**Visual** (Shadcn Command + Linear) — command `>` 10 actions grouped Команды + hotkey pills G P/G A/T; sparkline tooltip done; publication accent bar hover.
+
+**Motion** — ticker `900ms easeOutCubic` tabular-nums; BroadcastChannel status note 2.5s; cmdk reuse 220ms.
+
+**Integrator** — один PR zero-deps: `workspace.js` 10 CMD_ACTIONS + renderCommands + data-cmd + `home-activity.js` BroadcastChannel ws-kanban-v14 + storage + ticker __wsAnimateNumber + `index.html` preconnect + `workspace-home.css` ticker/accent bar.
+
+**Оркестратор** — утвердил MAX, запретил layout shift, потребовал 76/0/0.
+
+### Задачи v14
+
+| № | Ось | Задача | Реф |
+|---|-----|--------|-----|
+| 1 | Навигация | Command `>` 10 actions data-cmd | Shadcn/Linear |
+| 2 | Главная kanban | BroadcastChannel ws-kanban-v14 + storage | Realtime |
+| 3 | Главная metrics | Number ticker 900ms tabular-nums | Tremor |
+| 4 | Главная | Publication ::before accent bar | Editorial |
+| 5 | Компоненты | preconnect api.github + dns-prefetch cdn | Perf |
+| 6 | Навигация | Placeholder Поиск или > команды | UX |
+
+### Проверка
+
+- `audit 76/0/0`; `regression 3517/0`; `node --check` ok
+- manual: Ctrl+K → > → Команды ↑↓↵; 2 tabs drag → note; metrics animate.
+
+---
+
 ### Следующий кандидат v14
 
 - Command palette `⌘K` → actions (навигация без мыши) + dashboard realtime via `BroadcastChannel` между вкладками.
