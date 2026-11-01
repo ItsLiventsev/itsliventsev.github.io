@@ -4,9 +4,11 @@
   if (document.documentElement.dataset.workspaceReady === 'true') return;
   const body = document.body;
   const pathname = location.pathname.replace(/\/$/, '') || '/';
+  const learningArea = pathname.startsWith('/stands/office') ? 'office' : pathname.startsWith('/stands/ops') ? 'operations' : pathname.startsWith('/stands/') && pathname !== '/stands/index.html' ? 'network' : 'general';
+  body.dataset.wsArea = learningArea;
   const pathTitle = () => {
     const h1 = document.querySelector('main h1');
-    if (h1 && h1.textContent.trim()) return h1.textContent.trim().replace(/\s+/g, ' ');
+    if (h1 && (h1.innerText || h1.textContent).trim()) return (h1.innerText || h1.textContent).trim().replace(/\s+/g, ' ');
     return ({
       '/': 'Обзор', '/404.html': 'Страница не найдена', '/projects.html': 'Проекты',
       '/articles.html': 'Статьи', '/blog.html': 'Заметки', '/archive.html': 'База знаний',
@@ -37,7 +39,7 @@
   };
   const navItems = [
     { label: 'Обзор', href: '/', icon: 'overview', test: p => p === '/' || p === '/index.html' },
-    { label: 'Учебные пространства', href: '/stands/index.html', icon: 'learning', test: p => p.startsWith('/stands/') },
+    { label: 'Пространства', href: '/stands/index.html', icon: 'learning', test: p => p.startsWith('/stands/') },
     { label: 'Проекты', href: '/projects.html', icon: 'projects', test: p => p === '/projects.html' || p.startsWith('/projects/') },
     { label: 'Статьи', href: '/articles.html', icon: 'articles', test: p => p === '/articles.html' || p.startsWith('/articles/') },
     { label: 'Заметки', href: '/blog.html', icon: 'notes', test: p => p === '/blog.html' || p.startsWith('/blog/') },
@@ -83,7 +85,7 @@
   });
   sidebar.appendChild(nav);
   const learningNav = document.createElement('div'); learningNav.className = 'ws-learning-links';
-  learningNav.innerHTML = '<p class="ws-sidebar-caption">УЧЕБНЫЕ ВСЕЛЕННЫЕ</p>'
+  learningNav.innerHTML = '<p class="ws-sidebar-caption">НАПРАВЛЕНИЯ</p>'
     + '<a class="ws-nav-link" href="/stands/setpolis.html"><span class="ws-nav-dot ws-dot-violet"></span><span class="ws-nav-label">СетьПолис</span></a>'
     + '<a class="ws-nav-link" href="/stands/office/index.html"><span class="ws-nav-dot ws-dot-orange"></span><span class="ws-nav-label">ОфисПолис</span></a>'
     + '<a class="ws-nav-link" href="/stands/ops/index.html"><span class="ws-nav-dot ws-dot-blue"></span><span class="ws-nav-label">ДатаПолис</span></a>';
@@ -133,7 +135,33 @@
   if (oldHeader) oldHeader.remove();
   root.classList.remove('page-wrap', 'st-wrap');
   root.classList.add('ws-page-content');
-  if (main) main.classList.add('ws-content');
+  if (main) {
+    main.classList.add('ws-content');
+    if (pathname.startsWith('/articles/') || pathname.startsWith('/blog/') || pathname.startsWith('/projects/')) {
+      main.dataset.wsEditorial = pathname.startsWith('/articles/') ? 'article' : pathname.startsWith('/blog/') ? 'note' : 'case-study';
+      const editorialHeader = main.querySelector('.prose-head');
+      if (editorialHeader) editorialHeader.dataset.wsArticleHeader = 'true';
+      const authorList = main.querySelector('.article-authors');
+      if (authorList) authorList.dataset.wsArticleAuthors = 'true';
+      main.querySelectorAll('.author-chip').forEach(el => { el.dataset.wsArticleAuthor = 'true'; });
+      const editorialAbstract = editorialHeader?.nextElementSibling;
+      if (pathname.startsWith('/articles/') && editorialAbstract) editorialAbstract.dataset.wsArticleAbstract = 'true';
+      const articleLayout = [...main.children].find(el => el.querySelector('#toc') && el.querySelector('article'));
+      if (articleLayout) {
+        articleLayout.dataset.wsArticleLayout = 'true';
+        articleLayout.querySelector('aside')?.setAttribute('data-ws-article-toc', 'true');
+        articleLayout.querySelector('article')?.setAttribute('data-ws-article-content', 'true');
+      }
+      main.querySelectorAll('.callout, .notice').forEach(el => { el.dataset.wsCallout = 'true'; });
+      main.querySelectorAll('.range-seg').forEach(el => { el.dataset.wsRangeBar = 'true'; el.dataset.wsTone = /orange-500/.test(el.className) ? 'warm' : 'cool'; });
+      main.querySelectorAll('.relative').forEach(el => { if (el.querySelector('.range-seg')) el.dataset.wsRangeTrack = 'true'; });
+      main.querySelectorAll('ol.list-none, ul.list-none').forEach(el => { el.dataset.wsListStyle = 'none'; });
+      main.querySelectorAll('ol.list-decimal').forEach(el => { el.dataset.wsListStyle = 'decimal'; });
+      main.querySelectorAll('.chart-group').forEach(el => { el.dataset.wsChartGroup = 'true'; });
+      main.querySelectorAll('.chart-bar').forEach(el => { el.dataset.wsChartBar = 'true'; el.dataset.wsTone = /bg-orange-400/.test(el.className) ? 'warm-soft' : /bg-orange-500/.test(el.className) ? 'warm' : 'cool'; });
+      main.querySelectorAll('.chart-label').forEach(el => { el.dataset.wsChartLabel = 'true'; });
+    }
+  }
   root.querySelectorAll('footer').forEach(el => { el.className = 'ws-footer'; });
   document.querySelector('.skip-link')?.classList.add('ws-skip-link');
   root.querySelectorAll('.ambient, .bg-glyphs, .floating-elements, .giant-word, .title-mark, #title-mark').forEach(el => el.setAttribute('data-ws-decoration', 'true'));
@@ -270,7 +298,7 @@
       if (/\b(btn|flat-btn|primary)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary');
     });
     scope.querySelectorAll('a').forEach(el => { if (/\b(btn|flat-btn|quick-bubble|ws-button)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary'); });
-    scope.querySelectorAll('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev').forEach(el => {
+    scope.querySelectorAll('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev, .tag-hash').forEach(el => {
       el.setAttribute('data-ws-tag', 'true');
       if (/p-status-ready|is-complete|is-done|status-ok/.test(el.className)) el.setAttribute('data-ws-state', 'complete');
       else if (/p-status-soon|is-locked|status-wait/.test(el.className)) el.setAttribute('data-ws-state', 'locked');
