@@ -312,9 +312,14 @@ body.ws-ready #to-top.show { opacity: 1; visibility: visible; pointer-events: au
 .ws-mode-compact .ws-collapse { transform: rotate(180deg); }
 .ws-collapse:hover { color: var(--ws-accent); border-color: var(--ws-accent); }
 .ws-nav-link:focus-visible, .ws-collapse:focus-visible, .ws-mobile-menu:focus-visible { outline: 3px solid color-mix(in srgb,var(--ws-accent) 32%,transparent); outline-offset: 2px; }
-.ws-sidebar::-webkit-scrollbar { width: 6px; }
-.ws-sidebar::-webkit-scrollbar:horizontal { display: none; height: 0; }
-.ws-sidebar::-webkit-scrollbar-thumb { border-radius: 99px; background: var(--ws-line-strong); }
+/* custom invisible scrollbar — show only on hover, no native buttons */
+.ws-sidebar { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.ws-sidebar:hover { scrollbar-color: color-mix(in srgb, var(--ws-ink) 14%, transparent) transparent; }
+.ws-sidebar::-webkit-scrollbar { width: 4px; height: 0; }
+.ws-sidebar::-webkit-scrollbar-thumb { border-radius: 99px; background: transparent; }
+.ws-sidebar:hover::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ws-ink) 14%, transparent); }
+.ws-sidebar::-webkit-scrollbar-track { background: transparent; }
+.ws-sidebar::-webkit-scrollbar-button, .ws-sidebar::-webkit-scrollbar-corner { display:none; width:0; height:0; }
 
 /* Shared content rhythm: tighter catalogue cards and a readable editorial measure. */
 .ws-project-grid-balanced { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -598,3 +603,27 @@ a > .ws-inline-icon:last-child { margin-inline-start: .22em; }
 .ws-sidebar { background: var(--ws-surface) !important; }
 .ws-shell { background: var(--ws-canvas); }
 .ws-workspace { background: var(--ws-canvas); }
+
+/* v2: compact structural rhythm — closer blocks (Agent-Structural) */
+.ws-page-content { padding: 22px clamp(18px, 3.4vw, 50px) 36px; }
+.ws-section { margin-top: 22px; }
+.ws-section-heading { margin-bottom: 10px; }
+.ws-home-hero { gap: 12px; }
+.ws-home-copy { min-height: 260px; padding: clamp(20px, 3.2vw, 36px); }
+.ws-dashboard-grid { gap: 12px; margin-top: 12px; }
+.ws-learning-grid { gap: 12px; }
+.ws-skill-grid { gap: 10px; }
+.ws-resource-grid { gap: 8px; }
+.ws-experience-grid { gap: 10px; }
+.ws-contact-grid { gap: 8px; }
+.ws-course-card { min-height: 210px; padding: 16px; }
+.ws-panel { padding: 16px; }
+.ws-overview-card { padding: 18px; }
+.ws-skill-card { padding: 14px; }
+
+/* tighten mobile */
+@media (max-width: 560px) {
+  .ws-page-content { padding: 16px 12px 28px; }
+  .ws-section { margin-top: 18px; }
+}
+

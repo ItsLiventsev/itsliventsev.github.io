@@ -318,6 +318,19 @@
   renderTicker();
   renderTimeline();
   renderChart([]);
+  // — animated cycle (Agent-Motion: sequential highlight + dash flow)
+  const cycleEl = root.querySelector('[data-ws-activity-cycle]');
+  if (cycleEl && !reduceMotion) {
+    const steps = [...cycleEl.querySelectorAll('span:not([aria-hidden])')];
+    let cycleIdx = 0;
+    setInterval(()=>{
+      steps.forEach((el,i)=> el.style.opacity = i===cycleIdx*2 ? '1' : i===cycleIdx*2+1 ? '1' : '.85');
+      steps.forEach((el,i)=> { if(i%2===1) el.style.transform = cycleIdx*2===i-1 ? 'translateX(4px)' : 'translateX(0)'; });
+      cycleEl.classList.toggle('is-active', cycleIdx===3);
+      cycleIdx = (cycleIdx+1)%4;
+    }, 1200);
+  }
+
   startShuffle();
 
   const cached = readCache();

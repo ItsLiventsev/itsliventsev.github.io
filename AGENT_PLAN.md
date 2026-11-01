@@ -95,3 +95,18 @@
 - Визуал: фон #F8F9FA, карточки белые 16px, мягкие тени, сетка не ломается на 320px, анимации уважают reduced-motion, нет горизонтального overflow.
 
 — Оркестратор, 2026
+
+## Итерация v2 — компактная структура и живой синтез (1 ноября 2026)
+
+**Запрос:** блоки `ЦИКЛ РАБОТЫ` и `Лента изменений` рядом (2 колонки), компактнее, структурнее, продуманная анимация, убрать браузерный скроллбар в меню.
+
+**Решение мульти-агентов:**
+
+- **Agent-Layout (Structural):** `#activity` теперь `grid-template-columns: 380px 1fr` на ≥980px (sticky левый sticky 78px). На мобиле — одна колонка. Все gap 12px вместо 16-18, section margin 22px, card padding 16-18px. Bento остаётся, но плотность выше (VibeUI density).
+- **Agent-Scroll (UX):** `.ws-sidebar` теперь `scrollbar-width: thin` + `::-webkit-scrollbar 4px`, thumb прозрачен до hover, `scrollbar-button: none`. Аналогично для timeline (520px max-height, custom thin). Убран жирный браузерный ползунок (screenshot 4).
+- **Agent-Motion v2:** цикл `→` стрелки анимируются `ws-cycle-arrow` 1.4s, steps подсвечиваются по очереди 1200ms (Kokonut AI State). LIVE dot с `ws-ping` ripple, card shimmer (Magic UI), timeline stagger 40ms, marquee pause on hover.
+- **Agent-Visual v2:** карточка цикла — dashed рамка, при 4-м шаге `is-active` подсвечивается accent-wash. График 48px height, бары 6px radius, today — green с wash.
+- **Agent-Data:** лента сохраняет фильтры, но viewport ограничен 520px с кастомным скроллом, улучшает восприятие длинных списков.
+
+**Библиотеки v2 (vibecoding.ru 30):** VibeUI (density), Magic UI (shimmer/ping), Aceternity (moving border), Kokonut (AI State), React Bits (pulse), 21st.dev (timeline), shadcn (pill filters).
+
