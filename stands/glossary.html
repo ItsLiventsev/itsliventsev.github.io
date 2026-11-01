@@ -14,9 +14,9 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r1">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r1">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r1">
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r2">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -101,7 +101,7 @@
       <div>
         <p class="flat-kicker">понятный язык практики · три вселенные</p>
         <h1>словарь практик</h1>
-        <p class="st-hero-lead">Лабораторные говорят на языке реальных ИТ-команд. Каждое слово объяснено коротко: что это значит, зачем нужно и в какой из трёх вселенных встретится на практике. Семь разделов, 69 терминов, пометки «новое» у свежих добавлений.</p>
+        <p class="st-hero-lead">Лабораторные говорят на языке реальных ИТ-команд. Каждое слово объяснено коротко: что это значит, зачем нужно и в какой из трёх вселенных встретится на практике. Семь разделов, 74 термина, пометки «новое» у свежих добавлений.</p>
       </div>
     </div>
 
@@ -110,6 +110,13 @@
         <span class="sr-only">поиск по словарю</span>
         <input class="flat-input" id="glossary-search" type="search" placeholder="поиск: SLA, бэклог, OCR…" autocomplete="off">
       </label>
+      <div class="glossary-filters" role="group" aria-label="Фильтр терминов по вселенной">
+        <button type="button" data-ws-glossary-filter="all" aria-pressed="true">Все термины</button>
+        <button type="button" data-ws-glossary-filter="СетьПолис" aria-pressed="false">СетьПолис</button>
+        <button type="button" data-ws-glossary-filter="ОфисПолис" aria-pressed="false">ОфисПолис</button>
+        <button type="button" data-ws-glossary-filter="ДатаПолис" aria-pressed="false">ДатаПолис</button>
+        <button type="button" data-ws-glossary-filter="новое" aria-pressed="false">Новое</button>
+      </div>
       <nav class="glossary-toc" aria-label="Разделы словаря">
         <a href="#g1">01 · команды</a>
         <a href="#g2">02 · задачи</a>
@@ -296,16 +303,21 @@
   if (!input) return;
   var heads = Array.prototype.slice.call(document.querySelectorAll('.st-section-head'));
   var grids = Array.prototype.slice.call(document.querySelectorAll('dl.glossary-grid'));
+  var filters = Array.prototype.slice.call(document.querySelectorAll('[data-ws-glossary-filter]'));
   var status = document.getElementById('glossary-status');
   var empty = document.getElementById('glossary-empty');
   var total = document.querySelectorAll('.glossary-item').length;
-  input.addEventListener('input', function () {
-    var q = input.value.trim().toLowerCase();
+  var activeFilter = 'all';
+  function render() {
+    var q = input.value.trim().toLocaleLowerCase('ru');
     var shown = 0;
     grids.forEach(function (dl, idx) {
       var sectionCount = 0;
       dl.querySelectorAll('.glossary-item').forEach(function (item) {
-        var hit = !q || item.textContent.toLowerCase().indexOf(q) !== -1;
+        var text = item.textContent.toLocaleLowerCase('ru');
+        var universeMatch = activeFilter === 'all' || text.indexOf(activeFilter.toLocaleLowerCase('ru')) !== -1;
+        var textMatch = !q || text.indexOf(q) !== -1;
+        var hit = universeMatch && textMatch;
         item.hidden = !hit;
         if (hit) sectionCount++;
       });
@@ -314,10 +326,18 @@
       shown += sectionCount;
     });
     empty.hidden = shown !== 0;
-    status.textContent = q ? ('найдено: ' + shown + ' из ' + total) : '';
+    status.textContent = (q || activeFilter !== 'all') ? ('найдено: ' + shown + ' из ' + total) : '';
+  }
+  input.addEventListener('input', render);
+  filters.forEach(function (button) {
+    button.addEventListener('click', function () {
+      activeFilter = button.getAttribute('data-ws-glossary-filter');
+      filters.forEach(function (other) { other.setAttribute('aria-pressed', other === button ? 'true' : 'false'); });
+      render();
+    });
   });
 })();
 </script>
-<script src="/assets/workspace.js?v=20261101r1"></script>
+<script src="/assets/workspace.js?v=20261101r2"></script>
 </body>
 </html>
