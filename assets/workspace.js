@@ -54,12 +54,8 @@
   sidebar.setAttribute('aria-label', 'Навигация по workspace');
   const brand = document.createElement('div');
   brand.className = 'ws-brand';
-  const mark = document.createElement('span');
-  mark.className = 'ws-brand-mark';
-  mark.setAttribute('aria-hidden', 'true');
-  mark.textContent = 'i';
-  brand.appendChild(mark);
   if (logo) {
+    logo.querySelector('.arrow')?.remove();
     logo.classList.add('ws-brand-logo');
     if (logo.matches('a')) brand.appendChild(logo);
     else {
@@ -93,7 +89,7 @@
     + '<a class="ws-nav-link" href="/stands/ops/index.html"><span class="ws-nav-dot ws-dot-blue"></span><span class="ws-nav-label">ДатаПолис</span></a>';
   sidebar.appendChild(learningNav);
   const sidebarBottom = document.createElement('div'); sidebarBottom.className = 'ws-sidebar-bottom';
-  sidebarBottom.innerHTML = '<div class="ws-sidebar-card"><strong>Кабинет практики</strong><p>Проекты, материалы и учебные сценарии — в одном месте.</p></div>';
+  sidebarBottom.innerHTML = '<div class="ws-sidebar-card"><strong>Портфолио</strong><p>Проекты, публикации и практические материалы.</p></div>';
   sidebar.appendChild(sidebarBottom);
   const collapse = document.createElement('button'); collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = '<span aria-hidden="true">‹</span>'; sidebar.appendChild(collapse);
 

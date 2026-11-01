@@ -61,6 +61,14 @@ for (const module of ['.ws-home-hero', '.ws-learning-grid', '.ws-course-card', '
 for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
   ok(shell.includes(behavior), 'workspace.js: отсутствует функциональный контракт ' + behavior);
 }
+ok(!shell.includes("mark.textContent = 'i'") && !ui.includes('.ws-brand-mark'), 'в общей навигации остался монограммный I вместо ника');
+const homePage = read('index.html');
+ok(homePage.includes('Я преподаю IT.') && !homePage.includes('Ваше пространство'), 'главная должна начинаться с персонального профиля, без формулировки «Ваше пространство»');
+ok(homePage.indexOf('ws-dashboard-grid') < homePage.indexOf('learning-title'), 'персональный профиль и проекты должны идти до учебных пространств');
+const learningDirectory = read('stands/index.html');
+for (const feature of ['СетьПолис', 'ОфисПолис', 'ДатаПолис', '41', 'ws-learning-hero', 'ws-journey-grid', 'ws-ecosystem-grid']) {
+  ok(learningDirectory.includes(feature), 'stands/index.html: отсутствует блок нового каталога ' + feature);
+}
 ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(ui), 'новая система обращается к старым CSS-классам');
 ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(homeUi), 'новый dashboard обращается к старым CSS-классам');
 ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card|lab-panel|flat-btn|task-item|q-item|st-topbar)\b/.test(learningUi), 'новые LMS-паттерны обращаются к старым CSS-классам');
@@ -114,7 +122,7 @@ for (const asset of ['dom-kit.js', 'stands.js', 'ops-engine.js', 'ops-hub.js', '
 }
 const sitemap = read('sitemap.xml');
 ok((sitemap.match(/<loc>[^<]+<\/loc>/g) || []).length === 71, 'ожидалось 71 URL в sitemap.xml');
-ok(read('stands/index.html').includes('три вселенные'), 'потеряно описание учебных вселенных');
+ok(read('stands/index.html').includes('Три самостоятельные практики'), 'потеряно описание трёх учебных пространств');
 ok(read('stands/office/index.html').includes('office-hub.js'), 'потерян хаб ОфисПолис');
 ok(read('stands/ops/index.html').includes('ops-hub.js'), 'потерян хаб ДатаПолис');
 

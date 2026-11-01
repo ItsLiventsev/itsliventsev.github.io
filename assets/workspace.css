@@ -35,11 +35,6 @@ body.ws-ready {
   padding: 3px 10px; color: var(--ws-ink); text-decoration: none;
   font-size: 15px; font-weight: 800; letter-spacing: -.035em;
 }
-.ws-brand-mark {
-  display: grid; place-items: center; flex: 0 0 30px; height: 30px;
-  border-radius: 10px; background: var(--ws-accent); color: white;
-  font-size: 14px; font-weight: 800;
-}
 .ws-brand-logo { color: inherit; text-decoration: none; }
 .ws-sidebar-caption {
   margin: 2px 10px -12px; color: var(--ws-faint); font-size: 10px;
@@ -142,8 +137,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .ws-mode-compact { --ws-rail: 76px; }
 .ws-mode-compact .ws-sidebar { padding-inline: 10px; }
 .ws-mode-compact .ws-nav-link { justify-content: center; padding-inline: 8px; }
-.ws-mode-compact .ws-nav-label, .ws-mode-compact .ws-sidebar-caption, .ws-mode-compact .ws-sidebar-card, .ws-mode-compact .ws-brand-name { display: none; }
+.ws-mode-compact .ws-nav-label, .ws-mode-compact .ws-sidebar-caption, .ws-mode-compact .ws-sidebar-card { display: none; }
 .ws-mode-compact .ws-brand { justify-content: center; padding-inline: 0; }
+.ws-mode-compact .ws-brand-name { max-width: 60px; overflow-wrap: anywhere; text-align: center; font-size: 9px; letter-spacing: -.08em; }
 .ws-mode-compact .ws-collapse { transform: rotate(180deg); }
 .ws-mode-drawer { overflow: hidden; }
 .ws-mode-drawer .ws-sidebar { position: fixed; inset: 0 auto 0 0; width: min(300px, calc(100vw - 48px)); height: 100dvh; transform: translateX(-102%); box-shadow: var(--ws-shadow-lg); transition: transform 220ms ease; }
