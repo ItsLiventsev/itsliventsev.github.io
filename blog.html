@@ -10,14 +10,11 @@
 <meta name="description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/blog.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -45,9 +42,9 @@
 <header class="ws-page-heading"><span class="ws-eyebrow">ЗАПИСИ · МЫСЛИ · ПОДБОРКИ</span><h1>Заметки</h1><p>Короткие записи с занятий, наблюдения и дополнительные материалы. Большие завершённые тексты собраны в разделе статей.</p></header>
 <section class="ws-notes-note" data-ws-surface><span class="ws-note-icon">✎</span><div><strong>Рабочий блокнот</strong><p>Здесь появляются небольшие записи и дополнения к практикумам. Материалы публикуются по мере подготовки.</p></div><a class="ws-inline-link" href="articles.html">К статьям →</a></section>
 <section class="ws-section"><div class="ws-section-heading"><div><span class="ws-eyebrow">ЛЕНТА</span><h2>Последние заметки <span class="ws-count" id="feed-count">…</span></h2></div><div class="ws-filter-row" id="note-filters"><button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button></div></div><div class="ws-note-grid" id="note-grid" aria-live="polite"><div class="ws-empty">Загружаем заметки…</div></div></section>
-</main><footer class="ws-footer"><span>© 2026 itsliventsev · Заметки</span><nav><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a></nav><span data-footer-updated></span></footer></div>
+</main><footer class="ws-footer"><span>© 2026 itsliventsev · Заметки</span><nav><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a></nav><time data-footer-updated></time></footer></div>
 <script>
 (function(){const labels={note:'Заметка',thought:'Мысль',digest:'Подборка',extra:'Доп. материал'};const grid=document.getElementById('note-grid'),filters=document.getElementById('note-filters'),counter=document.getElementById('feed-count');let posts=[];const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});};function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);grid.innerHTML=items.length?items.map(p=>'<a class="ws-note-card" data-ws-surface href="blog/'+esc(p.file)+'"><span class="ws-publication-meta"><span class="ws-tag ws-tag-blue">'+esc(labels[p.type]||p.type)+'</span><span>'+esc(date(p.date))+'</span></span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).slice(0,3).map(t=>'<span>#'+esc(t)+'</span>').join('')+'</span><span class="ws-card-footer">Открыть заметку <b>→</b></span></a>').join(''):'<div class="ws-empty">В этой категории пока нет записей.</div>';}
 filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});fetch('blog/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];counter.textContent=posts.length;const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{counter.textContent='0';grid.innerHTML='<div class="ws-empty">Заметки пока не загрузились.</div>';});})();
 </script>
-<script src="assets/site.js?v=20261101r1"></script><script src="assets/shared-chrome.js?v=20261031bf"></script><script src="assets/workspace.js?v=20261101r2"></script></body></html>
+<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261101r3"></script></body></html>

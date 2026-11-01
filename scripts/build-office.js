@@ -395,13 +395,10 @@ function shell(cfg, n) {
 <title>${cfg.title} · ОфисПолис · itsliventsev</title>
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="../../assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261101r2">
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="../../assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -476,7 +473,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=${VERSION}"></script>
-<script src="../../assets/workspace.js?v=20261101r2"></script>
+<script src="../../assets/workspace.js?v=20261101r3"></script>
 </body>
 </html>
 `;
