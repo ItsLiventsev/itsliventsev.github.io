@@ -1126,3 +1126,8 @@ html { scroll-behavior: smooth; }
 
 .ws-kanban-list { min-height: 64px; align-content: start; }
 @media (max-width: 600px) { .ws-kanban-grid.is-visible { grid-template-columns: minmax(0, 1fr); } }
+
+/* Pause the ticker for keyboard users as well as pointer users. */
+[data-ws-activity-ticker]:focus-within [data-ws-activity-ticker-track] { animation-play-state: paused; }
+
+.ws-activity-filter-empty { color: var(--ws-muted); font-size: 13px; margin: 14px 0; }

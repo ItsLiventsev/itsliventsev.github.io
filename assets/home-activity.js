@@ -14,6 +14,11 @@
   const tickerTrack = root.querySelector('[data-ws-activity-ticker-track]');
   const timeline = root.querySelector('[data-ws-activity-timeline]');
   const filterButtons = root.querySelectorAll('[data-ws-activity-filter]');
+  const filterEmpty = document.createElement('p');
+  filterEmpty.className = 'ws-activity-filter-empty';
+  filterEmpty.hidden = true;
+  filterEmpty.setAttribute('role', 'status');
+  if (timeline) timeline.after(filterEmpty);
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
@@ -126,7 +131,8 @@
     currentData = data;
     const value = data.count >= 100 ? '100+' : String(data.count);
     if (countNode) {
-      if(window.__wsAnimateNumber) window.__wsAnimateNumber(countNode, parseInt(value,10)||0); else countNode.textContent = value;
+      if (data.count >= 100) countNode.textContent = value;
+      else if(window.__wsAnimateNumber) window.__wsAnimateNumber(countNode, data.count); else countNode.textContent = value;
       countNode.setAttribute('aria-label', words().count(data.count));
     }
     const latest = data.latest;
@@ -138,7 +144,7 @@
     if (shaNode) shaNode.textContent = latest ? latest.sha.slice(0,7) : '—';
     if (commitLink) commitLink.href = latest ? `https://github.com/ItsLiventsev/itsliventsev.github.io/commit/${latest.sha}` : historyUrl;
     setState(state || (data.count ? 'ready' : 'empty'));
-    if (chartTotal) chartTotal.textContent = data.count ? `${data.count} за 30 дней` : '—';
+    // The chart describes 14 days; its total is computed in renderChart.
   }
 
   // — chart: 14-day sparkline (Recharts-like bars)
@@ -154,13 +160,15 @@
       const diff = Math.floor((now - d)/dayMs);
       if (diff >=0 && diff < days) buckets[days-1 - diff] += 1;
     });
-    // if all zero (no data or fallback), synthesize gentle wave
-    const maxB = Math.max(...buckets);
-    const hasData = maxB > 0;
-    let mock = [2,3,5,4,6,7,4,8,5,6,9,7,8,5];
-    let series = hasData ? buckets : mock;
-    let max = Math.max(...series,1);
+    const series = buckets;
+    const max = Math.max(...series, 1);
     chartGrid.innerHTML = '';
+    if (!commits.length && (currentState === 'loading' || currentState === 'error')) {
+      if (chartTotal) chartTotal.textContent = '—';
+      return;
+    }
+    const total = series.reduce((sum, count) => sum + count, 0);
+    if (chartTotal) chartTotal.textContent = (currentState === 'loading' || currentState === 'error') ? '—' : `${total} ${language() === 'en' ? 'commits' : 'коммитов'}`;
     series.forEach((v, i) => {
       const bar = document.createElement('div');
       bar.setAttribute('data-ws-activity-bar','true');
@@ -169,7 +177,8 @@
       bar.style.height = h + '%';
       bar.style.minHeight = '8px';
       bar.title = `${v} ${language()==='en' ? 'commits' : 'коммитов'}`;
-      bar.setAttribute('data-tip', (bar.getAttribute('aria-label')||'')); chartGrid.appendChild(bar);
+      bar.setAttribute('aria-label', bar.title);
+      bar.setAttribute('data-tip', bar.title); chartGrid.appendChild(bar);
     });
     // Animate in staggered if not reduced
     if (!reduceMotion) {
@@ -396,6 +405,7 @@
         if (timeline) timeline.style.display = isKanban ? 'none' : 'grid';
         const ticker = root.querySelector('[data-ws-activity-ticker]');
         if (ticker) ticker.style.display = isKanban ? 'none' : 'block';
+        updateFilterEmpty();
       }
     }));
   }
@@ -417,7 +427,7 @@
       id: commit.sha, title: commit.title, tag: classifyCommit(commit.title),
       status: 'done', time: formatDate(commit.date), date: commit.date
     }));
-    renderTicker(); renderTimeline(); renderKanban(feedData);
+    renderTicker(); renderTimeline(); renderKanban(feedData); updateFilterEmpty();
     if (!feedData.length && timeline) timeline.textContent = language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.';
   }
   function renderTicker() {
@@ -469,8 +479,14 @@
       timeline.appendChild(row);
     });
   }
+  function updateFilterEmpty() {
+    const noMatches = feedData.length > 0 && activeFilter !== 'all' && !feedData.some(item => item.tag === activeFilter);
+    filterEmpty.hidden = !noMatches || (kanbanRoot && !kanbanRoot.hidden);
+    filterEmpty.textContent = language() === 'en' ? 'No changes for this filter.' : 'По этому фильтру изменений нет.';
+  }
   function setFilter(tag) {
     activeFilter = tag;
+    updateFilterEmpty();
     filterButtons.forEach(btn=>{
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
