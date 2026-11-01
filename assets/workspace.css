@@ -467,7 +467,7 @@ a > .ws-inline-icon:last-child { margin-inline-start: .22em; }
 .ws-mode-compact [data-ws-sidebar-brand] { display: none; }
 .ws-topbar-context[data-ws-top-level="true"] { display: none; }
 .ws-topbar[data-ws-top-level="true"] { justify-content: flex-end; }
-[data-ws-on-page-nav] { max-height: min(42vh, 440px); overflow: auto; padding-inline-end: 2px; scrollbar-width: thin; }
+[data-ws-on-page-nav] { max-height: none; overflow: visible; padding-inline-end: 0; }
 [data-ws-on-page-nav] > .ws-section-nav-label { margin-top: 2px; }
 .ws-section-link { min-width: 0; overflow-wrap: anywhere; }
 [data-ws-action] { max-width: 100%; min-width: 0; white-space: normal; text-align: center; overflow-wrap: anywhere; }

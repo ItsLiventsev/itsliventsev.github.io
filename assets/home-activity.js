@@ -228,20 +228,56 @@
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
     });
-    // smooth stagger: animate visibility, container height follows gently
+    // FLIP: animate container height smoothly, items stagger fade + scale without abrupt collapse
     if (timeline) {
+      const prefersHeightAnim = !reduceMotion;
+      const startH = timeline.offsetHeight;
+      // Prepare: lock current height to avoid jump
+      if (prefersHeightAnim) {
+        timeline.style.overflow = 'hidden';
+        timeline.style.height = startH + 'px';
+        timeline.style.transition = 'height 420ms cubic-bezier(.2,.8,.2,1)';
+      }
       const rows = [...timeline.children];
-      rows.forEach((row, i)=>{
-        const rowTag = row.dataset.tag;
-        const shouldShow = tag==='all' || rowTag===tag;
-        // stagger 40ms per item for fluid motion
-        setTimeout(()=>{
-          if (shouldShow) row.removeAttribute('data-filtered');
-          else row.setAttribute('data-filtered','true');
-        }, i*32);
+      // Apply filtered state instantly for measurement (no stagger for height)
+      rows.forEach(row=>{
+        const shouldShow = tag==='all' || row.dataset.tag===tag;
+        if (shouldShow) row.removeAttribute('data-filtered');
+        else row.setAttribute('data-filtered','true');
       });
+      // Measure end height (force reflow)
+      const endH = timeline.scrollHeight;
+      if (prefersHeightAnim) {
+        // Animate container height
+        requestAnimationFrame(()=>{
+          timeline.style.height = endH + 'px';
+          // staggered item entrance: fade + scale
+          rows.forEach((row, i)=>{
+            if (row.hasAttribute('data-filtered')) return;
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(6px) scale(.98)';
+            setTimeout(()=>{
+              row.style.transition = 'opacity 320ms ease '+(i*36)+'ms, transform 320ms cubic-bezier(.2,.8,.2,1) '+(i*36)+'ms';
+              row.style.opacity = '1';
+              row.style.transform = 'translateY(0) scale(1)';
+            }, 16);
+          });
+        });
+        const cleanup = ()=>{
+          timeline.style.height = '';
+          timeline.style.overflow = '';
+          timeline.style.transition = '';
+          rows.forEach(r=>{ r.style.opacity=''; r.style.transform=''; r.style.transition=''; });
+          timeline.removeEventListener('transitionend', cleanup);
+        };
+        timeline.addEventListener('transitionend', cleanup);
+        // fallback cleanup
+        setTimeout(cleanup, 600);
+      } else {
+        // reduced motion: no animation
+        rows.forEach(row=>{ row.style.opacity=''; row.style.transform=''; });
+      }
     }
-    // highlight ticker active
     if (tickerTrack) {
       [...tickerTrack.children].forEach(pill=>{
         if (tag==='all') pill.removeAttribute('data-active');

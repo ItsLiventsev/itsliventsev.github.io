@@ -154,4 +154,13 @@
 - **Мелочи cozy:** eyebrow точка `::before` per section, footer `soft 60%` radius 14px, activity review→brown, filter active→black.
 - **Адаптация:** 390/768/1280, touch 44px, dark-тема cozy wash `#2e2520` etc., `prefers-reduced-motion`, без layout shift.
 
+### v6 — Smooth & Dense (1 ноября 2026, устранены замечания)
+- **Убрана плашка «Человек + ИИ»** из header activity, оставлен только eyebrow — меньше шума.
+- **Лента не проваливается:** FLIP-анимация высоты `height 420ms cubic-bezier(.2,.8,.2,1)` + stagger fade `320ms/36ms`, overflow hidden, reduced-motion fallback.
+- **Цвета цикла:** 4 пилюли `заметить blue-wash / собрать green-wash / проверить terracotta-wash / уточнить brown-wash` с hover lift, стрелки faint.
+- **Метрики + график:** метрика1 violet top + wash, метрика2 blue; бары `7n` палитра violet/blue/green/terracotta/brown/mustard/red, today black.
+- **Меню без крутилки:** `[data-ws-on-page-nav] max-height none overflow visible` — весь сайдбар скроллится как единое целое, без вложенного блока.
+- **Коротко обо мне:** плотный Bento 14px/6px, stat-grid pill cards с wash (blue/green/brown), achievements pills violet/mustard, inline-link компакт.
+- **Оптимизация пустого:** page 14px/14px, section 14px, heading 6px, hero 10px gap, hero-copy 20×22px h1 28–44px, cards 14px/168px, activity 14px/12px — плотность без тесноты, cozy сохранён.
+
 — Оркестратор, 2026

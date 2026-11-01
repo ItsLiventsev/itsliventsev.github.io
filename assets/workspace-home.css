@@ -677,3 +677,97 @@ html { scroll-behavior: smooth; }
   #stack .ws-skill-card { flex: 1 1 100%; }
   .ws-course-card { border-top-width: 3px; }
 }
+
+/* === v6: Orchestrator fixes — no badge, smooth filter, cozy cycle, compact about, no empty === */
+/* remove badge (already deleted in HTML, ensure no orphan) */
+[data-ws-activity-badge] { display:none !important; }
+[data-ws-activity-header] { gap: 8px; }
+
+/* ЦИКЛ РАБОТЫ — each step cozy distinct pill + arrows */
+[data-ws-activity-cycle] {
+  display:flex; align-items:center; flex-wrap:wrap; gap:6px;
+  padding: 6px; border: none; background: transparent;
+}
+[data-ws-activity-cycle] > span:not([aria-hidden]) {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height: 26px; padding: 4px 10px; border-radius: 999px;
+  font-size: 10px; font-weight: 800; letter-spacing:.02em; line-height:1;
+  border:1px solid transparent; transition: transform 180ms, box-shadow 180ms, background 180ms;
+}
+[data-ws-activity-cycle] > span[data-i18n="activity_step_1"] { background: var(--ws-blue-wash); color: var(--ws-blue); border-color: color-mix(in srgb, var(--ws-blue) 14%, transparent); }
+[data-ws-activity-cycle] > span[data-i18n="activity_step_2"] { background: var(--ws-green-wash); color: var(--ws-green); border-color: color-mix(in srgb, var(--ws-green) 14%, transparent); }
+[data-ws-activity-cycle] > span[data-i18n="activity_step_3"] { background: var(--ws-terracotta-wash); color: var(--ws-terracotta); border-color: color-mix(in srgb, var(--ws-terracotta) 14%, transparent); }
+[data-ws-activity-cycle] > span[data-i18n="activity_step_4"] { background: var(--ws-brown-wash); color: var(--ws-brown); border-color: color-mix(in srgb, var(--ws-brown) 14%, transparent); }
+[data-ws-activity-cycle] > span[data-i18n="activity_step_1"]:hover,
+[data-ws-activity-cycle] > span[data-i18n="activity_step_2"]:hover,
+[data-ws-activity-cycle] > span[data-i18n="activity_step_3"]:hover,
+[data-ws-activity-cycle] > span[data-i18n="activity_step_4"]:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(16,24,40,.08); }
+[data-ws-activity-cycle] > span[aria-hidden] { color: var(--ws-faint); font-size: 12px; padding:0 1px; background: transparent; border:none; }
+
+/* metrics — two distinct cozy accents */
+[data-ws-activity-metric]:nth-child(1) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-violet-wash) 55%, #fff) 0%, #fff 75%); border-top: 2px solid var(--ws-violet); }
+[data-ws-activity-metric]:nth-child(1) strong { color: var(--ws-violet); }
+[data-ws-activity-metric]:nth-child(2) { background: linear-gradient(180deg, color-mix(in srgb, var(--ws-blue-wash) 55%, #fff) 0%, #fff 75%); border-top: 2px solid var(--ws-blue); }
+[data-ws-activity-metric]:nth-child(2) time { color: var(--ws-blue); }
+
+/* chart — colorful bars per activity intensity (cycle palette) */
+[data-ws-activity-bar] { background: var(--ws-accent); }
+[data-ws-activity-bar]:nth-child(7n+1) { background: var(--ws-violet); }
+[data-ws-activity-bar]:nth-child(7n+2) { background: var(--ws-blue); }
+[data-ws-activity-bar]:nth-child(7n+3) { background: var(--ws-green); }
+[data-ws-activity-bar]:nth-child(7n+4) { background: var(--ws-terracotta); }
+[data-ws-activity-bar]:nth-child(7n+5) { background: var(--ws-brown); }
+[data-ws-activity-bar]:nth-child(7n+6) { background: var(--ws-mustard); }
+[data-ws-activity-bar]:nth-child(7n) { background: var(--ws-red); }
+[data-ws-activity-bar][data-today="true"] { background: var(--ws-black) !important; box-shadow: 0 0 0 3px var(--ws-black-wash) !important; }
+
+/* timeline — compact gap + no abrupt jump (height animated via JS) */
+[data-ws-activity-timeline] { gap: 6px; max-height: none; overflow: visible; padding-right: 0; }
+[data-ws-activity-timeline]:hover { scrollbar-color: transparent transparent; }
+[data-ws-activity-item] { padding: 10px 12px; gap: 10px; border-radius: 12px; }
+
+/* КОРОТКО ОБО МНЕ — structOptimize: denser, no empty */
+.ws-overview-card { padding: 14px !important; gap: 6px !important; justify-content: flex-start !important; }
+.ws-overview-head { padding-bottom: 8px !important; font-size: 13px; }
+.ws-stat-grid { gap: 6px !important; padding: 8px 0 !important; }
+.ws-stat-grid > div { grid-template-columns: 44px 1fr !important; gap: 8px !important; padding: 6px 8px; border-radius: 10px; background: var(--ws-surface-soft); }
+.ws-stat-grid > div:first-child { background: var(--ws-blue-wash); }
+.ws-stat-grid > div:nth-child(2) { background: var(--ws-green-wash); }
+.ws-stat-grid > div:nth-child(3) { background: var(--ws-brown-wash); }
+.ws-stat-grid strong { font-size: 16px !important; }
+.ws-stat-grid span { font-size: 10px !important; line-height:1.35 !important; }
+.ws-overview-achievements { margin: 4px 0 6px !important; gap: 4px !important; }
+.ws-overview-achievements li { font-size: 9.5px !important; line-height:1.35 !important; padding: 4px 6px; border-radius: 8px; background: var(--ws-surface-soft); }
+.ws-overview-achievements li:nth-child(1) { background: var(--ws-violet-wash); }
+.ws-overview-achievements li:nth-child(2) { background: var(--ws-mustard-wash); }
+.ws-overview-card .ws-inline-link { margin-top: 2px; font-size: 11px; }
+
+/* глобально — убрать пустое: tighter rhythm */
+.ws-page-content { padding: 14px clamp(12px, 2.2vw, 28px) 28px !important; }
+.ws-section { margin-top: 14px !important; }
+.ws-section-heading { margin-bottom: 6px !important; gap: 10px !important; }
+.ws-section-heading h2 { font-size: 17px !important; }
+.ws-home-hero { gap: 10px !important; }
+.ws-home-copy { min-height: 0 !important; padding: 20px 22px !important; }
+.ws-home-copy h1 { margin: 12px 0 8px !important; font-size: clamp(28px, 3.6vw, 44px) !important; }
+.ws-home-copy > p { font-size: 12.5px !important; line-height:1.6 !important; }
+.ws-hero-actions { margin-top: 14px !important; gap: 8px !important; }
+.ws-dashboard-grid { margin-top: 10px !important; gap: 10px !important; }
+.ws-learning-grid, .ws-resource-grid, .ws-experience-grid, .ws-contact-grid, .ws-skill-grid { gap: 8px !important; }
+.ws-course-card { min-height: 168px !important; padding: 14px !important; }
+.ws-course-card h3 { margin: 4px 0 4px !important; font-size: 16px !important; }
+.ws-course-card p { font-size: 10.5px !important; }
+.ws-panel { padding: 14px !important; }
+.ws-contact-grid a { padding: 12px !important; }
+[data-ws-activity-card] { gap: 10px !important; padding: 14px !important; }
+[data-ws-activity-feed] { gap: 8px !important; padding: 12px !important; }
+[data-ws-activity-copy] { font-size: 11.5px !important; line-height:1.55 !important; }
+
+/* extra accent moments — eyebrow already cozy, add section card top accents denser */
+.ws-section[id="practice"] .ws-section-heading .ws-eyebrow { color: var(--ws-violet); }
+.ws-section[id="resources"] .ws-section-heading .ws-eyebrow { color: var(--ws-green); }
+
+/* no internal scroll in sidebar — ensure groups flow */
+.ws-sidebar { gap: 10px !important; padding: 14px 10px 14px !important; height: 100dvh; }
+.ws-nav-group { padding: 6px !important; border-radius: 14px !important; }
+[data-ws-on-page-nav] { max-height: none !important; overflow: visible !important; }
