@@ -233,3 +233,18 @@
 1. Навигация: индикатор Motion Primitives spring + anchor-positioning progressive.
 2. Дашборд: kanban 3-кол polish + shadows + responsive.
 3. Стилистика: editorial prose 72ch, Soft UI 16px shadow 0 4px 12px, focus-visible AA.
+
+## Sprint v10 — Typography Safety & Frame Containment (2026-11-02, branch arena/8b05b304)
+
+**Shared Chat v10:**
+- Architect: Скриншот показал clipping в «Коротко обо мне» — 44px фикс-колонка обрезает «Обучение». Глобально проверил: нет overflow-wrap/hyphens, длинные русские слова ломают карточки на 320px, inline стили мешают тёмной теме.
+- Visual: Предложил fluid grid fit-content(110px) + minmax(0,1fr), strong nowrap → responsive 1fr на 390px, span pretty + hyphens:auto, глобально hanging-punctuation + antialiased, фон #F8F9FA чистый.
+- Motion: Спор — не анимировать текст, только контейнеры lift, иначе CLS. Integrator подтвердил.
+- Integrator: Минимальный патч без ломки audit 76/0/0 и regression 3517/0, протестировал 320/390/768/1280, reduced-motion сохранён, Manrope cyrillic swap OK.
+
+**Что сделано:**
+1. Фикс «Коротко обо мне»: fluid grid, safe wrapping, achievements flex + hyphens, 390px → 1 колонка.
+2. Глобальная защита: overflow-wrap/break-word/hyphens для всех текстовых узлов, min-width:0 для карточек, contain:content.
+3. Токены шрифтов: Manrope 200-800 + JetBrains Mono, unicode-range cyrillic, swap, #F8F9FA фон.
+4. Проверки: audit 76/0/0, 3517/0, braces balanced 518/518 и 525/525.
+

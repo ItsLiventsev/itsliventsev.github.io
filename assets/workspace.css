@@ -662,3 +662,16 @@ body.ws-ready::before {
 [data-ws-surface], .ws-panel, .ws-course-card { border-radius: 18px !important; }
 .ws-project-card.ws-project-featured { border-radius: 20px !important; box-shadow: 0 8px 24px rgba(16,24,40,.06), 0 2px 8px rgba(16,24,40,.04) !important; }
 .ws-project-card:hover { transform: translateY(-3px) scale(1.005); }
+
+/* === v10: Global text containment — no overflow outside frames === */
+:where(.ws-card, .ws-panel, .ws-surface, [data-ws-surface], .ws-course-card, .ws-skill-card, .ws-resource-grid a, .ws-contact-grid a) {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+:where(p, li, h1, h2, h3, strong, span, a, small, em) {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+html { hanging-punctuation: first allow-end; }
+body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+
