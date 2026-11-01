@@ -1074,3 +1074,38 @@ html { scroll-behavior: smooth; }
   .ws-page-content { view-transition-name: page-content; }
   ::view-transition-group(page-content) { animation-duration: 320ms; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
 }
+
+
+/* ── v17 utility: kanban/hero/view-toggle (из инлайнов index.html) ── */
+.ws-view-toggle { display:flex; gap:4px; background:var(--ws-surface-soft); padding:3px; border-radius:999px; }
+.ws-view-btn { padding:4px 10px; border-radius:999px; border:0; font-size:12px; cursor:pointer; transition: background var(--ws-motion), box-shadow var(--ws-motion); }
+.ws-view-btn[aria-pressed="true"] { background:var(--ws-surface); font-weight:600; box-shadow: var(--ws-shadow-sm); }
+.ws-view-btn[aria-pressed="false"] { background:transparent; font-weight:500; color:var(--ws-muted); }
+.ws-kanban-grid { display:none; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:12px; }
+.ws-kanban-grid.is-visible { display:grid; }
+.ws-hero-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+@media (prefers-reduced-motion: reduce) { .ws-view-btn, .ws-kanban-grid { transition:none; } }
+
+/* ── v17 utility: agent badges (из agent-plan.html инлайнов) ── */
+.ws-agent-badge { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; font-size:14px; }
+.ws-agent-badge--accent { background:var(--ws-accent-wash); color:var(--ws-accent); }
+.ws-agent-badge--blue { background:var(--ws-blue-wash); color:var(--ws-blue); }
+.ws-agent-badge--green { background:var(--ws-green-wash); color:var(--ws-green); }
+.ws-agent-badge--orange { background:var(--ws-orange-wash); color:var(--ws-orange); }
+.ws-agent-badge--violet { background:var(--ws-violet-wash); color:var(--ws-violet); }
+.ws-agent-badge--neutral { background:var(--ws-surface); color:var(--ws-accent); border:1px solid var(--ws-line); }
+.ws-agent-title small { color:var(--ws-muted); font-weight:600; }
+.ws-hero-spaced { margin-top:14px; }
+.ws-section-spaced { margin:8px 0 8px; font-size:20px; letter-spacing:-.02em; }
+.ws-lead-muted { margin:0; font-size:12px; line-height:1.7; color:var(--ws-muted); max-width:60ch; }
+.ws-actions-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.ws-surface-row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.ws-caption-muted { color:var(--ws-muted); }
+.ws-gradient-surface { background:linear-gradient(135deg, var(--ws-surface), var(--ws-accent-wash)); }
+
+.ws-muted { color:var(--muted); }
+
+
+.ws-kanban-col { background:var(--ws-surface-soft); border-radius:12px; padding:10px; min-height:120px; border:1px solid var(--ws-line); }
+.ws-kanban-head { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+.ws-kanban-list { display:grid; gap:6px; }

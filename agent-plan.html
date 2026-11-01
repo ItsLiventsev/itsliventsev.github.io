@@ -96,9 +96,9 @@
   <main id="main-content" class="ws-content">
     <div data-ws-project-intro>
       <span class="ws-eyebrow"><span class="ws-status-dot"></span> ОРКЕСТРАТОР · CTO + ART-DIRECTOR · AGENTIC OS</span>
-      <h1>Агентный план редизайна <span style="color:var(--ws-accent)">2026</span></h1>
+      <h1>Агентный план редизайна <span class="ws-accent">2026</span></h1>
       <p>Не правки, а автономный оркестр: 5 суб-агентов пересобирают сайт как продукт. Токены → shell → дашборд → данные. План живёт внутри сайта — это и есть мастерская.</p>
-      <div class="ws-hero-actions" style="margin-top:14px">
+      <div class="ws-hero-actions ws-hero-spaced">
         <a class="ws-button ws-button-primary" href="#agents">5 агентов <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-down"></use></svg></a>
         <a class="ws-button" href="index.html#activity">Посмотреть ленту <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
         <a class="ws-button" href="AGENT_PLAN.md" target="_blank" rel="noopener">AGENT_PLAN.md</a>
@@ -108,9 +108,9 @@
     <section class="agent-hero" aria-label="Ключевые цели">
       <div class="agent-hero-main">
         <span class="ws-eyebrow">ПРОБЛЕМА АУДИТА</span>
-        <h2 style="margin:8px 0 8px; font-size:20px; letter-spacing:-.02em;">Сайт работал, но не ощущался как продукт</h2>
-        <p style="margin:0; font-size:12px; line-height:1.7; color:var(--ws-muted); max-width:60ch;">Навигация была сегментирована, но без движущегося индикатора. Блок «Сайт развивается итерациями» — статичен. Палитра #f3f4f7 темновата, тени резковаты, Bento и микровзаимодействий минимум. Видение: F8F9FA канвас + 16px + мягкие тени + CSS-first анимации.</p>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;">
+        <h2 class="ws-section-spaced">Сайт работал, но не ощущался как продукт</h2>
+        <p class="ws-lead-muted">Навигация была сегментирована, но без движущегося индикатора. Блок «Сайт развивается итерациями» — статичен. Палитра #f3f4f7 темновата, тени резковаты, Bento и микровзаимодействий минимум. Видение: F8F9FA канвас + 16px + мягкие тени + CSS-first анимации.</p>
+        <div class="ws-actions-row">
           <span data-ws-tag data-ws-tone="accent">F8F9FA · Soft UI</span><span data-ws-tag data-ws-tone="info">Motion Primitives</span><span data-ws-tag data-ws-tone="success">Bento 16px</span><span data-ws-tag data-ws-tone="warm">70+ маршрутов</span>
         </div>
       </div>
@@ -125,37 +125,37 @@
       <div class="ws-section-heading"><div><span class="ws-eyebrow">КОМАНДА</span><h2 id="agents-title">5 суб-агентов</h2></div><span data-ws-tag>оркестратор → агенты → сайт</span></div>
       <div class="agent-grid">
         <article class="agent-card">
-          <div class="agent-icon" style="background:var(--ws-accent-wash); color:var(--ws-accent);">◈</div>
-          <h3>Agent-Navigator <span style="font-weight:600; color:var(--ws-muted);">UX/IA</span></h3>
+          <div class="agent-icon ws-agent-badge ws-agent-badge--accent">◈</div>
+          <h3 class="ws-agent-title">Agent-Navigator <small>UX/IA</small></h3>
           <p>Плавная плашка-индикатор `ws-nav-indicator` с `transform: translateY()` — Motion Primitives Smooth Tabs. Anchor-positioning + JS-фолбэк.</p>
           <ul><li>3 визуальные группы</li><li>hover/focus/active sync</li><li>compact & drawer inert</li></ul>
         </article>
         <article class="agent-card">
-          <div class="agent-icon" style="background:var(--ws-blue-wash); color:var(--ws-blue);">▦</div>
-          <h3>Agent-Visual <span style="font-weight:600; color:var(--ws-muted);">Art</span></h3>
+          <div class="agent-icon ws-agent-badge ws-agent-badge--blue">▦</div>
+          <h3 class="ws-agent-title">Agent-Visual <small>Art</small></h3>
           <p>Светлая SaaS: F8F9FA, белые 16px карты, многослойные тени. Shimmer & Aceternity moving border.</p>
           <ul><li>#F8F9FA + #f2f4f7</li><li>Manrope + JetBrains</li><li>radial mesh градиенты</li></ul>
         </article>
         <article class="agent-card">
-          <div class="agent-icon" style="background:var(--ws-green-wash); color:var(--ws-green);">◎</div>
+          <div class="agent-icon ws-agent-badge ws-agent-badge--green">◎</div>
           <h3>Agent-Motion</h3>
           <p>CSS-first 60fps: stagger, pulse, marquee, shimmer. `prefers-reduced-motion` глушит анимации.</p>
           <ul><li>ws-enter / ws-pulse</li><li>hover lift -2px</li><li>cycle стрелки</li></ul>
         </article>
         <article class="agent-card">
-          <div class="agent-icon" style="background:var(--ws-orange-wash); color:var(--ws-orange);">◍</div>
-          <h3>Agent-Data <span style="font-weight:600; color:var(--ws-muted);">Feed</span></h3>
+          <div class="agent-icon ws-agent-badge ws-agent-badge--orange">◍</div>
+          <h3 class="ws-agent-title">Agent-Data <small>Feed</small></h3>
           <p>Живой дашборд: ticker + timeline + sparkline из реального GitHub API (sessionStorage, 100+).</p>
           <ul><li>#frontend #design…</li><li>✅ 🔄 ⏳ кликабельны</li><li>auto-shuffle 2.6s</li></ul>
         </article>
         <article class="agent-card">
-          <div class="agent-icon" style="background:#f0edff; color:#6654c4;">⬢</div>
-          <h3>Agent-Integrator <span style="font-weight:600; color:var(--ws-muted);">FE</span></h3>
+          <div class="agent-icon ws-agent-badge ws-agent-badge--violet">⬢</div>
+          <h3 class="ws-agent-title">Agent-Integrator <small>FE</small></h3>
           <p>Zero-deps, CSS-переменные, адаптив 1440/390. Проверки: regression, audit, runtime.</p>
           <ul><li>PASS 3481/0</li><li>75 страниц · 0 битых</li><li>WCAG AA контраст</li></ul>
         </article>
-        <article class="agent-card" style="background:linear-gradient(135deg, var(--ws-surface), var(--ws-accent-wash));">
-          <div class="agent-icon" style="background:var(--ws-surface); color:var(--ws-accent); border:1px solid var(--ws-line);">★</div>
+        <article class="agent-card ws-gradient-surface">
+          <div class="agent-icon ws-agent-badge ws-agent-badge--neutral">★</div>
           <h3>Оркестратор</h3>
           <p>CTO/арт-директор: не ждёт инструкций, принимает дизайн-решения и обосновывает в PR.</p>
           <ul><li>автономный цикл</li><li>атомарные коммиты</li><li>PR с метриками</li></ul>
@@ -198,9 +198,9 @@
 
     <section class="ws-section" aria-labelledby="out-title">
       <div class="ws-section-heading"><div><span class="ws-eyebrow">ВЫВОД</span><h2 id="out-title">Вывод — это действия</h2></div></div>
-      <div style="display:grid; gap:10px;">
-        <div data-ws-surface style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-          <div><strong>План — внутри сайта.</strong><br><small style="color:var(--ws-muted)">Этот файл рендерит AGENT_PLAN.md как живую страницу. Обновление — через коммиты, не слова.</small></div>
+      <div class="ws-stack-gap">
+        <div data-ws-surface class="ws-surface-row">
+          <div><strong>План — внутри сайта.</strong><br><small class="ws-caption-muted">Этот файл рендерит AGENT_PLAN.md как живую страницу. Обновление — через коммиты, не слова.</small></div>
           <a data-ws-action="primary" href="index.html#activity">К активности <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
         </div>
       </div>
