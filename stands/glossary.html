@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#14110a">
+<meta name="theme-color" content="#f5f6f8">
 <meta name="color-scheme" content="dark light">
-<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#11151b");}}catch(e){}})();</script>
 <title>словарь практик трёх вселенных · трайбы, тикеты, SLA и runbook · itsliventsev</title>
 <meta name="description" content="Единый словарь учебной практики трёх вселенных: трайбы, трайны, экипажи и бригады; спринт, бэклог и DoD; XP, неткоины и PRP; тикеты, SLA, runbook и postmortem; стили документов, OCR, сводные таблицы и статический сайт.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="../assets/site.css?v=20261031bf">
 <link rel="stylesheet" href="../assets/stands.css?v=20261031bf">
 <link rel="stylesheet" href="../assets/shared-chrome.css?v=20261031bf">
+<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -317,5 +318,6 @@
   });
 })();
 </script>
+<script src="/assets/soft-shell.js?v=20261101"></script>
 </body>
 </html>

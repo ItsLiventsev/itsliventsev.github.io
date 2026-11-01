@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f7f6f2">
+<meta name="theme-color" content="#f5f6f8">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow">
-<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#11151b");}}catch(e){}})();</script>
 <title>админка · itsliventsev</title>
 <meta name="description" content="Служебная панель: приём работ виртуальных стендов, мониторинг сессий и публикация постов. Страница не индексируется.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -30,6 +30,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
 </head>
 <body class="bg-grid" data-accent="rust">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
@@ -404,5 +405,6 @@
   show(initial, false);
 })();
 </script>
+<script src="/assets/soft-shell.js?v=20261101"></script>
 </body>
 </html>

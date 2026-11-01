@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#14110a">
+<meta name="theme-color" content="#f5f6f8">
 <meta name="color-scheme" content="dark light">
-<script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#11151b");}}catch(e){}})();</script>
 <title>ДатаПолис · сервисный центр · учебная вселенная itsliventsev</title>
 <meta name="description" content="Учебная вселенная ДатаПолис: сетевое и системное администрирование, эксплуатация сервисов, заявки и инциденты, SLA, дежурства, runbook и изменения. 70% ALT Linux, 30% Windows.">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="../../assets/stands.css?v=20261031bf">
 <link rel="stylesheet" href="../../assets/ops.css?v=20261031bf">
 <link rel="stylesheet" href="../../assets/shared-chrome.css?v=20261031bf">
+<link rel="stylesheet" href="/assets/soft-shell.css?v=20261101">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/index.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -262,5 +263,6 @@
 <script src="../../assets/stands.js?v=20261031bf"></script>
 <script src="../../assets/ops-hub.js?v=20261031bf"></script>
 <script src="../../assets/shared-chrome.js?v=20261031bf"></script>
+<script src="/assets/soft-shell.js?v=20261101"></script>
 </body>
 </html>
