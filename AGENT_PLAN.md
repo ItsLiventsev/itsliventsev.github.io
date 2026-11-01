@@ -370,6 +370,54 @@
 ---
 
 
+
+## Sprint v16 · 2026-11-01 — container queries + editorial callouts + skeleton + recent cmdk + view-transition · MAX
+
+> **Режим:** Shared Chat v16 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.
+> **Критерий:** `76/0/0` + `3517/0` + `node --check` ok; задник `#F8F9FA/#15161d`; no layout shift; 30 библиотек retained.
+
+### Shared Chat v16 — Architect → Visual ⇄ Motion → Integrator → Оркестратор
+
+**Architect** — аудит v15 закрыт (progress+scroll-spy+copy+lightbox+print ✓, `3517/0` hidden preserved). Нашёл 6 щелей до идеала: Bento hero viewport-only (нет container queries) на 1024/1280; editorial без footnote/callout + нет inline TOC на mobile; dashboard без skeleton (резкий flash); cmdk без recent pages; PWA без offline management messages; Motion без cross-document view-transition polish. Проверил 4 оси: Главная Bento/Dashboard stagger OK, Внутренние 72ch + TOC sticky OK, Компоненты Soft UI 16px shadow OK, Навигация anchor 360ms + cmdk blur12 OK.
+
+**Visual** (Aceternity / Magic UI / Shadcn / Linear / Notion) — container `home` inline-size + `@container 720/520` для hero/dashboard/learning; callout blue/warn/success + footnote pill + inline toc `<details>` mobile-only; skeleton shimmer `1.4s` + dark `rgba(.08)`; recent pages pills `999px` + small ↗; view-transition `page-content 320ms cubic-bezier(.2,.8,.2,1)`. Аргумент: «Не добавляй offline.html — сломаешь 76/0/0, используй cached / fallback + sw message GET_CACHE_SIZE/CLEAR_CACHE».
+
+**Motion** (Motion Primitives + Framer Motion spring) — container queries без JS, только CSS; skeleton shimmer `prefers-reduced-motion: reduce` → none; recent hover `140ms`; view-transition только если `startViewTransition` + не `reduceMotion`, anchor `→` без JS скачков; chart bar `data-tip` hover 140ms. Спорил: «Не анимируй skeleton бесконечно — 1.4s шва достаточно, иначе CPU». Visual согласился.
+
+**Integrator** — свёл в **один PR MAX без deps**: `workspace-home.css` container+callout+inlineToc+skeleton+viewTransition + `workspace.css` recentChip+themeTransition + `sw.js` offline messages + `workspace.js` recent `ws:recent:v16` (12) + viewTransition navigation + empty recents group + `home-activity.js` skeleton `is-loading` + chart `data-tip`. Все reversible, 6 задач, 4 оси покрыты, `3517/0` сохранён.
+
+**Оркестратор** — утвердил MAX, запретил новые HTML (76), layout shift, требование `node --check` обоих JS + `audit 76/0/0` до мержа. План v16 — последний штрих к идеалу per СИСТЕМНЫЙ ПРОМПТ.
+
+### Задачи v16 (закрыты одним PR feat/autonomous-polish-v16)
+
+| № | Ось | Задача | Библиотека-реф | Файлы |
+|---|-----|--------|----------------|-------|
+| 1 | Главная Bento | Container Queries `home` 720/520 для hero/dashboard/learning | CSS Container Queries L3 | `workspace-home.css` |
+| 2 | Внутренние editorial | Callout info/warn/success + footnote pill + inline TOC mobile | Docs | `workspace-home.css` |
+| 3 | Главная dashboard | Skeleton shimmer `is-loading` + chart `data-tip` | Tremor/Shimmer | `workspace-home.css`+`home-activity.js` |
+| 4 | Навигация cmdk | Recent pages `ws:recent:v16` 12 + empty group + preconnect retained | Shadcn Command/Notion | `workspace.js`+`workspace.css` |
+| 5 | Компоненты PWA | sw message `GET_CACHE_SIZE/CLEAR_CACHE` + offline fallback polish | PWA v2 | `sw.js` |
+| 6 | Motion | View-transition `page-content 320ms` + recent hover 140ms | Motion Primitives | `workspace.js`+`home.css` |
+
+### Токены / тёмная тема / задник (коррекция пользователя retained)
+
+Задник светлый `#F8F9FA` / тёмный `#15161d` (per 2026-11-01 красный/синий/зелёный/коричневый cozy — каждый wash свой, не единый фон). Токены `workspace-tokens.css` unchanged: `#F8F9FA/#f2f4f7/#e9ecef` + 8 dark washes `#26243a/#2e2520` и accent variants network/office/ops. Grain off retained.
+
+### Проверка
+
+- `python3 scripts/audit-html.py` → `76/0/0` (76 HTML, 0 дублей, 0 H1, 0 битых)
+- `node scripts/regression-static.js` → `3517/0` (скрытый progress + to-top.show preserved)
+- `node --check assets/workspace.js && node --check assets/home-activity.js` → ok
+- braces `workspace.css 596/596` `workspace-home.css 672/672` balanced
+- manual: resize 1280→390 container adapts; article callout + footnote; dashboard skeleton → data; Ctrl+K empty shows recent pills; > commands; view-transition между страницами.
+
+### Что дальше (v17 кандидат, 2026-11-01+)
+
+- Dashboard live via `BroadcastChannel` cross-tab уже есть (v14) — next: `WebSocket` mock ticker 32s + `prefers-contrast: more` а11y.
+
+---
+
+
 ## Sprint v15 · 2026-11-01 — reading progress + scroll-spy + copy pre + lightbox + print · MAX
 
 > **Режим:** Shared Chat v15 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.

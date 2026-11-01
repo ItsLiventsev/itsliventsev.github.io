@@ -29,6 +29,15 @@
   })();
 
   const historyUrl = 'https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main';
+  // v16: skeleton helpers
+  function setSkeleton(on){
+    var card = root.querySelector('[data-ws-activity-card]');
+    if (!card) return;
+    card.classList.toggle('is-loading', !!on);
+    if (on) { if (countNode) countNode.classList.add('ws-skeleton','ws-skeleton--text'); if (dateNode) dateNode.classList.add('ws-skeleton','ws-skeleton--text'); if (chartGrid) chartGrid.classList.add('ws-skeleton'); }
+    else { [countNode,dateNode,chartGrid].forEach(function(el){ if(el) el.classList.remove('ws-skeleton','ws-skeleton--text','ws-skeleton--heading','ws-skeleton--card'); }); }
+  }
+
   const apiUrl = 'https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits';
   const cacheKey = 'itsliventsev-home-activity-v1';
   const freshForMs = 15 * 60 * 1000;
@@ -87,6 +96,7 @@
   let currentData = null;
   let currentState = 'loading';
   let activeFilter = 'all';
+  setSkeleton(true);
 
   // — feed mock data (Kokonut AI State like fast chips + Timeline)
   const feedSeed = [
@@ -170,7 +180,7 @@
       bar.style.height = h + '%';
       bar.style.minHeight = '8px';
       bar.title = `${v} ${language()==='en' ? 'commits' : 'коммитов'}`;
-      chartGrid.appendChild(bar);
+      bar.setAttribute('data-tip', (bar.getAttribute('aria-label')||'')); chartGrid.appendChild(bar);
     });
     // Animate in staggered if not reduced
     if (!reduceMotion) {

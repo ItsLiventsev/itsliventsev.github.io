@@ -32,9 +32,16 @@ self.addEventListener('fetch', e => {
       if (resp.ok) { const clone = resp.clone(); caches.open(CACHE).then(c=>c.put(e.request, clone)); }
       return resp;
     }).catch(()=> cached || caches.match('/'));
+    // v16: offline fallback — if both cache and network fail, show cached index
     return cached || fetchPromise;
   }));
 });
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'GET_CACHE_SIZE') { e.waitUntil(caches.open(CACHE).then(c=>c.keys()).then(keys=> e.ports[0].postMessage({count: keys.length}))); }
+  if (e.data && e.data.type === 'CLEAR_CACHE') { e.waitUntil(caches.delete(CACHE).then(()=> e.ports[0].postMessage({cleared:true}))); }
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+// legacy handler preserved below
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
