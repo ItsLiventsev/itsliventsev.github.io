@@ -133,7 +133,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fafafa">
+<meta name="theme-color" content="#f4f6fa">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>${esc(d.title)} · itsliventsev</title>
@@ -142,27 +142,19 @@
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="${prefix}assets/site.css?v=20261031bb">
 <link rel="stylesheet" href="${prefix}assets/tw-fallback.css?v=20261031bb">
 <link rel="stylesheet" href="${prefix}assets/shared-chrome.css?v=20261031bb">
 <link rel="stylesheet" href="${prefix}assets/tw-compiled.css?v=20261031bb">
+<link rel="stylesheet" href="${prefix}assets/soft-shell.css?v=20261101">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
-<body class="bg-grid" data-accent="${SECTION_ACCENT[section]}">
+<body data-accent="${SECTION_ACCENT[section]}">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты, переключение темы и анимации не работают.</div></noscript>
-
-<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
-<div class="ambient" aria-hidden="true">
-  <span class="orb orb-1"></span>
-  <span class="orb orb-2"></span>
-  <span class="ambient-glyph">#</span>
-  <span class="ambient-glyph">/</span>
-  <span class="ambient-glyph">&gt;_</span>
-</div>
+<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 <button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
@@ -225,6 +217,7 @@ ${bodyHtml}
 
 <script src="${prefix}assets/site.js?v=20261031bb"></script>
 <script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
+<script src="${prefix}assets/soft-shell.js?v=20261101"></script>
 </body>
 </html>
 `;

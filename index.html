@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f5f6f8">
+<meta name="theme-color" content="#f4f6fa">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#11151b");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#111722");}}catch(e){}})();</script>
 <title>itsliventsev — сети, системное администрирование и IT-образование</title>
 <meta name="description" content="Заметки, статьи, проекты и учебные материалы: сети, системное администрирование и IT-образование.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="assets/site.css?v=20261031bf">
 <link rel="stylesheet" href="assets/tw-fallback.css?v=20261031bf">
 <link rel="stylesheet" href="assets/shared-chrome.css?v=20261031bf">
@@ -43,19 +43,9 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"],"jobTitle":"мастер производственного обучения"}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="bg-grid" data-accent="rust">
+<body data-accent="rust">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-
-<!-- Ambient-фон: мягкие орбы и парящие терминальные глифы -->
-<div class="ambient" aria-hidden="true">
-  <span class="orb orb-1"></span>
-  <span class="orb orb-2"></span>
-  <span class="ambient-glyph">#</span>
-  <span class="ambient-glyph">/</span>
-  <span class="ambient-glyph">&gt;_</span>
-</div>
-
 <div class="scroll-progress" id="scroll-progress"></div>
 <button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
@@ -63,7 +53,7 @@
 
   <!-- Header -->
   <header class="site-header">
-    <span class="logo magnetic cursor-pointer" id="logo" title="click me">~/itsliventsev</span>
+    <span class="logo magnetic cursor-pointer" id="logo" title="click me">itsliventsev</span>
     <nav class="site-nav" aria-label="Основная навигация">
       <a href="#stack" class="nav-link" data-i18n="nav_stack">стек</a>
       <a href="#resources" class="nav-link" data-i18n="nav_materials">материалы</a>
@@ -73,7 +63,7 @@
       <a href="projects.html" class="nav-link"><span data-i18n="nav_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
       <a href="archive.html" class="nav-link" data-i18n="nav_archive">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </nav>
-  
+
     <div class="header-actions">
       <button onclick="toggleLang()" class="lang-btn magnetic" aria-label="switch language">
         <span id="lang-indicator">EN</span>
@@ -89,20 +79,15 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="bg-glyphs" aria-hidden="true">
-      <span class="bg-glyph">/</span>
-      <span class="bg-glyph">#</span>
-      <span class="bg-glyph">{ }</span>
-    </div>
-    <h1 class="hero-title">
-        <span class="ht-name">itsliventsev<span class="brand-cursor" aria-hidden="true">_</span></span>
-        <span class="ht-tagline"><span class="ht-slash" aria-hidden="true">//</span> заметки · статьи · проекты · учебные материалы</span>
+<h1 class="hero-title">
+        <span class="ht-name">itsliventsev</span>
+        <span class="ht-tagline"> заметки · статьи · проекты · учебные материалы</span>
       </h1>
     <div class="quick-bubbles">
-      <a href="blog.html" class="quick-bubble is-wip"><span class="qb-glyph">~</span> <span data-i18n="qb_blog">заметки</span> <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="articles.html" class="quick-bubble"><span class="qb-glyph">/</span> <span data-i18n="qb_articles">статьи</span> <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="projects.html" class="quick-bubble"><span class="qb-glyph">#</span> <span data-i18n="qb_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="archive.html" class="quick-bubble"><span class="qb-glyph">~</span> <span data-i18n="qb_archive">архив</span> <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
+      <a href="blog.html" class="quick-bubble is-wip"> <span data-i18n="qb_blog">заметки</span> <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
+      <a href="articles.html" class="quick-bubble"> <span data-i18n="qb_articles">статьи</span> <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
+      <a href="projects.html" class="quick-bubble"> <span data-i18n="qb_projects">проекты</span> <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
+      <a href="archive.html" class="quick-bubble"> <span data-i18n="qb_archive">архив</span> <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
     </div>
   </section>
 
@@ -152,8 +137,7 @@
 
   <!-- Materials -->
   <section id="resources" class="mb-10 sm:mb-12 scroll-mt-24">
-<div class="giant-word" aria-hidden="true">сети</div>
-    <h2 class="section-label" data-i18n="res_title">материалы для студентов</h2>
+<h2 class="section-label" data-i18n="res_title">материалы для студентов</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
       <a href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener" class="card sheen group flex justify-between items-center p-3.5">
         <span class="text-sm font-medium text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors" data-i18n="res_1">база знаний</span>
@@ -216,8 +200,7 @@
 
   <!-- Contacts -->
   <section class="mb-10">
-<div class="giant-word giant-word--right" aria-hidden="true">данные</div>
-    <h2 class="section-label" data-i18n="contact_title">контакты</h2>
+<h2 class="section-label" data-i18n="contact_title">контакты</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
       <a href="mailto:livencev01@ya.ru" class="card sheen group block p-3.5">
         <span class="mono text-[10px] text-[var(--faint)] mb-1 block">email</span>

@@ -1,7 +1,94 @@
-/* Shared, local-first navigation search for the static site. */
+/* Shared local navigation, responsive LMS-style rail, and site-wide search. */
 (function () {
   'use strict';
   if (document.querySelector('.site-search-dialog')) return;
+  document.documentElement.classList.add('has-soft-shell');
+
+  var iconPaths = {
+    home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+    projects: '<rect x="3" y="4" width="8" height="7" rx="2"/><rect x="13" y="4" width="8" height="7" rx="2"/><rect x="3" y="13" width="8" height="7" rx="2"/><rect x="13" y="13" width="8" height="7" rx="2"/>',
+    articles: '<path d="M5 3h11l3 3v15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 14h8M8 18h5M16 3v4h4"/>',
+    notes: '<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    archive: '<path d="M4 4h16v4H4zM6 8v12h12V8M10 12h4"/>',
+    practice: '<path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h5M8 16h8"/><path d="m15 12 2 2 4-5"/>',
+    help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.6 1.3c-.8 1-2.2 1.4-2.2 3M12 17h.01"/>',
+    map: '<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>'
+  };
+  var navItems = [
+    { label: 'Обзор', href: '/', icon: 'home', active: function (p) { return p === '/'; } },
+    { label: 'Проекты', href: '/projects.html', icon: 'projects', active: function (p) { return p.indexOf('/projects') === 0; } },
+    { label: 'Статьи', href: '/articles.html', icon: 'articles', active: function (p) { return p.indexOf('/articles') === 0; } },
+    { label: 'Заметки', href: '/blog.html', icon: 'notes', active: function (p) { return p.indexOf('/blog') === 0; } },
+    { label: 'База знаний', href: '/archive.html', icon: 'archive', active: function (p) { return p.indexOf('/archive') === 0; } },
+    { label: 'Учебная практика', href: '/stands/index.html', icon: 'practice', active: function (p) { return p.indexOf('/stands') === 0; } },
+    { label: 'Справка', href: '/faq.html', icon: 'help', active: function (p) { return p.indexOf('/faq') === 0; } },
+    { label: 'Карта сайта', href: '/sitemap.html', icon: 'map', active: function (p) { return p.indexOf('/sitemap') === 0; } }
+  ];
+  var path = location.pathname.replace(/\/$/, '') || '/';
+  var sidebar = document.createElement('aside');
+  sidebar.className = 'global-sidebar';
+  sidebar.setAttribute('aria-label', 'Основная навигация');
+  sidebar.innerHTML = '<a class="global-sidebar-brand" href="/" aria-label="itsliventsev — на главную">'
+    + '<span class="global-sidebar-mark" aria-hidden="true">i</span><span>itsliventsev</span></a>'
+    + '<p class="global-sidebar-caption">Разделы</p><nav class="global-sidebar-nav"></nav>'
+    + '<div class="global-sidebar-footer"><div class="global-sidebar-note">Материалы, проекты и учебная практика<br>в одном пространстве</div></div>';
+  var nav = sidebar.querySelector('.global-sidebar-nav');
+  navItems.forEach(function (item) {
+    var link = document.createElement('a');
+    link.className = 'global-sidebar-link';
+    link.href = item.href;
+    link.title = item.label;
+    link.setAttribute('aria-label', item.label);
+    if (item.active(path)) link.setAttribute('aria-current', 'page');
+    link.innerHTML = '<span class="global-sidebar-icon" aria-hidden="true"><svg viewBox="0 0 24 24">' + iconPaths[item.icon] + '</svg></span><span>' + item.label + '</span>';
+    nav.appendChild(link);
+  });
+  var overlay = document.createElement('div');
+  overlay.className = 'global-sidebar-overlay';
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(overlay);
+  document.body.appendChild(sidebar);
+
+  var isLearning = document.body.classList.contains('flat-scope');
+  var toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'global-nav-toggle';
+  toggle.setAttribute('aria-label', 'Открыть меню разделов');
+  var desktopAtStart = window.matchMedia('(min-width: 960px)').matches;
+  toggle.setAttribute('aria-expanded', desktopAtStart ? 'true' : 'false');
+  toggle.setAttribute('aria-label', desktopAtStart ? 'Свернуть меню разделов' : 'Открыть меню разделов');
+  toggle.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+  var toggleHost = isLearning ? document.querySelector('.st-topbar-in') : document.querySelector('.header-actions');
+  if (toggleHost) toggleHost.prepend(toggle);
+  function setSidebar(open) {
+    var mobile = window.matchMedia('(max-width: 959px)').matches;
+    sidebar.classList.toggle('is-open', open && mobile);
+    overlay.classList.toggle('is-open', open && mobile);
+    document.documentElement.classList.toggle('global-menu-open', open && mobile);
+    document.documentElement.classList.toggle('sidebar-collapsed', !open && !mobile);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? (mobile ? 'Закрыть меню разделов' : 'Свернуть меню разделов') : (mobile ? 'Открыть меню разделов' : 'Развернуть меню разделов'));
+  }
+  toggle.addEventListener('click', function () { setSidebar(toggle.getAttribute('aria-expanded') !== 'true'); });
+  overlay.addEventListener('click', function () { setSidebar(false); toggle.focus(); });
+  sidebar.addEventListener('click', function (event) {
+    if (event.target.closest('a')) setSidebar(false);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setSidebar(false); toggle.focus(); }
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 959) {
+      sidebar.classList.remove('is-open'); overlay.classList.remove('is-open');
+      document.documentElement.classList.remove('global-menu-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Свернуть меню разделов');
+    } else {
+      document.documentElement.classList.remove('sidebar-collapsed');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Открыть меню разделов');
+    }
+  }, { passive: true });
 
   var searchIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.6"></circle><path d="m16 16 4.2 4.2"></path></svg>';
   var trigger = document.createElement('button');
