@@ -131,30 +131,9 @@
     });
   });
 
-  /* ---------- 4. Якоря: плавный скролл не дольше 400ms ---------- */
-  if (!reduceMotion) {
-    document.addEventListener('click', function (e) {
-      var link = e.target.closest && e.target.closest('a[href^="#"]');
-      if (!link || link.classList.contains('skip-link')) return; // skip-link сам переносит фокус
-      var id = link.getAttribute('href');
-      if (id.length < 2) return;
-      var target = document.getElementById(id.slice(1));
-      if (!target) return;
-      e.preventDefault();
-      var start = window.scrollY;
-      var delta = target.getBoundingClientRect().top;
-      var duration = Math.min(400, Math.max(120, Math.abs(delta) * 0.4));
-      var t0 = performance.now();
-      function frame(now) {
-        var k = Math.min(1, (now - t0) / duration);
-        var eased = 1 - Math.pow(1 - k, 3); // ease-out cubic
-        window.scrollTo(0, start + delta * eased);
-        if (k < 1) window.requestAnimationFrame(frame);
-        else history.replaceState(null, '', id);
-      }
-      window.requestAnimationFrame(frame);
-    });
-  }
+  /* ---------- 4. Якоря ---------- */
+  // Сохраняем штатное поведение ссылок-фрагментов: браузер сам обновляет URL,
+  // поддерживает историю переходов и соблюдает scroll-behavior/reduced motion.
 
   /* ---------- 5. Prefetch внутренних ссылок ----------
      Клик попадает в кэш браузера — переход ощущается мгновенным,

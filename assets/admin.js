@@ -140,13 +140,10 @@
 <meta name="description" content="${desc}">
 <meta name="post-date" content="${esc(d.date)}">
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261101r2">
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -215,7 +212,7 @@ ${bodyHtml}
 
 <script src="${prefix}assets/site.js?v=20261031bb"></script>
 <script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
-<script src="${prefix}assets/workspace.js?v=20261101r2"></script>
+<script src="${prefix}assets/workspace.js?v=20261101r3"></script>
 </body>
 </html>
 `;

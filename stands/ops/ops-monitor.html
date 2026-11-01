@@ -9,14 +9,11 @@
 <title>Мониторинг, алерты и логи · ДатаПолис · itsliventsev</title>
 <meta name="description" content="Prometheus и Grafana, журнал systemd, ротация логов и учебный P1-инцидент с war room.">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-monitor.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -109,7 +106,7 @@
   </main>
   <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-monitor · autosave: on</span>
-    <span class="st-footer-updated" data-footer-updated></span>
+    <time class="st-footer-updated" data-footer-updated></time>
   </footer>
 </div>
 
@@ -119,7 +116,7 @@
 <script src="../../assets/stands.js?v=20261031bf"></script>
 <script type="application/json" id="ops-data">{"id": "ops-monitor", "sprint": 4, "hours": "6 ч", "coins": "100", "mascot": "wolf", "who": "волк Тихон — NOC-командир инцидент-дня", "title": "Мониторинг, алерты и логи", "lead": "Prometheus и Grafana, журнал systemd, ротация логов и учебный P1-инцидент с war room.", "story": "Сегодня инцидент-день: учебная тревога P1. Веб-сервис «лежит», алерты сыплются в NOC, у вас ограниченное время. Сначала вы строите систему наблюдения — Prometheus собирает метрики, Grafana показывает дашборд, journald и ротация логов дают доказательную базу, — а затем по боевой тревоге поднимаете сервис и проводите разбор. Это сердце эксплуатации.", "theory": [{"h": "Метрики и алерты", "p": "Prometheus опрашивает экспортёры по HTTP и хранит временные ряды. Алерт — правило на метрику (недоступность, диск, нагрузка), Grafana — визуализация. Мониторинг без алертов превращается в картинку.", "code": "# apt-get install prometheus grafana\n# mcedit /etc/prometheus/prometheus.yml\nscrape_configs:\n  - job_name: nodes\n    static_configs:\n      - targets: [\"srv-hq:9100\"]"}, {"h": "Журналы systemd и ротация", "p": "journalctl — централизованный просмотр логов юнитов. logrotate не даёт журналам забить диск: сжимает и делит файлы по расписанию. В инциденте лог — главный свидетель.", "code": "# journalctl -u nginx --since \"09:00\"\n# mcedit /etc/logrotate.d/webapp\n/var/log/webapp/*.log { weekly rotate 4 compress missingok }"}, {"h": "Управление инцидентом", "p": "P1 — массовое влияние. Incident Commander координирует, scribe ведёт таймлайн, дежурный восстанавливает. Сначала возврат сервиса, потом поиск причины; фиксация времени реакции и восстановления обязательна.", "note": "War room — это про роли и спокойствие, а не про героизм одного человека."}], "commands": [{"linux": "systemctl status prometheus grafana-server", "windows": "Get-Service", "what": "статус стека мониторинга"}, {"linux": "journalctl -u <unit> -f", "windows": "Get-WinEvent -FollowEquivalent", "what": "поток журналов в реальном времени"}, {"linux": "curl localhost:9090/-/healthy", "windows": "Invoke-WebRequest /health", "what": "проверка здоровья сервиса"}, {"linux": "logrotate -d /etc/logrotate.d/webapp", "windows": "Очистка журналов Event Log по политике", "what": "проверка ротации"}, {"linux": "ss -tulpn", "windows": "Get-NetTCPConnection", "what": "поднялись ли порты сервиса"}, {"linux": "df -h ; free -m", "windows": "Get-Volume ; Get-CimInstance Win32_OS", "what": "ресурсы при инциденте"}], "tasks": [{"id": "t1", "text": "Разверните Prometheus и node_exporter на двух узлах, проверьте таргеты"}, {"id": "t2", "text": "Поднимите Grafana и постройте дашборд загрузки CPU/памяти/диска"}, {"id": "t3", "text": "Настройте алерт на недоступность узла и на заполнение диска >85%"}, {"id": "t4", "text": "Настройте logrotate для учебного приложения и докажите ротацию"}, {"id": "t5", "text": "По тревоге P1 распределите роли IC/scribe/дежурный и заведите таймлайн"}, {"id": "t6", "text": "Восстановите сервис, зафиксируйте время реакции и разрешения"}, {"id": "t7", "text": "Проведите blameless postmortem и оформите runbook эскалации"}], "ticket": {"type": "incident", "priority": "P1", "title": "Веб-сервис недоступен, массовое влияние на отделы", "text": "P1: алерт показывает падение веб-сервиса, затронуты три отдела. Соберите war room по ролям, восстановите сервис в пределах SLA (30 минут) и проведите разбор без вины с системными мерами.", "deliverables": ["Дашборд Grafana и рабочие алерты", "Таймлайн инцидента с временем реакции/решения", "Postmortem и runbook эскалации P1"]}, "runbook": {"title": "Действия при P1 «сервис недоступен»", "steps": ["Подтвердить алерт и собрать war room по ролям", "Проверить здоровье, порт, ресурсы и логи", "Вернуть сервис рестартом/откатом до стабилизации", "Зафиксировать таймлайн и SLA", "Провести postmortem и внести меры в бэклог"]}, "rca": true, "quiz": [{"q": "Кто в war room принимает решение по ходу инцидента?", "options": ["Случайный пользователь", "Incident Commander", "Сторож здания", "Почтовый сервер"], "answer": 1, "explain": "IC координирует людей и отвечает за ход восстановления."}, {"q": "Что правильнее сначала при P1?", "options": ["Долго искать виноватого", "Вернуть сервис, причину разбирать после", "Перезагрузить все серверы наугад", "Удалить логи"], "answer": 1, "explain": "Приоритет — восстановление сервиса, затем postmortem."}, {"q": "Зачем нужен logrotate?", "options": ["Для красоты", "Чтобы логи не заполнили диск, со сжатием и архивацией", "Он ускоряет сеть", "Шифрует метрики"], "answer": 1, "explain": "Без ротации журналы могут исчерпать место и вызвать новый сбой."}, {"q": "Что собирает Prometheus?", "options": ["Файлы пользователей", "Временные ряды метрик с экспортёров", "Только письма", "Скриншоты экрана"], "answer": 1, "explain": "Prometheus — система сбора и хранения метрик с правилами алертов."}], "reflection": ["Как роль scribe спасает разбор постфактум?", "Что чувствуется в роли IC и что помогло бы на практике?", "Какой алерт вы добавили бы после этого инцидента?"], "sprintTitle": "Эксплуатация"}</script>
 <script src="../../assets/ops-kit.js?v=20261031bf"></script>
-<script src="../../assets/shared-chrome.js?v=20261031bf"></script>
-<script src="/assets/workspace.js?v=20261101r2"></script>
+<script src="../../assets/shared-chrome.js?v=20261101r1"></script>
+<script src="/assets/workspace.js?v=20261101r3"></script>
 </body>
 </html>

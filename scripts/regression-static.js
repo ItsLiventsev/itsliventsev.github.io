@@ -30,15 +30,22 @@ ok(html.length === 75, 'ожидалось 75 HTML-страниц, получе�
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 for (const file of contentPages) {
   const source = read(file);
-  ok(source.includes('/assets/workspace-tokens.css?v=20261101r2'), file + ': отсутствуют новые токены');
-  ok(source.includes('/assets/workspace.css?v=20261101r2'), file + ': отсутствует новая система компонентов');
-  ok(source.includes('/assets/workspace-learning.css?v=20261101r2'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261101r2'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('/assets/workspace-tokens.css?v=20261101r3'), file + ': отсутствуют новые токены');
+  ok(source.includes('/assets/workspace.css?v=20261101r3'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261101r3'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261101r3'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
+  ok(source.includes('skip-link'), file + ': нет ссылки перехода к основному содержимому');
+  ok(/<nav\b/.test(source), file + ': нет семантического элемента навигации');
+  if (file !== 'projects/glossary.html') ok(/<time\b[^>]*data-footer-updated/.test(source), file + ': нет семантической даты обновления');
+  for (const match of source.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0];
+    ok(/\balt="/.test(tag) && /\bwidth="\d+"/.test(tag) && /\bheight="\d+"/.test(tag) && /\bloading="lazy"/.test(tag), file + ': изображению нужны alt, размеры и lazy loading');
+  }
   ok(!/href="[^\"]*(?:site\.css|shared-chrome\.css|soft-shell\.css|tw-(?:compiled|fallback)\.css|stands\.css|ops\.css|office\.css)/.test(source), file + ': подключена прежняя визуальная система');
-  ok(source.includes('family=Manrope:') && !source.includes('DM+Serif+Display'), file + ': шрифтовая загрузка не соответствует новой системе');
+  ok(source.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !source.includes('fonts.googleapis.com') && !source.includes('DM+Serif+Display'), file + ': локальные шрифты не подключены или осталась внешняя загрузка Google Fonts');
   ok(!source.includes('class="ambient"') && !source.includes('class="floating-elements"'), file + ': осталась декоративная разметка старого дизайна');
 }
 
@@ -52,19 +59,38 @@ ok(tokens.includes('prefers-reduced-motion'), 'workspace tokens: нет режи
 for (const name of ['--ws-canvas', '--ws-surface', '--ws-ink', '--ws-accent', '--ws-space-2', '--ws-space-4', '--ws-space-6', '--ws-space-8', '--ws-r-1', '--ws-r-2', '--ws-r-3', '--ws-r-4', '--ws-shadow-sm', '--ws-shadow-md', '--ws-shadow-lg']) {
   ok(tokens.includes(name), 'workspace tokens: отсутствует ' + name);
 }
+function tokenColor(name) { return tokens.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]{6})'))?.[1]; }
+function luminance(hex) {
+  const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+  return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
+}
+function contrast(a, b) { const [l1, l2] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (l1 + .05) / (l2 + .05); }
+for (const [fg, bg] of [['--ws-ink','--ws-canvas'],['--ws-ink-soft','--ws-canvas'],['--ws-muted','--ws-canvas'],['--ws-faint','--ws-canvas'],['--ws-accent','--ws-canvas'],['--ws-green','--ws-green-wash'],['--ws-blue','--ws-blue-wash'],['--ws-orange','--ws-orange-wash'],['--ws-red','--ws-red-wash']]) {
+  const a = tokenColor(fg), b = tokenColor(bg); ok(a && b && contrast(a, b) >= 4.5, 'контраст пары ' + fg + ' / ' + bg + ' ниже WCAG AA');
+}
 for (const component of ['.ws-shell', '.ws-sidebar', '.ws-nav-link', '.ws-topbar', '.ws-breadcrumbs', '.ws-search-dialog', '[data-ws-surface]', '[data-ws-action]', '.ws-overlay', '.ws-mode-compact']) {
   ok(ui.includes(component), 'workspace.css: отсутствует контракт ' + component);
 }
 for (const module of ['.ws-home-hero', '.ws-learning-grid', '.ws-course-card', '.ws-dashboard-grid', '.ws-skill-grid', '.ws-resource-grid', '.ws-experience-grid']) {
   ok(homeUi.includes(module), 'workspace-home.css: отсутствует блок dashboard ' + module);
 }
-for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
-  ok(shell.includes(behavior), 'workspace.js: отсутствует функциональный контракт ' + behavior);
+for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', 'IntersectionObserver', '.ws-section-nav', 'scroll-margin-top', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
+  ok(shell.includes(behavior) || ui.includes(behavior), 'workspace shell: отсутствует функциональный контракт ' + behavior);
 }
+ok(exists('assets/icons.svg') && ['arrow-up-right', 'network', 'document', 'server', 'search', 'moon'].every(id => read('assets/icons.svg').includes('id="' + id + '"')), 'неполный общий SVG-спрайт иконок');
+ok(ui.includes('.scroll-progress { display: none !important; }') && ui.includes('body.ws-ready #to-top.show'), 'верхний прогресс-штрих должен быть убран, кнопка «Наверх» появляется после прокрутки');
+ok(!read('assets/shared-chrome.js').includes('window.scrollTo(0, start + delta * eased)'), 'обработчик якорей не должен перехватывать нативную историю и smooth-scroll браузера');
 ok(!shell.includes("mark.textContent = 'i'") && !ui.includes('.ws-brand-mark'), 'в общей навигации остался монограммный I вместо ника');
+ok(ui.includes(':root[data-theme="dark"] :is([data-ws-action="primary"], .ws-button-primary)') && ui.includes('color: var(--ws-canvas) !important'), 'dark-mode primary controls need readable text contrast');
 const homePage = read('index.html');
 ok(homePage.includes('Обучаю будущих') && homePage.includes('сети и системное администрирование') && homePage.includes('технологии искусственного интеллекта') && !homePage.includes('Ваше пространство'), 'главная должна спокойно представлять автора и его профессиональные направления');
 ok(homePage.indexOf('ws-dashboard-grid') < homePage.indexOf('learning-title'), 'персональный профиль и проекты должны идти до блока пространств');
+for (const id of ['about', 'projects', 'practice', 'resources', 'experience', 'contact']) {
+  ok(homePage.includes('id="' + id + '"') && shell.includes("['" + id + "'"), 'главная: отсутствует якорь локальной навигации ' + id);
+}
+for (const font of ['manrope-cyrillic-wght-normal.woff2', 'manrope-latin-wght-normal.woff2', 'jetbrains-mono-cyrillic-wght-normal.woff2', 'jetbrains-mono-latin-wght-normal.woff2']) {
+  ok(exists('assets/fonts/' + font) && tokens.includes(font), 'локальный набор шрифтов неполон: ' + font);
+}
 const learningDirectory = read('stands/index.html');
 for (const feature of ['СетьПолис', 'ОфисПолис', 'ДатаПолис', '41', 'ws-learning-hero', 'ws-journey-grid', 'ws-ecosystem-grid']) {
   ok(learningDirectory.includes(feature), 'stands/index.html: отсутствует блок нового каталога ' + feature);
@@ -83,11 +109,14 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r2', 'assets/workspace.css?v=20261101r2', 'assets/workspace-learning.css?v=20261101r2', 'assets/workspace.js?v=20261101r2']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r3', 'assets/workspace.css?v=20261101r3', 'assets/workspace-learning.css?v=20261101r3', 'assets/workspace.js?v=20261101r3']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r2') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r2') && officeBuilder.includes('assets/workspace.js?v=20261101r2'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r3') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r3') && officeBuilder.includes('assets/workspace.js?v=20261101r3'), 'build-office.js: генератор не создаёт страницы на новом shell');
+for (const [name, template] of [['admin.js', adminTemplate], ['build-office.js', officeBuilder]]) {
+  ok(template.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !template.includes('fonts.googleapis.com'), name + ': generated pages must use local fonts without Google Fonts');
+}
 ok(exists('REDESIGN_PLAN.md') && read('REDESIGN_PLAN.md').includes('Workspace / Learning OS'), 'нет плана архитектуры REDESIGN_PLAN.md');
 
 /* Local search, page links, file formats and script syntax. */

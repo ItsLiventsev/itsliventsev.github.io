@@ -64,7 +64,6 @@ body.ws-ready {
   min-height: var(--ws-topbar); display: flex; align-items: center; justify-content: space-between;
   gap: 18px; padding: 12px clamp(18px, 3.4vw, 50px);
   background: var(--ws-surface);
-  border-bottom: 1px solid var(--ws-line);
   backdrop-filter: saturate(140%) blur(14px);
 }
 .ws-topbar-context { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--ws-muted); font-size: 12px; }
@@ -87,7 +86,7 @@ body.ws-ready {
 .ws-search-trigger > .ws-search-icon svg { width: 16px; height: 16px; }
 .ws-search-trigger:hover, .ws-icon-button:hover, .ws-lang:hover { border-color: var(--ws-line-strong); background: var(--ws-surface-soft); color: var(--ws-ink); }
 .ws-topbar-actions .ws-icon-button svg { width: 17px; height: 17px; }
-.ws-context-nav { padding: 8px clamp(18px, 3.4vw, 50px); border-bottom: 1px solid var(--ws-line); background: var(--ws-surface); }
+.ws-context-nav { padding: 8px clamp(18px, 3.4vw, 50px); background: var(--ws-surface); }
 .ws-context-nav .ws-context-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .ws-context-nav nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .ws-context-nav nav a { padding: 7px 10px; border-radius: 8px; color: var(--ws-muted); text-decoration: none; font-size: 12px; font-weight: 650; }
@@ -103,6 +102,7 @@ body.ws-ready {
 .ws-content p { color: var(--ws-ink-soft); }
 .ws-content a:not([data-ws-action]):not([data-ws-surface]) { color: var(--ws-accent); text-underline-offset: 3px; }
 .ws-content img { height: auto; border-radius: var(--ws-r-2); }
+.ws-content picture { display: block; }
 .ws-content table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--ws-line); border-radius: 12px; background: var(--ws-surface); }
 .ws-content th, .ws-content td { padding: 10px 12px; border-bottom: 1px solid var(--ws-line); text-align: start; }
 .ws-content th { background: var(--ws-surface-soft); color: var(--ws-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
@@ -148,8 +148,10 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .ws-mobile-menu { display: none; }
 [data-ws-decoration="true"] { display: none !important; }
 .ws-context-nav + .ws-page-content { padding-top: 22px; }
-body.ws-ready .scroll-progress { position: fixed; inset: 0 0 auto; z-index: 90; height: 3px; background: var(--ws-accent); }
-body.ws-ready #to-top { position: fixed; inset: auto 24px 24px auto; z-index: 45; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--ws-line); border-radius: 50%; background: var(--ws-surface); color: var(--ws-ink); box-shadow: var(--ws-shadow-md); }
+.scroll-progress { display: none !important; }
+body.ws-ready #to-top { position: fixed; inset: auto 24px 24px auto; z-index: 45; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--ws-line); border-radius: 50%; background: var(--ws-surface); color: var(--ws-ink); box-shadow: var(--ws-shadow-md); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(6px); transition: opacity var(--ws-motion), transform var(--ws-motion), visibility var(--ws-motion); }
+body.ws-ready #to-top.show { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
+:root[data-theme="dark"] :is([data-ws-action="primary"], .ws-button-primary) { color: var(--ws-canvas) !important; }
 @media (max-width: 940px) {
   .ws-shell { display: block; }
   .ws-sidebar { position: fixed; inset: 0 auto 0 0; width: min(290px, calc(100vw - 48px)); transform: translateX(-102%); box-shadow: var(--ws-shadow-lg); transition: transform 220ms ease; }
@@ -397,3 +399,20 @@ body.ws-ready #to-top { position: fixed; inset: auto 24px 24px auto; z-index: 45
 [data-ws-archive-meta] { display: flex; flex: 0 0 auto; flex-wrap: nowrap; align-items: center; gap: 8px; margin-inline-start: auto; }
 [data-ws-archive-count] { display: inline-flex; min-width: 30px; justify-content: center; padding: 4px 8px; border: 1px solid var(--ws-line); border-radius: var(--ws-pill); background: var(--ws-surface-soft); color: var(--ws-muted); font: 700 10px var(--ws-mono); }
 @media (max-width: 540px) { [data-ws-archive-summary] { align-items: flex-start; gap: 9px; padding: 14px; } [data-ws-archive-meta] { gap: 5px; } }
+
+/* Additional audit fixes: compact in-page navigation, consistent SVG icons and keyboard focus. */
+.ws-section-nav { display: grid; gap: 2px; margin-top: -8px; }
+.ws-section-nav-label { margin: 0 10px 4px; color: var(--ws-muted); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.ws-section-link { min-height: 33px; display: flex; align-items: center; padding: 6px 11px; border-radius: 9px; color: var(--ws-ink-soft); text-decoration: none; font-size: 12px; font-weight: 620; transition: background var(--ws-motion), color var(--ws-motion); }
+.ws-section-link:hover { background: var(--ws-surface-soft); color: var(--ws-ink); }
+.ws-section-link[aria-current="location"] { background: var(--ws-accent-wash); color: var(--ws-accent); }
+.ws-inline-icon { display: inline-block; width: 1em; height: 1em; flex: 0 0 auto; vertical-align: -.16em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+[data-ws-icon] { display: inline-flex; align-items: center; }
+[data-ws-icon="chevron-right"] .ws-inline-icon { transition: transform var(--ws-motion); }
+details[open] summary [data-ws-icon="chevron-right"] .ws-inline-icon { transform: rotate(90deg); }
+a > .ws-inline-icon:last-child { margin-inline-start: .22em; }
+.ws-resource-icon svg, .ws-course-icon svg { display: block; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ws-course-icon svg { width: 22px; height: 22px; }
+#about, #projects, #practice, #resources, #experience, #contact { scroll-margin-top: calc(var(--ws-topbar) + 18px); }
+.ws-home-root :where(button, a, input, select, textarea):focus-visible { outline: 3px solid color-mix(in srgb,var(--ws-accent) 45%,transparent); outline-offset: 3px; }
+@media (max-width: 940px) { .ws-section-nav { margin-top: -8px; } }

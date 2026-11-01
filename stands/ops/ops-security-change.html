@@ -9,14 +9,11 @@
 <title>Безопасность и управление изменениями · ДатаПолис · itsliventsev</title>
 <meta name="description" content="Межсетевой экран, сертификаты, CAB-ревью и откат: изменение как управляемый процесс.">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/ops/ops-security-change.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -109,7 +106,7 @@
   </main>
   <footer class="st-footer"><span>// © 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-security-change · autosave: on</span>
-    <span class="st-footer-updated" data-footer-updated></span>
+    <time class="st-footer-updated" data-footer-updated></time>
   </footer>
 </div>
 
@@ -119,7 +116,7 @@
 <script src="../../assets/stands.js?v=20261031bf"></script>
 <script type="application/json" id="ops-data">{"id": "ops-security-change", "sprint": 5, "hours": "6 ч", "coins": "100", "mascot": "cat", "who": "кот Мурр — Security Champion совета изменений", "title": "Безопасность и управление изменениями", "lead": "Межсетевой экран, сертификаты, CAB-ревью и откат: изменение как управляемый процесс.", "story": "Перед релизом заказчик требует ужесточить периметр. Вы настроите политики межсетевого экрана на ALT и Windows, разберётесь в сертификатах и проведёте изменение через совет CAB: риск, окно работ, план отката и приёмочный тест. Это P1-изменение — право на ошибку минимально, поэтому процесс важнее скорости.", "theory": [{"h": "Политики по умолчанию DROP", "p": "Безопасная конфигурация начинается с запрета всего и явного разрешения нужного. На ALT — iptables/nftables с состоянием соединений, на Windows — Windows Defender Firewall.", "code": "# iptables -P INPUT DROP\n# iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n# iptables -A INPUT -p tcp --dport 22 -s 10.20.30.0/24 -j ACCEPT"}, {"h": "Сертификаты и доверие", "p": "TLS-сертификаты подтверждают подлинность сервиса и шифруют трафик. В российском контуре применяются ГОСТ-цепочки; общий принцип — закрытый ключ не покидает сервер, срок действия отслеживается мониторингом.", "code": "# openssl req -x509 -newkey rsa:2048 -nodes \\\n  -keyout key.pem -out cert.pem -days 365"}, {"h": "CAB и план отката", "p": "Change Advisory Board проверяет изменение до работ: зачем, риск, окно, как откатывать, как проверять результат. Без принятого отката изменение не выпускается.", "note": "Security Champion — роль, а не должность: на спринте её может нести любой член экипажа."}], "commands": [{"linux": "iptables-save / nft list ruleset", "windows": "Get-NetFirewallRule", "what": "выгрузка политик фильтрации"}, {"linux": "iptables -A INPUT -p tcp --dport", "windows": "New-NetFirewallRule", "what": "разрешающее правило"}, {"linux": "journalctl -k | grep DROP", "windows": "Журнал · блокировки фаервола", "what": "анализ сработавших запретов"}, {"linux": "openssl x509 -in cert.pem -text", "windows": "certlm.msc", "what": "просмотр сертификата"}, {"linux": "ss -tulpn", "windows": "Get-NetTCPConnection", "what": "открытые порты и сервисы"}, {"linux": "systemctl status fail2ban", "windows": "Get-MpComputerStatus", "what": "средства защиты и угрозы"}], "tasks": [{"id": "t1", "text": "Составьте матрицу доступа: кто, откуда, к какому порту и зачем"}, {"id": "t2", "text": "Настройте политику DROP по умолчанию и разрешите только SSH из своей подсети"}, {"id": "t3", "text": "Воспроизведите блокировку и убедитесь, что легитимный трафик не затронут"}, {"id": "t4", "text": "Создайте учебный самоподписанный сертификат и проверьте срок/цепочку"}, {"id": "t5", "text": "На Windows создайте правила фаервола, эквивалентные по смыслу Linux-политикам"}, {"id": "t6", "text": "Оформите CAB-карту: риск, окно, шаги, приёмочный тест, откат"}, {"id": "t7", "text": "Проведите изменение и откат по плану, зафиксируйте время"}], "ticket": {"type": "change", "priority": "P1", "title": "Ужесточить периметр и выпустить изменение через CAB", "text": "Ввести политики фильтрации с DROP по умолчанию и подготовить TLS для веб-сервиса. P1-изменение: без принятого советом плана отката и приёмочного теста работы не начинаются.", "deliverables": ["Матрица доступа и набор правил на двух ОС", "CAB-карта с риском и откатом", "Протокол изменения и успешного отката"]}, "runbook": {"title": "Выпуск изменения через CAB", "steps": ["Собрать матрицу доступа и описать риск", "Подготовить конфигурацию и план отката", "Получить одобрение CAB и окно работ", "Применить, прогнать приёмочный тест", "Откатить при отклонении или закрыть изменение"]}, "quiz": [{"q": "Какой принцип построения политики безопасности надёжнее?", "options": ["Всё разрешить, запрещать по жалобам", "Запретить всё, явно разрешить нужное", "Полагаться на NAT", "Отключить фаервол для скорости"], "answer": 1, "explain": "Default-deny минимизирует поверхность атаки."}, {"q": "Что обязательно содержит CAB-карта изменения?", "options": ["Только имя исполнителя", "Риск, окно работ, приёмочный тест и план отката", "Пароли всех сервисов", "Список сотрудников отдела"], "answer": 1, "explain": "Управляемое изменение невозможно без отката и критериев успеха."}, {"q": "Зачем отслеживать срок действия сертификата?", "options": ["Для статистики", "Просроченный сертификат ломает доверие и доступ к сервису", "Это влияет на диск", "Сертификаты не истекают"], "answer": 1, "explain": "Истечение TLS — частая причина инцидентов доступности."}, {"q": "Чем DROP отличается от REJECT в периметре?", "options": ["Ничем", "DROP молча отбрасывает, REJECT сообщает об отказе", "REJECT быстрее", "DROP работает только на Windows"], "answer": 1, "explain": "Для внешнего периметра тише DROP, внутри информативнее REJECT."}], "reflection": ["Почему безопасность и скорость релиза не должны конфликтовать?", "Какой риск в вашем изменении был самым серьёзным?", "Как матрица доступа помогает дежурной смене?"], "sprintTitle": "Изменения и релиз"}</script>
 <script src="../../assets/ops-kit.js?v=20261031bf"></script>
-<script src="../../assets/shared-chrome.js?v=20261031bf"></script>
-<script src="/assets/workspace.js?v=20261101r2"></script>
+<script src="../../assets/shared-chrome.js?v=20261101r1"></script>
+<script src="/assets/workspace.js?v=20261101r3"></script>
 </body>
 </html>

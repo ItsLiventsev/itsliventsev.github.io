@@ -272,11 +272,18 @@ document.querySelectorAll('[data-filter-root]').forEach((root) => {
   }, { rootMargin: '-30% 0px -60% 0px' });
   sections.forEach((s) => spy.observe(s));
 
-  // Единый слот футера «обновлено» — дата из времени выдачи файла
-  document.querySelectorAll('[data-footer-updated]').forEach((el) => {
-    const d = new Date(document.lastModified);
-    if (!isNaN(d.getTime())) {
-      el.textContent = '// обновлено: ' + d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
+})();
+
+/* ---------- Семантическая дата изменения текущего документа ---------- */
+(function () {
+  const date = new Date(document.lastModified);
+  if (Number.isNaN(date.getTime())) return;
+  const pad = value => String(value).padStart(2, '0');
+  const iso = date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
+  const label = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  document.querySelectorAll('time[data-footer-updated]').forEach(el => {
+    el.dateTime = iso;
+    el.textContent = 'Обновлено: ' + label;
+    el.setAttribute('aria-label', 'Страница обновлена ' + label);
   });
 })();

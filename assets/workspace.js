@@ -15,7 +15,8 @@
       '/faq.html': 'Справка', '/sitemap.html': 'Карта сайта', '/admin.html': 'Панель преподавателя'
     })[pathname] || decodeURIComponent(pathname.split('/').filter(Boolean).pop() || 'Обзор').replace(/\.html$/, '').replace(/[-_]/g, ' ');
   };
-  const currentTitle = pathname === '/' || pathname === '/index.html' ? 'Главная' : pathTitle();
+  const isHome = pathname === '/' || pathname === '/index.html';
+  const currentTitle = isHome ? 'Главная' : pathTitle();
   const root = document.querySelector('[data-workspace-root], .page-wrap, .st-wrap') || document.querySelector('main')?.parentElement || body;
   const contextBar = document.querySelector('.st-topbar');
   const oldHeader = document.querySelector('.site-header, .st-global-header');
@@ -25,17 +26,36 @@
   if (languageButton) languageButton.classList.add('ws-lang');
   const crumbs = root.querySelector('.st-crumbs, [aria-label="Хлебные крошки"]');
   const main = root.querySelector('#main-content, main');
+  const iconByGlyph = { '↗': 'arrow-up-right', '→': 'arrow-right', '←': 'arrow-left', '↓': 'arrow-down', '↧': 'arrow-down', '↑': 'arrow-up', '▾': 'chevron-down', '▸': 'chevron-right', '⌘': 'network', '▤': 'document', '◉': 'server', '◈': 'award', '⌖': 'compass', '◷': 'archive', '⇄': 'operations', '★': 'star', '✓': 'check', '✕': 'close', '↥': 'upload', '↻': 'refresh', 'ⓘ': 'info' };
+  const iconMarkup = (name, className = 'ws-inline-icon') => '<svg class="' + className + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#' + name + '"></use></svg>';
+  document.querySelectorAll('[aria-hidden="true"]').forEach(node => {
+    const glyph = node.textContent.trim();
+    if (!node.children.length && iconByGlyph[glyph]) node.innerHTML = iconMarkup(iconByGlyph[glyph]);
+  });
+  document.querySelectorAll('.ws-resource-icon, .ws-course-icon').forEach(node => {
+    const glyph = node.textContent.trim();
+    if (iconByGlyph[glyph]) { node.setAttribute('aria-hidden', 'true'); node.innerHTML = iconMarkup(iconByGlyph[glyph]); }
+  });
+  const linkArrow = { '↗': 'arrow-up-right', '→': 'arrow-right', '←': 'arrow-left', '↓': 'arrow-down', '↑': 'arrow-up', '↥': 'upload', '↧': 'arrow-down', '↻': 'refresh' };
+  document.querySelectorAll('a, button').forEach(control => {
+    for (const node of [...control.childNodes].reverse()) {
+      if (node.nodeType !== Node.TEXT_NODE) continue;
+      const match = /^(.*?)(\s*)(↗|→|←|↓|↑|↥|↧|↻)(\s*)$/u.exec(node.nodeValue);
+      if (!match) { if (node.nodeValue.trim()) break; else continue; }
+      node.nodeValue = match[1] + match[2];
+      const template = document.createElement('template'); template.innerHTML = iconMarkup(linkArrow[match[3]]);
+      control.insertBefore(template.content.firstElementChild, node.nextSibling);
+      break;
+    }
+  });
+  document.querySelectorAll('.arrow, .chevron, .skills-summary-chevron').forEach(node => {
+    const glyph = node.textContent.trim();
+    if (iconByGlyph[glyph]) {
+      const name = iconByGlyph[glyph]; node.setAttribute('aria-hidden', 'true'); node.setAttribute('data-ws-icon', name); node.innerHTML = iconMarkup(name);
+    }
+  });
 
-  const icons = {
-    overview: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
-    learning: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M8 12h5M8 16h8"/>',
-    projects: '<rect x="3" y="4" width="8" height="7" rx="2"/><rect x="13" y="4" width="8" height="7" rx="2"/><rect x="3" y="13" width="8" height="7" rx="2"/><rect x="13" y="13" width="8" height="7" rx="2"/>',
-    articles: '<path d="M5 3h11l3 3v15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 14h8M8 18h5M16 3v4h4"/>',
-    notes: '<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
-    archive: '<path d="M4 4h16v4H4zM6 8v12h12V8M10 12h4"/>',
-    help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.6 1.3c-.8 1-2.2 1.4-2.2 3M12 17h.01"/>',
-    map: '<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>'
-  };
+  const icons = { overview: 'home', learning: 'document', projects: 'projects', articles: 'document', notes: 'notes', archive: 'archive', help: 'help', map: 'map' };
   const navItems = [
     { label: 'Обзор', href: '/', icon: 'overview', test: p => p === '/' || p === '/index.html' },
     { label: 'Пространства', href: '/stands/index.html', icon: 'learning', test: p => p.startsWith('/stands/') },
@@ -52,11 +72,11 @@
   const sidebar = document.createElement('aside');
   sidebar.className = 'ws-sidebar';
   sidebar.id = 'workspace-navigation';
-  sidebar.setAttribute('aria-label', 'Навигация по workspace');
+  sidebar.setAttribute('aria-label', 'Основная навигация сайта');
   const sidebarHead = document.createElement('div');
   sidebarHead.className = 'ws-sidebar-head';
   const collapse = document.createElement('button');
-  collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg>';
+  collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = iconMarkup('chevron-left');
   sidebarHead.appendChild(collapse);
   sidebar.appendChild(sidebarHead);
   const caption = document.createElement('p');
@@ -66,16 +86,24 @@
     const link = document.createElement('a'); link.href = item.href; link.className = 'ws-nav-link';
     if (item.test(pathname)) link.setAttribute('aria-current', 'page');
     const icon = document.createElement('span'); icon.className = 'ws-nav-icon'; icon.setAttribute('aria-hidden', 'true');
-    icon.innerHTML = '<svg viewBox="0 0 24 24">' + icons[item.icon] + '</svg>';
+    icon.innerHTML = iconMarkup(icons[item.icon]);
     const label = document.createElement('span'); label.className = 'ws-nav-label'; label.textContent = item.label;
     link.append(icon, label); nav.appendChild(link);
   });
   sidebar.appendChild(nav);
+  if (isHome) {
+    const sectionNav = document.createElement('nav'); sectionNav.className = 'ws-section-nav'; sectionNav.setAttribute('aria-label', 'Разделы главной страницы');
+    const sectionCaption = document.createElement('p'); sectionCaption.className = 'ws-section-nav-label'; sectionCaption.textContent = 'На этой странице'; sectionNav.appendChild(sectionCaption);
+    [['about', 'Обо мне'], ['projects', 'Проекты'], ['practice', 'Практика'], ['resources', 'Материалы'], ['experience', 'Опыт'], ['contact', 'Контакты']].forEach(([id, label]) => {
+      const link = document.createElement('a'); link.className = 'ws-section-link'; link.href = '#' + id; link.textContent = label; sectionNav.appendChild(link);
+    });
+    sidebar.appendChild(sectionNav);
+  }
   const learningNav = document.createElement('div'); learningNav.className = 'ws-learning-links';
   learningNav.innerHTML = '<p class="ws-sidebar-caption">НАПРАВЛЕНИЯ</p>'
-    + '<a class="ws-nav-link" href="/stands/setpolis.html"><span class="ws-nav-dot ws-dot-violet"></span><span class="ws-nav-label">СетьПолис</span></a>'
-    + '<a class="ws-nav-link" href="/stands/office/index.html"><span class="ws-nav-dot ws-dot-orange"></span><span class="ws-nav-label">ОфисПолис</span></a>'
-    + '<a class="ws-nav-link" href="/stands/ops/index.html"><span class="ws-nav-dot ws-dot-blue"></span><span class="ws-nav-label">ДатаПолис</span></a>';
+    + '<a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a>'
+    + '<a class="ws-nav-link" href="/stands/office/index.html"' + (pathname.startsWith('/stands/office') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-orange" aria-hidden="true"></span><span class="ws-nav-label">ОфисПолис</span></a>'
+    + '<a class="ws-nav-link" href="/stands/ops/index.html"' + (pathname.startsWith('/stands/ops') ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-blue" aria-hidden="true"></span><span class="ws-nav-label">ДатаПолис</span></a>';
   sidebar.appendChild(learningNav);
   const sidebarBottom = document.createElement('div'); sidebarBottom.className = 'ws-sidebar-bottom';
   sidebarBottom.innerHTML = '<div class="ws-sidebar-card"><strong>Портфолио</strong><p>Проекты, публикации и практические материалы.</p></div>';
@@ -84,7 +112,7 @@
   const workspace = document.createElement('div'); workspace.className = 'ws-workspace';
   const topbar = document.createElement('header'); topbar.className = 'ws-topbar';
   const topContext = document.createElement('div'); topContext.className = 'ws-topbar-context';
-  const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'ws-icon-button ws-mobile-menu'; menu.setAttribute('aria-label', 'Открыть меню'); menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', sidebar.id); menu.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+  const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'ws-icon-button ws-mobile-menu'; menu.setAttribute('aria-label', 'Открыть меню'); menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', sidebar.id); menu.innerHTML = iconMarkup('menu');
   topContext.appendChild(menu);
   if (crumbs) {
     crumbs.className = 'ws-breadcrumbs';
@@ -96,16 +124,16 @@
   topbar.appendChild(topContext);
   const actions = document.createElement('div'); actions.className = 'ws-topbar-actions';
   const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger'; searchButton.setAttribute('aria-label', 'Поиск по сайту');
-  searchButton.innerHTML = '<span class="ws-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></span><span class="ws-search-label">Поиск по материалам</span><kbd>⌘ K</kbd>';
+  searchButton.innerHTML = '<span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><span class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>';
   actions.appendChild(searchButton);
   if (languageButton) actions.appendChild(languageButton);
   if (readingMeter) actions.appendChild(readingMeter);
   if (themeButton) {
     themeButton.className = 'theme-toggle ws-icon-button';
-    themeButton.innerHTML = '<svg class="ws-theme-indicator" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13.1A8.8 8.8 0 1 1 10.9 3.3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+    themeButton.innerHTML = iconMarkup('moon', 'ws-theme-indicator');
     actions.appendChild(themeButton);
   } else {
-    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'theme-toggle ws-icon-button'; theme.setAttribute('aria-label', 'Переключить тему'); theme.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false'); theme.innerHTML = '<svg class="ws-theme-indicator" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13.1A8.8 8.8 0 1 1 10.9 3.3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'theme-toggle ws-icon-button'; theme.setAttribute('aria-label', 'Переключить тему'); theme.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false'); theme.innerHTML = iconMarkup('moon', 'ws-theme-indicator');
     actions.appendChild(theme);
   }
   if (!document.documentElement.classList.contains('js-enabled')) {
@@ -207,6 +235,23 @@
   workspace.appendChild(root);
   shell.append(sidebar, workspace);
   body.appendChild(shell);
+  const lastModified = new Date(document.lastModified);
+  if (!Number.isNaN(lastModified.getTime())) {
+    const pad = value => String(value).padStart(2, '0');
+    const dateTime = lastModified.getFullYear() + '-' + pad(lastModified.getMonth() + 1) + '-' + pad(lastModified.getDate());
+    const visibleDate = lastModified.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.querySelectorAll('time[data-footer-updated]').forEach(el => {
+      el.dateTime = dateTime; el.textContent = 'Обновлено: ' + visibleDate; el.setAttribute('aria-label', 'Страница обновлена ' + visibleDate);
+    });
+  }
+  let topButton = document.getElementById('to-top');
+  if (!topButton) {
+    topButton = document.createElement('button'); topButton.id = 'to-top'; topButton.type = 'button'; topButton.className = 'ws-to-top';
+    topButton.setAttribute('aria-label', 'Наверх'); topButton.title = 'Наверх'; topButton.innerHTML = iconMarkup('arrow-up'); body.appendChild(topButton);
+    const updateTopButton = () => topButton.classList.toggle('show', window.scrollY > 500);
+    window.addEventListener('scroll', updateTopButton, { passive: true }); updateTopButton();
+    topButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+  }
   body.classList.add('ws-ready');
   document.documentElement.dataset.workspaceReady = 'true';
   let savedRail = 'expanded';
@@ -218,15 +263,48 @@
 
   const overlay = document.createElement('div'); overlay.className = 'ws-overlay'; overlay.setAttribute('aria-hidden', 'true'); body.appendChild(overlay);
   function setDrawer(open) {
+    const wasOpen = sidebar.dataset.open === 'true';
     sidebar.dataset.open = open ? 'true' : 'false'; overlay.dataset.open = open ? 'true' : 'false';
     menu.setAttribute('aria-expanded', open ? 'true' : 'false');
     menu.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
     document.documentElement.classList.toggle('ws-mode-drawer', open);
+    workspace.toggleAttribute('inert', open);
+    if (open) {
+      sidebar.setAttribute('role', 'dialog'); sidebar.setAttribute('aria-modal', 'true');
+      sidebar.querySelector('a[href]')?.focus();
+    } else {
+      sidebar.removeAttribute('role'); sidebar.removeAttribute('aria-modal');
+      if (wasOpen && sidebar.contains(document.activeElement)) menu.focus();
+    }
   }
   menu.addEventListener('click', () => setDrawer(menu.getAttribute('aria-expanded') !== 'true'));
+  sidebar.addEventListener('keydown', event => {
+    if (event.key !== 'Tab' || sidebar.dataset.open !== 'true') return;
+    const focusable = [...sidebar.querySelectorAll('a[href], button:not([disabled])')].filter(el => el.getClientRects().length);
+    if (!focusable.length) return;
+    if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable[focusable.length - 1].focus(); }
+    else if (!event.shiftKey && document.activeElement === focusable[focusable.length - 1]) { event.preventDefault(); focusable[0].focus(); }
+  });
   overlay.addEventListener('click', () => { setDrawer(false); menu.focus(); });
   sidebar.addEventListener('click', event => { if (event.target.closest('a')) setDrawer(false); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { setDrawer(false); menu.focus(); } });
+  if (isHome) {
+    const sectionLinks = [...sidebar.querySelectorAll('.ws-section-link')];
+    const setActiveSection = id => sectionLinks.forEach(link => {
+      if (link.hash === '#' + id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    const sectionTargets = sectionLinks.map(link => document.getElementById(link.hash.slice(1))).filter(Boolean);
+    setActiveSection(location.hash.slice(1) || 'about');
+    window.addEventListener('hashchange', () => setActiveSection(location.hash.slice(1)));
+    if ('IntersectionObserver' in window) {
+      const sectionObserver = new IntersectionObserver(entries => {
+        const current = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (current) setActiveSection(current.target.id);
+      }, { rootMargin: '-14% 0px -68% 0px', threshold: 0 });
+      sectionTargets.forEach(target => sectionObserver.observe(target));
+    }
+  }
   collapse.addEventListener('click', () => {
     const compact = document.documentElement.classList.toggle('ws-mode-compact');
     try { localStorage.setItem('workspace-rail', compact ? 'compact' : 'expanded'); } catch (error) { /* private browsing */ }
@@ -236,7 +314,7 @@
   window.addEventListener('resize', () => { if (window.innerWidth > 940) setDrawer(false); }, { passive: true });
 
   const searchDialog = document.createElement('dialog'); searchDialog.className = 'ws-search-dialog'; searchDialog.setAttribute('aria-label', 'Поиск по сайту');
-  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span aria-hidden="true">⌕</span><input class="ws-search-input" type="search" placeholder="Статья, проект или учебный модуль…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">×</button></form><div class="ws-search-results" role="listbox"><div class="ws-empty">Начните вводить запрос</div></div>';
+  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Статья, проект или учебный модуль…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox"><div class="ws-empty">Начните вводить запрос</div></div>';
   body.appendChild(searchDialog);
   const searchInput = searchDialog.querySelector('.ws-search-input'); const searchResults = searchDialog.querySelector('.ws-search-results');
   let searchData = null, loading = false;

@@ -1,4 +1,14 @@
 /* Workspace tokens — new semantic foundation, 2026 */
+/* Self-hosted variable fonts (Fontsource 5.3.0; SIL Open Font License in assets/fonts). */
+@font-face { font-family: Manrope; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/manrope-cyrillic-ext-wght-normal.woff2") format("woff2"); unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F; }
+@font-face { font-family: Manrope; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/manrope-cyrillic-wght-normal.woff2") format("woff2"); unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+@font-face { font-family: Manrope; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/manrope-latin-ext-wght-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: Manrope; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/manrope-latin-wght-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/assets/fonts/jetbrains-mono-cyrillic-ext-wght-normal.woff2") format("woff2"); unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F; }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/assets/fonts/jetbrains-mono-cyrillic-wght-normal.woff2") format("woff2"); unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/assets/fonts/jetbrains-mono-latin-ext-wght-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
 :root {
   color-scheme: light;
   --ws-canvas: #f3f4f7;
@@ -7,18 +17,18 @@
   --ws-surface-raised: #ffffff;
   --ws-ink: #171821;
   --ws-ink-soft: #4f515d;
-  --ws-muted: #777985;
-  --ws-faint: #a0a2ad;
+  --ws-muted: #666873;
+  --ws-faint: #6b6d78;
   --ws-line: #e9e9ee;
   --ws-line-strong: #dedee7;
   --ws-accent: #3f766b;
   --ws-accent-hover: #315f56;
   --ws-accent-wash: #eaf4f0;
-  --ws-green: #27866e;
+  --ws-green: #247b65;
   --ws-green-wash: #e8f5f0;
-  --ws-blue: #3474b7;
+  --ws-blue: #2f6ba9;
   --ws-blue-wash: #eaf2fc;
-  --ws-orange: #bb6e34;
+  --ws-orange: #9b541e;
   --ws-orange-wash: #fff1e5;
   --ws-red: #b84b55;
   --ws-red-wash: #fff0f1;
@@ -92,7 +102,7 @@
   --ws-shadow-lg: 0 18px 48px rgba(0,0,0,.32);
 }
 body[data-ws-area="network"] { --ws-accent: #6654c4; --ws-accent-hover: #5241a7; --ws-accent-wash: #f0edff; }
-body[data-ws-area="office"] { --ws-accent: #b86d38; --ws-accent-hover: #98572b; --ws-accent-wash: #fff1e5; }
+body[data-ws-area="office"] { --ws-accent: #9b541e; --ws-accent-hover: #834517; --ws-accent-wash: #fff1e5; }
 body[data-ws-area="operations"] { --ws-accent: #2f7882; --ws-accent-hover: #245f68; --ws-accent-wash: #e8f4f5; }
 :root[data-theme="dark"] body[data-ws-area="network"] { --ws-accent: #b4a8ff; --ws-accent-hover: #c8c0ff; --ws-accent-wash: #302b48; }
 :root[data-theme="dark"] body[data-ws-area="office"] { --ws-accent: #edb17f; --ws-accent-hover: #f3c397; --ws-accent-wash: #3b2b20; }

@@ -10,15 +10,12 @@
 <meta name="description" content="Сетевой и системный администратор, мастер производственного обучения. Практика для будущих IT-специалистов и постепенное освоение технологий искусственного интеллекта.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r2">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261101r2">
+<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261101r3">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261101r3">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -48,13 +45,13 @@
 <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 <div data-workspace-root class="ws-home-root">
   <main id="main-content" class="ws-content">
-    <section class="ws-home-hero" aria-labelledby="home-title">
+    <section class="ws-home-hero" id="about" aria-labelledby="home-title">
       <div class="ws-home-copy">
         <span class="ws-eyebrow"><span class="ws-status-dot"></span> itsliventsev · мастер производственного обучения</span>
         <h1 id="home-title">Обучаю будущих<br><span>IT-специалистов.</span></h1>
         <p>Моя специальность — сети и системное администрирование. В учебной практике я опираюсь на реальные задачи, а технологии искусственного интеллекта изучаю постепенно и применяю там, где они действительно полезны.</p>
         <div class="ws-hero-actions">
-          <a class="ws-button ws-button-primary" href="#experience">Мой опыт <span aria-hidden="true">↗</span></a>
+          <a class="ws-button ws-button-primary" href="#experience">Мой опыт <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></span></a>
           <a class="ws-button" href="#contact">Связаться</a>
         </div>
       </div>
@@ -65,18 +62,18 @@
           <div><strong>СПО</strong><span>мастер производственного обучения</span></div>
           <div><strong>IT</strong><span>сети, администрирование и цифровые навыки</span></div>
         </div>
-        <a href="#experience" class="ws-inline-link">Опыт и достижения <span aria-hidden="true">→</span></a>
+        <a href="#experience" class="ws-inline-link">Опыт и достижения <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
       </aside>
     </section>
 
     <section class="ws-dashboard-grid" aria-label="Материалы и проекты">
-      <article class="ws-panel ws-panel-large" data-ws-surface>
-        <div class="ws-section-heading"><div><span class="ws-eyebrow">ИЗБРАННОЕ</span><h2>Проекты и материалы</h2></div><a href="projects.html" class="ws-inline-link">Все проекты →</a></div>
+      <article class="ws-panel ws-panel-large" id="projects" data-ws-surface>
+        <div class="ws-section-heading"><div><span class="ws-eyebrow">ИЗБРАННОЕ</span><h2>Проекты и материалы</h2></div><a href="projects.html" class="ws-inline-link">Все проекты <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></a></div>
         <div class="ws-resource-list">
-          <a href="projects/esports.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-purple">◈</span><span><strong>Киберспорт в образовании</strong><small>Проект · учебная программа и соревнования</small></span><b aria-hidden="true">↗</b></a>
-          <a href="projects/navigation.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-green">⌖</span><span><strong>Навигация колледжа</strong><small>Проект · дизайн-система указателей и маршрутов</small></span><b aria-hidden="true">↗</b></a>
-          <a href="articles.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-blue">▤</span><span><strong>Статьи и методические материалы</strong><small>Публикации, исследования и учебные материалы</small></span><b aria-hidden="true">↗</b></a>
-          <a href="archive.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-amber">◷</span><span><strong>Архив знаний</strong><small>Практикумы, дисциплины и материалы прошлых лет</small></span><b aria-hidden="true">↗</b></a>
+          <a href="projects/esports.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-purple">◈</span><span><strong>Киберспорт в образовании</strong><small>Проект · учебная программа и соревнования</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+          <a href="projects/navigation.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-green">⌖</span><span><strong>Навигация колледжа</strong><small>Проект · дизайн-система указателей и маршрутов</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+          <a href="articles.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-blue">▤</span><span><strong>Статьи и методические материалы</strong><small>Публикации, исследования и учебные материалы</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+          <a href="archive.html" class="ws-resource-row"><span class="ws-resource-icon ws-resource-amber">◷</span><span><strong>Архив знаний</strong><small>Практикумы, дисциплины и материалы прошлых лет</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
         </div>
       </article>
       <aside class="ws-panel ws-panel-profile" data-ws-surface>
@@ -88,30 +85,30 @@
           <li>Победитель регионального этапа «Московские профессионалы»</li>
           <li>Разработка оценочных материалов и демоэкзамена</li>
         </ul>
-        <a href="#experience" class="ws-inline-link">Опыт и квалификация →</a>
+        <a href="#experience" class="ws-inline-link">Опыт и квалификация <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></a>
       </aside>
     </section>
 
-    <section class="ws-section" aria-labelledby="learning-title">
+    <section class="ws-section" id="practice" aria-labelledby="learning-title">
       <div class="ws-section-heading">
         <div><span class="ws-eyebrow">ПРАКТИКА</span><h2 id="learning-title">Пространства</h2></div>
-        <a href="stands/index.html" class="ws-inline-link">Все направления <span aria-hidden="true">→</span></a>
+        <a href="stands/index.html" class="ws-inline-link">Все направления <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
       </div>
       <div class="ws-learning-grid">
         <a class="ws-course-card ws-course-violet" href="stands/setpolis.html">
-          <span class="ws-course-icon" aria-hidden="true">⌘</span><span class="ws-card-kicker">УП.01 · СЕТИ</span>
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#network"></use></svg></span><span class="ws-card-kicker">УП.01 · СЕТИ</span>
           <h3>СетьПолис</h3><p>Собирайте и настраивайте инфраструктуру: от первой команды до проекта локальной сети.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true">↗</b></span>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
         </a>
         <a class="ws-course-card ws-course-orange" href="stands/office/index.html">
-          <span class="ws-course-icon" aria-hidden="true">▤</span><span class="ws-card-kicker">УП.02 · ЦИФРОВОЕ РАБОЧЕЕ МЕСТО</span>
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#document"></use></svg></span><span class="ws-card-kicker">УП.02 · ЦИФРОВОЕ РАБОЧЕЕ МЕСТО</span>
           <h3>ОфисПолис</h3><p>Осваивайте документы, таблицы, графику, презентации, базы данных и веб-инструменты.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true">↗</b></span>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
         </a>
         <a class="ws-course-card ws-course-blue" href="stands/ops/index.html">
-          <span class="ws-course-icon" aria-hidden="true">◉</span><span class="ws-card-kicker">УП.02 · ЭКСПЛУАТАЦИЯ</span>
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#server"></use></svg></span><span class="ws-card-kicker">УП.02 · ЭКСПЛУАТАЦИЯ</span>
           <h3>ДатаПолис</h3><p>Принимайте сервисы, обрабатывайте инциденты и тренируйтесь работать по SLA.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true">↗</b></span>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
         </a>
       </div>
     </section>
@@ -129,12 +126,12 @@
     <section class="ws-section" id="resources" aria-labelledby="resources-title">
       <div class="ws-section-heading"><div><span class="ws-eyebrow">ДЛЯ УЧЁБЫ</span><h2 id="resources-title" data-i18n="res_title">Материалы для студентов</h2></div></div>
       <div class="ws-resource-grid">
-        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener"><span>БАЗА ЗНАНИЙ</span><b>Buildin ↗</b></a>
-        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" rel="noopener"><span>УЧЕБНАЯ ПРАКТИКА</span><b>Buildin ↗</b></a>
-        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" rel="noopener"><span>ПРОИЗВОДСТВЕННАЯ ПРАКТИКА</span><b>Buildin ↗</b></a>
-        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" rel="noopener"><span>ДЕМОЭКЗАМЕН</span><b>Buildin ↗</b></a>
-        <a data-ws-surface href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" rel="noopener"><span>ДОСКА · ДЕМОЭКЗАМЕН</span><b>Яндекс ↗</b></a>
-        <a data-ws-surface href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" rel="noopener"><span>ДОСКА · УП.01</span><b>Яндекс ↗</b></a>
+        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/d4c77241-3bf4-47c7-b0d4-471321898c95" target="_blank" rel="noopener"><span>БАЗА ЗНАНИЙ</span><b>Buildin <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/619ca0ce-9687-4734-b23f-d25e2ea8a205" target="_blank" rel="noopener"><span>УЧЕБНАЯ ПРАКТИКА</span><b>Buildin <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/97331c31-0f5d-4e47-84ac-9e9a4628274d" target="_blank" rel="noopener"><span>ПРОИЗВОДСТВЕННАЯ ПРАКТИКА</span><b>Buildin <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+        <a data-ws-surface href="https://buildin.ai/itsliventsev/share/d073da4b-01a4-491c-9e01-22f0dfc31ac0" target="_blank" rel="noopener"><span>ДЕМОЭКЗАМЕН</span><b>Buildin <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+        <a data-ws-surface href="https://boards.yandex.ru/whiteboard/?hash=b0700d9021371eb66e768c45777dd79d" target="_blank" rel="noopener"><span>ДОСКА · ДЕМОЭКЗАМЕН</span><b>Яндекс <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
+        <a data-ws-surface href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" rel="noopener"><span>ДОСКА · УП.01</span><b>Яндекс <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
       </div>
     </section>
 
@@ -152,14 +149,14 @@
       <div class="ws-contact-grid">
         <a data-ws-surface href="mailto:livencev01@ya.ru"><small>EMAIL</small><strong>livencev01@ya.ru</strong></a>
         <a data-ws-surface href="mailto:liventsevka@edu.mos.ru"><small>EDU EMAIL</small><strong>liventsevka@edu.mos.ru</strong></a>
-        <a data-ws-surface href="https://github.com/ItsLiventsev" target="_blank" rel="noopener"><small>GITHUB</small><strong>itsLiventsev ↗</strong></a>
-        <a data-ws-surface href="https://hh.ru" target="_blank" rel="noopener"><small data-i18n="portfolio">ПОРТФОЛИО</small><strong>hh.ru ↗</strong></a>
+        <a data-ws-surface href="https://github.com/ItsLiventsev" target="_blank" rel="noopener"><small>GITHUB</small><strong>itsLiventsev <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></strong></a>
+        <a data-ws-surface href="https://hh.ru" target="_blank" rel="noopener"><small data-i18n="portfolio">ПОРТФОЛИО</small><strong>hh.ru <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></strong></a>
       </div>
     </section>
   </main>
-  <footer class="ws-footer"><span>© 2026 itsliventsev · Обучение через практику</span><nav aria-label="Служебная навигация"><a href="sitemap.html">Карта сайта</a><a href="feed.xml">RSS</a><a href="admin.html" rel="nofollow">Панель преподавателя</a></nav><span id="secret-message" data-i18n="secret">У вас всё получится. Продолжайте исследовать.</span></footer>
+  <footer class="ws-footer"><span>© 2026 itsliventsev · Обучение через практику</span><nav aria-label="Служебная навигация"><a href="sitemap.html">Карта сайта</a><a href="feed.xml">RSS</a><a href="admin.html" rel="nofollow">Панель преподавателя</a></nav><span id="secret-message" data-i18n="secret">У вас всё получится. Продолжайте исследовать.</span><time data-footer-updated></time></footer>
 </div>
-<script src="assets/site.js?v=20261101r1"></script>
+<script src="assets/site.js?v=20261101r2"></script>
 <script src="assets/i18n.js?v=20261031bf"></script>
 <script>
 window.I18N.register({
@@ -167,7 +164,7 @@ window.I18N.register({
  en:{stack_title:'Technical stack',cat_languages:'Languages & development',cat_infrastructure:'Infrastructure',cat_network:'Networks & databases',cat_tools:'Tools',res_title:'Student resources',cv_title:'Experience & education',work_1:'Vocational training instructor',work_2:'Training network and systems administrators, leading academic and industrial practice',work_years:'years',ach_1:'Mentor of the first-place winner · Masteryata finals · smart home systems',ach_2:'Regional winner of Moscow Professionals · smart home systems · juniors',edu_1:'Assessment materials development · IRPO',edu_2:'Demo exam expert developer · IRPO',edu_4:'AI in professional practice · School 21',edu_5:'Applied skills in vocational workshops · State University of Education',edu_8:'Vocational educator · professional retraining',contact_title:'Contact',portfolio:'Portfolio',secret:'You can do it. Keep exploring.'}
 });
 </script>
-<script src="assets/shared-chrome.js?v=20261031bf"></script>
-<script src="assets/workspace.js?v=20261101r2"></script>
+<script src="assets/shared-chrome.js?v=20261101r1"></script>
+<script src="assets/workspace.js?v=20261101r3"></script>
 </body>
 </html>
