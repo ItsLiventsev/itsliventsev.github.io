@@ -474,34 +474,103 @@
   });
   window.addEventListener('resize', () => { if (window.innerWidth > 940) setDrawer(false); }, { passive: true });
 
-  const searchDialog = document.createElement('dialog'); searchDialog.className = 'ws-search-dialog'; searchDialog.setAttribute('aria-label', 'Поиск по сайту');
-  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Статья, проект или учебный модуль…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox"><div class="ws-empty">Начните вводить запрос</div></div>';
+  const searchDialog = document.createElement('dialog'); searchDialog.className = 'ws-search-dialog'; searchDialog.setAttribute('aria-label', 'Поиск по сайту — cmdk palette (Ctrl+K)');
+  searchDialog.innerHTML = '<form class="ws-search-form" method="dialog"><span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><input class="ws-search-input" type="search" placeholder="Статья, проект или учебный модуль — начните печатать…" aria-label="Поисковый запрос" autocomplete="off"><button class="ws-icon-button" type="submit" aria-label="Закрыть поиск">' + iconMarkup('close') + '</button></form><div class="ws-search-results" role="listbox" aria-label="Результаты поиска"></div><div class="ws-search-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> навигация · <kbd>↵</kbd> открыть · <kbd>Esc</kbd> закрыть</span><span data-ws-search-hint>Введите запрос</span></div>';
   body.appendChild(searchDialog);
-  const searchInput = searchDialog.querySelector('.ws-search-input'); const searchResults = searchDialog.querySelector('.ws-search-results');
-  let searchData = null, loading = false;
+  const searchInput = searchDialog.querySelector('.ws-search-input'); const searchResults = searchDialog.querySelector('.ws-search-results'); const searchHint = searchDialog.querySelector('[data-ws-search-hint]');
+  let searchData = null, loading = false, activeIndex = -1;
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function highlight(text, terms){ if(!text) return ''; var out=escapeHtml(text); terms.forEach(function(t){ if(t.length<2) return; var safe=t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); out=out.replace(new RegExp('('+safe+')','gi'),'<mark>$1</mark>'); }); return out; }
+  function setActive(n){ var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(!els.length){ activeIndex=-1; return; } activeIndex=Math.max(0,Math.min(n,els.length-1)); els.forEach(function(el,i){ el.classList.toggle('is-active',i===activeIndex); el.setAttribute('aria-selected',i===activeIndex?'true':'false'); if(i===activeIndex) el.scrollIntoView({block:'nearest'}); }); }
   function normalize(value) { return String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }
-  function openSearch() { if (searchDialog.showModal) searchDialog.showModal(); else searchDialog.setAttribute('open', ''); searchInput.focus(); if (!searchData && !loading) { loading = true; fetch('/assets/search-index.json').then(r => r.json()).then(data => { searchData = data; loading = false; renderSearch(searchInput.value); }).catch(() => { loading = false; searchResults.innerHTML = '<div class="ws-empty">Индекс поиска недоступен</div>'; }); } }
+  function openSearch() { if (searchDialog.open) { searchInput.focus(); return; } if (searchDialog.showModal) searchDialog.showModal(); else searchDialog.setAttribute('open', ''); searchInput.focus(); searchInput.select(); if (!searchData && !loading) { loading = true; searchResults.innerHTML = '<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('search') + '</div>Загружаем индекс…</div>'; fetch('/assets/search-index.json').then(function(r){ return r.json(); }).then(function(data){ searchData=Array.isArray(data)?data:(data.items||[]); loading=false; renderSearch(searchInput.value); }).catch(function(){ loading=false; searchResults.innerHTML='<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('close') + '</div>Индекс поиска недоступен.</div>'; }); } }
   function renderSearch(query) {
     if (!searchData) return;
-    const terms = normalize(query).split(/\s+/).filter(Boolean);
-    if (!terms.length) { searchResults.innerHTML = '<div class="ws-empty">Начните вводить запрос</div>'; return; }
-    const matches = searchData.map(item => {
-      const title = normalize(item.title), category = normalize(item.category), content = normalize(item.content);
-      let score = 0; for (const term of terms) { if (title.includes(term)) score += title.startsWith(term) ? 8 : 5; else if (category.includes(term)) score += 3; else if (content.includes(term)) score += 1; else return null; }
-      return { item, score };
-    }).filter(Boolean).sort((a,b) => b.score-a.score).slice(0,10);
+    var terms = normalize(query).split(/\s+/).filter(Boolean);
+    if (!terms.length) { searchResults.innerHTML = '<div class="ws-empty"><div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('search') + '</div>Начните вводить запрос — проекты, статьи, заметки<br><small style="color:var(--ws-muted);margin-top:6px;display:block;">Используйте <kbd>↑</kbd> <kbd>↓</kbd> для навигации · <kbd>Esc</kbd> закрыть</small></div>'; if(searchHint) searchHint.textContent='Введите запрос'; activeIndex=-1; return; }
+    var scored = searchData.map(function(item){ var title=normalize(item.title), category=normalize(item.category), content=normalize(item.content); var score=0; for(var _ti=0; _ti<terms.length; _ti++){ var term=terms[_ti]; if(title.indexOf(term)!==-1) score+= title.indexOf(term)===0?8:5; else if(category.indexOf(term)!==-1) score+=3; else if(content.indexOf(term)!==-1) score+=1; else return null; } return {item:item,score:score}; }).filter(Boolean).sort(function(a,b){ return b.score-a.score; }).slice(0,20);
     searchResults.replaceChildren();
-    if (!matches.length) { const empty = document.createElement('div'); empty.className = 'ws-empty'; empty.textContent = 'Совпадений нет — попробуйте другой запрос.'; searchResults.appendChild(empty); return; }
-    matches.forEach(({ item }) => { const link = document.createElement('a'); link.className = 'ws-search-result'; link.role = 'option'; link.href = item.url; const title = document.createElement('strong'); title.textContent = item.title; const meta = document.createElement('small'); meta.textContent = [item.category, item.description || item.content].filter(Boolean).join(' · ').slice(0, 180); link.append(title, meta); searchResults.appendChild(link); });
+    if(!scored.length){ var empty=document.createElement('div'); empty.className='ws-empty'; empty.innerHTML='<div class="ws-empty-icon" aria-hidden="true">' + iconMarkup('search') + '</div>Совпадений нет по запросу «' + escapeHtml(query.slice(0,48)) + '»<br><small style="color:var(--ws-muted);margin-top:6px;display:block;">Попробуйте другое сочетание.</small>'; searchResults.appendChild(empty); if(searchHint) searchHint.textContent='0 результатов'; activeIndex=-1; return; }
+    if(searchHint) searchHint.textContent=scored.length+' результатов';
+    var groups={}; scored.forEach(function(x){ var cat=(x.item.category||'Другое').toString().trim()||'Другое'; if(!groups[cat]) groups[cat]=[]; groups[cat].push(x); });
+    Object.keys(groups).forEach(function(cat){ var cap=document.createElement('div'); cap.className='ws-search-group-caption'; cap.textContent=cat; searchResults.appendChild(cap); groups[cat].forEach(function(entry){ var item=entry.item; var link=document.createElement('a'); link.className='ws-search-result'; link.setAttribute('role','option'); link.href=item.url; var ic=document.createElement('span'); ic.className='ws-search-result-ic'; ic.setAttribute('aria-hidden','true'); var lk=(item.category||'').toString().toLocaleLowerCase('ru-RU'); var iconKey=lk.indexOf('проект')!==-1?'projects':lk.indexOf('стать')!==-1?'document':lk.indexOf('замет')!==-1?'notes':'search'; ic.innerHTML=iconMarkup(iconKey); var body=document.createElement('span'); body.className='ws-search-result-body'; var title=document.createElement('strong'); title.innerHTML=highlight(item.title||item.url, terms); var meta=document.createElement('small'); meta.innerHTML=highlight([item.category, item.description||item.content||''].filter(Boolean).join(' · ').slice(0,200), terms); body.append(title,meta); var pill=document.createElement('span'); pill.className='ws-search-result-meta'; pill.textContent=(item.category||'').slice(0,18); if(!(item.category||'').trim()) pill.style.display='none'; link.append(ic, body, pill); searchResults.appendChild(link); }); });
+    activeIndex=-1; setActive(0);
   }
   searchButton.addEventListener('click', openSearch);
-  searchInput.addEventListener('input', () => renderSearch(searchInput.value));
-  searchDialog.addEventListener('click', event => { if (event.target === searchDialog) searchDialog.close?.(); });
-  searchDialog.querySelector('form').addEventListener('submit', event => { event.preventDefault(); searchDialog.close?.(); });
+  searchInput.addEventListener('input', function(){ renderSearch(searchInput.value); });
+  searchInput.addEventListener('keydown', function(e){ var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(e.key==='ArrowDown'){ e.preventDefault(); setActive(activeIndex+1); } else if(e.key==='ArrowUp'){ e.preventDefault(); setActive(activeIndex-1); } else if(e.key==='Enter'){ if(activeIndex>=0 && els[activeIndex]){ e.preventDefault(); var href=els[activeIndex].getAttribute('href'); if(href) window.location.href=href; } else if(els.length===1){ e.preventDefault(); window.location.href=els[0].getAttribute('href'); } } });
+  searchDialog.addEventListener('click', function(event){ if(event.target===searchDialog) searchDialog.close && searchDialog.close(); });
+  searchDialog.addEventListener('close', function(){ if(searchHint) searchHint.textContent='Введите запрос'; });
+  searchDialog.querySelector('form').addEventListener('submit', function(event){ event.preventDefault(); var els=Array.from(searchResults.querySelectorAll('.ws-search-result')); if(activeIndex>=0 && els[activeIndex]) window.location.href=els[activeIndex].getAttribute('href'); else if(els.length) window.location.href=els[0].getAttribute('href'); else if(searchDialog.close) searchDialog.close(); });
+  document.addEventListener('keydown', function(e){ if((e.ctrlKey||e.metaKey) && e.key.toLocaleLowerCase()==='k'){ e.preventDefault(); openSearch(); } });
   document.addEventListener('keydown', event => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); }
     else if (event.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) { event.preventDefault(); openSearch(); }
   });
+
+
+  /* ── Aceternity 3D tilt: mouse tracking + glare ── */
+  (function initTilt(){
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || !window.matchMedia('(hover: hover)').matches) return;
+    var SELECTOR = '.ws-course-card, .ws-project-card[data-status], .ws-panel, #stack .ws-skill-card';
+    var cards = document.querySelectorAll(SELECTOR);
+    if (!cards.length) {
+      // retry after decorate injects some cards
+      document.addEventListener('DOMContentLoaded', function(){
+        cards = document.querySelectorAll(SELECTOR);
+        bind(cards);
+      });
+    } else bind(cards);
+    function bind(list){
+      list.forEach(function(card){
+        if (card.hasAttribute('data-tilt')) return;
+        card.setAttribute('data-tilt','');
+        if (!card.querySelector('.ws-tilt-glare')) {
+          var glare = document.createElement('span');
+          glare.className = 'ws-tilt-glare';
+          glare.setAttribute('aria-hidden','true');
+          card.appendChild(glare);
+        }
+        card.style.transformStyle = 'preserve-3d';
+        card.addEventListener('mousemove', onMove);
+        card.addEventListener('mouseleave', onLeave);
+        card.addEventListener('mouseenter', function(){ card.style.transition = 'transform 120ms ease'; });
+      });
+    }
+    function onMove(e){
+      var card = e.currentTarget;
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var px = (x / rect.width) - 0.5;
+      var py = (y / rect.height) - 0.5;
+      var rotY = px * 7;
+      var rotX = -py * 7;
+      card.style.setProperty('--mx', (x/rect.width*100).toFixed(1)+'%');
+      card.style.setProperty('--my', (y/rect.height*100).toFixed(1)+'%');
+      card.style.transform = 'perspective(900px) rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg) translateZ(0)';
+    }
+    function onLeave(e){
+      var card = e.currentTarget;
+      card.style.transform = '';
+      card.style.transition = 'transform 420ms cubic-bezier(.2,.8,.2,1)';
+    }
+    // Observe dynamically added cards (e.g. activity kanban)
+    if (window.MutationObserver) {
+      var obs = new MutationObserver(function(muts){
+        muts.forEach(function(m){
+          m.addedNodes && Array.prototype.forEach.call(m.addedNodes, function(n){
+            if (n.nodeType!==1) return;
+            if (n.matches && n.matches(SELECTOR)) bind([n]);
+            var inner = n.querySelectorAll ? n.querySelectorAll(SELECTOR) : [];
+            if (inner.length) bind(inner);
+          });
+        });
+      });
+      obs.observe(document.body, {childList:true, subtree:true});
+    }
+  })();
 
   function decorate(scope) {
     const all = selector => [
