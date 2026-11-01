@@ -15,11 +15,10 @@
       '/faq.html': 'Справка', '/sitemap.html': 'Карта сайта', '/admin.html': 'Панель преподавателя'
     })[pathname] || decodeURIComponent(pathname.split('/').filter(Boolean).pop() || 'Обзор').replace(/\.html$/, '').replace(/[-_]/g, ' ');
   };
-  const currentTitle = pathTitle();
+  const currentTitle = pathname === '/' || pathname === '/index.html' ? 'Главная' : pathTitle();
   const root = document.querySelector('[data-workspace-root], .page-wrap, .st-wrap') || document.querySelector('main')?.parentElement || body;
   const contextBar = document.querySelector('.st-topbar');
   const oldHeader = document.querySelector('.site-header, .st-global-header');
-  const logo = oldHeader?.querySelector('.logo');
   const themeButton = document.querySelector('.theme-toggle');
   const languageButton = document.querySelector('.lang-btn');
   const readingMeter = document.querySelector('#read-percent');
@@ -54,24 +53,12 @@
   sidebar.className = 'ws-sidebar';
   sidebar.id = 'workspace-navigation';
   sidebar.setAttribute('aria-label', 'Навигация по workspace');
-  const brand = document.createElement('div');
-  brand.className = 'ws-brand';
-  if (logo) {
-    logo.querySelector('.arrow')?.remove();
-    logo.classList.add('ws-brand-logo');
-    if (logo.matches('a')) brand.appendChild(logo);
-    else {
-      const brandLink = document.createElement('a');
-      brandLink.href = '/'; brandLink.className = 'ws-brand-name';
-      brandLink.appendChild(logo); brand.appendChild(brandLink);
-    }
-  } else {
-    const brandLink = document.createElement('a');
-    brandLink.href = '/'; brandLink.className = 'ws-brand-name'; brandLink.textContent = 'itsliventsev';
-    brand.appendChild(brandLink);
-  }
-  if (!brand.querySelector('.ws-brand-name') && logo?.matches('a')) logo.classList.add('ws-brand-name');
-  sidebar.appendChild(brand);
+  const sidebarHead = document.createElement('div');
+  sidebarHead.className = 'ws-sidebar-head';
+  const collapse = document.createElement('button');
+  collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg>';
+  sidebarHead.appendChild(collapse);
+  sidebar.appendChild(sidebarHead);
   const caption = document.createElement('p');
   caption.className = 'ws-sidebar-caption'; caption.textContent = 'РАБОЧЕЕ ПРОСТРАНСТВО'; sidebar.appendChild(caption);
   const nav = document.createElement('nav'); nav.className = 'ws-nav'; nav.setAttribute('aria-label', 'Основные разделы');
@@ -93,12 +80,11 @@
   const sidebarBottom = document.createElement('div'); sidebarBottom.className = 'ws-sidebar-bottom';
   sidebarBottom.innerHTML = '<div class="ws-sidebar-card"><strong>Портфолио</strong><p>Проекты, публикации и практические материалы.</p></div>';
   sidebar.appendChild(sidebarBottom);
-  const collapse = document.createElement('button'); collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = '<span aria-hidden="true">‹</span>'; sidebar.appendChild(collapse);
 
   const workspace = document.createElement('div'); workspace.className = 'ws-workspace';
   const topbar = document.createElement('header'); topbar.className = 'ws-topbar';
   const topContext = document.createElement('div'); topContext.className = 'ws-topbar-context';
-  const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'ws-icon-button ws-mobile-menu'; menu.setAttribute('aria-label', 'Открыть меню'); menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', sidebar.id); menu.innerHTML = '<span aria-hidden="true">☰</span>';
+  const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'ws-icon-button ws-mobile-menu'; menu.setAttribute('aria-label', 'Открыть меню'); menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', sidebar.id); menu.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
   topContext.appendChild(menu);
   if (crumbs) {
     crumbs.className = 'ws-breadcrumbs';
@@ -110,16 +96,29 @@
   topbar.appendChild(topContext);
   const actions = document.createElement('div'); actions.className = 'ws-topbar-actions';
   const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger'; searchButton.setAttribute('aria-label', 'Поиск по сайту');
-  searchButton.innerHTML = '<span aria-hidden="true">⌕</span><span class="ws-search-label">Поиск по материалам</span><kbd>⌘ K</kbd>';
+  searchButton.innerHTML = '<span class="ws-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></span><span class="ws-search-label">Поиск по материалам</span><kbd>⌘ K</kbd>';
   actions.appendChild(searchButton);
   if (languageButton) actions.appendChild(languageButton);
   if (readingMeter) actions.appendChild(readingMeter);
   if (themeButton) {
     themeButton.className = 'theme-toggle ws-icon-button';
-    themeButton.innerHTML = '<span class="ws-theme-indicator" aria-hidden="true">◐</span>';
+    themeButton.innerHTML = '<svg class="ws-theme-indicator" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13.1A8.8 8.8 0 1 1 10.9 3.3a7 7 0 0 0 9.8 9.8Z"/></svg>';
     actions.appendChild(themeButton);
   } else {
-    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'theme-toggle ws-icon-button'; theme.setAttribute('aria-label', 'Переключить тему'); theme.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false'); theme.innerHTML = '<span aria-hidden="true">◐</span>'; actions.appendChild(theme);
+    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'theme-toggle ws-icon-button'; theme.setAttribute('aria-label', 'Переключить тему'); theme.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false'); theme.innerHTML = '<svg class="ws-theme-indicator" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13.1A8.8 8.8 0 1 1 10.9 3.3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+    actions.appendChild(theme);
+  }
+  if (!document.documentElement.classList.contains('js-enabled')) {
+    actions.querySelector('.theme-toggle')?.addEventListener('click', () => {
+      const dark = document.documentElement.dataset.theme !== 'dark';
+      if (dark) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+      try { localStorage.setItem('itsliventsev-theme', dark ? 'dark' : 'light'); } catch (error) { /* приватный режим */ }
+      const metaColor = document.querySelector('meta[name="theme-color"]');
+      if (metaColor) metaColor.setAttribute('content', dark ? '#15161d' : '#f3f4f7');
+      const button = actions.querySelector('.theme-toggle');
+      button?.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      button?.setAttribute('aria-label', dark ? 'включить светлую тему' : 'включить тёмную тему');
+    });
   }
   topbar.appendChild(actions); workspace.appendChild(topbar);
 
@@ -137,6 +136,43 @@
   root.classList.add('ws-page-content');
   if (main) {
     main.classList.add('ws-content');
+    main.querySelectorAll('.st-section-num').forEach(el => el.setAttribute('data-ws-index', 'true'));
+    main.querySelectorAll('.drop-cap').forEach(el => el.setAttribute('data-ws-dropcap', 'true'));
+    main.querySelectorAll('.fn-ref').forEach(el => el.setAttribute('data-ws-article-reference', 'true'));
+    main.querySelectorAll('table').forEach(table => {
+      table.setAttribute('data-ws-table', 'true');
+      if (!table.parentElement?.hasAttribute('data-ws-table-wrap')) {
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('data-ws-table-wrap', 'true');
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+    });
+    if (pathname === '/projects.html') {
+      main.dataset.wsProjects = 'true';
+      main.querySelector('.ws-page-heading')?.setAttribute('data-ws-project-intro', 'true');
+    }
+    if (pathname === '/archive.html') {
+      main.querySelectorAll('details > summary').forEach(summary => {
+        summary.setAttribute('data-ws-archive-summary', 'true');
+        const meta = summary.lastElementChild;
+        meta?.setAttribute('data-ws-archive-meta', 'true');
+        meta?.querySelectorAll('span').forEach(item => {
+          if (/^\d+$/.test(item.textContent.trim())) item.setAttribute('data-ws-archive-count', 'true');
+        });
+      });
+    }
+    if (pathname === '/stands/glossary.html') {
+      main.dataset.wsGlossary = 'true';
+      main.querySelector('.glossary-toolbar')?.setAttribute('data-ws-glossary-toolbar', 'true');
+      main.querySelector('.glossary-filters')?.setAttribute('data-ws-glossary-filters', 'true');
+      main.querySelector('.glossary-toc')?.setAttribute('data-ws-glossary-toc', 'true');
+      main.querySelector('.glossary-status')?.setAttribute('data-ws-glossary-status', 'true');
+      main.querySelector('.glossary-empty')?.setAttribute('data-ws-glossary-empty', 'true');
+      main.querySelectorAll('.glossary-item').forEach(el => el.setAttribute('data-ws-glossary-term', 'true'));
+      main.querySelectorAll('.glossary-grid').forEach(el => el.setAttribute('data-ws-glossary-grid', 'true'));
+      main.querySelectorAll('.glossary-legend').forEach(el => el.setAttribute('data-ws-glossary-legend', 'true'));
+    }
     if (pathname.startsWith('/articles/') || pathname.startsWith('/blog/') || pathname.startsWith('/projects/')) {
       main.dataset.wsEditorial = pathname.startsWith('/articles/') ? 'article' : pathname.startsWith('/blog/') ? 'note' : 'case-study';
       const editorialHeader = main.querySelector('.prose-head');
@@ -157,7 +193,10 @@
       main.querySelectorAll('.relative').forEach(el => { if (el.querySelector('.range-seg')) el.dataset.wsRangeTrack = 'true'; });
       main.querySelectorAll('ol.list-none, ul.list-none').forEach(el => { el.dataset.wsListStyle = 'none'; });
       main.querySelectorAll('ol.list-decimal').forEach(el => { el.dataset.wsListStyle = 'decimal'; });
-      main.querySelectorAll('.chart-group').forEach(el => { el.dataset.wsChartGroup = 'true'; });
+      main.querySelectorAll('.chart-group').forEach(el => {
+        el.dataset.wsChartGroup = 'true';
+        el.dataset.wsChartDirection = /(?:^|\s)flex-col(?:\s|$)/.test(el.className) ? 'column' : 'row';
+      });
       main.querySelectorAll('.chart-bar').forEach(el => { el.dataset.wsChartBar = 'true'; el.dataset.wsTone = /bg-orange-400/.test(el.className) ? 'warm-soft' : /bg-orange-500/.test(el.className) ? 'warm' : 'cool'; });
       main.querySelectorAll('.chart-label').forEach(el => { el.dataset.wsChartLabel = 'true'; });
     }
@@ -236,10 +275,12 @@
     scope.querySelectorAll('.bento-grid, .glossary-grid').forEach(el => el.setAttribute('data-ws-grid', 'true'));
     scope.querySelectorAll('.grid').forEach(el => {
       const classes = String(el.className || '');
-      const dimensions = { base: classes.match(/(?:^|\s)grid-cols-(\d+)/)?.[1] || '1' };
+      const tokens = classes.split(/\s+/);
+      const baseClass = tokens.find(token => token.startsWith('grid-cols-'));
+      const dimensions = { base: baseClass ? baseClass.slice('grid-cols-'.length) : '1' };
       for (const breakpoint of ['sm', 'md', 'lg']) {
-        const match = classes.match(new RegExp('(?:^|\\s)' + breakpoint + ':grid-cols-(\\d+)'));
-        if (match) dimensions[breakpoint] = match[1];
+        const responsiveClass = tokens.find(token => token.startsWith(breakpoint + ':grid-cols-'));
+        if (responsiveClass) dimensions[breakpoint] = responsiveClass.slice((breakpoint + ':grid-cols-').length);
       }
       el.setAttribute('data-ws-grid', 'utility');
       el.style.setProperty('--ws-grid-base', dimensions.base);
@@ -249,10 +290,19 @@
       }
     });
     scope.querySelectorAll('.flex').forEach(el => {
+      const classes = String(el.className || '');
       el.setAttribute('data-ws-flex', 'true');
-      if (/\bjustify-between\b/.test(el.className)) el.setAttribute('data-ws-justify', 'between');
-      if (/\bitems-start\b/.test(el.className)) el.setAttribute('data-ws-align', 'start');
-      if (/\bitems-center\b/.test(el.className)) el.setAttribute('data-ws-align', 'center');
+      if (/\bflex-col\b/.test(classes)) el.setAttribute('data-ws-direction', 'column');
+      else if (/\bflex-row\b/.test(classes)) el.setAttribute('data-ws-direction', 'row');
+      if (/\bflex-nowrap\b/.test(classes)) el.setAttribute('data-ws-wrap', 'nowrap');
+      else if (/\bflex-wrap\b/.test(classes)) el.setAttribute('data-ws-wrap', 'wrap');
+      if (/\bjustify-between\b/.test(classes)) el.setAttribute('data-ws-justify', 'between');
+      else if (/\bjustify-center\b/.test(classes)) el.setAttribute('data-ws-justify', 'center');
+      else if (/\bjustify-end\b/.test(classes)) el.setAttribute('data-ws-justify', 'end');
+      if (/\bitems-start\b/.test(classes)) el.setAttribute('data-ws-align', 'start');
+      else if (/\bitems-center\b/.test(classes)) el.setAttribute('data-ws-align', 'center');
+      else if (/\bitems-end\b/.test(classes)) el.setAttribute('data-ws-align', 'end');
+      else if (/\bitems-baseline\b/.test(classes)) el.setAttribute('data-ws-align', 'baseline');
     });
     scope.querySelectorAll('.flex-1').forEach(el => el.setAttribute('data-ws-grow', 'true'));
     scope.querySelectorAll('.min-w-0').forEach(el => el.setAttribute('data-ws-min-width', 'true'));
@@ -298,11 +348,19 @@
       if (/\b(btn|flat-btn|primary)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary');
     });
     scope.querySelectorAll('a').forEach(el => { if (/\b(btn|flat-btn|quick-bubble|ws-button)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary'); });
-    scope.querySelectorAll('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev, .tag-hash').forEach(el => {
+    scope.querySelectorAll('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev, .tag-hash, .ws-tag, .gl-term-tag').forEach(el => {
+      const classes = typeof el.className === 'string' ? el.className : '';
       el.setAttribute('data-ws-tag', 'true');
-      if (/p-status-ready|is-complete|is-done|status-ok/.test(el.className)) el.setAttribute('data-ws-state', 'complete');
-      else if (/p-status-soon|is-locked|status-wait/.test(el.className)) el.setAttribute('data-ws-state', 'locked');
-      else if (/is-active|p-status-new/.test(el.className)) el.setAttribute('data-ws-state', 'active');
+      if (/pill-blue|ws-tag-blue/.test(classes)) el.dataset.wsTone = 'info';
+      else if (/pill-amber|pill-orange|ws-tag-orange/.test(classes)) el.dataset.wsTone = 'warm';
+      else if (/pill-red/.test(classes)) el.dataset.wsTone = 'danger';
+      else if (/pill-neutral/.test(classes)) el.dataset.wsTone = 'neutral';
+      else if (/ws-tag-green|gl-term-new/.test(classes)) el.dataset.wsTone = 'success';
+      else if (/ws-tag-purple/.test(classes)) el.dataset.wsTone = 'accent';
+      else if (/gl-term-tag/.test(classes)) el.dataset.wsTone = 'neutral';
+      if (/p-status-ready|is-complete|is-done|status-ok|ws-tag-green|gl-term-new/.test(classes)) el.setAttribute('data-ws-state', 'complete');
+      else if (/p-status-soon|is-locked|status-wait/.test(classes)) el.setAttribute('data-ws-state', 'locked');
+      else if (/is-active|p-status-new/.test(classes)) el.setAttribute('data-ws-state', 'active');
     });
   }
   decorate(root);

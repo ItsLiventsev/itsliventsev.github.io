@@ -30,10 +30,10 @@ ok(html.length === 75, 'ожидалось 75 HTML-страниц, получе�
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 for (const file of contentPages) {
   const source = read(file);
-  ok(source.includes('/assets/workspace-tokens.css?v=20261101r1'), file + ': отсутствуют новые токены');
-  ok(source.includes('/assets/workspace.css?v=20261101r1'), file + ': отсутствует новая система компонентов');
-  ok(source.includes('/assets/workspace-learning.css?v=20261101r1'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261101r1'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('/assets/workspace-tokens.css?v=20261101r2'), file + ': отсутствуют новые токены');
+  ok(source.includes('/assets/workspace.css?v=20261101r2'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261101r2'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261101r2'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
@@ -72,7 +72,7 @@ for (const feature of ['СетьПолис', 'ОфисПолис', 'ДатаПо
 ok(learningDirectory.includes('<title>Пространства · itsliventsev</title>') && learningDirectory.includes('<h1 id="learning-title">Пространства</h1>'), 'каталог должен называться «Пространства»');
 ok(read('projects.html').includes('ws-project-grid-balanced') && !read('projects.html').includes('ws-project-placeholder'), 'каталог проектов не должен заполняться пустыми заглушками');
 ok(ui.includes('[data-ws-article-layout]') && ui.includes('[data-ws-article-content]'), 'workspace.css: отсутствуют стили читабельной статьи');
-ok(ui.includes('overflow-x: hidden') && ui.includes('.ws-collapse { inset-inline-end: 9px') && ui.includes('.ws-mode-compact .ws-collapse { inset-block-start: auto'), 'sidebar должна быть без горизонтальной прокрутки, а кнопка — видимой и внутри рейла в обоих режимах');
+ok(ui.includes('overflow-x: hidden') && ui.includes('.ws-sidebar-head') && ui.includes('.ws-mode-compact .ws-collapse { transform: rotate(180deg)'), 'sidebar должна быть без горизонтальной прокрутки, а кнопка сворачивания — видимой в шапке рейла и корректно поворачиваться в компактном режиме');
 ok(read('index.html').includes('data-target="5">5</span>') && read('assets/site.js').includes('let current = parseInt(el.textContent, 10) || 0'), 'счётчики профиля не должны показывать временный ноль до прокрутки');
 ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(ui), 'новая система обращается к старым CSS-классам');
 ok(!/\.(?:site-header|site-nav|global-sidebar|hero-title|card|p-card)\b/.test(homeUi), 'новый dashboard обращается к старым CSS-классам');
@@ -83,11 +83,11 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r1', 'assets/workspace.css?v=20261101r1', 'assets/workspace-learning.css?v=20261101r1', 'assets/workspace.js?v=20261101r1']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r2', 'assets/workspace.css?v=20261101r2', 'assets/workspace-learning.css?v=20261101r2', 'assets/workspace.js?v=20261101r2']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r1') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r1') && officeBuilder.includes('assets/workspace.js?v=20261101r1'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r2') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r2') && officeBuilder.includes('assets/workspace.js?v=20261101r2'), 'build-office.js: генератор не создаёт страницы на новом shell');
 ok(exists('REDESIGN_PLAN.md') && read('REDESIGN_PLAN.md').includes('Workspace / Learning OS'), 'нет плана архитектуры REDESIGN_PLAN.md');
 
 /* Local search, page links, file formats and script syntax. */
