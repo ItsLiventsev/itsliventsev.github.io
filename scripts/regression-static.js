@@ -5,7 +5,7 @@ const path = require('path');
 const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '20261031bd';
+const VERSION = '20261031be';
 let pass = 0, fail = 0;
 const fails = [];
 function ok(cond, msg) { if (cond) pass++; else { fail++; fails.push(msg); } }
@@ -463,7 +463,7 @@ for (const f of allHtml) {
   const c = read(f);
   ok(!c.includes('wght@300'), f + ': шрифтовая строка со стартом 300');
   if (c.includes('fonts.googleapis.com')) ok(c.includes('Source+Serif+4:ital,opsz,wght@0,8..60,600') && c.includes('Golos+Text:wght@400'), f + ': нет пары SOFT Source Serif 4+Golos Text');
-  ok(!c.includes('?v=20261031bc') && !c.includes('?v=20261031bb') && !c.includes('?v=20261031ba'), f + ': не поднята версия ассетов');
+  ok(!c.includes('?v=20261031bd') && !c.includes('?v=20261031bc') && !c.includes('?v=20261031bb'), f + ': не поднята версия ассетов');
 }
 
 /* 25. Связка лига ↔ команды ↔ биржа ↔ ДатаПолис */
@@ -808,6 +808,24 @@ ok(stCss.includes('.rw-card:hover, .lg-award:hover, .ach-card.is-unlocked:hover,
 const unboundedLinks = allHtml.filter(f => read(f).includes('family=Unbounded'));
 ok(unboundedLinks.length === 0, 'Unbounded не выведен из шрифтовых ссылок: ' + unboundedLinks.slice(0, 4).join(', '));
 ok(!allHtml.some(f => read(f).includes('content="#f4efe4"')), 'theme-color: старая бумага #f4efe4 не заменена на #f7f6f2');
+
+
+/* дизайн 2026 · волна 24: PHASE2 — wiki-архив, bento-главная, крошки */
+const archHtml = read('archive.html');
+ok(siteCss.includes('.wiki-layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }') && siteCss.includes('grid-template-columns: 16.5rem minmax(0, 1fr);'), 'site.css: wiki-лейаут не введён (мобайл+десктоп)');
+ok(siteCss.includes('.wiki-nav {\n  align-self: start;') && siteCss.includes('position: sticky; top: calc(var(--header-reserve) + 1rem);'), 'site.css: сайдбар не sticky на десктопе');
+ok(siteCss.includes('.wiki-main { min-width: 0; }'), 'site.css: wiki-main без min-width guard');
+ok(archHtml.includes('class="wiki-layout"') && archHtml.includes('class="wiki-nav"') && archHtml.includes('data-wiki-filter="#wiki-materials"'), 'archive.html: wiki-разметка неполна (aside+поиск)');
+ok(archHtml.includes('id="acc-programs"') && archHtml.includes('id="acc-empty"') && (archHtml.match(/id="acc-/g) || []).length === 6, 'archive.html: id категорий аккордеонов не проставлены (6)');
+ok((archHtml.match(/data-wiki-item/g) || []).length === 9, 'archive.html: в панели не все 9 материалов');
+ok(read('assets/site.js').includes("document.querySelectorAll('input[data-wiki-filter]')") && read('assets/site.js').includes("item.hidden = q !== '' && !item.textContent.toLowerCase().includes(q);"), 'site.js: движок wiki-фильтра не добавлен');
+ok(read('index.html').includes('class="bento-home"'), 'index.html: main не в bento-режиме');
+ok(/@media \(min-width: 1080px\) \{\s*\.bento-home \{\s*display: grid;\s*grid-template-columns: repeat\(12, minmax\(0, 1fr\)\);/.test(siteCss) && siteCss.includes('.bento-home > #stack { grid-column: span 4; }') && siteCss.includes('.bento-home > #resources { grid-column: span 8; }') && siteCss.includes('.bento-home > #cv { grid-column: span 8; }') && siteCss.includes('.bento-home > section:last-of-type { grid-column: span 4; }'), 'site.css: bento-раскладка 4/8-8/4 не собрана');
+ok(siteCss.includes('.bento-home > #stack .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }') && siteCss.includes('.bento-home > section:last-of-type .grid { grid-template-columns: 1fr; }'), 'site.css: внутренние сетки bento не переопределены');
+const crumbArchives = ['computer-networks', 'info-encoding', 'intro-to-databases', 'it-docs-monitoring', 'mesh-upload', 'network-load', 'operation-migration', 'password-reset', 'vosh-infosec'];
+const noCrumbs = crumbArchives.filter(n => !read('archive/' + n + '.html').includes('class="crumbs mb-6"'));
+ok(noCrumbs.length === 0, 'крошки отсутствуют в методичках: ' + noCrumbs.join(', '));
+ok(read('AUDIT_REPORT.md').includes('Фаза 2 (волна 24, выполнена)'), 'AUDIT_REPORT: фаза 2 не отмечена выполненной');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }

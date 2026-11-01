@@ -14,10 +14,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap"></noscript>
-<link rel="stylesheet" href="assets/site.css?v=20261031bd">
-<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031bd">
-<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031bd">
-<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031bd">
+<link rel="stylesheet" href="assets/site.css?v=20261031be">
+<link rel="stylesheet" href="assets/tw-fallback.css?v=20261031be">
+<link rel="stylesheet" href="assets/shared-chrome.css?v=20261031be">
+<link rel="stylesheet" href="assets/tw-compiled.css?v=20261031be">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -92,6 +92,37 @@
     <p class="hero-sub text-xs sm:text-sm md:text-base">// старые материалы · черновики · то, что жалко удалить</p>
   </section>
 
+  <!-- Wiki-навигация: категории + быстрый переход + поиск -->
+  <div class="wiki-layout">
+    <aside class="wiki-nav" aria-label="Навигация по архиву">
+      <input type="search" class="wiki-search" data-wiki-filter="#wiki-materials" placeholder="поиск материала…" aria-label="Поиск материала в архиве">
+      <div class="wiki-group">
+        <div class="wiki-label">категории</div>
+        <nav class="wiki-links">
+          <a href="#acc-programs"><span class="mono">01</span>учебные программы</a>
+          <a href="#acc-tech"><span class="mono">02</span>технические дисциплины</a>
+          <a href="#acc-practice"><span class="mono">03</span>практикумы и кейсы</a>
+          <a href="#acc-digital"><span class="mono">04</span>цифровая грамотность и ии</a>
+          <a href="#acc-pubs"><span class="mono">05</span>публикации и дпо</a>
+        </nav>
+      </div>
+      <div class="wiki-group">
+        <div class="wiki-label">все материалы</div>
+        <nav class="wiki-links" id="wiki-materials">
+          <a href="archive/computer-networks.html" data-wiki-item><span class="mono">ar</span>Компьютерные сети</a>
+          <a href="archive/info-encoding.html" data-wiki-item><span class="mono">ar</span>Информация. Кодирование</a>
+          <a href="archive/intro-to-databases.html" data-wiki-item><span class="mono">ar</span>Введение в базы данных</a>
+          <a href="archive/it-docs-monitoring.html" data-wiki-item><span class="mono">ar</span>IT-документооборот и мониторинг</a>
+          <a href="archive/mesh-upload.html" data-wiki-item><span class="mono">ar</span>Загрузка сценариев в МЭШ</a>
+          <a href="archive/network-load.html" data-wiki-item><span class="mono">ar</span>Устранение паразитирующей нагрузки</a>
+          <a href="archive/operation-migration.html" data-wiki-item><span class="mono">ar</span>Операция «Миграция»</a>
+          <a href="archive/password-reset.html" data-wiki-item><span class="mono">ar</span>Восстановление пароля owa.mos.ru</a>
+          <a href="archive/vosh-infosec.html" data-wiki-item><span class="mono">ar</span>ВОШ: Информационная безопасность</a>
+        </nav>
+      </div>
+    </aside>
+    <div class="wiki-main">
+
   <!-- Disclaimer -->
   <section class="mb-8">
     <div class="notice notice-info" style="border-style:dashed;">
@@ -119,7 +150,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
 
       <!-- 1 -->
-      <details class="card accordion hoverable">
+      <details class="card accordion hoverable" id="acc-programs">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono">▸</span>
@@ -158,7 +189,7 @@
       </details>
 
       <!-- 2 -->
-      <details class="card accordion hoverable">
+      <details class="card accordion hoverable" id="acc-tech">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono">▸</span>
@@ -203,7 +234,7 @@
       </details>
 
       <!-- 3 -->
-      <details class="card accordion hoverable">
+      <details class="card accordion hoverable" id="acc-practice">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono">▸</span>
@@ -232,7 +263,7 @@
       </details>
 
       <!-- 4 -->
-      <details class="card accordion hoverable">
+      <details class="card accordion hoverable" id="acc-digital">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono">▸</span>
@@ -260,7 +291,7 @@
       </details>
 
       <!-- 5 -->
-      <details class="card accordion hoverable">
+      <details class="card accordion hoverable" id="acc-pubs">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono">▸</span>
@@ -283,7 +314,7 @@
       </details>
 
       <!-- 6 -->
-      <details class="card accordion hoverable" style="border-color:color-mix(in srgb, var(--neo-verm) 30%, transparent);">
+      <details class="card accordion hoverable" id="acc-empty" style="border-color:color-mix(in srgb, var(--neo-verm) 30%, transparent);">
         <summary class="flex items-center justify-between p-4 sm:p-5">
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <span class="chevron mono" style="color:var(--neo-verm);">▸</span>
@@ -318,6 +349,9 @@
     </a>
   </section>
 
+    </div><!-- /wiki-main -->
+  </div><!-- /wiki-layout -->
+
     </main>
 
 <footer class="site-footer">
@@ -328,7 +362,7 @@
 
 </div>
 
-<script src="assets/site.js?v=20261031bd"></script>
+<script src="assets/site.js?v=20261031be"></script>
 <script>
   /* Метка # в заголовке: автопрокрутка + ускорение по клику */
   const mark = document.getElementById('title-mark');
@@ -346,6 +380,6 @@
     }, 70);
   });
 </script>
-<script src="assets/shared-chrome.js?v=20261031bd"></script>
+<script src="assets/shared-chrome.js?v=20261031be"></script>
 </body>
 </html>
