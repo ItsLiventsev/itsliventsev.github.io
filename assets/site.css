@@ -3740,3 +3740,78 @@ a.card:hover, .card.hoverable:hover, .card:hover, a.p-card:hover, .p-card:hover,
   margin-top: .45rem;
 }
 .prose-measure article h2 { flex-wrap: wrap; }
+
+/* ==========================================================================
+   PHASE2 2026 · волна 24: wiki-лейаут архива, bento-дашборд главной
+   ========================================================================== */
+/* Wiki: боковая панель категорий + основной поток (паттерн Fikri Studio) */
+.wiki-layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+.wiki-nav {
+  align-self: start;
+  padding: 1.1rem 1.1rem 1.25rem;
+  background: var(--neo-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--neo-hard);
+}
+.wiki-search {
+  width: 100%;
+  padding: .55rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--neo-surface-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.wiki-search::placeholder { color: var(--faint); }
+.wiki-search:focus { outline: 3px solid var(--neo-verm); outline-offset: 2px; }
+.wiki-group + .wiki-group { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--border); }
+.wiki-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--faint);
+  margin-bottom: .45rem;
+}
+.wiki-links { display: grid; gap: .1rem; }
+.wiki-links a {
+  display: flex;
+  gap: .55rem;
+  align-items: baseline;
+  padding: .38rem .55rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+}
+.wiki-links a .mono { font-size: var(--fs-micro); color: var(--faint); }
+.wiki-links a:hover { background: var(--neo-surface-2); color: var(--accent); }
+.wiki-links a:focus-visible { outline: 3px solid var(--neo-verm); outline-offset: 2px; }
+.wiki-main { min-width: 0; }
+@media (min-width: 1024px) {
+  .wiki-layout { grid-template-columns: 16.5rem minmax(0, 1fr); gap: 2rem; }
+  .wiki-nav { position: sticky; top: calc(var(--header-reserve) + 1rem); max-height: calc(100vh - var(--header-reserve) - 2rem); overflow: auto; }
+}
+
+/* Bento-дашборд главной: асимметричная модульная сетка (паттерн Corebit) */
+@media (min-width: 1080px) {
+  .bento-home {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.25rem 1.75rem;
+    align-items: start;
+  }
+  .bento-home > .hero { grid-column: 1 / -1; }
+  .bento-home > #stack { grid-column: span 4; }
+  .bento-home > #stack .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bento-home > #resources { grid-column: span 8; }
+  .bento-home > #resources .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bento-home > #cv { grid-column: span 8; }
+  .bento-home > #cv .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bento-home > section:last-of-type { grid-column: span 4; }
+  .bento-home > section:last-of-type .grid { grid-template-columns: 1fr; }
+}

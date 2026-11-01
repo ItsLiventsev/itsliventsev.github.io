@@ -151,6 +151,21 @@ document.documentElement.classList.add('js-enabled');
   }
 })();
 
+/* ---------- Wiki-фильтр: поиск по материалам боковой панели ---------- */
+(function () {
+  document.querySelectorAll('input[data-wiki-filter]').forEach((input) => {
+    const list = document.querySelector(input.dataset.wikiFilter);
+    if (!list) return;
+    const items = list.querySelectorAll('[data-wiki-item]');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      items.forEach((item) => {
+        item.hidden = q !== '' && !item.textContent.toLowerCase().includes(q);
+      });
+    });
+  });
+})();
+
 /* ---------- Счётчики с анимацией ---------- */
 (function () {
   const counters = document.querySelectorAll('.counter[data-target]');
