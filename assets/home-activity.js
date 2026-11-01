@@ -438,6 +438,8 @@
     doubled.forEach((item, idx) => {
       const pill = document.createElement('button');
       pill.type='button';
+      // The second copy is only for the visual loop, not another tab stop.
+      if (idx >= feedData.length) { pill.setAttribute('aria-hidden', 'true'); pill.tabIndex = -1; }
       pill.setAttribute('data-ws-activity-pill','true');
       pill.setAttribute('data-tone', item.tag);
       pill.dataset.tag=item.tag;

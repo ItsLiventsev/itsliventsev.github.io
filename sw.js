@@ -1,7 +1,7 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v5';
+const CACHE = 'itsliventsev-v6';
 const PRECACHE = [
-  '/', '/index.html',
+  '/', '/index.html', '/assets/offline.html',
   '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
   '/assets/workspace.js', '/assets/i18n.js', '/assets/home-activity.js',
   '/assets/icons.svg', '/assets/favicon.svg',
@@ -38,8 +38,8 @@ self.addEventListener('fetch', event => {
       const cached = await cache.match(request);
       if (cached) return cached;
       if (request.mode === 'navigate') {
-        const home = await cache.match('/index.html') || await cache.match('/');
-        if (home) return home;
+        const offline = await cache.match('/assets/offline.html');
+        if (offline) return offline;
       }
       // Never respond to an unavailable JS/CSS/image request with HTML.
       return new Response('Offline', { status: 503, statusText: 'Service Unavailable', headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
