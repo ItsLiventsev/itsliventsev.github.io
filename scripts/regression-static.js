@@ -204,7 +204,7 @@ for (const f of allHtml) {
   for (let r of refs) {
     if (/['+\s]/.test(r)) continue; // JS-шаблоны вида blog/' + esc(p.file) + '
     if (/^https?:|^mailto:|^tel:|^data:/.test(r)) continue;
-    const target = path.normalize(path.join(path.dirname(f), r));
+    const target = path.normalize(r.startsWith('/') ? r.slice(1) : path.join(path.dirname(f), r));
     ok(exists(target), f + ': битая ссылка ' + r);
   }
 }
@@ -707,7 +707,7 @@ ok(siteCss.includes('.prose-measure { max-width: 44rem;'), 'длина стро�
 ok(siteCss.includes('width: 2.75rem;\n  height: 2.75rem;'), 'to-top: тач-цель < 44px');
 ok(siteCss.includes('animation-timeline: scroll(root block)') && siteCss.includes('@keyframes neo-scroll-progress'), 'нет CSS-first скролл-прогресса');
 ok(!read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html').includes('text-[15px]'), 'статья: кегль 15px на мобиле не устранён');
-ok(exists('docs/design-system.md') && read('docs/design-system.md').includes('Наследуемость'), 'docs/design-system.md отсутствует или неполон');
+ok(exists('docs/design-system.md') && read('docs/design-system.md').includes('SOFT SHELL 2026') && read('docs/design-system.md').includes('Компонентный контракт'), 'docs/design-system.md отсутствует или неполон');
 
 /* дизайн 2026 · волна 17: mechanics — reduce-safe прогресс, единый hover */
 ok(/@media \(prefers-reduced-motion: reduce\) \{\n    \.scroll-progress \{ animation: none; \}\n  \}/.test(siteCss), 'site.css: прогресс не защищён от reduce-заморозки');
@@ -773,7 +773,7 @@ ok(read('blog/2026-10-26-kak-ustroen-etot-blog.html').includes('class="crumbs mb
 const noMeta = ['index.html', 'projects.html', 'blog.html', 'stands/index.html', 'admin.html'].filter(f => !read(f).includes('name="theme-color"'));
 ok(noMeta.length === 0, 'theme-color отсутствует: ' + noMeta.join(', '));
 ok(!read('index.html').includes('content="#fafafa"') && !read('stands/index.html').includes('content="#0b0e11"'), 'theme-color: легаси-хексы #fafafa/#0b0e11 не выведены');
-ok(read('assets/site.js').includes("theme === 'dark' ? '#14110a' : '#f7f6f2'"), 'site.js: синк theme-color не в бумажных тонах');
+ok(read('assets/site.js').includes("theme === 'dark' ? '#11151b' : '#f5f6f8'"), 'site.js: синк theme-color не в бумажных тонах');
 
 
 /* дизайн 2026 · волна 22: MISPRINT2 — «сети/данные» на зонах и главах */
@@ -825,7 +825,7 @@ ok(siteCss.includes('.bento-home > #stack .grid { grid-template-columns: repeat(
 const crumbArchives = ['computer-networks', 'info-encoding', 'intro-to-databases', 'it-docs-monitoring', 'mesh-upload', 'network-load', 'operation-migration', 'password-reset', 'vosh-infosec'];
 const noCrumbs = crumbArchives.filter(n => !read('archive/' + n + '.html').includes('class="crumbs mb-6"'));
 ok(noCrumbs.length === 0, 'крошки отсутствуют в методичках: ' + noCrumbs.join(', '));
-ok(read('AUDIT_REPORT.md').includes('Фаза 2 (волна 24, выполнена)'), 'AUDIT_REPORT: фаза 2 не отмечена выполненной');
+ok(read('AUDIT_REPORT.md').includes('SOFT SHELL 2026') && read('AUDIT_REPORT.md').includes('0 структурных ошибок'), 'AUDIT_REPORT: итоговый аудит не отражён');
 
 
 /* дизайн 2026 · волна 25: TOKENS — тона, шкала дисплея, Avatar, чистка */
@@ -849,6 +849,22 @@ const art25 = read('articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystv
 ok(art25.includes('class="article-authors"') && (art25.match(/class="avatar avatar-/g) || []).length === 3 && art25.includes('aria-hidden="true"'), 'статья: авторы не на чипах с Avatar (3 шт)');
 ok(siteCss.includes('.tag-verm   { color: var(--tone-verm);') && !siteCss.includes('.tag-blue'), 'site.css: tag-verm/tag-blue не решены');
 ok(siteCss.includes('.notice-info .notice-label { color: var(--nav-mint-ink); }'), 'site.css: синий лейбл notice-info не выведен');
+
+
+
+/* 26. SOFT SHELL — один адаптивный UI-слой и клавиатурный поиск на всех страницах */
+const shellCss = read('assets/soft-shell.css');
+const shellJs = read('assets/soft-shell.js');
+const searchIndex = JSON.parse(read('assets/search-index.json'));
+const contentPages = allHtml.filter(f => f !== 'projects/glossary.html');
+ok(contentPages.every(f => read(f).includes('/assets/soft-shell.css?v=20261101')), 'soft-shell.css не подключён на каждой содержательной HTML-странице');
+ok(contentPages.every(f => read(f).includes('/assets/soft-shell.js?v=20261101')), 'soft-shell.js не подключён на каждой содержательной HTML-странице');
+ok(shellCss.includes('--bg: #f5f6f8;') && shellCss.includes('--surface: #ffffff;') && shellCss.includes('--radius-lg: 24px;'), 'soft-shell: нарушены базовые soft UI-токены');
+ok(shellCss.includes('.bento-home > .hero') && shellCss.includes('grid-template-columns: repeat(12, minmax(0, 1fr))'), 'soft-shell: нет адаптивной bento-сетки главной');
+ok(shellCss.includes('.site-search-dialog') && shellCss.includes('.wiki-layout'), 'soft-shell: отсутствуют паттерны поиска и wiki');
+ok(shellJs.includes("event.metaKey || event.ctrlKey") && shellJs.includes("/assets/search-index.json"), 'soft-shell: поиск без горячей клавиши или локального индекса');
+ok(searchIndex.length === 72 && searchIndex.every(x => x.title && x.url.startsWith('/') && x.category), 'search-index: ожидалось 72 локальные записи с заголовком, URL и категорией');
+ok(!read('assets/site.js').includes("theme === 'dark' ? '#14110a' : '#f7f6f2'"), 'site.js: осталось прежнее theme-color поведение');
 
 console.log('PASS ' + pass + ' / FAIL ' + fail);
 if (fail) { console.log(fails.slice(0, 40).join('\n')); process.exit(1); }
