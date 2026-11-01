@@ -314,7 +314,8 @@
   opacity:0; transform: translateY(8px); animation: ws-enter 420ms cubic-bezier(.2,.8,.2,1) forwards;
 }
 [data-ws-activity-item]:hover { transform: translateY(-1px); border-color: var(--ws-line-strong); box-shadow: var(--ws-shadow-sm); }
-[data-ws-activity-item][data-filtered="true"] { max-height:0; opacity:0; padding-top:0; padding-bottom:0; margin:0; border-width:0; transform:scale(.98); pointer-events:none; overflow:hidden; }
+[data-ws-activity-item][data-filtered="true"] { display:none !important; }
+[data-ws-activity-item] { transition: opacity 320ms ease, transform 320ms cubic-bezier(.2,.8,.2,1); }
 [data-ws-activity-item-line] { width:2px; height:100%; min-height:32px; justify-self:center; border-radius:2px; background: var(--ws-line); position:relative; }
 [data-ws-activity-item-line]::after {
   content:""; position:absolute; left:50%; top:50%; width:10px; height:10px; transform:translate(-50%,-50%);
@@ -376,8 +377,7 @@
 }
 [data-ws-activity-intro] { display: grid; gap: 8px; }
 [data-ws-activity-copy] { margin: 0; font-size: 12px; line-height: 1.65; }
-[data-ws-activity-cycle] { gap: 6px; padding: 8px 10px; border: 1px dashed var(--ws-line); border-radius: 10px; background: var(--ws-surface-soft); }
-[data-ws-activity-cycle] span { font-size: 10px; }
+/* cycle pill — см. cozy блок 686+ */
 [data-ws-activity-metrics] { gap: 8px; }
 [data-ws-activity-metric] { min-height: 78px; padding: 10px 12px; }
 [data-ws-activity-metric] > strong, [data-ws-activity-metric] > time { font-size: 20px; }
@@ -411,7 +411,7 @@
 [data-ws-activity-cycle] span:nth-child(even):nth-child(4) { animation-delay: 200ms; }
 [data-ws-activity-cycle] span:nth-child(even):nth-child(6) { animation-delay: 400ms; }
 @keyframes ws-cycle-arrow { 0%,100% { transform: translateX(0); opacity: .7; } 50% { transform: translateX(3px); opacity: 1; } }
-[data-ws-activity-cycle].is-active { border-color: var(--ws-accent); background: var(--ws-accent-wash); }
+/* v18: is-active для cycle не нужен — pills сами красятся */
 
 /* pulse dot enhanced (React Bits / Magic UI) */
 [data-ws-activity-dot][data-live="true"]::after {
@@ -973,7 +973,8 @@ html { scroll-behavior: smooth; }
 
 /* ── v13: Kanban drag-n-drop polish ── */
 [data-ws-activity-kanban] { gap: 14px; }
-.ws-kanban-col { border: 1px dashed var(--ws-line); border-radius: 14px; background: var(--ws-surface-soft); min-height: 160px; transition: border-color 200ms, background 200ms, box-shadow 200ms; }
+.ws-kanban-col { background: var(--ws-surface-soft); border-radius: 12px; padding: 10px; min-height: 120px; border:1px solid var(--ws-line); transition: border-color 200ms, background 200ms, box-shadow 200ms, transform 160ms ease; }
+.ws-kanban-col:hover { transform: translateY(-1px); }
 .ws-kanban-col.is-drop-target { border-color: var(--ws-accent); background: var(--ws-accent-wash); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ws-accent) 22%, transparent); }
 .ws-kanban-card { cursor: grab; transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease; }
 .ws-kanban-card:active { cursor: grabbing; }
@@ -988,11 +989,13 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { .ws-reveal { opacity: 1; transform: none; transition: none; } }
 
 /* ── v13: offline banner ── */
-.ws-offline-banner { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #f0c36d; background: #fff8e1; color: #7a5a12; font: 600 11px/1.4 var(--ws-font); transform: translateY(-100%); opacity: 0; transition: transform 220ms ease, opacity 220ms ease; }
-.ws-offline-banner.is-visible { transform: none; opacity: 1; }
-.ws-offline-banner button { margin-left: auto; padding: 4px 8px; border-radius: 999px; border: 1px solid #e6c17a; background: #fff; font: 700 10px var(--ws-font); cursor: pointer; }
-:root[data-theme="dark"] .ws-offline-banner { background: #2e2712; color: #f3d58b; border-color: #5a4a1e; }
-:root[data-theme="dark"] .ws-offline-banner button { background: #1a1c16; color: #f3d58b; border-color: #5a4a1e; }
+/* offline — toast-пилюля, как системный статус, не бар */
+.ws-offline-banner { position: fixed; left: 50%; bottom: 18px; z-index: 95; display: flex; align-items: center; gap: 10px; padding: 10px 14px; max-width: min(92vw, 520px); border: 1px solid var(--ws-line); border-radius: 999px; background: var(--ws-surface); color: var(--ws-ink); box-shadow: var(--ws-shadow-lg); font: 600 12px/1 var(--ws-font); transform: translate(-50%, 120%); opacity: 0; pointer-events: none; transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 220ms ease; }
+.ws-offline-banner.is-visible { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.ws-offline-banner button { margin-left: 4px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--ws-line); background: var(--ws-ink); color: var(--ws-surface); font: 700 11px var(--ws-font); cursor: pointer; transition: opacity 180ms, transform 180ms; }
+.ws-offline-banner button:hover { opacity: .9; transform: translateY(-1px); }
+.ws-offline-banner span[aria-hidden] { width: 8px; height: 8px; border-radius: 50%; background: var(--ws-orange); box-shadow: 0 0 0 4px var(--ws-orange-wash); animation: ws-pulse 1.6s infinite; }
+
 
 /* ── v13: dashboard sparkline tooltip ── */
 .ws-chart-bar { position: relative; }
@@ -1109,3 +1112,14 @@ html { scroll-behavior: smooth; }
 .ws-kanban-col { background:var(--ws-surface-soft); border-radius:12px; padding:10px; min-height:120px; border:1px solid var(--ws-line); }
 .ws-kanban-head { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
 .ws-kanban-list { display:grid; gap:6px; }
+
+
+/* v18: шрифты ровно — единый масштаб + переносы */
+.ws-page-content :where(p,li,a,span,strong) { overflow-wrap: anywhere; word-break: break-word; hyphens: auto; }
+.ws-home-root, .ws-dashboard-grid, .ws-section, [data-ws-activity-card], [data-ws-activity-feed], .ws-panel, .ws-resource-grid { container-type: inline-size; }
+.ws-course-card, .ws-panel, .ws-resource-grid a, .ws-contact-grid a, [data-ws-activity-card], [data-ws-activity-feed],
+[data-ws-activity-metric], .ws-kanban-col, .ws-kanban-card { min-width: 0; overflow-wrap: anywhere; }
+.ws-page-content { font-variant-ligatures: common-ligatures; hanging-punctuation: first allow-end last; }
+@media (max-width: 720px) { .ws-page-content h1 { font-size: 26px; } }
+
+*,:before,:after { box-sizing:border-box; }

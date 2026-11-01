@@ -259,6 +259,7 @@
         }
       });
     }
+    window.__wsRebindKanban = function(){ document.querySelectorAll('[data-kanban-list] [data-kanban-card]').forEach(function(el){ if(!el.hasAttribute('draggable')) el.setAttribute('draggable','true'); }); };
     function updateCounts(){
       Object.keys(kanbanLists).forEach(function(k){
         var list = kanbanLists[k]; var cnt = kanbanCounts[k];
@@ -452,55 +453,24 @@
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
     });
-    // FLIP: animate container height smoothly, items stagger fade + scale without abrupt collapse
     if (timeline) {
-      const prefersHeightAnim = !reduceMotion;
-      const startH = timeline.offsetHeight;
-      // Prepare: lock current height to avoid jump
-      if (prefersHeightAnim) {
-        timeline.style.overflow = 'hidden';
-        timeline.style.height = startH + 'px';
-        timeline.style.transition = 'height 420ms cubic-bezier(.2,.8,.2,1)';
-      }
       const rows = [...timeline.children];
-      // Apply filtered state instantly for measurement (no stagger for height)
-      rows.forEach(row=>{
-        const shouldShow = tag==='all' || row.dataset.tag===tag;
-        if (shouldShow) row.removeAttribute('data-filtered');
-        else row.setAttribute('data-filtered','true');
+      rows.forEach((row,i)=>{
+        const show = tag==='all' || row.dataset.tag===tag;
+        if (show) {
+          row.removeAttribute('data-filtered');
+          if (!reduceMotion) {
+            row.style.opacity='0'; row.style.transform='translateY(4px)';
+            requestAnimationFrame(()=> requestAnimationFrame(()=>{
+              row.style.transition='opacity 280ms ease '+(i*28)+'ms, transform 320ms cubic-bezier(.2,.8,.2,1) '+(i*28)+'ms';
+              row.style.opacity='1'; row.style.transform='translateY(0)';
+              setTimeout(()=>{ row.style.transition=''; row.style.opacity=''; row.style.transform=''; }, 500+(i*28));
+            }));
+          }
+        } else {
+          row.setAttribute('data-filtered','true');
+        }
       });
-      // Measure end height (force reflow)
-      const endH = timeline.scrollHeight;
-      if (prefersHeightAnim) {
-        // Animate container height
-        requestAnimationFrame(()=>{
-          timeline.style.height = endH + 'px';
-          // staggered item entrance: fade + scale
-          rows.forEach((row, i)=>{
-            if (row.hasAttribute('data-filtered')) return;
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(6px) scale(.98)';
-            setTimeout(()=>{
-              row.style.transition = 'opacity 320ms ease '+(i*36)+'ms, transform 320ms cubic-bezier(.2,.8,.2,1) '+(i*36)+'ms';
-              row.style.opacity = '1';
-              row.style.transform = 'translateY(0) scale(1)';
-            }, 16);
-          });
-        });
-        const cleanup = ()=>{
-          timeline.style.height = '';
-          timeline.style.overflow = '';
-          timeline.style.transition = '';
-          rows.forEach(r=>{ r.style.opacity=''; r.style.transform=''; r.style.transition=''; });
-          timeline.removeEventListener('transitionend', cleanup);
-        };
-        timeline.addEventListener('transitionend', cleanup);
-        // fallback cleanup
-        setTimeout(cleanup, 600);
-      } else {
-        // reduced motion: no animation
-        rows.forEach(row=>{ row.style.opacity=''; row.style.transform=''; });
-      }
     }
     if (tickerTrack) {
       [...tickerTrack.children].forEach(pill=>{
@@ -533,7 +503,7 @@
       // sync feedData for timeline consistency occasionally
       if (Math.random() < .35) {
         feedData[idx].status = next;
-        renderTimeline();
+        renderTimeline(); renderKanban(feedData);
       }
     }, 2600);
   }
@@ -582,18 +552,25 @@
   // initial paint
   renderTicker();
   renderTimeline();
+  renderKanban(feedData);
   renderChart([]);
   // — animated cycle (Agent-Motion: sequential highlight + dash flow)
+  // v18: цикл — мягкий подсвет активного шага, без дерганий
   const cycleEl = root.querySelector('[data-ws-activity-cycle]');
   if (cycleEl && !reduceMotion) {
-    const steps = [...cycleEl.querySelectorAll('span:not([aria-hidden])')];
-    let cycleIdx = 0;
-    setInterval(()=>{
-      steps.forEach((el,i)=> el.style.opacity = i===cycleIdx*2 ? '1' : i===cycleIdx*2+1 ? '1' : '.85');
-      steps.forEach((el,i)=> { if(i%2===1) el.style.transform = cycleIdx*2===i-1 ? 'translateX(4px)' : 'translateX(0)'; });
-      cycleEl.classList.toggle('is-active', cycleIdx===3);
-      cycleIdx = (cycleIdx+1)%4;
-    }, 1200);
+    const pills = [...cycleEl.querySelectorAll('span:not([aria-hidden])')];
+    let idx = 0;
+    const tick = ()=>{
+      pills.forEach((p,i)=>{
+        const active = i===idx;
+        p.style.transform = active ? 'translateY(-1px) scale(1.02)' : 'translateY(0) scale(1)';
+        p.style.boxShadow = active ? '0 4px 12px rgba(16,24,40,.12)' : 'none';
+        p.style.filter = active ? 'brightness(1.04)' : 'brightness(1)';
+      });
+      idx = (idx+1)%pills.length;
+    };
+    tick();
+    setInterval(tick, 1600);
   }
 
   startShuffle();
@@ -614,7 +591,7 @@
 
   window.addEventListener('itsliventsev:languagechange', ()=>{
     if (currentData) render(currentData, currentState); else setState(currentState);
-    renderTicker(); renderTimeline(); renderChart(commitsCache);
+    renderTicker(); renderTimeline(); renderKanban(feedData); renderChart(commitsCache);
   });
 
   // pause ticker on prefers-reduced-motion live check
