@@ -141,9 +141,9 @@
 <meta name="post-date" content="${esc(d.date)}">
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261101r3">
-<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261101r3">
-<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261101r3">
+<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261101r4">
+<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261101r4">
+<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261101r4">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -212,7 +212,7 @@ ${bodyHtml}
 
 <script src="${prefix}assets/site.js?v=20261031bb"></script>
 <script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
-<script src="${prefix}assets/workspace.js?v=20261101r3"></script>
+<script src="${prefix}assets/workspace.js?v=20261101r4"></script>
 </body>
 </html>
 `;

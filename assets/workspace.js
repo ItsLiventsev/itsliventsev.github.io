@@ -123,7 +123,7 @@
   }
   topbar.appendChild(topContext);
   const actions = document.createElement('div'); actions.className = 'ws-topbar-actions';
-  const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger'; searchButton.setAttribute('aria-label', 'Поиск по сайту');
+  const searchButton = document.createElement('button'); searchButton.type = 'button'; searchButton.className = 'ws-search-trigger';
   searchButton.innerHTML = '<span class="ws-search-icon" aria-hidden="true">' + iconMarkup('search') + '</span><span class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>';
   actions.appendChild(searchButton);
   if (languageButton) actions.appendChild(languageButton);
@@ -343,15 +343,47 @@
   });
 
   function decorate(scope) {
+    const all = selector => [
+      ...(scope.matches && scope.matches(selector) ? [scope] : []),
+      ...scope.querySelectorAll(selector)
+    ];
     const components = ['.card', '.p-card', '.pub-card', '.note-card', '.lab-panel', '.st-panel', '.op-panel', '.office-panel', '.admin-card', '.bento-cell', '.zone', '.project-card', '.sign-card', '.step-card', '.esp-section', '.accordion', '.wiki-group', '.quest-card', '.sla-stat', '.ticket-card', '.notice'];
-    scope.querySelectorAll(components.join(',')).forEach(el => el.setAttribute('data-ws-surface', 'true'));
-    scope.querySelectorAll('.st-hero, .uni-hero').forEach(el => el.setAttribute('data-ws-hero', 'true'));
-    scope.querySelectorAll('.st-hero-index').forEach(el => el.setAttribute('data-ws-index', 'true'));
-    scope.querySelectorAll('.flat-profile').forEach(el => el.setAttribute('data-ws-profile', 'true'));
-    scope.querySelectorAll('.fp-spacer').forEach(el => el.setAttribute('data-ws-spacer', 'true'));
-    scope.querySelectorAll('.zone-head, .st-section-head').forEach(el => el.setAttribute('data-ws-section-head', 'true'));
-    scope.querySelectorAll('.bento-grid, .glossary-grid').forEach(el => el.setAttribute('data-ws-grid', 'true'));
-    scope.querySelectorAll('.grid').forEach(el => {
+    all('#profile-gate').forEach(el => el.setAttribute('data-ws-profile-gate', 'true'));
+    all('#profile-form').forEach(el => el.setAttribute('data-ws-profile-form', 'true'));
+    all('.flat-field').forEach(el => el.setAttribute('data-ws-field', el.querySelector('#mascot-picker-host') ? 'mascot' : 'true'));
+    all('#mascot-picker-host').forEach(el => el.setAttribute('data-ws-mascot-host', 'true'));
+    all('.mascot-pick').forEach(el => el.setAttribute('data-ws-mascot-picker', 'true'));
+    all('.flat-caption').forEach(el => el.setAttribute('data-ws-caption', 'true'));
+    all('#profile-form button[type="submit"]').forEach(el => { el.setAttribute('data-ws-profile-submit', 'true'); el.setAttribute('data-ws-action', 'primary'); });
+    all('#cab-dashboard').forEach(el => el.setAttribute('data-ws-dashboard', 'true'));
+    all('.cab-grid').forEach(el => el.setAttribute('data-ws-dashboard-grid', 'true'));
+    all('.cab-grid > aside').forEach(el => el.setAttribute('data-ws-profile-summary', 'true'));
+    all('.cab-grid > section').forEach(el => el.setAttribute('data-ws-quest-panel', 'true'));
+    all('#profile-change').forEach(el => el.setAttribute('data-ws-profile-edit', 'true'));
+    all('#cab-id-card').forEach(el => el.setAttribute('data-ws-id-card', 'true'));
+    all('.id-card-top').forEach(el => el.setAttribute('data-ws-id-header', 'true'));
+    all('.id-stats > .id-collapse').forEach(el => el.setAttribute('data-ws-stat-list', 'true'));
+    all('.id-stat').forEach(el => el.setAttribute('data-ws-id-stat', 'true'));
+    all('.id-level').forEach(el => el.setAttribute('data-ws-id-level', 'true'));
+    all('.id-level > .id-collapse').forEach(el => el.setAttribute('data-ws-id-level-content', 'true'));
+    all('.id-level .flat-row').forEach(el => el.setAttribute('data-ws-profile-actions', 'true'));
+    all('.roadmap-overview').forEach(el => el.setAttribute('data-ws-roadmap-overview', 'true'));
+    all('.roadmap-meter').forEach(el => el.setAttribute('data-ws-roadmap-meter', 'true'));
+    all('.quest-card').forEach(el => el.setAttribute('data-ws-quest-card', 'true'));
+    all('.quest-glyph').forEach(el => el.setAttribute('data-ws-quest-icon', 'true'));
+    all('.quest-side').forEach(el => el.setAttribute('data-ws-quest-meta', 'true'));
+    all('.greet-card').forEach(el => el.setAttribute('data-ws-greeting', 'true'));
+    all('.greet-mascot').forEach(el => el.setAttribute('data-ws-greeting-icon', 'true'));
+    all('.greet-body').forEach(el => el.setAttribute('data-ws-greeting-body', 'true'));
+    all('.greet-actions').forEach(el => el.setAttribute('data-ws-greeting-actions', 'true'));
+    all(components.join(',')).forEach(el => el.setAttribute('data-ws-surface', 'true'));
+    all('.st-hero, .uni-hero').forEach(el => el.setAttribute('data-ws-hero', 'true'));
+    all('.st-hero-index').forEach(el => el.setAttribute('data-ws-index', 'true'));
+    all('.flat-profile').forEach(el => el.setAttribute('data-ws-profile', 'true'));
+    all('.fp-spacer').forEach(el => el.setAttribute('data-ws-spacer', 'true'));
+    all('.zone-head, .st-section-head').forEach(el => el.setAttribute('data-ws-section-head', 'true'));
+    all('.bento-grid, .glossary-grid').forEach(el => el.setAttribute('data-ws-grid', 'true'));
+    all('.grid').forEach(el => {
       const classes = String(el.className || '');
       const tokens = classes.split(/\s+/);
       const baseClass = tokens.find(token => token.startsWith('grid-cols-'));
@@ -367,7 +399,7 @@
         el.style.setProperty('--ws-grid-' + breakpoint, dimensions[breakpoint]);
       }
     });
-    scope.querySelectorAll('.flex').forEach(el => {
+    all('.flex').forEach(el => {
       const classes = String(el.className || '');
       el.setAttribute('data-ws-flex', 'true');
       if (/\bflex-col\b/.test(classes)) el.setAttribute('data-ws-direction', 'column');
@@ -382,51 +414,51 @@
       else if (/\bitems-end\b/.test(classes)) el.setAttribute('data-ws-align', 'end');
       else if (/\bitems-baseline\b/.test(classes)) el.setAttribute('data-ws-align', 'baseline');
     });
-    scope.querySelectorAll('.flex-1').forEach(el => el.setAttribute('data-ws-grow', 'true'));
-    scope.querySelectorAll('.min-w-0').forEach(el => el.setAttribute('data-ws-min-width', 'true'));
-    scope.querySelectorAll('.shrink-0').forEach(el => el.setAttribute('data-ws-no-shrink', 'true'));
-    scope.querySelectorAll('.notice-label').forEach(el => el.setAttribute('data-ws-notice-label', 'true'));
-    scope.querySelectorAll('.mat-row').forEach(el => el.setAttribute('data-ws-row', 'true'));
-    scope.querySelectorAll('.mat-dot').forEach(el => el.setAttribute('data-ws-dot', 'true'));
-    scope.querySelectorAll('.wiki-links .mono').forEach(el => el.setAttribute('data-ws-index', 'true'));
-    scope.querySelectorAll('.wiki-layout').forEach(el => el.setAttribute('data-ws-layout', 'wiki'));
-    scope.querySelectorAll('.wiki-nav').forEach(el => el.setAttribute('data-ws-wiki-nav', 'true'));
-    scope.querySelectorAll('.wiki-links').forEach(el => el.setAttribute('data-ws-wiki-links', 'true'));
-    scope.querySelectorAll('.article-meta').forEach(el => el.setAttribute('data-ws-meta', 'true'));
-    scope.querySelectorAll('.flat-row, .step-card').forEach(el => el.setAttribute('data-ws-row', 'true'));
-    scope.querySelectorAll('.lab-progress, .xp-bar, .lg-bar, .quest-progress').forEach(el => el.setAttribute('data-ws-progress', 'true'));
-    scope.querySelectorAll('.lp-head').forEach(el => el.setAttribute('data-ws-panel-head', 'true'));
-    scope.querySelectorAll('.lp-body').forEach(el => el.setAttribute('data-ws-panel-body', 'true'));
-    scope.querySelectorAll('.lab-layout, .ops-board, .flat-grid--cards, .lab-steps').forEach(el => el.setAttribute('data-ws-grid', 'cards'));
-    scope.querySelectorAll('.cmd-duo, .plus-minus, .rca-fields').forEach(el => el.setAttribute('data-ws-grid', 'two'));
-    scope.querySelectorAll('.task-list, .lab-checks, .st-goals, .ops-legend-list').forEach(el => el.setAttribute('data-ws-stack', 'true'));
-    scope.querySelectorAll('.task-item, .cmd-row, .ticket-card, .ticket').forEach(el => el.setAttribute('data-ws-row', 'true'));
-    scope.querySelectorAll('.q-item').forEach(el => el.setAttribute('data-ws-surface', 'true'));
-    scope.querySelectorAll('.q-opts').forEach(el => el.setAttribute('data-ws-options', 'true'));
-    scope.querySelectorAll('.q-opt').forEach(el => el.setAttribute('data-ws-option', 'true'));
-    scope.querySelectorAll('.mc-speech').forEach(el => el.setAttribute('data-ws-message', 'true'));
-    scope.querySelectorAll('.mc-bubble').forEach(el => el.setAttribute('data-ws-bubble', 'true'));
-    scope.querySelectorAll('.task-body').forEach(el => el.setAttribute('data-ws-task-body', 'true'));
-    scope.querySelectorAll('.task-hint').forEach(el => el.setAttribute('data-ws-task-hint', 'true'));
-    scope.querySelectorAll('.task-title').forEach(el => el.setAttribute('data-ws-task-title', 'true'));
-    scope.querySelectorAll('.xp-meta').forEach(el => el.setAttribute('data-ws-progress-label', 'true'));
-    scope.querySelectorAll('.is-active').forEach(el => el.setAttribute('data-ws-active', 'true'));
-    scope.querySelectorAll('.task-item.is-done, .q-opt.is-ok').forEach(el => el.setAttribute('data-ws-state', 'complete'));
-    scope.querySelectorAll('.q-opt.is-bad').forEach(el => el.setAttribute('data-ws-state', 'error'));
-    scope.querySelectorAll('.is-disabled').forEach(el => el.setAttribute('data-ws-state', 'locked'));
-    scope.querySelectorAll('.theory-block, .reflect-item, .cmd-col, .rca-fields > div').forEach(el => el.setAttribute('data-ws-inset', 'true'));
-    scope.querySelectorAll('.lab-terminal, .lab-editor, .term-screen, .lt-screen').forEach(el => el.setAttribute('data-ws-console', 'true'));
-    scope.querySelectorAll('.st-modal, .st-modal-box').forEach(el => el.setAttribute('data-ws-modal', 'true'));
-    scope.querySelectorAll('.st-details, details').forEach(el => el.setAttribute('data-ws-disclosure', 'true'));
-    scope.querySelectorAll('.lk-progress-strip, .ops-statusbar').forEach(el => el.setAttribute('data-ws-progress-strip', 'true'));
-    scope.querySelectorAll('table').forEach(el => el.setAttribute('data-ws-table', 'true'));
-    scope.querySelectorAll('[role="tablist"]').forEach(el => el.setAttribute('data-ws-tabs', 'true'));
-    scope.querySelectorAll('button').forEach(el => {
+    all('.flex-1').forEach(el => el.setAttribute('data-ws-grow', 'true'));
+    all('.min-w-0').forEach(el => el.setAttribute('data-ws-min-width', 'true'));
+    all('.shrink-0').forEach(el => el.setAttribute('data-ws-no-shrink', 'true'));
+    all('.notice-label').forEach(el => el.setAttribute('data-ws-notice-label', 'true'));
+    all('.mat-row').forEach(el => el.setAttribute('data-ws-row', 'true'));
+    all('.mat-dot').forEach(el => el.setAttribute('data-ws-dot', 'true'));
+    all('.wiki-links .mono').forEach(el => el.setAttribute('data-ws-index', 'true'));
+    all('.wiki-layout').forEach(el => el.setAttribute('data-ws-layout', 'wiki'));
+    all('.wiki-nav').forEach(el => el.setAttribute('data-ws-wiki-nav', 'true'));
+    all('.wiki-links').forEach(el => el.setAttribute('data-ws-wiki-links', 'true'));
+    all('.article-meta').forEach(el => el.setAttribute('data-ws-meta', 'true'));
+    all('.flat-row, .step-card').forEach(el => el.setAttribute('data-ws-row', 'true'));
+    all('.lab-progress, .xp-bar, .lg-bar, .quest-progress').forEach(el => el.setAttribute('data-ws-progress', 'true'));
+    all('.lp-head').forEach(el => el.setAttribute('data-ws-panel-head', 'true'));
+    all('.lp-body').forEach(el => el.setAttribute('data-ws-panel-body', 'true'));
+    all('.lab-layout, .ops-board, .flat-grid--cards, .lab-steps').forEach(el => el.setAttribute('data-ws-grid', 'cards'));
+    all('.cmd-duo, .plus-minus, .rca-fields').forEach(el => el.setAttribute('data-ws-grid', 'two'));
+    all('.task-list, .lab-checks, .st-goals, .ops-legend-list').forEach(el => el.setAttribute('data-ws-stack', 'true'));
+    all('.task-item, .cmd-row, .ticket-card, .ticket').forEach(el => el.setAttribute('data-ws-row', 'true'));
+    all('.q-item').forEach(el => el.setAttribute('data-ws-surface', 'true'));
+    all('.q-opts').forEach(el => el.setAttribute('data-ws-options', 'true'));
+    all('.q-opt').forEach(el => el.setAttribute('data-ws-option', 'true'));
+    all('.mc-speech').forEach(el => el.setAttribute('data-ws-message', 'true'));
+    all('.mc-bubble').forEach(el => el.setAttribute('data-ws-bubble', 'true'));
+    all('.task-body').forEach(el => el.setAttribute('data-ws-task-body', 'true'));
+    all('.task-hint').forEach(el => el.setAttribute('data-ws-task-hint', 'true'));
+    all('.task-title').forEach(el => el.setAttribute('data-ws-task-title', 'true'));
+    all('.xp-meta').forEach(el => el.setAttribute('data-ws-progress-label', 'true'));
+    all('.is-active').forEach(el => el.setAttribute('data-ws-active', 'true'));
+    all('.task-item.is-done, .q-opt.is-ok').forEach(el => el.setAttribute('data-ws-state', 'complete'));
+    all('.q-opt.is-bad').forEach(el => el.setAttribute('data-ws-state', 'error'));
+    all('.is-disabled').forEach(el => el.setAttribute('data-ws-state', 'locked'));
+    all('.theory-block, .reflect-item, .cmd-col, .rca-fields > div').forEach(el => el.setAttribute('data-ws-inset', 'true'));
+    all('.lab-terminal, .lab-editor, .term-screen, .lt-screen').forEach(el => el.setAttribute('data-ws-console', 'true'));
+    all('.st-modal, .st-modal-box').forEach(el => el.setAttribute('data-ws-modal', 'true'));
+    all('.st-details, details').forEach(el => el.setAttribute('data-ws-disclosure', 'true'));
+    all('.lk-progress-strip, .ops-statusbar').forEach(el => el.setAttribute('data-ws-progress-strip', 'true'));
+    all('table').forEach(el => el.setAttribute('data-ws-table', 'true'));
+    all('[role="tablist"]').forEach(el => el.setAttribute('data-ws-tabs', 'true'));
+    all('button').forEach(el => {
       el.setAttribute('data-ws-control', 'true');
       if (/\b(btn|flat-btn|primary)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary');
     });
-    scope.querySelectorAll('a').forEach(el => { if (/\b(btn|flat-btn|quick-bubble|ws-button)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary'); });
-    scope.querySelectorAll('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev, .tag-hash, .ws-tag, .gl-term-tag').forEach(el => {
+    all('a').forEach(el => { if (/\b(btn|flat-btn|quick-bubble|ws-button)\b/.test(el.className)) el.setAttribute('data-ws-action', /\b(btn-primary|btn-main|primary)\b/.test(el.className) ? 'primary' : 'secondary'); });
+    all('.pill, .chip, .badge, .p-tag, .kind-badge, .flat-badge, .p-status, .sev, .tag-hash, .ws-tag, .gl-term-tag').forEach(el => {
       const classes = typeof el.className === 'string' ? el.className : '';
       el.setAttribute('data-ws-tag', 'true');
       if (/pill-blue|ws-tag-blue/.test(classes)) el.dataset.wsTone = 'info';

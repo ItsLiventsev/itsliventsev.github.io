@@ -30,10 +30,10 @@ ok(html.length === 75, 'ожидалось 75 HTML-страниц, получе�
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 for (const file of contentPages) {
   const source = read(file);
-  ok(source.includes('/assets/workspace-tokens.css?v=20261101r3'), file + ': отсутствуют новые токены');
-  ok(source.includes('/assets/workspace.css?v=20261101r3'), file + ': отсутствует новая система компонентов');
-  ok(source.includes('/assets/workspace-learning.css?v=20261101r3'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261101r3'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('/assets/workspace-tokens.css?v=20261101r4'), file + ': отсутствуют новые токены');
+  ok(source.includes('/assets/workspace.css?v=20261101r4'), file + ': отсутствует новая система компонентов');
+  ok(source.includes('/assets/workspace-learning.css?v=20261101r4'), file + ': отсутствуют учебные паттерны LMS');
+  ok(source.includes('assets/workspace.js?v=20261101r4'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
@@ -68,12 +68,24 @@ function contrast(a, b) { const [l1, l2] = [luminance(a), luminance(b)].sort((x,
 for (const [fg, bg] of [['--ws-ink','--ws-canvas'],['--ws-ink-soft','--ws-canvas'],['--ws-muted','--ws-canvas'],['--ws-faint','--ws-canvas'],['--ws-accent','--ws-canvas'],['--ws-green','--ws-green-wash'],['--ws-blue','--ws-blue-wash'],['--ws-orange','--ws-orange-wash'],['--ws-red','--ws-red-wash']]) {
   const a = tokenColor(fg), b = tokenColor(bg); ok(a && b && contrast(a, b) >= 4.5, 'контраст пары ' + fg + ' / ' + bg + ' ниже WCAG AA');
 }
+const darkStart = tokens.indexOf(':root[data-theme="dark"]');
+const darkEnd = tokens.indexOf('}', darkStart);
+const darkTokens = darkStart >= 0 && darkEnd > darkStart ? tokens.slice(darkStart, darkEnd) : '';
+const darkColor = name => darkTokens.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]{6})'))?.[1];
+ok(darkColor('--ws-faint') && darkColor('--ws-surface') && contrast(darkColor('--ws-faint'), darkColor('--ws-surface')) >= 4.5, 'тёмный faint-текст должен сохранять контраст WCAG AA');
 for (const component of ['.ws-shell', '.ws-sidebar', '.ws-nav-link', '.ws-topbar', '.ws-breadcrumbs', '.ws-search-dialog', '[data-ws-surface]', '[data-ws-action]', '.ws-overlay', '.ws-mode-compact']) {
   ok(ui.includes(component), 'workspace.css: отсутствует контракт ' + component);
 }
 for (const module of ['.ws-home-hero', '.ws-learning-grid', '.ws-course-card', '.ws-dashboard-grid', '.ws-skill-grid', '.ws-resource-grid', '.ws-experience-grid']) {
   ok(homeUi.includes(module), 'workspace-home.css: отсутствует блок dashboard ' + module);
 }
+for (const hook of ['data-ws-profile-gate', 'data-ws-profile-form', 'data-ws-dashboard-grid', 'data-ws-id-card', 'data-ws-quest-card', 'data-ws-greeting']) {
+  ok(shell.includes(hook) && learningUi.includes('[' + hook + ']'), 'кабинет стажёра не размечен новыми компонентными токенами: ' + hook);
+}
+ok(read('stands/setpolis.html').includes('role="group" aria-labelledby="mascot-label"') && read('stands/setpolis.html').includes('assets/stands.js?v=20261101r4'), 'выбор маскота должен иметь доступное групповое имя, а профильный скрипт — актуальный cache bust');
+ok(ui.includes('.ws-mode-compact .ws-section-nav') && ui.includes('display: none;'), 'свёрнутый desktop sidebar не должен показывать обрезанную навигацию по секциям');
+ok(shell.includes('class="ws-search-label">Поиск по материалам</span><kbd>Ctrl K</kbd>') && !shell.includes("searchButton.setAttribute('aria-label'"), 'имя кнопки поиска должно формироваться из видимой подписи и подсказки клавиатуры');
+ok(read('stands/setpolis.html').includes('<h2>роадмап практики · пять спринтов</h2>'), 'раздел роадмапа должен задавать корректный порядок заголовков');
 for (const behavior of ['aria-current', 'aria-expanded', 'workspace-rail', 'search-index.json', 'IntersectionObserver', '.ws-section-nav', 'scroll-margin-top', "event.key.toLowerCase() === 'k'", "event.key === '/'", "event.key === 'Escape'"]) {
   ok(shell.includes(behavior) || ui.includes(behavior), 'workspace shell: отсутствует функциональный контракт ' + behavior);
 }
@@ -109,11 +121,11 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r3', 'assets/workspace.css?v=20261101r3', 'assets/workspace-learning.css?v=20261101r3', 'assets/workspace.js?v=20261101r3']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261101r4', 'assets/workspace-learning.css?v=20261101r4', 'assets/workspace.js?v=20261101r4']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r3') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r3') && officeBuilder.includes('assets/workspace.js?v=20261101r3'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace-learning.css?v=20261101r4') && officeBuilder.includes('assets/workspace.js?v=20261101r4'), 'build-office.js: генератор не создаёт страницы на новом shell');
 for (const [name, template] of [['admin.js', adminTemplate], ['build-office.js', officeBuilder]]) {
   ok(template.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !template.includes('fonts.googleapis.com'), name + ': generated pages must use local fonts without Google Fonts');
 }
