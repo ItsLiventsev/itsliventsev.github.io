@@ -171,6 +171,51 @@
     }
   }
 
+
+  // Kanban view toggle + renderer (autonomous polish v8)
+  const kanbanRoot = root.querySelector('[data-ws-activity-kanban]');
+  const viewButtons = root.querySelectorAll('[data-ws-view]');
+  const kanbanLists = {
+    review: root.querySelector('[data-kanban-list="review"]'),
+    progress: root.querySelector('[data-kanban-list="progress"]'),
+    done: root.querySelector('[data-kanban-list="done"]')
+  };
+  const kanbanCounts = {
+    review: root.querySelector('[data-kanban-count="review"]'),
+    progress: root.querySelector('[data-kanban-count="progress"]'),
+    done: root.querySelector('[data-kanban-count="done"]')
+  };
+  function renderKanban(items) {
+    if (!kanbanRoot || !kanbanLists.review) return;
+    const groups = { review: [], progress: [], done: [] };
+    items.forEach(it => { const g = groups[it.status] ? it.status : 'done'; groups[g].push(it); });
+    Object.keys(groups).forEach(k => {
+      const list = kanbanLists[k];
+      const cnt = kanbanCounts[k];
+      if (cnt) cnt.textContent = '('+groups[k].length+')';
+      if (!list) return;
+      list.innerHTML = groups[k].map(it => {
+        const tagColor = { frontend:'var(--ws-blue-wash)', design:'var(--ws-violet-wash)', infra:'var(--ws-green-wash)', bugfix:'var(--ws-red-wash)', content:'var(--ws-mustard-wash)', ops:'var(--ws-slate-wash)' }[it.tag] || 'var(--ws-surface)';
+        return '<div data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+(words().feedTitle[it.id]?.[language()]||it.id)+'</strong><span style="font-size:10px; color:var(--ws-muted);">'+statusLabel(it.status)+'</span></div>';
+      }).join('') || '<span style="font-size:11px; color:var(--ws-muted);">—</span>';
+    });
+  }
+  if (viewButtons.length) {
+    viewButtons.forEach(btn => btn.addEventListener('click', () => {
+      const view = btn.getAttribute('data-ws-view');
+      viewButtons.forEach(b => b.setAttribute('aria-pressed', String(b===btn)));
+      viewButtons.forEach(b => b.style.background = b===btn ? 'var(--ws-surface)' : 'transparent');
+      if (kanbanRoot) {
+        const isKanban = view==='kanban';
+        kanbanRoot.hidden = !isKanban;
+        kanbanRoot.style.display = isKanban ? 'grid' : 'none';
+        if (timeline) timeline.style.display = isKanban ? 'none' : 'grid';
+        const ticker = root.querySelector('[data-ws-activity-ticker]');
+        if (ticker) ticker.style.display = isKanban ? 'none' : 'block';
+      }
+    }));
+  }
+
   // — ticker + timeline renderer
   let feedData = feedSeed.map(s=>({ ...s, status:s.status })); // clone
   function renderTicker() {

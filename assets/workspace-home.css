@@ -787,3 +787,9 @@ html { scroll-behavior: smooth; }
 /* breadcrumb + on-page toc polish */
 .ws-breadcrumbs { font-size: 11px; letter-spacing: .02em; }
 .ws-section-nav { gap: 2px; }
+
+/* kanban v8 — 3 columns, responsive */
+[data-ws-activity-kanban] { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+@media (max-width: 720px) { [data-ws-activity-kanban] { grid-template-columns: 1fr !important; } [data-ws-activity-kanban] [data-ws-kanban-col] { min-height: auto; } }
+[data-ws-activity-kanban] [data-ws-kanban-col] { transition: transform 160ms ease; }
+[data-ws-activity-kanban] [data-ws-kanban-col]:hover { transform: translateY(-2px); }

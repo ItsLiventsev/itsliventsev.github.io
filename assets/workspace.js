@@ -649,3 +649,10 @@
   const observer = new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(node => { if (node.nodeType === 1) decorate(node); })));
   observer.observe(root, { childList: true, subtree: true });
 })();
+
+// PWA registration — offline stands (v8)
+if ('serviceWorker' in navigator && location.protocol === 'https:' || location.hostname === 'localhost') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
