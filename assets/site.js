@@ -21,7 +21,7 @@ document.documentElement.classList.add('js-enabled');
     try { localStorage.setItem(STORAGE_KEY, theme); } catch (e) { /* приватный режим */ }
     // Браузерный хром мобильных подстраивается под активную тему
     const metaColor = document.querySelector('meta[name="theme-color"]');
-    if (metaColor) metaColor.setAttribute('content', theme === 'dark' ? '#11151b' : '#f5f6f8');
+    if (metaColor) metaColor.setAttribute('content', theme === 'dark' ? '#111722' : '#f4f6fa');
     document.querySelectorAll('.theme-toggle').forEach((btn) => {
       btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
       btn.setAttribute('title', theme === 'dark' ? 'включить светлую тему' : 'включить тёмную тему');
