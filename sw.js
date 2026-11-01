@@ -1,12 +1,12 @@
 // itsliventsev PWA — offline stands, 2026
-const CACHE = 'itsliventsev-v1';
+const CACHE = 'itsliventsev-v2';
 const PRECACHE = [
   '/', '/index.html',
   '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
   '/assets/workspace.js', '/assets/i18n.js', '/assets/home-activity.js',
   '/assets/icons.svg', '/assets/favicon.svg',
   '/projects.html', '/articles.html', '/blog.html', '/archive.html',
-  '/stands/index.html', '/site.webmanifest'
+  '/stands/index.html', '/blog.html', '/archive.html', '/faq.html', '/sitemap.html', '/assets/workspace-learning.css', '/site.webmanifest'
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE).catch(()=>{})).then(()=>self.skipWaiting()));

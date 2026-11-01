@@ -66,6 +66,13 @@
   --ws-display: 'DM Serif Display', Georgia, serif;
   --ws-mono: 'JetBrains Mono', ui-monospace, monospace;
   --ws-motion: 160ms cubic-bezier(.2, .7, .2, 1);
+  /* v11 hyper tokens — focus + motion hyper */
+  --ws-focus: 0 0 0 2px var(--ws-surface), 0 0 0 4px var(--ws-accent);
+  --ws-focus-soft: 0 0 0 3px color-mix(in srgb, var(--ws-accent) 18%, transparent);
+  --ws-motion-spring: 360ms cubic-bezier(.34,1.56,.64,1);
+  --ws-motion-emphasis: 420ms cubic-bezier(.2,.8,.2,1);
+  --ws-content-max: 72ch;
+
   /* Transitional role aliases consumed by the independently tested lesson widgets. */
   --bg: var(--ws-canvas); --surface: var(--ws-surface); --surface-2: var(--ws-surface-soft);
   --text: var(--ws-ink); --text-2: var(--ws-ink-soft); --muted: var(--ws-muted); --faint: var(--ws-faint);

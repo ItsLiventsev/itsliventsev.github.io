@@ -675,3 +675,23 @@ body.ws-ready::before {
 html { hanging-punctuation: first allow-end; }
 body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
 
+
+/* === v11: Navigation hyper polish — breadcrumbs + focus + drawer === */
+.ws-breadcrumbs { font-size: 11px; letter-spacing: .02em; }
+.ws-breadcrumbs a:focus-visible { outline: 2px solid var(--ws-accent); outline-offset: 2px; border-radius: 6px; }
+.ws-nav-link:focus-visible { outline: 2px solid var(--ws-accent); outline-offset: -2px; }
+.ws-sidebar { backdrop-filter: saturate(140%) blur(6px); }
+[data-ws-on-page-nav] a { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 8px; color: var(--ws-muted); font-size: 11px; text-decoration: none; transition: background 150ms, color 150ms; }
+[data-ws-on-page-nav] a:hover { background: var(--ws-surface-soft); color: var(--ws-ink); }
+[data-ws-on-page-nav] a[aria-current="location"] { background: var(--ws-accent-wash); color: var(--ws-accent); font-weight: 700; }
+
+/* === v11: Components Soft UI 2.0 — buttons/inputs/cards unified === */
+button, [data-ws-action], .ws-button { border-radius: 999px !important; font-variant-numeric: lining-nums; }
+input, select, textarea, [data-ws-surface] input { border-radius: 12px !important; border-color: var(--ws-line) !important; background: var(--ws-surface) !important; transition: border-color 180ms, box-shadow 180ms; }
+input:focus, select:focus, textarea:focus, [data-ws-surface] input:focus { border-color: var(--ws-accent) !important; box-shadow: var(--ws-focus-soft) !important; outline: none !important; }
+[data-ws-surface] { border-radius: 16px !important; box-shadow: 0 4px 12px rgba(16,24,40,.05) !important; border: 1px solid var(--ws-line) !important; background: var(--ws-surface) !important; }
+[data-ws-tag] { border-radius: 999px !important; font-size: 10px !important; font-weight: 750 !important; letter-spacing: .02em; }
+[data-ws-progress], .ws-progress-bar { height: 8px !important; border-radius: 999px !important; overflow: hidden; background: var(--ws-surface-soft) !important; }
+[data-ws-progress] > *, .ws-progress-bar > span { background: var(--ws-accent) !important; border-radius: inherit; }
+[data-ws-table] th { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ws-muted); }
+[data-ws-table] td { font-size: 12px; line-height: 1.6; }

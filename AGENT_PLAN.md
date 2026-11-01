@@ -248,3 +248,49 @@
 3. Токены шрифтов: Manrope 200-800 + JetBrains Mono, unicode-range cyrillic, swap, #F8F9FA фон.
 4. Проверки: audit 76/0/0, 3517/0, braces balanced 518/518 и 525/525.
 
+## Sprint v11 — Hyper Polish MAX (2026-11-02, branch arena/79623e75-itsliventsev-github-io)
+
+**Shared Chat MAX — 4 агента × 10 задач, максимум токенов:**
+
+**Architect →** Нашёл 12 проблем: 19 inline styles в index (ломают dark), PWA v1 устарел, project-grid неравные высоты, publication-row без Soft UI, wiki sidebar не sticky, nav без focus-visible, components mix радиусов, нет containment, нет motion spring для indicator, нет editorial balance. Главная Bento OK но hero + overview дублируют inline, Проекты 4+2 неравные, Статьи/Заметки строки без карточек, Компоненты mix, Навигация без anchor.
+
+**Visual →** Предлагает: 1) Hero inline→CSS, overview achievements flex hyphens, project-grid auto-fill 280px + auto-fit 320px featured equal heights + tag washes, publication-row 52px/1fr/auto + clamp-2, wiki sticky + callout, nav focus + on-page current, components 16-24px unified, hero balance + line-height 1.06→1.75, #F8F9FA + shadow 0 4px 12px.
+
+**Motion →** Спорит: не перегружать! Но соглашается: indicator spring 360ms cubic-bezier(.34,1.56,.64,1) + anchor-positioning progressive, project card lift 3px + shadow 0 8px 24px, publication hover lift 2px, filter press scale .98→spring, ticker marquee 32s linear infinite pause hover/focus-within, view-transitions 220ms, section stagger 60ms * index, prefers-reduced-motion .01ms.
+
+**Integrator →** Оптимизирует: все 10 задач в один PR, но тесты PASS 3517/0 + audit 76/0/0 must hold. Scroll-progress keep hidden per spec, view-transitions 180/220ms, dark #15161d intact, PWA v2 precache +7 страниц, containment auto 500px, will-change где нужно, braces 534/534 568/568 24/24. Утвердить.
+
+**Оркестратор →** Утверждаю MAX: БЕРУ ВСЕ 10 ЗАДАЧ, максимум токенов.
+
+**Глобальный аудит каждой страницы:**
+| Страница | Аудит | Фикс |
+|---|---|---|
+| Главная | Bento hero 1.65fr/.85fr + overview inline 19→8, dashboard 1.45fr/.8fr + kanban 3-col lift слабый, activity cycle pills OK | inline→CSS, kanban shadows, cycle spring |
+| Проекты | 3+1 balanced vs 2 featured неравные высоты, chip-list без border, archive card disabled | equal heights subgrid + tag wash + featured depth |
+| Статьи | publication-row 50 файлов, filter all/тип, meta tag/date/readtime, chip-list — строки без карточек | Soft UI card 16px + clamp-2 + filter pills |
+| Заметки | note-grid auto-fill 280px, filters, chip #tag — карточки без hover | note-card flex + hover + filter active |
+| Компоненты | tokens #F8F9FA #f2f4f7 #e9ecef, shadows sm/md/lg, radius 8/12/16/20, buttons/inputs/cards/tags/progress/tabs/tables — mix 12px vs 16px | Soft UI 2.0 unified 16-24px + focus |
+| Навигация | 3 пилюли Общее/Направления/На этой странице, indicator spring 360ms + anchor progressive, crumbs, drawer, search Ctrl/K, focus | breadcrumbs 11px + on-page current + drawer blur |
+
+**Специфика по требованию:**
+1. Меню анимированное — Motion Primitives Smooth Tabs + anchor-positioning, indicator 360ms spring, hover/focus + will-change
+2. Дашборд живой — hashtag #frontend #design #bugfix #infra #content #ops + статусы ✅ Готово 🔄 В процессе ⏳ На проверке + ticker marquee 32s + kanban 3-col + chart 14д GitHub API + staggered 60ms
+3. Стилистика #F8F9FA + 16-24px + shadow 0 4px 12px rgba(0,0,0,0.05) — tokens + cards 16px → hover 0 8px 20px, 20px hero, 12px pills, containment auto
+
+**Метрики:** 76 0 0 3517/0, #F8F9FA light, dark #15161d, view-transitions, reduced-motion, containment, inert drawer, focus-visible AA.
+
+**База 30 библиотек:** Motion Primitives/Aceternity/Magic/Cult/Shadcn/Recharts/Thinking Orbs/Kokonut/21st/HeroUI/Kibo/Shaders etc — все CSS-first, без heavy WebGL.
+
+**10 Задач Sprint v11:**
+1. Hero inline→CSS + overview hyphens
+2. PWA v1→v2 +7 precache
+3. Projects Bento equal heights + tag washes
+4. Articles/Notes editorial Soft UI
+5. Archive wiki sticky + callout
+6. Navigation hyper polish
+7. Tokens hyper focus/spring/content-max
+8. Components Soft UI 2.0 unified
+9. Performance containment + view-transitions
+10. Global motion stagger + ticker + lift
+
+
