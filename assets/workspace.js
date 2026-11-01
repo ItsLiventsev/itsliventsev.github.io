@@ -6,16 +6,30 @@
   const pathname = location.pathname.replace(/\/$/, '') || '/';
   const learningArea = pathname.startsWith('/stands/office') ? 'office' : pathname.startsWith('/stands/ops') ? 'operations' : pathname.startsWith('/stands/') && pathname !== '/stands/index.html' ? 'network' : 'general';
   body.dataset.wsArea = learningArea;
+  const cleanLabel = value => String(value || '').replace(/\s+/g, ' ').trim();
+  const sentenceCase = value => {
+    const label = cleanLabel(value);
+    return label ? label.charAt(0).toLocaleUpperCase('ru-RU') + label.slice(1) : '';
+  };
   const pathTitle = () => {
     const h1 = document.querySelector('main h1');
-    if (h1 && (h1.innerText || h1.textContent).trim()) return (h1.innerText || h1.textContent).trim().replace(/\s+/g, ' ');
-    return ({
-      '/': 'Обзор', '/404.html': 'Страница не найдена', '/projects.html': 'Проекты',
-      '/articles.html': 'Статьи', '/blog.html': 'Заметки', '/archive.html': 'База знаний',
-      '/faq.html': 'Справка', '/sitemap.html': 'Карта сайта', '/admin.html': 'Панель преподавателя'
-    })[pathname] || decodeURIComponent(pathname.split('/').filter(Boolean).pop() || 'Обзор').replace(/\.html$/, '').replace(/[-_]/g, ' ');
+    const heading = h1 && cleanLabel(h1.innerText || h1.textContent);
+    if (heading) return sentenceCase(heading);
+    const routes = {
+      '/404.html': 'Страница не найдена', '/projects.html': 'Проекты',
+      '/articles.html': 'Статьи', '/blog.html': 'Заметки', '/archive.html': 'Архив',
+      '/faq.html': 'Справка', '/sitemap.html': 'Карта сайта', '/admin.html': 'Панель преподавателя',
+      '/stands/index.html': 'Пространства', '/stands/office/index.html': 'ОфисПолис',
+      '/stands/ops/index.html': 'ДатаПолис', '/stands/setpolis.html': 'СетьПолис'
+    };
+    if (routes[pathname]) return routes[pathname];
+    const metaTitle = document.querySelector('meta[property="og:title"]')?.content || document.title;
+    const safeTitle = cleanLabel(metaTitle.split(/\s+[·|—–]\s+/)[0]);
+    return safeTitle && !/^itsliventsev$/i.test(safeTitle) ? sentenceCase(safeTitle) : 'Раздел';
   };
   const isHome = pathname === '/' || pathname === '/index.html';
+  const pathSegments = pathname.split('/').filter(Boolean).filter(part => part !== 'index.html');
+  const isNestedPage = pathSegments.length > 1;
   const currentTitle = isHome ? 'Главная' : pathTitle();
   const root = document.querySelector('[data-workspace-root], .page-wrap, .st-wrap') || document.querySelector('main')?.parentElement || body;
   const contextBar = document.querySelector('.st-topbar');
@@ -26,6 +40,66 @@
   if (languageButton) languageButton.classList.add('ws-lang');
   const crumbs = root.querySelector('.st-crumbs, [aria-label="Хлебные крошки"]');
   const main = root.querySelector('#main-content, main');
+  function addSectionNavigation() {
+    if (!main) return;
+    const headings = [...main.querySelectorAll('h2')].filter(heading => {
+      if (heading.closest('details, dialog, [role="dialog"], [hidden], [aria-hidden="true"]')) return false;
+      return cleanLabel(heading.innerText || heading.textContent).length > 1;
+    });
+    const seen = new Set();
+    const sectionNav = document.createElement('nav');
+    sectionNav.className = 'ws-section-nav'; sectionNav.dataset.wsOnPageNav = 'true';
+    sectionNav.setAttribute('aria-label', 'На этой странице');
+    const sectionCaption = document.createElement('p');
+    sectionCaption.className = 'ws-section-nav-label';
+    sectionCaption.textContent = 'На этой странице';
+    sectionNav.appendChild(sectionCaption);
+    headings.forEach((heading, index) => {
+      let id = heading.id;
+      if (!id) {
+        const base = cleanLabel(heading.textContent).toLocaleLowerCase('ru-RU')
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ё/g, 'е')
+          .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'section-' + (index + 1);
+        id = base; let suffix = 2;
+        while (document.getElementById(id) || seen.has(id)) id = base + '-' + suffix++;
+        heading.id = id;
+      }
+      heading.setAttribute('data-ws-section-target', 'true');
+      if (seen.has(id)) return;
+      seen.add(id);
+      const link = document.createElement('a');
+      link.className = 'ws-section-link'; link.href = '#' + id;
+      link.textContent = sentenceCase(heading.innerText || heading.textContent);
+      sectionNav.appendChild(link);
+    });
+    if (seen.size > 1) sidebar.appendChild(sectionNav);
+  }
+  addSectionNavigation();
+  function generatedBreadcrumbs() {
+    if (!isNestedPage) return null;
+    const items = [];
+    const first = pathSegments[0];
+    if (first === 'projects') items.push(['Проекты', '/projects.html']);
+    else if (first === 'articles') items.push(['Статьи', '/articles.html']);
+    else if (first === 'blog') items.push(['Заметки', '/blog.html']);
+    else if (first === 'archive') items.push(['Архив', '/archive.html']);
+    else if (first === 'stands') {
+      items.push(['Пространства', '/stands/index.html']);
+      if (pathSegments[1] === 'ops') items.push(['ДатаПолис', '/stands/ops/index.html']);
+      else if (pathSegments[1] === 'office') items.push(['ОфисПолис', '/stands/office/index.html']);
+    }
+    while (items.length > 1 && items[items.length - 1][0].toLocaleLowerCase('ru-RU') === currentTitle.toLocaleLowerCase('ru-RU')) items.pop();
+    if (!items.length) return null;
+    const breadcrumb = document.createElement('nav');
+    breadcrumb.className = 'ws-breadcrumbs'; breadcrumb.setAttribute('aria-label', 'Хлебные крошки');
+    items.forEach(([label, href]) => {
+      const link = document.createElement('a'); link.href = href; link.textContent = label; breadcrumb.appendChild(link);
+      const separator = document.createElement('span'); separator.setAttribute('aria-hidden', 'true'); separator.textContent = '›'; breadcrumb.appendChild(separator);
+    });
+    const current = document.createElement('span'); current.setAttribute('aria-current', 'page'); current.textContent = currentTitle;
+    breadcrumb.appendChild(current);
+    return breadcrumb;
+  }
   const iconByGlyph = { '↗': 'arrow-up-right', '→': 'arrow-right', '←': 'arrow-left', '↓': 'arrow-down', '↧': 'arrow-down', '↑': 'arrow-up', '▾': 'chevron-down', '▸': 'chevron-right', '⌘': 'network', '▤': 'document', '◉': 'server', '◈': 'award', '⌖': 'compass', '◷': 'archive', '⇄': 'operations', '★': 'star', '✓': 'check', '✕': 'close', '↥': 'upload', '↻': 'refresh', 'ⓘ': 'info' };
   const iconMarkup = (name, className = 'ws-inline-icon') => '<svg class="' + className + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#' + name + '"></use></svg>';
   document.querySelectorAll('[aria-hidden="true"]').forEach(node => {
@@ -62,7 +136,7 @@
     { label: 'Проекты', href: '/projects.html', icon: 'projects', test: p => p === '/projects.html' || p.startsWith('/projects/') },
     { label: 'Статьи', href: '/articles.html', icon: 'articles', test: p => p === '/articles.html' || p.startsWith('/articles/') },
     { label: 'Заметки', href: '/blog.html', icon: 'notes', test: p => p === '/blog.html' || p.startsWith('/blog/') },
-    { label: 'База знаний', href: '/archive.html', icon: 'archive', test: p => p === '/archive.html' || p.startsWith('/archive/') },
+    { label: 'Архив', href: '/archive.html', icon: 'archive', test: p => p === '/archive.html' || p.startsWith('/archive/') },
     { label: 'Справка', href: '/faq.html', icon: 'help', test: p => p === '/faq.html' },
     { label: 'Карта сайта', href: '/sitemap.html', icon: 'map', test: p => p === '/sitemap.html' }
   ];
@@ -75,12 +149,15 @@
   sidebar.setAttribute('aria-label', 'Основная навигация сайта');
   const sidebarHead = document.createElement('div');
   sidebarHead.className = 'ws-sidebar-head';
+  const brand = document.createElement('a');
+  brand.className = 'ws-sidebar-brand'; brand.dataset.wsSidebarBrand = 'true'; brand.href = '/'; brand.textContent = 'itsliventsev';
+  brand.setAttribute('aria-label', 'itsliventsev — главная страница');
   const collapse = document.createElement('button');
   collapse.type = 'button'; collapse.className = 'ws-collapse'; collapse.setAttribute('aria-label', 'Свернуть навигацию'); collapse.setAttribute('aria-expanded', 'true'); collapse.innerHTML = iconMarkup('chevron-left');
-  sidebarHead.appendChild(collapse);
+  sidebarHead.append(brand, collapse);
   sidebar.appendChild(sidebarHead);
   const caption = document.createElement('p');
-  caption.className = 'ws-sidebar-caption'; caption.textContent = 'РАБОЧЕЕ ПРОСТРАНСТВО'; sidebar.appendChild(caption);
+  caption.className = 'ws-sidebar-caption'; caption.textContent = 'РАЗДЕЛЫ САЙТА'; sidebar.appendChild(caption);
   const nav = document.createElement('nav'); nav.className = 'ws-nav'; nav.setAttribute('aria-label', 'Основные разделы');
   navItems.forEach(item => {
     const link = document.createElement('a'); link.href = item.href; link.className = 'ws-nav-link';
@@ -91,14 +168,6 @@
     link.append(icon, label); nav.appendChild(link);
   });
   sidebar.appendChild(nav);
-  if (isHome) {
-    const sectionNav = document.createElement('nav'); sectionNav.className = 'ws-section-nav'; sectionNav.setAttribute('aria-label', 'Разделы главной страницы');
-    const sectionCaption = document.createElement('p'); sectionCaption.className = 'ws-section-nav-label'; sectionCaption.textContent = 'На этой странице'; sectionNav.appendChild(sectionCaption);
-    [['about', 'Обо мне'], ['projects', 'Проекты'], ['practice', 'Практика'], ['resources', 'Материалы'], ['experience', 'Опыт'], ['contact', 'Контакты']].forEach(([id, label]) => {
-      const link = document.createElement('a'); link.className = 'ws-section-link'; link.href = '#' + id; link.textContent = label; sectionNav.appendChild(link);
-    });
-    sidebar.appendChild(sectionNav);
-  }
   const learningNav = document.createElement('div'); learningNav.className = 'ws-learning-links';
   learningNav.innerHTML = '<p class="ws-sidebar-caption">НАПРАВЛЕНИЯ</p>'
     + '<a class="ws-nav-link" href="/stands/setpolis.html"' + (pathname === '/stands/setpolis.html' ? ' aria-current="page"' : '') + '><span class="ws-nav-dot ws-dot-violet" aria-hidden="true"></span><span class="ws-nav-label">СетьПолис</span></a>'
@@ -114,12 +183,15 @@
   const topContext = document.createElement('div'); topContext.className = 'ws-topbar-context';
   const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'ws-icon-button ws-mobile-menu'; menu.setAttribute('aria-label', 'Открыть меню'); menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', sidebar.id); menu.innerHTML = iconMarkup('menu');
   topContext.appendChild(menu);
-  if (crumbs) {
-    crumbs.className = 'ws-breadcrumbs';
-    topContext.appendChild(crumbs);
+  const breadcrumb = isNestedPage ? (crumbs || generatedBreadcrumbs()) : null;
+  if (breadcrumb) {
+    breadcrumb.className = 'ws-breadcrumbs';
+    breadcrumb.querySelectorAll('a, [aria-current="page"]').forEach(item => { item.textContent = sentenceCase(item.textContent); });
+    topContext.appendChild(breadcrumb);
   } else {
-    const crumb = document.createElement('span'); crumb.className = 'ws-breadcrumbs'; crumb.setAttribute('aria-label', 'Текущий раздел'); crumb.innerHTML = '<span aria-current="page"></span>';
-    crumb.firstElementChild.textContent = currentTitle; topContext.appendChild(crumb);
+    topContext.dataset.wsTopLevel = 'true';
+    topbar.dataset.wsTopLevel = 'true';
+    if (crumbs) crumbs.remove();
   }
   topbar.appendChild(topContext);
   const actions = document.createElement('div'); actions.className = 'ws-topbar-actions';
@@ -181,6 +253,8 @@
       main.querySelector('.ws-page-heading')?.setAttribute('data-ws-project-intro', 'true');
     }
     if (pathname === '/archive.html') {
+      main.dataset.wsArchive = 'true';
+      main.querySelectorAll('.notice').forEach(notice => { notice.dataset.wsCallout = 'true'; notice.dataset.wsTone = 'info'; });
       main.querySelectorAll('details > summary').forEach(summary => {
         summary.setAttribute('data-ws-archive-summary', 'true');
         const meta = summary.lastElementChild;
@@ -200,6 +274,30 @@
       main.querySelectorAll('.glossary-item').forEach(el => el.setAttribute('data-ws-glossary-term', 'true'));
       main.querySelectorAll('.glossary-grid').forEach(el => el.setAttribute('data-ws-glossary-grid', 'true'));
       main.querySelectorAll('.glossary-legend').forEach(el => el.setAttribute('data-ws-glossary-legend', 'true'));
+    }
+    if (pathname === '/projects/esports.html') {
+      main.dataset.wsEsports = 'true';
+      const hooks = {
+        '.esp-hero': 'data-ws-esports-hero', '.esp-hero-main': 'data-ws-esports-intro',
+        '.esp-badges': 'data-ws-esports-badges', '.hero-panel': 'data-ws-esports-visual',
+        '.hero-orb': 'data-ws-esports-orb', '.hero-orb.o1': 'data-ws-esports-orbit-a',
+        '.hero-orb.o2': 'data-ws-esports-orbit-b', '.hero-orb.o3': 'data-ws-esports-orbit-c', '.hero-orb.o4': 'data-ws-esports-orbit-d',
+        '.hero-controller': 'data-ws-esports-controller', '.hero-panel-tag': 'data-ws-esports-tag',
+        '.hero-title': 'data-ws-esports-title', '.hero-lead': 'data-ws-esports-lead',
+        '.esp-section': 'data-ws-esports-section', '.esp-stat': 'data-ws-esports-stat',
+        '.esp-stat-num': 'data-ws-esports-stat-value', '.esp-stat-label': 'data-ws-esports-stat-label',
+        '.esp-label': 'data-ws-esports-kicker', '.esp-title': 'data-ws-esports-heading',
+        '.esp-timeline': 'data-ws-esports-timeline', '.esp-tl-item': 'data-ws-esports-event',
+        '.esp-tl-date': 'data-ws-esports-date', '.esp-tl-title': 'data-ws-esports-event-title',
+        '.esp-tl-desc': 'data-ws-esports-event-copy', '.light-band': 'data-ws-esports-band',
+        '.light-card': 'data-ws-esports-card', '.color-band': 'data-ws-esports-callout',
+        '.p-status-row': 'data-ws-esports-status-row', '.p-counter': 'data-ws-esports-meta',
+        '.split-bar': 'data-ws-esports-split', '.seg-theory': 'data-ws-esports-theory',
+        '.seg-practice': 'data-ws-esports-practice', '.result-done': 'data-ws-esports-outcome-success',
+        '.result-growth': 'data-ws-esports-outcome-neutral'
+      };
+      Object.entries(hooks).forEach(([selector, attribute]) => main.querySelectorAll(selector).forEach(el => el.setAttribute(attribute, 'true')));
+      main.querySelectorAll('.p-card').forEach(el => el.setAttribute('data-ws-esports-card', 'true'));
     }
     if (pathname.startsWith('/articles/') || pathname.startsWith('/blog/') || pathname.startsWith('/projects/')) {
       main.dataset.wsEditorial = pathname.startsWith('/articles/') ? 'article' : pathname.startsWith('/blog/') ? 'note' : 'case-study';
@@ -288,14 +386,14 @@
   overlay.addEventListener('click', () => { setDrawer(false); menu.focus(); });
   sidebar.addEventListener('click', event => { if (event.target.closest('a')) setDrawer(false); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { setDrawer(false); menu.focus(); } });
-  if (isHome) {
+  if (sidebar.querySelector('.ws-section-nav')) {
     const sectionLinks = [...sidebar.querySelectorAll('.ws-section-link')];
     const setActiveSection = id => sectionLinks.forEach(link => {
       if (link.hash === '#' + id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
     const sectionTargets = sectionLinks.map(link => document.getElementById(link.hash.slice(1))).filter(Boolean);
-    setActiveSection(location.hash.slice(1) || 'about');
+    setActiveSection(location.hash.slice(1));
     window.addEventListener('hashchange', () => setActiveSection(location.hash.slice(1)));
     if ('IntersectionObserver' in window) {
       const sectionObserver = new IntersectionObserver(entries => {
@@ -417,7 +515,18 @@
     all('.flex-1').forEach(el => el.setAttribute('data-ws-grow', 'true'));
     all('.min-w-0').forEach(el => el.setAttribute('data-ws-min-width', 'true'));
     all('.shrink-0').forEach(el => el.setAttribute('data-ws-no-shrink', 'true'));
+    all('[data-ws-chart-fill]').forEach(el => {
+      const value = Number(el.dataset.wsChartFill);
+      if (Number.isFinite(value)) el.style.setProperty('--ws-chart-fill', String(Math.min(100, Math.max(0, value))));
+    });
     all('.notice-label').forEach(el => el.setAttribute('data-ws-notice-label', 'true'));
+    all('.notice, .callout').forEach(el => {
+      el.dataset.wsCallout = 'true';
+      const classes = typeof el.className === 'string' ? el.className : '';
+      if (/notice-info|callout-info/.test(classes)) el.dataset.wsTone = 'info';
+      else if (/notice-warn|callout-warn/.test(classes)) el.dataset.wsTone = 'warm';
+      else if (/notice-error|callout-error/.test(classes)) el.dataset.wsTone = 'danger';
+    });
     all('.mat-row').forEach(el => el.setAttribute('data-ws-row', 'true'));
     all('.mat-dot').forEach(el => el.setAttribute('data-ws-dot', 'true'));
     all('.wiki-links .mono').forEach(el => el.setAttribute('data-ws-index', 'true'));
@@ -462,11 +571,11 @@
       const classes = typeof el.className === 'string' ? el.className : '';
       el.setAttribute('data-ws-tag', 'true');
       if (/pill-blue|ws-tag-blue/.test(classes)) el.dataset.wsTone = 'info';
-      else if (/pill-amber|pill-orange|ws-tag-orange/.test(classes)) el.dataset.wsTone = 'warm';
-      else if (/pill-red/.test(classes)) el.dataset.wsTone = 'danger';
-      else if (/pill-neutral/.test(classes)) el.dataset.wsTone = 'neutral';
-      else if (/ws-tag-green|gl-term-new/.test(classes)) el.dataset.wsTone = 'success';
-      else if (/ws-tag-purple/.test(classes)) el.dataset.wsTone = 'accent';
+      else if (/pill-amber|pill-orange|ws-tag-orange|tag-verm|tag-orange|tag-pink/.test(classes)) el.dataset.wsTone = 'warm';
+      else if (/pill-red|tag-red/.test(classes)) el.dataset.wsTone = 'danger';
+      else if (/pill-neutral|p-status-neutral|p-status-archive/.test(classes)) el.dataset.wsTone = 'neutral';
+      else if (/ws-tag-green|gl-term-new|pill-green|tag-green/.test(classes)) el.dataset.wsTone = 'success';
+      else if (/ws-tag-purple|tag-purple/.test(classes)) el.dataset.wsTone = 'accent';
       else if (/gl-term-tag/.test(classes)) el.dataset.wsTone = 'neutral';
       if (/p-status-ready|is-complete|is-done|status-ok|ws-tag-green|gl-term-new/.test(classes)) el.setAttribute('data-ws-state', 'complete');
       else if (/p-status-soon|is-locked|status-wait/.test(classes)) el.setAttribute('data-ws-state', 'locked');

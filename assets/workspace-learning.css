@@ -319,3 +319,69 @@ button[data-ws-glossary-filter]:focus-visible, [data-ws-glossary-toc] a:focus-vi
   [data-ws-quest-card] { padding: 11px; }
 }
 [data-ws-panel-head] > h2 { margin: 0; color: var(--ws-ink); font: 750 12px/1.4 var(--ws-font); }
+
+/* Archived and long-form notices share a single accessible callout pattern. */
+[data-ws-callout] { overflow-wrap: anywhere; }
+[data-ws-callout] p { color: inherit; line-height: 1.75; }
+[data-ws-callout][data-ws-tone="info"] { color: var(--ws-ink-soft); }
+
+/* Esports case study rebuilt on semantic workspace hooks. */
+[data-ws-esports] { max-width: 1280px; margin-inline: auto; }
+[data-ws-esports-hero] { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(220px,.75fr); align-items: stretch; gap: 18px; margin: 0 0 24px; }
+[data-ws-esports-intro] { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(22px,4vw,44px); border: 1px solid var(--ws-line); border-radius: var(--ws-r-4); background: var(--ws-surface); box-shadow: var(--ws-shadow-sm); }
+[data-ws-esports-badges] { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+[data-ws-esports-title] { margin: 6px 0 10px !important; color: var(--ws-ink) !important; font-size: clamp(34px,5.2vw,58px) !important; line-height: 1.02 !important; letter-spacing: -.06em !important; }
+[data-ws-esports-context] { margin: 0 0 12px; color: var(--ws-muted); font-size: 11px; font-weight: 650; letter-spacing: .01em; }
+[data-ws-esports-lead] { max-width: 70ch; color: var(--ws-muted) !important; font-size: 14px; line-height: 1.75; }
+[data-ws-esports-visual] { position: relative; min-height: 250px; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--ws-line); border-radius: var(--ws-r-4); background: radial-gradient(circle at 52% 45%,var(--ws-accent-wash),var(--ws-surface) 68%); }
+[data-ws-esports-visual] > :is([data-ws-esports-orb],[data-ws-esports-controller],[data-ws-esports-tag]) { position: absolute; }
+[data-ws-esports-orb] { font-size: 26px; }
+[data-ws-esports-orbit-a] { inset: 15% auto auto 15%; }
+[data-ws-esports-orbit-b] { inset: 20% 17% auto auto; }
+[data-ws-esports-orbit-c] { inset: auto auto 24% 19%; }
+[data-ws-esports-orbit-d] { inset: auto 16% 20% auto; }
+[data-ws-esports-controller] { font-size: clamp(66px,9vw,104px); filter: drop-shadow(0 12px 14px rgba(23,24,33,.14)); }
+[data-ws-esports-tag] { inset: auto 12px 12px auto; padding: 6px 9px; border: 1px solid var(--ws-line); border-radius: var(--ws-pill); background: var(--ws-surface); color: var(--ws-muted); font: 10px var(--ws-mono); }
+[data-ws-esports-strip] { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 28px; padding: 13px 0; border-block: 1px solid var(--ws-line); }
+[data-ws-esports-strip] span { display: inline-flex; align-items: center; min-height: 30px; padding: 5px 10px; border: 1px solid var(--ws-line); border-radius: var(--ws-pill); background: var(--ws-surface); color: var(--ws-ink-soft); font-size: 11px; }
+[data-ws-esports-split] { display: flex; width: 100%; height: 10px; overflow: hidden; border: 1px solid var(--ws-line); border-radius: var(--ws-pill); background: var(--ws-surface-soft); }
+[data-ws-esports-split] > [data-ws-chart-fill] { flex: 0 0 calc(var(--ws-chart-fill,0) * 1%); min-width: 0; height: 100%; }
+[data-ws-esports-theory] { background: var(--ws-blue); }
+[data-ws-esports-practice] { background: var(--ws-accent); }
+[data-ws-esports-outcome-success] { border-inline-start: 3px solid var(--ws-green); background: var(--ws-green-wash); }
+[data-ws-esports-outcome-neutral] { border-inline-start: 3px solid var(--ws-accent); background: var(--ws-accent-wash); }
+[data-ws-esports-section] { min-width: 0; margin: 18px 0; padding: clamp(18px,2.5vw,28px); }
+[data-ws-esports-section] > :first-child { min-width: 0; }
+[data-ws-esports-stat] { min-width: 0; display: grid; align-content: center; gap: 6px; padding: 17px; border: 1px solid var(--ws-line); border-radius: 14px; background: var(--ws-surface-soft); }
+[data-ws-esports-stat-value] { color: var(--ws-accent); font-size: clamp(24px,3vw,36px); font-weight: 800; line-height: 1; letter-spacing: -.05em; }
+[data-ws-esports-stat-label] { color: var(--ws-muted); font-size: 11px; line-height: 1.55; }
+[data-ws-esports-kicker] { margin-bottom: 6px; color: var(--ws-accent); font: 700 10px/1.4 var(--ws-mono); letter-spacing: .08em; text-transform: uppercase; }
+[data-ws-esports-heading] { margin: 0 0 17px !important; }
+[data-ws-esports-band] { padding: clamp(18px,3vw,30px); border: 1px solid var(--ws-line); border-radius: var(--ws-r-3); background: linear-gradient(135deg,var(--ws-surface),var(--ws-surface-soft)); }
+[data-ws-esports-card] { min-width: 0; height: 100%; padding: 16px; border: 1px solid var(--ws-line); border-radius: 13px; background: var(--ws-surface); }
+[data-ws-esports-card] p:last-child { margin-bottom: 0; }
+[data-ws-esports-callout] { border-inline-start: 3px solid var(--ws-accent); border-radius: 0 13px 13px 0; background: var(--ws-accent-wash); }
+[data-ws-esports-timeline] { display: grid; gap: 0; }
+[data-ws-esports-event] { position: relative; display: grid; grid-template-columns: minmax(100px,.32fr) minmax(0,1fr); gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--ws-line); }
+[data-ws-esports-event]:last-child { border-bottom: 0; }
+[data-ws-esports-date] { color: var(--ws-accent); font: 700 11px/1.5 var(--ws-mono); }
+[data-ws-esports-event-title] { margin: 0 0 5px; color: var(--ws-ink); font-size: 14px; }
+[data-ws-esports-event-copy] { margin: 0; color: var(--ws-muted); font-size: 12px; line-height: 1.7; }
+[data-ws-esports-status-row], [data-ws-esports-meta] { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+[data-ws-esports] [data-ws-action] { min-width: 0; }
+@media (max-width: 900px) {
+  [data-ws-esports-hero] { grid-template-columns: minmax(0,1fr); }
+  [data-ws-esports-visual] { min-height: 190px; }
+}
+@media (max-width: 620px) {
+  [data-ws-esports-intro] { padding: 22px 18px; }
+  [data-ws-esports-section] { margin-block: 13px; padding: 16px; }
+    [data-ws-esports-event] { grid-template-columns: 1fr; gap: 5px; }
+  [data-ws-esports-strip] { padding-block: 11px; }
+}
+@media (max-width: 380px) {
+  [data-ws-esports-section] [data-ws-grid="utility"] { grid-template-columns: minmax(0,1fr); }
+}
+
+@keyframes ws-esports-orbit { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@media (prefers-reduced-motion: no-preference) { [data-ws-esports-orb] { animation: ws-esports-orbit 5s ease-in-out infinite; } [data-ws-esports-orbit-b] { animation-delay: -1.6s; } [data-ws-esports-orbit-c] { animation-delay: -3.2s; } [data-ws-esports-orbit-d] { animation-delay: -2.4s; } }
