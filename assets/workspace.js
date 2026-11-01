@@ -156,26 +156,45 @@
   sidebarHead.append(brand, collapse);
   sidebar.appendChild(sidebarHead);
   // — Agentic redesign: three visually separated pill groups with moving indicator
+  // v18: единый индикатор на весь сайдбар — плашка скользит между всеми группами, меняет цвет
   function attachIndicator(navEl) {
-    const indicator = document.createElement('div');
-    indicator.className = 'ws-nav-indicator';
-    indicator.setAttribute('aria-hidden','true');
-    navEl.prepend(indicator);
-    let active = navEl.querySelector('[aria-current="page"]');
-    const links = [...navEl.querySelectorAll('.ws-nav-link, .ws-section-link')];
-    if (!links.length) return;
+    // создаём один индикатор на сайдбар, а не на каждую группу
+    if (!sidebar._indicator) {
+      const ind = document.createElement('div');
+      ind.className = 'ws-nav-indicator';
+      ind.setAttribute('aria-hidden','true');
+      sidebar.prepend(ind);
+      sidebar._indicator = ind;
+    }
+    const indicator = sidebar._indicator;
+    // обновляем variant при ховере
+    function variantFor(el){
+      const group = el.closest('.ws-nav-group');
+      if (!group) return 'general';
+      return group.dataset.variant || 'general';
+    }
+    // собираем все ссылки сайдбара для единой логики leave
+    let active = sidebar.querySelector('[aria-current="page"]');
     function moveTo(el) {
-      if (!el || !navEl.contains(el)) return;
-      const top = el.offsetTop;
+      if (!el || !sidebar.contains(el)) return;
+      // offset относительно сайдбара, а не группы
+      const sTop = sidebar.getBoundingClientRect().top;
+      const eRect = el.getBoundingClientRect();
+      const top = eRect.top - sTop + sidebar.scrollTop;
       const h = el.offsetHeight;
       indicator.style.transform = 'translateY(' + top + 'px)';
       indicator.style.height = h + 'px';
-      navEl.classList.add('is-indicator-active');
+      indicator.style.opacity = '1';
+      indicator.setAttribute('data-variant', variantFor(el));
+      sidebar.classList.add('is-indicator-active');
     }
     function leave() {
-      if (active) moveTo(active); else { indicator.style.opacity='0'; navEl.classList.remove('is-indicator-active'); }
+      if (active) moveTo(active); else { indicator.style.opacity='0'; sidebar.classList.remove('is-indicator-active'); }
     }
     if (active) requestAnimationFrame(()=> moveTo(active));
+    // делегируем на группу, но движение — по сайдбару
+    const links = [...navEl.querySelectorAll('.ws-nav-link, .ws-section-link')];
+    if (!links.length) return;
     links.forEach(link=>{
       link.addEventListener('mouseenter', ()=> { link.classList.add('is-hovered'); moveTo(link); });
       link.addEventListener('mouseleave', ()=> { link.classList.remove('is-hovered'); });
@@ -185,8 +204,11 @@
     navEl.addEventListener('focusout', ()=> { setTimeout(leave, 10); });
     if (window.ResizeObserver) {
       const ro = new ResizeObserver(()=> { if (active) moveTo(active); });
+      ro.observe(sidebar);
       ro.observe(navEl);
     }
+    // также слушаем скролл сайдбара
+    sidebar.addEventListener('scroll', ()=> { if (active && indicator.style.opacity==='1') moveTo(active); }, {passive:true});
   }
   const generalGroup = document.createElement('div'); generalGroup.className='ws-nav-group'; generalGroup.dataset.variant='general';
   const caption = document.createElement('p'); caption.className='ws-sidebar-caption'; caption.textContent='Общее меню'; generalGroup.appendChild(caption);
@@ -562,29 +584,37 @@
 
 
 
-  /* ── v13: offline banner + shell state ── */
+  /* ── v18: offline toast — в дизайне, fixed снизу, не занимает место ── */
   (function initOffline(){
     var banner = document.createElement('div');
     banner.className = 'ws-offline-banner';
     banner.setAttribute('role','status');
     banner.setAttribute('aria-live','polite');
-    banner.innerHTML = '<span aria-hidden="true">◉</span> Нет соединения — показываем сохранённую версию. <button type="button">Обновить</button>';
+    banner.innerHTML = '<span aria-hidden="true"></span> Нет соединения — показываем сохранённую версию <button type="button">Обновить</button>';
     var btn = banner.querySelector('button');
     btn.addEventListener('click', function(){ location.reload(); });
     var shell = document.querySelector('.ws-shell') || document.body;
-    // insert as first child of body for sticky
-    if (document.body.firstChild) document.body.insertBefore(banner, document.body.firstChild);
-    else document.body.appendChild(banner);
+    document.body.appendChild(banner);
+    var hideTimer = null;
     function sync(){
       var online = navigator.onLine;
       banner.classList.toggle('is-visible', !online);
       document.documentElement.classList.toggle('is-offline', !online);
       if (shell) shell.classList.toggle('is-offline', !online);
       try { localStorage.setItem('ws:offline:last', JSON.stringify({online: online, at: new Date().toISOString()})); } catch(e){}
+      if (online) {
+        // показать на 1.8с "Соединение восстановлено" затем скрыть
+        if (hideTimer) clearTimeout(hideTimer);
+        banner.innerHTML = '<span aria-hidden="true" style="background:var(--ws-green);box-shadow:0 0 0 4px var(--ws-green-wash)"></span> Соединение восстановлено <button type="button">Ок</button>';
+        banner.classList.add('is-visible');
+        banner.querySelector('button').addEventListener('click', function(){ banner.classList.remove('is-visible'); });
+        hideTimer = setTimeout(function(){ banner.classList.remove('is-visible'); banner.innerHTML = '<span aria-hidden="true"></span> Нет соединения — показываем сохранённую версию <button type="button">Обновить</button>'; banner.querySelector('button').addEventListener('click', function(){ location.reload(); }); }, 2200);
+      }
     }
     window.addEventListener('online', sync);
     window.addEventListener('offline', sync);
-    sync();
+    // Не показываем сразу при загрузке если онлайн (избегаем серой плашки)
+    if (!navigator.onLine) sync();
   })();
 
   /* ── Aceternity 3D tilt: mouse tracking + glare ── */

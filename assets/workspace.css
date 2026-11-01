@@ -21,13 +21,15 @@ body.ws-ready {
   --st-radius: var(--ws-r-3) !important; --st-hard-color: transparent !important; --st-sans: var(--ws-font) !important; --st-mono: var(--ws-mono) !important;
   -webkit-font-smoothing: antialiased;
 }
-.ws-shell { min-height: 100vh; display: grid; grid-template-columns: var(--ws-rail) minmax(0, 1fr); }
+.ws-shell { min-height: 100vh; display: grid; grid-template-columns: var(--ws-rail) minmax(0, 1fr); transition: grid-template-columns 360ms cubic-bezier(.34,1.56,.64,1); }
 :root[data-theme="dark"] body.ws-ready { color-scheme: dark; }
 .ws-sidebar {
   position: sticky; inset-block-start: 0; z-index: 80;
   display: flex; flex-direction: column; gap: 18px;
   height: 100dvh; padding: 22px 14px 16px;
   overflow-x: hidden; overflow-y: auto; background: var(--ws-surface);
+  will-change: width, padding, transform;
+  transition: width 360ms cubic-bezier(.34,1.56,.64,1), padding 360ms ease, gap 300ms ease;
   border-inline-end: 1px solid var(--ws-line);
   transition: width var(--ws-motion), transform var(--ws-motion);
 }
@@ -52,7 +54,10 @@ body.ws-ready {
   font-weight: 800;
   letter-spacing: .1em;
 }
+.ws-sidebar { position: relative; }
+.ws-sidebar .ws-nav-group { position: relative; }
 .ws-nav { position: relative; display: grid; gap: 3px; }
+/* единый индикатор — один на весь сайдбар, цвет меняется по секции */
 .ws-nav-indicator {
   position: absolute;
   left: 0; right: 0;
@@ -63,9 +68,12 @@ body.ws-ready {
   opacity: 0;
   pointer-events: none;
   transform: translateY(0);
-  transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 200ms ease, height 200ms ease;
+  transition: transform 360ms cubic-bezier(.34,1.56,.64,1), opacity 200ms ease, height 200ms ease, background 220ms ease, border-color 220ms ease;
   will-change: transform;
 }
+.ws-nav-indicator[data-variant="general"] { background: var(--ws-accent-wash); border-color: color-mix(in srgb, var(--ws-accent) 14%, transparent); }
+.ws-nav-indicator[data-variant="directions"] { background: var(--ws-violet-wash); border-color: color-mix(in srgb, var(--ws-violet) 14%, transparent); }
+.ws-nav-indicator[data-variant="onpage"] { background: var(--ws-orange-wash); border-color: color-mix(in srgb, var(--ws-orange) 14%, transparent); }
 @supports (anchor-name: --ws-active) {
   .ws-nav-link[aria-current="page"] { anchor-name: --ws-active; }
   .ws-nav-indicator { position-anchor: --ws-active; top: anchor(top); height: anchor-size(height); transform: none; transition: top 400ms cubic-bezier(.34,1.56,.64,1), height 200ms ease, opacity 200ms ease; }
@@ -104,7 +112,7 @@ body.ws-ready {
   min-height: var(--ws-topbar); display: flex; align-items: center; justify-content: space-between;
   gap: 18px; padding: 12px clamp(18px, 3.4vw, 50px);
   background: var(--ws-surface);
-  backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--ws-line);
 }
 .ws-topbar-context { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--ws-muted); font-size: 12px; }
 .ws-breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-width: 0; }
@@ -769,3 +777,26 @@ a[data-prefetched="true"] { text-decoration-thickness: 2px; }
 /* ── v16: theme transition polish ── */
 html { transition: background-color 220ms ease, color 220ms ease; }
 @media (prefers-reduced-motion: reduce) { html { transition: none !important; } }
+
+
+/* v18: единые шрифты — ровно, аккуратно, один размер */
+.ws-page-content :is(h1,h2,h3,h4) { font-family: var(--ws-font); letter-spacing: -.025em; text-wrap: balance; overflow-wrap: anywhere; }
+.ws-page-content h1 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; font-weight: 800; }
+.ws-page-content h2 { font-size: clamp(18px, 2.4vw, 22px); line-height: 1.25; font-weight: 760; }
+.ws-page-content h3 { font-size: 15px; line-height: 1.4; font-weight: 700; }
+.ws-page-content :is(p,li,td,th) { font-size: 14px; line-height: 1.6; }
+.ws-page-content small { font-size: 12px; line-height: 1.5; }
+.ws-page-content code, .ws-page-content pre { font-family: var(--ws-mono); }
+
+
+/* v18: пространства — все страницы к общему дизайну, без багов */
+.flat-scope :is(h1,h2,h3) { font-family: var(--ws-font); letter-spacing:-.02em; }
+.flat-scope p, .flat-scope li { font-size:14px; line-height:1.65; }
+.st-team-card, .glossary-card, .lab-panel, .st-panel, .op-panel, .office-panel { border:1px solid var(--ws-line); border-radius:16px; background: var(--ws-surface); box-shadow: var(--ws-shadow-sm); overflow:hidden; min-width:0; overflow-wrap:anywhere; }
+.st-team-card:hover { transform: translateY(-1px); box-shadow: var(--ws-shadow-md); }
+
+
+/* v18: legacy headers — привести к общему дизайну */
+[data-ws-brand], .st-brand { font-family: var(--ws-font); font-weight: 800; letter-spacing: -.04em; }
+.flat-scope :is(header, nav) { font-family: var(--ws-font); }
+.st-topbar a { font-size: 13px; font-weight: 600; }
