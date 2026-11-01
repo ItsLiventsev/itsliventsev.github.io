@@ -917,3 +917,55 @@ html { scroll-behavior: smooth; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 220ms; animation-timing-function: var(--ws-motion-emphasis); }
 .ws-resource-grid a, .ws-contact-grid a { will-change: transform; }
 .ws-resource-grid a:focus-visible, .ws-contact-grid a:focus-visible { outline: var(--ws-focus); outline-offset: 2px; }
+
+
+/* ── Aceternity 3D tilt: preserve-3d + glare (mouse tracking via JS) ── */
+@media (hover: hover) and (pointer: fine) {
+  .ws-course-card[data-tilt],
+  .ws-project-card[data-tilt],
+  .ws-panel[data-tilt],
+  #stack .ws-skill-card[data-tilt] {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 420ms cubic-bezier(.2,.8,.2,1), box-shadow 420ms ease, border-color var(--ws-motion);
+  }
+  .ws-course-card[data-tilt]:hover,
+  .ws-project-card[data-tilt]:hover,
+  .ws-panel[data-tilt]:hover,
+  #stack .ws-skill-card[data-tilt]:hover { box-shadow: 0 12px 28px rgba(16,24,40,.11); }
+  .ws-course-card[data-tilt] .ws-tilt-glare,
+  .ws-project-card[data-tilt] .ws-tilt-glare,
+  .ws-panel[data-tilt] .ws-tilt-glare { position: absolute; inset: -1px; border-radius: inherit; background: radial-gradient(420px 240px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.16), transparent 72%); opacity: 0; pointer-events: none; transition: opacity 220ms ease; mix-blend-mode: overlay; }
+  :root[data-theme="dark"] .ws-course-card[data-tilt] .ws-tilt-glare,
+  :root[data-theme="dark"] .ws-project-card[data-tilt] .ws-tilt-glare { background: radial-gradient(420px 240px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.06), transparent 70%); }
+  .ws-course-card[data-tilt]:hover .ws-tilt-glare,
+  .ws-project-card[data-tilt]:hover .ws-tilt-glare,
+  .ws-panel[data-tilt]:hover .ws-tilt-glare { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-course-card[data-tilt], .ws-project-card[data-tilt], .ws-panel[data-tilt], #stack .ws-skill-card[data-tilt] {
+    transform: none !important; transition: none !important;
+  }
+  .ws-tilt-glare { display: none !important; }
+}
+
+/* ── Dark cozy washes: project/course cards inherit dark-wash per accent ── */
+:root[data-theme="dark"] .ws-course-violet { background: #1d1c2e !important; border-top-color: #5b4d8a !important; color: var(--ws-ink) !important; }
+:root[data-theme="dark"] .ws-course-blue   { background: #1a212e !important; border-top-color: #3d5a87 !important; }
+:root[data-theme="dark"] .ws-course-green  { background: #1b2420 !important; border-top-color: #335241 !important; }
+:root[data-theme="dark"] .ws-course-orange { background: #2a2018 !important; border-top-color: #765230 !important; }
+:root[data-theme="dark"] .ws-course-terracotta { background: #2e2220 !important; border-top-color: #6b3d33 !important; }
+:root[data-theme="dark"] .ws-course-mustard { background: #2b2918 !important; border-top-color: #6b5f24 !important; }
+:root[data-theme="dark"] .ws-course-brown { background: #221a14 !important; border-top-color: #5c3f2a !important; }
+:root[data-theme="dark"] .ws-course-slate { background: #1c222c !important; border-top-color: #3e4a5c !important; }
+:root[data-theme="dark"] .ws-project-card[data-status="in_progress"] { background: var(--ws-blue-wash) !important; border-inline-color: var(--ws-line); }
+:root[data-theme="dark"] .ws-project-card[data-status="done"] { background: var(--ws-green-wash) !important; }
+:root[data-theme="dark"] .ws-project-card[data-status="draft"] { background: var(--ws-mustard-wash) !important; }
+:root[data-theme="dark"] .ws-project-card[data-accent="terracotta"] { background: #2e2220 !important; border-inline-color: #6b3d33 !important; }
+:root[data-theme="dark"] .ws-project-card[data-accent="brown"] { background: #221a14 !important; border-inline-color: #5c3f2a !important; }
+
+/* ── Magic UI shimmer + border-beam (reduced-motion off) ── */
+@keyframes ws-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.ws-shimmer { background: linear-gradient(90deg, transparent 22%, rgba(255,255,255,.46) 50%, transparent 78%); background-size: 220% 100%; animation: ws-shimmer 1400ms ease both; }
+@media (prefers-reduced-motion: reduce) { .ws-shimmer { animation: none !important; } }
+

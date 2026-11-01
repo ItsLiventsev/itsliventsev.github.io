@@ -239,15 +239,31 @@ window.I18N.register({
 <script src="assets/home-activity.js?v=20261101r1" defer></script>
 
 <script>
-// axe-core audit loader (dev, press Alt+Shift+A)
-document.addEventListener('keydown', function(e){
-  if (e.altKey && e.shiftKey && e.key.toLowerCase()==='a') {
-    if (window.axe) { window.axe.run().then(r=>console.table(r.violations)); return; }
-    var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/axe-core@4.10/axe.min.js';
-    s.onload=function(){ axe.run().then(r=>{ console.log('[axe] violations', r.violations); alert('axe: '+r.violations.length+' violations — see console'); }); };
-    document.head.appendChild(s);
+// axe-core audit — расширенный: Alt+Shift+A, автозапуск на localhost, бейдж + консольный отчёт
+(function(){
+  var AXE_URL='https://cdn.jsdelivr.net/npm/axe-core@4.10/axe.min.js';
+  function badge(text, bg){ var b=document.createElement('div'); b.id='ws-a11y-badge'; b.setAttribute('role','status'); b.setAttribute('aria-live','polite'); b.style.cssText='position:fixed;right:16px;bottom:72px;z-index:80;max-width:320px;padding:10px 12px;border-radius:12px;border:1px solid var(--ws-line);background:'+bg+';color:var(--ws-ink);font:700 11px/1.4 var(--ws-font);box-shadow:var(--ws-shadow-md)'; b.textContent=text; document.body.appendChild(b); setTimeout(function(){ b.style.opacity='0'; b.style.transition='opacity 400ms ease'; setTimeout(function(){ b.remove(); }, 500); }, 5200); return b; }
+  function runAxe(){
+    function exec(){ window.axe.run({resultTypes:['violations','incomplete']}).then(function(res){
+      console.groupCollapsed('[a11y] axe — '+res.violations.length+' violations'); console.table(res.violations.map(function(v){ return {impact:v.impact, id:v.id, nodes:v.nodes.length, help:v.help}; })); res.violations.forEach(function(v){ console.group('%c'+v.id+' — '+v.help+' ('+v.impact+')', 'font-weight:700;color:'+(v.impact==='critical'?'#c0392b':v.impact==='serious'?'#d35400':'#7d6608')); v.nodes.forEach(function(n){ console.log(n.html, n.failureSummary); }); console.groupEnd(); }); console.groupEnd();
+      var msg = res.violations.length ? 'a11y: '+res.violations.length+' проблем — см. консоль (F12)' : 'a11y: нарушений не найдено ✓';
+      badge(msg, res.violations.length ? '#fff7e6' : '#eef6ec');
+      try{ localStorage.setItem('ws:a11y:last', JSON.stringify({at:new Date().toISOString(), count:res.violations.length})); }catch(e){}
+    }).catch(function(err){ console.error('[a11y] axe error', err); badge('a11y ошибка: '+err.message, '#ffeef0'); }); }
+    if(window.axe){ exec(); return; }
+    var s=document.createElement('script'); s.src=AXE_URL; s.onload=exec; s.onerror=function(){ badge('a11y: не удалось загрузить axe-core', '#ffeef0'); }; document.head.appendChild(s);
   }
-});
+  document.addEventListener('keydown', function(e){ if(e.altKey && e.shiftKey && e.key.toLowerCase()==='a'){ e.preventDefault(); runAxe(); } });
+  // автозапуск на localhost / 127.0.0.1
+  if(location.hostname==='localhost' || location.hostname==='127.0.0.1'){ window.addEventListener('load', function(){ setTimeout(runAxe, 1200); }); }
+  // кнопка в футере (если есть .ws-footer)
+  window.addEventListener('DOMContentLoaded', function(){
+    var footer = document.querySelector('.ws-footer');
+    if(!footer || document.getElementById('ws-a11y-trigger')) return;
+    var btn=document.createElement('button'); btn.id='ws-a11y-trigger'; btn.type='button'; btn.textContent='a11y аудит'; btn.style.cssText='padding:4px 8px;border-radius:999px;border:1px solid var(--ws-line);background:var(--ws-surface);font:600 10px var(--ws-font);cursor:pointer;color:var(--ws-muted)';
+    btn.addEventListener('click', runAxe); footer.appendChild(btn);
+  });
+})();
 </script>
 </body>
 </html>
