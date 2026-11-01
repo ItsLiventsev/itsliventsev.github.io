@@ -1,3 +1,4 @@
+.scroll-progress { display: none !important; }
 /* Workspace UI components — selector namespace is new and independent of page templates. */
 body.ws-ready {
   min-height: 100vh;
@@ -210,7 +211,34 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-
 .ws-mobile-menu { display: none; }
 [data-ws-decoration="true"] { display: none !important; }
 .ws-context-nav + .ws-page-content { padding-top: 22px; }
-.scroll-progress { display: none !important; }
+/* ── v15: reading progress (top 2px bar, scroll-timeline) ── */
+.ws-read-progress { position: fixed; inset: 0 0 auto 0; z-index: 100; height: 2px; background: var(--ws-accent); transform-origin: left; transform: scaleX(var(--read-progress, 0)); transition: transform 80ms linear; pointer-events: none; }
+@supports (animation-timeline: scroll()) {
+  .ws-read-progress { animation: ws-read linear both; animation-timeline: scroll(root); }
+  @keyframes ws-read { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+@media (prefers-reduced-motion: reduce) { .scroll-progress { transition: none; } }
+/* ── v15: copy code button ── */
+.ws-copy-btn { position: absolute; top: 8px; right: 8px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--ws-line); background: var(--ws-surface); color: var(--ws-muted); font: 600 10px var(--ws-font); cursor: pointer; opacity: 0; transition: opacity 140ms, background 140ms; }
+.ws-content pre:hover .ws-copy-btn, .ws-content pre:focus-within .ws-copy-btn { opacity: 1; }
+.ws-copy-btn:hover { background: var(--ws-surface-soft); color: var(--ws-ink); }
+.ws-copy-btn.is-copied { background: var(--ws-accent); color: #fff; border-color: var(--ws-accent); }
+/* ── v15: print ── */
+@media print {
+  .ws-sidebar, .ws-topbar, .ws-offline-banner, .ws-search-dialog, .scroll-progress, #to-top { display: none !important; }
+  .ws-shell { display: block; }
+  .ws-page-content { padding: 0; }
+  a::after { content: " (" attr(href) ")"; font-size: 9px; color: #666; }
+  a[href^="#"]::after, a[href^="/"]::after { content: ""; }
+  body { background: #fff; color: #000; }
+  .ws-content pre { border: 1px solid #ddd; background: #fafafa; }
+}
+/* ── v15: lightbox (dialog) ── */
+.ws-lightbox { width: min(96vw, 1100px); max-height: 90vh; padding: 0; border: 1px solid var(--ws-line); border-radius: 16px; background: var(--ws-surface); overflow: hidden; }
+.ws-lightbox::backdrop { background: rgba(12,13,18,.72); backdrop-filter: blur(8px); }
+.ws-lightbox img { display: block; width: 100%; height: auto; max-height: 86vh; object-fit: contain; background: #0a0a0a; }
+.ws-lightbox-caption { padding: 10px 14px; border-top: 1px solid var(--ws-line); font: 11px/1.5 var(--ws-font); color: var(--ws-muted); }
+
 body.ws-ready #to-top { position: fixed; inset: auto 24px 24px auto; z-index: 45; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--ws-line); border-radius: 50%; background: var(--ws-surface); color: var(--ws-ink); box-shadow: var(--ws-shadow-md); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(6px); transition: opacity var(--ws-motion), transform var(--ws-motion), visibility var(--ws-motion); }
 body.ws-ready #to-top.show { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
 :root[data-theme="dark"] :is([data-ws-action="primary"], .ws-button-primary) { color: var(--ws-canvas) !important; }

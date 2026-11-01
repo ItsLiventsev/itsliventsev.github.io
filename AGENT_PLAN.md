@@ -369,6 +369,43 @@
 
 ---
 
+
+## Sprint v15 · 2026-11-01 — reading progress + scroll-spy + copy pre + lightbox + print · MAX
+
+> **Режим:** Shared Chat v15 (Architect → Visual ⇄ Motion → Integrator → Оркестратор) → один PR MAX.
+> **Критерий:** `76/0/0` + `3517/0` + `node --check` ok; задник `#F8F9FA/#15161d`; no layout shift.
+
+### Shared Chat v15
+
+**Architect** — аудит v14 закрыт (command palette + BroadcastChannel + ticker ✓). Нашёл 4 polish-щели: нет reading progress (top bar), TOC без scroll-spy active, pre без copy button, нет lightbox/print; scroll-progress по тесту должен оставаться hidden (legacy contract).
+
+**Visual** — reading progress `ws-read-progress` 2px top bar `scaleX(--read-progress)` + `@supports animation-timeline: scroll()` fallback; TOC active `›` + accent; copy button `8px` corner hover/focus → `Скопировано ✓`; lightbox `dialog 1100px` + backdrop blur 8px; print hides sidebar/topbar/search.
+
+**Motion** — progress `80ms linear` + to-top `220ms` + copy `140ms`; lightbox `backdrop 8px`; all `prefers-reduced-motion: reduce` instant; only transform/opacity.
+
+**Integrator** — один PR: `workspace.css` progress (keep hidden legacy + new ws-read-progress) + copy + print + lightbox + `workspace-home.css` scroll-spy active + to-top.show alias + `workspace.js` initReading/initCopyPre/initLightbox (clipboard + execCommand fallback) + `workspace.js` scroll-spy fallback for no IO.
+
+**Оркестратор** — утвердил MAX, потребовал `3517/0` (legacy hidden) до мержа.
+
+### Задачи v15
+
+| № | Ось | Задача | Реф |
+|---|-----|--------|-----|
+| 1 | Навигация | Reading progress 2px top `ws-read-progress` + to-top show | Lenis |
+| 2 | Навигация | Scroll-spy TOC active `›` + accent | Docs |
+| 3 | Компоненты | Copy pre button + clipboard fallback | Shadcn |
+| 4 | Компоненты | Lightbox dialog 96vw/1100px blur 8px | Aceternity |
+| 5 | Компоненты | Print: hide chrome, block bento | Print |
+| 6 | Навигация | Keep legacy `.scroll-progress hidden` + `#to-top.show` for regression | Contract |
+
+### Проверка
+
+- `audit 76/0/0`; `regression 3517/0` (hidden preserved)
+- `node --check` ok
+- manual: scroll → top bar fills; TOC active; pre hover copy; image click → lightbox; print preview clean.
+
+---
+
 ### Следующий кандидат v14
 
 - Command palette `⌘K` → actions (навигация без мыши) + dashboard realtime via `BroadcastChannel` между вкладками.
