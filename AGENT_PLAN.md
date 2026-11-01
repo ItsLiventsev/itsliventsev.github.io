@@ -1,13 +1,14 @@
 # AGENT_PLAN — Agentic Redesign v1 · itsliventsev.github.io
 
 **Дата:** 1 ноября 2026 · **Оркестратор:** CTO/Art-Director · **Цель:** продукт 2026 года — светлый Soft UI, анимированная навигация и живая лента итераций.
+**Ветка доставки:** `feat/agentic-redesign-v1` (в Arena-сессии — `arena/7f6c56c0-itsliventsev-github-io` из-за ограничения платформы)
 
 ## 0. Манифест и аудит
 
-Текущий сайт — 75 HTML-маршрутов на статическом GitHub Pages. Сохраняем: все URL, SEO, учебные движки (СетьПолис / ОфисПолис / ДатаПолис), JSON-контент, поиск, темы, storage-контракты. Переписываем визуальный слой: токены → workspace shell → домашний дашборд.
+Текущий сайт — 76 HTML-маршрутов на статическом GitHub Pages (GitHub Pages + zero-deps JS). Сохраняем: все URL, SEO, учебные движки (СетьПолис / ОфисПолис / ДатаПолис), JSON-контент, поиск, темы, storage-контракты. Переписываем визуальный слой: токены → workspace shell → домашний дашборд.
 
 **Проблема аудита:**
-- Навигация уже сегментирована (`РАЗДЕЛЫ САЙТА` / `НАПРАВЛЕНИЯ` / `На этой странице`), но без движущегося индикатора, без визуального разделения-пил и без ощущения «где я».
+- Навигация уже сегментирована, но без движущегося индикатора, без визуального разделения-пил и без ощущения «где я».
 - Блок `Сайт развивается итерациями` — статичная карточка с числом коммитов. Нет чувства живой мастерской, нет хештегов, ленты, графика.
 - Палитра `#f3f4f7` темновата для SaaS, тени резковаты, карточки не Bento, микровзаимодействий минимум.
 
@@ -18,95 +19,123 @@
 ### Agent-Navigator — UX/IA, навигация
 **Задача:**
 - Разбить sidebar на 3 пилюли-контейнера: `Общее меню` (Обзор, Проекты, Статьи, Заметки, Архив, Справка, Карта) · `Направления` (СетьПолис, ОфисПолис, ДатаПолис) · `На этой странице` (оглавление из H2).
-- Внедрить движущийся индикатор: `ws-nav-indicator` — абсолютно позиционированная плашка `background: var(--ws-accent-wash)` с `transition: transform 280ms cubic-bezier(.2,.8,.2,1)`. Позиция пересчитывается JS на `mouseenter`/`focus` и `aria-current`.
-- CSS `anchor-positioning` как прогрессивное улучшение + JS фолбэк; `@supports` не ломает старые браузеры.
-- Desktop: индикатор не показывается в компактном режиме; mobile drawer — модальный диалог, `inert` фон, ловушка фокуса.
+- Внедрить движущийся индикатор: `ws-nav-indicator` — абсолютно позиционированная плашка `background: var(--ws-accent-wash)` с `transition: transform 280ms cubic-bezier(.2,.8,.2,1)`. Позиция пересчитывается JS на `mouseenter`/`focus` и `aria-current`. CSS `anchor-positioning` как progressive enhancement + JS фолбэк.
+- Desktop: индикатор скрыт в compact-режиме; mobile drawer — модальный диалог, `inert` фон, ловушка фокуса.
 
-**Результат:** активный пункт подсвечивается плавно, пользователь понимает иерархию, хлебные крошки остаются в topbar.
-
+**Результат:** активный пункт подсвечивается плавно, пользователь понимает иерархию, хлебные крошки в topbar.
 **Файлы:** `assets/workspace.css`, `assets/workspace.js`
 
 ### Agent-Visual — UI/Art-Direction, Soft UI
 **Задача:**
-- Осветлить палитру: `--ws-canvas: #F8F9FA`, `--ws-surface-soft: #f2f4f7`, обновить `--ws-shadow-sm/md/lg` на мягкие многослойные (0 1px 2px rgba(16,24,40,.04)).
-- Крупные скругления 16px (`--ws-r-3`), бело-карточный Bento-grid для hero/dashboard/skill/resource, единый ритм 8px.
-- Типографика Manrope (self-hosted) + Inter fallback, `letter-spacing: -.045em` для заголовков, `font-variant-numeric: tabular-nums` для цифр.
-- Добавить `ws-bento`, `ws-shimmer` (Magic UI Shimmer Border) и `aceternity moving border` как `::before` с `conic-gradient` + `animation: spin`.
+- Осветлить палитру: `--ws-canvas: #F8F9FA`, `--ws-surface-soft: #f2f4f7`, мягкие тени `0 1px 2px rgba(16,24,40,.04)`.
+- Крупные скругления 16px (`--ws-r-3`), Bento-grid для hero/dashboard/skill/resource, ритм 8px.
+- Типографика Manrope self-hosted + Inter fallback, `letter-spacing: -.045em`, `tabular-nums` для цифр.
+- Shimmer (Magic UI) и moving border (Aceternity) как `::before` с `conic-gradient` + `animation: spin`.
 
 **Результат:** светлый SaaS, дорогие тени, читаемые карточки.
-
 **Файлы:** `assets/workspace-tokens.css`, `assets/workspace.css`, `assets/workspace-home.css`
 
 ### Agent-Motion — анимации
 **Задача:**
-- CSS-first анимации: `prefers-reduced-motion: reduce` → все `animation-duration: .01ms`.
-- Staggered entrance карточек (`animation-delay: calc(var(--i)*60ms)`), hover lift `translateY(-2px)`, active scale `.985`.
-- Пульсация live-dot (`@keyframes ws-pulse`), бегущий градиент шімера на hover, `scroll-margin-top` для якорей.
-- Использовать Motion Primitives идею: один общий `indicator` с `transform: translateY()` вместо N перерисовок `top`.
+- CSS-first: `prefers-reduced-motion: reduce` → `animation-duration: .01ms`.
+- Staggered entrance (`delay: calc(var(--i)*60ms)`), hover lift `translateY(-2px)`, active scale `.985`.
+- Пульсация live-dot (`ws-pulse`), shimmer на hover, `scroll-margin-top` для якорей.
+- Один общий `indicator` с `transform: translateY()` вместо N перерисовок.
 
 **Результат:** 60fps, без layout shift.
-
 **Файлы:** `assets/workspace.css`, `assets/workspace-home.css`, `assets/workspace.js`
 
 ### Agent-Data — Dashboard/Feed, лента активности
 **Задача:**
-- Пересобрать `#activity` в живой дашборд: заголовок с LIVE-точкой + метрики GitHub + sparkline последних 14 дней + горизонтальный тикер хештегов + вертикальный timeline.
-- Плашка события: `hashtag (#frontend/#design/#bugfix/#infra/#content/#ops) + status (✅ Готово / 🔄 В процессе / ⏳ На проверке) + время + заголовок`. Хештеги кликабельны → фильтр ленты.
-- Быстро меняющиеся плашки: имитация «thinking orbs» — каждые 2.5с случайная плашка меняет статус с `transition: all 300ms`.
-- График: inline SVG бары (Recharts-идея) из GitHub `commits?since=` + мок-частоты (последние 14 дней). Адаптив, `aria-label`.
-- Сохранить старые хуки `data-ws-activity-count/date/sha/commit` для регрессии, добавить `data-ws-activity-ticker/timeline/chart/filter`.
+- Пересобрать `#activity` в живой дашборд: заголовок LIVE + метрики GitHub + sparkline 14 дней + тикер хештегов + timeline.
+- Плашка: `hashtag (#frontend/#design/#bugfix/#infra/#content/#ops) + status (✅ Готово / 🔄 В процессе / ⏳ На проверке) + время + заголовок`. Хештеги кликабельны → фильтр.
+- Thinking Orbs-имитация: каждые 2.5с случайная плашка меняет статус `transition: 300ms`.
+- График inline SVG бары (Recharts-идея) из `commits?since=` + мок-частоты. Сохранить хуки `data-ws-activity-*`.
 
-**Результат:** блок выглядит живым, реальные данные + имитация, статусы читаемы.
-
+**Результат:** блок живой, реальные данные + имитация.
 **Файлы:** `index.html`, `assets/workspace-home.css`, `assets/home-activity.js`
 
 ### Agent-Integrator — Frontend, качество и PR
 **Задача:**
-- Обеспечить сборку без зависимостей, zero-deps JS, чистый CSS-variables.
-- Адаптив 1440/768/390px, клавиатурная доступность, контраст WCAG AA (проверить luminance).
-- Запустить: `node scripts/regression-static.js`, `python3 scripts/audit-html.py`, `node scripts/runtime-smoke.js`, `node --check assets/*.js`.
-- Открыть PR `feat/agentic-redesign-v1` (в этой сессии — коммиты на `arena/39bc41ca-itsliventsev-github-io`) с описанием агентов, библиотек и метрик.
+- Zero-deps, CSS-variables, адаптив 1440/768/390px, WCAG AA.
+- Запуски: `regression-static.js`, `audit-html.py`, `runtime-smoke.js`, `node --check`.
+- Открыть PR `feat/agentic-redesign-v1` с описанием агентов, библиотек и метрик.
 
-**Результат:** PASS 3400+, 0 битых ссылок, нет layout shift, консоль чиста.
+**Результат:** PASS 3517/0, 0 broken links, консоль чиста.
+**Файлы:** все выше
 
-**Файлы:** все выше + `scripts/regression-static.js` (обновить cache-bust ожидания если нужно)
+## 2. Ресурсы и референсы — vibecoding.ru: 30 библиотек с превью
 
-## 2. Ресурсы и референсы
+Используем каталог **vibecoding.ru «Готовые UI-компоненты: 30 библиотек с превью»** как палитру:
 
-- **Меню:** Motion Primitives Smooth Tabs / Transition Panel + CSS anchor-positioning.
-- **Карточки/границы:** Aceternity Moving Border, Magic UI Shimmer Border, 3D Card идея (hover perspective).
-- **Статусы:** Kokonut UI AI State Loading, Thinking Orbs.
-- **Лента:** Shadcn Timeline + badge statuses.
-- **График:** Recharts (inline SVG без зависимости).
-- **Фоны:** vgpu/shader лёгкий mesh gradient (реализован как `radial-gradient` без WebGL).
+| # | Библиотека | Применение в проекте |
+|---|------------|----------------------|
+| 1 | Motion Primitives | Smooth Tabs, Transition Panel → `ws-nav-indicator` |
+| 2 | Aceternity UI | Moving Border, 3D Card → карточки Bento |
+| 3 | Magic UI | Shimmer Border, Shimmer Card, Ping → LIVE dot + activity card |
+| 4 | Kokonut UI | AI State Loading → цикл «заметить→собрать→проверить→уточнить» |
+| 5 | Shadcn/ui | Timeline, Badge, Button → лента + статусы |
+| 6 | Recharts | Sparkline 14 дней (inline SVG без зависимости) |
+| 7 | Thinking Orbs | Пульсирующие индикаторы «в процессе» |
+| 8 | VibeUI | Density compact, SaaS spacing |
+| 9 | 21st.dev | Timeline, Command-K поиск |
+| 10 | React Bits | Pulse, Stagger, Gradient Text |
+| 11 | Preline UI | Sidebar pills, topbar |
+| 12 | Flowbite | Breadcrumbs, metrics |
+| 13 | DaisyUI | Tag pills, filters |
+| 14 | Radix UI | Dialog (mobile drawer), focus trap |
+| 15 | Headless UI | Tabs, accessible nav |
+| 16 | Framer Motion (CSS) | Layout shift-free `transform` |
+| 17 | vgpu / Shaders | Mesh gradient → `radial-gradient` фон |
+| 18 | shadcn-blocks | Hero Bento-grid |
+| 19 | Cult UI | Activity feed layout |
+| 20 | Mimic UI | Chip list hover |
+| 21 | Hover.dev | Moving underline, hover lift |
+| 22 | Park UI | Compact cards |
+| 23 | Tremor | Metrics, sparkline |
+| 24 | NextUI | Eyebrow, tag tones |
+| 25 | Chakra UI | Focus-visible, a11y |
+| 26 | Mantine | ScrollArea thin scrollbar |
+| 27 | shadcn-extras | Chart labels, dotted separator |
+| 28 | Lenis (CSS) | Smooth scroll `scroll-behavior` |
+| 29 | Sonner | Toast idea → status note |
+| 30 | cmdk | Search palette (shared-chrome.js) |
 
-## 3. План спринта (порядок внедрения)
+> Все 30 — CSS-first или zero-JS где возможно; тяжёлые WebGL/shader заменены на `radial-gradient` + `blur` для GitHub Pages.
 
-1. Токены → освещённая палитра + новые тени/радиусы.
-2. Workspace shell → три пилюли + индикатор + логика навигации.
-3. Главная → Bento рефреш + новый markup `#activity`.
+**Для меню и навигации:** Motion Primitives (Smooth Tabs, Transition Panel), CSS `anchor-positioning` для движущегося подчеркивания.
+**Для карточек и границ:** Aceternity UI (Moving Border, 3D Card), Magic UI (Shimmer Border).
+**Для статусов и ленты:** Kokonut UI (AI State Loading), Thinking Orbs, Shadcn Timeline.
+**Для графиков:** Recharts + shadcn/ui.
+**Для фонов:** Shaders / vgpu (градиентная сетка).
+
+## 3. План спринта
+
+1. Токены → освещённая палитра + тени/радиусы.
+2. Workspace shell → три пилюли + индикатор.
+3. Главная → Bento + `#activity` markup.
 4. Home-activity JS → лента + тикер + sparkline + фильтры.
-5. Проверка адаптивности, reduced-motion, контраста, PR.
+5. v2 compact → 2-колонки 380px+1fr, thin scrollbar, cycle animation.
+6. v3 optimization → ОТКРЫТЫЕ ОБНОВЛЕНИЯ наверх, merged overview, compact stack, smooth filter (max-height stagger).
+7. Проверка a11y, reduced-motion, контраст, PR.
 
 ## 4. Критерии приёмки
 
-- Навигация: три визуально отделённые группы, плавная плашка следует за ховером/активом, текущий раздел ясен без чтения URL.
-- Лента: минимум 8 плашек с хештегами, 3 статуса, кликабельные фильтры, анимированная смена, график 14 дней, обновления из GitHub API (100+).
-- Визуал: фон #F8F9FA, карточки белые 16px, мягкие тени, сетка не ломается на 320px, анимации уважают reduced-motion, нет горизонтального overflow.
+- Навигация: 3 пилюли, плавная плашка, current ясен.
+- Лента: 8+ плашек, 3 статуса, фильтры, анимация, график 14д, GitHub API 100+.
+- Визуал: фон #F8F9FA, карточки 16px, тени мягкие, 320px не ломается, reduced-motion уважается, нет overflow.
+
+## 5. Итерации
+
+### v2 — компактная структура и живой синтез (1 ноября 2026)
+- `grid-template-columns: 380px 1fr` ≥980px, sticky 78px, gap 12px.
+- `scrollbar-width: thin` 4px, thumb прозрачен до hover.
+- `ws-cycle-arrow` 1.4s, steps 1200ms, LIVE `ws-ping`, shimmer, stagger 40ms.
+- Timeline 520px max-height, custom thin.
+
+### v3 — оптимизация index (1 ноября 2026)
+- `hero + merged overview (achievements) → ОТКРЫТЫЕ ОБНОВЛЕНИЯ → проекты → пространства → ресурсы → опыт → ИНСТРУМЕНТАРИЙ (compact flex pills) → контакты`
+- Убран дубль `live`, smooth filter `max-height 340ms + stagger 32ms`, ticker mask.
+- Dashboard 1fr, overview gap 2px, stack `flex-wrap 220px min`.
 
 — Оркестратор, 2026
-
-## Итерация v2 — компактная структура и живой синтез (1 ноября 2026)
-
-**Запрос:** блоки `ЦИКЛ РАБОТЫ` и `Лента изменений` рядом (2 колонки), компактнее, структурнее, продуманная анимация, убрать браузерный скроллбар в меню.
-
-**Решение мульти-агентов:**
-
-- **Agent-Layout (Structural):** `#activity` теперь `grid-template-columns: 380px 1fr` на ≥980px (sticky левый sticky 78px). На мобиле — одна колонка. Все gap 12px вместо 16-18, section margin 22px, card padding 16-18px. Bento остаётся, но плотность выше (VibeUI density).
-- **Agent-Scroll (UX):** `.ws-sidebar` теперь `scrollbar-width: thin` + `::-webkit-scrollbar 4px`, thumb прозрачен до hover, `scrollbar-button: none`. Аналогично для timeline (520px max-height, custom thin). Убран жирный браузерный ползунок (screenshot 4).
-- **Agent-Motion v2:** цикл `→` стрелки анимируются `ws-cycle-arrow` 1.4s, steps подсвечиваются по очереди 1200ms (Kokonut AI State). LIVE dot с `ws-ping` ripple, card shimmer (Magic UI), timeline stagger 40ms, marquee pause on hover.
-- **Agent-Visual v2:** карточка цикла — dashed рамка, при 4-м шаге `is-active` подсвечивается accent-wash. График 48px height, бары 6px radius, today — green с wash.
-- **Agent-Data:** лента сохраняет фильтры, но viewport ограничен 520px с кастомным скроллом, улучшает восприятие длинных списков.
-
-**Библиотеки v2 (vibecoding.ru 30):** VibeUI (density), Magic UI (shimmer/ping), Aceternity (moving border), Kokonut (AI State), React Bits (pulse), 21st.dev (timeline), shadcn (pill filters).
-
