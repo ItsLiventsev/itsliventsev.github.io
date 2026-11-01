@@ -155,9 +155,9 @@
     </section>
 
     <section class="ws-section" id="activity" data-ws-activity aria-labelledby="activity-title">
-      <div class="ws-section-heading">
+      <div class="ws-section-heading" data-ws-activity-header>
         <div><span class="ws-eyebrow" data-i18n="activity_eyebrow">ОТКРЫТЫЕ ОБНОВЛЕНИЯ</span><h2 id="activity-title" data-i18n="activity_title">Сайт развивается итерациями</h2></div>
-        <span data-ws-tag data-ws-tone="accent"><span data-ws-activity-dot aria-hidden="true"></span><span data-i18n="activity_badge">Человек + ИИ</span></span>
+        <span data-ws-tag data-ws-tone="accent" data-ws-activity-badge><span data-ws-activity-dot data-live="true" aria-hidden="true"></span><span data-i18n="activity_badge">Человек + ИИ</span></span>
       </div>
       <article data-ws-activity-card data-ws-surface data-ws-activity-state="loading" aria-busy="true">
         <div data-ws-activity-intro>
@@ -185,12 +185,34 @@
               </a>
             </div>
           </div>
+          <div data-ws-activity-chart aria-hidden="false">
+            <div data-ws-activity-chart-head><span>Активность 14 дней</span><span data-ws-activity-chart-total>— коммитов</span></div>
+            <div data-ws-activity-chart-grid role="img" aria-label="График частоты коммитов за 14 дней"></div>
+            <div data-ws-activity-bar-label><span>14 дней назад</span><span>сегодня</span></div>
+          </div>
           <div data-ws-activity-actions>
             <p data-ws-activity-status role="status" aria-live="polite" data-i18n="activity_loading">Сверяю открытую историю GitHub…</p>
             <a data-ws-action data-ws-activity-history href="https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main" target="_blank" rel="noopener"><span data-i18n="activity_history">Вся история</span><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
           </div>
           <p data-ws-activity-note data-i18n="activity_api_note">Сводка берётся из публичного GitHub API; при ограничении запросов счётчик может быть временно недоступен. Полная история всегда доступна по ссылке.</p>
         </div>
+      </article>
+      <article data-ws-activity-feed data-ws-surface aria-label="Лента изменений">
+        <div data-ws-activity-feed-head>
+          <div data-ws-activity-feed-title>Лента изменений <small>live</small><span data-ws-activity-live><i aria-hidden="true"></i> LIVE</span></div>
+          <div data-ws-activity-filters aria-label="Фильтр по хештегу">
+            <button type="button" data-ws-activity-filter data-filter="all" aria-pressed="true">Все</button>
+            <button type="button" data-ws-activity-filter data-filter="frontend">#frontend</button>
+            <button type="button" data-ws-activity-filter data-filter="design">#design</button>
+            <button type="button" data-ws-activity-filter data-filter="bugfix">#bugfix</button>
+            <button type="button" data-ws-activity-filter data-filter="content">#content</button>
+          </div>
+        </div>
+        <div data-ws-activity-ticker aria-label="Быстро меняющиеся плашки">
+          <span data-ws-activity-ticker-label>Сейчас в работе</span>
+          <div data-ws-activity-ticker-track></div>
+        </div>
+        <div data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
       </article>
     </section>
   </main>
