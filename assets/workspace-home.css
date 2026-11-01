@@ -1123,3 +1123,7 @@ html { scroll-behavior: smooth; }
 @media (max-width: 720px) { .ws-page-content h1 { font-size: 26px; } }
 
 *,:before,:after { box-sizing:border-box; }
+
+.ws-activity-demo-note { margin: 10px 0; color: var(--ws-muted); font-size: 12px; line-height: 1.5; }
+.ws-kanban-list { min-height: 64px; align-content: start; }
+@media (max-width: 600px) { .ws-kanban-grid.is-visible { grid-template-columns: minmax(0, 1fr); } }

@@ -131,6 +131,9 @@
     currentState = state;
     root.dataset.wsActivityState = state;
     root.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+    const card = root.querySelector('[data-ws-activity-card]');
+    if (card) { card.dataset.wsActivityState = state; card.setAttribute('aria-busy', String(state === 'loading')); }
+    setSkeleton(state === 'loading');
     if (statusNode) statusNode.textContent = words()[state] || words().error;
   }
   function render(data, state) {
@@ -203,6 +206,12 @@
     done: root.querySelector('[data-kanban-list="done"]')
   };
 
+  const kanbanCounts = {
+    review: root.querySelector('[data-kanban-count="review"]'),
+    progress: root.querySelector('[data-kanban-count="progress"]'),
+    done: root.querySelector('[data-kanban-count="done"]')
+  };
+
   // ── v13: Kanban drag-n-drop (native HTML5, no deps, persists to localStorage) ──
   (function initKanbanDnD(){
     if (!kanbanRoot || !kanbanLists.review) return;
@@ -259,7 +268,6 @@
         }
       });
     }
-    window.__wsRebindKanban = function(){ document.querySelectorAll('[data-kanban-list] [data-kanban-card]').forEach(function(el){ if(!el.hasAttribute('draggable')) el.setAttribute('draggable','true'); }); };
     function updateCounts(){
       Object.keys(kanbanLists).forEach(function(k){
         var list = kanbanLists[k]; var cnt = kanbanCounts[k];
@@ -361,11 +369,6 @@
     updateCounts();
   })();
 
-  const kanbanCounts = {
-    review: root.querySelector('[data-kanban-count="review"]'),
-    progress: root.querySelector('[data-kanban-count="progress"]'),
-    done: root.querySelector('[data-kanban-count="done"]')
-  };
   function renderKanban(items) {
     if (!kanbanRoot || !kanbanLists.review) return;
     const groups = { review: [], progress: [], done: [] };
@@ -377,8 +380,23 @@
       if (!list) return;
       list.innerHTML = groups[k].map(it => {
         const tagColor = { frontend:'var(--ws-blue-wash)', design:'var(--ws-violet-wash)', infra:'var(--ws-green-wash)', bugfix:'var(--ws-red-wash)', content:'var(--ws-mustard-wash)', ops:'var(--ws-slate-wash)' }[it.tag] || 'var(--ws-surface)';
-        return '<div data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+(words().feedTitle[it.id]?.[language()]||it.id)+'</strong><span style="font-size:10px; color:var(--ws-muted);">'+statusLabel(it.status)+'</span></div>';
-      }).join('') || '<span style="font-size:11px; color:var(--ws-muted);">—</span>';
+        return '<div data-kanban-card data-kanban-id="'+it.id+'" role="listitem" data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+(words().feedTitle[it.id]?.[language()]||it.id)+'</strong></div>';
+      }).join('');
+    });
+    // Restore the locally saved example board, without changing the public feed.
+    try {
+      const saved = JSON.parse(localStorage.getItem('ws:kanban:order:v13') || 'null');
+      if (saved && saved.payload) Object.keys(kanbanLists).forEach(key => {
+        const list = kanbanLists[key];
+        if (!list || !Array.isArray(saved.payload[key])) return;
+        saved.payload[key].forEach(id => {
+          const card = [...kanbanRoot.querySelectorAll('[data-kanban-card]')].find(el => el.dataset.kanbanId === id);
+          if (card) list.appendChild(card);
+        });
+      });
+    } catch (_) {}
+    Object.keys(kanbanLists).forEach(key => {
+      if (kanbanCounts[key] && kanbanLists[key]) kanbanCounts[key].textContent = String(kanbanLists[key].querySelectorAll('[data-kanban-card]').length);
     });
   }
   if (viewButtons.length) {
@@ -483,31 +501,6 @@
     btn.addEventListener('click', ()=> setFilter(btn.getAttribute('data-filter')));
   });
 
-  // fast-changing simulation like Thinking Orbs
-  let shuffleTimer=null;
-  function startShuffle() {
-    if (reduceMotion || !tickerTrack) return;
-    shuffleTimer = setInterval(()=>{
-      const pills = [...tickerTrack.children].slice(0, feedData.length); // first cycle only
-      if (!pills.length) return;
-      const idx = Math.floor(Math.random()*pills.length);
-      const pill = pills[idx];
-      const statuses = ['done','progress','review'];
-      const current = pill.dataset.status;
-      let next = statuses[Math.floor(Math.random()*statuses.length)];
-      if (next===current) next = statuses[(statuses.indexOf(current)+1)%3];
-      pill.dataset.status = next;
-      pill.setAttribute('data-changing','true');
-      pill.innerHTML = `<b>#${pill.dataset.tag}</b> ${statusLabel(next)} <em>${feedData[idx].time}</em>`;
-      setTimeout(()=> pill.removeAttribute('data-changing'), 500);
-      // sync feedData for timeline consistency occasionally
-      if (Math.random() < .35) {
-        feedData[idx].status = next;
-        renderTimeline(); renderKanban(feedData);
-      }
-    }, 2600);
-  }
-
   function readCache() {
     try {
       const saved = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
@@ -573,17 +566,15 @@
     setInterval(tick, 1600);
   }
 
-  startShuffle();
 
   const cached = readCache();
   if (cached) {
     const state = cached.age < freshForMs ? 'cached' : 'stale';
     render(cached.data, state);
     renderChart(commitsCache);
-    if (state==='cached') return;
   } else setState('loading');
 
-  loadActivity().catch(()=>{
+  if (!cached || cached.age >= freshForMs) loadActivity().catch(()=>{
     if (currentData) setState('stale');
     else setState('error');
     renderChart(commitsCache);
@@ -594,9 +585,4 @@
     renderTicker(); renderTimeline(); renderKanban(feedData); renderChart(commitsCache);
   });
 
-  // pause ticker on prefers-reduced-motion live check
-  document.addEventListener('visibilitychange', ()=>{
-    if (document.hidden && shuffleTimer) { clearInterval(shuffleTimer); shuffleTimer=null; }
-    else if (!document.hidden && !shuffleTimer) startShuffle();
-  });
 })();
