@@ -399,9 +399,9 @@ function shell(cfg, n) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102">
-<link rel="stylesheet" href="../../assets/workspace.css?v=20261102">
-<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261102">
+<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261101r1">
+<link rel="stylesheet" href="../../assets/workspace.css?v=20261101r1">
+<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261101r1">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -476,7 +476,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=${VERSION}"></script>
-<script src="../../assets/workspace.js?v=20261102"></script>
+<script src="../../assets/workspace.js?v=20261101r1"></script>
 </body>
 </html>
 `;

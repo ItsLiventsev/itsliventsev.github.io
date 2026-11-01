@@ -170,12 +170,17 @@ document.documentElement.classList.add('js-enabled');
 (function () {
   const counters = document.querySelectorAll('.counter[data-target]');
   if (!counters.length) return;
+  if (!('IntersectionObserver' in window)) {
+    counters.forEach(el => { el.textContent = el.dataset.target; });
+    return;
+  }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const el = entry.target;
       const target = parseInt(el.dataset.target, 10);
-      let current = 0;
+      let current = parseInt(el.textContent, 10) || 0;
+      if (current >= target) { observer.unobserve(el); return; }
       const step = Math.max(1, Math.floor(target / 20));
       const timer = setInterval(() => {
         current += step;
