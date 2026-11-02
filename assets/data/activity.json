@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-02T22:05:03.922Z",
+  "generated": "2026-11-02T22:32:40.278Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 275,
+  "total": 274,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 69
+      "count": 67
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-02",
-      "count": 24
+      "count": 25
     }
   ],
   "commits": [
+    {
+      "sha": "79431f4",
+      "title": "feat(site): три вселенные со схемами, рабочий журнал коммитов и единый текстовый слой",
+      "date": "2026-11-02T22:30:20Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/79431f48c6737c08738d89ac72bbf8a6e1f807cb"
+    },
     {
       "sha": "bd22a5d",
       "title": "feat(design): v13 «Витрина» — язык референсов вместо тёплой «Мастерской»",
@@ -481,12 +487,6 @@
       "title": "Complete accessibility and performance audit fixes",
       "date": "2026-11-01T16:31:19Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2b66b986f7c611718016fa1ec65096df3c9a761e"
-    },
-    {
-      "sha": "cad7897",
-      "title": "Redesign workspace navigation and learning pages",
-      "date": "2026-11-01T15:58:53Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/cad78975a1000fd8f87e1f1d19d3af3ca5b48ba9"
     }
   ]
 }
