@@ -1153,3 +1153,11 @@ html { scroll-behavior: smooth; }
 [data-ws-activity-timeline] { min-height: 0; align-content: start; align-self: start; }
 /* The interactive dashboard must stay laid out while filters change its size. */
 .ws-dashboard-grid { content-visibility: visible; }
+/* The filter applies to both views, including cards with inline layout styles. */
+[data-kanban-card][hidden] { display: none !important; }
+
+/* Keep drop areas distinct from the surrounding columns. */
+.ws-kanban-list { min-height: 44px; border: 1px dashed transparent; border-radius: 10px; transition: border-color 200ms, background-color 200ms; }
+.ws-kanban-list.is-drop-target { border-color: var(--ws-accent); background: var(--ws-accent-wash); }
+@media (prefers-reduced-motion: reduce) { .ws-kanban-list { transition: none; } }
+.ws-kanban-list [data-kanban-card] { margin-block: 0; }

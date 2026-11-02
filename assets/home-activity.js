@@ -46,17 +46,18 @@
   const apiUrl = 'https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits';
   const cacheKey = 'itsliventsev-home-activity-v2';
   const freshForMs = 15 * 60 * 1000;
-  const staleForMs = 24 * 60 * 60 * 1000;
+  const staleForMs = 7 * 24 * 60 * 60 * 1000;
   const windowMs = 30 * 24 * 60 * 60 * 1000;
 
   const labels = {
     ru: {
       loading: 'Сверяю открытую историю GitHub…',
-      cached: 'Показываю сохранённый снимок GitHub; обновлю его при следующем запросе.',
+      cached: 'История GitHub.',
+      refreshing: 'Обновляю историю GitHub; показаны предыдущие данные.',
       ready: 'Данные получены из основной ветки GitHub.',
       error: 'Сводка временно недоступна; полная история открывается по ссылке.',
       empty: 'За последние 30 дней коммитов нет.',
-      stale: 'Запрос не прошёл; показываю сохранённый снимок GitHub.',
+      stale: 'Не удалось обновить историю GitHub. Показаны предыдущие данные.',
       count: n => n >= 100 ? 'Не менее 100 коммитов за 30 дней' : `${n} коммитов за 30 дней`,
       statuses: { done: '✅ Готово', progress: '🔄 В процессе', review: '⏳ На проверке' },
       feedTitle: {
@@ -74,11 +75,12 @@
     },
     en: {
       loading: 'Checking the public GitHub history…',
-      cached: 'Showing a saved GitHub snapshot; it will refresh on the next request.',
+      cached: 'GitHub history.',
+      refreshing: 'Refreshing GitHub history; showing previous data.',
       ready: 'Data received from the main GitHub branch.',
       error: 'The summary is temporarily unavailable; the full history is linked here.',
       empty: 'No commits in the last 30 days.',
-      stale: 'The request failed; showing the saved GitHub snapshot.',
+      stale: 'Could not refresh GitHub history. Showing previous data.',
       count: n => n >= 100 ? 'At least 100 commits in 30 days' : `${n} commits in 30 days`,
       statuses: { done: '✅ Done', progress: '🔄 In progress', review: '⏳ Review' },
       feedTitle: {
@@ -100,6 +102,7 @@
   const words = () => labels[language()];
   let currentData = null;
   let currentState = 'loading';
+  let lastUpdatedAt = null;
   let activeFilter = 'all';
   setSkeleton(true);
 
@@ -125,14 +128,37 @@
     const card = root.querySelector('[data-ws-activity-card]');
     if (card) { card.dataset.wsActivityState = state; card.setAttribute('aria-busy', String(state === 'loading')); }
     setSkeleton(state === 'loading');
-    if (statusNode) statusNode.textContent = words()[state] || words().error;
+    if (statusNode) {
+      let message = words()[state] || words().error;
+      if (lastUpdatedAt && ['cached', 'refreshing', 'stale'].includes(state)) {
+        const time = new Intl.DateTimeFormat(language() === 'en' ? 'en' : 'ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(lastUpdatedAt));
+        message += (language() === 'en' ? ' Updated: ' : ' Обновлено: ') + time + '.';
+      }
+      statusNode.textContent = message;
+    }
+    updateFilterEmpty();
+  }
+  let countAnimation = 0;
+  function animateCount(value) {
+    const token = ++countAnimation;
+    if (!countNode) return;
+    if (value >= 100 || reduceMotion) { countNode.textContent = value >= 100 ? '100+' : String(value); return; }
+    const match = countNode.textContent.match(/\d+/);
+    const from = match ? Number(match[0]) : 0;
+    if (from === value) { countNode.textContent = String(value); return; }
+    const start = performance.now();
+    function frame(now) {
+      if (token !== countAnimation) return;
+      const progress = Math.min(1, (now - start) / 900);
+      countNode.textContent = String(Math.round(from + (value - from) * (1 - Math.pow(1 - progress, 3))));
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
   function render(data, state) {
     currentData = data;
-    const value = data.count >= 100 ? '100+' : String(data.count);
     if (countNode) {
-      if (data.count >= 100) countNode.textContent = value;
-      else if(window.__wsAnimateNumber) window.__wsAnimateNumber(countNode, data.count); else countNode.textContent = value;
+      animateCount(data.count);
       countNode.setAttribute('aria-label', words().count(data.count));
     }
     const latest = data.latest;
@@ -153,11 +179,13 @@
     if (!chartGrid) return;
     const days = 14;
     const buckets = Array(days).fill(0);
-    const now = Date.now();
+    const now = new Date();
     const dayMs = 24*60*60*1000;
+    const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
     commits.forEach(c => {
-      const d = new Date(c.date).getTime();
-      const diff = Math.floor((now - d)/dayMs);
+      const d = new Date(c.date);
+      const date = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+      const diff = Math.floor((today - date)/dayMs);
       if (diff >=0 && diff < days) buckets[days-1 - diff] += 1;
     });
     const series = buckets;
@@ -165,10 +193,16 @@
     chartGrid.innerHTML = '';
     if (!commits.length && (currentState === 'loading' || currentState === 'error')) {
       if (chartTotal) chartTotal.textContent = '—';
+      chartGrid.setAttribute('aria-label', language() === 'en' ? 'Commit activity for 14 days, unavailable' : 'Активность коммитов за 14 дней недоступна');
       return;
     }
     const total = series.reduce((sum, count) => sum + count, 0);
-    if (chartTotal) chartTotal.textContent = (currentState === 'loading' || currentState === 'error') ? '—' : `${total} ${language() === 'en' ? 'commits' : 'коммитов'}`;
+    // GitHub returns at most 100 entries; its history need not be strictly
+    // ordered by commit date, so treat chart totals as a lower bound at the cap.
+    const truncated = commits.length >= 100;
+    const totalLabel = (truncated ? '≥ ' : '') + total + (language() === 'en' ? ' commits' : ' коммитов');
+    if (chartTotal) chartTotal.textContent = (currentState === 'loading' || currentState === 'error') ? '—' : totalLabel;
+    chartGrid.setAttribute('aria-label', language() === 'en' ? `Commit activity for 14 days: ${truncated ? 'at least ' : ''}${total}` : `Активность коммитов за 14 дней: ${truncated ? 'не менее ' : ''}${total}`);
     series.forEach((v, i) => {
       const bar = document.createElement('div');
       bar.setAttribute('data-ws-activity-bar','true');
@@ -257,7 +291,7 @@
         card.classList.remove('is-dragging');
         card.setAttribute('aria-grabbed','false');
         card.style.opacity='';
-        document.querySelectorAll('.ws-kanban-col').forEach(function(c){ c.classList.remove('is-drop-target'); });
+        kanbanRoot.querySelectorAll('.ws-kanban-list.is-drop-target').forEach(function(c){ c.classList.remove('is-drop-target'); });
         persist();
       });
       // Keyboard: Ctrl+Arrow moves the focused card between columns.
@@ -290,7 +324,9 @@
             var target = index + (direction === 'left' ? -1 : 1);
             button.disabled = target < 0 || target >= cols.length;
             var title = labels[target] || labels[index];
-            button.setAttribute('aria-label', (language() === 'en' ? 'Move to ' : 'Переместить в «') + title + (language() === 'en' ? '' : '»'));
+            var cardTitle = card.querySelector('strong');
+            var subject = cardTitle ? cardTitle.textContent : '';
+            button.setAttribute('aria-label', (language() === 'en' ? 'Move ' + subject + ' to ' + title : 'Переместить «' + subject + '» в «' + title + '»'));
           });
         });
       });
@@ -300,7 +336,7 @@
       Object.keys(kanbanLists).forEach(function(k){
         var list = kanbanLists[k]; var cnt = kanbanCounts[k];
         if (!list || !cnt) return;
-        cnt.textContent = String(list.querySelectorAll('[data-kanban-card]').length);
+        cnt.textContent = String(list.querySelectorAll('[data-kanban-card]:not([hidden])').length);
       });
     }
     // Enhance existing cards
@@ -320,11 +356,6 @@
     // Columns as drop targets
     Object.values(kanbanLists).forEach(function(col){
       if (!col) return;
-      col.classList.add('ws-kanban-col');
-      // Ensure header has count styling if missing
-      if (!col.querySelector('.ws-kanban-col-header')) {
-        // header already in markup; just ensure class
-      }
       col.addEventListener('dragover', function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; col.classList.add('is-drop-target'); });
       col.addEventListener('dragleave', function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove('is-drop-target'); });
       col.addEventListener('drop', function(e){
@@ -335,7 +366,7 @@
         if (card) {
           // Insert before closest card under cursor
           var after = null;
-          var cards = Array.from(col.querySelectorAll('[data-kanban-card]'));
+          var cards = Array.from(col.querySelectorAll('[data-kanban-card]:not([hidden])')).filter(function(item){ return item !== card; });
           var y = e.clientY;
           for (var i=0;i<cards.length;i++){
             var r = cards[i].getBoundingClientRect();
@@ -355,29 +386,6 @@
     if (event.key === STORAGE_KEY && feedData.length) renderKanban(feedData);
   });
 
-  // ── v14: number ticker для метрик (countNode) ──
-  (function initTicker(){
-    if (!countNode) return;
-    function animateNumber(el, to){
-      if (!el || isNaN(to)) return;
-      var from = 0;
-      var m = el.textContent.match(/\d+/);
-      if (m) from = parseInt(m[0],10) || 0;
-      if (from === to || reduceMotion) { el.textContent = to; return; }
-      var start = performance.now(), dur = 900;
-      function frame(now){
-        var p = Math.min(1, (now - start)/dur);
-        var eased = 1 - Math.pow(1 - p, 3);
-        var cur = Math.round(from + (to - from)*eased);
-        el.textContent = String(cur);
-        if (p < 1) requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    }
-    // expose for dashboard fetch
-    window.__wsAnimateNumber = animateNumber;
-  })();
-
     updateCounts();
   })();
 
@@ -392,7 +400,7 @@
       if (!list) return;
       list.innerHTML = groups[k].map(it => {
         const tagColor = { frontend:'var(--ws-blue-wash)', design:'var(--ws-violet-wash)', infra:'var(--ws-green-wash)', bugfix:'var(--ws-red-wash)', content:'var(--ws-mustard-wash)', ops:'var(--ws-slate-wash)' }[it.tag] || 'var(--ws-surface)';
-        return '<div data-kanban-card data-kanban-id="'+it.id+'" role="listitem" data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;">'+escapeHtml(titleOf(it))+'</strong></div>';
+        return '<div data-kanban-card data-kanban-id="'+it.id+'" data-kanban-tag="'+it.tag+'" role="listitem" class="ws-kanban-card" data-ws-surface style="padding:8px 10px; border-radius:10px; background:'+tagColor+'; border:1px solid var(--ws-line); display:grid; gap:4px;"><span style="font-size:10px; font-weight:600; color:var(--ws-muted);">#'+it.tag+' · '+it.time+'</span><strong style="font-size:12px; line-height:1.3;"><a href="https://github.com/ItsLiventsev/itsliventsev.github.io/commit/'+it.id+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(titleOf(it))+'</a></strong></div>';
       }).join('');
     });
     // Restore the saved board arrangement without changing the feed.
@@ -407,8 +415,16 @@
         });
       });
     } catch (_) {}
+    applyKanbanFilter();
+  }
+  function applyKanbanFilter() {
     Object.keys(kanbanLists).forEach(key => {
-      if (kanbanCounts[key] && kanbanLists[key]) kanbanCounts[key].textContent = String(kanbanLists[key].querySelectorAll('[data-kanban-card]').length);
+      const list = kanbanLists[key];
+      if (!list) return;
+      list.querySelectorAll('[data-kanban-card]').forEach(card => {
+        card.hidden = activeFilter !== 'all' && card.dataset.kanbanTag !== activeFilter;
+      });
+      if (kanbanCounts[key]) kanbanCounts[key].textContent = String(list.querySelectorAll('[data-kanban-card]:not([hidden])').length);
     });
   }
   if (viewButtons.length) {
@@ -498,7 +514,7 @@
           <strong><a href="https://github.com/ItsLiventsev/itsliventsev.github.io/commit/${item.id}" target="_blank" rel="noopener">${escapeHtml(titleOf(item))}</a></strong>
           <small>GitHub · ${item.id.slice(0,7)}</small>
         </div>
-        <time data-ws-activity-item-time>${item.time}</time>
+        <time data-ws-activity-item-time datetime="${escapeHtml(item.date)}">${item.time}</time>
       `;
       const tagEl = row.querySelector('[data-ws-activity-tag]');
       tagEl.addEventListener('click', ()=> setFilter(item.tag));
@@ -508,8 +524,13 @@
   }
   function updateFilterEmpty() {
     const noMatches = feedData.length > 0 && activeFilter !== 'all' && !feedData.some(item => item.tag === activeFilter);
-    filterEmpty.hidden = !noMatches || (kanbanRoot && !kanbanRoot.hidden);
-    filterEmpty.textContent = language() === 'en' ? 'No changes for this filter.' : 'По этому фильтру изменений нет.';
+    const boardEmpty = kanbanRoot && !kanbanRoot.hidden && !feedData.length;
+    filterEmpty.hidden = !noMatches && !boardEmpty;
+    if (boardEmpty) {
+      filterEmpty.textContent = currentState === 'loading' ? (language() === 'en' ? 'Loading changes…' : 'Загружаю изменения…') : currentState === 'error' ? (language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.') : (language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.');
+    } else {
+      filterEmpty.textContent = language() === 'en' ? 'No changes for this filter.' : 'По этому фильтру изменений нет.';
+    }
   }
   let filterAnimation = 0;
   function setFilter(tag) {
@@ -517,6 +538,7 @@
     const startHeight = timeline && !reduceMotion ? timeline.getBoundingClientRect().height : 0;
     activeFilter = tag;
     updateFilterEmpty();
+    applyKanbanFilter();
     filterButtons.forEach(btn=>{
       const f = btn.getAttribute('data-filter');
       btn.setAttribute('aria-pressed', f===tag ? 'true' : 'false');
@@ -573,18 +595,33 @@
   });
 
   function readCache() {
-    try {
-      const saved = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
-      if (!saved || !Number.isFinite(saved.savedAt) || !saved.data || !Number.isInteger(saved.data.count) || saved.data.count<0) return null;
-      if (Date.now() - saved.savedAt > staleForMs) return null;
-      const latest = saved.data.latest;
-      if (latest && (!/^[a-f0-9]{40}$/i.test(latest.sha) || Number.isNaN(Date.parse(latest.date)))) return null;
-      if (Array.isArray(saved.commits)) commitsCache = saved.commits;
-      return { data: saved.data, age: Date.now() - saved.savedAt };
-    } catch (_) { return null; }
+    // Share a recent public snapshot between tabs and sessions, but tolerate
+    // disabled storage and old or malformed records independently.
+    const candidates = [];
+    [() => localStorage, () => sessionStorage].forEach(getStorage => {
+      try {
+        const saved = JSON.parse(getStorage().getItem(cacheKey) || 'null');
+        if (!saved) return;
+        const age = Date.now() - saved.savedAt;
+        if (!Number.isFinite(saved.savedAt) || age < -300000 || age > staleForMs || !saved.data || !Number.isInteger(saved.data.count) || saved.data.count < 0 || saved.data.count > 100 || !Array.isArray(saved.commits)) return;
+        const commits = saved.commits.filter(commit => commit && /^[a-f0-9]{40}$/i.test(commit.sha || '') && typeof commit.title === 'string' && commit.title.length <= 200 && !Number.isNaN(Date.parse(commit.date)));
+        if (commits.length !== saved.data.count) return;
+        const latest = saved.data.latest;
+        if ((commits.length && (!latest || latest.sha !== commits[0].sha || latest.date !== commits[0].date)) || (!commits.length && latest)) return;
+        candidates.push({ data: { count: commits.length, latest: commits[0] || null }, commits, savedAt: saved.savedAt, age: Math.max(0, age) });
+      } catch (_) { /* storage can be unavailable in private browsing */ }
+    });
+    candidates.sort((a, b) => a.age - b.age);
+    const newest = candidates[0];
+    if (!newest) return null;
+    commitsCache = newest.commits;
+    return newest;
   }
   function saveCache(data, commits) {
-    try { sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data, commits })); } catch (_) {}
+    lastUpdatedAt = Date.now();
+    const value = JSON.stringify({ savedAt: lastUpdatedAt, data, commits });
+    try { localStorage.setItem(cacheKey, value); }
+    catch (_) { try { sessionStorage.setItem(cacheKey, value); } catch (_) {} }
   }
   function parseCommits(commits) {
     if (!Array.isArray(commits)) throw new TypeError('Unexpected GitHub response');
@@ -641,16 +678,41 @@
 
   const cached = readCache();
   if (cached) {
-    const state = cached.age < freshForMs ? 'cached' : 'stale';
+    lastUpdatedAt = cached.savedAt;
+    const state = cached.age < freshForMs ? 'cached' : 'refreshing';
     render(cached.data, state);
     renderChart(commitsCache);
     updateFeed(commitsCache);
   } else setState('loading');
 
-  if (!cached || cached.age >= freshForMs) loadActivity().catch(()=>{
-    if (currentData) setState('stale');
-    else { setState('error'); showTimelineMessage(language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'); }
+  let refreshInFlight = null;
+  function refreshActivity() {
+    if (refreshInFlight) return refreshInFlight;
+    refreshInFlight = loadActivity().catch(()=>{
+      const snapshot = readCache();
+      if (snapshot && snapshot.age < freshForMs) {
+        lastUpdatedAt = snapshot.savedAt;
+        render(snapshot.data, 'cached');
+        updateFeed(commitsCache);
+      } else if (currentData) setState('stale');
+      else { setState('error'); showTimelineMessage(language() === 'en' ? 'Changes are temporarily unavailable.' : 'Не удалось загрузить изменения.'); }
+      renderChart(commitsCache);
+    }).finally(() => { refreshInFlight = null; });
+    return refreshInFlight;
+  }
+  if (!cached || cached.age >= freshForMs) refreshActivity();
+  window.addEventListener('online', () => {
+    const snapshot = readCache();
+    if (!snapshot || snapshot.age >= freshForMs || currentState === 'error' || currentState === 'stale') refreshActivity();
+  });
+  window.addEventListener('storage', event => {
+    if (event.key !== cacheKey || !event.newValue) return;
+    const snapshot = readCache();
+    if (!snapshot) return;
+    lastUpdatedAt = snapshot.savedAt;
+    render(snapshot.data, snapshot.age < freshForMs ? 'cached' : 'stale');
     renderChart(commitsCache);
+    updateFeed(commitsCache);
   });
 
   window.addEventListener('itsliventsev:languagechange', ()=>{

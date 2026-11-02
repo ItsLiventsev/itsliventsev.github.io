@@ -81,3 +81,7 @@ same_page_dups = {i: ps for i, ps in id_pages.items()
 print('дублей id внутри одной страницы:', len(same_page_dups), dict(list(same_page_dups.items())[:5]))
 print('страниц без ровно одного h1:', [p for p in pages if h1_count.get(p, 0) != 1][:8])
 print('битых ссылок:', len(links_bad), links_bad[:6])
+
+# Make the audit suitable for CI as well as interactive reports.
+if errors or same_page_dups or any(h1_count.get(p, 0) != 1 for p in pages) or links_bad:
+    raise SystemExit(1)

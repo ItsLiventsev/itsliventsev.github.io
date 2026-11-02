@@ -1,5 +1,7 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v7';
+const CACHE = 'itsliventsev-v8';
+const RUNTIME_CACHE = CACHE + '-runtime';
+const MAX_RUNTIME_ENTRIES = 120;
 const PRECACHE = [
   '/', '/index.html', '/assets/offline.html',
   '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
@@ -18,7 +20,7 @@ self.addEventListener('install', event => {
 });
 self.addEventListener('activate', event => {
   event.waitUntil(caches.keys().then(keys => Promise.all(
-    keys.filter(key => key.startsWith('itsliventsev-v') && key !== CACHE).map(key => caches.delete(key))
+    keys.filter(key => key.startsWith('itsliventsev-v') && key !== CACHE && key !== RUNTIME_CACHE).map(key => caches.delete(key))
   )).then(() => self.clients.claim()));
 });
 
@@ -33,12 +35,17 @@ self.addEventListener('fetch', event => {
       const response = await fetch(request);
       if (response.ok) {
         const copy = response.clone();
-        await caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {});
+        await caches.open(RUNTIME_CACHE).then(async cache => {
+          await cache.put(request, copy);
+          const keys = await cache.keys();
+          await Promise.all(keys.slice(0, Math.max(0, keys.length - MAX_RUNTIME_ENTRIES)).map(key => cache.delete(key)));
+        }).catch(() => {});
       }
       return response;
     } catch (_) {
       const cache = await caches.open(CACHE);
-      const cached = await cache.match(request);
+      const runtime = await caches.open(RUNTIME_CACHE);
+      const cached = await runtime.match(request) || await cache.match(request);
       if (cached) return cached;
       // HTML uses ?v= cache busters while the installation cache uses clean paths.
       if (url.pathname.startsWith('/assets/') && /\.(?:js|css)$/.test(url.pathname) && url.searchParams.has('v') && [...url.searchParams.keys()].every(key => key === 'v')) {
@@ -56,10 +63,11 @@ self.addEventListener('fetch', event => {
 });
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'GET_CACHE_SIZE' && event.ports[0]) {
-    event.waitUntil(caches.open(CACHE).then(cache => cache.keys()).then(keys => event.ports[0].postMessage({count: keys.length})));
+    event.waitUntil(Promise.all([caches.open(CACHE), caches.open(RUNTIME_CACHE)]).then(cs => Promise.all(cs.map(cache => cache.keys()))).then(keys => event.ports[0].postMessage({count: keys[0].length + keys[1].length})));
+
   }
   if (event.data && event.data.type === 'CLEAR_CACHE' && event.ports[0]) {
-    event.waitUntil(caches.delete(CACHE).then(() => event.ports[0].postMessage({cleared: true})));
+    event.waitUntil(caches.delete(RUNTIME_CACHE).then(() => event.ports[0].postMessage({cleared: true}))); // Keep the offline shell available.
   }
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
