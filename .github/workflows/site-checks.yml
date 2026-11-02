@@ -42,5 +42,13 @@ jobs:
             if curl -fsS http://127.0.0.1:8000/ > /dev/null; then break; fi
             sleep 1
           done
-          node scripts/browser-smoke.js
-          node scripts/browser-reading.js
+          for test in browser-smoke browser-reading; do
+            if node "scripts/$test.js" > "$RUNNER_TEMP/$test.log" 2>&1; then
+              cat "$RUNNER_TEMP/$test.log"
+            else
+              cat "$RUNNER_TEMP/$test.log"
+              detail=$(tail -20 "$RUNNER_TEMP/$test.log" | tr '\n' ' ' | sed 's/%/%25/g;s/\r/%0D/g')
+              echo "::error::$test failed: $detail"
+              exit 1
+            fi
+          done

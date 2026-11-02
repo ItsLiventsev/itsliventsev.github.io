@@ -1215,3 +1215,29 @@ html { scroll-behavior: smooth; }
   .ws-dashboard-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
   .ws-dashboard-grid .ws-panel-large { grid-column: auto; }
 }
+
+/* Task-oriented paths: a small map without introducing a second navigation system. */
+.ws-pathways-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.ws-content .ws-pathway {
+  --path-tone: var(--ws-accent); --path-wash: var(--ws-accent-wash);
+  position: relative; display: grid; align-content: start; gap: 6px; min-width: 0;
+  padding: 16px; border: 1px solid var(--ws-line); border-radius: 16px;
+  background: var(--ws-surface); color: var(--ws-ink); text-decoration: none;
+  transition: border-color var(--ws-motion), box-shadow var(--ws-motion), transform var(--ws-motion);
+}
+.ws-content .ws-pathway-practice { --path-tone: var(--ws-violet); --path-wash: var(--ws-violet-wash); }
+.ws-content .ws-pathway-reading { --path-tone: var(--ws-brown); --path-wash: var(--ws-brown-wash); }
+.ws-content .ws-pathway-projects { --path-tone: var(--ws-blue); --path-wash: var(--ws-blue-wash); }
+.ws-content .ws-pathway-resources { --path-tone: var(--ws-green); --path-wash: var(--ws-green-wash); }
+.ws-pathway-number { width: fit-content; padding: 4px 8px; border-radius: 8px; background: var(--path-wash); color: var(--path-tone); font: 700 10px var(--ws-mono); }
+.ws-pathway strong { margin-top: 3px; color: var(--ws-ink); font-size: 13px; line-height: 1.4; }
+.ws-pathway small { color: var(--ws-muted); font-size: 11px; line-height: 1.5; }
+.ws-pathway-arrow { position: absolute; top: 16px; right: 16px; color: var(--path-tone); transition: transform var(--ws-motion); }
+.ws-pathway:focus-visible { outline: 2px solid var(--path-tone); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .ws-content .ws-pathway:hover { border-color: var(--path-tone); box-shadow: var(--ws-shadow-md); transform: translateY(-2px); }
+  .ws-pathway:hover .ws-pathway-arrow { transform: translate(2px, -2px); }
+}
+@media (max-width: 1000px) { .ws-pathways-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 360px) { .ws-pathways-grid { grid-template-columns: minmax(0, 1fr); gap: 6px; } .ws-content .ws-pathway { padding: 12px 14px; } }
+@media (prefers-reduced-motion: reduce) { .ws-content .ws-pathway, .ws-pathway-arrow { transition: none; } .ws-content .ws-pathway:hover { transform: none; } }
