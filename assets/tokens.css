@@ -142,6 +142,8 @@
   --u-fs-3xl: 2.5rem;    /* 40 */
   --u-fs-4xl: 3.25rem;   /* 52 */
   --u-fs-5xl: 4rem;      /* 64 */
+  --u-fs-page-title: clamp(var(--u-fs-2xl), 5vw, var(--u-fs-4xl)); /* обложка раздела */
+  --u-fs-card-title: clamp(1.75rem, 4vw, var(--u-fs-3xl));         /* заголовок внутри карточки */
 
   --u-lh-tight: 1.04;
   --u-lh-snug: 1.14;

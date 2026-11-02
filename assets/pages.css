@@ -354,7 +354,9 @@
   border-radius: 3px 3px 0 0;
   background: color-mix(in srgb, var(--u-accent) 45%, var(--u-line));
 }
+.chart-grid > i[data-empty] { background: var(--u-line); }
 .chart-grid > i[data-today] { background: var(--u-accent); }
+.chart-grid > i { transition: height var(--u-dur-2) var(--u-ease); }
 .chart-grid:empty { border-bottom-style: dashed; }
 .chart-scale { display: flex; justify-content: space-between; color: var(--u-faint); font-size: 10px; }
 .chart-status { margin: 0; color: var(--u-muted); font-size: var(--u-fs-xs); }
@@ -1601,3 +1603,346 @@ label.btn { cursor: pointer; }
   letter-spacing: 0;
   color: var(--u-muted);
 }
+
+/* ==========================================================================
+   14. Universes — three practice worlds with inline SVG schematics
+   Each card is a schematic of what the space actually is: a topology,
+   a workstation, a shift dashboard. Strokes come from the tone colour,
+   no inline styles, no raster images.
+   ========================================================================== */
+.universe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--u-card-gap);
+}
+.universe {
+  --space-tone: var(--u-accent);
+  --space-soft: var(--u-accent-soft);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--u-r-xl);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  color: var(--u-ink);
+  text-decoration: none;
+  overflow: hidden;
+  transition: box-shadow var(--u-dur-2) var(--u-ease), transform var(--u-dur-2) var(--u-ease);
+}
+.universe:hover { box-shadow: var(--u-shadow-2); transform: translateY(-2px); }
+.universe[data-tone="net"] { --space-tone: var(--u-net); --space-soft: var(--u-net-soft); }
+.universe[data-tone="office"] { --space-tone: var(--u-office); --space-soft: var(--u-office-soft); }
+.universe[data-tone="ops"] { --space-tone: var(--u-ops); --space-soft: var(--u-ops-soft); }
+
+.universe-art {
+  margin: 0;
+  padding: var(--u-s4) var(--u-s4) 0;
+  background: var(--space-soft);
+}
+.universe-art svg { display: block; width: 100%; height: auto; }
+
+/* Schematic primitives: one colour per world, surfaces stay neutral. */
+.u-art-panel {
+  fill: var(--u-surface);
+  stroke: color-mix(in srgb, var(--space-tone) 34%, transparent);
+  stroke-width: 1.5;
+}
+.u-art-line {
+  fill: none;
+  stroke: var(--space-tone);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+.u-art-soft {
+  fill: none;
+  stroke: color-mix(in srgb, var(--space-tone) 42%, transparent);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+.u-art-dot { fill: var(--space-tone); }
+.u-art-bar { fill: color-mix(in srgb, var(--space-tone) 55%, var(--u-surface)); }
+.u-art-ecg {
+  fill: none;
+  stroke: var(--space-tone);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.u-art-cursor { fill: var(--space-tone); }
+.u-art-pulse { fill: var(--space-tone); transform-box: fill-box; transform-origin: center; }
+.u-art-text {
+  fill: color-mix(in srgb, var(--space-tone) 78%, var(--u-ink));
+  font-family: var(--u-font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+}
+
+.universe-body {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: var(--u-s2);
+  padding: var(--u-s5);
+}
+.universe-num {
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--space-tone);
+}
+.universe-body h3 {
+  margin: 0;
+  font-family: var(--u-font-display);
+  font-size: 1.4375rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.universe-body p {
+  margin: 0;
+  color: var(--u-muted);
+  font-size: var(--u-fs-sm);
+  line-height: 1.5;
+}
+.universe-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u-s3);
+  margin-block-start: var(--u-s2);
+  padding-block-start: var(--u-s3);
+  border-top: 1px solid var(--u-line);
+  color: var(--u-muted);
+  font-size: var(--u-fs-xs);
+}
+.universe-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  padding: 3px 12px;
+  border-radius: var(--u-r-pill);
+  background: var(--space-soft);
+  color: var(--space-tone);
+  font-weight: 600;
+  transition: background var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease);
+}
+.universe:hover .universe-cta { background: var(--space-tone); color: var(--u-surface); }
+
+/* Light motion: a heartbeat dot, a drawn line, a blinking cursor. */
+@media (prefers-reduced-motion: no-preference) {
+  .universe:hover .u-art-pulse { animation: u-art-pulse 1.8s var(--u-ease) infinite; }
+  .universe:hover .u-art-ecg { animation: u-art-ecg 2.4s linear infinite; }
+  .universe:hover .u-art-cursor { animation: u-art-blink 1.2s steps(2, end) infinite; }
+}
+@keyframes u-art-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.45); }
+}
+@keyframes u-art-ecg {
+  0% { stroke-dasharray: 240; stroke-dashoffset: 240; }
+  100% { stroke-dasharray: 240; stroke-dashoffset: 0; }
+}
+@keyframes u-art-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+@media (max-width: 1080px) {
+  .universe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .universe-grid { grid-template-columns: minmax(0, 1fr); }
+  .universe-body { padding: var(--u-s4); }
+}
+
+/* ==========================================================================
+   15. Type layer — one set of text rules for every page type
+   Legacy publications carry utility classes from earlier iterations
+   (.fs-1, .ink-muted, .p-title…). They are mapped onto the v13 scale here
+   so a heading, a paragraph or a list looks the same everywhere.
+   ========================================================================== */
+.editorial h1,
+.editorial h2,
+.editorial h3,
+.prose-measure h2,
+.prose-measure h3 {
+  text-wrap: balance;
+}
+.editorial p,
+.prose-measure p,
+.prose p { text-wrap: pretty; }
+.editorial h2,
+.prose-measure h2 {
+  font-family: var(--u-font-display);
+  font-size: clamp(1.375rem, 2.1vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.editorial h3,
+.prose-measure h3 {
+  font-family: var(--u-font-display);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+.editorial h4 {
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-base);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Legacy size and colour helpers */
+.fs-1 { font-size: 1.1875rem; line-height: 1.3; }
+.fs-098 { font-size: 1.0625rem; line-height: 1.35; }
+.fs-105 { font-size: 1.125rem; line-height: 1.3; }
+.ink-muted, .is-muted { color: var(--u-muted); }
+.ink-faint, .is-faint { color: var(--u-faint); }
+.m-0 { margin: 0; }
+.p-title { font-family: var(--u-font-display); font-weight: 700; letter-spacing: -0.02em; }
+.p-desc { margin: 0; color: var(--u-muted); font-size: var(--u-fs-sm); line-height: 1.55; }
+.p-num,
+.step-card-num,
+.esp-label {
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--u-muted);
+}
+.p-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 9px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+  color: var(--u-ink-2);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Lists in content: the same marker, spacing and measure everywhere. */
+.editorial ul,
+.editorial ol,
+.prose-measure ul,
+.prose-measure ol,
+.prose ul {
+  max-width: 72ch;
+  margin: 0 0 var(--u-s4);
+  padding-inline-start: 1.1em;
+}
+.editorial li + li,
+.prose-measure li + li,
+.prose li + li { margin-block-start: 6px; }
+.editorial li::marker,
+.prose-measure li::marker,
+.prose li::marker { color: var(--u-accent); }
+
+/* Tables read as data, not as a spreadsheet. */
+.editorial table,
+.prose-measure table,
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+}
+.editorial th,
+.prose-measure th,
+.prose th {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--u-line-strong);
+  text-align: start;
+  font-weight: 600;
+  color: var(--u-ink);
+}
+.editorial td,
+.prose-measure td,
+.prose td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--u-line);
+  color: var(--u-ink-2);
+  vertical-align: top;
+}
+
+/* Inline contents of a long article: the rail already does this job on
+   desktop, so the block only shows on narrow screens. */
+.article-toc { display: none; }
+.toc-link {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  padding-block: 8px;
+  border-bottom: 1px solid var(--u-line);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-sm);
+  line-height: 1.4;
+  text-decoration: none;
+}
+.toc-link:hover { color: var(--u-accent); }
+.toc-link .mono { color: var(--u-muted); font-size: 11px; letter-spacing: 0.04em; }
+@media (max-width: 1080px) {
+  .article-toc {
+    display: block;
+    margin-block-end: var(--u-s5);
+    padding: var(--u-s4) var(--u-s5);
+    border-radius: var(--u-r-lg);
+    background: var(--u-surface);
+    box-shadow: var(--u-shadow-1);
+  }
+  .article-toc .mono:first-child { display: block; margin-block-end: var(--u-s2); }
+  .toc-link:last-child { border-bottom: 0; }
+}
+
+/* The unclassed first paragraph of a long read is the lead. */
+.prose-measure > p:first-of-type:not([class]) {
+  font-size: 1.3125rem;
+  line-height: 1.5;
+  color: var(--u-ink);
+}
+
+/* Catalogue toolbars sit closer to the list they filter. */
+.catalog-toolbar { margin-block: var(--u-s4) var(--u-s2); }
+
+/* ==========================================================================
+   16. Home hero — the same shape as a case-study hero
+   On wide screens the numbers move to the right column as fact tiles,
+   so the card has no dead half and the pattern matches /projects/*.
+   ========================================================================== */
+@media (min-width: 1081px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
+    align-items: start;
+    gap: var(--u-s7);
+  }
+  .home-stats {
+    grid-column: 2;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+  }
+  .home-stats li {
+    padding: var(--u-s3) var(--u-s4);
+    border: 0;
+    border-radius: var(--u-r-md);
+    background: var(--u-surface-sunk);
+  }
+  .home-stats li:first-child { padding-inline-start: var(--u-s4); }
+  .home-stats b { font-size: 1.5rem; }
+  .home-stats span { font-size: var(--u-fs-xs); }
+}
+
+/* Схемы вселенных в тёмной теме: тон светлеет, поэтому штрихи можно сделать заметнее. */
+:root[data-theme="dark"] .u-art-line { opacity: 1; }
+:root[data-theme="dark"] .u-art-soft { stroke: color-mix(in srgb, var(--space-tone) 55%, transparent); }
+:root[data-theme="dark"] .u-art-panel { stroke: color-mix(in srgb, var(--space-tone) 48%, transparent); }

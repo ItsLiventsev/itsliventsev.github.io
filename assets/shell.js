@@ -510,13 +510,24 @@
     requestAnimationFrame(step);
   });
 
-  /* ——— scroll reveal: two elements per page at most, opt-in ——— */
-  const revealables = [...doc.querySelectorAll('[data-ui-reveal]')].slice(0, 3);
-  if (revealables.length && 'IntersectionObserver' in window && !reduceMotion()) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-revealed'); io.unobserve(entry.target); } });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
-    revealables.forEach(node => { node.classList.add('ui-reveal'); io.observe(node); });
+  /* ——— scroll reveal ———
+     Лёгкое движение только у блоков ниже первого экрана: сдвиг на 14px без
+     изменения прозрачности, поэтому контраст и замеры axe не страдают.
+     Блоки с липкими рельсами и первым экраном не трогаем вовсе. */
+  if ('IntersectionObserver' in window && !reduceMotion()) {
+    const fold = window.innerHeight;
+    const explicit = [...doc.querySelectorAll('[data-ui-reveal]')];
+    const auto = [...doc.querySelectorAll('main > section, main > article > section')]
+      .filter(node => !node.matches('[data-ui-reveal]'))
+      .filter(node => !node.querySelector('.ui-rail, .ui-toc, [data-ui-sticky], .sticky'))
+      .filter(node => node.getBoundingClientRect().top > fold * 0.9);
+    const revealables = [...explicit.slice(0, 3), ...auto.slice(0, 12)];
+    if (revealables.length) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-revealed'); io.unobserve(entry.target); } });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.04 });
+      revealables.forEach(node => { node.classList.add('ui-reveal'); io.observe(node); });
+    }
   }
 
   /* ——— code blocks: keyboard-focusable, copy action ——— */
