@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r6">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r7">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <!-- SEO:AUTO:START -->
@@ -181,8 +181,8 @@
         </div>
         <p class="ws-reading-status" role="status" aria-live="polite"></p>
         <div class="ws-reading-list" data-reading-list>
-          <a class="ws-reading-row" href="blog.html"><span class="ws-reading-type">Заметки</span><strong>Открыть заметки</strong><span aria-hidden="true">↗</span></a>
-          <a class="ws-reading-row" href="articles.html"><span class="ws-reading-type">Статьи</span><strong>Открыть статьи</strong><span aria-hidden="true">↗</span></a>
+          <a class="ws-reading-row" data-reading-kind="blog" href="blog.html"><span class="ws-reading-type">Заметки</span><strong>Открыть заметки</strong><span aria-hidden="true">↗</span></a>
+          <a class="ws-reading-row" data-reading-kind="articles" href="articles.html"><span class="ws-reading-type">Статьи</span><strong>Открыть статьи</strong><span aria-hidden="true">↗</span></a>
         </div>
       </article>
     </section>
@@ -269,7 +269,7 @@ window.I18N.register({
 <script src="assets/shared-chrome.js?v=20261101r1"></script>
 <script src="assets/workspace.js?v=20261102r4"></script>
 <script src="assets/home-activity.js?v=20261102r4" defer></script>
-<script src="assets/home-reading.js?v=20261102r1" defer></script>
+<script src="assets/home-reading.js?v=20261102r2" defer></script>
 
 <script>
 // axe-core audit — Alt+Shift+A, бейдж + консольный отчёт

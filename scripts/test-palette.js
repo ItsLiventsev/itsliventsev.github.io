@@ -14,4 +14,15 @@ for (const name of ['accent', 'green', 'blue', 'orange', 'red', 'brown', 'terrac
   const ratio = (b + .05) / (a + .05);
   assert(ratio >= 4.5, `${name} text on wash: ${ratio.toFixed(2)} < 4.5`);
 }
-console.log('Light palette: canvas unchanged; accent text on washes meets 4.5:1');
+// Check both gradient endpoints for the accent colors used in the new surfaces.
+const darkSource = fs.readFileSync('assets/workspace-tokens.css', 'utf8').split(':root[data-theme="dark"] {')[1].split('}')[0];
+const dark = Object.fromEntries([...darkSource.matchAll(/--ws-([\w-]+):\s*(#[\da-f]{6})\s*;/gi)].map(m => [m[1], m[2]]));
+for (const [theme, palette] of [['light', values], ['dark', dark]]) {
+  for (const name of ['violet', 'green', 'terracotta', 'blue', 'mustard', 'brown']) {
+    for (const background of ['surface', name + '-wash']) {
+      const [a, b] = [luminance(palette[name]), luminance(palette[background])].sort((x, y) => x - y);
+      assert((b + .05) / (a + .05) >= 4.5, `${theme} ${name} on ${background} fails contrast`);
+    }
+  }
+}
+console.log('Palette: light canvas unchanged; accent text meets 4.5:1 in both themes');

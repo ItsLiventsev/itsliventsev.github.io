@@ -1241,3 +1241,34 @@ html { scroll-behavior: smooth; }
 @media (max-width: 1000px) { .ws-pathways-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 360px) { .ws-pathways-grid { grid-template-columns: minmax(0, 1fr); gap: 6px; } .ws-content .ws-pathway { padding: 12px 14px; } }
 @media (prefers-reduced-motion: reduce) { .ws-content .ws-pathway, .ws-pathway-arrow { transition: none; } .ws-content .ws-pathway:hover { transform: none; } }
+
+/* Editorial color cues: keep the canvas neutral and put color on the content. */
+.ws-content .ws-pathway {
+  background: linear-gradient(155deg, var(--path-wash) 0%, var(--ws-surface) 70%);
+  border-top: 3px solid var(--path-tone);
+}
+.ws-pathway-number { background: var(--ws-surface); }
+.ws-dashboard-grid > .ws-panel-large { border-top-color: var(--ws-violet); }
+.ws-dashboard-grid > .ws-reading { border-top: 3px solid var(--ws-brown); }
+.ws-dashboard-grid > .ws-panel-large .ws-eyebrow { color: var(--ws-violet); }
+.ws-reading .ws-eyebrow { color: var(--ws-brown); }
+.ws-reading-row[data-reading-kind="blog"] .ws-reading-type { color: var(--ws-blue); background: var(--ws-blue-wash); }
+.ws-reading-row[data-reading-kind="articles"] .ws-reading-type { color: var(--ws-brown); background: var(--ws-brown-wash); }
+.ws-resource-grid a:nth-child(1) { --resource-wash: var(--ws-violet-wash); --resource-tone: var(--ws-violet); }
+.ws-resource-grid a:nth-child(2) { --resource-wash: var(--ws-green-wash); --resource-tone: var(--ws-green); }
+.ws-resource-grid a:nth-child(3) { --resource-wash: var(--ws-terracotta-wash); --resource-tone: var(--ws-terracotta); }
+.ws-resource-grid a:nth-child(4) { --resource-wash: var(--ws-blue-wash); --resource-tone: var(--ws-blue); }
+.ws-resource-grid a:nth-child(5) { --resource-wash: var(--ws-mustard-wash); --resource-tone: var(--ws-mustard); }
+.ws-resource-grid a:nth-child(6) { --resource-wash: var(--ws-brown-wash); --resource-tone: var(--ws-brown); }
+.ws-content .ws-resource-grid a {
+  background: linear-gradient(160deg, var(--resource-wash, var(--ws-surface)), var(--ws-surface) 70%);
+  transition: border-color var(--ws-motion), box-shadow var(--ws-motion), transform var(--ws-motion);
+}
+.ws-resource-grid a b { color: var(--resource-tone, var(--ws-accent)) !important; }
+@media (hover: hover) and (pointer: fine) {
+  .ws-content .ws-resource-grid a:hover { border-color: var(--resource-tone, var(--ws-accent)) !important; transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-content .ws-resource-grid a { transition: none; }
+  .ws-content .ws-resource-grid a:hover { transform: none; }
+}
