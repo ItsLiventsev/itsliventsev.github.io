@@ -29,6 +29,14 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
         await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
         const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
         assert.equal(pathViolations.length, 0, 'pathways accessibility in ' + theme + ': ' + JSON.stringify(pathViolations));
+        for (const selector of ['#resources', '[data-ws-reading]']) {
+          await page.locator(selector).scrollIntoViewIfNeeded();
+          const violations = await page.evaluate(async selector => (await axe.run(document.querySelector(selector))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.html) })), selector);
+          assert.equal(violations.length, 0, selector + ' accessibility in ' + theme + ': ' + JSON.stringify(violations));
+        }
+        const colors = await page.evaluate(() => [...document.querySelectorAll('.ws-pathway')].map(el => getComputedStyle(el).borderTopColor));
+        assert.equal(new Set(colors).size, 4, 'distinct pathway accents');
+        if (theme === 'light') assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--ws-canvas').trim().toLowerCase()), '#f8f9fa');
       }
       await page.evaluate(() => localStorage.setItem('itsliventsev-theme', 'light'));
       await page.reload({ waitUntil: 'load' });

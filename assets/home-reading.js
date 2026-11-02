@@ -33,7 +33,7 @@
     const items = kinds.flatMap(kind => state[kind] || []).sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title, 'ru')).slice(0, 4);
     list.replaceChildren();
     items.forEach(item => {
-      const link = document.createElement('a'); link.className = 'ws-reading-row'; link.href = '/' + item.kind + '/' + item.file;
+      const link = document.createElement('a'); link.className = 'ws-reading-row'; link.dataset.readingKind = item.kind; link.href = '/' + item.kind + '/' + item.file;
       const meta = document.createElement('span'); meta.className = 'ws-reading-meta';
       const type = document.createElement('span'); type.className = 'ws-reading-type'; type.textContent = item.kind === 'blog' ? (isEnglish() ? 'Note' : 'Заметка') : (isEnglish() ? 'Article' : 'Статья'); meta.appendChild(type);
       const label = dateLabel(item.date);
