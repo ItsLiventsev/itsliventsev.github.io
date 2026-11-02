@@ -1326,3 +1326,68 @@ html { scroll-behavior: smooth; }
 .ws-home-root [data-ws-activity-card]::after, .ws-home-root .ws-panel-large .ws-resource-row::after { display: none; }
 .ws-home-root .ws-pathway { box-shadow: var(--ws-shadow-sm); }
 .ws-home-root .ws-course-card { gap: 4px; }
+
+/* Editorial workspace: a strong introduction, compact routes and useful content first. */
+.ws-home-root .ws-home-hero { gap: 12px; grid-template-columns: minmax(0, 1.55fr) minmax(260px, .75fr); }
+.ws-home-root .ws-home-copy {
+  position: relative; overflow: hidden; min-height: 300px;
+  background: #202c2a; border: 0; color: #f7f8f4;
+  padding: clamp(26px, 4vw, 50px);
+}
+.ws-home-root .ws-home-copy::after {
+  content: ''; position: absolute; right: -95px; bottom: -165px; width: 310px; height: 310px;
+  border: 1px solid rgba(163, 218, 184, .22); border-radius: 50%;
+  box-shadow: 0 0 0 32px rgba(163, 218, 184, .045), 0 0 0 64px rgba(163, 218, 184, .035);
+  pointer-events: none;
+}
+.ws-home-root .ws-home-copy > * { position: relative; z-index: 1; }
+.ws-home-root .ws-home-copy .ws-eyebrow { color: #b5d6bf; }
+.ws-home-root .ws-home-copy h1 { color: #fff; font-size: clamp(34px, 4vw, 55px) !important; line-height: 1.08; letter-spacing: -.045em; }
+.ws-home-root .ws-home-copy h1 span { color: #b7dfbf; }
+.ws-home-root .ws-home-copy > p { color: #c7d3cd; font-size: 14px !important; line-height: 1.65 !important; }
+.ws-home-root .ws-home-copy .ws-button-primary { background: #c2e7c8; border-color: #c2e7c8; color: #1b3025 !important; }
+.ws-home-root .ws-home-copy .ws-button:not(.ws-button-primary) { background: transparent; border-color: #799087; color: #fff; }
+.ws-home-root .ws-home-copy .ws-button-primary:hover { background: #d5efda; color: #1b3025 !important; }
+.ws-home-root .ws-home-copy .ws-button:hover { filter: brightness(1.08); }
+.ws-home-root .ws-overview-card { border: 1px solid var(--ws-line-strong); box-shadow: none !important; }
+.ws-home-root .ws-overview-head { color: var(--ws-accent); }
+.ws-home-root .ws-section { margin-top: clamp(28px, 3.5vw, 46px); }
+.ws-home-root .ws-section-heading { align-items: end; gap: 12px; margin-bottom: 14px !important; }
+.ws-home-root .ws-section-heading h2 { letter-spacing: -.035em; }
+.ws-home-root .ws-section-heading .ws-eyebrow { color: var(--ws-accent); }
+.ws-home-root .ws-pathways-grid { gap: 8px; }
+.ws-home-root .ws-content .ws-pathway {
+  min-height: 110px; padding: 15px 16px; border: 1px solid var(--ws-line-strong);
+  border-top: 3px solid var(--path-tone); background: var(--ws-surface); box-shadow: none;
+}
+.ws-home-root .ws-pathway-number { padding: 0; background: transparent; }
+.ws-home-root .ws-pathway strong { font-size: 14px; }
+.ws-home-root .ws-pathway small { font-size: 12px !important; }
+.ws-home-root .ws-directory { border-color: var(--ws-line-strong); }
+.ws-home-root .ws-learning-grid { gap: 10px; }
+.ws-home-root .ws-course-card { border: 1px solid var(--ws-line-strong); box-shadow: none !important; }
+.ws-home-root .ws-course-card h3 { letter-spacing: -.03em; }
+.ws-home-root .ws-course-card p { font-size: 13px !important; line-height: 1.6; }
+.ws-home-root .ws-card-footer { border-top: 1px solid var(--ws-line-strong); padding-top: 12px; }
+.ws-home-root .ws-dashboard-grid { margin-top: clamp(28px, 3.5vw, 46px); }
+.ws-home-root .ws-resource-row { min-height: 58px; }
+.ws-home-root .ws-resource-row strong { font-size: 13px; }
+.ws-home-root .ws-resource-row small { font-size: 12px; white-space: normal; }
+.ws-home-root [data-ws-activity-feed-head] { gap: 12px; }
+.ws-home-root [data-ws-activity-filters] { gap: 5px; }
+.ws-home-root [data-ws-activity-filter], .ws-home-root [data-ws-view] { min-height: 36px; }
+@media (max-width: 800px) {
+  .ws-home-root .ws-home-hero { grid-template-columns: 1fr; }
+  .ws-home-root .ws-home-copy { min-height: 0; }
+}
+@media (max-width: 560px) {
+  .ws-home-root .ws-home-copy { padding: 27px 22px; }
+  .ws-home-root .ws-home-copy h1 { font-size: clamp(30px, 8vw, 38px) !important; }
+  .ws-home-root .ws-home-copy > p { font-size: 14px; }
+  .ws-home-root .ws-section-heading { align-items: flex-start; }
+  .ws-home-root .ws-content .ws-pathway { min-height: 100px; }
+  .ws-home-root .ws-course-card p { font-size: 13px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-home-root .ws-home-copy .ws-button, .ws-home-root .ws-pathway, .ws-home-root .ws-course-card { transition: none; }
+}

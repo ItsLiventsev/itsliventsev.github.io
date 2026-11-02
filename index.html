@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r9">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r10">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <!-- SEO:AUTO:START -->
@@ -70,80 +70,6 @@
         </ul>
         <a href="#experience" class="ws-inline-link">Опыт и квалификация <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
       </div>
-    </section>
-
-    <section class="ws-section" id="activity" data-ws-activity aria-labelledby="activity-title">
-      <div class="ws-section-heading" data-ws-activity-header>
-        <div><span class="ws-eyebrow" data-i18n="activity_eyebrow">ОТКРЫТЫЕ ОБНОВЛЕНИЯ</span><h2 id="activity-title" data-i18n="activity_title">Сайт развивается итерациями</h2></div>
-      </div>
-      <article data-ws-activity-card data-ws-surface data-ws-activity-state="loading" aria-busy="true">
-        <div data-ws-activity-intro>
-          <span class="ws-eyebrow" data-i18n="activity_cycle_label">ЦИКЛ РАБОТЫ</span>
-          <p data-ws-activity-copy data-i18n="activity_copy">Сайт — рабочая мастерская: я уточняю материалы, проверяю практикумы и дорабатываю интерфейс. ИИ помогает исследовать варианты и ускорять рутину; направление, содержание и итоговую проверку определяю я.</p>
-          <div data-ws-activity-cycle>
-            <span data-i18n="activity_step_1">заметить</span><span aria-hidden="true">→</span>
-            <span data-i18n="activity_step_2">собрать</span><span aria-hidden="true">→</span>
-            <span data-i18n="activity_step_3">проверить</span><span aria-hidden="true">→</span>
-            <span data-i18n="activity_step_4">уточнить</span>
-          </div>
-        </div>
-        <div data-ws-activity-details>
-          <span data-ws-activity-label data-i18n="activity_updates_label">ОБНОВЛЕНИЯ · ОСНОВНАЯ ВЕТКА</span>
-          <div data-ws-activity-metrics aria-live="polite">
-            <div data-ws-activity-metric>
-              <strong data-ws-activity-count aria-label="Загрузка">—</strong>
-              <span data-i18n="activity_metric_commits">коммитов за последние 30 дней</span>
-            </div>
-            <div data-ws-activity-metric>
-              <time data-ws-activity-date>—</time>
-              <span data-i18n="activity_metric_latest">последнее изменение</span>
-              <a data-ws-activity-commit href="https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main" target="_blank" rel="noopener">
-                <code data-ws-activity-sha>—</code><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg>
-              </a>
-            </div>
-          </div>
-          <div data-ws-activity-chart aria-hidden="false">
-            <div data-ws-activity-chart-head><span>Активность 14 дней</span><span data-ws-activity-chart-total>— коммитов</span></div>
-            <div data-ws-activity-chart-grid role="img" aria-label="График частоты коммитов за 14 дней"></div>
-            <div data-ws-activity-bar-label><span>13 дней назад</span><span>сегодня</span></div>
-          </div>
-          <div data-ws-activity-actions>
-            <p data-ws-activity-status role="status" aria-live="polite" data-i18n="activity_loading">Сверяю открытую историю GitHub…</p>
-            <a data-ws-action data-ws-activity-history href="https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main" target="_blank" rel="noopener"><span data-i18n="activity_history">Вся история</span><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
-          </div>
-          <p data-ws-activity-note data-i18n="activity_api_note">Сводка берётся из публичного GitHub API; при ограничении запросов счётчик может быть временно недоступен. Полная история всегда доступна по ссылке.</p>
-        </div>
-      </article>
-      <article data-ws-activity-feed data-ws-surface aria-label="Лента изменений">
-        <div data-ws-activity-feed-head>
-          <div data-ws-activity-feed-title>Лента изменений</div>
-          <div class="ws-hero-actions">
-          <div data-ws-view-toggle class="ws-view-toggle" role="group" aria-label="Вид ленты">
-            <button type="button" data-ws-view="feed" aria-pressed="true" class="ws-view-btn">Лента</button>
-            <button type="button" data-ws-view="kanban" aria-pressed="false" class="ws-view-btn">Канбан</button>
-          </div>
-          <div data-ws-activity-filters role="group" aria-label="Фильтр по хештегу">
-            <button type="button" data-ws-activity-filter data-filter="all" aria-pressed="true">Все</button>
-            <button type="button" data-ws-activity-filter data-filter="update">#update</button>
-            <button type="button" data-ws-activity-filter data-filter="frontend">#frontend</button>
-            <button type="button" data-ws-activity-filter data-filter="design">#design</button>
-            <button type="button" data-ws-activity-filter data-filter="bugfix">#bugfix</button>
-            <button type="button" data-ws-activity-filter data-filter="content">#content</button>
-          </div>
-          </div>
-        </div>
-        <div data-ws-activity-ticker>
-          <span data-ws-activity-ticker-label>Последние изменения</span>
-          <div data-ws-activity-ticker-track></div>
-        </div>
-        <div id="activity-timeline" data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
-        <button type="button" data-activity-more aria-controls="activity-timeline" aria-expanded="false" hidden>Показать ещё</button>
-        <div data-ws-activity-kanban hidden class="ws-kanban-grid">
-          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list" role="list"></div></div>
-          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list" role="list"></div></div>
-          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✓ Изменения <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list" role="list"></div></div>
-        </div>
-      </article>
     </section>
 
     <section class="ws-section ws-pathways" aria-labelledby="pathways-title">
@@ -233,6 +159,81 @@
         <a data-ws-surface href="https://boards.yandex.ru/whiteboard/?hash=3c1973643fe7db52a48d557e242fa763" target="_blank" rel="noopener"><span>ДОСКА · УП.01</span><b>Яндекс <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
       </div>
     </section>
+
+    <section class="ws-section" id="activity" data-ws-activity aria-labelledby="activity-title">
+      <div class="ws-section-heading" data-ws-activity-header>
+        <div><span class="ws-eyebrow" data-i18n="activity_eyebrow">ОТКРЫТЫЕ ОБНОВЛЕНИЯ</span><h2 id="activity-title" data-i18n="activity_title">Сайт развивается итерациями</h2></div>
+      </div>
+      <article data-ws-activity-card data-ws-surface data-ws-activity-state="loading" aria-busy="true">
+        <div data-ws-activity-intro>
+          <span class="ws-eyebrow" data-i18n="activity_cycle_label">ЦИКЛ РАБОТЫ</span>
+          <p data-ws-activity-copy data-i18n="activity_copy">Сайт — рабочая мастерская: я уточняю материалы, проверяю практикумы и дорабатываю интерфейс. ИИ помогает исследовать варианты и ускорять рутину; направление, содержание и итоговую проверку определяю я.</p>
+          <div data-ws-activity-cycle>
+            <span data-i18n="activity_step_1">заметить</span><span aria-hidden="true">→</span>
+            <span data-i18n="activity_step_2">собрать</span><span aria-hidden="true">→</span>
+            <span data-i18n="activity_step_3">проверить</span><span aria-hidden="true">→</span>
+            <span data-i18n="activity_step_4">уточнить</span>
+          </div>
+        </div>
+        <div data-ws-activity-details>
+          <span data-ws-activity-label data-i18n="activity_updates_label">ОБНОВЛЕНИЯ · ОСНОВНАЯ ВЕТКА</span>
+          <div data-ws-activity-metrics aria-live="polite">
+            <div data-ws-activity-metric>
+              <strong data-ws-activity-count aria-label="Загрузка">—</strong>
+              <span data-i18n="activity_metric_commits">коммитов за последние 30 дней</span>
+            </div>
+            <div data-ws-activity-metric>
+              <time data-ws-activity-date>—</time>
+              <span data-i18n="activity_metric_latest">последнее изменение</span>
+              <a data-ws-activity-commit href="https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main" target="_blank" rel="noopener">
+                <code data-ws-activity-sha>—</code><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg>
+              </a>
+            </div>
+          </div>
+          <div data-ws-activity-chart aria-hidden="false">
+            <div data-ws-activity-chart-head><span>Активность 14 дней</span><span data-ws-activity-chart-total>— коммитов</span></div>
+            <div data-ws-activity-chart-grid role="img" aria-label="График частоты коммитов за 14 дней"></div>
+            <div data-ws-activity-bar-label><span>13 дней назад</span><span>сегодня</span></div>
+          </div>
+          <div data-ws-activity-actions>
+            <p data-ws-activity-status role="status" aria-live="polite" data-i18n="activity_loading">Сверяю открытую историю GitHub…</p>
+            <a data-ws-action data-ws-activity-history href="https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main" target="_blank" rel="noopener"><span data-i18n="activity_history">Вся история</span><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-up-right"></use></svg></a>
+          </div>
+          <p data-ws-activity-note data-i18n="activity_api_note">Сводка берётся из публичного GitHub API; при ограничении запросов счётчик может быть временно недоступен. Полная история всегда доступна по ссылке.</p>
+        </div>
+      </article>
+      <article data-ws-activity-feed data-ws-surface aria-label="Лента изменений">
+        <div data-ws-activity-feed-head>
+          <div data-ws-activity-feed-title>Лента изменений</div>
+          <div class="ws-hero-actions">
+          <div data-ws-view-toggle class="ws-view-toggle" role="group" aria-label="Вид ленты">
+            <button type="button" data-ws-view="feed" aria-pressed="true" class="ws-view-btn">Лента</button>
+            <button type="button" data-ws-view="kanban" aria-pressed="false" class="ws-view-btn">Канбан</button>
+          </div>
+          <div data-ws-activity-filters role="group" aria-label="Фильтр по хештегу">
+            <button type="button" data-ws-activity-filter data-filter="all" aria-pressed="true">Все</button>
+            <button type="button" data-ws-activity-filter data-filter="update">#update</button>
+            <button type="button" data-ws-activity-filter data-filter="frontend">#frontend</button>
+            <button type="button" data-ws-activity-filter data-filter="design">#design</button>
+            <button type="button" data-ws-activity-filter data-filter="bugfix">#bugfix</button>
+            <button type="button" data-ws-activity-filter data-filter="content">#content</button>
+          </div>
+          </div>
+        </div>
+        <div data-ws-activity-ticker>
+          <span data-ws-activity-ticker-label>Последние изменения</span>
+          <div data-ws-activity-ticker-track></div>
+        </div>
+        <div id="activity-timeline" data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
+        <button type="button" data-activity-more aria-controls="activity-timeline" aria-expanded="false" hidden>Показать ещё</button>
+        <div data-ws-activity-kanban hidden class="ws-kanban-grid">
+          <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list" role="list"></div></div>
+          <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list" role="list"></div></div>
+          <div data-ws-kanban-col data-status="done" class="ws-kanban-col"><div class="ws-kanban-head">✓ Изменения <span data-kanban-count="done"></span></div><div data-kanban-list="done" class="ws-kanban-list" role="list"></div></div>
+        </div>
+      </article>
+    </section>
+
 
     <section class="ws-section" id="experience" aria-labelledby="experience-title">
       <div class="ws-section-heading"><div><span class="ws-eyebrow">ПРОФИЛЬ</span><h2 id="experience-title" data-i18n="cv_title">Опыт и образование</h2></div></div>
