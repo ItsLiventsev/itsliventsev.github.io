@@ -6,7 +6,7 @@ import json
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP = {'admin.html', '404.html', 'projects/glossary.html'}
+SKIP = {'admin.html', '404.html', 'projects/glossary.html', 'assets/offline.html'}
 
 class Extract(HTMLParser):
     def __init__(self):
@@ -57,7 +57,7 @@ def category_for(path):
 records = []
 for path in sorted(ROOT.rglob('*.html')):
     rel = path.relative_to(ROOT)
-    if rel.as_posix() in SKIP: continue
+    if rel.as_posix() in SKIP or any(part.startswith('.') or part == 'node_modules' for part in rel.parts): continue
     parser = Extract()
     parser.feed(path.read_text(encoding='utf-8'))
     title = (parser.h1 or parser.title).strip()

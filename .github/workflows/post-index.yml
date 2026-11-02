@@ -11,8 +11,10 @@ on:
       - 'articles/**.html'
       - 'projects/**.html'
       - 'archive/**.html'
+      - 'stands/**.html'
       - '*.html'
       - 'scripts/build-post-index.js'
+      - 'scripts/build-search-index.py'
       - 'scripts/build-seo.js'
       - '.github/workflows/post-index.yml'
   workflow_dispatch:
@@ -41,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add blog/posts.json articles/posts.json feed-counts.json sitemap.xml feed.xml
+          git add blog/posts.json articles/posts.json feed-counts.json sitemap.xml feed.xml assets/search-index.json
           git add '*.html' 'blog/*.html' 'articles/*.html' 'projects/*.html' 'archive/*.html'
           if git diff --staged --quiet; then
             echo "Изменений для коммита нет"

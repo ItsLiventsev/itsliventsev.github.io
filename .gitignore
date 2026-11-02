@@ -1,3 +1,7 @@
 # Сборочные зависимости (OG-генератор, scripts/build-og.js) — не часть сайта
 .ogbuild/
 node_modules/
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]

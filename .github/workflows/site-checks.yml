@@ -29,6 +29,7 @@ jobs:
       - name: Activity and real offline checks
         run: |
           node scripts/test-activity.js
+          node scripts/test-search.js
           node scripts/browser-offline.js
       - name: Browser interaction checks
         run: |
