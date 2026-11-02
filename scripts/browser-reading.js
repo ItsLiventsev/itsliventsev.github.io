@@ -25,7 +25,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
       for (const theme of ['light', 'dark']) {
         await page.evaluate(theme => document.documentElement.setAttribute('data-theme', theme), theme);
         const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
-        assert.deepEqual(pathViolations, [], 'pathways accessibility in ' + theme);
+        assert.equal(pathViolations.length, 0, 'pathways accessibility in ' + theme + ': ' + JSON.stringify(pathViolations));
       }
       await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'light'));
       await paths.first().focus();
