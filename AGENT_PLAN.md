@@ -1,3 +1,5 @@
+> Исторический документ итерации v11 «Workspace / Learning OS». Актуальная система — `DESIGN_SYSTEM.md`, результаты — `QA_REPORT.md`.
+
 # AGENT_PLAN — Agentic Redesign v1 · itsliventsev.github.io
 
 **Дата:** 1 ноября 2026 · **Оркестратор:** CTO/Art-Director · **Цель:** продукт 2026 года — светлый Soft UI, анимированная навигация и живая лента итераций.
