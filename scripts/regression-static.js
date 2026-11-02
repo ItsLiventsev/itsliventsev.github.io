@@ -66,7 +66,8 @@ for (const name of ['--u-paper', '--u-surface', '--u-ink', '--u-ink-2', '--u-mut
   ok(tokens.includes(name), 'token layer: отсутствует ' + name);
 }
 ok(!/--u-font-(?:ui|display):[^;]*(Inter|Roboto|Arial|system-ui)/i.test(tokens), 'в качестве основных шрифтов выбран запрещённый стек');
-ok(/--u-font-ui:\s*"Golos Text"/.test(tokens) && /--u-font-display:\s*"Literata"/.test(tokens), 'основные шрифты должны быть Golos Text и Literata');
+ok(/--u-font-ui:\s*"Golos Text"/.test(tokens) && /--u-font-display:\s*"Golos (Display|Text)"/.test(tokens), 'интерфейс и заголовки должны быть на Golos');
+ok(/--u-font-serif:\s*"Literata"/.test(tokens), 'длинный текст должен остаться на Literata');
 ok(!tokens.includes('workspace.css'), 'в токенах остались ссылки на удалённый файл');
 function tokenColor(name) { return tokens.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]{6})'))?.[1]; }
 function luminance(hex) {
