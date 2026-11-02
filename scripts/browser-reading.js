@@ -22,6 +22,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
         assert.equal(await page.locator('.ws-pathways-grid a[href="' + href + '"]').count(), 1);
         assert.equal(await page.locator(href).count(), 1);
       }
+      await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
       for (const theme of ['light', 'dark']) {
         await page.evaluate(theme => document.documentElement.setAttribute('data-theme', theme), theme);
         const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
