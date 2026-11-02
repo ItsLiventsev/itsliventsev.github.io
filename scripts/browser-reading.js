@@ -29,6 +29,15 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
         await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
         const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
         assert.equal(pathViolations.length, 0, 'pathways accessibility in ' + theme + ': ' + JSON.stringify(pathViolations));
+        const directory = page.locator('.ws-directory');
+        await directory.locator('summary').focus();
+        await page.keyboard.press('Enter');
+        assert.equal(await directory.getAttribute('open'), '');
+        assert.equal(await directory.locator('nav a').count(), 9);
+        const directoryViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-directory'))).violations.map(v => ({id: v.id, nodes: v.nodes.map(n => ({html: n.html, summary: n.failureSummary}))})));
+        assert.equal(directoryViolations.length, 0, 'directory accessibility in ' + theme + ': ' + JSON.stringify(directoryViolations));
+        await directory.locator('summary').click();
+        assert.equal(await directory.getAttribute('open'), null);
         for (const selector of ['#resources', '[data-ws-reading]']) {
           await page.locator(selector).scrollIntoViewIfNeeded();
           const violations = await page.evaluate(async selector => (await axe.run(document.querySelector(selector))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.html) })), selector);
@@ -36,6 +45,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
         }
         const colors = await page.evaluate(() => [...document.querySelectorAll('.ws-pathway')].map(el => getComputedStyle(el).borderTopColor));
         assert.equal(new Set(colors).size, 4, 'distinct pathway accents');
+        if (width === 390) assert.equal(await page.locator('.ws-resource-grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), 2);
         if (theme === 'light') assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--ws-canvas').trim().toLowerCase()), '#f8f9fa');
       }
       await page.evaluate(() => localStorage.setItem('itsliventsev-theme', 'light'));
@@ -55,9 +65,17 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
     }
     await page.evaluate(() => window.I18N.toggle());
     assert.equal(await page.locator('#pathways-title').textContent(), 'What would you like to find?');
+    assert.equal(await page.locator('.ws-directory summary strong').textContent(), 'Quick links');
     await page.locator('.ws-pathway-practice').focus();
     await page.keyboard.press('Enter');
     assert.equal(await page.evaluate(() => location.hash), '#practice');
+    const noScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+    const fallback = await noScript.newPage();
+    await fallback.goto(base + '/', { waitUntil: 'load' });
+    await fallback.locator('.ws-directory summary').click();
+    assert.equal(await fallback.locator('.ws-directory[open] a').count(), 9);
+    assert.equal(await fallback.locator('.ws-directory a[href="stands/ops/index.html"]').count(), 1);
+    await noScript.close();
     console.log('Browser pathways and editorial shelf: filters, mobile/desktop overflow and axe OK');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
