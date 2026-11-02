@@ -82,19 +82,16 @@
 
   /* ----------------------------- Тема (светлая/тёмная) ----------------------------- */
   function initTheme() {
-    function apply(theme) { document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark'); }
-    var saved = localStorage.getItem(THEME_KEY);
-    apply(saved === 'light' ? 'light' : 'dark');
-    document.querySelectorAll('.theme-toggle').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        localStorage.setItem(THEME_KEY, next);
-        // Переключение мгновенное: анимации раскрытия выключены
-        apply(next);
-      });
-    });
+    // Theme belongs to the shared shell: engines only restore the saved choice.
+    try {
+      var saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+    } catch (e) { /* private mode */ }
     window.addEventListener('storage', function (e) {
-      if (e.key === THEME_KEY) apply(e.newValue === 'light' ? 'light' : 'dark');
+      if (e.key !== THEME_KEY) return;
+      if (e.newValue === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
     });
   }
 

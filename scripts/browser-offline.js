@@ -34,13 +34,13 @@ const server = http.createServer((req, res) => {
     await new Promise(resolve => server.close(resolve)); // no network, not merely a mocked fetch
     const response = await page.goto(base + '/', { waitUntil: 'load' });
     assert.equal(response.status(), 200);
-    await page.waitForSelector('.ws-sidebar');
+    await page.waitForSelector('.ui-masthead');
     await page.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
-    assert.equal(await page.locator('[data-ws-reading] .ws-reading-row').count(), 2);
+    assert.equal(await page.locator('[data-reading-list] .ui-reading-row').count(), 2);
     const assets = await page.evaluate(async () => ({
-      css: (await fetch('/assets/workspace-home.css?v=20261102r9')).status,
-      js: (await fetch('/assets/home-activity.js?v=20261102r5')).status,
-      reading: (await fetch('/assets/home-reading.js?v=20261102r2')).status,
+      css: (await fetch('/assets/pages.css')).status,
+      js: (await fetch('/assets/feed.js')).status,
+      reading: (await fetch('/assets/home-reading.js')).status,
       publications: (await fetch('/blog/posts.json')).status,
       missing: (await fetch('/assets/missing.js')).status
     }));

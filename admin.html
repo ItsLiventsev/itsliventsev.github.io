@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>админка · itsliventsev</title>
 <meta name="description" content="Служебная панель: приём работ виртуальных стендов, мониторинг сессий и публикация постов. Страница не индексируется.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="админка · itsliventsev">
@@ -24,33 +24,15 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
 </head>
 <body data-accent="rust">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <noscript><div class="noscript-bar">// JavaScript отключён: панель управления требует JS для приёма работ и публикации.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
 
 <div class="page-wrap">
-
-  <header class="site-header">
-    <a href="index.html" class="logo"><span class="arrow">←</span> itsliventsev</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-      <a href="index.html" class="nav-link">главная</a>
-      <a href="blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="archive.html" class="nav-link">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-    <div class="header-actions">
-      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
-    </div>
-  </header>
 
   <main id="main-content">
 
@@ -78,7 +60,7 @@
         <div class="admin-btngroup">
           <p class="admin-grouplabel">приём работ</p>
           <div class="admin-btnrow">
-            <label class="btn btn-primary btn-sm" for="sub-import" style="cursor:pointer;">импорт JSON ↥
+            <label class="btn btn-primary btn-sm is-clickable" for="sub-import">импорт JSON ↥
               <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
             </label>
             <button class="btn btn-sm" id="sub-repo" type="button">загрузить из репозитория</button>
@@ -132,9 +114,9 @@
           <div>
             <p class="section-label">биржи привилегий · ордера студентов</p>
             <h2 class="admin-card-title">Обмен неткоинов на поощрения
-              <span class="nav-bubble is-filled" id="claims-count" style="margin-left:.4rem;" title="ордера СетьПолиса в ожидании">0</span>
-              <span class="nav-bubble bubble-orange is-filled" id="ops-claims-count" style="margin-left:.2rem;" title="ордера ДатаПолиса в ожидании">0</span>
-              <span class="nav-bubble bubble-rose is-filled" id="office-claims-count" style="margin-left:.2rem;" title="ордера ОфисПолиса в ожидании">0</span>
+              <span class="nav-bubble is-filled" id="claims-count" title="ордера СетьПолиса в ожидании">0</span>
+              <span class="nav-bubble bubble-orange is-filled" id="ops-claims-count" title="ордера ДатаПолиса в ожидании">0</span>
+              <span class="nav-bubble bubble-rose is-filled" id="office-claims-count" title="ордера ОфисПолиса в ожидании">0</span>
             </h2>
           </div>
         </div>
@@ -209,7 +191,7 @@
     <section class="admin-section" id="panel-posts" role="tabpanel" aria-labelledby="seg-posts" data-section="posts" hidden>
 
       <!-- Вход -->
-      <div id="auth-card" class="card admin-card" style="max-width:46rem;">
+      <div id="auth-card" class="card admin-card is-narrow">
         <p class="section-label">доступ к GitHub API</p>
         <h2 class="admin-card-title">Вход для публикации</h2>
         <div class="admin-tabs" role="tablist">
@@ -246,7 +228,7 @@
       <!-- Рабочая область -->
       <section id="workspace" hidden>
         <div class="admin-bar">
-          <div class="mono text-sm">вошли как <strong id="gh-login" style="color:var(--accent);">—</strong></div>
+          <div class="mono text-sm">вошли как <strong id="gh-login">—</strong></div>
           <button class="btn btn-sm" id="logout" type="button">выйти</button>
         </div>
 
@@ -284,7 +266,7 @@
             <input id="f-title" class="admin-input" type="text" placeholder="Заголовок поста" required>
 
             <div class="admin-slug">
-              <div style="flex:1;min-width:0;">
+              <div>
                 <label class="admin-label" for="f-slug">slug (имя файла)</label>
                 <input id="f-slug" class="admin-input mono" type="text" spellcheck="false">
               </div>
@@ -352,15 +334,15 @@
 
 </div>
 
-<script src="assets/admin-config.js?v=20261031bf"></script>
-<script src="assets/league.js?v=20261031bf"></script>
-<script src="assets/ops-engine.js?v=20261031bf"></script>
-<script src="assets/office-engine.js?v=20261031bf"></script>
-<script src="assets/admin.js?v=20261102palette"></script>
-<script src="assets/dom-kit.js?v=20261031bf"></script>
-<script src="assets/submissions.js?v=20261031bf"></script>
-<script src="assets/site.js?v=20261101r2"></script>
-<script src="assets/shared-chrome.js?v=20261101r1"></script>
+<script defer src="assets/admin-config.js?v=20261031bf"></script>
+<script defer src="assets/league.js?v=20261031bf"></script>
+<script defer src="assets/ops-engine.js?v=20261031bf"></script>
+<script defer src="assets/office-engine.js?v=20261031bf"></script>
+<script defer src="assets/admin.js?v=20261102palette"></script>
+<script defer src="assets/dom-kit.js?v=20261031bf"></script>
+<script defer src="assets/submissions.js?v=20261031bf"></script>
+
+
 <script>
 /* Сегменты панели: изолированы от .admin-tab (вход PAT/Device) —
    свой контракт data-seg/data-section, стрелки клавиатуры и hash-ссылки. */
@@ -391,6 +373,6 @@
   show(initial, false);
 })();
 </script>
-<script src="/assets/workspace.js?v=20261102r4"></script>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>

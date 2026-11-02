@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Устранение паразитирующей нагрузки · itsliventsev</title>
 <meta name="description" content="7-часовой практический курс по диагностике фоновой сетевой нагрузки: Task Manager, netstat, службы обновлений и командные сражения.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/network-load.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -39,80 +39,49 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Устранение паразитирующей нагрузки","item":"https://itsliventsev.github.io/archive/network-load.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="rust">
+<body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <header class="site-header">
-    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-      <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="../projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="../archive.html" class="nav-link active" aria-current="page">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content" class="prose-measure">
-    <nav aria-label="Хлебные крошки" class="crumbs mb-6">
-      <a href="../index.html">главная</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <a href="../archive.html">архив</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <span aria-current="page">устранение паразитирующей нагрузки</span>
-    </nav>
-
-  <section class="hero">
+<main id="main-content">
+<article class="editorial">
+<section >
 <h1 class="hero-title">
       Устранение паразитирующей нагрузки
     </h1>
-    <span class="pill pill-neutral mb-4"><span class="mono" style="color:var(--accent);margin-right:.35rem;">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
-    <p class="text-[var(--text-2)] text-sm sm:text-base leading-relaxed mb-0">
+    <span class="pill pill-neutral"><span class="mono is-accent">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
+    <p >
       План практических занятий по диагностике и устранению фоновой сетевой нагрузки. Формат: дистанционно через VK Мессенджер (7 академических часов).
     </p>
   </section>
 
-  <section class="space-y-6">
+  <section >
     <!-- Game mechanics -->
     <div class="notice notice-quest">
-      <h2 class="mono text-sm font-semibold mb-3"><span class="h2-glyph">></span>Игровая механика курса</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+      <h2 class="mono"><span class="h2-glyph">></span>Игровая механика курса</h2>
+      <div class="prose-grid prose-grid--2">
+        <div >
           <div class="rank-glyph rg-3">III</div>
-          <div class="text-xs font-medium text-[var(--text)]">Стажёр</div>
-          <div class="text-[10px] text-[var(--muted)]">0-20 баллов</div>
+          <div >Стажёр</div>
+          <div >0-20 баллов</div>
         </div>
-        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+        <div >
           <div class="rank-glyph rg-2">II</div>
-          <div class="text-xs font-medium text-[var(--text)]">Специалист</div>
-          <div class="text-[10px] text-[var(--muted)]">21-40 баллов</div>
+          <div >Специалист</div>
+          <div >21-40 баллов</div>
         </div>
-        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+        <div >
           <div class="rank-glyph rg-1">I</div>
-          <div class="text-xs font-medium text-[var(--text)]">Эксперт</div>
-          <div class="text-[10px] text-[var(--muted)]">41-60 баллов</div>
+          <div >Эксперт</div>
+          <div >41-60 баллов</div>
         </div>
-        <div class="text-center p-3 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+        <div >
           <div class="rank-glyph rg-top">★</div>
-          <div class="text-xs font-medium text-[var(--text)]">Сетевой детектив</div>
-          <div class="text-[10px] text-[var(--muted)]">61+ баллов</div>
+          <div >Сетевой детектив</div>
+          <div >61+ баллов</div>
         </div>
       </div>
-      <div class="text-xs text-[var(--text-2)] space-y-1">
+      <div >
         <div><strong>Как заработать баллы:</strong></div>
-        <ul class="ml-4 space-y-0.5 mb-0">
+        <ul >
           <li>• Индивидуальное задание: 5-8 баллов</li>
           <li>• Командное задание: 8-12 баллов (делятся на команду)</li>
           <li>• Отчёт через VK: 2 балла</li>
@@ -122,14 +91,14 @@
     </div>
 
     <!-- Lesson 1 -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3"><span class="h2-glyph">#</span>Урок 1: «Охота на невидимок»</h2>
-      <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 10 баллов | Индивидуальный</div>
-      <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0"><strong>Ситуация:</strong> На компьютере пользователя интернет «тормозит», хотя скорость по тарифу 100 Мбит/с. Браузер закрыт, но трафик куда-то уходит.</p>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Разведка (15 мин, 3 балла)</div>
-          <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
+    <div class="card hoverable">
+      <h2 class="mono"><span class="h2-glyph">#</span>Урок 1: «Охота на невидимок»</h2>
+      <div >1 акад. час | до 10 баллов | Индивидуальный</div>
+      <div >
+        <p ><strong>Ситуация:</strong> На компьютере пользователя интернет «тормозит», хотя скорость по тарифу 100 Мбит/с. Браузер закрыт, но трафик куда-то уходит.</p>
+        <div >
+          <div >Этап 1: Разведка (15 мин, 3 балла)</div>
+          <ol >
             <li>1. Откройте Task Manager (Ctrl+Shift+Esc)</li>
             <li>2. Перейдите на вкладку «Процессы» → добавьте столбец «Сеть»</li>
             <li>3. Отсортируйте по потреблению сети</li>
@@ -137,9 +106,9 @@
             <li>5. Для каждого запишите: имя, PID, объём трафика</li>
           </ol>
         </div>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Глубокий анализ (20 мин, 5 баллов)</div>
-          <ol class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
+        <div >
+          <div >Этап 2: Глубокий анализ (20 мин, 5 баллов)</div>
+          <ol >
             <li>1. Откройте Resource Monitor (resmon.exe)</li>
             <li>2. Перейдите на вкладку Network</li>
             <li>3. Изучите: Processes with Network Activity, Network Activity, TCP Connections, Listening Ports</li>
@@ -151,39 +120,39 @@
     </div>
 
     <!-- Lesson 2 -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3"><span class="h2-glyph">#</span>Урок 2: «Следы в сети»</h2>
-      <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 12 баллов | Индивидуальный</div>
-      <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0"><strong>Ситуация:</strong> Администратор заметил подозрительные соединения с неизвестными IP-адресами из разных стран.</p>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Командная строка — ваш друг (25 мин, 6 баллов)</div>
-          <div class="text-xs text-[var(--text-2)] space-y-2">
+    <div class="card hoverable">
+      <h2 class="mono"><span class="h2-glyph">#</span>Урок 2: «Следы в сети»</h2>
+      <div >1 акад. час | до 12 баллов | Индивидуальный</div>
+      <div >
+        <p ><strong>Ситуация:</strong> Администратор заметил подозрительные соединения с неизвестными IP-адресами из разных стран.</p>
+        <div >
+          <div >Этап 1: Командная строка — ваш друг (25 мин, 6 баллов)</div>
+          <div >
             <div>
-              <div class="font-medium mb-1">шаг 1: Обучение с ИИ</div>
-              <p class="text-[var(--muted)] mb-0">Спросите у ИИ: «Объясни команду 'netstat -ano' в Windows: что означает каждый ключ (-a, -n, -o), как читать вывод, что означают столбцы Proto, Local Address, Foreign Address, State, PID?»</p>
+              <div >шаг 1: Обучение с ИИ</div>
+              <p >Спросите у ИИ: «Объясни команду 'netstat -ano' в Windows: что означает каждый ключ (-a, -n, -o), как читать вывод, что означают столбцы Proto, Local Address, Foreign Address, State, PID?»</p>
             </div>
             <div>
-              <div class="font-medium mb-1">шаг 2: Практика</div>
-              <ol class="ml-4 space-y-1 mb-0">
+              <div >шаг 2: Практика</div>
+              <ol >
                 <li>• Откройте CMD от имени администратора</li>
                 <li>• Выполните: <code>netstat -ano &gt; C:\netstat_full.txt</code></li>
                 <li>• Выполните: <code>netstat -ano | findstr ESTABLISHED &gt; C:\netstat_established.txt</code></li>
               </ol>
             </div>
             <div>
-              <div class="font-medium mb-1">шаг 3: Анализ</div>
-              <p class="text-[var(--muted)] mb-0">Откройте netstat_established.txt и найдите 5 разных внешних IP-адресов и соответствующие PID процессов.</p>
+              <div >шаг 3: Анализ</div>
+              <p >Откройте netstat_established.txt и найдите 5 разных внешних IP-адресов и соответствующие PID процессов.</p>
             </div>
             <div>
-              <div class="font-medium mb-1">шаг 4: Идентификация</div>
-              <p class="text-[var(--muted)] mb-0">Для каждого PID выполните: <code>tasklist | findstr «[PID]»</code></p>
+              <div >шаг 4: Идентификация</div>
+              <p >Для каждого PID выполните: <code>tasklist | findstr «[PID]»</code></p>
             </div>
           </div>
         </div>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Географический анализ (15 мин, 4 балла)</div>
-          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
+        <div >
+          <div >Этап 2: Географический анализ (15 мин, 4 балла)</div>
+          <ul >
             <li>• Спросите у ИИ: «Как узнать географическое расположение IP-адреса?»</li>
             <li>• Проверьте 5 IP-адресов через: https://www.ip2location.com/ или who.is/</li>
             <li>• Добавьте в таблицу: Страна, Город, Организация (ISP/Company), ASN</li>
@@ -194,15 +163,15 @@
     </div>
 
     <!-- Lesson 3 -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3"><span class="h2-glyph">#</span>Урок 3: «Командное сражение: Пожиратели трафика»</h2>
-      <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 15 баллов | Групповая работа</div>
-      <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0"><strong>Новый формат:</strong> Сессионные залы VK. 11 человек → 2 команды (Blue Team и Red Team).</p>
+    <div class="card hoverable">
+      <h2 class="mono"><span class="h2-glyph">#</span>Урок 3: «Командное сражение: Пожиратели трафика»</h2>
+      <div >1 акад. час | до 15 баллов | Групповая работа</div>
+      <div >
+        <p ><strong>Новый формат:</strong> Сессионные залы VK. 11 человек → 2 команды (Blue Team и Red Team).</p>
         <div class="notice notice-info">
-          <div class="font-medium text-[var(--text)] mb-2">Миссия для обеих команд:</div>
-          <p class="text-xs text-[var(--text-2)] mb-2">Ваша компания обнаружила, что за последний месяц расход трафика вырос на 200%. Руководство требует найти причины и предложить решения.</p>
-          <div class="text-xs text-[var(--text-2)] space-y-2 mb-0">
+          <div >Миссия для обеих команд:</div>
+          <p >Ваша компания обнаружила, что за последний месяц расход трафика вырос на 200%. Руководство требует найти причины и предложить решения.</p>
+          <div >
             <div><strong>1. Диагностика (10 мин):</strong> Каждый участник запускает Task Manager → Performance → Ethernet, Resource Monitor → Network, netstat -ano | findstr ESTABLISHED</div>
             <div><strong>2. Централизация (10 мин):</strong> Создайте общую Google Таблицу с листами: ПРОЦЕССЫ, СОЕДИНЕНИЯ, СТАТИСТИКА</div>
             <div><strong>3. Анализ (10 мин):</strong> Ответьте на вопросы: Какой процесс чаще всего встречается? Какие страны доминируют? Есть ли подозрительные соединения?</div>
@@ -213,25 +182,25 @@
     </div>
 
     <!-- Lesson 4 -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3"><span class="h2-glyph">#</span>Урок 4: «Укротитель обновлений»</h2>
-      <div class="text-xs text-[var(--muted)] mb-3">1 акад. час | до 14 баллов | Индивидуальный</div>
-      <div class="space-y-3 text-sm text-[var(--text-2)]">
-        <p class="mb-0"><strong>Ситуация:</strong> Windows Update загружает обновления в рабочее время, парализуя работу. Облачные сервисы синхронизируются без разрешения.</p>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 1: Анатомия автообновлений (25 мин, 7 баллов)</div>
-          <div class="text-xs text-[var(--text-2)] space-y-2">
+    <div class="card hoverable">
+      <h2 class="mono"><span class="h2-glyph">#</span>Урок 4: «Укротитель обновлений»</h2>
+      <div >1 акад. час | до 14 баллов | Индивидуальный</div>
+      <div >
+        <p ><strong>Ситуация:</strong> Windows Update загружает обновления в рабочее время, парализуя работу. Облачные сервисы синхронизируются без разрешения.</p>
+        <div >
+          <div >Этап 1: Анатомия автообновлений (25 мин, 7 баллов)</div>
+          <div >
             <div>
-              <div class="font-medium mb-1">шаг 1: Исследование служб</div>
-              <ol class="ml-4 space-y-1 mb-0">
+              <div >шаг 1: Исследование служб</div>
+              <ol >
                 <li>• Откройте services.msc (Win+R → services.msc)</li>
                 <li>• Найдите службы, связанные с обновлениями: wuauserv, UsoSvc, WaaSMedicSvc, DoSvc</li>
                 <li>• Создайте таблицу: Служба, Display Name, Status, Startup Type, Dependencies</li>
               </ol>
             </div>
             <div>
-              <div class="font-medium mb-1">шаг 2: Групповые политики</div>
-              <ol class="ml-4 space-y-1 mb-0">
+              <div >шаг 2: Групповые политики</div>
+              <ol >
                 <li>• Откройте gpedit.msc (Win+R)</li>
                 <li>• Путь: Computer Configuration → Administrative Templates → Windows Components → Windows Update</li>
                 <li>• Настройте: Configure Automatic Updates → «2 - Notify for download and auto install»</li>
@@ -240,9 +209,9 @@
             </div>
           </div>
         </div>
-        <div class="bg-[var(--surface-2)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="font-medium text-[var(--text)] mb-2">Этап 2: Облачные синхронизации (15 мин, 5 баллов)</div>
-          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4 mb-0">
+        <div >
+          <div >Этап 2: Облачные синхронизации (15 мин, 5 баллов)</div>
+          <ul >
             <li>• Откройте Task Manager → вкладка Startup</li>
             <li>• Найдите облачные клиенты: OneDrive, Google Drive, Dropbox, Yandex.Disk</li>
             <li>• Для каждого настройте ограничение скорости синхронизации</li>
@@ -255,36 +224,31 @@
 
     <!-- Final note -->
     <div class="notice notice-quest">
-      <h2 class="mono text-sm font-semibold mb-3"><span class="h2-glyph">~</span>Дополнительные уроки</h2>
-      <p class="text-sm text-[var(--text-2)] mb-3">Курс также включает:</p>
-      <ul class="text-sm text-[var(--text-2)] space-y-2 mb-0">
-        <li class="flex items-start gap-2">
-          <span style="color:var(--accent);" class="mt-0.5">5.</span>
+      <h2 class="mono"><span class="h2-glyph">~</span>Дополнительные уроки</h2>
+      <p >Курс также включает:</p>
+      <ul >
+        <li class="prose-row">
+          <span >5.</span>
           <span><strong>Урок 5:</strong> «Битва за HOSTS: Командное противостояние» (PvP: Defenders vs Attackers)</span>
         </li>
-        <li class="flex items-start gap-2">
-          <span style="color:var(--accent);" class="mt-0.5">6.</span>
+        <li class="prose-row">
+          <span >6.</span>
           <span><strong>Урок 6:</strong> «Автоматизация: Скрипты-помощники» (PowerShell + Peer Review)</span>
         </li>
-        <li class="flex items-start gap-2">
-          <span style="color:var(--accent);" class="mt-0.5">7.</span>
+        <li class="prose-row">
+          <span >7.</span>
           <span><strong>Урок 7:</strong> «Финальный босс: Корпоративный кейс» (Командный проект)</span>
         </li>
       </ul>
     </div>
   </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <span>© 2026 itsliventsev · архив</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="../index.html">главная</a> <a href="../projects.html">проекты</a> <a href="../sitemap.html">карта сайта</a> <a href="../feed.xml">rss</a> <a href="../admin.html" rel="nofollow">admin</a></nav>
-    <time data-footer-updated class="footer-updated"></time>
+</article>
+<footer class="ui-footer">
+    <span>© 2026 itsliventsev</span>
+    <nav aria-label="Служебная навигация"><a href="/">Главная</a><a href="/sitemap.html">Карта сайта</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
   </footer>
-</div>
-
-<script src="../assets/site.js?v=20261101r2"></script>
-<script src="../assets/shared-chrome.js?v=20261101r1"></script>
-<script src="/assets/workspace.js?v=20261102r4"></script>
+</main>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>

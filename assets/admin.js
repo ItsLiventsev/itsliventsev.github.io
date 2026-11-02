@@ -117,102 +117,56 @@
     const rtMeta = d.readtime ? '    <meta name="post-readtime" content="' + esc(d.readtime) + '">\n' : '';
     const srcMeta = d.source ? '    <meta name="post-source" content="' + esc(d.source) + '">\n' : '';
     const draftMeta = d.draft ? '    <meta name="post-status" content="draft">\n' : '';
-    const navItems = [
-      ['index.html', 'главная', ''], ['blog.html', 'заметки', 'blog'],
-      ['articles.html', 'статьи', 'articles'], ['projects.html', 'проекты', 'projects'],
-      ['archive.html', 'архив', 'archive']
-    ].map(([href, label, key]) => {
-      const active = (section === key) ? ' active" aria-current="page' : '';
-      const wip = key === 'blog' ? ' is-wip' : '';
-      const plate = key === 'blog' ? ' <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span>' : '';
-      return `      <a href="${prefix}${href}" class="nav-link${wip}${active}">${label}${plate}</a>`;
-    }).join('\n');
-
     return `<!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('itsliventsev-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 <title>${esc(d.title)} · itsliventsev</title>
 <meta name="description" content="${desc}">
 <meta name="post-date" content="${esc(d.date)}">
 ${typeMeta}${tagsMeta}${rtMeta}${srcMeta}${draftMeta}<link rel="icon" type="image/svg+xml" href="${prefix}assets/favicon.svg">
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${prefix}assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="${prefix}assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="${prefix}assets/workspace-learning.css?v=20261102r1">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${prefix}assets/tokens.css">
+<link rel="stylesheet" href="${prefix}assets/base.css">
+<link rel="stylesheet" href="${prefix}assets/pages.css">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="${SECTION_ACCENT[section]}">
+<body data-article data-area="general">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <header class="site-header">
-    <a href="${prefix}${section}.html" class="logo"><span class="arrow">←</span> ${section === 'blog' ? 'заметки' : 'статьи'}</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-${navItems}
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
+<main id="main-content">
+  <article class="editorial" data-post>
+    <p class="ui-eyebrow">${section === 'blog' ? 'заметки' : 'статьи'} · ${esc(d.date)}</p>
+    <h1 class="hero-title">${esc(d.title)}</h1>
+    <div class="prose-row">
+      <span class="ui-tag">${esc(TYPE_LABELS[section][d.type] || d.type)}</span>
+      ${d.readtime ? '<span class="ui-tag">≈ ' + esc(d.readtime) + '</span>' : ''}
+      <span class="ui-tag">${esc(d.date)}</span>
     </div>
-  </header>
-
-  <main id="main-content" class="prose-measure">
-
-    <nav class="mono text-xs mb-6 flex items-center gap-2 flex-wrap" style="color:var(--faint);" aria-label="Хлебные крошки">
-      <a href="${prefix}index.html" class="nav-link" style="padding:.2rem .4rem;">главная</a>
-      <span>/</span>
-      <a href="${prefix}${section}.html" class="nav-link" style="padding:.2rem .4rem;">${section === 'blog' ? 'заметки' : 'статьи'}</a>
-    </nav>
-
-    <article>
-      <div class="article-meta">
-        <span class="pill ${section === 'blog' ? 'pill-rose' : 'pill-amber'}">${esc(TYPE_LABELS[section][d.type] || d.type)}</span>
-        <span class="dot"></span><span>${esc(d.date)}</span>
-        ${d.readtime ? '<span class="dot"></span><span>≈ ' + esc(d.readtime) + '</span>' : ''}
-      </div>
-
-      <h1 class="hero-title text-3xl sm:text-4xl mb-6">${esc(d.title)}</h1>
-
 ${bodyHtml}
-    </article>
-
-    <div class="mt-10 flex flex-wrap gap-3">
-      <a href="${prefix}${section}.html" class="btn"><span class="arrow">←</span> назад</a>
+    <div class="prose-row">
+      <a href="${prefix}${section}.html" class="ui-btn">← назад</a>
     </div>
-
-  </main>
-
-  <footer class="site-footer">
+  </article>
+  <footer class="ui-footer">
     <span>© 2026 itsliventsev · ${section === 'blog' ? 'заметки' : 'статьи'}</span>
-    <nav class="footer-nav" aria-label="Служебная навигация">
-      <a href="${prefix}index.html">главная</a>
-      <a href="${prefix}projects.html">проекты</a>
-      <a href="${prefix}sitemap.html">карта сайта</a>
-      <a href="${prefix}feed.xml">rss</a>
-      <a href="${prefix}admin.html" rel="nofollow">admin</a>
+    <nav aria-label="Служебная навигация">
+      <a href="${prefix}index.html">Главная</a>
+      <a href="${prefix}projects.html">Проекты</a>
+      <a href="${prefix}sitemap.html">Карта сайта</a>
+      <a href="${prefix}feed.xml">RSS</a>
     </nav>
-    <span data-footer-updated class="footer-updated"></span>
+    <time data-footer-updated></time>
   </footer>
+</main>
 
-</div>
+<script src="${prefix}assets/shell.js" defer></script>
 
-<script src="${prefix}assets/site.js?v=20261031bb"></script>
-<script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
-<script src="${prefix}assets/workspace.js?v=20261102r4"></script>
 </body>
 </html>
 `;

@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#F8F9FA">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
-<title>статьи · itsliventsev</title>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Статьи · itsliventsev</title>
 <meta name="description" content="Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/catalog.css?v=20261102r2">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/articles.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -25,7 +24,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="статьи · itsliventsev">
+  <meta property="og:title" content="Статьи · itsliventsev">
   <meta property="og:description" content="Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.">
   <meta property="og:url" content="https://itsliventsev.github.io/articles.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
@@ -33,32 +32,95 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="статьи · itsliventsev">
+  <meta name="twitter:title" content="Статьи · itsliventsev">
   <meta name="twitter:description" content="Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"статьи","description":"Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.","url":"https://itsliventsev.github.io/articles.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Статьи","description":"Публикации, методические материалы и статьи в сборниках конференций: завершённые академические тексты про практикоориентированное обучение и трудоустройство выпускников.","url":"https://itsliventsev.github.io/articles.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="catalog-page"><a class="skip-link" href="#main-content">перейти к содержанию</a><div data-workspace-root><main id="main-content" class="ws-content">
-<header class="ws-page-heading"><span class="ws-eyebrow">ПУБЛИКАЦИИ · МЕТОДИЧЕСКИЕ МАТЕРИАЛЫ</span><h1>Статьи</h1><p>Завершённые тексты, материалы конференций и методические разработки — то, что прошло редактуру и опубликовано.</p></header>
-<div class="catalog-search" data-catalog-search hidden>
-  <label for="catalog-query">Поиск по разделу</label>
-  <div class="catalog-search-field"><span aria-hidden="true">⌕</span><input id="catalog-query" type="search" placeholder="По названию или теме" autocomplete="off"><button type="button" data-catalog-clear hidden>Очистить</button></div>
-  <p data-catalog-status role="status" aria-live="polite"></p>
-</div>
-<section class="ws-editorial-summary" aria-label="Статистика публикаций"><article data-ws-surface><small>ПУБЛИКАЦИИ</small><strong id="stat-articles">—</strong></article><article data-ws-surface><small>КОНФЕРЕНЦИИ</small><strong id="stat-conf">—</strong></article><article data-ws-surface><small>МИНУТ ЧТЕНИЯ</small><strong id="stat-minutes">—</strong></article><article data-ws-surface><small>ПЕРВАЯ ПУБЛИКАЦИЯ</small><strong id="stat-year">—</strong></article></section>
-<section class="ws-section"><div class="ws-section-heading"><div><span class="ws-eyebrow">БИБЛИОТЕКА ТЕКСТОВ</span><h2>Все публикации <span class="ws-count" id="pub-count">…</span></h2></div><div class="ws-filter-row" id="pub-filters"><button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button></div></div><div class="ws-publications" id="pub-list" aria-live="polite"><div class="ws-empty">Загружаем список публикаций…</div><noscript><p class="ws-empty">Для загрузки списка нужен JavaScript. Доступная публикация: <a href="articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html">Практикоориентированное формирование знаний</a>.</p></noscript></div></section>
-</main><footer class="ws-footer"><span>© 2026 itsliventsev · Публикации</span><nav><a href="index.html">Главная</a><a href="projects.html">Проекты</a><a href="feed.xml">RSS</a></nav><time data-footer-updated></time></footer></div>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <header class="ui-pagehead">
+    <p class="ui-eyebrow">публикации · методические материалы</p>
+    <h1>Статьи</h1>
+    <p>Завершённые тексты: материалы конференций и методические разработки. То, что прошло редактуру и опубликовано — без черновиков и случайных заметок.</p>
+    <div class="ui-pagehead-meta"><span id="stat-articles">—</span><span id="stat-conf">—</span><span id="stat-minutes">—</span><span>с <span id="stat-year">—</span> года</span></div>
+  </header>
+
+  <div class="catalog-toolbar">
+    <div class="catalog-search" data-catalog-search hidden>
+      <label for="catalog-query">Поиск по разделу</label>
+      <div class="ui-search-field">
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#search"></use></svg>
+        <input id="catalog-query" type="search" placeholder="Название или тема" autocomplete="off">
+      </div>
+      <button type="button" data-catalog-clear hidden>Очистить</button>
+    </div>
+    <div class="catalog-filters" id="pub-filters" role="group" aria-label="Тип публикации">
+      <button class="catalog-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>
+    </div>
+    <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="catalog" data-catalog-list id="pub-list" aria-live="polite">
+    <div class="catalog-empty">Загружаю список публикаций…</div>
+    <noscript><a class="catalog-row" href="articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html"><span class="catalog-index">01</span><span><span class="catalog-title">Практикоориентированное формирование знаний</span><span class="catalog-desc">Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников.</span></span><span class="catalog-side"><span class="ui-tag">конференция</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a></noscript>
+  </div>
+
+  <p class="catalog-note">Статьи отличаются от заметок: это вычитанные тексты с источниками и методической рамкой. Заметки живут в <a href="blog.html">отдельной ленте</a>.</p>
+
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Публикации</span>
+    <nav aria-label="Служебная навигация"><a href="index.html">Главная</a><a href="blog.html">Заметки</a><a href="projects.html">Проекты</a><a href="feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
 <script>
 (function(){
- const labels={conference:'Конференция',methodical:'Методический материал',book:'Книга / сборник'};
- const list=document.getElementById('pub-list'), filters=document.getElementById('pub-filters'); let posts=[];
- const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
- function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);list.innerHTML=items.length?items.map((p,i)=>'<a class="ws-publication-row" data-ws-surface href="articles/'+esc(p.file)+'"><span class="ws-publication-index">'+String(i+1).padStart(2,'0')+'</span><span class="ws-publication-copy"><span class="ws-publication-meta"><span class="ws-tag ws-tag-purple">'+esc(labels[p.type]||p.type)+'</span>'+(p.date?'<span>'+esc(date(p.date))+'</span>':'')+(p.readtime?'<span>≈ '+esc(p.readtime)+' чтения</span>':'')+'</span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join('')+'</span></span><span class="ws-publication-arrow" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></span></a>').join(''):'<div class="ws-empty">В этой категории пока нет публикаций.</div>';}
- filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});
- fetch('articles/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];document.getElementById('pub-count').textContent=posts.length;document.getElementById('stat-articles').textContent=posts.length;document.getElementById('stat-conf').textContent=posts.filter(p=>p.type==='conference').length;document.getElementById('stat-minutes').textContent=posts.reduce((n,p)=>n+(parseInt(String(p.readtime||'').match(/\d+/)||0,10)||0),0)||'—';const years=posts.map(p=>String(p.date||'').match(/\d{4}/)).filter(Boolean).map(x=>Number(x[0]));document.getElementById('stat-year').textContent=years.length?Math.min(...years):'—';const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{document.getElementById('pub-count').textContent='—';list.innerHTML='<div class="ws-empty">Не удалось загрузить список. <a href="sitemap.html">Открыть карту сайта</a>.</div>';});
+  var labels={conference:'конференция',methodical:'методический материал',book:'книга / сборник'};
+  var list=document.getElementById('pub-list'), filters=document.getElementById('pub-filters');
+  var posts=[];
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+  var date=function(s){if(!s)return '';if(/^\d{4}$/.test(s))return s;var d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
+  function render(type){
+    var items=type==='all'?posts:posts.filter(function(p){return p.type===type;});
+    list.innerHTML=items.length?items.map(function(p,i){
+      var meta=[];
+      if(p.date)meta.push(esc(date(p.date)));
+      if(p.readtime)meta.push('≈ '+esc(p.readtime));
+      if(p.source)meta.push(esc(p.source));
+      return '<a class="catalog-row" href="articles/'+esc(p.file)+'">'
+        +'<span class="catalog-index">'+String(i+1).padStart(2,'0')+'</span>'
+        +'<span><span class="catalog-title">'+esc(p.title)+'</span>'
+        +(p.excerpt?'<span class="catalog-desc">'+esc(p.excerpt)+'</span>':'')
+        +'<span class="catalog-meta">'+meta.join('<span aria-hidden="true">·</span>')
+        +(p.tags&&p.tags.length?'<span aria-hidden="true">·</span><span>'+p.tags.map(esc).join(', ')+'</span>':'')+'</span></span>'
+        +'<span class="catalog-side"><span class="ui-tag">'+esc(labels[p.type]||p.type)+'</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a>';
+    }).join(''):'<div class="catalog-empty">В этой категории пока нет публикаций.</div>';
+  }
+  filters.addEventListener('click',function(e){
+    var b=e.target.closest('[data-type-filter]'); if(!b)return;
+    filters.querySelectorAll('.catalog-filter').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    render(b.dataset.typeFilter);
+  });
+  fetch('articles/posts.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json();}).then(function(data){
+    posts=Array.isArray(data)?data.filter(function(p){return p&&p.status!=='draft';}):[];
+    document.getElementById('stat-articles').textContent=posts.length+' '+(posts.length===1?'публикация':'публикации');
+    document.getElementById('stat-conf').textContent=posts.filter(function(p){return p.type==='conference';}).length+' на конференциях';
+    var minutes=posts.reduce(function(n,p){return n+(parseInt(String(p.readtime||'').match(/\d+/)||0,10)||0);},0);
+    document.getElementById('stat-minutes').textContent=minutes?minutes+' мин чтения':'—';
+    var years=posts.map(function(p){return String(p.date||'').match(/\d{4}/);}).filter(Boolean).map(function(x){return Number(x[0]);});
+    document.getElementById('stat-year').textContent=years.length?Math.min.apply(null,years):'—';
+    var types=Array.from(new Set(posts.map(function(p){return p.type;})));
+    filters.innerHTML='<button class="catalog-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(function(t){return '<button class="catalog-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>';}).join('');
+    render('all');
+  }).catch(function(){
+    list.innerHTML='<div class="catalog-empty">Не удалось загрузить список. <a href="sitemap.html">Открыть карту сайта</a>.</div>';
+  });
 })();
 </script>
-<script src="assets/catalog.js?v=20261102r1" defer></script>
-<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261102r4"></script></body></html>
+<script src="assets/catalog.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

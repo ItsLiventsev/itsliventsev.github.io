@@ -1,13 +1,14 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v16';
+const CACHE = 'itsliventsev-v17';
 const RUNTIME_CACHE = CACHE + '-runtime';
 const MAX_RUNTIME_ENTRIES = 120;
 const PRECACHE = [
   '/', '/index.html', '/assets/offline.html',
-  '/assets/workspace-tokens.css', '/assets/workspace.css', '/assets/workspace-home.css', '/assets/workspace-learning.css',
-  '/assets/catalog.css', '/assets/catalog.js', '/assets/workspace.js', '/assets/i18n.js', '/assets/home-activity.js', '/assets/home-reading.js', '/assets/site.js', '/assets/shared-chrome.js',
+  '/assets/tokens.css', '/assets/base.css', '/assets/pages.css', '/assets/course.css',
+  '/assets/shell.js', '/assets/catalog.js', '/assets/feed.js', '/assets/home-reading.js',
   '/assets/search-index.json', '/blog/posts.json', '/articles/posts.json',
-  '/assets/fonts/manrope-cyrillic-wght-normal.woff2', '/assets/fonts/manrope-latin-wght-normal.woff2',
+  '/assets/fonts/literata-cyrillic-wght-normal.woff2', '/assets/fonts/literata-latin-wght-normal.woff2',
+  '/assets/fonts/golos-text-cyrillic-wght-normal.woff2', '/assets/fonts/golos-text-latin-wght-normal.woff2',
   '/assets/fonts/jetbrains-mono-cyrillic-wght-normal.woff2', '/assets/fonts/jetbrains-mono-latin-wght-normal.woff2',
   '/assets/icons.svg', '/assets/favicon.svg',
   '/projects.html', '/articles.html', '/blog.html', '/archive.html',

@@ -5,9 +5,9 @@
   if (!panel) return;
   const input = panel.querySelector('input');
   const clear = panel.querySelector('[data-catalog-clear]');
-  const status = panel.querySelector('[data-catalog-status]');
-  const lists = [...document.querySelectorAll('.ws-project-grid, #pub-list, #note-grid')];
-  const selector = '.ws-project-card, .ws-publication-row, .ws-note-card';
+  const status = panel.querySelector('[data-catalog-status]') || document.querySelector('[data-catalog-status]');
+  const lists = [...document.querySelectorAll('.catalog, [data-catalog-list]')];
+  const selector = '.catalog-row';
   const normalize = text => text.toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').replace(/\s+/g, ' ').trim();
   function update() {
     const query = normalize(input.value);
@@ -17,7 +17,7 @@
     cards.forEach(card => {
       const content = normalize(card.textContent);
       const visible = words.every(word => content.includes(word));
-      card.classList.toggle('catalog-filtered-out', !visible);
+      card.hidden = !visible;
       if (visible) matches++;
     });
     clear.hidden = !query;

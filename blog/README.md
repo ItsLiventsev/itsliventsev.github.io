@@ -5,7 +5,7 @@
 ## Как добавить заметку
 
 1. Создайте HTML-файл в этой папке; имя файла является slug.
-2. Используйте в качестве примера `2026-10-26-kak-ustroen-etot-blog.html`: сохраните SEO-метаданные, `h1`, `main#main-content`, навигационные ссылки и подключение `workspace-tokens.css`, `workspace.css`, `workspace.js`.
+2. Используйте в качестве примера `2026-10-26-kak-ustroen-etot-blog.html`: сохраните SEO-метаданные, `h1`, `<main id="main-content">` с `<article class="editorial">` и подключение `tokens.css`, `base.css`, `pages.css`, `shell.js` (см. `scripts/regression-static.js` — он проверяет контракт).
 3. Заполните метаданные записи — они участвуют в карточке `blog.html`:
 
 ```html

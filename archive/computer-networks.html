@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Компьютерные сети · itsliventsev</title>
 <meta name="description" content="Компьютерные сети: типы сетей, линии связи, сетевое оборудование и ситуационная задача по проектированию сети цеха.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/computer-networks.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -39,92 +39,61 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Компьютерные сети","item":"https://itsliventsev.github.io/archive/computer-networks.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="rust">
+<body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <header class="site-header">
-    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-      <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="../projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="../archive.html" class="nav-link active" aria-current="page">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content" class="prose-measure">
-    <nav aria-label="Хлебные крошки" class="crumbs mb-6">
-      <a href="../index.html">главная</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <a href="../archive.html">архив</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <span aria-current="page">компьютерные сети</span>
-    </nav>
-
-  <section class="hero">
+<main id="main-content">
+<article class="editorial">
+<section >
 <h1 class="hero-title">
       Компьютерные сети
     </h1>
-    <span class="pill pill-neutral"><span class="mono" style="color:var(--accent);margin-right:.35rem;">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
+    <span class="pill pill-neutral"><span class="mono is-accent">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
   </section>
 
-  <section class="space-y-6">
+  <section >
     <!-- Definition -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">1. Определение компьютерной сети</h2>
-      <p class="text-sm text-[var(--text-2)] mb-3">
+    <div class="card hoverable">
+      <h2 class="mono">1. Определение компьютерной сети</h2>
+      <p >
         <strong>Компьютерная сеть</strong> — это система связи, объединяющая два и более компьютеров и периферийных устройств для совместного использования ресурсов (данных, программ, принтеров, интернета) и обмена информацией.
       </p>
       <div class="notice notice-info">
-        <div class="text-xs text-[var(--text-2)] m-0">
+        <div class="m-0">
           <strong>Для мехатроников:</strong> На современном производстве это не просто компьютеры, а целый комплекс: ПЛК (Программируемые Логические Контроллеры), промышленные компьютеры, сенсоры, роботы и ЧПУ-станки, объединенные в сеть для автоматизации технологического процесса.
         </div>
       </div>
     </div>
 
     <!-- Network types -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">2. Типы сетей (по масштабу)</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
-          <div class="mono text-xs text-[var(--accent)] mb-1">PAN</div>
-          <div class="text-sm font-medium text-[var(--text)]">Персональная сеть</div>
-          <div class="text-xs text-[var(--muted)] mt-1">Personal Area Network</div>
+    <div class="card hoverable">
+      <h2 class="mono">2. Типы сетей (по масштабу)</h2>
+      <div class="prose-grid prose-grid--2">
+        <div >
+          <div class="mono">PAN</div>
+          <div >Персональная сеть</div>
+          <div >Personal Area Network</div>
         </div>
-        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
-          <div class="mono text-xs text-[var(--accent)] mb-1">LAN</div>
-          <div class="text-sm font-medium text-[var(--text)]">Локальная сеть</div>
-          <div class="text-xs text-[var(--muted)] mt-1">Local Area Network</div>
+        <div >
+          <div class="mono">LAN</div>
+          <div >Локальная сеть</div>
+          <div >Local Area Network</div>
         </div>
-        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
-          <div class="mono text-xs text-[var(--accent)] mb-1">MAN</div>
-          <div class="text-sm font-medium text-[var(--text)]">Городская/Региональная сеть</div>
-          <div class="text-xs text-[var(--muted)] mt-1">Metropolitan Area Network</div>
+        <div >
+          <div class="mono">MAN</div>
+          <div >Городская/Региональная сеть</div>
+          <div >Metropolitan Area Network</div>
         </div>
-        <div class="p-3 bg-[var(--surface-2)] rounded-lg border border-[var(--border)]">
-          <div class="mono text-xs text-[var(--accent)] mb-1">WAN</div>
-          <div class="text-sm font-medium text-[var(--text)]">Глобальная сеть</div>
-          <div class="text-xs text-[var(--muted)] mt-1">Wide Area Network</div>
+        <div >
+          <div class="mono">WAN</div>
+          <div >Глобальная сеть</div>
+          <div >Wide Area Network</div>
         </div>
       </div>
     </div>
 
     <!-- Connection types -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">3. Виды линий связи</h2>
+    <div class="card hoverable">
+      <h2 class="mono">3. Виды линий связи</h2>
       <div class="table-wrap">
         <table class="data-table">
           <thead>
@@ -136,69 +105,69 @@
           </thead>
           <tbody>
             <tr>
-              <td class="font-medium text-[var(--text)]">Витая пара</td>
-              <td class="text-xs">Недорогая, гибкая, низкая помехозащищенность</td>
-              <td class="text-xs">Основа офисных и цеховых LAN, подключение станков</td>
+              <td >Витая пара</td>
+              <td >Недорогая, гибкая, низкая помехозащищенность</td>
+              <td >Основа офисных и цеховых LAN, подключение станков</td>
             </tr>
             <tr>
-              <td class="font-medium text-[var(--text)]">Коаксиальный кабель</td>
-              <td class="text-xs">Защищен от помех, толще, менее гибкий</td>
-              <td class="text-xs">Системы видеонаблюдения, устаревшие сети</td>
+              <td >Коаксиальный кабель</td>
+              <td >Защищен от помех, толще, менее гибкий</td>
+              <td >Системы видеонаблюдения, устаревшие сети</td>
             </tr>
             <tr>
-              <td class="font-medium text-[var(--text)]">Оптоволокно</td>
-              <td class="text-xs">Высокая скорость, помехозащищенность, дороже</td>
-              <td class="text-xs">Магистральные каналы, роботизированные комплексы</td>
+              <td >Оптоволокно</td>
+              <td >Высокая скорость, помехозащищенность, дороже</td>
+              <td >Магистральные каналы, роботизированные комплексы</td>
             </tr>
             <tr>
-              <td class="font-medium text-[var(--text)]">Wi-Fi</td>
-              <td class="text-xs">Радиоканал, удобно, подвержен помехам</td>
-              <td class="text-xs">Мобильные панели, беспроводные датчики</td>
+              <td >Wi-Fi</td>
+              <td >Радиоканал, удобно, подвержен помехам</td>
+              <td >Мобильные панели, беспроводные датчики</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-[var(--muted)] mt-3 italic mb-0">
+      <p >
         Важно: В критичных системах предпочтительны проводные соединения из-за надежности.
       </p>
     </div>
 
     <!-- LAN -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">4. Локальная сеть (LAN)</h2>
-      <p class="text-sm text-[var(--text-2)] mb-3">
+    <div class="card hoverable">
+      <h2 class="mono">4. Локальная сеть (LAN)</h2>
+      <p >
         <strong>Локальная сеть</strong> — это сеть, объединяющая компьютеры и устройства на небольшой территории (офис, здание, учебный класс, цех).
       </p>
       <div class="notice notice-info">
-        <div class="text-sm text-[var(--text-2)] m-0">
+        <div class="m-0">
           <strong>Есть ли в нашем колледже локальная сеть?</strong> Да, конечно. Она объединяет все компьютеры в учебных классах и лабораториях, серверы колледжа, принтеры и МФУ, возможно, некоторые учебные стенды и ПЛК. Организована с помощью сетевых коммутаторов (свитчей), к которым кабелями («витая пара») подключены все устройства.
         </div>
       </div>
     </div>
 
     <!-- Network equipment -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">5. Сетевое оборудование</h2>
-      <div class="space-y-3">
+    <div class="card hoverable">
+      <h2 class="mono">5. Сетевое оборудование</h2>
+      <div >
         <div>
-          <div class="text-sm font-medium text-[var(--text)] mb-1">Базовое оборудование</div>
-          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
+          <div >Базовое оборудование</div>
+          <ul >
             <li>• <strong>Сетевой адаптер (NIC)</strong> — устройство для подключения к сети (сетевая карта, Wi-Fi модуль)</li>
             <li>• <strong>Повторитель (Repeater)</strong> — усиливает сигнал (устарел)</li>
             <li>• <strong>Концентратор (Hub)</strong> — простой «разветвитель» (устарел)</li>
           </ul>
         </div>
         <div>
-          <div class="text-sm font-medium text-[var(--text)] mb-1">Интеллектуальное оборудование</div>
-          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
+          <div >Интеллектуальное оборудование</div>
+          <ul >
             <li>• <strong>Коммутатор (Switch)</strong> — «умный» концентратор, знает MAC-адреса, отправляет данные только нужному получателю. Основа современной LAN.</li>
             <li>• <strong>Маршрутизатор (Router)</strong> — соединяет разные сети (например, LAN с интернетом), определяет оптимальный маршрут</li>
             <li>• <strong>Точка доступа (Access Point)</strong> — устройство для создания Wi-Fi сети</li>
           </ul>
         </div>
         <div>
-          <div class="text-sm font-medium text-[var(--text)] mb-1">Специализированное оборудование</div>
-          <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
+          <div >Специализированное оборудование</div>
+          <ul >
             <li>• <strong>Межсетевой экран (Firewall)</strong> — фильтрует трафик, защищает от несанкционированного доступа</li>
             <li>• <strong>Промышленный коммутатор</strong> — усиленный свитч для цехов (защищен от пыли, влаги, вибраций, перепадов температур)</li>
           </ul>
@@ -207,27 +176,27 @@
     </div>
 
     <!-- Regional network -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">6. Региональная и корпоративная сеть</h2>
-      <div class="space-y-3">
+    <div class="card hoverable">
+      <h2 class="mono">6. Региональная и корпоративная сеть</h2>
+      <div >
         <div>
-          <div class="text-sm font-medium text-[var(--text)] mb-1">Региональная сеть (MAN)</div>
-          <p class="text-xs text-[var(--text-2)] mb-0">Объединяет компьютеры и локальные сети в пределах города или региона. Преимущества: высокоскоростное соединение между филиалами, совместное использование дорогих ресурсов, видеоконференц-связь.</p>
+          <div >Региональная сеть (MAN)</div>
+          <p >Объединяет компьютеры и локальные сети в пределах города или региона. Преимущества: высокоскоростное соединение между филиалами, совместное использование дорогих ресурсов, видеоконференц-связь.</p>
         </div>
         <div>
-          <div class="text-sm font-medium text-[var(--text)] mb-1">Корпоративная сеть</div>
-          <p class="text-xs text-[var(--text-2)] mb-0">Сеть крупной организации, объединяющая филиалы в разных городах и странах (частный случай WAN).</p>
+          <div >Корпоративная сеть</div>
+          <p >Сеть крупной организации, объединяющая филиалы в разных городах и странах (частный случай WAN).</p>
         </div>
       </div>
     </div>
 
     <!-- Quest -->
     <div class="notice notice-quest">
-      <h2 class="mono text-sm font-semibold mb-3"><span class="h2-glyph">></span>Ситуационная задача: «Проектирование сетевой инфраструктуры цеха»</h2>
-      <div class="text-sm text-[var(--text-2)] space-y-3">
-        <p class="mb-0"><strong>Легенда:</strong> Вы — инженеры-проектировщики из компании «Мехатроник-Про». Вашей команде поручено разработать проект локальной сети для нового участка сборки автоматизированной линии.</p>
-        <p class="mb-0"><strong>Оборудование на участке:</strong></p>
-        <ul class="text-xs text-[var(--text-2)] space-y-1 ml-4">
+      <h2 class="mono"><span class="h2-glyph">></span>Ситуационная задача: «Проектирование сетевой инфраструктуры цеха»</h2>
+      <div >
+        <p ><strong>Легенда:</strong> Вы — инженеры-проектировщики из компании «Мехатроник-Про». Вашей команде поручено разработать проект локальной сети для нового участка сборки автоматизированной линии.</p>
+        <p ><strong>Оборудование на участке:</strong></p>
+        <ul >
           <li>• 3 промышленных робота с ПЛК</li>
           <li>• 2 станка с ЧПУ</li>
           <li>• 1 система машинного зрения (камера высокого разрешения)</li>
@@ -235,22 +204,17 @@
           <li>• 1 промышленный принтер</li>
           <li>• Датчики температуры и вибрации</li>
         </ul>
-        <p class="mb-0"><strong>Задача:</strong> Выбрать оптимальные типы линий связи и сетевое оборудование, рассчитать бюджет проекта, нарисовать схему подключения.</p>
+        <p ><strong>Задача:</strong> Выбрать оптимальные типы линий связи и сетевое оборудование, рассчитать бюджет проекта, нарисовать схему подключения.</p>
       </div>
     </div>
   </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <span>© 2026 itsliventsev · архив</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="../index.html">главная</a> <a href="../projects.html">проекты</a> <a href="../sitemap.html">карта сайта</a> <a href="../feed.xml">rss</a> <a href="../admin.html" rel="nofollow">admin</a></nav>
-    <time data-footer-updated class="footer-updated"></time>
+</article>
+<footer class="ui-footer">
+    <span>© 2026 itsliventsev</span>
+    <nav aria-label="Служебная навигация"><a href="/">Главная</a><a href="/sitemap.html">Карта сайта</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
   </footer>
-</div>
-
-<script src="../assets/site.js?v=20261101r2"></script>
-<script src="../assets/shared-chrome.js?v=20261101r1"></script>
-<script src="/assets/workspace.js?v=20261102r4"></script>
+</main>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>
