@@ -22,13 +22,18 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
         assert.equal(await page.locator('.ws-pathways-grid a[href="' + href + '"]').count(), 1);
         assert.equal(await page.locator(href).count(), 1);
       }
-      await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
       for (const theme of ['light', 'dark']) {
-        await page.evaluate(theme => document.documentElement.setAttribute('data-theme', theme), theme);
+        await page.evaluate(theme => localStorage.setItem('itsliventsev-theme', theme), theme);
+        await page.reload({ waitUntil: 'load' });
+        await page.addScriptTag({ content: axe.source });
+        await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
         const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
         assert.equal(pathViolations.length, 0, 'pathways accessibility in ' + theme + ': ' + JSON.stringify(pathViolations));
       }
-      await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'light'));
+      await page.evaluate(() => localStorage.setItem('itsliventsev-theme', 'light'));
+      await page.reload({ waitUntil: 'load' });
+      await page.addScriptTag({ content: axe.source });
+      await shelf.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
       await paths.first().focus();
       assert.equal(await paths.first().evaluate(el => document.activeElement === el), true);
       for (const filter of ['all', 'blog', 'articles']) {
