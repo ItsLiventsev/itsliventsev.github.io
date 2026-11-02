@@ -396,7 +396,7 @@ function shell(cfg, n) {
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102r4">
+<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102r5">
 <link rel="stylesheet" href="../../assets/workspace.css?v=20261102r4">
 <link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261102r1">
   <!-- SEO:AUTO:START -->

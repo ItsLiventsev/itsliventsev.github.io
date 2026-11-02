@@ -18,11 +18,16 @@ for (const name of ['accent', 'green', 'blue', 'orange', 'red', 'brown', 'terrac
 const darkSource = fs.readFileSync('assets/workspace-tokens.css', 'utf8').split(':root[data-theme="dark"] {')[1].split('}')[0];
 const dark = Object.fromEntries([...darkSource.matchAll(/--ws-([\w-]+):\s*(#[\da-f]{6})\s*;/gi)].map(m => [m[1], m[2]]));
 for (const [theme, palette] of [['light', values], ['dark', dark]]) {
-  for (const name of ['violet', 'green', 'terracotta', 'blue', 'mustard', 'brown']) {
+  for (const name of ['accent', 'violet', 'green', 'terracotta', 'blue', 'mustard', 'brown']) {
     for (const background of ['surface', name + '-wash']) {
       const [a, b] = [luminance(palette[name]), luminance(palette[background])].sort((x, y) => x - y);
       assert((b + .05) / (a + .05) >= 4.5, `${theme} ${name} on ${background} fails contrast`);
     }
   }
 }
-console.log('Palette: light canvas unchanged; accent text meets 4.5:1 in both themes');
+// Feature panels intentionally keep the same charcoal/peach treatment in both themes.
+for (const [foreground, background] of [['feature-ink', 'feature-bg'], ['feature-muted', 'feature-bg'], ['feature-accent', 'feature-bg'], ['feature-button-ink', 'feature-button'], ['feature-button-ink', 'feature-button-hover']]) {
+  const [a, b] = [luminance(values[foreground]), luminance(values[background])].sort ( (x, y) => x - y);
+  assert((b + .05) / (a + .05) >= 4.5, `${foreground} on ${background} fails contrast`);
+}
+console.log('Palette: light canvas unchanged; accent and feature text meet 4.5:1');
