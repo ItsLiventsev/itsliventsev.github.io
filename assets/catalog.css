@@ -2,17 +2,17 @@
 .catalog-page .ws-content > .ws-page-heading {
   position: relative; max-width: none; overflow: hidden; margin: 0 0 18px;
   padding: clamp(25px, 4vw, 42px); border-radius: 20px;
-  background: #202c2a; color: #f6f8f5;
+  background: var(--ws-feature-bg); color: var(--ws-feature-ink);
 }
 .catalog-page .ws-page-heading::after {
   content: ''; position: absolute; width: 240px; height: 240px; right: -55px; bottom: -170px;
-  border: 1px solid rgba(183,223,191,.3); border-radius: 50%;
-  box-shadow: 0 0 0 30px rgba(183,223,191,.06), 0 0 0 60px rgba(183,223,191,.04);
+  border: 1px solid rgba(255,177,139,.3); border-radius: 50%;
+  box-shadow: 0 0 0 30px rgba(255,177,139,.06), 0 0 0 60px rgba(255,177,139,.04);
   pointer-events: none;
 }
-.catalog-page .ws-page-heading .ws-eyebrow { color: #b7dfbf; }
+.catalog-page .ws-page-heading .ws-eyebrow { color: var(--ws-feature-accent); }
 .catalog-page .ws-page-heading h1 { position: relative; margin: 10px 0; color: #fff; font-size: clamp(32px, 4vw, 48px); line-height: 1.08; letter-spacing: -.045em; }
-.catalog-page .ws-page-heading > p { position: relative; max-width: 650px; color: #cedbd3; font-size: 15px; line-height: 1.6; }
+.catalog-page .ws-page-heading > p { position: relative; max-width: 650px; color: var(--ws-feature-muted); font-size: 15px; line-height: 1.6; }
 .catalog-search { display: grid; grid-template-columns: auto minmax(180px, 1fr) auto; align-items: center; gap: 12px; padding: 12px 15px; border: 1px solid var(--ws-line-strong); border-radius: 14px; background: var(--ws-surface); }
 .catalog-search[hidden], .catalog-search [hidden] { display: none !important; }
 .catalog-search label { color: var(--ws-ink); font-size: 12px; font-weight: 750; }
