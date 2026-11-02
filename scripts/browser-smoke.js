@@ -17,7 +17,11 @@ const commits = [
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args: browserArgs, headless: true });
   try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
-    await context.route('https://api.github.com/**', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(commits) }));
+    let apiRequests = 0;
+    await context.route('https://api.github.com/**', route => {
+      apiRequests++;
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify(commits) });
+    });
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/', { waitUntil: 'load' });
@@ -57,17 +61,28 @@ const commits = [
     await page.locator('[data-filter="bugfix"]').click();
     assert.equal(await page.locator('[data-ws-activity-item]:not([data-filtered])').count(), 1);
     await page.locator('[data-ws-view="kanban"]').click();
-    const first = page.locator('[data-kanban-list="done"] [data-kanban-card]').first();
+    assert.equal(await page.locator('[data-kanban-card]:visible').count(), 1, 'kanban must respect the selected filter');
+    const first = page.locator('[data-kanban-list="done"] [data-kanban-card]:visible').first();
+    assert.match(await first.locator('a').getAttribute('href'), /github.com\/.*\/commit\//);
     const cardId = await first.getAttribute('data-kanban-id');
     const card = page.locator('[data-kanban-id="' + cardId + '"]');
     await card.locator('[data-kanban-move="left"]').click();
     assert.equal(await page.locator('[data-kanban-list="progress"] [data-kanban-card]').count(), 1);
+    await page.locator('[data-filter="design"]').click();
+    assert(await page.locator('.ws-activity-filter-empty').isVisible());
+    await page.locator('[data-filter="all"]').click();
+    assert.equal(await page.locator('[data-kanban-card]:visible').count(), 2, 'hidden cards survive board moves');
     const other = await context.newPage();
     await other.goto(base + '/', { waitUntil: 'load' });
     await other.waitForSelector('[data-ws-activity-item]');
+    assert.equal(apiRequests, 1, 'a new tab should reuse a fresh snapshot');
     await other.locator('[data-ws-view="kanban"]').click();
     await card.locator('[data-kanban-move="left"]').click();
     await other.waitForFunction(id => !!document.querySelector('[data-kanban-list="review"] [data-kanban-id="' + id + '"]'), cardId);
+    await card.dragTo(page.locator('[data-kanban-list="done"]'));
+    assert.equal(await page.locator('[data-kanban-list="done"] [data-kanban-id="' + cardId + '"]').count(), 1);
+    assert.equal(await card.locator('[data-kanban-move="right"]').isDisabled(), true);
+    assert.equal(await page.locator('.ws-kanban-list.is-drop-target').count(), 0);
     assert.deepEqual(errors, []);
     console.log('Browser smoke: mobile drawer, indicator, profiles, feed and cross-tab kanban OK');
   } finally { await browser.close(); }
