@@ -35,12 +35,16 @@ const server = http.createServer((req, res) => {
     const response = await page.goto(base + '/', { waitUntil: 'load' });
     assert.equal(response.status(), 200);
     await page.waitForSelector('.ws-sidebar');
+    await page.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
+    assert.equal(await page.locator('[data-ws-reading] .ws-reading-row').count(), 2);
     const assets = await page.evaluate(async () => ({
-      css: (await fetch('/assets/workspace-home.css?v=20261102r4')).status,
+      css: (await fetch('/assets/workspace-home.css?v=20261102r5')).status,
       js: (await fetch('/assets/home-activity.js?v=20261102r4')).status,
+      reading: (await fetch('/assets/home-reading.js?v=20261102r1')).status,
+      publications: (await fetch('/blog/posts.json')).status,
       missing: (await fetch('/assets/missing.js')).status
     }));
-    assert.deepEqual(assets, { css: 200, js: 200, missing: 503 });
+    assert.deepEqual(assets, { css: 200, js: 200, reading: 200, publications: 200, missing: 503 });
     await page.evaluate(() => new Promise(resolve => {
       const channel = new MessageChannel();
       channel.port1.onmessage = resolve;
