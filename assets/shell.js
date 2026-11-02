@@ -91,9 +91,10 @@
   masthead.className = 'ui-masthead';
   masthead.innerHTML = [
     '<div class="ui-masthead-inner">',
-    '  <a class="ui-brand" href="/" aria-label="itsliventsev — на главную">',
+    '  <a class="ui-brand" href="/">',
     '    <span class="ui-brand-word">itsliventsev<span class="ui-brand-dot">.</span></span>',
     '    <span class="ui-brand-role">сети · системы · практика</span>',
+    '    <span class="sr-only">— на главную</span>',
     '  </a>',
     '  <nav class="ui-nav" aria-label="Разделы сайта">',
     navItems.map(item => '<a class="ui-navlink" href="' + item.href + '"' + (isCurrent(item.test) ? ' aria-current="page"' : '') + '>' + item.label + '</a>').join(''),
@@ -162,9 +163,15 @@
     }
     used.add(id);
     if (sectionLinks.some(link => link.hash === '#' + id)) return;
-    sectionLinks.push({ id, label: clean(heading.textContent), hash: '#' + id });
+    const label = [...heading.childNodes]
+      .map(node => clean(node.textContent))
+      .filter(Boolean)
+      .join(' ');
+    sectionLinks.push({ id, label: label || clean(heading.textContent), hash: '#' + id });
   });
-  if (sectionLinks.length >= 2) {
+  /* The home page is a showcase: its own tiles already act as the index. */
+  const wantsToc = !main || !main.querySelector('.home-hero');
+  if (wantsToc && sectionLinks.length >= 2) {
     toc.innerHTML = '<p class="ui-toc-title">На этой странице</p><ul class="ui-toc-list">'
       + sectionLinks.map(link => '<li><a class="ui-toc-link" href="' + link.hash + '">' + link.label + '</a></li>').join('')
       + '</ul><div class="ui-toc-meta">' + sectionLinks.length + ' ' + sectionWord(sectionLinks.length)
