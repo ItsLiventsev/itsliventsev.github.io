@@ -395,10 +395,12 @@ function shell(cfg, n) {
 <title>${cfg.title} · ОфисПолис · itsliventsev</title>
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="../../assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261102r1">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/pages.css">
+<link rel="stylesheet" href="../../assets/course.css">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
@@ -473,7 +475,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=20261102r1"></script>
-<script src="../../assets/workspace.js?v=20261102r4"></script>
+<script src="../../assets/shell.js" defer></script>
 </body>
 </html>
 `;

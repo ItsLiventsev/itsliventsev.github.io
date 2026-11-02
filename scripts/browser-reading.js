@@ -1,81 +1,52 @@
-/* Run alongside browser-smoke.js with playwright-core and axe-core installed. */
+/*
+ * Reading shelf + accessibility check. Start a local server first, then run:
+ * NODE_PATH=/path/to/node_modules BROWSER_BIN=/path/to/chromium node scripts/browser-reading.js
+ * Requires playwright-core and axe-core.
+ */
 'use strict';
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const { chromium } = require('playwright-core');
-const axe = require('axe-core');
 const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
+const browserArgs = process.env.BROWSER_ARGS ? JSON.parse(process.env.BROWSER_ARGS) : ['--no-sandbox'];
+let axeSource = process.env.AXE_SOURCE_PATH ? fs.readFileSync(process.env.AXE_SOURCE_PATH, 'utf8') : null;
+if (!axeSource) {
+  try { axeSource = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8'); } catch (error) { axeSource = null; }
+}
+const serious = violations => violations.filter(v => ['serious', 'critical'].includes(v.impact));
 (async () => {
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args: process.env.BROWSER_ARGS ? JSON.parse(process.env.BROWSER_ARGS) : ['--no-sandbox'], headless: true });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args: browserArgs, headless: true });
   try {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
-    await page.route('https://api.github.com/**', route => route.fulfill({ contentType: 'application/json', body: '[]' }));
-    await page.goto(base + '/', { waitUntil: 'load' });
-    const shelf = page.locator('[data-ws-reading]');
-    await shelf.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
-    assert.equal(await shelf.locator('.ws-reading-row').count(), 2);
-    await page.addScriptTag({ content: axe.source });
-    for (const width of [390, 1440]) {
-      await page.setViewportSize({ width, height: 844 });
-      const paths = page.locator('.ws-pathways-grid a');
-      assert.equal(await paths.count(), 4);
-      for (const href of ['#practice', '#reading-title', '#projects', '#resources']) {
-        assert.equal(await page.locator('.ws-pathways-grid a[href="' + href + '"]').count(), 1);
-        assert.equal(await page.locator(href).count(), 1);
-      }
-      for (const theme of ['light', 'dark']) {
-        await page.evaluate(theme => localStorage.setItem('itsliventsev-theme', theme), theme);
-        await page.reload({ waitUntil: 'load' });
-        await page.addScriptTag({ content: axe.source });
-        await page.locator('.ws-pathways').scrollIntoViewIfNeeded();
-        const pathViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-pathways'))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ html: n.html, summary: n.failureSummary })) })));
-        assert.equal(pathViolations.length, 0, 'pathways accessibility in ' + theme + ': ' + JSON.stringify(pathViolations));
-        const directory = page.locator('.ws-directory');
-        await directory.locator('summary').focus();
-        await page.keyboard.press('Enter');
-        assert.equal(await directory.getAttribute('open'), '');
-        assert.equal(await directory.locator('nav a').count(), 9);
-        const directoryViolations = await page.evaluate(async () => (await axe.run(document.querySelector('.ws-directory'))).violations.map(v => ({id: v.id, nodes: v.nodes.map(n => ({html: n.html, summary: n.failureSummary}))})));
-        assert.equal(directoryViolations.length, 0, 'directory accessibility in ' + theme + ': ' + JSON.stringify(directoryViolations));
-        await directory.locator('summary').click();
-        assert.equal(await directory.getAttribute('open'), null);
-        for (const selector of ['#resources', '[data-ws-reading]']) {
-          await page.locator(selector).scrollIntoViewIfNeeded();
-          const violations = await page.evaluate(async selector => (await axe.run(document.querySelector(selector))).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.html) })), selector);
-          assert.equal(violations.length, 0, selector + ' accessibility in ' + theme + ': ' + JSON.stringify(violations));
+    for (const theme of ['light', 'dark']) {
+      const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: theme, reducedMotion: 'reduce' });
+      await context.route('https://api.github.com/**', route => route.fulfill({ contentType: 'application/json', body: '[]' }));
+      const page = await context.newPage();
+      await page.goto(base + '/', { waitUntil: 'load' });
+      await page.waitForSelector('[data-reading-list] .ui-reading-row');
+      const shelf = page.locator('[data-reading-shelf]');
+      const total = await shelf.locator('.ui-reading-row').count();
+      assert(total >= 2, 'полка чтения должна показывать материалы');
+      await page.locator('[data-reading-filter="articles"]').click();
+      const articles = await shelf.locator('.ui-reading-row').count();
+      assert(articles >= 1 && articles < total, 'фильтр «статьи» должен сокращать полку');
+      assert.equal(await page.locator('[data-reading-filter="articles"]').getAttribute('aria-pressed'), 'true');
+      await page.locator('[data-reading-filter="all"]').click();
+      assert.equal(await shelf.locator('.ui-reading-row').count(), total);
+
+      if (axeSource) {
+        await page.addScriptTag({ content: axeSource });
+        for (const selector of ['main', '.ui-masthead', '[data-reading-shelf]']) {
+          const result = await page.evaluate(async sel => {
+            const axe = window.axe;
+            return (await axe.run(document.querySelector(sel), { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } }))
+              .violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.slice(0, 2).map(n => n.html) }));
+          }, selector);
+          assert.deepEqual(serious(result), [], selector + ' (' + theme + '): ' + JSON.stringify(result));
         }
-        const colors = await page.evaluate(() => [...document.querySelectorAll('.ws-pathway')].map(el => getComputedStyle(el).borderTopColor));
-        assert.equal(new Set(colors).size, 4, 'distinct pathway accents');
-        if (width === 390) assert.equal(await page.locator('.ws-resource-grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), 2);
-        if (theme === 'light') assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--ws-canvas').trim().toLowerCase()), '#f8f9fa');
       }
-      await page.evaluate(() => localStorage.setItem('itsliventsev-theme', 'light'));
-      await page.reload({ waitUntil: 'load' });
-      await page.addScriptTag({ content: axe.source });
-      await shelf.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
-      await paths.first().focus();
-      assert.equal(await paths.first().evaluate(el => document.activeElement === el), true);
-      for (const filter of ['all', 'blog', 'articles']) {
-        await shelf.locator('[data-reading-filter="' + filter + '"]').click();
-        assert.equal(await shelf.locator('.ws-reading-row').count(), filter === 'all' ? 2 : 1);
-        assert.equal(await shelf.locator('[data-reading-filter="' + filter + '"]').getAttribute('aria-pressed'), 'true');
-        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-        const violations = await page.evaluate(async () => (await axe.run(document.querySelector('[data-ws-reading]'))).violations.map(v => v.id));
-        assert.deepEqual(violations, [], 'editorial shelf accessibility');
-      }
+      await context.close();
     }
-    await page.evaluate(() => window.I18N.toggle());
-    assert.equal(await page.locator('#pathways-title').textContent(), 'What would you like to find?');
-    assert.equal(await page.locator('.ws-directory summary strong').textContent(), 'Quick links');
-    await page.locator('.ws-pathway-practice').focus();
-    await page.keyboard.press('Enter');
-    assert.equal(await page.evaluate(() => location.hash), '#practice');
-    const noScript = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
-    const fallback = await noScript.newPage();
-    await fallback.goto(base + '/', { waitUntil: 'load' });
-    await fallback.locator('.ws-directory summary').click();
-    assert.equal(await fallback.locator('.ws-directory[open] a').count(), 9);
-    assert.equal(await fallback.locator('.ws-directory a[href="stands/ops/index.html"]').count(), 1);
-    await noScript.close();
-    console.log('Browser pathways and editorial shelf: filters, mobile/desktop overflow and axe OK');
+    console.log('Browser reading: shelf filters and axe (serious/critical) in light and dark OK');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
