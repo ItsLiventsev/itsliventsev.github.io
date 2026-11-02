@@ -5,6 +5,7 @@ name: post-index
 # а также освежает SEO-блоки (canonical, OG, JSON-LD) во всех страницах.
 on:
   push:
+    branches: [main]
     paths:
       - 'blog/**.html'
       - 'articles/**.html'
