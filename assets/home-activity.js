@@ -659,20 +659,27 @@
   // — animated cycle (Agent-Motion: sequential highlight + dash flow)
   // v18: цикл — мягкий подсвет активного шага, без дерганий
   const cycleEl = root.querySelector('[data-ws-activity-cycle]');
-  if (cycleEl && !reduceMotion) {
+  if (cycleEl) {
     const pills = [...cycleEl.querySelectorAll('span:not([aria-hidden])')];
-    let idx = 0;
-    const tick = ()=>{
-      pills.forEach((p,i)=>{
-        const active = i===idx;
-        p.style.transform = active ? 'translateY(-1px) scale(1.02)' : 'translateY(0) scale(1)';
-        p.style.boxShadow = active ? '0 4px 12px rgba(16,24,40,.12)' : 'none';
-        p.style.filter = active ? 'brightness(1.04)' : 'brightness(1)';
-      });
-      idx = (idx+1)%pills.length;
-    };
-    tick();
-    setInterval(tick, 1600);
+    const motion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    let idx = 0, timer = null, visible = !('IntersectionObserver' in window);
+    function tick() {
+      pills.forEach((pill, i) => pill.toggleAttribute('data-cycle-active', i === idx));
+      idx = (idx + 1) % pills.length;
+    }
+    function syncCycle() {
+      const shouldRun = pills.length && visible && !document.hidden && !(motion && motion.matches);
+      if (shouldRun && !timer) { tick(); timer = setInterval(tick, 2200); }
+      else if (!shouldRun && timer) { clearInterval(timer); timer = null; }
+      if (motion && motion.matches) pills.forEach(pill => pill.removeAttribute('data-cycle-active'));
+    }
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => { visible = entries.some(entry => entry.isIntersecting); syncCycle(); });
+      observer.observe(cycleEl);
+    }
+    document.addEventListener('visibilitychange', syncCycle);
+    if (motion && motion.addEventListener) motion.addEventListener('change', syncCycle);
+    syncCycle();
   }
 
 

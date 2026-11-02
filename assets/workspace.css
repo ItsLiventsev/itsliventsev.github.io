@@ -806,3 +806,17 @@ html { transition: background-color 220ms ease, color 220ms ease; }
 [data-ws-table-wrap]:focus-visible { outline: 3px solid var(--ws-accent); outline-offset: 3px; }
 
 .ws-content pre:focus-visible { outline: 3px solid var(--ws-accent); outline-offset: 3px; }
+
+/* One restrained accent per learning area; the light canvas stays unchanged. */
+body[data-ws-area="general"] { --ws-area-tone: var(--ws-accent); }
+body[data-ws-area="network"] { --ws-area-tone: var(--ws-violet); }
+body[data-ws-area="office"] { --ws-area-tone: var(--ws-terracotta); }
+body[data-ws-area="operations"] { --ws-area-tone: var(--ws-blue); }
+.ws-sidebar-brand::before {
+  content: ''; display: inline-block; width: 6px; height: 6px; margin-inline-end: 8px;
+  border-radius: 50%; background: var(--ws-area-tone, var(--ws-accent)); vertical-align: middle;
+}
+.ws-sidebar .ws-sidebar-caption { color: var(--ws-muted); }
+.ws-nav-link:focus-visible, .ws-section-link:focus-visible {
+  outline: 2px solid var(--ws-area-tone, var(--ws-accent)); outline-offset: -2px;
+}

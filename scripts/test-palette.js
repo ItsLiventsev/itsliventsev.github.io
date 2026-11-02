@@ -1,0 +1,17 @@
+'use strict';
+// Guard the light background and text-on-wash combinations used by badges.
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const source = fs.readFileSync('assets/workspace-tokens.css', 'utf8').split(':root[data-theme="dark"]')[0];
+const values = Object.fromEntries([...source.matchAll(/--ws-([\w-]+):\s*(#[\da-f]{6})\s*;/gi)].map(m => [m[1], m[2]]));
+function luminance(hex) {
+  const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4);
+  return rgb[0] * .2126 + rgb[1] * .7152 + rgb[2] * .0722;
+}
+assert.equal(values.canvas.toLowerCase(), '#f8f9fa');
+for (const name of ['accent', 'green', 'blue', 'orange', 'red', 'brown', 'terracotta', 'mustard', 'violet', 'slate']) {
+  const [a, b] = [luminance(values[name]), luminance(values[name + '-wash'])].sort((x, y) => x - y);
+  const ratio = (b + .05) / (a + .05);
+  assert(ratio >= 4.5, `${name} text on wash: ${ratio.toFixed(2)} < 4.5`);
+}
+console.log('Light palette: canvas unchanged; accent text on washes meets 4.5:1');
