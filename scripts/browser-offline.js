@@ -38,8 +38,8 @@ const server = http.createServer((req, res) => {
     await page.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
     assert.equal(await page.locator('[data-ws-reading] .ws-reading-row').count(), 2);
     const assets = await page.evaluate(async () => ({
-      css: (await fetch('/assets/workspace-home.css?v=20261102r8')).status,
-      js: (await fetch('/assets/home-activity.js?v=20261102r4')).status,
+      css: (await fetch('/assets/workspace-home.css?v=20261102r9')).status,
+      js: (await fetch('/assets/home-activity.js?v=20261102r5')).status,
       reading: (await fetch('/assets/home-reading.js?v=20261102r2')).status,
       publications: (await fetch('/blog/posts.json')).status,
       missing: (await fetch('/assets/missing.js')).status

@@ -1308,3 +1308,21 @@ html { scroll-behavior: smooth; }
 [data-ws-view-toggle] [aria-pressed="true"] { background: var(--ws-blue-wash); color: var(--ws-blue); }
 [data-ws-activity-filters] [aria-pressed="true"] { background: var(--ws-violet-wash); border-color: var(--ws-violet); color: var(--ws-violet); }
 [data-ws-activity-filter]:focus-visible, [data-ws-view]:focus-visible { outline: 2px solid var(--ws-accent); outline-offset: 2px; }
+
+/* Homepage editorial rhythm: updates first, then practical paths and reading. */
+.ws-home-root [data-ws-activity-item][hidden], .ws-home-root [data-activity-more][hidden] { display: none !important; }
+.ws-home-root [data-activity-more] { justify-self: start; min-height: 38px; padding: 7px 14px; border: 1px solid var(--ws-line-strong); background: var(--ws-blue-wash); color: var(--ws-blue); font: 700 12px var(--ws-font); cursor: pointer; }
+.ws-home-root [data-activity-more]:focus-visible { outline: 2px solid var(--ws-accent); outline-offset: 3px; }
+.ws-home-root [data-ws-activity-ticker] { overflow-x: auto; overflow-y: hidden; -webkit-mask: none; mask: none; border: 0; padding: 2px 0 5px; scrollbar-width: thin; }
+.ws-home-root [data-ws-activity-ticker-label] { position: static; transform: none; display: block; width: fit-content; margin-bottom: 5px; border: 0; padding: 0; }
+.ws-home-root [data-ws-activity-ticker-track] { animation: none; width: max-content; padding-left: 0; }
+.ws-home-root [data-ws-activity-item] { animation: none; }
+.ws-home-root .ws-course-card p, .ws-home-root .ws-pathway small, .ws-home-root .ws-reading-excerpt { font-size: 12px !important; line-height: 1.55; }
+.ws-home-root .ws-section-heading { margin-bottom: 10px !important; }
+@media (prefers-reduced-motion: reduce) { .ws-home-root [data-activity-more] { transition: none; } }
+/* Leave content visible even before observers fire; accent rather than flash. */
+.ws-home-root .ws-reveal { opacity: 1; transform: none; transition-delay: 0s; }
+.ws-home-root [data-ws-activity-card] { position: relative; top: auto; background: linear-gradient(160deg, var(--ws-terracotta-wash), var(--ws-surface) 32%) !important; }
+.ws-home-root [data-ws-activity-card]::after, .ws-home-root .ws-panel-large .ws-resource-row::after { display: none; }
+.ws-home-root .ws-pathway { box-shadow: var(--ws-shadow-sm); }
+.ws-home-root .ws-course-card { gap: 4px; }

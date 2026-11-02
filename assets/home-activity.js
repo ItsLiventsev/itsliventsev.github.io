@@ -14,6 +14,8 @@
   const tickerTrack = root.querySelector('[data-ws-activity-ticker-track]');
   const timeline = root.querySelector('[data-ws-activity-timeline]');
   const filterButtons = root.querySelectorAll('[data-ws-activity-filter]');
+  const moreButton = root.querySelector('[data-activity-more]');
+  let expandedFeed = false;
   const filterEmpty = document.createElement('p');
   filterEmpty.className = 'ws-activity-filter-empty';
   filterEmpty.hidden = true;
@@ -439,6 +441,7 @@
         const ticker = root.querySelector('[data-ws-activity-ticker]');
         if (ticker) ticker.style.display = isKanban ? 'none' : 'block';
         updateFilterEmpty();
+        updateTimelineVisibility();
       }
     }));
   }
@@ -468,19 +471,16 @@
       id: commit.sha, title: commit.title, tag: classifyCommit(commit.title),
       status: 'done', time: formatDate(commit.date), date: commit.date
     }));
-    renderTicker(); renderTimeline(); renderKanban(feedData); updateFilterEmpty();
+    renderTicker(); renderTimeline(); renderKanban(feedData); updateFilterEmpty(); updateTimelineVisibility();
     if (!feedData.length) showTimelineMessage(language() === 'en' ? 'No recent changes.' : 'За последние 30 дней изменений нет.');
   }
   function renderTicker() {
     if (!tickerTrack) return;
     tickerTrack.innerHTML='';
-    // duplicate for infinite marquee
-    const doubled = [...feedData, ...feedData];
-    doubled.forEach((item, idx) => {
+    // One interactive chip per change: no duplicated or moving tab stops.
+    feedData.forEach((item, idx) => {
       const pill = document.createElement('button');
       pill.type='button';
-      // The second copy is only for the visual loop, not another tab stop.
-      if (idx >= feedData.length) { pill.setAttribute('aria-hidden', 'true'); pill.tabIndex = -1; }
       pill.setAttribute('data-ws-activity-pill','true');
       pill.setAttribute('data-tone', item.tag);
       pill.dataset.tag=item.tag;
@@ -522,6 +522,24 @@
       timeline.appendChild(row);
     });
   }
+  function updateTimelineVisibility() {
+    if (!timeline) return;
+    let matching = 0;
+    timeline.querySelectorAll('[data-ws-activity-item]').forEach(row => {
+      const matches = activeFilter === 'all' || row.dataset.tag === activeFilter;
+      if (matches) matching++;
+      row.hidden = matches && !expandedFeed && matching > 4;
+    });
+    if (moreButton) {
+      moreButton.hidden = matching <= 4 || (kanbanRoot && !kanbanRoot.hidden);
+      moreButton.setAttribute('aria-expanded', String(expandedFeed));
+      moreButton.textContent = expandedFeed ? (language() === 'en' ? 'Show less' : 'Свернуть') : (language() === 'en' ? `Show ${matching - 4} more` : `Показать ещё: ${matching - 4}`);
+    }
+  }
+  if (moreButton) moreButton.addEventListener('click', () => {
+    expandedFeed = !expandedFeed;
+    setFilter(activeFilter);
+  });
   function updateFilterEmpty() {
     const noMatches = feedData.length > 0 && activeFilter !== 'all' && !feedData.some(item => item.tag === activeFilter);
     const boardEmpty = kanbanRoot && !kanbanRoot.hidden && !feedData.length;
@@ -553,6 +571,7 @@
         row.toggleAttribute('data-filtered', tag !== 'all' && row.dataset.tag !== tag);
         if (row.hasAttribute('data-filtered')) row.setAttribute('data-filtered', 'true');
       });
+      updateTimelineVisibility();
       const endHeight = timeline.getBoundingClientRect().height;
       if (!reduceMotion && startHeight && Math.abs(startHeight - endHeight) > 1) {
         timeline.style.overflow = 'hidden';

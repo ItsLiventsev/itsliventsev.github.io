@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
 <link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r8">
+<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r9">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
   <!-- SEO:AUTO:START -->
@@ -136,7 +136,8 @@
           <span data-ws-activity-ticker-label>Последние изменения</span>
           <div data-ws-activity-ticker-track></div>
         </div>
-        <div data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
+        <div id="activity-timeline" data-ws-activity-timeline role="list" aria-label="Хронология итераций"></div>
+        <button type="button" data-activity-more aria-controls="activity-timeline" aria-expanded="false" hidden>Показать ещё</button>
         <div data-ws-activity-kanban hidden class="ws-kanban-grid">
           <div data-ws-kanban-col data-status="review" class="ws-kanban-col"><div class="ws-kanban-head">☆ Избранное <span data-kanban-count="review"></span></div><div data-kanban-list="review" class="ws-kanban-list" role="list"></div></div>
           <div data-ws-kanban-col data-status="progress" class="ws-kanban-col"><div class="ws-kanban-head">◷ Изучить <span data-kanban-count="progress"></span></div><div data-kanban-list="progress" class="ws-kanban-list" role="list"></div></div>
@@ -166,6 +167,32 @@
       </details>
     </section>
 
+    <section class="ws-section" id="practice" aria-labelledby="learning-title">
+      <div class="ws-section-heading">
+        <div><span class="ws-eyebrow">ПРАКТИКА</span><h2 id="learning-title">Пространства</h2></div>
+        <a href="stands/index.html" class="ws-inline-link">Все направления <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
+      </div>
+      <div class="ws-learning-grid">
+        <a class="ws-course-card ws-course-violet" href="stands/setpolis.html">
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#network"></use></svg></span><span class="ws-card-kicker">УП.01 · СЕТИ</span>
+          <h3>СетьПолис</h3><p>Собирайте и настраивайте инфраструктуру: от первой команды до проекта локальной сети.</p>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
+        </a>
+        <a class="ws-course-card ws-course-orange" href="stands/office/index.html">
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#document"></use></svg></span><span class="ws-card-kicker">УП.02 · ЦИФРОВОЕ РАБОЧЕЕ МЕСТО</span>
+          <h3>ОфисПолис</h3><p>Осваивайте документы, таблицы, графику, презентации, базы данных и веб-инструменты.</p>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
+        </a>
+        <a class="ws-course-card ws-course-blue" href="stands/ops/index.html">
+          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#server"></use></svg></span><span class="ws-card-kicker">УП.02 · ЭКСПЛУАТАЦИЯ</span>
+          <h3>ДатаПолис</h3><p>Принимайте сервисы, обрабатывайте инциденты и тренируйтесь работать по SLA.</p>
+          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
+        </a>
+      </div>
+    </section>
+
+
+
     <section class="ws-dashboard-grid" aria-label="Материалы и проекты">
       <article class="ws-panel ws-panel-large" id="projects" data-ws-surface>
         <div class="ws-section-heading"><div><span class="ws-eyebrow">ИЗБРАННОЕ</span><h2>Проекты и материалы</h2></div><a href="projects.html" class="ws-inline-link">Все проекты <svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></a></div>
@@ -194,32 +221,6 @@
         </div>
       </article>
     </section>
-
-    <section class="ws-section" id="practice" aria-labelledby="learning-title">
-      <div class="ws-section-heading">
-        <div><span class="ws-eyebrow">ПРАКТИКА</span><h2 id="learning-title">Пространства</h2></div>
-        <a href="stands/index.html" class="ws-inline-link">Все направления <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-right"></use></svg></span></a>
-      </div>
-      <div class="ws-learning-grid">
-        <a class="ws-course-card ws-course-violet" href="stands/setpolis.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#network"></use></svg></span><span class="ws-card-kicker">УП.01 · СЕТИ</span>
-          <h3>СетьПолис</h3><p>Собирайте и настраивайте инфраструктуру: от первой команды до проекта локальной сети.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-        <a class="ws-course-card ws-course-orange" href="stands/office/index.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#document"></use></svg></span><span class="ws-card-kicker">УП.02 · ЦИФРОВОЕ РАБОЧЕЕ МЕСТО</span>
-          <h3>ОфисПолис</h3><p>Осваивайте документы, таблицы, графику, презентации, базы данных и веб-инструменты.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-        <a class="ws-course-card ws-course-blue" href="stands/ops/index.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#server"></use></svg></span><span class="ws-card-kicker">УП.02 · ЭКСПЛУАТАЦИЯ</span>
-          <h3>ДатаПолис</h3><p>Принимайте сервисы, обрабатывайте инциденты и тренируйтесь работать по SLA.</p>
-          <span class="ws-card-footer">Открыть практику <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-      </div>
-    </section>
-
-    
 
     <section class="ws-section" id="resources" aria-labelledby="resources-title">
       <div class="ws-section-heading"><div><span class="ws-eyebrow">ДЛЯ УЧЁБЫ</span><h2 id="resources-title" data-i18n="res_title">Материалы для студентов</h2></div></div>
@@ -262,7 +263,7 @@
       </div>
     </section>
 
-    
+
   </main>
   <footer class="ws-footer"><span>© 2026 itsliventsev · Обучение через практику</span><nav aria-label="Служебная навигация"><a href="sitemap.html">Карта сайта</a><a href="feed.xml">RSS</a><a href="agent-plan.html">План агентов</a><a href="admin.html" rel="nofollow">Панель преподавателя</a></nav><span id="secret-message" data-i18n="secret">У вас всё получится. Продолжайте исследовать.</span><time data-footer-updated></time></footer>
 </div>
@@ -276,7 +277,7 @@ window.I18N.register({
 </script>
 <script src="assets/shared-chrome.js?v=20261101r1"></script>
 <script src="assets/workspace.js?v=20261102r4"></script>
-<script src="assets/home-activity.js?v=20261102r4" defer></script>
+<script src="assets/home-activity.js?v=20261102r5" defer></script>
 <script src="assets/home-reading.js?v=20261102r2" defer></script>
 
 <script>
