@@ -73,13 +73,23 @@
   line-height: 1.55;
 }
 .ops-kicker, .flat-kicker, .st-section-tag {
-  margin: 0 0 var(--u-s2);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--u-s2);
+  margin: 0 0 var(--u-s3);
   font-family: var(--u-font-ui);
   font-size: var(--u-fs-sm);
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
   color: var(--u-muted);
+}
+.ops-kicker::before, .flat-kicker::before, .st-section-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--u-accent);
 }
 
 /* v13: the stand hero is a card, facts are chips */
@@ -108,14 +118,14 @@
   font-weight: 600;
 }
 .st-hero h1 {
-  margin: 0 0 var(--u-s3);
+  margin: 0 0 var(--u-s4);
   font-family: var(--u-font-display);
-  font-size: clamp(1.65rem, 3.4vw, 2.5rem);
+  font-size: var(--u-fs-card-title);
   font-weight: 700;
-  line-height: 1.07;
-  letter-spacing: -0.035em;
+  line-height: var(--u-lh-tight);
+  letter-spacing: var(--u-ls-display);
 }
-.st-hero-lead { max-width: 64ch; margin: 0; color: var(--u-ink-2); font-size: 1.0625rem; line-height: 1.55; }
+.st-hero-lead { max-width: 58ch; margin: 0; color: var(--u-muted); font-size: var(--u-fs-md); line-height: 1.55; }
 .st-hero-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: var(--u-s4); font-size: var(--u-fs-xs); color: var(--u-muted); }
 .st-hero-meta span {
   padding: 4px 10px;
@@ -651,3 +661,149 @@ h2.ops-legend-title, [data-ws-surface] h2.ops-legend-title {
   [data-ws-quest-meta] { grid-column: 2; justify-items: start; text-align: start; }
   .ui-subbar a, .st-topnav a { font-size: var(--u-fs-xs); padding-inline: var(--u-s2); }
 }
+
+/* ==========================================================================
+   Legacy stand components carried by the 51 laboratory pages
+   .st-lede, .lab-panel, .sprint-* and friends came from the first iteration
+   and had no rules at all: text took the browser defaults. This block maps
+   them onto the v13 scale so every laboratory reads like the rest of the site.
+   ========================================================================== */
+.st-lede {
+  max-width: 68ch;
+  margin: 0 0 var(--u-s6);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-md);
+  line-height: 1.6;
+}
+
+.lab-panel {
+  margin-block: var(--u-s5);
+  padding: var(--u-card-pad);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.lab-panel--narrow { max-width: 46ch; }
+.lp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--u-s3);
+  margin-block-end: var(--u-s4);
+  padding-block-end: var(--u-s3);
+  border-bottom: 1px solid var(--u-line);
+}
+.lp-head h2 {
+  margin: 0;
+  font-family: var(--u-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.lp-body { display: grid; gap: var(--u-s4); }
+
+.sprint-group { display: grid; gap: 4px; }
+.sprint-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--u-s3);
+  min-width: 0;
+}
+.sprint-head h3 {
+  margin: 0;
+  font-family: var(--u-font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+.sprint-meta {
+  color: var(--u-muted);
+  font-size: var(--u-fs-xs);
+  overflow-wrap: anywhere;
+}
+.sprint-line { flex: 1 1 auto; min-width: var(--u-s4); height: 1px; background: var(--u-line); }
+.sprint-group .admin-hint {
+  max-width: 74ch;
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--u-muted);
+  font-size: var(--u-fs-sm);
+  line-height: 1.5;
+}
+
+/* Small shared bits of the stand pages */
+.flat-badge,
+.chip-sm,
+.gl-term-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 10px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+  color: var(--u-ink-2);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.flat-badge { background: var(--u-surface); box-shadow: inset 0 0 0 1px var(--u-line); }
+.gl-term-new { background: var(--u-accent-soft); color: var(--u-accent); }
+.notice-info {
+  padding: var(--u-s4) var(--u-s5);
+  border-inline-start: 2px solid var(--u-info);
+  border-radius: var(--u-r-sm);
+  background: var(--u-info-soft);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-sm);
+  line-height: 1.55;
+}
+.hoverable { transition: box-shadow var(--u-dur-2) var(--u-ease); }
+.hoverable:hover { box-shadow: var(--u-shadow-2); }
+.st-goal,
+.st-details {
+  max-width: 74ch;
+  margin-block: var(--u-s4);
+  padding: var(--u-s4) var(--u-s5);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface-sunk);
+  font-size: var(--u-fs-sm);
+  line-height: 1.55;
+}
+.st-details > summary { cursor: pointer; font-weight: 600; color: var(--u-ink); }
+.step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--u-accent-soft);
+  color: var(--u-accent);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.mat-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--u-line-strong); }
+.mat-dot.is-done { background: var(--u-ok); }
+.mat-dot.is-now { background: var(--u-accent); }
+.submit-channels { display: flex; flex-wrap: wrap; gap: var(--u-s2); margin-block: var(--u-s4); }
+.flat-profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--u-s2) var(--u-s4);
+  padding: 10px var(--u-s4);
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  font-size: var(--u-fs-xs);
+  color: var(--u-muted);
+}
+.fp-name { font-weight: 600; color: var(--u-ink); }
+.fp-spacer { flex: 1 1 auto; }
+.st-mb-7 { margin-block-end: var(--u-s7); }
+.st-mt-4 { margin-block-start: var(--u-s4); }

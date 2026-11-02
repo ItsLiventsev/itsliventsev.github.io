@@ -45,7 +45,7 @@
     <p class="ui-eyebrow">публикации · методические материалы</p>
     <h1>Статьи</h1>
     <p>Завершённые тексты: материалы конференций и методические разработки. То, что прошло редактуру и опубликовано — без черновиков и случайных заметок.</p>
-    <div class="ui-pagehead-meta"><span id="stat-articles">—</span><span id="stat-conf">—</span><span id="stat-minutes">—</span><span>с <span id="stat-year">—</span> года</span></div>
+    <div class="ui-pagehead-meta"><span id="stat-articles">—</span><span id="stat-conf">—</span><span id="stat-minutes">—</span><span id="stat-since">—</span></div>
   </header>
 
   <div class="catalog-toolbar">
@@ -107,11 +107,14 @@
   fetch('articles/posts.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json();}).then(function(data){
     posts=Array.isArray(data)?data.filter(function(p){return p&&p.status!=='draft';}):[];
     document.getElementById('stat-articles').textContent=posts.length+' '+(posts.length===1?'публикация':'публикации');
-    document.getElementById('stat-conf').textContent=posts.filter(function(p){return p.type==='conference';}).length+' на конференциях';
+    var conf=posts.filter(function(p){return p.type==='conference';}).length;
+    var confWord=conf%10===1&&conf%100!==11?'конференция':(conf%10>=2&&conf%10<=4&&(conf%100<12||conf%100>14)?'конференции':'конференций');
+    document.getElementById('stat-conf').textContent=conf?conf+' '+confWord:'';
     var minutes=posts.reduce(function(n,p){return n+(parseInt(String(p.readtime||'').match(/\d+/)||0,10)||0);},0);
     document.getElementById('stat-minutes').textContent=minutes?minutes+' мин чтения':'—';
     var years=posts.map(function(p){return String(p.date||'').match(/\d{4}/);}).filter(Boolean).map(function(x){return Number(x[0]);});
-    document.getElementById('stat-year').textContent=years.length?Math.min.apply(null,years):'—';
+    var since=document.getElementById('stat-since');
+    if (since) since.textContent=years.length?'с '+Math.min.apply(null,years)+' года':'';
     var types=Array.from(new Set(posts.map(function(p){return p.type;})));
     filters.innerHTML='<button class="catalog-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(function(t){return '<button class="catalog-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>';}).join('');
     render('all');

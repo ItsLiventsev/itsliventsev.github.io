@@ -1,0 +1,492 @@
+{
+  "generated": "2026-11-02T22:05:03.922Z",
+  "repo": "ItsLiventsev/itsliventsev.github.io",
+  "branch": "main",
+  "window": 30,
+  "total": 275,
+  "truncated": true,
+  "days": [
+    {
+      "date": "2026-10-04",
+      "count": 0
+    },
+    {
+      "date": "2026-10-05",
+      "count": 0
+    },
+    {
+      "date": "2026-10-06",
+      "count": 0
+    },
+    {
+      "date": "2026-10-07",
+      "count": 0
+    },
+    {
+      "date": "2026-10-08",
+      "count": 0
+    },
+    {
+      "date": "2026-10-09",
+      "count": 0
+    },
+    {
+      "date": "2026-10-10",
+      "count": 0
+    },
+    {
+      "date": "2026-10-11",
+      "count": 0
+    },
+    {
+      "date": "2026-10-12",
+      "count": 0
+    },
+    {
+      "date": "2026-10-13",
+      "count": 0
+    },
+    {
+      "date": "2026-10-14",
+      "count": 0
+    },
+    {
+      "date": "2026-10-15",
+      "count": 0
+    },
+    {
+      "date": "2026-10-16",
+      "count": 0
+    },
+    {
+      "date": "2026-10-17",
+      "count": 0
+    },
+    {
+      "date": "2026-10-18",
+      "count": 0
+    },
+    {
+      "date": "2026-10-19",
+      "count": 0
+    },
+    {
+      "date": "2026-10-20",
+      "count": 0
+    },
+    {
+      "date": "2026-10-21",
+      "count": 0
+    },
+    {
+      "date": "2026-10-22",
+      "count": 0
+    },
+    {
+      "date": "2026-10-23",
+      "count": 0
+    },
+    {
+      "date": "2026-10-24",
+      "count": 0
+    },
+    {
+      "date": "2026-10-25",
+      "count": 69
+    },
+    {
+      "date": "2026-10-26",
+      "count": 15
+    },
+    {
+      "date": "2026-10-27",
+      "count": 38
+    },
+    {
+      "date": "2026-10-28",
+      "count": 29
+    },
+    {
+      "date": "2026-10-29",
+      "count": 0
+    },
+    {
+      "date": "2026-10-30",
+      "count": 0
+    },
+    {
+      "date": "2026-10-31",
+      "count": 53
+    },
+    {
+      "date": "2026-11-01",
+      "count": 47
+    },
+    {
+      "date": "2026-11-02",
+      "count": 24
+    }
+  ],
+  "commits": [
+    {
+      "sha": "bd22a5d",
+      "title": "feat(design): v13 «Витрина» — язык референсов вместо тёплой «Мастерской»",
+      "date": "2026-11-02T21:52:45Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bd22a5d8d1faf965cef7bbfa6b3e6a9b7231d964"
+    },
+    {
+      "sha": "9bb2a77",
+      "title": "perf(fonts): инстанцирование вариативных шрифтов и отказ от латинского курсива",
+      "date": "2026-11-02T20:45:14Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9bb2a77ee027117a43031980c64ec6d71765e26c"
+    },
+    {
+      "sha": "091a5cf",
+      "title": "docs: аудит, дизайн-система, QA и референсы итерации v12",
+      "date": "2026-11-02T20:38:55Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/091a5cf19128838e4ead9439fd5d3dad066532ca"
+    },
+    {
+      "sha": "a9344cc",
+      "title": "feat(pages): все 76 страниц на общей оболочке и редакционном шаблоне",
+      "date": "2026-11-02T20:38:51Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a9344cce568c44a84da862489ee4e313a1572cdb"
+    },
+    {
+      "sha": "c1fc479",
+      "title": "feat(system): тёплая бумажная система, один shell, живые данные",
+      "date": "2026-11-02T20:38:45Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/c1fc4790b8b0b2be70da0f6db9488beca488458a"
+    },
+    {
+      "sha": "85efc76",
+      "title": "Rebalance site palette around charcoal and warm accents",
+      "date": "2026-11-02T19:09:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/85efc76f4047ac5352fb7d71a2c5f6052d6de908"
+    },
+    {
+      "sha": "763f4b8",
+      "title": "Unify editorial catalogs and add local search",
+      "date": "2026-11-02T19:05:21Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/763f4b80f9e0aa8ab7c26f7e4a5047e4449d6bb2"
+    },
+    {
+      "sha": "1d2afa6",
+      "title": "Refine homepage editorial hierarchy",
+      "date": "2026-11-02T19:01:03Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1d2afa6de75d5cf05d21502117687ee3eb4b4658"
+    },
+    {
+      "sha": "7ac4413",
+      "title": "Reorganize homepage and make activity feed compact",
+      "date": "2026-11-02T18:51:39Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7ac44137e9aa102eaec827c6d44cbad956affa23"
+    },
+    {
+      "sha": "2a031e8",
+      "title": "Build compact task directory and refine widgets",
+      "date": "2026-11-02T18:45:42Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2a031e8c0328628561ab6d3781c720eb6a2ad10d"
+    },
+    {
+      "sha": "3773170",
+      "title": "Add warm editorial color accents",
+      "date": "2026-11-02T06:58:13Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3773170e15ffb1cbc5252bd135b452c5b4945fbc"
+    },
+    {
+      "sha": "64a4f5e",
+      "title": "Check each theme on a fresh rendered page",
+      "date": "2026-11-02T06:53:24Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/64a4f5eae1510bf777386e86fa8c0a674f8a9c45"
+    },
+    {
+      "sha": "63a172b",
+      "title": "Measure visible pathways when checking theme contrast",
+      "date": "2026-11-02T06:52:09Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/63a172be96f9b17da8dafdc4eea5d11494299d8b"
+    },
+    {
+      "sha": "1b4fe55",
+      "title": "Expose axe node details in CI output",
+      "date": "2026-11-02T06:50:53Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1b4fe55c69878558d3b2d0c8aac41ad906c9d22e"
+    },
+    {
+      "sha": "d93f44d",
+      "title": "Include accessibility failure details",
+      "date": "2026-11-02T06:50:49Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d93f44d8c02e2652e9c8155ca5506f714138425f"
+    },
+    {
+      "sha": "7fd0e9b",
+      "title": "Report browser test failure details in CI",
+      "date": "2026-11-02T06:49:43Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7fd0e9be6e1fcdc327c685c02173fc2002165776"
+    },
+    {
+      "sha": "6845845",
+      "title": "Add task-oriented paths to homepage",
+      "date": "2026-11-02T06:48:51Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6845845985b62ae16dc05cad1824d81518945339"
+    },
+    {
+      "sha": "14f04cb",
+      "title": "Add editorial reading shelf inspired by content hubs",
+      "date": "2026-11-02T06:43:34Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/14f04cb97bd087d83ea1ac581fd0d308196c4e43"
+    },
+    {
+      "sha": "751a66e",
+      "title": "Unify cozy accents and calm interface motion",
+      "date": "2026-11-02T06:32:58Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/751a66e505eb7ccde0d741d8155c145ab1e91f37"
+    },
+    {
+      "sha": "cdf9cdf",
+      "title": "Exclude Python bytecode from the repository",
+      "date": "2026-11-02T06:27:00Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/cdf9cdfb1a33b5b89cd9a4cc15fe071940a8d3a7"
+    },
+    {
+      "sha": "6fa66b5",
+      "title": "Fix search interactions and keep its index current",
+      "date": "2026-11-02T06:26:53Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6fa66b53b0d6f22e3633085d2e4b0041ed554f5d"
+    },
+    {
+      "sha": "d496417",
+      "title": "Keep generated post indexes on main",
+      "date": "2026-11-02T06:18:47Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d496417d2aac31525fa165e10b63e32a25f35510"
+    },
+    {
+      "sha": "946470f",
+      "title": "Run checks after generated sitemap update",
+      "date": "2026-11-02T06:17:49Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/946470fbb22dc93e5526fab4cfa9fc2fb9c3f8f2"
+    },
+    {
+      "sha": "76c2e83",
+      "title": "Make activity and offline experiences more resilient",
+      "date": "2026-11-02T06:17:04Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/76c2e8312db7994ac78aedb490dde14f594a4136"
+    },
+    {
+      "sha": "ead2717",
+      "title": "Fix workspace navigation, profiles and offline reliability",
+      "date": "2026-11-01T22:04:22Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ead2717215178c161100e3e692d720bff8258a8b"
+    },
+    {
+      "sha": "722a2bf",
+      "title": "Improve responsive navigation and offline experience",
+      "date": "2026-11-01T21:30:44Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/722a2bfd16bffd96c6e8b8e9c5667f98b1dfb0cb"
+    },
+    {
+      "sha": "6ac8883",
+      "title": "Fix activity accuracy and offline cache behavior",
+      "date": "2026-11-01T21:28:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6ac888377a9a011ec084020eb0b5f797894c0509"
+    },
+    {
+      "sha": "9498fc3",
+      "title": "Connect change feed to real GitHub commits",
+      "date": "2026-11-01T21:26:04Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9498fc39bda02128559b1e8912e71fa8c3289834"
+    },
+    {
+      "sha": "3d82583",
+      "title": "Fix navigation highlight and activity initialization",
+      "date": "2026-11-01T21:14:17Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3d825836b7ed45b2b2bf02b22c8fc60d3787e6c6"
+    },
+    {
+      "sha": "19ca7cd",
+      "title": "fix: цикл/лента/канбан, единый индикатор, анимация меню, оффлайн-toast, шрифты, DataPolis, пространства — полный аудит пространств",
+      "date": "2026-11-01T21:08:54Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/19ca7cd9c44e793914b4cee41536e3ca03fd0b91"
+    },
+    {
+      "sha": "d3009df",
+      "title": "feat(agent-plan execution v17): inline→CSS utilities for all key pages, kanban/view-toggle, agent badges, cozy washes",
+      "date": "2026-11-01T20:57:51Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d3009df23fed34a979125a6e80c2e188a3f58136"
+    },
+    {
+      "sha": "fcd3d05",
+      "title": "feat(autonomous-polish-v16): container queries + editorial callouts + skeleton + recent cmdk + view-transition",
+      "date": "2026-11-01T20:55:28Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/fcd3d05729e302b8cba605cddc3c1a2eb9dd2a58"
+    },
+    {
+      "sha": "8646e02",
+      "title": "feat(autonomous-polish-v15): reading progress + scroll-spy + copy pre + lightbox + print",
+      "date": "2026-11-01T20:51:33Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8646e02f0a0f83bc0a33121e2618c2ffa1f630fe"
+    },
+    {
+      "sha": "1210c5a",
+      "title": "feat(autonomous-polish-v14): command palette > actions + BroadcastChannel realtime + ticker + perf hints",
+      "date": "2026-11-01T20:50:31Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1210c5a74b34e3b95fb489e1af4e09496f262a78"
+    },
+    {
+      "sha": "709bd98",
+      "title": "feat(autonomous-polish-v13): kanban drag-n-drop + offline banner + reveal stagger + SW dedupe + prefetch link",
+      "date": "2026-11-01T20:49:28Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/709bd98f83e789c41b4ee45508b700ca283616c2"
+    },
+    {
+      "sha": "5b38af4",
+      "title": "feat(autonomous-polish-v12): Aceternity 3D tilt + cmdk palette polish + cozy dark washes + axe expanded",
+      "date": "2026-11-01T20:47:13Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5b38af44721f1f1a2b628f3aaf5a4e7b64721c78"
+    },
+    {
+      "sha": "f3bc825",
+      "title": "feat(orchestrator v11 MAX): hyper polish — inline→CSS, PWA v2, Bento equal, editorial Soft UI, nav hyper, tokens hyper, containment",
+      "date": "2026-11-01T20:42:46Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f3bc8256e52fe47b025380825129c3d96a99a31b"
+    },
+    {
+      "sha": "1cc8a7c",
+      "title": "feat(orchestrator v10): typography safety — fluid overview grid + frame containment",
+      "date": "2026-11-01T20:38:42Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1cc8a7cba5ceddbaad50d99c482d36d9002029b4"
+    },
+    {
+      "sha": "f7d109b",
+      "title": "feat(orchestrator v9): editorial prose + kanban polish + anchor nav spring",
+      "date": "2026-11-01T20:35:20Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f7d109b73d967c6dc07556fc3195d4bfb17f5f99"
+    },
+    {
+      "sha": "4565351",
+      "title": "feat(orchestrator v8): kanban + PWA offline + i18n hero + axe audit",
+      "date": "2026-11-01T20:31:34Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4565351ac153d87f684806f513315e62a534eff4"
+    },
+    {
+      "sha": "f10da2e",
+      "title": "fix(canvas): revert to pure light #F8F9FA per feedback",
+      "date": "2026-11-01T20:29:07Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f10da2ebcb318dab3d0e49a598ac5a442b7fb9e6"
+    },
+    {
+      "sha": "f1b7a71",
+      "title": "feat(orchestrator v7): autonomous polish — view-transitions + grain + Soft UI 18px + staggered + UI_KNOWLEDGE_BASE",
+      "date": "2026-11-01T20:26:37Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f1b7a7131139bd453727ff2ec2da4628c46b8411"
+    },
+    {
+      "sha": "bfa07fe",
+      "title": "feat(orchestrator v6): smooth filter FLIP, no badge, cozy cycle, dense about, no empty",
+      "date": "2026-11-01T20:21:14Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bfa07fe874ce1435f43399b0a78c21ff23f1e615"
+    },
+    {
+      "sha": "a9f59b4",
+      "title": "feat(orchestrator v5): Cozy Accents — warm canvas, multi-accent palette",
+      "date": "2026-11-01T20:14:35Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a9f59b45e4180ec4c2496304085ca3c052f48282"
+    },
+    {
+      "sha": "8ab7328",
+      "title": "feat(orchestrator v4): Depth & Flow — hero orbs, Bento levels, timeline line, spring motion",
+      "date": "2026-11-01T20:12:09Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8ab7328993c96d2eba1030c20b0cf792c1a8829a"
+    },
+    {
+      "sha": "ea94a98",
+      "title": "docs: AGENT_PLAN — 30 библиотек vibecoding.ru, 5 агентов, v3 оптимизация",
+      "date": "2026-11-01T20:08:57Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ea94a98a9a3595cc55ab767137a981c2db828d15"
+    },
+    {
+      "sha": "06719d9",
+      "title": "feat(index): активность наверх, плавные фильтры, компактный стек",
+      "date": "2026-11-01T20:06:12Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/06719d9e54a257fd3c1bbf93136faea13baf2c78"
+    },
+    {
+      "sha": "ac68bc2",
+      "title": "feat(agent-plan): план в рамках сайта — agent-plan.html, ссылка в футере/карте, поиск и sitemap",
+      "date": "2026-11-01T20:03:05Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ac68bc2a789a2a2c7b2579d3f206a9eb98d2a1ce"
+    },
+    {
+      "sha": "a100e24",
+      "title": "feat(v2): компактный 2-колонный дашборд, кастомный скролл, анимация цикла и структурный рефреш",
+      "date": "2026-11-01T19:57:58Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a100e2418991355300e16aeb9f0250dac9d7b249"
+    },
+    {
+      "sha": "2632a98",
+      "title": "chore: обновлена регрессия под новую навигацию и индикатор",
+      "date": "2026-11-01T19:48:30Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2632a98d3a0f6928a71a99896311369348b735fe"
+    },
+    {
+      "sha": "d9f319b",
+      "title": "feat(data+motion): живой фид — хештеги, статусы, быстрый shuffle и график коммитов",
+      "date": "2026-11-01T19:48:30Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d9f319bc21b802bb803981f5f6cb75419ef63ed8"
+    },
+    {
+      "sha": "0c91221",
+      "title": "feat(visual+bento): Soft UI Bento-grid, activity dashboard — ticker, timeline и sparkline",
+      "date": "2026-11-01T19:48:30Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/0c9122113ac2b47bb9a3c94f00f4d592201dd6d0"
+    },
+    {
+      "sha": "2be5da2",
+      "title": "feat(navigator+visual): осветлённая палитра #F8F9FA, pill-группы навигации и moving indicator",
+      "date": "2026-11-01T19:48:30Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2be5da2cf469a34de98ad319883939cbe64e730d"
+    },
+    {
+      "sha": "e02c666",
+      "title": "docs: AGENT_PLAN — оркестрация 5 суб-агентов (Navigator/Visual/Motion/Data/Integrator)",
+      "date": "2026-11-01T19:48:30Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/e02c666ae952a9d91aae58c5e5736d26e68c3208"
+    },
+    {
+      "sha": "5650e52",
+      "title": "Add live activity journal to homepage",
+      "date": "2026-11-01T19:37:17Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5650e521b3bf0ff59ac3d870aea382df289cbb9e"
+    },
+    {
+      "sha": "6c654b7",
+      "title": "Fix workspace shell initialization and button contrast",
+      "date": "2026-11-01T19:25:23Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6c654b73ca7788c8c9225d084049e954a9505198"
+    },
+    {
+      "sha": "6759de0",
+      "title": "Refresh shared workspace navigation and page design",
+      "date": "2026-11-01T19:19:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6759de0a03997f01d66727008a7c9d61d2a658b0"
+    },
+    {
+      "sha": "bc29e84",
+      "title": "Fix student cabinet and compact navigation layout",
+      "date": "2026-11-01T16:56:12Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bc29e84e7414d26937fdd59393cc94463b9481ea"
+    },
+    {
+      "sha": "2b66b98",
+      "title": "Complete accessibility and performance audit fixes",
+      "date": "2026-11-01T16:31:19Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2b66b986f7c611718016fa1ec65096df3c9a761e"
+    },
+    {
+      "sha": "cad7897",
+      "title": "Redesign workspace navigation and learning pages",
+      "date": "2026-11-01T15:58:53Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/cad78975a1000fd8f87e1f1d19d3af3ca5b48ba9"
+    }
+  ]
+}

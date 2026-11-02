@@ -1,8 +1,13 @@
 /* ==========================================================================
-   itsliventsev · feed.js — open development log for the home page.
-   Reads the public GitHub API (no token, no server), renders the last
-   changes with hashtags, a 30-day counter and a 14-day bar chart.
-   The component always degrades to a link to the repository history.
+   itsliventsev · feed.js — открытый журнал разработки на главной.
+
+   Источник данных — снимок assets/data/activity.json: его собирает
+   scripts/build-activity.js в GitHub Actions при каждом пуше в main.
+   Почему не прямой запрос к API из браузера: лимит 60 запросов в час на IP
+   выбивается за пару посетителей, блок пустеет и в консоль летит ошибка.
+   Прямой запрос остался фолбэком (локальная разработка без снимка).
+
+   Компонент всегда деградирует до ссылки на историю репозитория.
    ========================================================================== */
 (function () {
   'use strict';
@@ -18,8 +23,10 @@
   const chart = root.querySelector('[data-activity-chart]');
   const filters = [...root.querySelectorAll('[data-impact]')];
   const historyUrl = 'https://github.com/ItsLiventsev/itsliventsev.github.io/commits/main';
-  const CACHE_KEY = 'itsliventsev:activity:v1';
+  const SNAPSHOT_URL = '/assets/data/activity.json';
+  const CACHE_KEY = 'itsliventsev:activity:v2';
   const FRESH_MS = 15 * 60 * 1000;
+  const days = 14;
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
@@ -43,19 +50,19 @@
     return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
   };
   const tagsOf = message => {
-    const text = message.toLowerCase();
+    const text = String(message).toLowerCase();
     const tags = [];
     if (/^(feat|add|redesign|ui|build)|интерфейс|layout|компонент/.test(text)) tags.push('frontend');
     if (/design|css|style|token|типограф|оформлен|дизайн/.test(text)) tags.push('design');
     if (/docs?|content|text|article|post|материал|текст|статья|заметк|контент/.test(text)) tags.push('content');
-    if (/fix|bug|hotfix|исправ|регресс|ошибк/.test(text)) tags.push('fix');
+    if (/fix|bug|hotfix|исправ|регресс|ошибк|perf/.test(text)) tags.push('fix');
     if (!tags.length) tags.push('frontend');
     return [...new Set(tags)].slice(0, 2);
   };
   const TAG_LABEL = { frontend: '#frontend', design: '#design', content: '#content', fix: '#fix' };
   const STATUS = { frontend: 'в работе', design: 'готово', content: 'готово', fix: 'исправлено' };
 
-  let state = { items: [], count: 0, latest: null, error: false };
+  let state = { items: [], total: 0, days: null, latest: null, generated: '', error: false };
   let selected = 'all';
 
   function setStatus(text) { if (status) status.textContent = text; }
@@ -81,59 +88,74 @@
         + '<a class="feed-commit" href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(item.sha) + ' ↗</a>'
         + '</div></div></article>';
     }).join('');
+    if (!reduceMotion) {
+      [...list.children].forEach((row, index) => {
+        row.animate?.([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 260, delay: Math.min(index * 40, 240), easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
+      });
+    }
   }
 
-  function renderChart(commits) {
-    if (!chart) return;
-    const days = 14;
-    const buckets = Array(days).fill(0);
-    const dayMs = 86400000;
-    const now = new Date();
-    const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-    commits.forEach(commit => {
-      const date = new Date(commit.date);
+  function bucketFromItems(items) {
+    const out = Array(days).fill(0);
+    const today = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
+    items.forEach(item => {
+      const date = new Date(item.date);
       if (Number.isNaN(date.getTime())) return;
       const day = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-      const diff = Math.round((today - day) / dayMs);
-      if (diff >= 0 && diff < days) buckets[days - 1 - diff] += 1;
+      const diff = Math.round((today - day) / 86400000);
+      if (diff >= 0 && diff < days) out[days - 1 - diff] += 1;
     });
+    return out;
+  }
+
+  function renderChart() {
+    if (!chart) return;
+    const buckets = state.days
+      ? state.days.slice(-days).map(entry => entry.count)
+      : bucketFromItems(state.items);
+    while (buckets.length < days) buckets.unshift(0);
     const max = Math.max(...buckets, 1);
     const total = buckets.reduce((sum, value) => sum + value, 0);
-    const truncated = commits.length >= 100;
     chart.innerHTML = buckets.map((value, index) => {
-      const height = Math.max(4, Math.round((value / max) * 100));
-      return '<i data-height="' + height + '"' + (index === days - 1 ? ' data-today=""' : '') + ' title="' + value + ' ' + plural(value, 'коммит', 'коммита', 'коммитов') + '"></i>';
+      const height = value ? Math.max(8, Math.round((value / max) * 100)) : 3;
+      const label = value + ' ' + plural(value, 'коммит', 'коммита', 'коммитов');
+      return '<i data-height="' + height + '"' + (index === days - 1 ? ' data-today=""' : '')
+        + (value ? '' : ' data-empty=""') + ' title="' + label + '"></i>';
     }).join('');
     [...chart.children].forEach(bar => bar.style.setProperty('--h', bar.dataset.height + '%'));
-    chart.setAttribute('aria-label', 'Коммиты за 14 дней: ' + (truncated ? 'не менее ' : '') + total);
-    if (totalNode) totalNode.textContent = (truncated ? '≥ ' : '') + total;
+    chart.setAttribute('aria-label', 'Коммиты за 14 дней: ' + total);
+    if (totalNode) totalNode.textContent = String(total);
     if (!reduceMotion) {
       [...chart.children].forEach((bar, index) => {
-        bar.animate?.([{ transform: 'scaleY(0.2)' }, { transform: 'scaleY(1)' }], { duration: 320, delay: index * 22, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
+        bar.animate?.([{ transform: 'scaleY(0.15)' }, { transform: 'scaleY(1)' }],
+          { duration: 340, delay: index * 24, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
       });
     }
   }
 
   function render() {
-    if (countNode && !state.error) countNode.textContent = state.count >= 100 ? '100+' : String(state.count);
-    if (countNode && countNode.textContent !== '—') countNode.setAttribute('aria-label', state.count + ' ' + plural(state.count, 'коммит', 'коммита', 'коммитов') + ' за 30 дней');
+    if (countNode && !state.error) {
+      countNode.textContent = String(state.total || state.items.length || 0);
+      countNode.setAttribute('aria-label', (state.total || state.items.length) + ' ' + plural(state.total || state.items.length, 'коммит', 'коммита', 'коммитов') + ' за 30 дней');
+    }
     if (state.latest) {
       if (dateNode) { dateNode.dateTime = state.latest.date.slice(0, 10); dateNode.textContent = dayLabel(state.latest.date); }
       if (shaNode) shaNode.textContent = state.latest.sha;
       if (commitLink) commitLink.href = state.latest.url;
     }
-    renderChart(state.commits || []);
+    renderChart();
     renderList();
   }
 
-  function normalize(commit) {
-    const message = String(commit.commit?.message || '').split('\n')[0].trim();
+  function normalize(item) {
+    const title = String(item.title || 'без описания');
     return {
-      sha: String(commit.sha || '').slice(0, 7),
-      url: 'https://github.com/ItsLiventsev/itsliventsev.github.io/commit/' + commit.sha,
-      title: message || 'без описания',
-      date: commit.commit?.committer?.date || commit.commit?.author?.date || '',
-      tags: tagsOf(message)
+      sha: String(item.sha || '').slice(0, 7),
+      url: item.url || '',
+      title,
+      date: item.date || '',
+      tags: Array.isArray(item.tags) && item.tags.length ? item.tags : tagsOf(title)
     };
   }
 
@@ -143,28 +165,31 @@
       if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (!parsed || !Array.isArray(parsed.commits) || Date.now() - parsed.at > FRESH_MS) return null;
-      return parsed.commits;
+      return parsed.payload;
     } catch (error) { return null; }
   }
-  function writeCache(commits) {
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), commits })); } catch (error) { /* quota/private */ }
+  function writeCache(payload) {
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), commits: payload.commits, payload })); } catch (error) { /* quota/private */ }
   }
 
-  function applyCommits(commits, cached) {
-    state.commits = commits;
-    state.items = commits.map(normalize);
-    state.count = commits.length;
+  function apply(payload, origin) {
+    state.items = (payload.commits || []).map(normalize);
+    state.total = Number(payload.total) || state.items.length;
+    state.days = Array.isArray(payload.days) ? payload.days : null;
+    state.generated = payload.generated || '';
     state.latest = state.items[0] || null;
     state.error = false;
     render();
-    setStatus(cached
-      ? 'Показан сохранённый снимок GitHub за последние 30 дней.'
-      : 'Данные получены из основной ветки GitHub: ' + commits.length + ' ' + plural(commits.length, 'коммит', 'коммита', 'коммитов') + ' за 30 дней.');
+    const word = plural(state.total, 'коммит', 'коммита', 'коммитов');
+    setStatus(origin === 'cache'
+      ? 'Показан сохранённый снимок истории: ' + state.total + ' ' + word + ' за 30 дней.'
+      : 'История из основной ветки GitHub: ' + state.total + ' ' + word + ' за 30 дней. Merge-коммиты и служебные сборки не считаются.');
   }
 
   function fail() {
     state.error = true;
-    state.commits = [];
+    state.items = [];
+    state.days = null;
     render();
     if (countNode) countNode.textContent = '—';
     if (totalNode) totalNode.textContent = '—';
@@ -181,22 +206,40 @@
   });
 
   const cached = readCache();
-  if (cached && cached.length) applyCommits(cached, true);
+  if (cached && cached.commits) apply(cached, 'cache');
 
-  const since = new Date(Date.now() - 30 * 86400000).toISOString();
-  const url = new URL('https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits');
-  url.searchParams.set('sha', 'main');
-  url.searchParams.set('since', since);
-  url.searchParams.set('per_page', '100');
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 9000);
-  fetch(url, { signal: controller.signal, headers: { Accept: 'application/vnd.github+json' } })
-    .then(response => { if (!response.ok) throw new Error('GitHub API ' + response.status); return response.json(); })
-    .then(data => {
-      if (!Array.isArray(data)) throw new Error('unexpected payload');
-      writeCache(data);
-      applyCommits(data, false);
+  // 1. Снимок с того же домена — основной путь.
+  fetch(SNAPSHOT_URL, { cache: 'no-cache' })
+    .then(response => { if (!response.ok) throw new Error('snapshot ' + response.status); return response.json(); })
+    .then(payload => {
+      if (!payload || !Array.isArray(payload.commits)) throw new Error('unexpected snapshot');
+      writeCache(payload);
+      apply(payload, 'snapshot');
     })
-    .catch(() => { if (!cached) fail(); else setStatus('Запрос не прошёл — показан сохранённый снимок GitHub.'); })
-    .finally(() => clearTimeout(timer));
+    // 2. Прямой запрос к API — только если снимка нет (локальная разработка).
+    .catch(() => {
+      const since = new Date(Date.now() - 30 * 86400000).toISOString();
+      const url = new URL('https://api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits');
+      url.searchParams.set('sha', 'main');
+      url.searchParams.set('since', since);
+      url.searchParams.set('per_page', '100');
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 9000);
+      return fetch(url, { signal: controller.signal, headers: { Accept: 'application/vnd.github+json' } })
+        .then(response => { if (!response.ok) throw new Error('GitHub API ' + response.status); return response.json(); })
+        .then(data => {
+          if (!Array.isArray(data)) throw new Error('unexpected payload');
+          const commits = data.map(commit => ({
+            sha: String(commit.sha || ''),
+            title: String(commit.commit?.message || '').split('\n')[0].trim(),
+            date: commit.commit?.committer?.date || commit.commit?.author?.date || '',
+            url: 'https://github.com/ItsLiventsev/itsliventsev.github.io/commit/' + commit.sha
+          }));
+          const payload = { generated: new Date().toISOString(), total: commits.length, commits };
+          writeCache(payload);
+          apply(payload, 'api');
+        })
+        .finally(() => clearTimeout(timer));
+    })
+    .catch(() => { if (!cached) fail(); else setStatus('Снимок истории обновляется — показан сохранённый.'); });
 })();

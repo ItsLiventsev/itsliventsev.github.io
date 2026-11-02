@@ -8,17 +8,24 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright-core');
 const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
 const browserArgs = process.env.BROWSER_ARGS ? JSON.parse(process.env.BROWSER_ARGS) : ['--no-sandbox'];
-const commits = [
-  { sha: 'a'.repeat(40), commit: { message: 'feat: навигация', committer: { date: new Date().toISOString() } } },
-  { sha: 'b'.repeat(40), commit: { message: 'fix: контраст кнопок', committer: { date: new Date(Date.now() - 86400e3).toISOString() } } },
-  { sha: 'c'.repeat(40), commit: { message: 'docs: материалы', committer: { date: new Date(Date.now() - 2 * 86400e3).toISOString() } } }
-];
+const iso = offset => new Date(Date.now() - offset).toISOString();
+const snapshot = {
+  generated: iso(0),
+  total: 3,
+  window: 30,
+  days: Array.from({ length: 30 }, (_, index) => ({ date: iso((29 - index) * 86400e3).slice(0, 10), count: index === 29 ? 1 : 0 })),
+  commits: [
+    { sha: 'aaaaaaa', title: 'feat: навигация', date: iso(3600e3), url: 'https://github.com/x/commit/a' },
+    { sha: 'bbbbbbb', title: 'fix: контраст кнопок', date: iso(86400e3), url: 'https://github.com/x/commit/b' },
+    { sha: 'ccccccc', title: 'docs: материалы', date: iso(2 * 86400e3), url: 'https://github.com/x/commit/c' }
+  ]
+};
 const noOverflow = page => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args: browserArgs, headless: true });
   try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
-    await context.route('https://api.github.com/**', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(commits) }));
+    await context.route('**/assets/data/activity.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(snapshot) }));
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/', { waitUntil: 'load' });

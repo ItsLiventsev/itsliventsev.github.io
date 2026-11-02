@@ -578,7 +578,7 @@ svg.ui-icon,
 .ui-pagehead { padding-block: var(--u-s7) var(--u-s6); max-width: 68ch; }
 .ui-pagehead h1 {
   margin: 0 0 var(--u-s4);
-  font-size: clamp(var(--u-fs-2xl), 5vw, var(--u-fs-4xl));
+  font-size: var(--u-fs-page-title);
   font-weight: 700;
   line-height: var(--u-lh-tight);
   letter-spacing: var(--u-ls-display);
@@ -778,3 +778,10 @@ dialog.ui-search {
   box-shadow: var(--u-shadow-lg, 0 24px 60px rgba(25, 23, 18, .18));
 }
 dialog.ui-search::backdrop { background: color-mix(in srgb, var(--u-ink) 42%, transparent); }
+
+/* ——— Scroll reveal: transforms only, so contrast and layout stay intact ——— */
+.ui-reveal { transform: translateY(14px); transition: transform 520ms var(--u-ease); }
+.ui-reveal.is-revealed { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ui-reveal { transform: none; transition: none; }
+}

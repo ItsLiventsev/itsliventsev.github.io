@@ -102,10 +102,20 @@ for (const behavior of ['aria-current', 'aria-expanded', 'IntersectionObserver',
 }
 ok(shell.includes("doc.querySelector('.st-topbar')") && !/root\.querySelector\('\.st-topbar'\)/.test(shell), 'shell.js должен искать верхнюю полосу в документе, а не в контенте');
 const feed = read('assets/feed.js');
-for (const behavior of ['api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits', "per_page', '100'", 'sessionStorage', 'itsliventsev:activity:v1', 'data-activity-chart', 'data-activity-commit', 'data-activity-count', '100+']) {
+for (const behavior of ['/assets/data/activity.json', 'api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits', "per_page', '100'", 'sessionStorage', 'itsliventsev:activity:v2', 'data-activity-chart', 'data-activity-commit', 'data-activity-count', 'data-activity-total']) {
   ok(feed.includes(behavior), 'feed.js: отсутствует контракт ' + behavior);
 }
 ok(feed.includes("since") && feed.includes('Date.now'), 'feed.js должен запрашивать скользящее окно, а не всю историю');
+ok(feed.indexOf('/assets/data/activity.json') < feed.indexOf('api.github.com'), 'feed.js должен сначала читать снимок, а к API идти только как к фолбэку');
+
+/* Снимок активности: 30 дней, 14 последних на графике, только содержательные коммиты */
+const activity = JSON.parse(read('assets/data/activity.json'));
+ok(activity && Array.isArray(activity.days) && activity.days.length === 30, 'activity.json должен содержать 30 дней истории');
+ok(Array.isArray(activity.commits) && activity.commits.length > 0 && activity.commits.length <= 60, 'activity.json хранит 1–60 последних коммитов');
+ok(activity.commits.every(c => /^[0-9a-f]{7}$/.test(c.sha) && /^https:\/\/github\.com\//.test(c.url) && c.date && c.title), 'каждый коммит в снимке имеет sha, url, дату и заголовок');
+ok(activity.commits.every(c => !/^merge\b/i.test(c.title)), 'в снимке нет merge-коммитов');
+ok(activity.days.every(d => /^\d{4}-\d{2}-\d{2}$/.test(d.date) && Number.isInteger(d.count)), 'дни в снимке — ISO-даты со счётчиком');
+ok(activity.total >= activity.days.reduce((sum, d) => sum + d.count, 0) - 30, 'total согласован со счётчиками по дням');
 const reading = read('assets/home-reading.js');
 for (const behavior of ['data-reading-shelf', 'data-reading-list', 'data-reading-filter', 'published']) {
   ok(reading.includes(behavior), 'home-reading.js: отсутствует контракт ' + behavior);
