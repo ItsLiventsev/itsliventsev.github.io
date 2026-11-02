@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const listeners = {};
-const stores = new Map([['unrelated-app', new Map()], ['itsliventsev-v7', new Map()], ['itsliventsev-v7-runtime', new Map()]]);
+const stores = new Map([['unrelated-app', new Map()], ['itsliventsev-v7', new Map()], ['itsliventsev-v7-runtime', new Map()], ['itsliventsev-v8', new Map()], ['itsliventsev-v8-runtime', new Map()]]);
 const normalize = request => new URL(typeof request === 'string' ? request : request.url, 'https://site.test').href;
 const caches = {
   async open(name) {
@@ -39,8 +39,8 @@ async function request(url, mode = 'cors') {
 }
 (async () => {
   await lifecycle('install'); assert(skipped);
-  assert(stores.get('itsliventsev-v8').has(normalize('/index.html'))); // one failed file does not discard the rest
-  await lifecycle('activate'); assert(claimed); assert(!stores.has('itsliventsev-v7')); assert(!stores.has('itsliventsev-v7-runtime')); assert(stores.has('unrelated-app'));
+  assert(stores.get('itsliventsev-v9').has(normalize('/index.html'))); // one failed file does not discard the rest
+  await lifecycle('activate'); assert(claimed); assert(!stores.has('itsliventsev-v7')); assert(!stores.has('itsliventsev-v7-runtime')); assert(!stores.has('itsliventsev-v8')); assert(!stores.has('itsliventsev-v8-runtime')); assert(stores.has('unrelated-app'));
   let response = await request('https://site.test/missing.js');
   assert.equal(response.status, 503); assert.match(response.headers.get('content-type'), /text\/plain/);
   response = await request('https://site.test/assets/workspace.css?v=20261102r1'); assert.equal(await response.text(), '/assets/workspace.css');
@@ -49,8 +49,8 @@ async function request(url, mode = 'cors') {
   assert.equal(await request('https://api.github.com/repos/example'), null);
   network = async () => new Response('fresh');
   for (let i = 0; i < 130; i++) await request('https://site.test/test-' + i + '.js');
-  assert.equal(stores.get('itsliventsev-v8-runtime').size, 120);
-  assert(!stores.get('itsliventsev-v8-runtime').has(normalize('/test-0.js')));
+  assert.equal(stores.get('itsliventsev-v9-runtime').size, 120);
+  assert(!stores.get('itsliventsev-v9-runtime').has(normalize('/test-0.js')));
   network = async () => { throw Error('offline'); };
   response = await request('https://site.test/test-129.js'); assert.equal(await response.text(), 'fresh');
   response = await request('https://site.test/assets/workspace.js?v=new'); assert.equal(await response.text(), '/assets/workspace.js');

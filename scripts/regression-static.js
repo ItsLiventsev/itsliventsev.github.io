@@ -35,7 +35,7 @@ for (const file of contentPages) {
   ok(source.includes('/assets/workspace-tokens.css?v=20261101r4'), file + ': отсутствуют новые токены');
   ok(source.includes('/assets/workspace.css?v=20261102r1'), file + ': отсутствует новая система компонентов');
   ok(source.includes('/assets/workspace-learning.css?v=20261102r1'), file + ': отсутствуют учебные паттерны LMS');
-  ok(source.includes('assets/workspace.js?v=20261102r1'), file + ': отсутствует общий workspace shell');
+  ok(source.includes('assets/workspace.js?v=20261102r3'), file + ': отсутствует общий workspace shell');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
@@ -141,11 +141,11 @@ for (const obsolete of ['assets/site.css', 'assets/shared-chrome.css', 'assets/s
 
 /* Client-side generated article template and lesson generator must emit the new UI. */
 const adminTemplate = read('assets/admin.js');
-for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261102r1', 'assets/workspace-learning.css?v=20261102r1', 'assets/workspace.js?v=20261102r1']) {
+for (const pathFragment of ['assets/workspace-tokens.css?v=20261101r4', 'assets/workspace.css?v=20261102r1', 'assets/workspace-learning.css?v=20261102r1', 'assets/workspace.js?v=20261102r3']) {
   ok(adminTemplate.includes(pathFragment), 'admin.js: динамический материал не подключает ' + pathFragment);
 }
 const officeBuilder = read('scripts/build-office.js');
-ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace.css?v=20261102r1') && officeBuilder.includes('assets/workspace-learning.css?v=20261102r1') && officeBuilder.includes('assets/workspace.js?v=20261102r1'), 'build-office.js: генератор не создаёт страницы на новом shell');
+ok(officeBuilder.includes('assets/workspace-tokens.css?v=20261101r4') && officeBuilder.includes('assets/workspace.css?v=20261102r1') && officeBuilder.includes('assets/workspace-learning.css?v=20261102r1') && officeBuilder.includes('assets/workspace.js?v=20261102r3'), 'build-office.js: генератор не создаёт страницы на новом shell');
 for (const [name, template] of [['admin.js', adminTemplate], ['build-office.js', officeBuilder]]) {
   ok(template.includes('/assets/fonts/manrope-cyrillic-wght-normal.woff2') && !template.includes('fonts.googleapis.com'), name + ': generated pages must use local fonts without Google Fonts');
 }

@@ -473,7 +473,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=20261102r1"></script>
-<script src="../../assets/workspace.js?v=20261102r1"></script>
+<script src="../../assets/workspace.js?v=20261102r3"></script>
 </body>
 </html>
 `;

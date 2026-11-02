@@ -212,7 +212,7 @@ ${bodyHtml}
 
 <script src="${prefix}assets/site.js?v=20261031bb"></script>
 <script src="${prefix}assets/shared-chrome.js?v=20261031bb"></script>
-<script src="${prefix}assets/workspace.js?v=20261102r1"></script>
+<script src="${prefix}assets/workspace.js?v=20261102r3"></script>
 </body>
 </html>
 `;
