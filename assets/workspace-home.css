@@ -1192,3 +1192,26 @@ html { scroll-behavior: smooth; }
   }
   [data-ws-activity-cycle] > span[data-cycle-active] { transform: none; box-shadow: none; }
 }
+
+/* A compact editorial shelf, using the site's own publication indexes. */
+.ws-reading { min-width: 0; }
+.ws-reading-intro { margin: 0 0 12px; font-size: 12px; line-height: 1.55; color: var(--ws-muted); }
+.ws-reading-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.ws-reading-filters[hidden] { display: none; }
+.ws-reading-filters button { min-height: 34px; padding: 6px 12px; border: 1px solid var(--ws-line-strong); border-radius: 999px; color: var(--ws-ink-soft); background: var(--ws-surface); font: 700 11px var(--ws-font); cursor: pointer; transition: color var(--ws-motion), background var(--ws-motion), border-color var(--ws-motion); }
+.ws-reading-filters button[aria-pressed="true"] { color: var(--ws-brown); background: var(--ws-brown-wash); border-color: color-mix(in srgb, var(--ws-brown) 35%, transparent); }
+.ws-reading-filters button:focus-visible, .ws-reading-row:focus-visible { outline: 2px solid var(--ws-accent); outline-offset: 3px; }
+.ws-reading-status { min-height: 1.4em; margin: 9px 0 4px; color: var(--ws-muted); font-size: 11px; }
+.ws-reading-list { display: grid; }
+.ws-content .ws-reading-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; padding: 13px 2px; border-top: 1px solid var(--ws-line); color: var(--ws-ink); text-decoration: none; }
+.ws-reading-meta { grid-column: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--ws-muted); font-size: 10px; }
+.ws-reading-type { color: var(--ws-brown); background: var(--ws-brown-wash); border-radius: 999px; padding: 3px 8px; font-weight: 750; }
+.ws-reading-row strong { grid-column: 1; font-size: 13px; line-height: 1.4; }
+.ws-reading-excerpt { grid-column: 1; color: var(--ws-muted); font-size: 11px; line-height: 1.55; }
+.ws-reading-arrow { grid-column: 2; grid-row: 1 / 4; align-self: center; color: var(--ws-accent); transition: transform var(--ws-motion); }
+@media (hover: hover) { .ws-reading-row:hover .ws-reading-arrow { transform: translate(2px, -2px); } }
+@media (prefers-reduced-motion: reduce) { .ws-reading-arrow, .ws-reading-filters button { transition: none; } }
+@media (min-width: 801px) {
+  .ws-dashboard-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+  .ws-dashboard-grid .ws-panel-large { grid-column: auto; }
+}
