@@ -396,8 +396,8 @@ function shell(cfg, n) {
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261101r4">
-<link rel="stylesheet" href="../../assets/workspace.css?v=20261102r1">
+<link rel="stylesheet" href="../../assets/workspace-tokens.css?v=20261102r4">
+<link rel="stylesheet" href="../../assets/workspace.css?v=20261102r4">
 <link rel="stylesheet" href="../../assets/workspace-learning.css?v=20261102r1">
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
@@ -473,7 +473,7 @@ function shell(cfg, n) {
 <script src="../../assets/stands.js?v=${VERSION}"></script>
 <script type="application/json" id="office-data">${json}</script>
 <script src="../../assets/office-kit.js?v=20261102r1"></script>
-<script src="../../assets/workspace.js?v=20261102r3"></script>
+<script src="../../assets/workspace.js?v=20261102r4"></script>
 </body>
 </html>
 `;

@@ -911,10 +911,10 @@ html { scroll-behavior: smooth; }
 /* === v11: Performance & Motion — containment + staggered + view-transitions === */
 .ws-home-hero, .ws-dashboard-grid, .ws-section, .ws-content { content-visibility: auto; contain-intrinsic-size: auto 500px; }
 .ws-home-hero { contain-intrinsic-size: auto 320px; }
-.ws-section { animation: ws-enter 480ms var(--ws-motion-emphasis) both; animation-delay: calc(var(--reveal-index, 0) * 60ms); }
+.ws-section { animation: ws-enter 480ms var(--ease-emphasized) both; animation-delay: calc(var(--reveal-index, 0) * 60ms); }
 @keyframes ws-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .ws-section { animation: none !important; } }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 220ms; animation-timing-function: var(--ws-motion-emphasis); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 220ms; animation-timing-function: var(--ease-emphasized); }
 .ws-resource-grid a, .ws-contact-grid a { will-change: transform; }
 .ws-resource-grid a:focus-visible, .ws-contact-grid a:focus-visible { outline: var(--ws-focus); outline-offset: 2px; }
 
@@ -984,7 +984,7 @@ html { scroll-behavior: smooth; }
 .ws-kanban-count { min-width: 20px; height: 20px; display: grid; place-items: center; padding: 0 6px; border-radius: 999px; background: var(--ws-surface); border: 1px solid var(--ws-line); font: 700 10px var(--ws-mono); }
 
 /* ── v13: scroll-reveal stagger for course/skill/resource cards ── */
-.ws-reveal { opacity: 0; transform: translateY(10px); transition: opacity 520ms var(--ws-motion-emphasis), transform 520ms var(--ws-motion-emphasis); transition-delay: calc(var(--reveal-index, 0) * 70ms); }
+.ws-reveal { opacity: 0; transform: translateY(10px); transition: opacity 520ms var(--ease-emphasized), transform 520ms var(--ease-emphasized); transition-delay: calc(var(--reveal-index, 0) * 70ms); }
 .ws-reveal.is-visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .ws-reveal { opacity: 1; transform: none; transition: none; } }
 
@@ -1161,3 +1161,34 @@ html { scroll-behavior: smooth; }
 .ws-kanban-list.is-drop-target { border-color: var(--ws-accent); background: var(--ws-accent-wash); }
 @media (prefers-reduced-motion: reduce) { .ws-kanban-list { transition: none; } }
 .ws-kanban-list [data-kanban-card] { margin-block: 0; }
+
+/* Matching cozy course accents on the home page and the spaces catalogue. */
+:root:not([data-theme="dark"]) .ws-course-violet {
+  background: linear-gradient(165deg, var(--ws-violet-wash), var(--ws-surface) 68%) !important;
+  border-top: 3px solid var(--ws-violet) !important;
+}
+:root:not([data-theme="dark"]) .ws-course-orange {
+  background: linear-gradient(165deg, var(--ws-terracotta-wash), var(--ws-surface) 68%) !important;
+  border-top: 3px solid var(--ws-terracotta) !important;
+}
+:root:not([data-theme="dark"]) .ws-course-blue {
+  background: linear-gradient(165deg, var(--ws-blue-wash), var(--ws-surface) 68%) !important;
+  border-top: 3px solid var(--ws-blue) !important;
+}
+[data-ws-activity-cycle] > span:not([aria-hidden]) {
+  transition: transform 360ms cubic-bezier(.2,.8,.2,1), box-shadow 360ms ease, border-color 360ms ease;
+}
+[data-ws-activity-cycle] > span[data-cycle-active] {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(30, 40, 35, .12);
+  border-color: currentColor;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ws-activity-cycle] span, [data-ws-activity-dot],
+  [data-ws-activity-live] i, .ws-home-copy .ws-status-dot,
+  [data-ws-activity-card]::after, .ws-panel-large .ws-resource-row::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  [data-ws-activity-cycle] > span[data-cycle-active] { transform: none; box-shadow: none; }
+}

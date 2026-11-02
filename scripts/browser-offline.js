@@ -36,8 +36,8 @@ const server = http.createServer((req, res) => {
     assert.equal(response.status(), 200);
     await page.waitForSelector('.ws-sidebar');
     const assets = await page.evaluate(async () => ({
-      css: (await fetch('/assets/workspace-home.css?v=20261102r2')).status,
-      js: (await fetch('/assets/home-activity.js?v=20261102r2')).status,
+      css: (await fetch('/assets/workspace-home.css?v=20261102r4')).status,
+      js: (await fetch('/assets/home-activity.js?v=20261102r4')).status,
       missing: (await fetch('/assets/missing.js')).status
     }));
     assert.deepEqual(assets, { css: 200, js: 200, missing: 503 });

@@ -26,6 +26,16 @@ const commits = [
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/', { waitUntil: 'load' });
     await page.waitForSelector('[data-ws-activity-item]');
+    const canvas = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--ws-canvas').trim());
+    assert.equal(canvas.toLowerCase(), '#f8f9fa', 'the light canvas must remain unchanged');
+    const courseStyle = await page.locator('.ws-course-violet').first().evaluate(el => ({ border: getComputedStyle(el).borderTopColor, bg: getComputedStyle(el).backgroundImage }));
+    assert.match(courseStyle.bg, /linear-gradient/);
+    assert.equal(await page.locator('[data-ws-activity-cycle] span[aria-hidden]').first().evaluate(el => getComputedStyle(el).animationName), 'none');
+    await page.locator('[data-ws-activity-cycle]').scrollIntoViewIfNeeded();
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.waitForSelector('[data-ws-activity-cycle] [data-cycle-active]', { state: 'attached' });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.waitForFunction(() => !document.querySelector('[data-ws-activity-cycle] [data-cycle-active]'));
     assert((await page.locator('main').boundingBox()).y < 200, 'mobile content must start within the first viewport');
     assert.equal(await page.locator('.ws-search-trigger').getAttribute('aria-label'), 'Поиск по материалам, Ctrl K');
     await page.locator('.ws-search-trigger').click();
@@ -45,6 +55,8 @@ const commits = [
     await page.locator('.ws-mobile-menu').click();
     await page.locator('.ws-nav-link').filter({ hasText: 'Пространства' }).first().click();
     await page.waitForURL('**/stands/index.html');
+    const catalogueStyle = await page.locator('.ws-course-violet').first().evaluate(el => ({ border: getComputedStyle(el).borderTopColor, bg: getComputedStyle(el).backgroundImage }));
+    assert.deepEqual(catalogueStyle, courseStyle, 'course accents should match across pages');
 
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(base + '/', { waitUntil: 'load' });

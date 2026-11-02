@@ -645,7 +645,7 @@
   (function initTilt(){
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion || !window.matchMedia('(hover: hover)').matches) return;
-    var SELECTOR = '.ws-course-card, .ws-project-card[data-status], .ws-panel, #stack .ws-skill-card';
+    var SELECTOR = '.ws-course-card, .ws-project-card[data-status], #stack .ws-skill-card';
     var cards = document.querySelectorAll(SELECTOR);
     if (!cards.length) {
       // retry after decorate injects some cards
@@ -672,21 +672,27 @@
     }
     function onMove(e){
       var card = e.currentTarget;
-      var rect = card.getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      var px = (x / rect.width) - 0.5;
-      var py = (y / rect.height) - 0.5;
-      var rotY = px * 7;
-      var rotX = -py * 7;
-      card.style.setProperty('--mx', (x/rect.width*100).toFixed(1)+'%');
-      card.style.setProperty('--my', (y/rect.height*100).toFixed(1)+'%');
-      card.style.transform = 'perspective(900px) rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg) translateZ(0)';
+      card._tiltPoint = { x: e.clientX, y: e.clientY };
+      if (card._tiltFrame) return;
+      card._tiltFrame = requestAnimationFrame(function(){
+        card._tiltFrame = 0;
+        var rect = card.getBoundingClientRect();
+        if (!rect.width || !rect.height || !card._tiltPoint) return;
+        var x = card._tiltPoint.x - rect.left, y = card._tiltPoint.y - rect.top;
+        var rotY = (x / rect.width - 0.5) * 3;
+        var rotX = -(y / rect.height - 0.5) * 3;
+        card.style.setProperty('--mx', (x / rect.width * 100).toFixed(1)+'%');
+        card.style.setProperty('--my', (y / rect.height * 100).toFixed(1)+'%');
+        card.style.transform = 'perspective(1000px) rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg)';
+      });
     }
     function onLeave(e){
       var card = e.currentTarget;
+      if (card._tiltFrame) cancelAnimationFrame(card._tiltFrame);
+      card._tiltFrame = 0;
+      card._tiltPoint = null;
       card.style.transform = '';
-      card.style.transition = 'transform 420ms cubic-bezier(.2,.8,.2,1)';
+      card.style.transition = 'transform 360ms cubic-bezier(.2,.8,.2,1)';
     }
     // Observe dynamically added cards (e.g. activity kanban)
     if (window.MutationObserver) {
