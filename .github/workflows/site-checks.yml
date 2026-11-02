@@ -32,6 +32,7 @@ jobs:
           node scripts/test-activity.js
           node scripts/test-search.js
           node scripts/test-reading.js
+          node scripts/test-catalog.js
           node scripts/browser-offline.js
       - name: Browser interaction checks
         run: |
