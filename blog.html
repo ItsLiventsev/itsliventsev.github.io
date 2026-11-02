@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#F8F9FA">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
-<title>заметки · itsliventsev</title>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Заметки · itsliventsev</title>
 <meta name="description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/catalog.css?v=20261102r2">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/blog.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -25,7 +24,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="заметки · itsliventsev">
+  <meta property="og:title" content="Заметки · itsliventsev">
   <meta property="og:description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
@@ -33,25 +32,69 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="заметки · itsliventsev">
+  <meta name="twitter:title" content="Заметки · itsliventsev">
   <meta name="twitter:description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"заметки","description":"Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.","url":"https://itsliventsev.github.io/blog.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body class="catalog-page"><a class="skip-link" href="#main-content">перейти к содержанию</a><div data-workspace-root><main id="main-content" class="ws-content">
-<header class="ws-page-heading"><span class="ws-eyebrow">ЗАПИСИ · МЫСЛИ · ПОДБОРКИ</span><h1>Заметки</h1><p>Короткие записи с занятий, наблюдения и дополнительные материалы. Большие завершённые тексты собраны в разделе статей.</p></header>
-<div class="catalog-search" data-catalog-search hidden>
-  <label for="catalog-query">Поиск по разделу</label>
-  <div class="catalog-search-field"><span aria-hidden="true">⌕</span><input id="catalog-query" type="search" placeholder="По названию или теме" autocomplete="off"><button type="button" data-catalog-clear hidden>Очистить</button></div>
-  <p data-catalog-status role="status" aria-live="polite"></p>
-</div>
-<section class="ws-notes-note" data-ws-surface><span class="ws-note-icon">✎</span><div><strong>Рабочий блокнот</strong><p>Здесь появляются небольшие записи и дополнения к практикумам. Материалы публикуются по мере подготовки.</p></div><a class="ws-inline-link" href="articles.html">К статьям →</a></section>
-<section class="ws-section"><div class="ws-section-heading"><div><span class="ws-eyebrow">ЛЕНТА</span><h2>Последние заметки <span class="ws-count" id="feed-count">…</span></h2></div><div class="ws-filter-row" id="note-filters"><button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button></div></div><div class="ws-note-grid" id="note-grid" aria-live="polite"><div class="ws-empty">Загружаем заметки…</div><noscript><p class="ws-empty">Для загрузки списка нужен JavaScript. Доступная заметка: <a href="blog/2026-10-26-kak-ustroen-etot-blog.html">Как устроены заметки</a>.</p></noscript></div></section>
-</main><footer class="ws-footer"><span>© 2026 itsliventsev · Заметки</span><nav><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a></nav><time data-footer-updated></time></footer></div>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <header class="ui-pagehead">
+    <p class="ui-eyebrow">записи · наблюдения · дополнения</p>
+    <h1>Заметки</h1>
+    <p>Короткие записи с занятий и дополнения к практикумам. Здесь быстрее и черновнее, чем в статьях: заметка появляется тогда, когда мысль уже проверена на группе.</p>
+    <div class="ui-pagehead-meta"><span>лента в обратном порядке</span><span>без редактуры</span><span><a href="feed.xml">RSS</a></span></div>
+  </header>
+
+  <div class="catalog-toolbar">
+    <div class="catalog-search" data-catalog-search hidden>
+      <label for="note-query">Поиск по заметкам</label>
+      <div class="ui-search-field">
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#search"></use></svg>
+        <input id="note-query" type="search" placeholder="Слово или тема" autocomplete="off">
+      </div>
+      <button type="button" data-catalog-clear hidden>Очистить</button>
+    </div>
+    <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="catalog" data-catalog-list id="note-grid" aria-live="polite">
+    <div class="catalog-empty">Загружаю заметки…</div>
+    <noscript><a class="catalog-row" href="blog/2026-10-26-kak-ustroen-etot-blog.html"><span class="catalog-index">01</span><span><span class="catalog-title">Как устроены заметки</span><span class="catalog-desc">Чем заметки отличаются от статей и проектов и как новая запись появляется в ленте.</span></span><span class="catalog-side"><span class="ui-tag">заметка</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a></noscript>
+  </div>
+
+  <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот: короткое наблюдение, проверенное на практике. Статья — вычитанный текст с источниками. Смешивать их в одном списке значит терять оба жанра.</div>
+
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a><a href="sitemap.html">Карта сайта</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
 <script>
-(function(){const labels={note:'Заметка',thought:'Мысль',digest:'Подборка',extra:'Доп. материал'};const grid=document.getElementById('note-grid'),filters=document.getElementById('note-filters'),counter=document.getElementById('feed-count');let posts=[];const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const date=s=>{if(!s)return '';if(/^\d{4}$/.test(s))return s;const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});};function render(type){const items=type==='all'?posts:posts.filter(p=>p.type===type);grid.innerHTML=items.length?items.map(p=>'<a class="ws-note-card" data-ws-surface href="blog/'+esc(p.file)+'"><span class="ws-publication-meta"><span class="ws-tag ws-tag-blue">'+esc(labels[p.type]||p.type)+'</span><span>'+esc(date(p.date))+'</span></span><strong>'+esc(p.title)+'</strong>'+(p.excerpt?'<span class="ws-publication-description">'+esc(p.excerpt)+'</span>':'')+'<span class="ws-chip-list">'+(p.tags||[]).slice(0,3).map(t=>'<span>#'+esc(t)+'</span>').join('')+'</span><span class="ws-card-footer">Открыть заметку <b>→</b></span></a>').join(''):'<div class="ws-empty">В этой категории пока нет записей.</div>';}
-filters.addEventListener('click',e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;filters.querySelectorAll('.ws-filter').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render(b.dataset.typeFilter);});fetch('blog/posts.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{posts=Array.isArray(data)?data:[];counter.textContent=posts.length;const types=[...new Set(posts.map(p=>p.type))];filters.innerHTML='<button class="ws-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(t=>'<button class="ws-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>').join('');render('all');}).catch(()=>{counter.textContent='—';grid.innerHTML='<div class="ws-empty">Не удалось загрузить заметки. <a href="sitemap.html">Открыть карту сайта</a>.</div>';});})();
+(function(){
+  var list=document.getElementById('note-grid');
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+  var date=function(s){if(!s)return '';var d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
+  fetch('blog/posts.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json();}).then(function(data){
+    var posts=(Array.isArray(data)?data:[]).filter(function(p){return p&&p.status==='published';})
+      .sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
+    if(!posts.length){list.innerHTML='<div class="catalog-empty">Пока нет опубликованных заметок.</div>';return;}
+    list.innerHTML=posts.map(function(p,i){
+      return '<a class="catalog-row" href="blog/'+esc(p.file)+'">'
+        +'<span class="catalog-index">'+String(i+1).padStart(2,'0')+'</span>'
+        +'<span><span class="catalog-title">'+esc(p.title)+'</span>'
+        +(p.excerpt?'<span class="catalog-desc">'+esc(p.excerpt)+'</span>':'')
+        +'<span class="catalog-meta"><time datetime="'+esc(p.date||'')+'">'+esc(date(p.date))+'</time>'
+        +(p.readtime?'<span aria-hidden="true">·</span><span>'+esc(p.readtime)+'</span>':'')+'</span></span>'
+        +'<span class="catalog-side"><span class="ui-tag">заметка</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a>';
+    }).join('');
+  }).catch(function(){list.innerHTML='<div class="catalog-empty">Не удалось загрузить ленту. <a href="sitemap.html">Карта сайта</a>.</div>';});
+})();
 </script>
-<script src="assets/catalog.js?v=20261102r1" defer></script>
-<script src="assets/site.js?v=20261101r2"></script><script src="assets/shared-chrome.js?v=20261101r1"></script><script src="assets/workspace.js?v=20261102r4"></script></body></html>
+<script src="assets/catalog.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

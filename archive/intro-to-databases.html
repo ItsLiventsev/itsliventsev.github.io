@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Введение в базы данных · itsliventsev</title>
 <meta name="description" content="Введение в реляционные базы данных: БД, СУБД, информационная система, таблицы, ключи и практикум по проектированию.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<!-- Tailwind: статическая локальная сборка утилит (wave 9), рантайм-компилятор CDN убран -->
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/archive/intro-to-databases.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -39,72 +39,41 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"архив","item":"https://itsliventsev.github.io/archive.html"},{"@type":"ListItem","position":3,"name":"Введение в базы данных","item":"https://itsliventsev.github.io/archive/intro-to-databases.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body data-accent="rust">
+<body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: навигация и тексты доступны, но ленты и переключение темы не работают.</div></noscript>
-<div class="scroll-progress" id="scroll-progress"></div>
-<button id="to-top" title="наверх" aria-label="наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-
-<div class="page-wrap">
-
-  <header class="site-header">
-    <a href="../archive.html" class="logo"><span class="arrow">←</span> архив</a>
-    <nav class="site-nav" aria-label="Основная навигация">
-      <a href="../index.html" class="nav-link">главная</a>
-      <a href="../blog.html" class="nav-link is-wip">заметки <span class="nav-wip" title="раздел в разработке, материалы пока не актуальны">в разработке</span></a>
-      <a href="../articles.html" class="nav-link">статьи <span class="nav-bubble bubble-orange" data-feed-count="articles"></span></a>
-      <a href="../projects.html" class="nav-link">проекты <span class="nav-bubble bubble-green" data-feed-count="projects"></span></a>
-      <a href="../archive.html" class="nav-link active" aria-current="page">архив <span class="nav-bubble bubble-neutral" data-feed-count="archive"></span></a>
-    </nav>
-
-    <div class="header-actions">
-    <button class="icon-btn theme-toggle" type="button" aria-pressed="false" title="включить тёмную тему" aria-label="включить тёмную тему">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
-    </div>
-  </header>
-
-  <main id="main-content" class="prose-measure">
-    <nav aria-label="Хлебные крошки" class="crumbs mb-6">
-      <a href="../index.html">главная</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <a href="../archive.html">архив</a>
-      <span class="sep" aria-hidden="true">/</span>
-      <span aria-current="page">введение в базы данных</span>
-    </nav>
-
-  <section class="hero">
+<main id="main-content">
+<article class="editorial">
+<section >
 <h1 class="hero-title">
       Введение в реляционные БД
     </h1>
-    <span class="pill pill-neutral"><span class="mono" style="color:var(--accent);margin-right:.35rem;">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
+    <span class="pill pill-neutral"><span class="mono is-accent">//</span>текст структурирован и оптимизирован с помощью ИИ</span>
   </section>
 
-  <section class="space-y-6">
+  <section >
     <!-- Definitions Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="card hoverable p-4">
-        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">База Данных (БД)</div>
-        <p class="text-sm text-[var(--text-2)] mb-2">Упорядоченная совокупность структурированных данных.</p>
-        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: библиотечный каталог или записная книжка.</p>
+    <div class="prose-grid prose-grid--3">
+      <div class="card hoverable">
+        <div class="mono is-accent">База Данных (БД)</div>
+        <p >Упорядоченная совокупность структурированных данных.</p>
+        <p >Аналогия: библиотечный каталог или записная книжка.</p>
       </div>
-      <div class="card hoverable p-4">
-        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">СУБД</div>
-        <p class="text-sm text-[var(--text-2)] mb-2">Программное обеспечение для создания и управления БД.</p>
-        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: библиотекарь, который расставляет книги и ищет их по запросу (MySQL, PostgreSQL, Access).</p>
+      <div class="card hoverable">
+        <div class="mono is-accent">СУБД</div>
+        <p >Программное обеспечение для создания и управления БД.</p>
+        <p >Аналогия: библиотекарь, который расставляет книги и ищет их по запросу (MySQL, PostgreSQL, Access).</p>
       </div>
-      <div class="card hoverable p-4">
-        <div class="mono text-xs uppercase tracking-wider mb-2" style="color:var(--accent);">Информационная Система</div>
-        <p class="text-sm text-[var(--text-2)] mb-2">Вся система целиком: Данные + Программы + Люди + Процедуры.</p>
-        <p class="text-xs text-[var(--muted)] italic mb-0">Аналогия: работа библиотеки в целом, включая читателей и устав.</p>
+      <div class="card hoverable">
+        <div class="mono is-accent">Информационная Система</div>
+        <p >Вся система целиком: Данные + Программы + Люди + Процедуры.</p>
+        <p >Аналогия: работа библиотеки в целом, включая читателей и устав.</p>
       </div>
     </div>
 
     <!-- Relational DB -->
-    <div class="card hoverable p-5">
-      <h2 class="mono text-sm font-semibold text-[var(--text)] mb-3">Реляционная база данных</h2>
-      <p class="text-sm text-[var(--text-2)] mb-4">Информация организована в виде взаимосвязанных таблиц (от англ. <em>relation</em> — отношение). Это самый распространенный тип БД.</p>
+    <div class="card hoverable">
+      <h2 class="mono">Реляционная база данных</h2>
+      <p >Информация организована в виде взаимосвязанных таблиц (от англ. <em>relation</em> — отношение). Это самый распространенный тип БД.</p>
 
       <div class="table-wrap">
         <table class="data-table">
@@ -117,19 +86,19 @@
           </thead>
           <tbody>
             <tr>
-              <td class="font-medium mono text-xs" style="color:var(--accent);">Поле (Столбец)</td>
+              <td class="mono is-accent">Поле (Столбец)</td>
               <td>Атрибут, определяет, что мы храним.</td>
-              <td class="mono text-xs">Фамилия, Зарплата</td>
+              <td class="mono">Фамилия, Зарплата</td>
             </tr>
             <tr>
-              <td class="font-medium mono text-xs" style="color:var(--accent);">Запись (Строка)</td>
+              <td class="mono is-accent">Запись (Строка)</td>
               <td>Набор данных об одном объекте.</td>
-              <td class="mono text-xs">(1, Иванов, 50000)</td>
+              <td class="mono">(1, Иванов, 50000)</td>
             </tr>
             <tr>
-              <td class="font-medium mono text-xs" style="color:var(--accent);">Первичный ключ (PK)</td>
+              <td class="mono is-accent">Первичный ключ (PK)</td>
               <td>Уникальная идентификация записи. Не может быть пустым.</td>
-              <td class="mono text-xs">ID_Сотрудник, № зачетки</td>
+              <td class="mono">ID_Сотрудник, № зачетки</td>
             </tr>
           </tbody>
         </table>
@@ -138,24 +107,24 @@
 
     <!-- Practical Task -->
     <div class="notice notice-info">
-      <h2 class="mono text-sm font-semibold mb-3 flex items-center gap-2" style="color:#1e40af;">
+      <h2 class="mono prose-row is-info">
         <span class="h2-glyph">~</span> Практикум: Журнал учета приборов
       </h2>
-      <p class="text-sm text-[var(--text-2)] mb-4">Необходимо вести учет измерительных приборов и графика их поверки. Спроектируйте две связанные таблицы:</p>
+      <p >Необходимо вести учет измерительных приборов и графика их поверки. Спроектируйте две связанные таблицы:</p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div class="bg-[var(--surface)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="mono text-xs font-bold text-[var(--text)] mb-2">Таблица: Приборы</div>
-          <ul class="text-xs text-[var(--muted)] space-y-1 mono mb-0">
+      <div class="prose-grid prose-grid--2">
+        <div >
+          <div class="mono">Таблица: Приборы</div>
+          <ul class="mono">
             <li>• ID_Прибора (PK, Счетчик)</li>
             <li>• Наименование (Текстовый)</li>
             <li>• Заводской_номер (Текстовый)</li>
             <li>• Тип (Текстовый)</li>
           </ul>
         </div>
-        <div class="bg-[var(--surface)] rounded-lg p-3 border border-[var(--border)]">
-          <div class="mono text-xs font-bold text-[var(--text)] mb-2">Таблица: Поверки</div>
-          <ul class="text-xs text-[var(--muted)] space-y-1 mono mb-0">
+        <div >
+          <div class="mono">Таблица: Поверки</div>
+          <ul class="mono">
             <li>• ID_Поверки (PK, Счетчик)</li>
             <li>• ID_Прибора (Внешний ключ)</li>
             <li>• Дата_поверки (Дата/время)</li>
@@ -164,21 +133,16 @@
           </ul>
         </div>
       </div>
-      <p class="text-xs text-[var(--muted)] mb-0"><strong>Вопрос для анализа:</strong> Почему <code>ID_Прибора</code> лучше подходит на роль первичного ключа, чем <code>Заводской_номер</code>? (Ответ: цифровые ID проще для ссылок, уникальны и не содержат лишних символов).</p>
+      <p ><strong>Вопрос для анализа:</strong> Почему <code>ID_Прибора</code> лучше подходит на роль первичного ключа, чем <code>Заводской_номер</code>? (Ответ: цифровые ID проще для ссылок, уникальны и не содержат лишних символов).</p>
     </div>
   </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <span>© 2026 itsliventsev · архив</span>
-    <nav class="footer-nav" aria-label="Служебная навигация"><a href="../index.html">главная</a> <a href="../projects.html">проекты</a> <a href="../sitemap.html">карта сайта</a> <a href="../feed.xml">rss</a> <a href="../admin.html" rel="nofollow">admin</a></nav>
-    <time data-footer-updated class="footer-updated"></time>
+</article>
+<footer class="ui-footer">
+    <span>© 2026 itsliventsev</span>
+    <nav aria-label="Служебная навигация"><a href="/">Главная</a><a href="/sitemap.html">Карта сайта</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
   </footer>
-</div>
-
-<script src="../assets/site.js?v=20261101r2"></script>
-<script src="../assets/shared-chrome.js?v=20261101r1"></script>
-<script src="/assets/workspace.js?v=20261102r4"></script>
+</main>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>

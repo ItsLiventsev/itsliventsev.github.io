@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
+<meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#15161d");}}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Пространства · itsliventsev</title>
 <meta name="description" content="Три практических направления: СетьПолис, ОфисПолис и ДатаПолис. Сценарии по сетям, цифровым инструментам и эксплуатации сервисов.">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<link rel="preload" href="/assets/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/workspace-tokens.css?v=20261102r5">
-<link rel="stylesheet" href="/assets/workspace.css?v=20261102r4">
-<link rel="stylesheet" href="/assets/workspace-learning.css?v=20261102r1">
-<link rel="stylesheet" href="/assets/workspace-home.css?v=20261102r11">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+<link rel="stylesheet" href="/assets/course.css">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/index.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -39,145 +40,80 @@
   <!-- SEO:AUTO:END -->
 </head>
 <body>
-<a class="skip-link" href="#main-content">Перейти к содержанию</a>
-<noscript><div class="noscript-bar">Каталог направлений доступен; для сохранения прогресса включите JavaScript.</div></noscript>
-<header class="st-topbar">
-  <div class="st-topbar-in">
-    <nav class="st-topnav" aria-label="Разделы каталога">
-      <a href="#universes">Пространства</a>
-      <a href="#journey">Маршрут</a>
-      <a href="#approach">Как устроена практика</a>
-      <a href="#ecosystem">Лига и команды</a>
-    </nav>
-  </div>
-</header>
-<div data-workspace-root class="ws-learning-root">
-  <main id="main-content" class="ws-content">
-    <nav class="st-crumbs" aria-label="Хлебные крошки">
-      <a href="../index.html">Главная</a><span aria-hidden="true">/</span>
-      <span aria-current="page">Пространства</span>
-    </nav>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <header class="ui-pagehead">
+    <p class="ui-eyebrow">практика · три учебных пространства</p>
+    <h1>Пространства</h1>
+    <p>Три самостоятельные практики с разными ролями и одинаковыми правилами: короткая теория, рабочая задача, автопроверка. Начинать можно с любой — прогресс не запирается.</p>
+    <div class="ui-pagehead-meta"><span>41 практическая работа</span><span>3 пространства</span><span>профиль и прогресс — в браузере</span></div>
+  </header>
 
-    <section class="ws-learning-hero" aria-labelledby="learning-title">
-      <div class="ws-learning-intro">
-        <span class="ws-eyebrow"><span class="ws-status-dot"></span> ПРАКТИКА · ПРОЕКТЫ · ПРОФЕССИЯ</span>
-        <h1 id="learning-title">Пространства</h1>
-        <p>Три самостоятельные практики, созданные на основе реальных задач. Выберите направление, работайте в своём темпе и собирайте профессиональные навыки по шагам.</p>
-        <div class="ws-hero-actions">
-          <a class="ws-button ws-button-primary" href="#universes">Выбрать пространство <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-down"></use></svg></span></a>
-          <a class="ws-button" href="#approach">Как это устроено</a>
-        </div>
-      </div>
-      <div class="ws-learning-summary" data-ws-surface role="group" aria-label="Обзор направлений">
-        <span class="ws-eyebrow">ОДИН ПОДХОД · ТРИ НАПРАВЛЕНИЯ</span>
-        <div class="ws-learning-metric"><strong>03</strong><span>самостоятельных направления</span></div>
-        <div class="ws-learning-metric"><strong>41</strong><span>практическая работа</span></div>
-        <p>От настройки инфраструктуры — к рабочим инструментам и эксплуатации сервисов.</p>
-      </div>
-    </section>
+  <section id="universes" aria-labelledby="universes-title">
+    <div class="ui-section-head"><div><p class="ui-eyebrow">выбор направления</p><h2 id="universes-title">Куда зайти первым</h2></div><span class="ui-kicker">вход свободный</span></div>
+    <div class="space-list">
+      <a class="space" data-tone="net" href="setpolis.html">
+        <span class="space-num">УП.01</span>
+        <span class="space-body"><h3>СетьПолис</h3><p>Сеть как она есть: коммутаторы, маршрутизация, VLAN, DHCP, DNS и Cisco. 15 работ от первой команды до проекта локальной сети.</p></span>
+        <span class="space-meta"><span>сети · 15 работ</span><span class="space-cta">войти <span aria-hidden="true">↗</span></span></span>
+      </a>
+      <a class="space" data-tone="office" href="office/index.html">
+        <span class="space-num">УП.02</span>
+        <span class="space-body"><h3>ОфисПолис</h3><p>Рабочее место оператора ЭВМ: документы, таблицы, OCR, базы данных, презентации и сайты. 10 работ в реальных офисных сценариях.</p></span>
+        <span class="space-meta"><span>офис · 10 работ</span><span class="space-cta">войти <span aria-hidden="true">↗</span></span></span>
+      </a>
+      <a class="space" data-tone="ops" href="ops/index.html">
+        <span class="space-num">УП.02</span>
+        <span class="space-body"><h3>ДатаПолис</h3><p>Эксплуатация ИТ-службы: тикеты, SLA, дежурства, домен, резервное копирование и мониторинг. 16 работ со сменой, где всё ломается по-настоящему.</p></span>
+        <span class="space-meta"><span>эксплуатация · 16 работ</span><span class="space-cta">войти <span aria-hidden="true">↗</span></span></span>
+      </a>
+    </div>
+    <div class="ui-callout"><strong>О кодах УП.01 и УП.02.</strong> Это обозначения учебных практик. ОфисПолис и ДатаПолис — две части УП.02: направления разные, проходить одну перед другой не нужно.</div>
+  </section>
 
-    <section class="ws-section" id="universes" aria-labelledby="universes-title">
-      <div class="ws-section-heading">
-        <div><span class="ws-eyebrow">ВЫБОР НАПРАВЛЕНИЯ</span><h2 id="universes-title">С чего начнём?</h2></div>
-        <span class="ws-section-note">Прогресс хранится отдельно в каждом пространстве</span>
-      </div>
-      <div class="ws-learning-grid ws-universe-grid">
-        <a class="ws-course-card ws-course-violet" data-ws-surface href="setpolis.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#network"></use></svg></span>
-          <span class="ws-card-kicker">СЕТЕВАЯ ИНФРАСТРУКТУРА · УП.01</span>
-          <h3>СетьПолис</h3>
-          <p>Постройте локальную сеть от первой команды до итогового проекта. Cisco IOS и ALT Linux, VLAN, маршрутизация, NAT и защита доступа.</p>
-          <span class="ws-universe-meta"><b>Cisco IOS ≈ ALT Linux</b><b>5 спринтов</b><b>15 практических работ</b></span>
-          <span class="ws-card-footer">Войти в СетьПолис <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-        <a class="ws-course-card ws-course-orange" data-ws-surface href="office/index.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#document"></use></svg></span>
-          <span class="ws-card-kicker">ЦИФРОВОЕ РАБОЧЕЕ МЕСТО · УП.02</span>
-          <h3>ОфисПолис</h3>
-          <p>Освойте профессию оператора ЭВМ: документы, таблицы, OCR, презентации, схемы, базы данных и публикация простого сайта.</p>
-          <span class="ws-universe-meta"><b>LibreOffice ≈ Microsoft Office</b><b>5 спринтов</b><b>10 практических работ</b></span>
-          <span class="ws-card-footer">Войти в ОфисПолис <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-        <a class="ws-course-card ws-course-blue" data-ws-surface href="ops/index.html">
-          <span class="ws-course-icon" aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#server"></use></svg></span>
-          <span class="ws-card-kicker">СИСТЕМНОЕ АДМИНИСТРИРОВАНИЕ · УП.02</span>
-          <h3>ДатаПолис</h3>
-          <p>Станьте частью сервисного центра: принимайте системы, ведите заявки, разбирайте инциденты, планируйте изменения и дежурства.</p>
-          <span class="ws-universe-meta"><b>ALT Linux 70% · Windows 30%</b><b>5 спринтов</b><b>16 практических работ</b></span>
-          <span class="ws-card-footer">Войти в ДатаПолис <b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></span>
-        </a>
-      </div>
-      <div class="ws-learning-note" data-ws-surface role="group">
-        <strong>О кодах учебных планов</strong>
-        <p><b>УП.01</b> и <b>УП.02</b> — обозначения учебных практик. ОфисПолис и ДатаПолис — две части УП.02; различаются направлениями и не требуют проходить одну практику перед другой.</p>
-      </div>
-    </section>
+  <section class="ui-section" id="journey" aria-labelledby="journey-title">
+    <div class="ui-section-head"><div><p class="ui-eyebrow">маршрут</p><h2 id="journey-title">От первого шага к самостоятельной работе</h2></div><span class="ui-kicker">три фазы</span></div>
+    <dl class="def-list">
+      <div class="def-row"><dt>01 · освоить</dt><dd><strong>Понять и попробовать</strong><p>Короткая теория сразу встречается с командой, настройкой или рабочим файлом. Ошибка — часть маршрута, а не повод остановиться.</p></dd></div>
+      <div class="def-row"><dt>02 · собрать</dt><dd><strong>Выполнить практику</strong><p>Спринты складываются в законченные результаты: сеть, документ, настроенный сервис, runbook или командный проект.</p></dd></div>
+      <div class="def-row"><dt>03 · закрепить</dt><dd><strong>Проверить и объяснить</strong><p>Автотесты, самооценка, взаимное ревью и защита показывают не только что работает, но и почему.</p></dd></div>
+    </dl>
+  </section>
 
-    <section class="ws-section" id="journey" aria-labelledby="journey-title">
-      <div class="ws-section-heading">
-        <div><span class="ws-eyebrow">МАРШРУТ ОБУЧЕНИЯ</span><h2 id="journey-title">От первого шага к самостоятельной работе</h2></div>
-        <span class="ws-section-note">Можно начать с любого направления</span>
-      </div>
-      <div class="ws-journey-grid">
-        <article class="ws-journey-card" data-ws-surface>
-          <span class="ws-journey-number">01</span><span class="ws-eyebrow">ОСВОИТЬ ОСНОВЫ</span>
-          <h3>Понять и попробовать</h3>
-          <p>Короткая теория сразу встречается с командой, настройкой или рабочим файлом. Ошибки — часть маршрута, а не повод остановиться.</p>
-        </article>
-        <article class="ws-journey-card" data-ws-surface>
-          <span class="ws-journey-number">02</span><span class="ws-eyebrow">СОБРАТЬ РЕШЕНИЕ</span>
-          <h3>Выполнить практику</h3>
-          <p>Спринты складываются в законченные результаты: сеть, документ, настроенный сервис, runbook или командный проект.</p>
-        </article>
-        <article class="ws-journey-card" data-ws-surface>
-          <span class="ws-journey-number">03</span><span class="ws-eyebrow">ЗАКРЕПИТЬ НАВЫК</span>
-          <h3>Проверить и объяснить</h3>
-          <p>Автотесты, самооценка, взаимное ревью и защита помогают понять не только что работает, но и почему.</p>
-        </article>
-      </div>
-    </section>
+  <section class="ui-section" id="approach" aria-labelledby="approach-title">
+    <div class="ui-section-head"><div><p class="ui-eyebrow">принципы</p><h2 id="approach-title">Практика устроена как работа</h2></div></div>
+    <div class="stack-grid">
+      <div class="stack-group"><h3>01 · контекст</h3><span>Сценарии опираются на реальные роли и ситуации: настройка, сдача, заявка, смена или разбор сбоя.</span></div>
+      <div class="stack-group"><h3>02 · хранение</h3><span>Профиль и прогресс хранятся локально в браузере. Работы переносятся между устройствами кодом или JSON-файлом.</span></div>
+      <div class="stack-group"><h3>03 · зачёт</h3><span>Выполненное отмечается после реальной работы. Тесты и проверки подтверждают результат, а не заменяют его.</span></div>
+      <div class="stack-group"><h3>04 · безопасность</h3><span>Тренироваться можно в браузере и на учебном оборудовании, не затрагивая рабочие системы.</span></div>
+    </div>
+  </section>
 
-    <section class="ws-section" id="approach" aria-labelledby="approach-title">
-      <div class="ws-section-heading">
-        <div><span class="ws-eyebrow">ПРИНЦИПЫ</span><h2 id="approach-title">Практика устроена как работа</h2></div>
-      </div>
-      <div class="ws-practice-grid">
-        <article class="ws-practice-card" data-ws-surface><span class="ws-practice-icon">01</span><h3>Задачи с контекстом</h3><p>Сценарии опираются на реальные роли и ситуации: настройка, сдача, заявка, смена или разбор сбоя.</p></article>
-        <article class="ws-practice-card" data-ws-surface><span class="ws-practice-icon">02</span><h3>Сохранение в браузере</h3><p>Профиль и прогресс хранятся локально. Работы можно переносить между устройствами кодом или JSON-файлом.</p></article>
-        <article class="ws-practice-card" data-ws-surface><span class="ws-practice-icon">03</span><h3>Честный зачёт</h3><p>Отмечайте выполненное после реальной работы. Тесты и проверки помогают подтвердить результат.</p></article>
-        <article class="ws-practice-card" data-ws-surface><span class="ws-practice-icon">04</span><h3>Безопасный старт</h3><p>Можно тренироваться в браузере и на учебном оборудовании, не затрагивая рабочие системы.</p></article>
-      </div>
-    </section>
+  <section class="ui-section" id="ecosystem" aria-labelledby="ecosystem-title">
+    <div class="ui-section-head"><div><p class="ui-eyebrow">вне заданий</p><h2 id="ecosystem-title">Команды, достижения и поддержка</h2></div><span class="ui-kicker">общее для трёх направлений</span></div>
+    <div class="resource-list">
+      <a class="resource-row" href="rewards.html"><span>Биржа привилегий — обмен неткоинов на поддержку</span><span>↗</span></a>
+      <a class="resource-row" href="teams.html"><span>Команды и зачёт — трайбы и экипажи</span><span>↗</span></a>
+      <a class="resource-row" href="ops/crew-ops.html"><span>Операции экипажа — смены и war room</span><span>↗</span></a>
+      <a class="resource-row" href="league.html"><span>Лига и достижения — уровни и бейджи</span><span>↗</span></a>
+      <a class="resource-row" href="glossary.html"><span>Словарь практик — 74 термина</span><span>↗</span></a>
+      <a class="resource-row" href="../faq.html"><span>Справка — вопросы и ответы</span><span>↗</span></a>
+    </div>
+  </section>
 
-    <section class="ws-section" id="ecosystem" aria-labelledby="ecosystem-title">
-      <div class="ws-section-heading">
-        <div><span class="ws-eyebrow">ВНЕ ЗАДАНИЙ</span><h2 id="ecosystem-title">Команды, достижения и поддержка</h2></div>
-        <span class="ws-section-note">Единые инструменты для трёх направлений</span>
-      </div>
-      <div class="ws-ecosystem-grid">
-        <a class="ws-ecosystem-card" data-ws-surface href="rewards.html"><span class="ws-resource-icon ws-resource-purple">◈</span><span><strong>Биржа привилегий</strong><small>Обмен неткоинов на учебную поддержку и поощрения.</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
-        <a class="ws-ecosystem-card" data-ws-surface href="teams.html"><span class="ws-resource-icon ws-resource-green">#</span><span><strong>Команды и зачёт</strong><small>Трайбы СетьПолиса и экипажи ДатаПолиса.</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
-        <a class="ws-ecosystem-card" data-ws-surface href="ops/crew-ops.html"><span class="ws-resource-icon ws-resource-blue">⇄</span><span><strong>Операции экипажа</strong><small>Смены, war room, аудит и план отката.</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
-        <a class="ws-ecosystem-card" data-ws-surface href="league.html" rel="nofollow"><span class="ws-resource-icon ws-resource-amber">★</span><span><strong>Лига и достижения</strong><small>Уровни, рейтинг проверяющего и бейджи за реальные действия.</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
-        <a class="ws-ecosystem-card" data-ws-surface href="glossary.html"><span class="ws-resource-icon ws-resource-purple">Aa</span><span><strong>Словарь практик</strong><small>Термины и понятия из всех учебных вселенных.</small></span><b aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up-right"></use></svg></b></a>
-      </div>
-    </section>
+  <section class="ui-section" aria-labelledby="start-title">
+    <div class="ui-section-head"><div><p class="ui-eyebrow">готовы начать</p><h2 id="start-title">Выберите направление</h2><p>Первый шаг — пять минут: короткая теория и одно действие руками.</p></div>
+    <div class="not-found-links u-flush"><a class="ui-btn ui-btn--primary" href="setpolis.html">СетьПолис</a><a class="ui-btn" href="office/index.html">ОфисПолис</a><a class="ui-btn" href="ops/index.html">ДатаПолис</a></div></div>
+  </section>
 
-    <section class="ws-learning-cta" aria-label="Начало практики">
-      <div><span class="ws-eyebrow">ГОТОВЫ НАЧАТЬ?</span><h2>Выберите направление и сделайте первый шаг.</h2></div>
-      <a class="ws-button ws-button-primary" href="#universes">Выбрать пространство <span aria-hidden="true"><svg class="ws-inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#arrow-up"></use></svg></span></a>
-    </section>
-  </main>
-  <footer class="ws-footer">
+  <footer class="ui-footer">
     <span>© 2026 itsliventsev · практика и пространства</span>
-    <nav aria-label="Ссылки по теме"><a href="../faq.html">Вопросы и ответы</a><a href="../sitemap.html">Карта сайта</a></nav>
-    <span>Профили и прогресс хранятся в браузере</span>
+    <nav aria-label="Служебная навигация"><a href="../index.html">Главная</a><a href="../sitemap.html">Карта сайта</a><a href="../faq.html">Справка</a></nav>
     <time data-footer-updated></time>
+    <p class="ui-footer-note">Профили и прогресс хранятся в браузере: аккаунт не нужен, данные не уходят на сервер.</p>
   </footer>
-</div>
-<script src="../assets/dom-kit.js?v=20261031bf"></script>
-<script src="../assets/stands.js?v=20261101r4"></script>
-<script src="../assets/shared-chrome.js?v=20261101r1"></script>
-<script src="/assets/workspace.js?v=20261102r4"></script>
+</main>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>
