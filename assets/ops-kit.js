@@ -25,7 +25,7 @@
     var box = document.createElement('div');
     box.className = 'st-init-error';
     box.setAttribute('role', 'alert');
-    box.innerHTML = '<strong>// модуль «' + name + '» запустился с ошибкой.</strong>' +
+    box.innerHTML = '<strong>модуль «' + name + '» запустился с ошибкой.</strong>' +
       '<span>Сохранение работает; обновите страницу. Если повторяется — текст из консоли (F12) преподавателю.</span>';
     host.insertBefore(box, host.firstChild);
   }
@@ -84,7 +84,7 @@
       if (!cfg.theory || !cfg.theory.length) return '';
       return '<section class="lab-panel" id="ops-theory"><div class="lp-head"><h2>теория и опорные конспекты</h2><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
         cfg.theory.map(function (b, i) {
-          return '<article class="theory-block"><h3><span class="theory-num">// ' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
+          return '<article class="theory-block"><h3><span class="theory-num">' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
             (b.code ? '<pre class="lab-codeblock"><code>' + esc(b.code) + '</code></pre>' : '') +
             (b.note ? '<p class="lab-note">⚑ ' + esc(b.note) + '</p>' : '') + '</article>';
         }).join('') + '</div></section>';
@@ -183,7 +183,7 @@
           var vText = !answered ? 'без ответа' : isCorrect ? 'верно' : 'неверно';
           verdict = '<p class="q-verdict ' + vCls + '"><span class="q-verdict-badge">' + vText + '</span>' +
             (isCorrect ? '' : ' правильный ответ: <strong>' + esc(item.options[item.answer]) + '</strong>') + '</p>';
-          explain = '<p class="q-explain">// ' + esc(item.explain) + '</p>';
+          explain = '<p class="q-explain">' + esc(item.explain) + '</p>';
         }
         return '<div class="q-item"><p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span> ' + esc(item.q) + '</p><div class="q-opts">' + opts + '</div>' + verdict + explain + '</div>';
       }).join('') +
@@ -209,7 +209,7 @@
     function quizScore() {
       var el = $('ops-quiz-score');
       if (!el) return;
-      el.textContent = state.quiz.done ? 'результат: ' + state.quiz.correct + '/' + cfg.quiz.length : '// ответьте на все вопросы';
+      el.textContent = state.quiz.done ? 'результат: ' + state.quiz.correct + '/' + cfg.quiz.length : 'ответьте на все вопросы';
       el.className = 'q-score' + (state.quiz.done && state.quiz.correct === cfg.quiz.length ? ' is-ok' : state.quiz.done ? ' is-bad' : '');
     }
 
@@ -242,7 +242,7 @@
         state.ticketId = t.id; save();
         ack.disabled = true; res.disabled = false;
         slaState.textContent = 'вы взяли в работу';
-        setMsg(msg, '// Тикет ' + t.id + ' создан и назначен на вас. Время реакции зафиксировано.', 'ok');
+        setMsg(msg, 'Тикет ' + t.id + ' создан и назначен на вас. Время реакции зафиксировано.', 'ok');
       });
       res.addEventListener('click', function () {
         if (!state.ticketId) return;
@@ -254,7 +254,7 @@
         OPS.award(profile.id, t.type === 'incident' ? 'incidentResolved' : t.type === 'change' ? 'changeReleased' : 'ticketClosed', 'tk:' + t.id, { ticketId: t.id });
         if (t.slaMet) OPS.award(profile.id, 'slaMet', 'sla:' + t.id, { ticketId: t.id });
         res.disabled = true; refresh();
-        setMsg(msg, '// Тикет закрыт' + (t.slaMet ? ', SLA выдержан — дополнительный опыт.' : ', SLA нарушен: это повод для postmortem, а не для штрафа.'), t.slaMet ? 'ok' : 'warn');
+        setMsg(msg, 'Тикет закрыт' + (t.slaMet ? ', SLA выдержан — дополнительный опыт.' : ', SLA нарушен: это повод для postmortem, а не для штрафа.'), t.slaMet ? 'ok' : 'warn');
       });
       var rb = $('ops-rollback');
       if (rb) rb.addEventListener('input', function () { state.rollback = rb.value; save(); });
@@ -271,8 +271,8 @@
           var rb = OPS.addRunbook({ title: 'Runbook: ' + cfg.title, steps: ta.value.split('\n').filter(Boolean), labId: cfg.id, author: OPS.publicStudent(profile) });
           state.runbookId = rb.id; save();
           OPS.award(profile.id, 'runbookWritten', 'rb:' + cfg.id, { labId: cfg.id });
-          setMsg(msg, '// Runbook сохранён в базу знаний экипажа, опыт начислен.', 'ok');
-        } else setMsg(msg, '// Runbook этой лабораторной уже в базе знаний.', 'warn');
+          setMsg(msg, 'Runbook сохранён в базу знаний экипажа, опыт начислен.', 'ok');
+        } else setMsg(msg, 'Runbook этой лабораторной уже в базе знаний.', 'warn');
       });
     }
     function bindRca() {
@@ -290,8 +290,8 @@
           var pm = OPS.addPostmortem({ ticketId: state.ticketId, labId: cfg.id, impact: f.impact, rootCause: f.cause, actions: f.actions, author: OPS.publicStudent(profile) });
           state.rcaId = pm.id; save();
           OPS.award(profile.id, 'postmortem', 'rca:' + cfg.id, { labId: cfg.id });
-          setMsg($('ops-rca-msg'), '// Postmortem сохранён. Без вины, с системными выводами — опыт начислен.', 'ok');
-        } else setMsg($('ops-rca-msg'), '// Postmortem этой лабораторной уже сохранён.', 'warn');
+          setMsg($('ops-rca-msg'), 'Postmortem сохранён. Без вины, с системными выводами — опыт начислен.', 'ok');
+        } else setMsg($('ops-rca-msg'), 'Postmortem этой лабораторной уже сохранён.', 'warn');
       });
     }
 

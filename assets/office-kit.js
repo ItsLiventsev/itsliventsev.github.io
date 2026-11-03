@@ -26,7 +26,7 @@
     var box = document.createElement('div');
     box.className = 'st-init-error';
     box.setAttribute('role', 'alert');
-    box.innerHTML = '<strong>// модуль «' + name + '» запустился с ошибкой.</strong>' +
+    box.innerHTML = '<strong>модуль «' + name + '» запустился с ошибкой.</strong>' +
       '<span>Сохранение работает; обновите страницу. Если повторяется — текст из консоли (F12) преподавателю.</span>';
     host.insertBefore(box, host.firstChild);
   }
@@ -84,7 +84,7 @@
       if (!cfg.theory || !cfg.theory.length) return '';
       return '<section class="lab-panel" id="office-theory"><div class="lp-head"><h2>теория и опорные конспекты</h2><span class="kind-badge">индивидуально</span></div><div class="lp-body lab-theory">' +
         cfg.theory.map(function (b, i) {
-          return '<article class="theory-block"><h3><span class="theory-num">// ' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
+          return '<article class="theory-block"><h3><span class="theory-num">' + String(i + 1).padStart(2, '0') + '</span> ' + esc(b.h) + '</h3><p>' + b.p + '</p>' +
             (b.code ? '<pre class="lab-codeblock"><code>' + esc(b.code) + '</code></pre>' : '') +
             (b.note ? '<p class="lab-note">⚑ ' + esc(b.note) + '</p>' : '') + '</article>';
         }).join('') + '</div></section>';
@@ -134,7 +134,7 @@
           var vText = !answered ? 'без ответа' : isCorrect ? 'верно' : 'неверно';
           verdict = '<p class="q-verdict ' + vCls + '"><span class="q-verdict-badge">' + vText + '</span>' +
             (isCorrect ? '' : ' правильный ответ: <strong>' + esc(item.options[item.answer]) + '</strong>') + '</p>';
-          explain = '<p class="q-explain">// ' + esc(item.explain) + '</p>';
+          explain = '<p class="q-explain">' + esc(item.explain) + '</p>';
         }
         return '<div class="q-item"><p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span> ' + esc(item.q) + '</p><div class="q-opts">' + opts + '</div>' + verdict + explain + '</div>';
       }).join('') +
@@ -160,7 +160,7 @@
     function quizScore() {
       var el = $('office-quiz-score');
       if (!el) return;
-      el.textContent = state.quiz.done ? 'результат: ' + state.quiz.correct + '/' + cfg.quiz.length : '// ответьте на все вопросы';
+      el.textContent = state.quiz.done ? 'результат: ' + state.quiz.correct + '/' + cfg.quiz.length : 'ответьте на все вопросы';
       el.className = 'q-score' + (state.quiz.done && state.quiz.correct === cfg.quiz.length ? ' is-ok' : state.quiz.done ? ' is-bad' : '');
     }
     function reflectionHtml() {

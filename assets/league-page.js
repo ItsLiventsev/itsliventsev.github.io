@@ -123,7 +123,7 @@
         '<td class="mono">' + esc(e.standId ? standName(e.standId) : '—') + '</td>' +
         '<td class="mono">+' + (e.xp || 0) + '</td><td class="mono">' +
         ((e.coins || 0) >= 0 ? '+' : '') + (e.coins || 0) + ' ◈</td></tr>';
-    }).join('') : '<tr><td colspan="5" class="admin-hint table-empty">// событий пока нет — выполните лабораторную на стенде</td></tr>';
+    }).join('') : '<tr><td colspan="5" class="admin-hint table-empty">событий пока нет — выполните лабораторную на стенде</td></tr>';
   }
 
   /* ----------------------------- 04 · матрица ФГОС ----------------------------- */
@@ -188,7 +188,7 @@
         '<td class="mono">' + auto + '</td>' +
         '<td class="mono">' + revs.length + '</td>' +
         '<td><button class="flat-btn ghost lg-copy" type="button" data-code="' + esc(code) + '">код ↧</button></td></tr>';
-    }).join('') : '<tr><td colspan="6" class="admin-hint table-empty">// работ пока нет — откройте стенд из каталога</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="admin-hint table-empty">работ пока нет — откройте стенд из каталога</td></tr>';
 
     document.querySelectorAll('.lg-copy').forEach(function (btn) {
       btn.addEventListener('click', function () {

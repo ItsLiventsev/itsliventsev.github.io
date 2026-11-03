@@ -44,7 +44,7 @@
     var box = document.createElement('div');
     box.className = 'st-init-error';
     box.setAttribute('role', 'alert');
-    box.innerHTML = '<strong>// модуль «' + esc(name) + '» запустился с ошибкой.</strong>' +
+    box.innerHTML = '<strong>модуль «' + esc(name) + '» запустился с ошибкой.</strong>' +
       '<span>Терминал и сохранение работают; обновите страницу. Если повторяется — ' +
       'передайте текст из консоли (F12) преподавателю.</span>';
     host.insertBefore(box, host.firstChild);
@@ -124,7 +124,7 @@
           var vText = !answered ? 'без ответа' : isCorrect ? 'верно' : 'неверно';
           verdict = '<p class="q-verdict ' + vCls + '"><span class="q-verdict-badge">' + vText + '</span>' +
             (isCorrect ? '' : ' правильный ответ: <strong>' + esc(item.options[item.answer]) + '</strong>') + '</p>';
-          explain = '<p class="q-explain">// ' + esc(item.explain) + '</p>';
+          explain = '<p class="q-explain">' + esc(item.explain) + '</p>';
         }
         return '<div class="q-item" data-q="' + qi + '">' +
           '<p class="q-title"><span class="q-num">' + String(qi + 1).padStart(2, '0') + '</span>' + esc(item.q) + '</p>' +
@@ -163,7 +163,7 @@
       if (!el) return;
       el.textContent = state.done
         ? 'результат: ' + state.correct + '/' + quiz.length + (state.correct === quiz.length ? ' · все верно' : '')
-        : '// ответьте на все вопросы';
+        : 'ответьте на все вопросы';
       el.className = 'q-score' + (state.done && state.correct === quiz.length ? ' is-ok' : state.done ? ' is-bad' : '');
     }
 
@@ -435,7 +435,7 @@
             '<small>' + esc(s.student.group || '—') + (s.student.name ? ' · ' + esc(s.student.name) : '') + '</small></div>' +
           '<span class="rv-score-pill ' + ((s.result.score || 0) >= 85 ? 'is-ok' : '') + '">CI ' + (s.result.score != null ? s.result.score + '%' : '—') + '</span></div>' +
           (reviewed
-            ? '<p class="rv-empty">// вы уже проверили эту работу</p>'
+            ? '<p class="rv-empty">вы уже проверили эту работу</p>'
             : '<button class="flat-btn ghost rv-open" type="button" data-sub="' + esc(s.id) + '">оценить работу</button>') +
           '<div class="rv-form-holder"></div></div>';
       }).join('');
@@ -523,7 +523,7 @@
       return r.standId === standId && r.reviewee && (r.reviewee.id === profile.id || r.reviewee.name === profile.name);
     });
     if (!mine.length) {
-      box.innerHTML = emptyHtml('// здесь появятся рецензии на ваши работы: вставьте код ITS-REV1 от коллеги в блок обмена', 'fox');
+      box.innerHTML = emptyHtml('здесь появятся рецензии на ваши работы: вставьте код ITS-REV1 от коллеги в блок обмена', 'fox');
       return;
     }
     box.innerHTML = mine.map(function (r) {
@@ -717,7 +717,7 @@
           var rows = QUESTS.map(function (q, i) { return q.sprint === sp ? cards[i] : null; }).filter(Boolean).join('');
           groups += '<div class="sprint-group">' +
             '<div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(story.title) + '</h3>' +
-            '<span class="sprint-meta">// ' + esc(story.note) + '</span><span class="sprint-line"></span></div>' +
+            '<span class="sprint-meta">' + esc(story.note) + '</span><span class="sprint-line"></span></div>' +
             rows + '</div>';
         });
         $('cab-quests').innerHTML = head + groups;
@@ -730,7 +730,7 @@
         return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) +
           (e.standId ? ' · ' + esc(e.standId) : '') + '</span><span class="feed-date">' +
           d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
-      }).join('') + '</ul>' : emptyHtml('// лента пуста: откройте первый квест', 'raccoon');
+      }).join('') + '</ul>' : emptyHtml('лента пуста: откройте первый квест', 'raccoon');
 
       bindExchange('cab-code-input', 'cab-code-go', 'cab-msg', function () { renderDashboard(profile); });
       var repoBtn = $('cab-repo');
@@ -1082,7 +1082,7 @@
     if (saved && saved.vm) {
       startedAt = saved.startedAt || startedAt;
       addLog('resume', 'прогресс восстановлен из сохранения браузера');
-      statusEl.textContent = '// найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
+      statusEl.textContent = 'найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
     } else {
       addLog('start', 'стенд открыт, профиль: ' + profile.name + ' (' + profile.group + ')');
     }
@@ -1151,7 +1151,7 @@
           quiz: quizApi ? quizApi.getState() : null,
           autotests: autotestsReport
         });
-        statusEl.textContent = '// автосохранено ' + new Date().toLocaleTimeString('ru-RU');
+        statusEl.textContent = 'автосохранено ' + new Date().toLocaleTimeString('ru-RU');
       }, 500);
     }
     editor.addEventListener('input', function () { runValidation(true); });
@@ -1224,7 +1224,7 @@
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
       downloadJson(submission);
       if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
-      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
+      statusEl.textContent = 'работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
       autosave();
@@ -1267,7 +1267,7 @@
     if (saved && saved.vm) {
       startedAt = saved.startedAt || startedAt;
       addLog('resume', 'прогресс восстановлен из сохранения браузера');
-      statusEl.textContent = '// найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
+      statusEl.textContent = 'найдено автосохранение от ' + new Date(saved.updatedAt).toLocaleString('ru-RU');
     } else {
       addLog('start', 'стенд открыт, профиль: ' + profile.name + ' (' + profile.group + ')');
     }
@@ -1285,7 +1285,7 @@
       var state = world.state();
       bridgeStatus.textContent = state.bridge
         ? 'мост ' + state.bridge + ' · служба ' + (state.enabled ? 'active' : 'не запущена')
-        : '// мост не создан';
+        : 'мост не создан';
       bridgeStatus.className = 'ovs-status ' + (state.bridge && state.enabled ? 'is-ok' : 'is-bad');
       portsBody.innerHTML = OVS.SPEC.ifaces.map(function (name) {
         var want = OVS.SPEC.ports[name];
@@ -1367,7 +1367,7 @@
           quiz: quizApi ? quizApi.getState() : null,
           autotests: autotestsReport
         });
-        statusEl.textContent = '// автосохранено ' + new Date().toLocaleTimeString('ru-RU');
+        statusEl.textContent = 'автосохранено ' + new Date().toLocaleTimeString('ru-RU');
       }, 500);
     }
 
@@ -1441,7 +1441,7 @@
       addLog('submit', 'работа сдана: ' + result.passed + '/' + result.total + ', score ' + result.score);
       downloadJson(submission);
       if (hasLeague()) openCodeModal(window.LEAGUE.encodeSubmission(submission));
-      statusEl.textContent = '// работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
+      statusEl.textContent = 'работа сдана (' + result.score + '%): JSON скачан, код готов к отправке коллегам';
       submitBtn.disabled = true;
       setTimeout(function () { submitBtn.disabled = false; }, 2500);
       autosave();
@@ -1472,7 +1472,7 @@
     if (!el) return;
     var d = new Date(document.lastModified);
     if (isNaN(d.getTime())) return;
-    el.textContent = '// обновлено: ' + d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    el.textContent = 'обновлено: ' + d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
