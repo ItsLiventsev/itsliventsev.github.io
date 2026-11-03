@@ -47,8 +47,8 @@
     var tribe = LEAGUE.TRIBES.filter(function (x) { return x.id === profile.tribeId; })[0];
     var handle = LEAGUE.handleFor(profile);
     $('lg-name').textContent = profile.name;
-    $('lg-group').textContent = profile.group + ' · ' + (tribe ? tribe.name : 'трайн не назначен');
-    $('lg-tribe').textContent = (tribe ? tribe.glyph + ' · ' + tribe.name : 'трайн: —') + ' · ' + handle.text;
+    $('lg-group').textContent = profile.group + ' · ' + (tribe ? tribe.name : 'трайб не назначен');
+    $('lg-tribe').textContent = (tribe ? tribe.glyph + ' · ' + tribe.name : 'трайб: —') + ' · ' + handle.text;
 
     $('lg-level-card').innerHTML =
       '<div class="lg-level-top">' +
@@ -245,7 +245,7 @@
   function dataMsg(text, isErr) {
     var el = $('lg-data-msg');
     el.textContent = text;
-    el.style.color = isErr ? 'var(--u-danger)' : '';
+    el.classList.toggle('is-bad', !!isErr);
   }
 
   function renderAll() {

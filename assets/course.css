@@ -38,7 +38,7 @@
 }
 .ui-subbar a:hover, .st-topnav a:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
 .ui-subbar a[aria-current="page"], .st-topnav a[aria-current="page"] { background: var(--u-ink); color: var(--u-inverse-ink); }
-.st-crumbs a, .ui-crumbs a { color: var(--u-muted); }
+.ui-crumbs a { color: var(--u-muted); }
 
 
 /* ——— Universe hero ——— */
@@ -193,7 +193,6 @@
   border-radius: var(--u-r-sm);
   background: var(--u-paper);
 }
-.lab-panel--narrow { max-width: 46ch; }
 
 /* ——— Grids and rows ——— */
 [data-ws-grid] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--u-s4); }
@@ -270,7 +269,7 @@ button:disabled, [aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
 
 /* ——— Forms ——— */
 .flat-form, [data-ws-profile-form] { display: grid; gap: var(--u-s3); }
-[data-ws-field], .flat-field { display: grid; gap: var(--u-s1); }
+[data-ws-field] { display: grid; gap: var(--u-s1); }
 [data-ws-field] > label,
 .flat-field > label,
 .flat-caption,
@@ -449,7 +448,7 @@ h2.ops-legend-title, [data-ws-surface] h2.ops-legend-title {
 }
 
 /* ——— Console / code output ——— */
-[data-ws-console], pre, .term-screen, .lt-screen {
+[data-ws-console], pre, .term-screen {
   font-family: var(--u-font-mono);
   font-size: var(--u-fs-sm);
   line-height: 1.55;
@@ -643,7 +642,7 @@ h2.ops-legend-title, [data-ws-surface] h2.ops-legend-title {
 [data-ws-wiki-nav] a:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
 
 /* ——— Rewards, league, standings (small app pages) ——— */
-.lg-step-lv, .lg-step-need, .lg-step-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.lg-step-lv, .lg-step-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
 .lg-award { display: grid; gap: var(--u-s1); padding: var(--u-s4); border: 1px solid var(--u-line); border-radius: var(--u-r-md); background: var(--u-surface); }
 .lg-award-coins { font-family: var(--u-font-display); font-size: var(--u-fs-xl); }
 [data-ws-dashboard], [data-ws-profile-summary] { min-width: 0; }
@@ -3041,3 +3040,40 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 .no-underline { text-decoration: none; }
 .glossary-search { display: grid; gap: 4px; }
 .glossary-empty { margin-block: var(--u-s4); color: var(--u-muted); font-size: var(--u-fs-sm); }
+
+/* ——— Админка: строка удаления поста и тело модального окна ——— */
+.admin-postrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u-s2) var(--u-s3);
+  padding: var(--u-s2) 0;
+  border-block-end: 1px solid var(--u-line);
+}
+.admin-postrow:last-child { border-block-end: 0; }
+.admin-del { color: var(--u-danger); }
+.admin-del:hover { border-color: var(--u-danger); background: var(--u-danger-soft); color: var(--u-danger); }
+.sub-modal-body { display: grid; gap: var(--u-s2); }
+
+/* ——— Архив и кейсы: недоступные позиции и акцентные полосы ——— */
+.archive-list .archive-off {
+  display: grid;
+  gap: 2px;
+  padding: var(--u-s3) 0;
+  color: var(--u-muted);
+}
+.archive-list .archive-off strong { font-weight: 500; }
+.archive-list .archive-off small { color: var(--u-faint); font-size: var(--u-fs-xs); }
+.verdict-col.is-growth { border-inline-start: 3px solid var(--u-warn); }
+.verdict-col.is-future { border-inline-start: 3px solid var(--u-info); }
+.color-band {
+  display: grid;
+  gap: var(--u-s2);
+  padding: var(--u-s5);
+  border-radius: var(--u-r-lg);
+  background: var(--u-area-soft);
+  color: var(--u-ink);
+}
+.color-band p { margin: 0; color: var(--u-ink-2); }
+.ink-rose { color: var(--u-accent); }
