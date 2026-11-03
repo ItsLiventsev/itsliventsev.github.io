@@ -2165,6 +2165,8 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 /* ——— Адаптив стендов ——— */
 @media (max-width: 980px) {
   .cab-grid { grid-template-columns: minmax(0, 1fr); }
+  /* В один столбец липкая колонка бессмысленна: пропуск висел бы поверх роадмапа. */
+  .cab-grid > aside { position: static; }
   .roadmap-overview { grid-template-columns: minmax(0, 1fr); }
   .cmd-duo { grid-template-columns: minmax(0, 1fr); }
 }
@@ -2183,6 +2185,9 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   .rw-balance-coins { grid-column: 1 / 2; }
   .rw-balance-xp { grid-column: 2 / 3; }
   .greet-card { flex-wrap: wrap; }
+  .id-card { padding: var(--u-s4); }
+  /* Кнопки пропуска на телефоне — ровной сеткой 2×2, а не лесенкой из одной-двух. */
+  .id-card-actions .flat-btn { flex: 1 1 calc(50% - var(--u-s2)); }
   .quest-card { grid-template-columns: auto minmax(0, 1fr); }
   .quest-side { grid-column: 2; justify-items: start; text-align: start; }
   .lg-step { grid-template-columns: 34px minmax(0, 1fr) auto; }
