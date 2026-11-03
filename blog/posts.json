@@ -1,209 +1,369 @@
 [
   {
-    "slug": "kak-ustroena-baza-znaniy",
-    "file": "kak-ustroena-baza-znaniy.html",
-    "title": "Как устроена база знаний",
-    "excerpt": "Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.",
-    "date": "2026-11-03",
+    "slug": "kn-ansible",
+    "file": "kn-ansible.html",
+    "title": "Ansible: плейбук, который можно запускать дважды",
+    "excerpt": "Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.",
+    "date": "2026-11-04",
     "type": "note",
     "tags": [
-      "граф",
-      "статика",
-      "карточки"
+      "автоматизация",
+      "shell",
+      "systemd"
     ],
-    "readtime": "6 мин",
+    "readtime": "8 мин",
     "source": "",
     "status": "published"
   },
   {
-    "slug": "tablicy-kak-most",
-    "file": "tablicy-kak-most.html",
-    "title": "Таблица как мост между текстом и решением",
-    "excerpt": "Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.",
-    "date": "2026-11-02",
+    "slug": "kn-backups",
+    "file": "kn-backups.html",
+    "title": "Бэкап: 3-2-1, RPO и проверка восстановлением",
+    "excerpt": "Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.",
+    "date": "2026-11-04",
     "type": "note",
     "tags": [
-      "таблицы",
-      "граф",
-      "карточки"
+      "бэкапы",
+      "raid",
+      "мониторинг"
     ],
     "readtime": "7 мин",
     "source": "",
     "status": "published"
   },
   {
-    "slug": "setka-i-plotnost",
-    "file": "setka-i-plotnost.html",
-    "title": "Сетка 12 колонок и поток карточек разных размеров",
-    "excerpt": "Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.",
-    "date": "2026-11-01",
+    "slug": "kn-bash",
+    "file": "kn-bash.html",
+    "title": "Конвейер: одна строка вместо цикла",
+    "excerpt": "grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.",
+    "date": "2026-11-04",
     "type": "note",
     "tags": [
-      "сетка",
-      "карточки",
-      "плотность"
-    ],
-    "readtime": "6 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "karta-temy",
-    "file": "karta-temy.html",
-    "title": "Карта темы: как из десяти заметок собрать одну мысль",
-    "excerpt": "Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.",
-    "date": "2026-10-30",
-    "type": "note",
-    "tags": [
-      "граф",
-      "карточки",
-      "статика"
-    ],
-    "readtime": "5 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "merka-stroki",
-    "file": "merka-stroki.html",
-    "title": "Мера строки: 68 знаков против пустоты",
-    "excerpt": "Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.",
-    "date": "2026-10-29",
-    "type": "note",
-    "tags": [
-      "мера-строки",
-      "типографика",
-      "читаемость"
-    ],
-    "readtime": "5 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "dve-garnitury",
-    "file": "dve-garnitury.html",
-    "title": "Две гарнитуры на страницу — и ни одной больше",
-    "excerpt": "Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.",
-    "date": "2026-10-28",
-    "type": "note",
-    "tags": [
-      "типографика",
-      "читаемость",
-      "токены"
-    ],
-    "readtime": "5 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "tokeny-tsveta",
-    "file": "tokeny-tsveta.html",
-    "title": "Цвет живёт в токенах, а не в компонентах",
-    "excerpt": "Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.",
-    "date": "2026-10-27",
-    "type": "note",
-    "tags": [
-      "токены",
-      "цвет",
-      "тёмная-тема"
-    ],
-    "readtime": "6 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "tablica-i-eho-zebra",
-    "file": "tablica-i-eho-zebra.html",
-    "title": "Зебра, границы и плотность внутри таблицы",
-    "excerpt": "Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.",
-    "date": "2026-10-26",
-    "type": "note",
-    "tags": [
-      "таблицы",
-      "плотность",
-      "цвет"
-    ],
-    "readtime": "5 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "shkala-otstupov",
-    "file": "shkala-otstupov.html",
-    "title": "Одна шкала отступов вместо двадцати решений",
-    "excerpt": "Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».",
-    "date": "2026-10-24",
-    "type": "note",
-    "tags": [
-      "токены",
-      "сетка",
-      "плотность"
-    ],
-    "readtime": "5 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "fokus-i-klaviatura",
-    "file": "fokus-i-klaviatura.html",
-    "title": "Видимый фокус — не украшение, а навигация",
-    "excerpt": "Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.",
-    "date": "2026-10-22",
-    "type": "note",
-    "tags": [
-      "фокус",
-      "доступность",
-      "контраст"
-    ],
-    "readtime": "6 мин",
-    "source": "",
-    "status": "published"
-  },
-  {
-    "slug": "kontrast-aa",
-    "file": "kontrast-aa.html",
-    "title": "Контраст AA: 4.5 к 1 и что за этим стоит",
-    "excerpt": "Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.",
-    "date": "2026-10-21",
-    "type": "note",
-    "tags": [
-      "контраст",
-      "доступность",
-      "цвет"
+      "shell",
+      "журналы",
+      "автоматизация"
     ],
     "readtime": "7 мин",
     "source": "",
     "status": "published"
   },
   {
-    "slug": "dvizhenie-120-320",
-    "file": "dvizhenie-120-320.html",
-    "title": "Движение 120–320 мс: когда анимация объясняет",
-    "excerpt": "Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.",
-    "date": "2026-10-18",
+    "slug": "kn-dhcp",
+    "file": "kn-dhcp.html",
+    "title": "DHCP: аренда адреса на четыре шага",
+    "excerpt": "Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.",
+    "date": "2026-11-04",
     "type": "note",
     "tags": [
-      "движение",
-      "доступность",
-      "плотность"
+      "dhcp",
+      "vlan",
+      "диагностика"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-dns",
+    "file": "kn-dns.html",
+    "title": "DNS: кеш, TTL и два резолвера",
+    "excerpt": "Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "dns",
+      "диагностика",
+      "dhcp"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-gre",
+    "file": "kn-gre.html",
+    "title": "Туннель и MTU: 24 байта, которые ломают передачу",
+    "excerpt": "Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "туннели",
+      "mtu",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-indexes",
+    "file": "kn-indexes.html",
+    "title": "Индексы и планы: почему запрос медленный",
+    "excerpt": "B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "индексы",
+      "postgresql",
+      "транзакции"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-ipsec",
+    "file": "kn-ipsec.html",
+    "title": "IPsec: две фазы и одна причина «туннель поднят, трафика нет»",
+    "excerpt": "IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "vpn",
+      "туннели",
+      "mtu"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-logs",
+    "file": "kn-logs.html",
+    "title": "Журналы: уровни, ротация и лимит на диск",
+    "excerpt": "Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "журналы",
+      "systemd",
+      "диагностика"
     ],
     "readtime": "6 мин",
     "source": "",
     "status": "published"
   },
   {
-    "slug": "srezy-i-razrezy",
-    "file": "srezy-i-razrezy.html",
-    "title": "Срезы и разрезы",
-    "excerpt": "Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.",
-    "date": "2026-10-16",
+    "slug": "kn-mtu",
+    "file": "kn-mtu.html",
+    "title": "MTU и PMTU: почему ping идёт, а скачивание нет",
+    "excerpt": "Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.",
+    "date": "2026-11-04",
     "type": "note",
     "tags": [
-      "сетка",
-      "типографика",
-      "статика"
+      "mtu",
+      "туннели",
+      "диагностика"
     ],
-    "readtime": "4 мин",
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-postgres",
+    "file": "kn-postgres.html",
+    "title": "PostgreSQL: версии строк, VACUUM и заворот XID",
+    "excerpt": "xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "postgresql",
+      "mvcc",
+      "индексы"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-practice",
+    "file": "kn-practice.html",
+    "title": "Практикоориентированное обучение: навык проверяют на стенде",
+    "excerpt": "Три уровня освоения, чем демонстрационный экзамен отличается от зачёта, зачем нужна воспроизводимость стенда и как разбирать ошибки после защиты.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "обучение",
+      "проекты",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-project",
+    "file": "kn-project.html",
+    "title": "Проект как кейс: навигация корпуса и киберспорт",
+    "excerpt": "Семь типов знаков в коридоре, 108 часов программы, критерий приёмки, который пришлось формулировать самому, и честный разбор того, что не получилось.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "проекты",
+      "обучение",
+      "доступность"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-prometheus",
+    "file": "kn-prometheus.html",
+    "title": "Prometheus: четыре типа метрик и один хороший алерт",
+    "excerpt": "rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "мониторинг",
+      "журналы",
+      "автоматизация"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-raid",
+    "file": "kn-raid.html",
+    "title": "RAID: паритет — это арифметика, а не магия",
+    "excerpt": "Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "raid",
+      "бэкапы",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-replication",
+    "file": "kn-replication.html",
+    "title": "Репликация: копия отстаёт, и это нормально",
+    "excerpt": "Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "репликация",
+      "postgresql",
+      "мониторинг"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-routing",
+    "file": "kn-routing.html",
+    "title": "Таблица маршрутов: как пакет выбирает выход",
+    "excerpt": "Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "маршрутизация",
+      "vlan",
+      "диагностика"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-ssh",
+    "file": "kn-ssh.html",
+    "title": "SSH: ключ вместо пароля и что закрыть в sshd",
+    "excerpt": "ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "ssh",
+      "диагностика",
+      "автоматизация"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-systemd",
+    "file": "kn-systemd.html",
+    "title": "systemd: юниты, цели и порядок загрузки",
+    "excerpt": "unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "systemd",
+      "журналы",
+      "диагностика"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-tcp",
+    "file": "kn-tcp.html",
+    "title": "TCP: три пакета, четыре состояния и одна минута",
+    "excerpt": "Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "tcp",
+      "диагностика",
+      "mtu"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-troubleshoot",
+    "file": "kn-troubleshoot.html",
+    "title": "Диагностика сети: снизу вверх, а не наугад",
+    "excerpt": "Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "диагностика",
+      "маршрутизация",
+      "dns"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-tx",
+    "file": "kn-tx.html",
+    "title": "Транзакции: уровни изоляции и три аномалии",
+    "excerpt": "Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "транзакции",
+      "postgresql",
+      "mvcc"
+    ],
+    "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-vlan",
+    "file": "kn-vlan.html",
+    "title": "VLAN и 802.1Q: один провод, много сетей",
+    "excerpt": "Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "vlan",
+      "маршрутизация",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
     "source": "",
     "status": "published"
   },
@@ -220,10 +380,166 @@
     "status": "published"
   },
   {
+    "slug": "dve-garnitury",
+    "file": "dve-garnitury.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "dvizhenie-120-320",
+    "file": "dvizhenie-120-320.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "fokus-i-klaviatura",
+    "file": "fokus-i-klaviatura.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "graph",
     "file": "graph.html",
     "title": "Граф заметок",
-    "excerpt": "Граф перекрёстных ссылок базы знаний: как заметки о типографике, токенах, композиции, движении, доступности и данных ссылаются друг на друга.",
+    "excerpt": "Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kak-ustroena-baza-znaniy",
+    "file": "kak-ustroena-baza-znaniy.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "karta-temy",
+    "file": "karta-temy.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kontrast-aa",
+    "file": "kontrast-aa.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "merka-stroki",
+    "file": "merka-stroki.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "setka-i-plotnost",
+    "file": "setka-i-plotnost.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "shkala-otstupov",
+    "file": "shkala-otstupov.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "srezy-i-razrezy",
+    "file": "srezy-i-razrezy.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "tablica-i-eho-zebra",
+    "file": "tablica-i-eho-zebra.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "tablicy-kak-most",
+    "file": "tablicy-kak-most.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "tokeny-tsveta",
+    "file": "tokeny-tsveta.html",
+    "title": "Заметка переехала",
+    "excerpt": "Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.",
     "date": "",
     "type": "note",
     "tags": [],
@@ -235,7 +551,7 @@
     "slug": "topics",
     "file": "topics.html",
     "title": "Рубрики заметок",
-    "excerpt": "Шесть рубрик базы знаний: типографика, токены, композиция, движение, доступность и данные. Каждая рубрика собирает заметки по одной теме.",
+    "excerpt": "Шесть рубрик базы знаний: сети, Linux и службы, базы данных, хранение, эксплуатация и практика обучения. Каждая рубрика собирает заметки по одной теме.",
     "date": "",
     "type": "note",
     "tags": [],

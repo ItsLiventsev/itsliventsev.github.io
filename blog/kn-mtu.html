@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev</title>
+<meta name="description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="mtu,туннели,диагностика">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-mtu.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev">
+  <meta property="og:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-mtu.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="mtu">
+  <meta property="article:tag" content="туннели">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev">
+  <meta name="twitter:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MTU и PMTU: почему ping идёт, а скачивание нет","description":"MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.","url":"https://itsliventsev.github.io/blog/kn-mtu.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-mtu.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"mtu, туннели, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"MTU и PMTU: почему ping идёт, а скачивание нет","item":"https://itsliventsev.github.io/blog/kn-mtu.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>MTU и PMTU: почему ping идёт, а скачивание нет</h1>
+        <p class="kn-def">MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>MTU — самое скучное и самое частое объяснение «странных» сетевых сбоев. Он не мигает лампочками и не появляется в дашборде, зато отлично маскируется под «плохого провайдера».</p>
+        <h2>Три числа, которые надо помнить</h2>
+        <p>1500 — полезная часть кадра Ethernet. 1472 — сколько данных можно отправить в ping, не включая заголовки IP (20 байт) и ICMP (8 байт). 1460 — типичный MSS для TCP-сегмента. Все три числа — одно и то же ограничение, записанное на разных уровнях.</p>
+        <p>Когда говорят «пакет больше MTU», речь всегда про полезную часть. Заголовки L2 (14 байт Ethernet, 4 байта тега VLAN) в MTU не входят, но входят в размер кадра — поэтому tagged-кадр и называется «baby giant» на 1522 байта.</p>
+        <h2>Что происходит при превышении</h2>
+        <p>Есть два варианта, и оба нежелательны:</p>
+        <ul><li><strong>Фрагментация.</strong> Маршрутизатор режет пакет на части. Работает, но добавляет нагрузку, а в IPv6 запрещена вовсе: там фрагментирует только отправитель.</li><li><strong>DF и ICMP.</strong> Если в пакете стоит флаг Don&#39;t Fragment (TCP его ставит), маршрутизатор отбрасывает пакет и обязан отправить ICMP «fragmentation needed» с указанием правильного MTU.</li></ul>
+        <p>Второй вариант — рабочий механизм PMTU discovery. Но он ломается, если ICMP вырезан файрволом. Тогда отправитель не узнает ни о чём и будет повторять слишком большой пакет, пока не истечёт таймаут соединения. Это и есть чёрная дыра PMTU: маленькие пакеты проходят, большие исчезают бесследно.</p>
+        <h2>Как найти порог</h2>
+        <pre><code>ping -M do -s 1472 192.0.2.10     # 1472 + 28 = 1500, должен пройти
+ping -M do -s 1400 192.0.2.10     # если и это не прошло — MTU пути ещё меньше
+tracepath 192.0.2.10              # покажет MTU по узлам</code></pre>
+        <p>Метод бинарного поиска по <code>-s</code> занимает минуту: начинаете с 1472, уменьшаете на 100, потом уточняете в найденном интервале. Разница между 1500 и найденным значением — накладные расходы на пути: PPPoE (8 байт), GRE (24), IPsec (до 78), VXLAN (50).</p>
+        <h2>Почему clamp-mss лучше, чем «настроить у всех MTU»</h2>
+        <p>Можно поправить MTU на каждом хосте, но хостов много, а забыть один — легко. Гораздо надёжнее подменить MSS в SYN-пакете на границе: тогда оба конца договариваются о размере сегмента, при котором пакет гарантированно влезает.</p>
+        <pre><code>iptables -t mangle -A FORWARD -p tcp --syn -j TCPMSS --clamp-mss-to-pmtu
+nft add rule inet filter forward tcp flags syn tcp option maxseg size set rt mtu</code></pre>
+        <p>Это не увеличивает пропускную способность, но убирает целый класс зависаний: браузер открывает соединение, получает первые килобайты и замирает на загрузке картинки.</p>
+        <h2>Чек-лист администратора</h2>
+        <ol><li>После любого туннеля — уменьшить MTU и включить clamp (расчёт — в <a class="kn-ref" href="/blog/kn-gre.html">GRE и MTU</a>).</li><li>ICMP type 3 code 4 пропускать всегда; остальной ICMP — по rate-limit, но не в ноль.</li><li>Для IPv6 помнить про 1280: меньше быть не может, «packet too big» придёт обязательно.</li><li>Проверять не только пинг, но и передачу файла: <code>curl -o /dev/null</code> на файл в несколько мегабайт.</li><li>В журналах искать «message too long» и «EMSGSIZE» — приложение может сообщать о MTU раньше, чем сеть.</li></ol>
+        <p>MTU почти всегда всплывает вместе с TCP: механизм MSS — часть рукопожатия, о котором <a class="kn-ref" href="/blog/kn-tcp.html">отдельная заметка</a>. А если непонятно, на каком слое искать, начните с <a class="kn-ref" href="/blog/kn-troubleshoot.html">порядка диагностики</a>.</p>
+        <dl class="kn-facts"><dt>1500</dt><dd>MTU стандартного Ethernet — полезная часть кадра, без заголовков L2</dd><dt>1472</dt><dd>сколько байт данных влезает в ping без фрагментации (1500 − 20 IP − 8 ICMP)</dd><dt>1460</dt><dd>типичный MSS для TCP без опций (1500 − 20 IP − 20 TCP)</dd><dt>1280</dt><dd>минимальный MTU, который обязана поддерживать любая сеть IPv6</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, которые ломают передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span></a></li>
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, которые ломают передачу</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута</a> — ссылается на эту заметку</li><li><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc1191" target="_blank" rel="noopener">RFC 1191: Path MTU Discovery</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc8200" target="_blank" rel="noopener">RFC 8200: IPv6 и требование фрагментации только источником</a><small>IETF</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man8/ip-link.8.html" target="_blank" rel="noopener">ip-link(8): параметр mtu и его значения по умолчанию</a><small>man7.org</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID →</a><a href="/blog/kn-logs.html">← Журналы: уровни, ротация и лимит на диск</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 10 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-mtu"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#mtu">mtu</a></li><li><a href="/blog/topics.html#туннели">туннели</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 7 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

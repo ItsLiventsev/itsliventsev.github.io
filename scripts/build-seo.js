@@ -162,17 +162,17 @@ function ogImage(rel, html = '') {
      должно совпадать с картинкой на странице. */
   const cover = /<meta\s+property="og:image"\s+content="([^"]+)"/i.exec(html);
   if (cover) return cover[1];
-  if (rel === 'blog/graph.html') return SITE_URL + '/assets/img/notes/notes-graph.webp';
-  if (rel === 'blog/topics.html') return SITE_URL + '/assets/img/notes/how-notes-work.webp';
+  if (rel === 'blog/graph.html') return SITE_URL + '/assets/img/notes/kn-troubleshoot.webp';
+  if (rel === 'blog/topics.html') return SITE_URL + '/assets/img/notes/kn-vlan.webp';
   const covers = {
-    typography: 'typography', tokens: 'tokens', layout: 'bento',
-    motion: 'motion', accessibility: 'accessibility', data: 'table',
+    network: 'kn-vlan', linux: 'kn-ssh', databases: 'kn-postgres',
+    storage: 'kn-raid', ops: 'kn-prometheus', practice: 'kn-practice',
   };
   const zone = /<meta\s+name="kn-zone"\s+content="([a-z-]+)"/i.exec(html);
   if (zone && covers[zone[1]]) return SITE_URL + '/assets/img/notes/' + covers[zone[1]] + '.webp';
   const topic = /^blog\/topics\/([a-z-]+)\.html$/.exec(rel);
   if (topic && covers[topic[1]]) return SITE_URL + '/assets/img/notes/' + covers[topic[1]] + '.webp';
-  if (rel === 'blog.html') return SITE_URL + '/assets/img/notes/notes-graph.webp';
+  if (rel === 'blog.html') return SITE_URL + '/assets/img/notes/kn-vlan.webp';
   return SITE_URL + '/assets/og.png';
 }
 

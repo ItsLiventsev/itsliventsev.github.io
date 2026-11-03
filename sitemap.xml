@@ -71,27 +71,9 @@
   </url>
   <url>
     <loc>https://itsliventsev.github.io/blog.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://itsliventsev.github.io/blog/dve-garnitury.html</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://itsliventsev.github.io/blog/dvizhenie-120-320.html</loc>
-    <lastmod>2026-10-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</loc>
-    <lastmod>2026-10-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://itsliventsev.github.io/blog/graph.html</loc>
@@ -99,62 +81,140 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-ansible.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/karta-temy.html</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-backups.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/kontrast-aa.html</loc>
-    <lastmod>2026-10-21</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-bash.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/merka-stroki.html</loc>
-    <lastmod>2026-10-29</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-dhcp.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/setka-i-plotnost.html</loc>
-    <lastmod>2026-11-01</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-dns.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/shkala-otstupov.html</loc>
-    <lastmod>2026-10-24</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-gre.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/srezy-i-razrezy.html</loc>
-    <lastmod>2026-10-16</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-indexes.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</loc>
-    <lastmod>2026-10-26</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-ipsec.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/tablicy-kak-most.html</loc>
-    <lastmod>2026-11-02</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-logs.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/tokeny-tsveta.html</loc>
-    <lastmod>2026-10-27</lastmod>
+    <loc>https://itsliventsev.github.io/blog/kn-mtu.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-postgres.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-practice.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-project.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-prometheus.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-raid.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-replication.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-routing.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-ssh.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-systemd.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-tcp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-troubleshoot.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-tx.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-vlan.html</loc>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -164,32 +224,32 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/accessibility.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/databases.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/data.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/linux.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/layout.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/network.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/motion.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/ops.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/tokens.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/practice.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/topics/typography.html</loc>
+    <loc>https://itsliventsev.github.io/blog/topics/storage.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>

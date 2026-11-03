@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Индексы и планы: почему запрос медленный · itsliventsev</title>
+<meta name="description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="индексы,postgresql,транзакции">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.">
+<meta name="kn-zone" content="databases">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-indexes.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
+  <meta property="og:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-indexes.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="индексы">
+  <meta property="article:tag" content="postgresql">
+  <meta property="article:tag" content="транзакции">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
+  <meta name="twitter:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Индексы и планы: почему запрос медленный","description":"Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.","url":"https://itsliventsev.github.io/blog/kn-indexes.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-indexes.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"индексы, postgresql, транзакции"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Индексы и планы: почему запрос медленный","item":"https://itsliventsev.github.io/blog/kn-indexes.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/databases.html">Базы данных</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Индексы и планы: почему запрос медленный</h1>
+        <p class="kn-def">Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Запрос без индекса читает всю таблицу. Запрос с индексом читает дерево и добирает нужные строки. Разница на миллионе строк — секунды против миллисекунд, и именно поэтому «добавь индекс» стало универсальным советом, который часто делают неправильно.</p>
+        <h2>Как устроено B-дерево</h2>
+        <p>Индекс B-tree — это отсортированная структура, где листья связаны между собой, а внутренние узлы хранят границы диапазонов. Чтобы найти значение, надо пройти от корня до листа — 3–4 страницы на индексе любого размера. В листе лежит ключ и ссылка на строку в таблице.</p>
+        <pre><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM notes WHERE id = 42;
+-- Index Scan using notes_pkey on notes  (cost=0.29..8.30 rows=1 width=...)</code></pre>
+        <p>Читается так: <code>Index Scan</code> — использован индекс; <code>Seq Scan</code> — читалась таблица целиком; <code>Buffers</code> показывает, сколько страниц реально прочитано с диска и из кеша.</p>
+        <h2>Селективность: главный критерий</h2>
+        <p>Индекс полезен, когда запрос отбирает <strong>мало</strong> строк. Если условие возвращает 40% таблицы, дешевле прочитать таблицу подряд, чем бегать по индексу и потом всё равно читать те же страницы. Планировщик это знает и сам выбирает Seq Scan — поэтому «я добавил индекс, а план не изменился» это не баг, а математика.</p>
+        <p>Селективность считается по статистике, которую собирает <code>ANALYZE</code>. Если статистика устарела, планировщик ошибается: ожидает 5 строк, получает 500 000, и выбирает неверный план.</p>
+        <pre><code>ANALYZE notes;                      -- обновить статистику
+SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></pre>
+        <h2>Три причины, по которым индекс не работает</h2>
+        <ol><li><strong>Функция над колонкой.</strong> <code>WHERE lower(email) = &#39;a@b&#39;</code> не использует обычный индекс по <code>email</code> — нужен индекс по выражению <code>lower(email)</code>.</li><li><strong>Несовпадение типов.</strong> <code>WHERE id = &#39;42&#39;</code> при <code>id</code> числовом может привести к неявному приведению и потере индекса; смотрите план.</li><li><strong>Составной индекс и порядок колонок.</strong> Индекс <code>(a, b)</code> работает для <code>WHERE a = …</code> и для <code>WHERE a = … AND b = …</code>, но не для <code>WHERE b = …</code>. Порядок колонок выбирают по запросам, а не по схеме таблицы.</li></ol>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Тип</th><th scope="col">Для чего</th><th scope="col">Пример запроса</th></tr></thead><tbody><tr><th scope="row">B-tree</th><td>равенство и диапазон</td><td>WHERE id = 5 или WHERE created_at &gt; …</td></tr><tr><th scope="row">Hash</th><td>только равенство</td><td>WHERE token = …</td></tr><tr><th scope="row">GIN</th><td>массивы</td><td>jsonb</td><td>полнотекст</td><td>WHERE tags @&gt; ARRAY[&#39;net&#39;]</td></tr><tr><th scope="row">GiST</th><td>геометрия и диапазоны</td><td>WHERE box &amp;&amp; …</td></tr><tr><th scope="row">BRIN</th><td>очень большие упорядоченные таблицы</td><td>WHERE ts &gt; now() - interval &#39;1 day&#39;</td></tr></tbody><caption>Тип индекса выбирается по типу запроса, а не по привычке.</caption></table></div>
+        <h2>Цена индексов</h2>
+        <p>Каждый индекс:</p>
+        <ul><li>занимает место (иногда больше самой таблицы);</li><li>замедляет INSERT и UPDATE: нужно обновить и дерево;</li><li>требует обслуживания — bloat, как у таблиц (см. <a class="kn-ref" href="/blog/kn-postgres.html">VACUUM</a>).</li></ul>
+        <p>Поэтому индексы добавляют под конкретные медленные запросы, а не «на все колонки, вдруг понадобится». Практика: посмотреть <code>pg_stat_user_indexes.idx_scan</code> — если счётчик равен нулю месяцами, индекс никто не использует.</p>
+        <h2>Как разбирать медленный запрос</h2>
+        <ol><li>Найти его: журнал медленных запросов (<code>log_min_duration_statement</code>) или <code>pg_stat_statements</code>.</li><li><code>EXPLAIN (ANALYZE, BUFFERS)</code> — увидеть фактические строки, время и страницы.</li><li>Сравнить плановое и фактическое число строк: расхождение в 100 раз — плохая статистика или неудачное условие.</li><li>Проверить, есть ли подходящий индекс и подходит ли порядок колонок.</li><li>Только потом создавать индекс, и обязательно <code>CREATE INDEX CONCURRENTLY</code>, чтобы не блокировать запись.</li></ol>
+        <h2>Что важно помнить</h2>
+        <p>Индексы — часть более широкой картины: если запросы медленные из-за блокировок или раздутых таблиц, индекс не поможет. Про блокировки и уровни изоляции — <a class="kn-ref" href="/blog/kn-tx.html">заметка про транзакции</a>, про раздувание — <a class="kn-ref" href="/blog/kn-postgres.html">MVCC и VACUUM</a>. А отслеживать деградацию времени ответа удобнее метриками: <a class="kn-ref" href="/blog/kn-prometheus.html">мониторинг</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
+          <li><a href="/blog/kn-tx.html"><strong>Транзакции: уровни изоляции и три аномалии</strong><span>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.postgresql.org/docs/current/using-explain.html" target="_blank" rel="noopener">PostgreSQL: Index Types и Using EXPLAIN</a><small>PostgreSQL Global Development Group</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.postgresql.org/docs/current/indexes.html" target="_blank" rel="noopener">PostgreSQL: Indexes (типы и стоимость)</a><small>PostgreSQL Global Development Group</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://use-the-index-luke.com/" target="_blank" rel="noopener">Use The Index, Luke: как работают индексы B-дерева</a><small>Markus Winand</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
+        <span><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет» →</a><a href="/blog/kn-gre.html">← Туннель и MTU: 24 байта, которые ломают передачу</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Базы данных. Запись 07 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-indexes"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#индексы">индексы</a></li><li><a href="/blog/topics.html#postgresql">postgresql</a></li><li><a href="/blog/topics.html#транзакции">транзакции</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

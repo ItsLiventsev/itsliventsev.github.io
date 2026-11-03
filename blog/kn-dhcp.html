@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>DHCP: аренда адреса на четыре шага · itsliventsev</title>
+<meta name="description" content="DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="dhcp,vlan,диагностика">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-dhcp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="DHCP: аренда адреса на четыре шага · itsliventsev">
+  <meta property="og:description" content="DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-dhcp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="dhcp">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DHCP: аренда адреса на четыре шага · itsliventsev">
+  <meta name="twitter:description" content="DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DHCP: аренда адреса на четыре шага","description":"DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.","url":"https://itsliventsev.github.io/blog/kn-dhcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-dhcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"dhcp, vlan, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"DHCP: аренда адреса на четыре шага","item":"https://itsliventsev.github.io/blog/kn-dhcp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>DHCP: аренда адреса на четыре шага</h1>
+        <p class="kn-def">DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>DHCP — самый недооценённый протокол в сети. Пока он работает, его никто не замечает; когда он ломается, не работает вообще ничего, включая доступ к серверу, который мог бы объяснить причину.</p>
+        <h2>DORA: четыре шага</h2>
+        <p>Клиент без адреса не может отправить unicast — у него нет ни адреса, ни шлюза. Поэтому первый пакет уходит широковещательно, с адреса 0.0.0.0 на 255.255.255.255, с UDP-портов 68 на 67.</p>
+        <ol><li><strong>Discover</strong> — «есть тут DHCP-сервер?».</li><li><strong>Offer</strong> — сервер предлагает адрес, маску, шлюз, DNS и срок аренды.</li><li><strong>Request</strong> — клиент широковещательно сообщает, чьё предложение принимает. Широковещательно — чтобы остальные серверы поняли, что их адреса свободны.</li><li><strong>ACK</strong> — сервер подтверждает аренду.</li></ol>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Сообщение</th><th scope="col">Кто sends</th><th scope="col">Куда</th><th scope="col">Зачем</th></tr></thead><tbody><tr><th scope="row">Discover</th><td>клиент</td><td>broadcast</td><td>«кто-нибудь даст адрес?»</td></tr><tr><th scope="row">Offer</th><td>сервер</td><td>unicast/broadcast</td><td>предложение адреса и параметров</td></tr><tr><th scope="row">Request</th><td>клиент</td><td>broadcast</td><td>«беру именно это предложение»</td></tr><tr><th scope="row">ACK</th><td>сервер</td><td>unicast</td><td>подтверждение и срок аренды</td></tr><tr><th scope="row">NAK</th><td>сервер</td><td>broadcast</td><td>«этот адрес тебе не положен»</td></tr></tbody><caption>Четыре сообщения — минимум; продление аренды обходится двумя.</caption></table></div>
+        <p>Если клиент просит адрес, который ему не положен (например, пришёл из другой подсети), сервер отвечает NAK, и клиент начинает заново.</p>
+        <h2>Таймеры: аренда не вечна</h2>
+        <p>Аренда (lease) — это срок, на который адрес закреплён за клиентом. По умолчанию в небольших сетях это 8–24 часа.</p>
+        <ul><li><strong>T1 = 50%</strong> срока: клиент отправляет DHCPREQUEST напрямую своему серверу и продлевает аренду. Адрес не меняется.</li><li><strong>T2 = 87,5%</strong>: если первый сервер не ответил, клиент рассылает запрос широковещательно — вдруг найдётся другой сервер, который продлит.</li><li><strong>Истечение срока</strong>: клиент обязан прекратить использовать адрес и начать DORA заново.</li></ul>
+        <p>Таймеры можно задать явно опциями 58 и 59, но по умолчанию работают именно эти доли. Знание долей нужно для одной практической вещи: «устройство отвалилось через 4 часа после включения» — это не магия, а истёкшая аренда, которую не удалось продлить.</p>
+        <h2>DHCP relay: как один сервер обслуживает много VLAN</h2>
+        <p>В крупной сети DHCP-сервер обычно один, а VLAN — десятки. Маршрутизатор в каждом сегменте работает как relay (опция 82, RFC 3046): он принимает широковещательный Discover и пересылает его серверу unicast, добавляя информацию о том, из какого интерфейса пришёл запрос. Сервер по этому полю выбирает пул.</p>
+        <p>Именно поэтому в файрволе между relay и сервером должны быть разрешены UDP 67 в обе стороны. Заблокировали — и «DHCP не работает» только в одном VLAN, что сильно затрудняет диагностику.</p>
+        <h2>Чужой DHCP — это атака</h2>
+        <p>Если в сегменте появится второй DHCP-сервер (например, ноутбук с включённой раздачей или специально настроенный злоумышленник), он может выдать клиентам себя в качестве шлюза. Дальше весь трафик пойдёт через него.</p>
+        <p>Защита стандартная и почти всегда доступна на управляемых коммутаторах:</p>
+        <ul><li><strong>DHCP snooping</strong> — порты делятся на trusted (к серверу) и untrusted (к клиентам); DHCP-ответы с untrusted-портов отбрасываются.</li><li><strong>IP source guard</strong> — привязывает адрес к MAC и порту, чтобы нельзя было взять чужой.</li><li><strong>Dynamic ARP Inspection</strong> — не даёт подменить ARP-таблицу.</li></ul>
+        <h2>Проверка и отладка</h2>
+        <pre><code>dhclient -v eth0                    # показать весь обмен
+tcpdump -ni any port 67 or port 68  # увидеть DORA целиком
+journalctl -u dhcpd -n 50           # журнал сервера</code></pre>
+        <p>Что смотреть в tcpdump: уходит ли Discover, приходит ли Offer, есть ли Request и ACK. Если Discover уходит, а Offer нет — проблема в relay или в пуле (закончились адреса). Если Offer есть, а Request не доходит — почти всегда DHCP snooping на неверном порту.</p>
+        <p>Смежная тема — какие адреса выдавать: чтобы пулы не пересекались между <a class="kn-ref" href="/blog/kn-vlan.html">VLAN</a>, их планируют вместе с топологией. А имена, которые выдаются вместе с адресом, работают только если DNS-резолвер доступен — см. <a class="kn-ref" href="/blog/kn-dns.html">про DNS</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера</a> — ссылается на эту заметку</li><li><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc2131" target="_blank" rel="noopener">RFC 2131: Dynamic Host Configuration Protocol</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc2132" target="_blank" rel="noopener">RFC 2132: DHCP Options and BOOTP Vendor Extensions</a><small>IETF</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc3046" target="_blank" rel="noopener">RFC 3046: DHCP Relay Agent Information Option</a><small>IETF</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера →</a><a href="/blog/kn-bash.html">← Конвейер: одна строка вместо цикла</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 04 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-dhcp"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#dhcp">dhcp</a></li><li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

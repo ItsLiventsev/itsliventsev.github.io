@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Хранение и отказоустойчивость — заметки · itsliventsev</title>
+<meta name="description" content="Заметки о хранении: уровни RAID и арифметика паритета, правило 3-2-1, RPO и RTO, проверка резервных копий восстановлением.">
+undefined
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/topics/storage.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Хранение и отказоустойчивость — заметки · itsliventsev">
+  <meta property="og:description" content="Заметки о хранении: уровни RAID и арифметика паритета, правило 3-2-1, RPO и RTO, проверка резервных копий восстановлением.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/topics/storage.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Хранение и отказоустойчивость — заметки · itsliventsev">
+  <meta name="twitter:description" content="Заметки о хранении: уровни RAID и арифметика паритета, правило 3-2-1, RPO и RTO, проверка резервных копий восстановлением.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Хранение и отказоустойчивость — заметки","description":"Заметки о хранении: уровни RAID и арифметика паритета, правило 3-2-1, RPO и RTO, проверка резервных копий восстановлением.","url":"https://itsliventsev.github.io/blog/topics/storage.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/storage.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-raid.webp"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Хранение и отказоустойчивость — заметки","item":"https://itsliventsev.github.io/blog/topics/storage.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <header class="kn-head">
+    <p class="ui-eyebrow">рубрика 04 · заметки</p>
+    <h1>Хранение и отказоустойчивость</h1>
+    <p class="kn-head-lede">Что случается с данными, когда отказывает диск, и как это пережить без потерь.</p>
+    <div class="ui-pagehead-meta"><span>2 заметки</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
+  </header>
+
+  <div class="kn-stream">
+      <a class="kn-card kn-card--wide" data-kn-zone="storage" href="/blog/kn-backups.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-backups.webp" alt="схема: правило трёх копий, двух носителей и одной площадки" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Хранение и отказоустойчивость</span>
+          <span class="kn-card-title">Бэкап: 3-2-1, RPO и проверка восстановлением</span>
+          <span class="kn-card-excerpt">Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-raid.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-raid.webp" alt="схема: раскладка блоков и паритета по пяти дискам RAID 5" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Хранение и отказоустойчивость</span>
+          <span class="kn-card-title">RAID: паритет — это арифметика, а не магия</span>
+          <span class="kn-card-excerpt">Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+  </div>
+  
+
+  <div class="ui-callout"><strong>Как читать рубрику.</strong> Что случается с данными, когда отказывает диск, и как это пережить без потерь. Внутри заметок ссылки ведут на соседние темы: рубрика показывает границу темы, связи — переходы между темами.</div>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки · Хранение и отказоустойчивость</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

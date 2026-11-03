@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Транзакции: уровни изоляции и три аномалии · itsliventsev</title>
+<meta name="description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="транзакции,postgresql,mvcc">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.">
+<meta name="kn-zone" content="databases">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-tx.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Транзакции: уровни изоляции и три аномалии · itsliventsev">
+  <meta property="og:description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tx.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="транзакции">
+  <meta property="article:tag" content="postgresql">
+  <meta property="article:tag" content="mvcc">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Транзакции: уровни изоляции и три аномалии · itsliventsev">
+  <meta name="twitter:description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Транзакции: уровни изоляции и три аномалии","description":"Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.","url":"https://itsliventsev.github.io/blog/kn-tx.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tx.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"транзакции, postgresql, mvcc"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Транзакции: уровни изоляции и три аномалии","item":"https://itsliventsev.github.io/blog/kn-tx.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/databases.html">Базы данных</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Транзакции: уровни изоляции и три аномалии</h1>
+        <p class="kn-def">Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Транзакция — это набор операций, который либо применяется целиком, либо не применяется вовсе. Про атомарность и durability знают все; про изоляцию — гораздо меньше людей, а именно она определяет, почему приложение иногда «теряет» обновления.</p>
+        <h2>Три аномалии</h2>
+        <ul><li><strong>Грязное чтение.</strong> Видно данные незакоммиченной чужой транзакции. Если та откатится, вы прочитали то, чего не было.</li><li><strong>Неповторяющееся чтение.</strong> Вы читаете строку, кто-то её меняет и коммитит, вы читаете снова — значение другое. Внутри одной транзакции.</li><li><strong>Фантомы.</strong> Вы дважды выполнили <code>SELECT ... WHERE status = &#39;new&#39;</code> и во второй раз увидели новые строки, которых не было.</li></ul>
+        <p>Плюс менее известная <strong>потерянная запись</strong> (lost update): две транзакции читают одно значение, обе прибавляют единицу, одна перезаписывает другую. Это самая частая ошибка в коде — «прочитать баланс, посчитать в приложении, записать».</p>
+        <h2>Что означает read committed</h2>
+        <p>По умолчанию PostgreSQL работает в read committed. Каждый <strong>запрос</strong> видит снимок данных, зафиксированный на момент начала этого запроса. Внутри одной транзакции два одинаковых SELECT могут вернуть разное, если между ними кто-то закоммитил изменение.</p>
+        <p>Это удобно и обычно достаточно. Но именно поэтому «проверить, потом записать» разваливается: проверка и запись — два запроса, и между ними состояние могло измениться.</p>
+        <h2>Как защищаться правильно</h2>
+        <p>Способ 1 — атомарный запрос вместо чтения и записи:</p>
+        <pre><code>UPDATE accounts SET balance = balance - 100
+WHERE id = 1 AND balance &gt;= 100;
+-- смотрим, сколько строк обновлено: 0 значит «денег не хватило»</code></pre>
+        <p>Способ 2 — блокировка строки на время:</p>
+        <pre><code>SELECT balance FROM accounts WHERE id = 1 FOR UPDATE;</code></pre>
+        <p><code>FOR UPDATE</code> блокирует строку до конца транзакции; вторая транзакция будет ждать.</p>
+        <p>Способ 3 — <code>serializable</code>, если логика сложная и затрагивает несколько таблиц. В PostgreSQL он реализован через проверку конфликтов (SSI) и может <strong>откатить</strong> вашу транзакцию с ошибкой сериализации. Приложение обязано уметь повторить её — это часть контракта, а не сбой.</p>
+        <h2>Блокировки и дедлоки</h2>
+        <p>Блокировки берутся на разные объекты: строку, таблицу, страницу. Дедлок (взаимная блокировка) возникает, когда две транзакции ждут друг друга. PostgreSQL сам находит цикл и убивает одну из них с ошибкой <code>deadlock detected</code>.</p>
+        <p>Профилактика простая: во всех транзакциях захватывать строки <strong>в одном порядке</strong> (например, по возрастанию id). И держать транзакции короткими: блокировка, взятая на время сетевого вызова внутри транзакции, — верный способ уронить систему под нагрузкой.</p>
+        <pre><code>SELECT pid, state, wait_event_type, query
+FROM pg_stat_activity
+WHERE state &lt;&gt; &#39;idle&#39;;</code></pre>
+        <h2>Связь с MVCC</h2>
+        <p>Изоляция в PostgreSQL реализована версиями строк, а не блокировками чтения: читатель никогда не ждёт писателя (см. <a class="kn-ref" href="/blog/kn-postgres.html">MVCC и VACUUM</a>). Побочный эффект — мёртвые версии и необходимость autovacuum. Второй эффект — длинная транзакция держит горизонт видимости и мешает очистке, поэтому «открыл транзакцию и ушёл на обед» — это не только плохая практика, но и реальный риск для всей базы.</p>
+        <h2>Что важно помнить</h2>
+        <ol><li>Уровень изоляции — не «настройка производительности», а выбор гарантий.</li><li>Атомарный UPDATE лучше, чем SELECT + логика + UPDATE.</li><li><code>serializable</code> требует retry-логики в приложении.</li><li>Короткие транзакции — залог и производительности, и здоровья базы.</li></ol>
+        <p>Для чтения с реплик есть отдельный нюанс: там вы получаете снимок, отставший на время репликации — см. <a class="kn-ref" href="/blog/kn-replication.html">репликация и lag</a>. А чтобы понять, какие индексы нужны этим транзакциям, — <a class="kn-ref" href="/blog/kn-indexes.html">индексы и планы</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Уровень</th><th scope="col">Видит</th><th scope="col">Аномалии</th><th scope="col">Когда брать</th></tr></thead><tbody><tr><th scope="row">read uncommitted</th><td>всё подряд</td><td>грязное чтение</td><td>практически никогда</td></tr><tr><th scope="row">read committed</th><td>закоммиченное до запроса</td><td>неповторяющееся чтение</td><td>по умолчанию</td></tr><tr><th scope="row">repeatable read</th><td>снимок на транзакцию</td><td>сериализационные</td><td>отчёты и сверки</td></tr><tr><th scope="row">serializable</th><td>как будто транзакции шли по очереди</td><td>почти нет</td><td>деньги и остатки</td></tr></tbody><caption>В PostgreSQL read uncommitted фактически совпадает с read committed, а repeatable read защищает от фантомов сильнее, чем требует стандарт.</caption></table></div>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
+          <li><a href="/blog/kn-indexes.html"><strong>Индексы и планы: почему запрос медленный</strong><span>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</span></a></li>
+          <li><a href="/blog/kn-replication.html"><strong>Репликация: копия отстаёт, и это нормально</strong><span>Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html" target="_blank" rel="noopener">PostgreSQL: Transaction Isolation</a><small>PostgreSQL Global Development Group</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://en.wikipedia.org/wiki/Isolation_(database_systems)" target="_blank" rel="noopener">SQL standard: уровни изоляции и феномены (обзор)</a><small>Wikipedia</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.postgresql.org/docs/current/explicit-locking.html" target="_blank" rel="noopener">PostgreSQL: Explicit Locking</a><small>PostgreSQL Global Development Group</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
+        <span><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей →</a><a href="/blog/kn-troubleshoot.html">← Диагностика сети: снизу вверх, а не наугад</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Базы данных. Запись 22 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-tx"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#транзакции">транзакции</a></li><li><a href="/blog/topics.html#postgresql">postgresql</a></li><li><a href="/blog/topics.html#mvcc">mvcc</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

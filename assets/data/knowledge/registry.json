@@ -1,253 +1,445 @@
 {
   "generated": "2026-11-03",
-  "notes": 13,
-  "sources": 35,
+  "notes": 23,
+  "sources": 69,
   "edges": [
     {
-      "from": "dve-garnitury",
-      "to": "merka-stroki"
+      "from": "kn-ansible",
+      "to": "kn-ssh"
     },
     {
-      "from": "dve-garnitury",
-      "to": "tokeny-tsveta"
+      "from": "kn-ansible",
+      "to": "kn-systemd"
     },
     {
-      "from": "dve-garnitury",
-      "to": "fokus-i-klaviatura"
+      "from": "kn-ansible",
+      "to": "kn-prometheus"
     },
     {
-      "from": "dvizhenie-120-320",
-      "to": "fokus-i-klaviatura"
+      "from": "kn-ansible",
+      "to": "kn-backups"
     },
     {
-      "from": "dvizhenie-120-320",
-      "to": "setka-i-plotnost"
+      "from": "kn-backups",
+      "to": "kn-raid"
     },
     {
-      "from": "dvizhenie-120-320",
-      "to": "kontrast-aa"
+      "from": "kn-backups",
+      "to": "kn-postgres"
     },
     {
-      "from": "fokus-i-klaviatura",
-      "to": "tokeny-tsveta"
+      "from": "kn-backups",
+      "to": "kn-systemd"
     },
     {
-      "from": "fokus-i-klaviatura",
-      "to": "kontrast-aa"
+      "from": "kn-backups",
+      "to": "kn-prometheus"
     },
     {
-      "from": "fokus-i-klaviatura",
-      "to": "dve-garnitury"
+      "from": "kn-bash",
+      "to": "kn-logs"
     },
     {
-      "from": "kak-ustroena-baza-znaniy",
-      "to": "setka-i-plotnost"
+      "from": "kn-bash",
+      "to": "kn-systemd"
     },
     {
-      "from": "kak-ustroena-baza-znaniy",
-      "to": "tablicy-kak-most"
+      "from": "kn-bash",
+      "to": "kn-ansible"
     },
     {
-      "from": "kak-ustroena-baza-znaniy",
-      "to": "merka-stroki"
+      "from": "kn-dhcp",
+      "to": "kn-vlan"
     },
     {
-      "from": "karta-temy",
-      "to": "kak-ustroena-baza-znaniy"
+      "from": "kn-dhcp",
+      "to": "kn-dns"
     },
     {
-      "from": "karta-temy",
-      "to": "setka-i-plotnost"
+      "from": "kn-dhcp",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "karta-temy",
-      "to": "dvizhenie-120-320"
+      "from": "kn-dns",
+      "to": "kn-dhcp"
     },
     {
-      "from": "karta-temy",
-      "to": "tablicy-kak-most"
+      "from": "kn-dns",
+      "to": "kn-tcp"
     },
     {
-      "from": "kontrast-aa",
-      "to": "fokus-i-klaviatura"
+      "from": "kn-dns",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "kontrast-aa",
-      "to": "tokeny-tsveta"
+      "from": "kn-gre",
+      "to": "kn-mtu"
     },
     {
-      "from": "kontrast-aa",
-      "to": "dve-garnitury"
+      "from": "kn-gre",
+      "to": "kn-ipsec"
     },
     {
-      "from": "merka-stroki",
-      "to": "dve-garnitury"
+      "from": "kn-gre",
+      "to": "kn-routing"
     },
     {
-      "from": "merka-stroki",
-      "to": "tablicy-kak-most"
+      "from": "kn-indexes",
+      "to": "kn-postgres"
     },
     {
-      "from": "merka-stroki",
-      "to": "kontrast-aa"
+      "from": "kn-indexes",
+      "to": "kn-tx"
     },
     {
-      "from": "merka-stroki",
-      "to": "setka-i-plotnost"
+      "from": "kn-indexes",
+      "to": "kn-prometheus"
     },
     {
-      "from": "setka-i-plotnost",
-      "to": "kak-ustroena-baza-znaniy"
+      "from": "kn-ipsec",
+      "to": "kn-gre"
     },
     {
-      "from": "setka-i-plotnost",
-      "to": "merka-stroki"
+      "from": "kn-ipsec",
+      "to": "kn-mtu"
     },
     {
-      "from": "setka-i-plotnost",
-      "to": "tablicy-kak-most"
+      "from": "kn-ipsec",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "shkala-otstupov",
-      "to": "tokeny-tsveta"
+      "from": "kn-ipsec",
+      "to": "kn-routing"
     },
     {
-      "from": "shkala-otstupov",
-      "to": "setka-i-plotnost"
+      "from": "kn-logs",
+      "to": "kn-systemd"
     },
     {
-      "from": "shkala-otstupov",
-      "to": "tablicy-kak-most"
+      "from": "kn-logs",
+      "to": "kn-bash"
     },
     {
-      "from": "shkala-otstupov",
-      "to": "merka-stroki"
+      "from": "kn-logs",
+      "to": "kn-prometheus"
     },
     {
-      "from": "srezy-i-razrezy",
-      "to": "dve-garnitury"
+      "from": "kn-logs",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "srezy-i-razrezy",
-      "to": "setka-i-plotnost"
+      "from": "kn-mtu",
+      "to": "kn-gre"
     },
     {
-      "from": "srezy-i-razrezy",
-      "to": "shkala-otstupov"
+      "from": "kn-mtu",
+      "to": "kn-tcp"
     },
     {
-      "from": "tablica-i-eho-zebra",
-      "to": "tablicy-kak-most"
+      "from": "kn-mtu",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "tablica-i-eho-zebra",
-      "to": "tokeny-tsveta"
+      "from": "kn-postgres",
+      "to": "kn-indexes"
     },
     {
-      "from": "tablica-i-eho-zebra",
-      "to": "kontrast-aa"
+      "from": "kn-postgres",
+      "to": "kn-tx"
     },
     {
-      "from": "tablica-i-eho-zebra",
-      "to": "setka-i-plotnost"
+      "from": "kn-postgres",
+      "to": "kn-backups"
     },
     {
-      "from": "tablicy-kak-most",
-      "to": "kak-ustroena-baza-znaniy"
+      "from": "kn-practice",
+      "to": "kn-project"
     },
     {
-      "from": "tablicy-kak-most",
-      "to": "setka-i-plotnost"
+      "from": "kn-practice",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "tablicy-kak-most",
-      "to": "kontrast-aa"
+      "from": "kn-practice",
+      "to": "kn-ansible"
     },
     {
-      "from": "tablicy-kak-most",
-      "to": "tablica-i-eho-zebra"
+      "from": "kn-project",
+      "to": "kn-practice"
     },
     {
-      "from": "tokeny-tsveta",
-      "to": "shkala-otstupov"
+      "from": "kn-project",
+      "to": "kn-troubleshoot"
     },
     {
-      "from": "tokeny-tsveta",
-      "to": "fokus-i-klaviatura"
+      "from": "kn-project",
+      "to": "kn-ansible"
     },
     {
-      "from": "tokeny-tsveta",
-      "to": "dve-garnitury"
+      "from": "kn-prometheus",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-prometheus",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-prometheus",
+      "to": "kn-replication"
+    },
+    {
+      "from": "kn-raid",
+      "to": "kn-backups"
+    },
+    {
+      "from": "kn-raid",
+      "to": "kn-postgres"
+    },
+    {
+      "from": "kn-raid",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-replication",
+      "to": "kn-tx"
+    },
+    {
+      "from": "kn-replication",
+      "to": "kn-backups"
+    },
+    {
+      "from": "kn-replication",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-routing",
+      "to": "kn-vlan"
+    },
+    {
+      "from": "kn-routing",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-routing",
+      "to": "kn-gre"
+    },
+    {
+      "from": "kn-ssh",
+      "to": "kn-systemd"
+    },
+    {
+      "from": "kn-ssh",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-ssh",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-systemd",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-systemd",
+      "to": "kn-ssh"
+    },
+    {
+      "from": "kn-systemd",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-systemd",
+      "to": "kn-backups"
+    },
+    {
+      "from": "kn-tcp",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-tcp",
+      "to": "kn-mtu"
+    },
+    {
+      "from": "kn-tcp",
+      "to": "kn-dns"
+    },
+    {
+      "from": "kn-tcp",
+      "to": "kn-gre"
+    },
+    {
+      "from": "kn-troubleshoot",
+      "to": "kn-routing"
+    },
+    {
+      "from": "kn-troubleshoot",
+      "to": "kn-dns"
+    },
+    {
+      "from": "kn-troubleshoot",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-troubleshoot",
+      "to": "kn-vlan"
+    },
+    {
+      "from": "kn-troubleshoot",
+      "to": "kn-tcp"
+    },
+    {
+      "from": "kn-tx",
+      "to": "kn-postgres"
+    },
+    {
+      "from": "kn-tx",
+      "to": "kn-indexes"
+    },
+    {
+      "from": "kn-tx",
+      "to": "kn-replication"
+    },
+    {
+      "from": "kn-vlan",
+      "to": "kn-routing"
+    },
+    {
+      "from": "kn-vlan",
+      "to": "kn-dhcp"
+    },
+    {
+      "from": "kn-vlan",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-vlan",
+      "to": "kn-mtu"
     }
   ],
   "backlinks": {
-    "dve-garnitury": [
-      "fokus-i-klaviatura",
-      "kontrast-aa",
-      "merka-stroki",
-      "srezy-i-razrezy",
-      "tokeny-tsveta"
+    "kn-ansible": [
+      "kn-bash",
+      "kn-practice",
+      "kn-project",
+      "kn-prometheus",
+      "kn-ssh",
+      "kn-systemd"
     ],
-    "dvizhenie-120-320": [
-      "karta-temy"
+    "kn-backups": [
+      "kn-ansible",
+      "kn-postgres",
+      "kn-raid",
+      "kn-replication",
+      "kn-systemd"
     ],
-    "fokus-i-klaviatura": [
-      "dve-garnitury",
-      "dvizhenie-120-320",
-      "kontrast-aa",
-      "tokeny-tsveta"
+    "kn-bash": [
+      "kn-logs"
     ],
-    "kak-ustroena-baza-znaniy": [
-      "karta-temy",
-      "setka-i-plotnost",
-      "tablicy-kak-most"
+    "kn-dhcp": [
+      "kn-dns",
+      "kn-vlan"
     ],
-    "karta-temy": [],
-    "kontrast-aa": [
-      "dvizhenie-120-320",
-      "fokus-i-klaviatura",
-      "merka-stroki",
-      "tablica-i-eho-zebra",
-      "tablicy-kak-most"
+    "kn-dns": [
+      "kn-dhcp",
+      "kn-tcp",
+      "kn-troubleshoot"
     ],
-    "merka-stroki": [
-      "dve-garnitury",
-      "kak-ustroena-baza-znaniy",
-      "setka-i-plotnost",
-      "shkala-otstupov"
+    "kn-gre": [
+      "kn-ipsec",
+      "kn-mtu",
+      "kn-routing",
+      "kn-tcp"
     ],
-    "setka-i-plotnost": [
-      "dvizhenie-120-320",
-      "kak-ustroena-baza-znaniy",
-      "karta-temy",
-      "merka-stroki",
-      "shkala-otstupov",
-      "srezy-i-razrezy",
-      "tablica-i-eho-zebra",
-      "tablicy-kak-most"
+    "kn-indexes": [
+      "kn-postgres",
+      "kn-tx"
     ],
-    "shkala-otstupov": [
-      "srezy-i-razrezy",
-      "tokeny-tsveta"
+    "kn-ipsec": [
+      "kn-gre"
     ],
-    "srezy-i-razrezy": [],
-    "tablica-i-eho-zebra": [
-      "tablicy-kak-most"
+    "kn-logs": [
+      "kn-bash",
+      "kn-prometheus",
+      "kn-systemd",
+      "kn-troubleshoot"
     ],
-    "tablicy-kak-most": [
-      "kak-ustroena-baza-znaniy",
-      "karta-temy",
-      "merka-stroki",
-      "setka-i-plotnost",
-      "shkala-otstupov",
-      "tablica-i-eho-zebra"
+    "kn-mtu": [
+      "kn-gre",
+      "kn-ipsec",
+      "kn-tcp",
+      "kn-vlan"
     ],
-    "tokeny-tsveta": [
-      "dve-garnitury",
-      "fokus-i-klaviatura",
-      "kontrast-aa",
-      "shkala-otstupov",
-      "tablica-i-eho-zebra"
+    "kn-postgres": [
+      "kn-backups",
+      "kn-indexes",
+      "kn-raid",
+      "kn-tx"
+    ],
+    "kn-practice": [
+      "kn-project"
+    ],
+    "kn-project": [
+      "kn-practice"
+    ],
+    "kn-prometheus": [
+      "kn-ansible",
+      "kn-backups",
+      "kn-indexes",
+      "kn-logs",
+      "kn-raid",
+      "kn-replication"
+    ],
+    "kn-raid": [
+      "kn-backups"
+    ],
+    "kn-replication": [
+      "kn-prometheus",
+      "kn-tx"
+    ],
+    "kn-routing": [
+      "kn-gre",
+      "kn-ipsec",
+      "kn-troubleshoot",
+      "kn-vlan"
+    ],
+    "kn-ssh": [
+      "kn-ansible",
+      "kn-systemd"
+    ],
+    "kn-systemd": [
+      "kn-ansible",
+      "kn-backups",
+      "kn-bash",
+      "kn-logs",
+      "kn-ssh"
+    ],
+    "kn-tcp": [
+      "kn-dns",
+      "kn-mtu",
+      "kn-troubleshoot"
+    ],
+    "kn-troubleshoot": [
+      "kn-dhcp",
+      "kn-dns",
+      "kn-ipsec",
+      "kn-logs",
+      "kn-mtu",
+      "kn-practice",
+      "kn-project",
+      "kn-routing",
+      "kn-ssh",
+      "kn-tcp",
+      "kn-vlan"
+    ],
+    "kn-tx": [
+      "kn-indexes",
+      "kn-postgres",
+      "kn-replication"
+    ],
+    "kn-vlan": [
+      "kn-dhcp",
+      "kn-routing",
+      "kn-troubleshoot"
     ]
   }
 }

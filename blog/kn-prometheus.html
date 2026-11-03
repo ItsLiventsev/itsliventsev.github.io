@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Prometheus: четыре типа метрик и один хороший алерт · itsliventsev</title>
+<meta name="description" content="Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="мониторинг,журналы,автоматизация">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.">
+<meta name="kn-zone" content="ops">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-prometheus.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Prometheus: четыре типа метрик и один хороший алерт · itsliventsev">
+  <meta property="og:description" content="Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-prometheus.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="мониторинг">
+  <meta property="article:tag" content="журналы">
+  <meta property="article:tag" content="автоматизация">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Prometheus: четыре типа метрик и один хороший алерт · itsliventsev">
+  <meta name="twitter:description" content="Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Prometheus: четыре типа метрик и один хороший алерт","description":"Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.","url":"https://itsliventsev.github.io/blog/kn-prometheus.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-prometheus.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"мониторинг, журналы, автоматизация"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Prometheus: четыре типа метрик и один хороший алерт","item":"https://itsliventsev.github.io/blog/kn-prometheus.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/ops.html">Эксплуатация</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Prometheus: четыре типа метрик и один хороший алерт</h1>
+        <p class="kn-def">Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Мониторинг отвечает на два разных вопроса: «что происходит сейчас» (дашборд) и «надо ли кого-то будить» (алерт). Смешивать их — главная ошибка: дашборд с сорока графиками и алерт на каждый график гарантируют, что через месяц уведомления будут игнорировать.</p>
+        <h2>Четыре типа метрик</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Тип</th><th scope="col">Что хранит</th><th scope="col">Функция</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">counter</th><td>сумму событий</td><td>rate()</td><td>http_requests_total</td></tr><tr><th scope="row">gauge</th><td>текущее значение</td><td>avg_over_time()</td><td>memory_used_bytes</td></tr><tr><th scope="row">histogram</th><td>распределение по бакетам</td><td>histogram_quantile()</td><td>request_duration_seconds</td></tr><tr><th scope="row">summary</th><td>квантили посчитаны клиентом</td><td>нельзя агрегировать между экземплярами</td><td>rpc_duration</td></tr></tbody><caption>Тип метрики определяется вопросом, на который она отвечает, и от него зависит, какие функции применимы.</caption></table></div>
+        <p>Разница между histogram и summary практична: гистограмму можно складывать между экземплярами (<code>sum(rate(...))</code> по всем подам), а summary — нет, у него квантили посчитаны на клиенте и не складываются. Поэтому для сервисов с несколькими репликами почти всегда берут histogram.</p>
+        <h2>Что считать</h2>
+        <p>Начинать надо не с «какие метрики есть», а с «что чувствует пользователь». Четыре золотых сигнала из практики SRE:</p>
+        <ol><li><strong>Задержка</strong> — сколько ждёт пользователь.</li><li><strong>Трафик</strong> — сколько запросов приходит.</li><li><strong>Ошибки</strong> — какая доля неуспешна.</li><li><strong>Насыщение</strong> — насколько заполнен ресурс.</li></ol>
+        <p>CPU и память — это насыщение, то есть самое косвенное из четырёх. Поэтому «CPU &gt; 80%» — плохой алерт: сервис может прекрасно работать на 95% CPU и падать на 20%, если упёрся в диск.</p>
+        <p>Плохой алерт: <code>CPU &gt; 80%</code> пятнадцать минут. Хороший: <code>95-й перцентиль времени ответа &gt; 2 c и доля 5xx &gt; 1%</code> в течение пяти минут.</p>
+        <h2>PromQL, которого достаточно</h2>
+        <pre><code>rate(http_requests_total[5m])                          # запросов в секунду
+sum(rate(http_requests_total{status=~&quot;5..&quot;}[5m]))
+  / sum(rate(http_requests_total[5m]))                 # доля ошибок
+histogram_quantile(0.95, sum(rate(request_duration_seconds_bucket[5m])) by (le))
+up == 0                                                # цель недоступна</code></pre>
+        <p>Правила: <code>rate</code> — только для counter; окно должно быть не меньше двух интервалов scrape; <code>by (le)</code> обязателен для <code>histogram_quantile</code>.</p>
+        <h2>Алерты, которые не игнорируют</h2>
+        <ul><li><strong><code>for</code></strong>: условие должно держаться N минут. Один скачок — не авария.</li><li><strong>Симптом, а не причина</strong>: «сайт отвечает 5xx» лучше, чем «температура диска 45 °C».</li><li><strong>Действие</strong>: у каждого алерта должно быть написано, что делать. Если действия нет — это не алерт, а наблюдение.</li><li><strong>Дежурство</strong>: алерты, которые не требуют немедленной реакции, идут в почту или чат, а не в телефон.</li></ul>
+        <h2>Где это живёт</h2>
+        <p>Prometheus собирает метрики сам, вытягивая их по HTTP (pull-модель) с интервалом, обычно 15–60 секунд. Grafana показывает графики, Alertmanager группирует и маршрутизирует уведомления. Для сбора с хостов — node_exporter, для приложений — клиентские библиотеки, для баз — экспортёры.</p>
+        <p>Логи и метрики дополняют друг друга: метрика говорит «стало плохо», журнал — «почему» (см. <a class="kn-ref" href="/blog/kn-logs.html">журналы</a>). А развёртывание экспортёров и правил на десятке хостов лучше делать плейбуком: <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-replication.html"><strong>Репликация: копия отстаёт, и это нормально</strong><span>Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logs.html">Журналы: уровни, ротация и лимит на диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://prometheus.io/docs/concepts/metric_types/" target="_blank" rel="noopener">Prometheus: Metric types</a><small>Prometheus</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://prometheus.io/docs/practices/alerting/" target="_blank" rel="noopener">Prometheus: Alerting best practices</a><small>Prometheus</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">Google SRE Book: Monitoring Distributed Systems</a><small>Google</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/ops.html">все заметки рубрики «Эксплуатация»</a>
+        <span><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия →</a><a href="/blog/kn-project.html">← Проект как кейс: навигация корпуса и киберспорт</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Эксплуатация. Запись 14 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-prometheus"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#мониторинг">мониторинг</a></li><li><a href="/blog/topics.html#журналы">журналы</a></li><li><a href="/blog/topics.html#автоматизация">автоматизация</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 9 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>
