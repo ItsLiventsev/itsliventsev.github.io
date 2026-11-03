@@ -43,6 +43,11 @@
     const next = dcl.dataset.theme === 'dark' ? 'light' : 'dark';
     try { localStorage.setItem(THEME_KEY, next); } catch (error) { /* private mode */ }
     paintTheme(next);
+    /* Тема применяется сразу (атрибут читается синхронно), а мягкость даёт
+       короткий переход цветов: класс u-theme-switch включает его на 340 мс. */
+    if (reduceMotion()) return;
+    dcl.classList.add('u-theme-switch');
+    window.setTimeout(() => dcl.classList.remove('u-theme-switch'), 340);
   }
   paintTheme(dcl.dataset.theme === 'dark' ? 'dark' : 'light');
   window.addEventListener('storage', event => {
@@ -534,6 +539,22 @@
       }, { rootMargin: '0px 0px -10% 0px', threshold: 0.04 });
       revealables.forEach(node => { node.classList.add('ui-reveal'); io.observe(node); });
     }
+  }
+
+  /* ——— лента итераций на главной: пауза по кнопке ———
+     Движение выключено в CSS при prefers-reduced-motion; кнопка тогда скрыта,
+     а состояние всё равно помечается, чтобы разметка оставалась честной. */
+  const iterStrip = doc.querySelector('[data-iter-strip]');
+  if (iterStrip) {
+    const iterToggle = iterStrip.querySelector('[data-iter-toggle]');
+    const setPaused = paused => {
+      iterStrip.classList.toggle('is-paused', paused);
+      if (!iterToggle) return;
+      iterToggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      iterToggle.textContent = paused ? 'продолжить' : 'пауза';
+    };
+    if (iterToggle) iterToggle.addEventListener('click', () => setPaused(!iterStrip.classList.contains('is-paused')));
+    if (reduceMotion()) setPaused(true);
   }
 
   /* ——— code blocks: keyboard-focusable, copy action ——— */
