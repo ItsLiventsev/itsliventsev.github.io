@@ -16,9 +16,10 @@ on:
 permissions:
   contents: write
 
+# Один писатель в main за раз: post-index и activity коммитят в одну ветку.
 concurrency:
-  group: activity-snapshot
-  cancel-in-progress: true
+  group: main-commits
+  cancel-in-progress: false
 
 jobs:
   snapshot:
@@ -43,7 +44,17 @@ jobs:
           git add assets/data/activity.json
           if git diff --staged --quiet; then
             echo "Снимок не изменился"
-          else
-            git commit -m "chore(activity): снимок истории за 30 дней"
-            git push
+            exit 0
           fi
+          git commit -m "chore(activity): снимок истории за 30 дней"
+          # post-index может закоммитить в main первым: перебазируемся и пробуем снова.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Снимок отправлен (попытка $attempt)"
+              exit 0
+            fi
+            echo "push отклонён, перебазируемся (попытка $attempt)"
+            git pull --rebase origin main
+          done
+          echo "::error::не удалось отправить снимок после трёх попыток"
+          exit 1

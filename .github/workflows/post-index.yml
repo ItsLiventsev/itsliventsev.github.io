@@ -19,6 +19,11 @@ on:
       - '.github/workflows/post-index.yml'
   workflow_dispatch:
 
+# Один писатель в main за раз: post-index и activity коммитят в одну ветку.
+concurrency:
+  group: main-commits
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -47,7 +52,17 @@ jobs:
           git add '*.html' 'blog/*.html' 'articles/*.html' 'projects/*.html' 'archive/*.html'
           if git diff --staged --quiet; then
             echo "Изменений для коммита нет"
-          else
-            git commit -m "chore: авто-обновление индексов, sitemap и SEO-разметки"
-            git push
+            exit 0
           fi
+          git commit -m "chore: авто-обновление индексов, sitemap и SEO-разметки"
+          # Второй бот может успеть первым: перебазируемся и пробуем снова.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Индексы отправлены (попытка $attempt)"
+              exit 0
+            fi
+            echo "push отклонён, перебазируемся (попытка $attempt)"
+            git pull --rebase origin main
+          done
+          echo "::error::не удалось отправить артефакты после трёх попыток"
+          exit 1
