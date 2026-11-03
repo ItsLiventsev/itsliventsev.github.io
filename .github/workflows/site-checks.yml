@@ -43,7 +43,7 @@ jobs:
             if curl -fsS http://127.0.0.1:8000/ > /dev/null; then break; fi
             sleep 1
           done
-          for test in browser-smoke browser-reading; do
+          for test in browser-smoke browser-reading browser-faq; do
             if node "scripts/$test.js" > "$RUNNER_TEMP/$test.log" 2>&1; then
               cat "$RUNNER_TEMP/$test.log"
             else

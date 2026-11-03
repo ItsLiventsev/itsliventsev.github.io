@@ -493,7 +493,13 @@
   toTop.classList.add('ui-to-top');
   toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' }));
   let toTopTick = false;
-  const updateToTop = () => { toTop.classList.toggle('show', window.scrollY > 520); toTopTick = false; };
+  const mastheadBar = doc.querySelector('.ui-masthead');
+  const updateToTop = () => {
+    toTop.classList.toggle('show', window.scrollY > 520);
+    /* Шапка липкая и непрозрачная: линия снизу отделяет её от текста, который уезжает под неё. */
+    if (mastheadBar) mastheadBar.classList.toggle('is-scrolled', window.scrollY > 8);
+    toTopTick = false;
+  };
   window.addEventListener('scroll', () => { if (!toTopTick) { toTopTick = true; requestAnimationFrame(updateToTop); } }, { passive: true });
   updateToTop();
 

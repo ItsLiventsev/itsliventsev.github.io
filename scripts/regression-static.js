@@ -143,6 +143,30 @@ ok(read('stands/index.html').includes('<h1') && read('stands/index.html').includ
 ok(read('projects.html').includes('data-catalog-list'), 'projects.html: нет каталога карточек');
 ok(read('projects.html').includes('data-catalog-status') || read('articles.html').includes('data-catalog-status'), 'каталог без области статуса фильтра');
 ok(read('faq.html').includes('01 · С чего начать'), 'FAQ потерял нумерованные разделы');
+/* Справка: каждый <details> обязан иметь настоящий текст ответа и свой id для деплинка.
+   Пустые аккордеоны уже случались — теперь это ловится тестом, а не глазами. */
+{
+  const faq = read('faq.html');
+  const items = [...faq.matchAll(/<details\b([^>]*)>([\s\S]*?)<\/details>/g)];
+  ok(items.length >= 17, 'справка: потерялись вопросы (найдено ' + items.length + ')');
+  const stripped = items.map(([, attrs, body]) => ({
+    id: (/id="([^"]+)"/.exec(attrs) || [])[1] || '',
+    summary: (/<summary>([^<]+)<\/summary>/.exec(body) || [])[1] || '',
+    answer: body.replace(/<summary>[\s\S]*?<\/summary>/, '').replace(/<p class="faq-anchor">[\s\S]*?<\/p>/, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+  }));
+  for (const item of stripped) {
+    ok(item.id.startsWith('faq-'), 'справка: вопрос без id для деплинка — ' + item.summary.slice(0, 40));
+    ok(item.summary.length > 6, 'справка: пустой вопрос в аккордеоне');
+    ok(item.answer.length > 80, 'справка: пустой или слишком короткий ответ — ' + item.summary.slice(0, 40));
+  }
+  ok(new Set(stripped.map(i => i.id)).size === stripped.length, 'справка: повторяющиеся id вопросов');
+  ok(faq.includes('FAQ:LD:START') && faq.includes('"@type":"FAQPage"'), 'справка: нет FAQPage-разметки');
+  const ld = JSON.parse(/FAQ:LD:START -->\n  <script type="application\/ld\+json">(.*?)<\/script>/.exec(faq)[1]);
+  ok(ld.mainEntity.length === stripped.length, 'справка: FAQPage размечен не для всех вопросов');
+  ok(ld.mainEntity.every(q => q.acceptedAnswer.text.length > 80), 'справка: в FAQPage пустые ответы');
+  ok(ld.mainEntity.every(q => stripped.some(i => i.summary.startsWith(q.name.slice(0, 30)))), 'справка: FAQPage спрашивает не о том, что на странице');
+  ok(faq.includes('id="faq-filter"') && faq.includes('assets/faq.js'), 'справка: пропал фильтр вопросов или его скрипт');
+}
 ok(read('archive.html').includes('Учебные программы и методика') && read('archive.html').includes('поз.'), 'архив должен сохранять категории и счётчики позиций');
 ok(read('sitemap.html').includes('map-group') && read('sitemap.html').includes('учебные вселенные'), 'карта сайта потеряла группы');
 ok(read('404.html').includes('not-found'), 'страница 404 не оформлена');
