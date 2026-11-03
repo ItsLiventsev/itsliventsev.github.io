@@ -919,7 +919,6 @@
 .p-card, .light-card { padding: var(--u-s4); border: 1px solid var(--u-line); border-radius: var(--u-r-sm); background: var(--u-surface); }
 .p-num { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-faint); }
 .p-title { display: block; margin-block: var(--u-s1); font-weight: 600; }
-.p-tag, .game-tag { color: var(--u-accent); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
 .step-card { display: grid; gap: var(--u-s1); padding: var(--u-s3) 0; border-bottom: 1px solid var(--u-line); }
 .step-card-num { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-accent); }
 
@@ -1413,6 +1412,7 @@ label.btn { cursor: pointer; }
   border-radius: var(--u-r-pill);
   background: var(--u-surface-sunk);
   color: var(--u-ink-2);
+  font-family: var(--u-font-mono);
   font-size: var(--u-fs-xs);
   font-weight: 500;
 }

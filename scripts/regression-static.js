@@ -180,5 +180,25 @@ ok(office.includes('assets/tokens.css') && office.includes('assets/shell.js') &&
 const sw = read('sw.js');
 ok(sw.includes('/assets/tokens.css') && sw.includes('/assets/shell.js') && !sw.includes('workspace'), 'service worker кэширует удалённые ассеты');
 
+/* ── поисковый индекс не должен расходиться с сайтом ──
+   Индекс поддерживается вручную, поэтому проверяем его целостность: битые url,
+   пустые поля и страницы, которые вообще не попали в поиск. Редиректы-заглушки
+   (meta refresh) индексировать не нужно. */
+const searchIndex = JSON.parse(read('assets/search-index.json'));
+ok(searchIndex.length >= 70, 'поисковый индекс подозрительно мал: ' + searchIndex.length);
+ok(new Set(searchIndex.map(i => i.url)).size === searchIndex.length, 'поисковый индекс: повторяющиеся url');
+for (const item of searchIndex) {
+  ok(!!item.title && !!item.description && !!item.category, 'поисковый индекс: пустые поля у ' + item.url);
+  ok(!!item.content && item.content.length > 200, 'поисковый индекс: слишком короткий текст у ' + item.url);
+  const target = item.url === '/' ? 'index.html' : item.url.replace(/^\//, '');
+  ok(exists(target), 'поисковый индекс ведёт на несуществующую страницу: ' + item.url);
+}
+const indexed = new Set(searchIndex.map(i => (i.url === '/' ? 'index.html' : i.url.replace(/^\//, ''))));
+for (const page of contentPages) {
+  if (page === 'admin.html' || page === '404.html') continue;
+  if (/http-equiv="refresh"/i.test(read(page))) continue;
+  ok(indexed.has(page), 'страница отсутствует в поисковом индексе: ' + page);
+}
+
 console.log(`regression-static: ${pass} passed, ${fail} failed`);
 if (fail) { for (const f of failures.slice(0, 40)) console.log('  ✗ ' + f); process.exitCode = 1; }
