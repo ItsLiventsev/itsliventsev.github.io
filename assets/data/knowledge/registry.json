@@ -1,0 +1,253 @@
+{
+  "generated": "2026-11-03",
+  "notes": 13,
+  "sources": 35,
+  "edges": [
+    {
+      "from": "dve-garnitury",
+      "to": "merka-stroki"
+    },
+    {
+      "from": "dve-garnitury",
+      "to": "tokeny-tsveta"
+    },
+    {
+      "from": "dve-garnitury",
+      "to": "fokus-i-klaviatura"
+    },
+    {
+      "from": "dvizhenie-120-320",
+      "to": "fokus-i-klaviatura"
+    },
+    {
+      "from": "dvizhenie-120-320",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "dvizhenie-120-320",
+      "to": "kontrast-aa"
+    },
+    {
+      "from": "fokus-i-klaviatura",
+      "to": "tokeny-tsveta"
+    },
+    {
+      "from": "fokus-i-klaviatura",
+      "to": "kontrast-aa"
+    },
+    {
+      "from": "fokus-i-klaviatura",
+      "to": "dve-garnitury"
+    },
+    {
+      "from": "kak-ustroena-baza-znaniy",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "kak-ustroena-baza-znaniy",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "kak-ustroena-baza-znaniy",
+      "to": "merka-stroki"
+    },
+    {
+      "from": "karta-temy",
+      "to": "kak-ustroena-baza-znaniy"
+    },
+    {
+      "from": "karta-temy",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "karta-temy",
+      "to": "dvizhenie-120-320"
+    },
+    {
+      "from": "karta-temy",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "kontrast-aa",
+      "to": "fokus-i-klaviatura"
+    },
+    {
+      "from": "kontrast-aa",
+      "to": "tokeny-tsveta"
+    },
+    {
+      "from": "kontrast-aa",
+      "to": "dve-garnitury"
+    },
+    {
+      "from": "merka-stroki",
+      "to": "dve-garnitury"
+    },
+    {
+      "from": "merka-stroki",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "merka-stroki",
+      "to": "kontrast-aa"
+    },
+    {
+      "from": "merka-stroki",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "setka-i-plotnost",
+      "to": "kak-ustroena-baza-znaniy"
+    },
+    {
+      "from": "setka-i-plotnost",
+      "to": "merka-stroki"
+    },
+    {
+      "from": "setka-i-plotnost",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "shkala-otstupov",
+      "to": "tokeny-tsveta"
+    },
+    {
+      "from": "shkala-otstupov",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "shkala-otstupov",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "shkala-otstupov",
+      "to": "merka-stroki"
+    },
+    {
+      "from": "srezy-i-razrezy",
+      "to": "dve-garnitury"
+    },
+    {
+      "from": "srezy-i-razrezy",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "srezy-i-razrezy",
+      "to": "shkala-otstupov"
+    },
+    {
+      "from": "tablica-i-eho-zebra",
+      "to": "tablicy-kak-most"
+    },
+    {
+      "from": "tablica-i-eho-zebra",
+      "to": "tokeny-tsveta"
+    },
+    {
+      "from": "tablica-i-eho-zebra",
+      "to": "kontrast-aa"
+    },
+    {
+      "from": "tablica-i-eho-zebra",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "tablicy-kak-most",
+      "to": "kak-ustroena-baza-znaniy"
+    },
+    {
+      "from": "tablicy-kak-most",
+      "to": "setka-i-plotnost"
+    },
+    {
+      "from": "tablicy-kak-most",
+      "to": "kontrast-aa"
+    },
+    {
+      "from": "tablicy-kak-most",
+      "to": "tablica-i-eho-zebra"
+    },
+    {
+      "from": "tokeny-tsveta",
+      "to": "shkala-otstupov"
+    },
+    {
+      "from": "tokeny-tsveta",
+      "to": "fokus-i-klaviatura"
+    },
+    {
+      "from": "tokeny-tsveta",
+      "to": "dve-garnitury"
+    }
+  ],
+  "backlinks": {
+    "dve-garnitury": [
+      "fokus-i-klaviatura",
+      "kontrast-aa",
+      "merka-stroki",
+      "srezy-i-razrezy",
+      "tokeny-tsveta"
+    ],
+    "dvizhenie-120-320": [
+      "karta-temy"
+    ],
+    "fokus-i-klaviatura": [
+      "dve-garnitury",
+      "dvizhenie-120-320",
+      "kontrast-aa",
+      "tokeny-tsveta"
+    ],
+    "kak-ustroena-baza-znaniy": [
+      "karta-temy",
+      "setka-i-plotnost",
+      "tablicy-kak-most"
+    ],
+    "karta-temy": [],
+    "kontrast-aa": [
+      "dvizhenie-120-320",
+      "fokus-i-klaviatura",
+      "merka-stroki",
+      "tablica-i-eho-zebra",
+      "tablicy-kak-most"
+    ],
+    "merka-stroki": [
+      "dve-garnitury",
+      "kak-ustroena-baza-znaniy",
+      "setka-i-plotnost",
+      "shkala-otstupov"
+    ],
+    "setka-i-plotnost": [
+      "dvizhenie-120-320",
+      "kak-ustroena-baza-znaniy",
+      "karta-temy",
+      "merka-stroki",
+      "shkala-otstupov",
+      "srezy-i-razrezy",
+      "tablica-i-eho-zebra",
+      "tablicy-kak-most"
+    ],
+    "shkala-otstupov": [
+      "srezy-i-razrezy",
+      "tokeny-tsveta"
+    ],
+    "srezy-i-razrezy": [],
+    "tablica-i-eho-zebra": [
+      "tablicy-kak-most"
+    ],
+    "tablicy-kak-most": [
+      "kak-ustroena-baza-znaniy",
+      "karta-temy",
+      "merka-stroki",
+      "setka-i-plotnost",
+      "shkala-otstupov",
+      "tablica-i-eho-zebra"
+    ],
+    "tokeny-tsveta": [
+      "dve-garnitury",
+      "fokus-i-klaviatura",
+      "kontrast-aa",
+      "shkala-otstupov",
+      "tablica-i-eho-zebra"
+    ]
+  }
+}

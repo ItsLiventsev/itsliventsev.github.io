@@ -24,7 +24,14 @@ const html = walk('.', /\.html$/);
 const contentPages = html.filter(file => file !== 'assets/offline.html');
 const stands = html.filter(file => file.startsWith('stands/'));
 
-ok(contentPages.length === 75, 'ожидалось 75 контентных HTML-страниц, получено ' + contentPages.length);
+/* 74 базовых маршрута + страницы базы знаний (заметки, указатель рубрик, сами
+   рубрики, граф; §18 pages.css) = 95. Число базовых маршрутов уменьшилось на
+   один, потому что прежняя одиночная заметка блога теперь считается частью
+   базы знаний, а не отдельным документом. */
+const knowledgePages = contentPages.filter(file => file === 'blog/topics.html'
+  || /^blog\/topics\/[a-z-]+\.html$/.test(file) || /^blog\/[a-z0-9-]+\.html$/.test(file));
+ok(contentPages.length === 74 + knowledgePages.length, 'ожидалось ' + (74 + knowledgePages.length)
+  + ' контентных HTML-страниц, получено ' + contentPages.length);
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 ok(exists('assets/offline.html'), 'нет автономной страницы для офлайн-перехода');
 

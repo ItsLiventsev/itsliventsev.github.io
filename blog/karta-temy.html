@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Карта темы: как из десяти заметок собрать одну мысль · itsliventsev</title>
+<meta name="description" content="Карта темы — это входная заметка, которая объясняет, какие записи и в каком порядке читать. Она не дублирует содержимое, а задаёт маршрут по нему.">
+<meta name="post-date" content="2026-10-30">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="граф,карточки,статика">
+<meta name="post-readtime" content="5 мин">
+<meta name="post-excerpt" content="Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.">
+<meta name="kn-zone" content="data">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/karta-temy.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Карта темы: как из десяти заметок собрать одну мысль · itsliventsev">
+  <meta property="og:description" content="Карта темы — это входная заметка, которая объясняет, какие записи и в каком порядке читать. Она не дублирует содержимое, а задаёт маршрут по нему.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/karta-temy.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/table.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-30">
+  <meta property="article:tag" content="граф">
+  <meta property="article:tag" content="карточки">
+  <meta property="article:tag" content="статика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Карта темы: как из десяти заметок собрать одну мысль · itsliventsev">
+  <meta name="twitter:description" content="Карта темы — это входная заметка, которая объясняет, какие записи и в каком порядке читать. Она не дублирует содержимое, а задаёт маршрут по нему.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/table.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Карта темы: как из десяти заметок собрать одну мысль","description":"Карта темы — это входная заметка, которая объясняет, какие записи и в каком порядке читать. Она не дублирует содержимое, а задаёт маршрут по нему.","url":"https://itsliventsev.github.io/blog/karta-temy.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/karta-temy.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/table.webp","datePublished":"2026-10-30","dateModified":"2026-10-30","keywords":"граф, карточки, статика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Карта темы: как из десяти заметок собрать одну мысль","item":"https://itsliventsev.github.io/blog/karta-temy.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/data.html">Данные</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-30">30 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 02.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>5 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Карта темы: как из десяти заметок собрать одну мысль</h1>
+        <p class="kn-def">Карта темы — это входная заметка, которая объясняет, какие записи и в каком порядке читать. Она не дублирует содержимое, а задаёт маршрут по нему.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Десять заметок — это уже не список, а пространство. В нём появляется вопрос, которого не было при трёх: с чего начать. Отвечает не каталог и не поиск, а карта темы — запись, которая задаёт маршрут.</p>
+        <h2>Три роли</h2>
+        <p>В любой связанной базе записи делятся на три роли, даже если их никто не назначал:</p>
+        <ul><li><strong>карта</strong> — вход. Объясняет, какие вопросы тема закрывает и в каком порядке их читать;</li><li><strong>узел</strong> — запись, на которую ссылаются многие: она уточняет понятие или правило;</li><li><strong>лист</strong> — конкретный случай, приём, разбор. Ссылок меньше, но именно листья отвечают на вопрос «что делать».</li></ul>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Роль</th><th scope="col">Отвечает на вопрос</th><th scope="col">Связей</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">Карта</th><td>«с чего начать»</td><td>4–6</td><td>как устроена база знаний</td></tr><tr><th scope="row">Узел</th><td>«как это связано»</td><td>3–5</td><td>мера строки</td><td>контраст AA</td></tr><tr><th scope="row">Лист</th><td>«что делать в этом случае»</td><td>2–3</td><td>зебра внутри таблицы</td></tr></tbody><caption>В базе десять заметок в среднем дают одну карту, три узла и шесть листьев.</caption></table></div>
+        <p>Роли не высечены в камне: заметка может вырасти из листа в узел, если её начали цитировать другие. В графе это видно по числу входящих рёбер — и это же число подсказывает, что стоит дополнить.</p>
+        <h2>Карта — не оглавление</h2>
+        <p>Разница принципиальная. Оглавление перечисляет всё; карта отбирает. В карте три-четыре ссылки, и каждая подписана: не «Мера строки», а «сколько знаков в строке читается легко». Тогда читатель понимает, нужен ли ему переход, ещё до клика.</p>
+        <p>Плохая карта пересказывает содержимое заметок — и превращается в ещё одну длинную страницу, после которой идти никуда не хочется. Хорошая карта оставляет чувство, что остальное уже понятно и осталось только проверить деталь.</p>
+        <h2>Порядок чтения важнее полноты</h2>
+        <p>Входная заметка задаёт последовательность: сначала простое, потом точное. Если начать с точного исключения, читатель уйдёт. Поэтому карта темы «Как устроена база знаний» ведёт сначала к <a class="kn-ref" href="/blog/setka-i-plotnost.html">сетке и плотности</a> — это про общий вид, — и только потом к таблицам и <a class="kn-ref" href="/blog/tablicy-kak-most.html">оси сравнения</a>.</p>
+        <p>Ещё один приём — делить маршрут на «за десять минут» и «если нужно глубже». Читатель сам выбирает бюджет времени.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">выбрать<em>2</em></p><div class="kn-tile"><strong>Один вопрос</strong>на какой вопрос отвечает карта</div><div class="kn-tile"><strong>Два-три входа</strong>не больше трёх первых ссылок</div></div><div class="kn-lane"><p class="kn-lane-head">связать<em>2</em></p><div class="kn-tile"><strong>Порядок чтения</strong>сначала простое, потом точное</div><div class="kn-tile"><strong>Смысл ссылки</strong>подписать, зачем идти дальше</div></div><div class="kn-lane"><p class="kn-lane-head">проверить<em>2</em></p><div class="kn-tile"><strong>Нет тупиков</strong>из каждой записи есть выход</div><div class="kn-tile"><strong>Обратные ссылки</strong>карта видна из всех листьев</div></div><div class="kn-lane"><p class="kn-lane-head">стоп<em>1</em></p><div class="kn-tile"><strong>Карта-дубль</strong>пересказ всех заметок вместо маршрута</div></div></div>
+        <h2>Проверка карты</h2>
+        <ol><li><strong>Нет тупиков.</strong> Из каждой заметки, куда ведёт карта, есть минимум две ссылки дальше.</li><li><strong>Обратные ссылки.</strong> Карта видна из всех листьев — иначе читатель, пришедший из поиска в середину, не найдёт вход.</li><li><strong>Нет дублей.</strong> Если две заметки отвечают на один вопрос, одна из них должна стать разделом другой.</li><li><strong>Нет висячих записей.</strong> Заметка с одной входящей ссылкой и одной исходящей почти всегда ждёт дополнения.</li></ol>
+        <p>Граф показывает это визуально: рёбра есть, картина сетки видна, но узлы с одной связью — это кандидаты на слияние. Как читать <a class="kn-ref" href="/blog/kak-ustroena-baza-znaniy.html">граф целиком</a>, описано во входной заметке; как не превратить ленту в свалку — в заметке о плотности. Отдельно про движение при переходах между записями — <a class="kn-ref" href="/blog/dvizhenie-120-320.html">Движение 120–320 мс: когда анимация объясняет</a>, там же про то, почему анимация не должна объяснять структуру за читателя.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kak-ustroena-baza-znaniy.html"><strong>Как устроена база знаний</strong><span>Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.</span></a></li>
+          <li><a href="/blog/setka-i-plotnost.html"><strong>Сетка 12 колонок и поток карточек разных размеров</strong><span>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span></a></li>
+          <li><a href="/blog/dvizhenie-120-320.html"><strong>Движение 120–320 мс: когда анимация объясняет</strong><span>Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.nngroup.com/articles/ia-study-guide/" target="_blank" rel="noopener">Information architecture: hub pages and navigation</a><small>Nielsen Norman Group</small><small>обращение: 2 ноября 2026</small></li><li><a href="https://maggieappleton.com/garden-history" target="_blank" rel="noopener">Digital garden: notes as an evolving knowledge base</a><small>Maggie Appleton</small><small>обращение: 28 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/data.html">все заметки рубрики «Данные»</a>
+        <span><a href="/blog/setka-i-plotnost.html">Сетка 12 колонок и поток карточек разных размеров →</a><a href="/blog/merka-stroki.html">← Мера строки: 68 знаков против пустоты</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Данные. Запись 10 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#karta-temy"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#граф">граф</a></li><li><a href="/blog/topics.html#карточки">карточки</a></li><li><a href="/blog/topics.html#статика">статика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 30.10.2026, обновлено 02.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

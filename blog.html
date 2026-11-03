@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Заметки · itsliventsev</title>
-<meta name="description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
+<meta name="description" content="База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -25,76 +25,194 @@
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Заметки · itsliventsev">
-  <meta property="og:description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
+  <meta property="og:description" content="База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/notes-graph.webp">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Заметки · itsliventsev">
-  <meta name="twitter:description" content="Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Заметки","description":"Заметки itsliventsev: короткие записи с пар, мысли на полях, подборки и мини-дополнения. Раздел в разработке — материалы носят архивный характер.","url":"https://itsliventsev.github.io/blog.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
+  <meta name="twitter:description" content="База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/notes-graph.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Заметки","description":"База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.","url":"https://itsliventsev.github.io/blog.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <main id="main-content">
-  <header class="ui-pagehead">
-    <p class="ui-eyebrow">записи · наблюдения · дополнения</p>
+  <!-- KN:AUTO:START · сборка scripts/build-knowledge.js -->
+  <div class="kn-head">
+    <p class="ui-eyebrow">база знаний · лента</p>
     <h1>Заметки</h1>
-    <p>Короткие записи с занятий и дополнения к практикумам. Здесь быстрее и черновнее, чем в статьях: заметка появляется тогда, когда мысль уже проверена на группе.</p>
-    <div class="ui-pagehead-meta"><span>лента в обратном порядке</span><span>без редактуры</span><span><a href="feed.xml">RSS</a></span></div>
-  </header>
+    <p class="kn-head-lede">Рабочий блокнот: короткие записи о дизайне, типографике и данных, которые проверены на живом сайте. Каждая заметка ссылается на соседние — из связей собирается база знаний, а не архив страниц.</p>
+    <div class="ui-pagehead-meta">
+      <span><b>13</b> заметок</span>
+      <span>6 рубрик</span>
+      <span>44 связи</span>
+      <span>обновлено 03.11.2026</span>
+    </div>
+  </div>
+
+    <div class="kn-group-head"><h2>Все записи</h2><span>от новых к старым · 13 заметок</span></div>
 
   <div class="catalog-toolbar">
     <div class="catalog-search" data-catalog-search hidden>
       <label for="note-query">Поиск по заметкам</label>
       <div class="ui-search-field">
         <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#search"></use></svg>
-        <input id="note-query" type="search" placeholder="Слово или тема" autocomplete="off">
+        <input id="note-query" type="search" placeholder="Слово, тема или тег" autocomplete="off" data-kn-search>
       </div>
       <button type="button" data-catalog-clear hidden>Очистить</button>
+    </div>
+    <div class="kn-rail-row">
+      <div class="kn-filterbar" data-kn-filters role="group" aria-label="Рубрика"><button class="catalog-filter" type="button" aria-pressed="true" data-kn-zone="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="typography">Типографика</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="tokens">Токены</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="layout">Композиция</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="motion">Движение</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="accessibility">Доступность</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="data">Данные</button></div>
+      <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/blog/graph.html">граф связей</a><a href="/feed.xml">RSS</a></nav>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
 
-  <div class="catalog" data-catalog-list id="note-grid" aria-live="polite">
-    <div class="catalog-empty">Загружаю заметки…</div>
-    <noscript><a class="catalog-row" href="blog/2026-10-26-kak-ustroen-etot-blog.html"><span class="catalog-index">01</span><span><span class="catalog-title">Как устроены заметки</span><span class="catalog-desc">Чем заметки отличаются от статей и проектов и как новая запись появляется в ленте.</span></span><span class="catalog-side"><span class="ui-tag">заметка</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a></noscript>
+  <div class="kn-stream" data-kn-stream>
+      <a class="kn-card kn-card--wide" data-kn-zone="layout" href="/blog/setka-i-plotnost.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/bento.webp" alt="иллюстрация к заметке: карточки разного размера на сетке" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Композиция</span>
+          <span class="kn-card-title">Сетка 12 колонок и поток карточек разных размеров</span>
+          <span class="kn-card-excerpt">Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-01">01.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="data" href="/blog/kak-ustroena-baza-znaniy.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/notes-graph.webp" alt="иллюстрация к заметке: карточки, связанные линиями" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Данные</span>
+          <span class="kn-card-title">Как устроена база знаний</span>
+          <span class="kn-card-excerpt">Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-03">03.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="data" href="/blog/tablicy-kak-most.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/table.webp" alt="иллюстрация к заметке: таблица с тонкими линиями и подписью" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Данные</span>
+          <span class="kn-card-title">Таблица как мост между текстом и решением</span>
+          <span class="kn-card-excerpt">Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-02">02.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--text" data-kn-zone="data" href="/blog/karta-temy.html">
+        
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Данные</span>
+          <span class="kn-card-title">Карта темы: как из десяти заметок собрать одну мысль</span>
+          <span class="kn-card-excerpt">Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-30">30.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="typography" href="/blog/merka-stroki.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/measure.webp" alt="иллюстрация к заметке: три колонки текста разной ширины" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Типографика</span>
+          <span class="kn-card-title">Мера строки: 68 знаков против пустоты</span>
+          <span class="kn-card-excerpt">Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-29">29.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--half kn-card--text" data-kn-zone="typography" href="/blog/dve-garnitury.html">
+        
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Типографика</span>
+          <span class="kn-card-title">Две гарнитуры на страницу — и ни одной больше</span>
+          <span class="kn-card-excerpt">Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-28">28.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="tokens" href="/blog/tokeny-tsveta.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/tokens.webp" alt="иллюстрация к заметке: образцы цвета на бумаге" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Токены</span>
+          <span class="kn-card-title">Цвет живёт в токенах, а не в компонентах</span>
+          <span class="kn-card-excerpt">Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-27">27.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--text" data-kn-zone="layout" href="/blog/tablica-i-eho-zebra.html">
+        
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Композиция</span>
+          <span class="kn-card-title">Зебра, границы и плотность внутри таблицы</span>
+          <span class="kn-card-excerpt">Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-26">26.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="tokens" href="/blog/shkala-otstupov.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/spacing-scale.webp" alt="иллюстрация к заметке: шкала отступов из полос разной ширины" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Токены</span>
+          <span class="kn-card-title">Одна шкала отступов вместо двадцати решений</span>
+          <span class="kn-card-excerpt">Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</span>
+          <span class="kn-card-meta"><time datetime="2026-10-24">24.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="accessibility" href="/blog/fokus-i-klaviatura.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/accessibility.webp" alt="иллюстрация к заметке: кольцо фокуса вокруг кнопки" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Доступность</span>
+          <span class="kn-card-title">Видимый фокус — не украшение, а навигация</span>
+          <span class="kn-card-excerpt">Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-22">22.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="accessibility" href="/blog/kontrast-aa.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/typography.webp" alt="иллюстрация к заметке: страница с мерой строки и линейкой" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Доступность</span>
+          <span class="kn-card-title">Контраст AA: 4.5 к 1 и что за этим стоит</span>
+          <span class="kn-card-excerpt">Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-21">21.10.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--flat" data-kn-zone="motion" href="/blog/dvizhenie-120-320.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/motion.webp" alt="иллюстрация к заметке: кривая ускорения на сетке" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Движение</span>
+          <span class="kn-card-title">Движение 120–320 мс: когда анимация объясняет</span>
+          <span class="kn-card-excerpt">Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-18">18.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--flat" data-kn-zone="layout" href="/blog/srezy-i-razrezy.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/hub.webp" alt="иллюстрация к разделу: блокнот, карточки и закладки" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Композиция</span>
+          <span class="kn-card-title">Срезы и разрезы</span>
+          <span class="kn-card-excerpt">Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.</span>
+          <span class="kn-card-meta"><time datetime="2026-10-16">16.10.2026</time><span aria-hidden="true">·</span><span>4 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
   </div>
+  <p class="kn-empty" data-kn-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
 
-  <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот: короткое наблюдение, проверенное на практике. Статья — вычитанный текст с источниками. Смешивать их в одном списке значит терять оба жанра.</div>
+  <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
+  <!-- KN:AUTO:END -->
+
+  <noscript>
+    <div class="ui-callout"><strong>Лента собрана статически.</strong> Все заметки доступны по ссылкам:
+      <a href="/blog/kak-ustroena-baza-znaniy.html">как устроена база знаний</a>,
+      <a href="/blog/setka-i-plotnost.html">сетка и плотность</a>,
+      <a href="/blog/merka-stroki.html">мера строки</a>,
+      <a href="/blog/tokeny-tsveta.html">цвет в токенах</a>,
+      <a href="/blog/topics.html">рубрики</a> и <a href="/blog/graph.html">граф связей</a>.
+    </div>
+  </noscript>
 
   <footer class="ui-footer">
     <span>© 2026 itsliventsev · Заметки</span>
-    <nav aria-label="Служебная навигация"><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="feed.xml">RSS</a><a href="sitemap.html">Карта сайта</a></nav>
+    <nav aria-label="Служебная навигация"><a href="index.html">Главная</a><a href="articles.html">Статьи</a><a href="blog/topics.html">Рубрики</a><a href="blog/graph.html">Граф</a><a href="feed.xml">RSS</a><a href="sitemap.html">Карта сайта</a></nav>
     <time data-footer-updated></time>
   </footer>
 </main>
-<script>
-(function(){
-  var list=document.getElementById('note-grid');
-  var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
-  var date=function(s){if(!s)return '';var d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
-  fetch('blog/posts.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json();}).then(function(data){
-    var posts=(Array.isArray(data)?data:[]).filter(function(p){return p&&p.status==='published';})
-      .sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
-    if(!posts.length){list.innerHTML='<div class="catalog-empty">Пока нет опубликованных заметок.</div>';return;}
-    list.innerHTML=posts.map(function(p,i){
-      return '<a class="catalog-row" href="blog/'+esc(p.file)+'">'
-        +'<span class="catalog-index">'+String(i+1).padStart(2,'0')+'</span>'
-        +'<span><span class="catalog-title">'+esc(p.title)+'</span>'
-        +(p.excerpt?'<span class="catalog-desc">'+esc(p.excerpt)+'</span>':'')
-        +'<span class="catalog-meta"><time datetime="'+esc(p.date||'')+'">'+esc(date(p.date))+'</time>'
-        +(p.readtime?'<span aria-hidden="true">·</span><span>'+esc(p.readtime)+'</span>':'')+'</span></span>'
-        +'<span class="catalog-side"><span class="ui-tag">заметка</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a>';
-    }).join('');
-  }).catch(function(){list.innerHTML='<div class="catalog-empty">Не удалось загрузить ленту. <a href="sitemap.html">Карта сайта</a>.</div>';});
-})();
-</script>
-<script src="assets/catalog.js" defer></script>
+<script src="assets/knowledge.js" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>

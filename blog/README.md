@@ -1,23 +1,42 @@
-# blog/ — короткие заметки
+# blog/ — заметки и база знаний
 
-Здесь хранятся небольшие записи: заметки с занятий, мысли, подборки и дополнения к практикумам. Завершённые длинные тексты находятся в `../articles/`, проекты — в `../projects/`.
+Здесь живут короткие записи: наблюдения, приёмы, дополнения к практикумам. Завершённые длинные
+тексты — в `../articles/`, проекты — в `../projects/`.
+
+Раздел собран как **база знаний**: заметки ссылаются друг на друга, у каждой есть рубрика, теги,
+соседние записи и внешние источники с датой обращения. Из этих полей автоматически собираются
+лента на `blog.html`, страницы рубрик (`blog/topics/`), граф связей (`blog/graph.html`),
+обратные ссылки и машинный индекс связей.
 
 ## Как добавить заметку
 
-1. Создайте HTML-файл в этой папке; имя файла является slug.
-2. Используйте в качестве примера `2026-10-26-kak-ustroen-etot-blog.html`: сохраните SEO-метаданные, `h1`, `<main id="main-content">` с `<article class="editorial">` и подключение `tokens.css`, `base.css`, `pages.css`, `shell.js` (см. `scripts/regression-static.js` — он проверяет контракт).
-3. Заполните метаданные записи — они участвуют в карточке `blog.html`:
+1. Создайте Markdown-файл в `../assets/data/knowledge/notes/` с YAML-фронтматтером. Полный контракт
+   полей — в `../docs/notes.md`; коротко обязательны `id`, `title`, `zone`, `tags`, `date`,
+   `summary`, `excerpt`, `readtime`, `related` (2+), `sources` (2+ с `accessed`), `ai`.
+2. Внутри текста ссылайтесь на соседние заметки как `[[id]]` — генератор превратит это в ссылку и
+   ребро графа.
+3. Запустите сборку:
 
-```html
-<meta name="post-date" content="2026-11-02">
-<meta name="post-type" content="note">
-<meta name="post-tags" content="пары,сети">
-<meta name="post-readtime" content="3 мин">
-<!-- <meta name="post-status" content="draft"> -->
+```bash
+node scripts/build-knowledge.js --collect   # notes.json из Markdown + все страницы раздела
+python3 scripts/build-search-index.py       # поисковый индекс
+node scripts/build-seo.js                   # SEO-блоки, sitemap.xml, feed.xml
 ```
 
-Поддерживаемые типы: `note`, `thought`, `digest`, `extra`. `title` и `description` берутся из стандартных метатегов.
+Отдельные HTML-файлы руками не пишутся: `blog/<id>.html`, `blog/topics/*.html` и `blog/graph.html`
+генерируются. Блок ленты в `blog.html` лежит между маркерами `KN:AUTO` и тоже перезаписывается
+сборкой — правки внутри маркеров будут потеряны.
 
-## Индекс
+## Что читать дальше
 
-GitHub Action запускает `scripts/build-post-index.js`, который обновляет `posts.json`. Локально: `node scripts/build-post-index.js`.
+- `../docs/notes.md` — контракт раздела: поля, роли, правила, команды сборки.
+- `../CONTENT_AUDIT.md` — что нашлось в разделе и что из этого исправлено.
+- `../CONTENT_QA.md` — чек-лист проверок перед публикацией.
+- `../scripts/build-knowledge.js` — сборщик: валидация, Markdown, лента, рубрики, граф.
+
+## Старые записи
+
+Файл `2026-10-26-kak-ustroen-etot-blog.html` — редирект-заглушка на актуальную входную заметку
+базы знаний. Прежние метатеги `post-*` для ручных HTML-заметок по-прежнему поддерживаются
+(`<meta name="post-date">`, `post-type`, `post-tags`, `post-readtime`), но новые записи так не
+добавляются: `scripts/build-knowledge.js` пересобирает `posts.json` из манифеста базы.

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Зебра, границы и плотность внутри таблицы · itsliventsev</title>
+<meta name="description" content="Зебра помогает глазу не съезжать со строки, пока разница между полосами почти незаметна; как только чередование становится узором, таблица начинает спорить с содержанием.">
+<meta name="post-date" content="2026-10-26">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="таблицы,плотность,цвет">
+<meta name="post-readtime" content="5 мин">
+<meta name="post-excerpt" content="Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.">
+<meta name="kn-zone" content="layout">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Зебра, границы и плотность внутри таблицы · itsliventsev">
+  <meta property="og:description" content="Зебра помогает глазу не съезжать со строки, пока разница между полосами почти незаметна; как только чередование становится узором, таблица начинает спорить с содержанием.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/bento.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:tag" content="таблицы">
+  <meta property="article:tag" content="плотность">
+  <meta property="article:tag" content="цвет">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Зебра, границы и плотность внутри таблицы · itsliventsev">
+  <meta name="twitter:description" content="Зебра помогает глазу не съезжать со строки, пока разница между полосами почти незаметна; как только чередование становится узором, таблица начинает спорить с содержанием.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/bento.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Зебра, границы и плотность внутри таблицы","description":"Зебра помогает глазу не съезжать со строки, пока разница между полосами почти незаметна; как только чередование становится узором, таблица начинает спорить с содержанием.","url":"https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/bento.webp","datePublished":"2026-10-26","dateModified":"2026-10-26","keywords":"таблицы, плотность, цвет"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Зебра, границы и плотность внутри таблицы","item":"https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/layout.html">Композиция</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-26">26 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 01.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>5 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Зебра, границы и плотность внутри таблицы</h1>
+        <p class="kn-def">Зебра помогает глазу не съезжать со строки, пока разница между полосами почти незаметна; как только чередование становится узором, таблица начинает спорить с содержанием.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Таблица читается построчно: глаз ведёт строку слева направо и должен не потерять её, когда доходит до конца. Три инструмента помогают удержать строку — воздух, линии и зебра. Работают они в обратном порядке по силе: воздух незаметен и полезен всегда, линия уместна почти всегда, зебра — только при аккуратном контрасте.</p>
+        <h2>Зебра: слабее, чем кажется</h2>
+        <p>Классическая ошибка — чередовать белый и серый, который заметен издалека. Тогда таблица читается как полосатый матрас, а не как данные. Работающая зебра почти невидима: разница между строками берётся из ближайшей ступени поверхности, например <code>--u-surface</code> и <code>--u-surface-sunk</code>, где разница яркости невелика.</p>
+        <p>Проверка простая: отойти от экрана на метр. Если полосы первыми бросаются в глаза — контраст зебры слишком сильный.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Уровень</th><th scope="col">Приём</th><th scope="col">Насколько заметно</th></tr></thead><tbody><tr><th scope="row">Заголовок</th><td>моноширинные метки</td><td>кегль 11 px</td><td>разрядка</td><td>среднее</td></tr><tr><th scope="row">Строка</th><td>зебра: фон на 3–5% темнее</td><td>слабое</td></tr><tr><th scope="row">Граница</th><td>линия 1 px между строками</td><td>минимальное</td></tr><tr><th scope="row">Ячейка</th><td>отступы 10 px по вертикали</td><td>не визуальное</td></tr></tbody><caption>Три уровня контраста внутри таблицы: заголовок, строка, линия.</caption></table></div>
+        <h2>Линии вместо узора</h2>
+        <p>Горизонтальные линии 1 px между строками решают ту же задачу честнее: они не создают узор и не отнимают контраст у текста. В этой системе таблица использует <code>border-collapse: collapse</code> и границу <code>--u-line</code> между строками. Вертикальные линии почти никогда не нужны: колонки разделяет выравнивание, а не сетка.</p>
+        <p>Исключение — таблицы с числами, где нужна точность по столбцу: там помогает не линия, а правое выравнивание и табличные цифры.</p>
+        <h2>Воздух — самый дешёвый инструмент</h2>
+        <p>Высота строки влияет на читаемость сильнее, чем полосатость. 10 px по вертикали внутри ячейки и 16 px по горизонтали дают строку, которую легко вести. Плотнее — таблица превращается в частокол; просторнее — теряется связь строки с заголовком.</p>
+        <dl class="kn-terms"><div class="kn-term"><dt>Зебра</dt><dd>чередование фона строк; работает при разнице яркости меньше 5%.</dd></div><div class="kn-term"><dt>Линия</dt><dd>горизонтальная граница 1 px; заменяет зебру в плотных таблицах.</dd></div><div class="kn-term"><dt>Воздух</dt><dd>вертикальные отступы ячейки; дешевле и надёжнее любой полосатости.</dd></div><div class="kn-term"><dt>Слияние</dt><dd>rowspan и colspan: усложняют чтение и семантику, применять редко.</dd></div></dl>
+        <h2>Цвет в таблице — только смысл</h2>
+        <p>Фон строки не должен нести эмоцию. Если нужно показать состояние, используется метка или цвет текста в одной ячейке, а не заливка всей строки: залитая строка читается как «важное», и это сообщение конкурирует с содержанием. О том, почему значения берут из <a class="kn-ref" href="/blog/tokeny-tsveta.html">слоя токенов</a>, а не подбирают на глаз, — отдельная заметка.</p>
+        <h2>Как это связано с остальным</h2>
+        <p>Таблица — самая плотная форма контента, поэтому её правила переносятся на карточки: слабые границы, аккуратная зебра, воздух вместо рамок. Если лента <a class="kn-ref" href="/blog/setka-i-plotnost.html">карточек</a> выглядит как таблица, скорее всего, в ней слишком много линий и слишком мало разницы в весе. Обратная связь тоже верна: таблица, где нет общей оси сравнения, — это не таблица, а <a class="kn-ref" href="/blog/tablicy-kak-most.html">набор ячеек</a></p>
+        <p>Связанное: <a class="kn-ref" href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> — откуда берутся поверхности для зебры, <a class="kn-ref" href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a> — почему заливка строки не заменяет метку состояния..</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/tablicy-kak-most.html"><strong>Таблица как мост между текстом и решением</strong><span>Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</span></a></li>
+          <li><a href="/blog/tokeny-tsveta.html"><strong>Цвет живёт в токенах, а не в компонентах</strong><span>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span></a></li>
+          <li><a href="/blog/kontrast-aa.html"><strong>Контраст AA: 4.5 к 1 и что за этим стоит</strong><span>Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/tablicy-kak-most.html">Таблица как мост между текстом и решением</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.nngroup.com/articles/zebra-striping-tables/" target="_blank" rel="noopener">Data tables: zebra striping and readability</a><small>Nielsen Norman Group</small><small>обращение: 1 ноября 2026</small></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse" target="_blank" rel="noopener">CSS table styling and border-collapse</a><small>MDN Web Docs</small><small>обращение: 24 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/layout.html">все заметки рубрики «Композиция»</a>
+        <span><a href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах →</a><a href="/blog/shkala-otstupov.html">← Одна шкала отступов вместо двадцати решений</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Композиция. Запись 06 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#tablica-i-eho-zebra"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#таблицы">таблицы</a></li><li><a href="/blog/topics.html#плотность">плотность</a></li><li><a href="/blog/topics.html#цвет">цвет</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 26.10.2026, обновлено 01.11.2026. В графе 5 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

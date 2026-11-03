@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Как устроена база знаний · itsliventsev</title>
+<meta name="description" content="Заметки — не лента новостей, а связанная база: у записи есть рубрика, теги, соседи и источники, и из этих полей собираются граф, обратные ссылки и лента.">
+<meta name="post-date" content="2026-11-03">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="граф,статика,карточки">
+<meta name="post-readtime" content="6 мин">
+<meta name="post-excerpt" content="Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.">
+<meta name="kn-zone" content="data">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Как устроена база знаний · itsliventsev">
+  <meta property="og:description" content="Заметки — не лента новостей, а связанная база: у записи есть рубрика, теги, соседи и источники, и из этих полей собираются граф, обратные ссылки и лента.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/table.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-03">
+  <meta property="article:tag" content="граф">
+  <meta property="article:tag" content="статика">
+  <meta property="article:tag" content="карточки">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Как устроена база знаний · itsliventsev">
+  <meta name="twitter:description" content="Заметки — не лента новостей, а связанная база: у записи есть рубрика, теги, соседи и источники, и из этих полей собираются граф, обратные ссылки и лента.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/table.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Как устроена база знаний","description":"Заметки — не лента новостей, а связанная база: у записи есть рубрика, теги, соседи и источники, и из этих полей собираются граф, обратные ссылки и лента.","url":"https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/table.webp","datePublished":"2026-11-03","dateModified":"2026-11-03","keywords":"граф, статика, карточки"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Как устроена база знаний","item":"https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/data.html">Данные</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-03">3 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 03.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>6 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Как устроена база знаний</h1>
+        <p class="kn-def">Заметки — не лента новостей, а связанная база: у записи есть рубрика, теги, соседи и источники, и из этих полей собираются граф, обратные ссылки и лента.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>База знаний начинается не с редактора, а с вопроса: что читатель сможет сделать, чего не мог раньше. Если ответ «прочитать ещё один текст» — это лента. Если ответ «перейти от термина к примеру, от примера к правилу и увидеть, где ещё встречается то же правило» — это база.</p>
+        <h2>Три жанра, которые нельзя смешивать</h2>
+        <p>Заметка, статья и проект отвечают на разные вопросы и проверяются по-разному. Смешивать их в одном списке — значит терять признаки: читатель не понимает, можно ли доверять дате, есть ли за текстом практика и кто отвечает за утверждения.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Критерий</th><th scope="col">Заметка</th><th scope="col">Статья</th><th scope="col">Проект</th></tr></thead><tbody><tr><th scope="row">Ритм</th><td>дни</td><td>недели</td><td>месяцы</td></tr><tr><th scope="row">Источники</th><td>2–5 со ссылкой</td><td>10+ с аппаратом</td><td>репозиторий и демо</td></tr><tr><th scope="row">Проверка</th><td>на практике в группе</td><td>редактура и рецензия</td><td>работающий результат</td></tr><tr><th scope="row">Единица</th><td>одна мысль</td><td>законченный аргумент</td><td>собранный продукт</td></tr></tbody><caption>Три жанра различаются не объёмом, а обязательствами перед читателем.</caption></table></div>
+        <p>Заметка живёт быстро и часто меняется. Именно поэтому у неё обязательные связи: если мысль уточнилась, соседние записи подскажут, куда смотреть. Статье связи не нужны так остро — у неё есть внутренняя логика. Проекту — тем более: он проверяется запуском.</p>
+        <h2>Метаданные — это не бюрократия</h2>
+        <p>У каждой записи в этом разделе есть паспорт: рубрика, теги, дата, время чтения, минимум два источника с датой обращения. Из этих полей без ручной работы собирается всё остальное:</p>
+        <ul><li>лента — сортировка по дате и раскладка карточек;</li><li>страницы рубрик — фильтр по единственному полю <code>zone</code>;</li><li>граф — список <code>related</code> плюс все внутренние ссылки в тексте;</li><li>блок «Обратные ссылки» — те записи, которые ссылаются на эту;</li><li>поисковый индекс — заголовок, описание и текст страницы.</li></ul>
+        <p>Проверяется просто: если поле не заполнено, сборка падает. Заметка не может попасть в раздел «наполовину» — генератор не пропустит.</p>
+        <dl class="kn-facts"><dt>Jekyll</dt><dd>статический сайт на GitHub Pages — только файлы, без сервера и базы данных</dd><dt>Markdown</dt><dd>заметка пишется в .md, а HTML собирает scripts/build-knowledge.js</dd><dt>id</dt><dd>внутренняя ссылка — из неё строятся граф и обратные ссылки</dd><dt>JSON</dt><dd>notes.json хранит метаданные, registry.json — готовый индекс связей</dd></dl>
+        <h2>Ссылки важнее заголовков</h2>
+        <p>Заголовок заметки читают один раз. Ссылку на неё читают из десяти других мест. Поэтому внутренняя ссылка — это <a class="kn-ref" href="/blog/setka-i-plotnost.html">сетка и плотность</a> или <a class="kn-ref" href="/blog/merka-stroki.html">мера строки</a> — оформлена отдельно: пунктирное подчёркивание и стрелка показывают, что переход ведёт внутрь базы, а не наружу. Внешний источник выглядит как обычная ссылка и всегда несёт дату обращения.</p>
+        <p>Есть и обратная сторона: связь должна быть осмысленной. Две заметки, связанные только потому, что обе про дизайн, дают красивый граф и бесполезную навигацию. Рабочее правило — ссылка оправдана, если читателю после неё нужна именно эта соседняя запись, а не любая другая.</p>
+        <h2>Почему статика, а не база данных</h2>
+        <p>Сайт — GitHub Pages: сорок с небольшим страниц, ноль серверного кода, ноль рантайм-зависимостей. Полноценная СУБД здесь была бы лишним звеном. Но и «просто HTML» недостаточно: связи и обратные ссылки руками не поддерживаются — они устаревают за неделю.</p>
+        <p>Компромисс: Markdown плюс маленький сборщик. Автор пишет заметку и связи, сборщик превращает их в статический HTML, граф, страницы рубрик и машинный индекс. Читателю достаётся готовый HTML, который работает без JavaScript; редактору — обычные текстовые файлы в репозитории.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">черновик<em>2</em></p><div class="kn-tile"><strong>Мысль на полях</strong>одна фраза после занятия, без структуры</div><div class="kn-tile"><strong>Ссылка и цитата</strong>источник сохранён, дата обращения записана</div></div><div class="kn-lane"><p class="kn-lane-head">проверка<em>2</em></p><div class="kn-tile"><strong>Работает на практике</strong>проверено на группе или на самом сайте</div><div class="kn-tile"><strong>Связи найдены</strong>минимум две соседние заметки</div></div><div class="kn-lane"><p class="kn-lane-head">в базе<em>2</em></p><div class="kn-tile"><strong>Метаданные заполнены</strong>рубрика, теги, время чтения, дата</div><div class="kn-tile"><strong>Источники выверены</strong>каждая ссылка открывается</div></div><div class="kn-lane"><p class="kn-lane-head">устарело<em>1</em></p><div class="kn-tile"><strong>Изменился факт</strong>правило изменилось — заметка ждёт правки</div></div></div>
+        <h2>Что читатель получает</h2>
+        <ul><li><strong>Рубрики</strong> — шесть постоянных мест, у каждого свой вопрос: <a class="kn-ref" href="/blog/tablicy-kak-most.html">данные</a> отвечают за сравнения и индексы, типографика — за читаемость.</li><li><strong>Граф</strong> — карта переходов: видно, какие записи держат тему, а какие висят на одной связи.</li><li><strong>Обратные ссылки</strong> — «кто меня цитирует»: без них связанность держится только в одну сторону.</li><li><strong>Источники с датой</strong> — утверждение можно проверить, а не принять на веру.</li></ul>
+        <h2>Что почитать и куда идти</h2>
+        <p>Ссылки с датой обращения собраны в блоке источников под заметкой: там же указано, что именно взято из каждого. Кратко — три опоры: гид Nielsen Norman Group по архитектуре информации, введение в Zettelkasten про атомарные заметки и связи вместо папок, справка Obsidian про обратные ссылки.</p>
+        <p>Дальше по базе: <a class="kn-ref" href="/blog/setka-i-plotnost.html">Сетка 12 колонок и поток карточек разных размеров</a> — как раскладывать поток заметок, <a class="kn-ref" href="/blog/tablicy-kak-most.html">Таблица как мост между текстом и решением</a> — как сравнивать без воды, <a class="kn-ref" href="/blog/merka-stroki.html">Мера строки: 68 знаков против пустоты</a> — почему строка длиной 68ch читается лучше.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/setka-i-plotnost.html"><strong>Сетка 12 колонок и поток карточек разных размеров</strong><span>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span></a></li>
+          <li><a href="/blog/tablicy-kak-most.html"><strong>Таблица как мост между текстом и решением</strong><span>Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</span></a></li>
+          <li><a href="/blog/merka-stroki.html"><strong>Мера строки: 68 знаков против пустоты</strong><span>Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/karta-temy.html">Карта темы: как из десяти заметок собрать одну мысль</a> — ссылается на эту заметку</li><li><a href="/blog/setka-i-plotnost.html">Сетка 12 колонок и поток карточек разных размеров</a> — ссылается на эту заметку</li><li><a href="/blog/tablicy-kak-most.html">Таблица как мост между текстом и решением</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.nngroup.com/articles/ia-study-guide/" target="_blank" rel="noopener">Information Architecture: The design of knowledge spaces</a><small>Nielsen Norman Group</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://zettelkasten.de/introduction/" target="_blank" rel="noopener">Zettelkasten: principles of linked notes</a><small>zettelkasten.de</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://help.obsidian.md/plugins/backlinks" target="_blank" rel="noopener">Obsidian Help — Internal links and backlinks</a><small>Obsidian</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/data.html">все заметки рубрики «Данные»</a>
+        <span><a href="/blog/tablicy-kak-most.html">← Таблица как мост между текстом и решением</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Данные. Запись 13 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kak-ustroena-baza-znaniy"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#граф">граф</a></li><li><a href="/blog/topics.html#статика">статика</a></li><li><a href="/blog/topics.html#карточки">карточки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 03.11.2026, обновлено 03.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

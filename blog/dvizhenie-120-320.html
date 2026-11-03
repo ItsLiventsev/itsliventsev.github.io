@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Движение 120–320 мс: когда анимация объясняет · itsliventsev</title>
+<meta name="description" content="Анимация в интерфейсе работает как объяснение перехода: откуда пришёл элемент и куда он ушёл. Если движение не отвечает на этот вопрос, оно только замедляет.">
+<meta name="post-date" content="2026-10-18">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="движение,доступность,плотность">
+<meta name="post-readtime" content="6 мин">
+<meta name="post-excerpt" content="Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.">
+<meta name="kn-zone" content="motion">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/dvizhenie-120-320.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Движение 120–320 мс: когда анимация объясняет · itsliventsev">
+  <meta property="og:description" content="Анимация в интерфейсе работает как объяснение перехода: откуда пришёл элемент и куда он ушёл. Если движение не отвечает на этот вопрос, оно только замедляет.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/dvizhenie-120-320.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/motion.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-18">
+  <meta property="article:tag" content="движение">
+  <meta property="article:tag" content="доступность">
+  <meta property="article:tag" content="плотность">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Движение 120–320 мс: когда анимация объясняет · itsliventsev">
+  <meta name="twitter:description" content="Анимация в интерфейсе работает как объяснение перехода: откуда пришёл элемент и куда он ушёл. Если движение не отвечает на этот вопрос, оно только замедляет.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/motion.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Движение 120–320 мс: когда анимация объясняет","description":"Анимация в интерфейсе работает как объяснение перехода: откуда пришёл элемент и куда он ушёл. Если движение не отвечает на этот вопрос, оно только замедляет.","url":"https://itsliventsev.github.io/blog/dvizhenie-120-320.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/dvizhenie-120-320.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/motion.webp","datePublished":"2026-10-18","dateModified":"2026-10-18","keywords":"движение, доступность, плотность"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Движение 120–320 мс: когда анимация объясняет","item":"https://itsliventsev.github.io/blog/dvizhenie-120-320.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/motion.html">Движение</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-18">18 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 02.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>6 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Движение 120–320 мс: когда анимация объясняет</h1>
+        <p class="kn-def">Анимация в интерфейсе работает как объяснение перехода: откуда пришёл элемент и куда он ушёл. Если движение не отвечает на этот вопрос, оно только замедляет.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Движение — самый быстрый способ объяснить, что произошло. Меню выехало справа — значит, оно «пришло» оттуда и уедет обратно. Карточка проявилась со сдвигом на шесть пикселей — значит, она появилась, а не была всё это время. Ни одного слова, только две десятых секунды.</p>
+        <h2>Три длительности — достаточно</h2>
+        <p>В системе есть ровно три длительности: 120, 200 и 320 мс. Это не случайные числа, а три роли:</p>
+        <ul><li><strong>120 мс</strong> — микросостояние: цвет кнопки, подсветка строки, стрелка сдвинулась на три пикселя.</li><li><strong>200 мс</strong> — переход: карточка появилась, меню открылось, диалог выехал.</li><li><strong>320 мс</strong> — смена контекста: тема, крупная панель, смена раскладки.</li></ul>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Длительность</th><th scope="col">Что происходит</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">120 мс</th><td>микросостояние</td><td>смена цвета кнопки</td><td>подсветка строки</td></tr><tr><th scope="row">200 мс</th><td>короткий переход</td><td>появление карточки</td><td>выдвижение меню</td></tr><tr><th scope="row">320 мс</th><td>смена контекста</td><td>смена темы</td><td>крупная панель</td></tr><tr><th scope="row">больше 400 мс</th><td>воспринимается как торможение</td><td>только для декоративных сцен</td></tr></tbody><caption>Чем короче движение, тем меньше оно мешает; всё, что длиннее 320 мс, читается как задержка.</caption></table></div>
+        <p>Всё, что длиннее 400 мс, воспринимается как задержка, если человек уже готов действовать. Исключение — декоративные сцены, у которых есть пауза и которые не мешают работе.</p>
+        <h2>Анимируются два свойства</h2>
+        <p><code>transform</code> и <code>opacity</code> не вызывают пересчёт раскладки: браузер рисует их на композиторе. <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, <code>margin</code> заставляют пересчитывать геометрию страницы, и на слабом устройстве это видно как рывок. Отсюда рабочее правило: изменение размера — это не анимация, а мгновенная смена состояния, а «плавность» создаётся сдвигом и прозрачностью.</p>
+        <dl class="kn-terms"><div class="kn-term"><dt>Кривая</dt><dd>функция скорости; одна кривая на систему — cubic-bezier(0.2, 0.7, 0.2, 1).</dd></div><div class="kn-term"><dt>Свойства</dt><dd>анимируются только transform и opacity — они не вызывают пересчёт раскладки.</dd></div><div class="kn-term"><dt>Вход</dt><dd>появление элемента: короткий сдвиг на 4–8 px и прозрачность.</dd></div><div class="kn-term"><dt>Reduced motion</dt><dd>режим, в котором движение отключается полностью, а не ускоряется.</dd></div></dl>
+        <h2>Одна кривая на всю систему</h2>
+        <p>Разнобой кривых — то же, что разнобой отступов: каждая по отдельности нормальная, вместе выглядит случайной. Здесь используется <code>cubic-bezier(0.2, 0.7, 0.2, 1)</code>: быстрый старт и мягкое торможение. Он записан в токен <code>--u-ease</code>, и компоненту не нужно выбирать заново.</p>
+        <p>Кривая отвечает за характер: с линейной интерфейс кажется механическим, с сильной перестраховкой (long ease-out) — вязким. Одна кривая на систему — это способ сделать движение узнаваемым, как один акцентный цвет.</p>
+        <h2>Reduced motion — не «помедленнее», а «без движения»</h2>
+        <p>Люди с вестибулярными расстройствами могут получить головокружение от движения, которое автор считает деликатным. <code>prefers-reduced-motion: reduce</code> — это запрос читателя, а не подсказка. Правильная реакция — отключить переходы и анимации, оставив смену состояний мгновенной:</p>
+        <pre><code>@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre>
+        <p><code>!important</code> здесь служебный и оправдан: это единственное место, где нужно перебить все компоненты сразу. Подробнее о том, почему доступность — не отдельный слой, а часть системы: <a class="kn-ref" href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a> и <a class="kn-ref" href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a>.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">замысел<em>2</em></p><div class="kn-tile"><strong>Вопрос «откуда»</strong>если ответа нет, анимация не нужна</div><div class="kn-tile"><strong>Один переход</strong>не анимировать больше двух свойств</div></div><div class="kn-lane"><p class="kn-lane-head">реализация<em>2</em></p><div class="kn-tile"><strong>transform, opacity</strong>никаких width и top</div><div class="kn-tile"><strong>Одна кривая</strong>--u-ease на всю систему</div></div><div class="kn-lane"><p class="kn-lane-head">проверка<em>2</em></p><div class="kn-tile"><strong>60 fps</strong>вкладка Performance без длинных кадров</div><div class="kn-tile"><strong>Reduced motion</strong>media-query отключает всё</div></div><div class="kn-lane"><p class="kn-lane-head">стоп<em>1</em></p><div class="kn-tile"><strong>Бесконечный цикл</strong>декоративная анимация без паузы запрещена</div></div></div>
+        <h2>Движение и плотность</h2>
+        <p>Анимация спорит с плотностью: чем больше элементов на экране, тем заметнее даже короткий сдвиг. В плотной <a class="kn-ref" href="/blog/setka-i-plotnost.html">ленте карточек</a> движение ограничено появлением и hover-тенью; в спокойных редакционных страницах его почти нет. Если хочется добавить «жизни» — сначала проверьте, не пустует ли композиция.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/fokus-i-klaviatura.html"><strong>Видимый фокус — не украшение, а навигация</strong><span>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span></a></li>
+          <li><a href="/blog/setka-i-plotnost.html"><strong>Сетка 12 колонок и поток карточек разных размеров</strong><span>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span></a></li>
+          <li><a href="/blog/kontrast-aa.html"><strong>Контраст AA: 4.5 к 1 и что за этим стоит</strong><span>Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/karta-temy.html">Карта темы: как из десяти заметок собрать одну мысль</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://m3.material.io/styles/motion/easing-and-duration" target="_blank" rel="noopener">Material Design — easing and duration</a><small>Google Material Design</small><small>обращение: 2 ноября 2026</small></li><li><a href="https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html" target="_blank" rel="noopener">WCAG 2.2 — 2.3.3 Animation from Interactions</a><small>W3C</small><small>обращение: 29 октября 2026</small></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener">prefers-reduced-motion — MDN</a><small>MDN Web Docs</small><small>обращение: 17 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/motion.html">все заметки рубрики «Движение»</a>
+        <span><a href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит →</a><a href="/blog/srezy-i-razrezy.html">← Срезы и разрезы</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Движение. Запись 02 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#dvizhenie-120-320"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#движение">движение</a></li><li><a href="/blog/topics.html#доступность">доступность</a></li><li><a href="/blog/topics.html#плотность">плотность</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 18.10.2026, обновлено 02.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>
