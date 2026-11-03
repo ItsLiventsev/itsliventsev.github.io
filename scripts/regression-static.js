@@ -93,6 +93,42 @@ for (const [fg, bg] of [['--u-ink', '--u-paper'], ['--u-ink-2', '--u-paper'], ['
 /* ── слои CSS ── */
 const base = read('assets/base.css');
 const pages = read('assets/pages.css');
+
+/* ── CSS: правила без селекторов и висячие скобки ──
+   Такой дефект уже случался: при вырезании блока комментарий остался, а
+   селектор исчез — объявления повисли без правила. Браузер молча проглатывает
+   эту часть файла, и целый слой компонентов перестаёт применяться. Поэтому
+   вложенность скобок проверяется по файлу целиком, а каждый блок обязан
+   начинаться с селектора или ат-правила. */
+function cssStructure(source, label) {
+  /* Комментарии выбрасываем: в них живут и «{», и примеры разметки. */
+  const clean = source.replace(/\/\*[\s\S]*?\*\//g, '');
+  let depth = 0;
+  let line = 1;
+  const stray = [];
+  const closers = [];
+  for (const ch of clean) {
+    if (ch === '\n') line++;
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      /* Закрывающая скобка без открывающей — хвост блока, у которого
+         потерялся селектор. */
+      if (depth < 0) { closers.push(line); depth = 0; }
+    } else if (ch === ';' && depth === 0) {
+      /* Точка с запятой вне блока — объявление без правила: селектор
+         потерялся, а тело осталось. Браузер молча выбрасывает такие
+         объявления вместе с соседним правилом. */
+      stray.push(line);
+    }
+  }
+  ok(depth === 0, label + ': незакрытых блоков CSS — ' + depth);
+  ok(closers.length === 0, label + ': лишняя «}» в строках ' + closers.slice(0, 3).join(', '));
+  ok(stray.length === 0, label + ': объявления без селектора в строках ' + stray.slice(0, 3).join(', '));
+}
+cssStructure(pages, 'pages.css');
+cssStructure(base, 'base.css');
+
 for (const contract of ['.ui-masthead', '.ui-navlink', '.ui-drawer', '.ui-tabbar', 'dialog.ui-search', '.ui-crumbs', '.ui-footer', '.ui-btn', '.skip-link', ':focus-visible']) {
   ok(base.includes(contract), 'base.css: отсутствует контракт ' + contract);
 }
