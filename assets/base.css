@@ -92,8 +92,10 @@ svg.ui-icon,
   inset-block-start: 0;
   z-index: 90;
   background: var(--u-paper);
-  border-bottom: 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--u-dur-1) var(--u-ease);
 }
+.ui-masthead.is-scrolled { border-bottom-color: var(--u-line); }
 .ui-masthead-inner {
   display: flex;
   align-items: center;
