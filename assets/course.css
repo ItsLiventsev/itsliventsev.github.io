@@ -12,8 +12,7 @@
   background: transparent;
   margin-block-end: var(--u-s5);
 }
-.ui-subbar > *,
-.ui-subbar-in {
+.ui-subbar > * {
   display: flex;
   align-items: center;
   gap: var(--u-s2);
@@ -233,8 +232,7 @@
 button, input[type="submit"] { cursor: pointer; }
 button[data-ws-control],
 [data-ws-action],
-.flat-btn,
-.st-btn {
+.flat-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -645,15 +643,6 @@ h2.ops-legend-title, [data-ws-surface] h2.ops-legend-title {
 [data-ws-wiki-nav] a:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
 
 /* ——— Rewards, league, standings (small app pages) ——— */
-.rr-row, .sp-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: var(--u-s3);
-  align-items: center;
-  padding: var(--u-s3) 0;
-  border-bottom: 1px solid var(--u-line);
-  font-size: var(--u-fs-sm);
-}
 .lg-step-lv, .lg-step-need, .lg-step-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
 .lg-award { display: grid; gap: var(--u-s1); padding: var(--u-s4); border: 1px solid var(--u-line); border-radius: var(--u-r-md); background: var(--u-surface); }
 .lg-award-coins { font-family: var(--u-font-display); font-size: var(--u-fs-xl); }
@@ -1730,7 +1719,7 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   padding: var(--u-s4);
   border: 1px dashed var(--u-line-strong);
   border-radius: var(--u-r-md);
-  font-family: var(--u-font-body, var(--u-font-ui));
+  font-family: var(--u-font-ui);
   font-size: var(--u-fs-sm);
   color: var(--u-ink-2);
 }
@@ -2078,7 +2067,6 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   text-align: center;
 }
 .std-empty-hint { font-size: var(--u-fs-xs); color: var(--u-muted); }
-.std-ready { color: var(--u-ok); }
 .std-status {
   margin: 0;
   min-height: 1em;
@@ -2386,7 +2374,7 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 
 /* ——— Топология: плитки не растягиваем по высоте соседа ——— */
 .topo-row { align-items: flex-start; }
-.topo-fan, .topo-col { align-content: start; }
+.topo-fan { align-content: start; }
 .topo-plate > b, .topo-plate > strong {
   font-family: var(--u-font-ui);
   font-size: var(--u-fs-xs);
@@ -2576,3 +2564,480 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   background: none;
 }
 [data-ws-row].flat-row:hover { border-color: transparent; }
+
+/* ——— Общий зачёт: таблицы и ордера стенда лиги ———
+   standings.js рисует .std-* только после загрузки снимка, поэтому правил у
+   них не было: таблица выходила на дефолтах браузера, а .std-ready красил
+   весь контейнер в зелёный (маркер готовности, а не состояние). */
+.std-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+}
+.std-table { width: 100%; border-collapse: collapse; font-size: var(--u-fs-xs); }
+.std-table th {
+  padding: var(--u-s2) var(--u-s3);
+  border-block-end: 1px solid var(--u-line);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--u-ls-mono);
+  text-align: start;
+  white-space: nowrap;
+  color: var(--u-muted);
+}
+.std-table td {
+  padding: var(--u-s2) var(--u-s3);
+  border-block-end: 1px solid var(--u-line);
+  vertical-align: middle;
+}
+.std-table tbody tr:last-child td { border-block-end: 0; }
+.std-table tbody tr:hover td { background: var(--u-surface-sunk); }
+.std-place { white-space: nowrap; font-weight: 600; color: var(--u-ink); }
+.std-handle { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); white-space: nowrap; }
+.std-col-bar { width: 34%; min-width: 120px; }
+.std-bar {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+}
+.std-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--u-area);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left center;
+}
+.std-claims { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.std-claim {
+  display: grid;
+  grid-template-columns: minmax(0, 110px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--u-s3);
+  padding: var(--u-s2) var(--u-s3);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface-sunk);
+  font-size: var(--u-fs-sm);
+  color: var(--u-ink-2);
+}
+.std-claim-status {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  white-space: nowrap;
+  color: var(--u-muted);
+}
+.std-claim.is-ok .std-claim-status { color: var(--u-ok); }
+.std-claim.is-bad .std-claim-status { color: var(--u-danger); }
+.std-claim.is-wait .std-claim-status { color: var(--u-warn); }
+.std-empty { display: grid; gap: var(--u-s1); }
+.std-empty-title { margin: 0; font-size: var(--u-fs-sm); font-weight: 600; color: var(--u-ink-2); }
+.std-empty-hint { margin: 0; }
+.std-meta { margin: var(--u-s2) 0 0; font-size: var(--u-fs-xs); color: var(--u-muted); }
+@media (max-width: 560px) {
+  .std-claim { grid-template-columns: minmax(0, 1fr) auto; }
+  .std-claim > .mono { grid-column: 1 / -1; }
+}
+
+/* ——— Операции экипажа ДатаПолиса (crew-ops) ———
+   ops-hub.js собирает карточки операций, чек-листы и составов из JS:
+   правил для .ops-co* / .ops-role-* / .ops-steps не было вовсе, поэтому
+   чек-листы шли дефолтными чекбоксами, а поле состава — голым input. */
+.ops-cohead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--u-s4);
+  margin-block-end: var(--u-s4);
+  padding: var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+}
+.ops-cohead > div:first-child { display: grid; gap: 4px; min-width: 0; }
+.ops-cohead strong { font-size: var(--u-fs-md); font-weight: 600; color: var(--u-ink); }
+.ops-cohead > div:first-child > span { font-size: var(--u-fs-sm); color: var(--u-muted); }
+.ops-cogrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--u-s4);
+  align-items: start;
+}
+.ops-cocard {
+  display: grid;
+  gap: var(--u-s3);
+  align-content: start;
+  padding: var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+}
+.ops-cocard-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--u-s3); }
+.ops-cocard-head > div:first-child { min-width: 0; }
+.ops-cocard-head strong { display: block; font-size: var(--u-fs-sm); font-weight: 600; color: var(--u-ink); }
+.ops-cocard-head p { margin: 2px 0 0; font-size: var(--u-fs-xs); line-height: 1.5; color: var(--u-muted); }
+.ops-cocard-meta { display: grid; gap: 2px; justify-items: end; text-align: end; }
+.ops-op-points { font-size: var(--u-fs-sm); color: var(--u-area); }
+.ops-op-done { font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.ops-role-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ops-role-chip {
+  padding: 2px 8px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-area-soft);
+  color: var(--u-area);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+}
+.ops-role-note { margin-inline-start: auto; font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.ops-steps { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.ops-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--u-s2);
+  padding: var(--u-s2);
+  border-radius: var(--u-r-sm);
+  font-size: var(--u-fs-xs);
+  line-height: 1.45;
+  color: var(--u-ink-2);
+  cursor: pointer;
+}
+.ops-step:hover { background: var(--u-surface-sunk); }
+.ops-step input { margin: 2px 0 0; flex: none; accent-color: var(--u-accent); }
+.ops-step.is-done span { color: var(--u-muted); text-decoration: line-through; }
+.ops-recent-label { margin: var(--u-s2) 0 0; font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.ops-recent { margin: 0; padding-inline-start: 1.1rem; font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.ops-close-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--u-s2);
+  padding-block-start: var(--u-s3);
+  border-block-start: 1px solid var(--u-line);
+}
+.ops-participants {
+  flex: 1 1 180px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 var(--u-s3);
+  border: 1px solid var(--u-line-strong);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface);
+  color: var(--u-ink);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-xs);
+}
+.ops-participants:focus-visible { outline: none; box-shadow: var(--u-focus); }
+@media (max-width: 640px) {
+  .ops-close-row .btn { flex: 1 1 100%; justify-content: center; }
+  .ops-cocard-meta { justify-items: start; text-align: start; }
+}
+
+/* ——— Админка: приём работ, сессии, ордера ———
+   submissions.js собирал таблицы и карточку работы инлайновыми стилями:
+   цвета, отступы и радиусы были захардкожены, а тёмная тема получала
+   светлые подложки. Теперь это классы на токенах. */
+.mono-note {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  color: var(--u-muted);
+}
+.mono-note--ink { color: var(--u-ink-2); }
+.sub-empty {
+  padding: var(--u-s5) var(--u-s4);
+  text-align: center;
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-xs);
+  line-height: 1.5;
+  color: var(--u-muted);
+}
+.sub-meta-cell { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); line-height: 1.5; color: var(--u-ink-2); }
+.sub-meta-note { color: var(--u-muted); }
+.sub-actions { white-space: nowrap; }
+.sub-actions .btn + .btn { margin-inline-start: 4px; }
+.sub-score {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--u-ink-2);
+}
+.sub-score.is-ok { background: var(--u-ok-soft); color: var(--u-ok); }
+.sub-score.is-bad { background: var(--u-danger-soft); color: var(--u-danger); }
+.sub-score--lg { padding: 3px 10px; font-size: var(--u-fs-sm); }
+.ps-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-inline-end: 6px;
+  border-radius: 50%;
+  background: var(--u-line-strong);
+  vertical-align: middle;
+}
+.ps-dot.is-online { background: var(--u-ok); box-shadow: 0 0 0 3px var(--u-ok-soft); }
+.presence-empty { padding: var(--u-s4); text-align: center; font-size: var(--u-fs-xs); color: var(--u-muted); }
+
+/* карточка работы в модальном окне */
+.sub-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--u-s3);
+  padding-block-end: var(--u-s3);
+  border-block-end: 1px solid var(--u-line);
+}
+.sub-detail-name { display: block; font-size: var(--u-fs-md); font-weight: 600; color: var(--u-ink); }
+.sub-detail-line { margin: var(--u-s2) 0 0; }
+.sub-hint { margin-block-start: var(--u-s2); }
+.sub-section { margin-block: var(--u-s5) var(--u-s2); }
+.sub-code {
+  margin: 0;
+  max-height: 260px;
+  overflow: auto;
+  padding: var(--u-s3);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface-sunk);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  line-height: 1.55;
+  color: var(--u-ink-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* оценки работы */
+.rv-review {
+  margin-block: var(--u-s2);
+  padding: var(--u-s3);
+  border-inline-start: 2px solid var(--u-accent);
+  border-radius: var(--u-r-xs);
+  background: var(--u-surface-sunk);
+}
+.rv-review.is-expert { border-inline-start-color: var(--u-warn); }
+.rv-review-meta { margin: 0 0 4px; font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.rv-review-text { margin: 0; font-size: var(--u-fs-sm); line-height: 1.55; color: var(--u-ink-2); }
+
+/* форма экспертной оценки */
+.expert-form {
+  margin-block-start: var(--u-s4);
+  padding: var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+}
+.expert-form-title { margin: 0 0 var(--u-s3); }
+.expert-crits { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--u-s3); }
+.expert-crit { display: grid; gap: 4px; font-size: var(--u-fs-xs); color: var(--u-ink-2); }
+.expert-score { width: 100%; margin: 0; }
+.expert-comment { width: 100%; margin-block-start: var(--u-s3); }
+.expert-save { margin-block-start: var(--u-s3); }
+
+/* ——— Зачёт трайбов и рейтинг проверяющего (страница лиги) ———
+   .lg-glyph раньше получал цвет из JS инлайном; теперь цвет трайба — класс,
+   а строка «мой трайб» и шапка интегрального рейтинга оформлены явно. */
+.lg-glyph--pkt { background: var(--u-area-soft); color: var(--u-area); }
+.lg-glyph--frm { background: var(--u-ok-soft); color: var(--u-ok); }
+.lg-glyph--rte { background: var(--u-warn-soft); color: var(--u-warn); }
+.lg-glyph--skt { background: var(--u-danger-soft); color: var(--u-danger); }
+.lg-mine-note { font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.lg-table tr.lg-row-mine td { background: var(--u-area-soft); }
+.lg-rv-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--u-s3);
+  padding-block-end: var(--u-s3);
+  border-block-end: 1px solid var(--u-line);
+}
+.lg-rv-head .flat-kicker { margin: 0; }
+.lg-rv-overall {
+  margin: 2px 0 0;
+  font-family: var(--u-font-display);
+  font-size: var(--u-fs-2xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--u-ink);
+}
+.lg-rv-of { font-family: var(--u-font-ui); font-size: var(--u-fs-sm); color: var(--u-muted); }
+
+/* ——— Тикет, runbook и postmortem в лабораторных ДатаПолиса ———
+   ops-kit.js собирает блоки из JS: у .ticket-*, .runbook-*, .rca-* и .rs-num
+   не было ни одного правила, поэтому SLA-строка, статус тикета и поля разбора
+   выходили текстом подряд без структуры. */
+.ticket-card .lp-body,
+.rca-box .lp-body { display: grid; gap: var(--u-s3); }
+.ticket-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--u-s2) var(--u-s3);
+}
+.ticket-head h3 { margin: 0; font-size: var(--u-fs-md); font-weight: 600; color: var(--u-ink); }
+.ticket-state {
+  padding: 2px 8px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  color: var(--u-muted);
+}
+.ticket-state.is-open { background: var(--u-warn-soft); color: var(--u-warn); }
+.ticket-state.is-progress { background: var(--u-info-soft); color: var(--u-info); }
+.ticket-text { margin: 0; font-size: var(--u-fs-sm); line-height: 1.6; color: var(--u-ink-2); }
+.sla-meter {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--u-s2);
+}
+.sla-meter .xp-bar { width: 100%; }
+.sla-num {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  color: var(--u-muted);
+  white-space: nowrap;
+}
+.ticket-actions { display: flex; flex-wrap: wrap; gap: var(--u-s2); }
+.rollback-field { display: grid; gap: 4px; }
+.runbook-editor { display: grid; gap: var(--u-s3); }
+.runbook-step {
+  display: grid;
+  gap: var(--u-s2);
+  padding: var(--u-s3);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface-sunk);
+}
+.runbook-map { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+.runbook-map ol { margin: 0; padding-inline-start: 1.2rem; font-size: var(--u-fs-xs); line-height: 1.55; color: var(--u-ink-2); }
+.rs-num {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  text-transform: uppercase;
+  color: var(--u-muted);
+}
+.blameless-note {
+  display: flex;
+  gap: var(--u-s2);
+  padding: var(--u-s3);
+  border-radius: var(--u-r-sm);
+  background: var(--u-ok-soft);
+  font-size: var(--u-fs-xs);
+  line-height: 1.5;
+  color: var(--u-ink-2);
+}
+.blameless-note > span:first-child { flex: none; }
+.rca-fields { display: grid; gap: var(--u-s3); }
+.rca-fields > div { display: grid; gap: 4px; }
+.rca-fields label { font-size: var(--u-fs-xs); color: var(--u-ink-2); }
+.task-hint { display: block; margin-block-start: 2px; font-size: var(--u-fs-2xs); color: var(--u-muted); }
+@media (max-width: 560px) {
+  .sla-meter { grid-template-columns: minmax(0, 1fr) auto; }
+  .sla-meter .xp-bar { grid-column: 1 / -1; order: 3; }
+}
+
+/* ——— Автопроверки стенда и тур по лабораторной ———
+   stands.js печатает результаты автопроверок (.at-*) и подсказки тура
+   (.tour-pop) из JS: карточка тура выходила без подложки и отступов, а
+   упавшие проверки не отличались от пройденных. */
+.at-summary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2); padding-block-end: var(--u-s2); }
+.at-score { font-family: var(--u-font-mono); font-size: var(--u-fs-xs); color: var(--u-ink-2); }
+.at-row {
+  display: grid;
+  gap: 4px;
+  padding: var(--u-s2) var(--u-s3);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface-sunk);
+}
+.at-row + .at-row { margin-block-start: 4px; }
+.at-row.is-bad { background: var(--u-danger-soft); }
+.at-head { display: flex; align-items: baseline; gap: var(--u-s2); }
+.at-mark { flex: none; font-family: var(--u-font-mono); font-size: var(--u-fs-xs); color: var(--u-muted); }
+.at-row.is-ok .at-mark { color: var(--u-ok); }
+.at-row.is-bad .at-mark { color: var(--u-danger); }
+.at-title { font-size: var(--u-fs-sm); color: var(--u-ink); }
+.at-detail {
+  margin: 0;
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  line-height: 1.55;
+  color: var(--u-ink-2);
+}
+.tour-pop {
+  display: grid;
+  gap: var(--u-s3);
+  width: min(560px, 100%);
+  padding: var(--u-s5);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-3);
+}
+.tour-pop p { margin: 0; font-size: var(--u-fs-sm); line-height: 1.6; color: var(--u-ink-2); }
+.tour-progress {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  color: var(--u-muted);
+}
+.tour-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--u-s2); }
+
+/* ——— Остатки старой редакционной вёрстки ———
+   Эти классы живут в статьях, архиве и админке, но правил у них не было:
+   аватары авторов, значок закрытия в модальном окне, ранговые бейджи и
+   цветные точки статуса выходили без оформления. */
+.sub-detail-meta { margin: var(--u-s2) 0 0; font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface);
+  color: var(--u-ink-2);
+  cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--u-line-strong); color: var(--u-ink); background: var(--u-surface-sunk); }
+.h2-glyph { margin-inline-end: 6px; font-family: var(--u-font-mono); color: var(--u-accent); }
+.rank-glyph {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-block-end: var(--u-s2);
+  border: 1px solid var(--u-line-strong);
+  border-radius: 50%;
+  background: var(--u-surface-sunk);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-sm);
+  color: var(--u-ink-2);
+}
+.rank-glyph.rg-top { border-color: var(--u-accent); background: var(--u-accent-soft); color: var(--u-accent); }
+.dot-green { background: var(--u-ok); }
+.dot-amber { background: var(--u-warn); }
+.dot-red { background: var(--u-danger); }
+.editorial .notice.notice-warn, .prose .notice.notice-warn, .notice.notice-warn { border-inline-start-color: var(--u-warn); }
+.editorial .notice.notice-rose, .prose .notice.notice-rose, .notice.notice-rose { border-inline-start-color: var(--u-danger); }
+.editorial .callout.callout-warn, .prose .callout.callout-warn, .callout.callout-warn { border-inline-start-color: var(--u-warn); }
+.editorial .callout.callout-idea, .prose .callout.callout-idea, .callout.callout-idea { border-inline-start-color: var(--u-accent); }
+.author-chip .avatar-verm { background: var(--u-danger-soft); color: var(--u-danger); }
+.author-chip .avatar-sage { background: var(--u-ok-soft); color: var(--u-ok); }
+.author-chip .avatar-cocoa { background: var(--u-accent-soft); color: var(--u-accent); }
+.author-meta { display: grid; gap: 2px; min-width: 0; }
+.no-underline { text-decoration: none; }
+.glossary-search { display: grid; gap: 4px; }
+.glossary-empty { margin-block: var(--u-s4); color: var(--u-muted); font-size: var(--u-fs-sm); }

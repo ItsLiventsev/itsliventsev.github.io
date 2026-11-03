@@ -161,7 +161,7 @@
         <p class="prose-p">
           Эти мероприятия параллельно вытекают из изменений в федеральных государственных образовательных стандартах СПО (ФГОС) по специальностям группы наук «Инженерное дело, технологии и технические науки»: снижаются сроки освоения программы, вводится «многопрофильность» (освоение нескольких профессий), повышается количество часов на учебные и производственные практики. К основным изменениям стоит отнести:
         </p>
-        <ol class="marker:text-[var(--faint)] marker:mono marker:text-sm">
+        <ol>
           <li>сокращение курса общеобразовательных дисциплин;</li>
           <li>введение курса практической подготовки — не менее <strong >600 часов</strong>;</li>
           <li>увеличение количества учебных и производственных практик — не менее <strong >1512 часов</strong>.</li>
@@ -191,54 +191,60 @@
         <div class="mono">
           <div class="prose-row">
             <span >база 9 классов</span>
-            <span class="line-through">3 г. 10 мес.</span>
+            <s>3 г. 10 мес.</s>
             <span >→</span>
             <span >2 г. 10 мес.</span>
           </div>
           <div class="prose-row">
             <span >база 11 классов</span>
-            <span class="line-through">2 г. 10 мес.</span>
+            <s>2 г. 10 мес.</s>
             <span >→</span>
             <span >1 г. 10 мес.</span>
           </div>
         </div>
 
-        <figure >
-          <div class="mono prose-row">
-            <span class="prose-row"><span ></span>профильные предприятия</span>
-            <span class="prose-row"><span ></span>непрофильные</span>
-            <span class="prose-row"><span ></span>база колледжа</span>
+        <figure class="chart-figure">
+          <div class="chart-legend mono">
+            <span><i class="is-a"></i>профильные предприятия</span>
+            <span><i class="is-b"></i>непрофильные</span>
+            <span><i class="is-c"></i>база колледжа</span>
           </div>
-          <div class="prose-row">
-            <div class="chart-group prose-row">
-              <span class="chart-label -top-1 -translate-x-1/2 mono">30/45/25</span>
-              <div class="chart-bar data-h="30">></div>
-              <div class="chart-bar data-h="45">></div>
-              <div class="chart-bar data-h="25">></div>
+          <div class="chart-plot">
+            <div class="chart-group">
+              <span class="chart-label">30/45/25</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="30"></div>
+                <div class="chart-bar is-b" data-h="45"></div>
+                <div class="chart-bar is-c" data-h="25"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label -top-1 -translate-x-1/2 mono">40/38/22</span>
-              <div class="chart-bar data-h="40">></div>
-              <div class="chart-bar data-h="38">></div>
-              <div class="chart-bar data-h="22">></div>
+            <div class="chart-group">
+              <span class="chart-label">40/38/22</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="40"></div>
+                <div class="chart-bar is-b" data-h="38"></div>
+                <div class="chart-bar is-c" data-h="22"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label -top-1 -translate-x-1/2 mono">55/28/17</span>
-              <div class="chart-bar data-h="55">></div>
-              <div class="chart-bar data-h="28">></div>
-              <div class="chart-bar data-h="17">></div>
+            <div class="chart-group">
+              <span class="chart-label">55/28/17</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="55"></div>
+                <div class="chart-bar is-b" data-h="28"></div>
+                <div class="chart-bar is-c" data-h="17"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label -top-1 -translate-x-1/2 mono">70/20/10</span>
-              <div class="chart-bar data-h="70">></div>
-              <div class="chart-bar data-h="20">></div>
-              <div class="chart-bar data-h="10">></div>
+            <div class="chart-group">
+              <span class="chart-label">70/20/10</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="70"></div>
+                <div class="chart-bar is-b" data-h="20"></div>
+                <div class="chart-bar is-c" data-h="10"></div>
+              </div>
             </div>
           </div>
-          <div class="prose-row mono">
-            <span>2021</span><span>2022</span><span>2023</span><span>2024</span>
-          </div>
-          <figcaption >
+          <div class="chart-axis mono"><span>2021</span><span>2022</span><span>2023</span><span>2024</span></div>
+          <figcaption class="chart-caption">
             Рисунок 1 — Распределение обучающихся на профильных предприятиях в соотношении с практикой на непрофильных предприятиях и на базе колледжа за 2021–2024 гг. Схема по данным статьи.
           </figcaption>
         </figure>
@@ -289,33 +295,39 @@
           Именно из-за условий поступления технические специальности в СПО на данный момент выглядят привлекательнее ИТ. Основной аргумент в пользу их востребованности — конкурентоспособность и трудоустройство по профилю обучающихся. Ниже — статистика трудоустройства выпускных групп за 2023–2024 гг.
         </p>
 
-        <figure >
-          <div class="mono prose-row">
-            <span class="prose-row"><span ></span>ИТ-профили</span>
-            <span class="prose-row"><span ></span>технические профили</span>
+        <figure class="chart-figure">
+          <div class="chart-legend mono">
+            <span><i class="is-a"></i>ИТ-профили</span>
+            <span><i class="is-c"></i>технические профили</span>
           </div>
-          <div class="prose-row">
-            <div class="chart-group prose-row">
-              <span class="chart-label mono">АДМс</span>
-              <div class="chart-bar data-h="52">></div>
+          <div class="chart-plot">
+            <div class="chart-group">
+              <span class="chart-label">АДМс</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="52"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label mono">АДМ</span>
-              <div class="chart-bar data-h="48">></div>
+            <div class="chart-group">
+              <span class="chart-label">АДМ</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="48"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label mono">УКП</span>
-              <div class="chart-bar data-h="85">></div>
+            <div class="chart-group">
+              <span class="chart-label">УКП</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="85"></div>
+              </div>
             </div>
-            <div class="chart-group prose-row">
-              <span class="chart-label mono">КИП</span>
-              <div class="chart-bar data-h="68">></div>
+            <div class="chart-group">
+              <span class="chart-label">КИП</span>
+              <div class="chart-bars">
+                <div class="chart-bar is-a" data-h="68"></div>
+              </div>
             </div>
           </div>
-          <div class="prose-row mono">
-            <span>АДМс</span><span>АДМ</span><span>УКП</span><span>КИП</span>
-          </div>
-          <figcaption >
+          <div class="chart-axis mono"><span>АДМс</span><span>АДМ</span><span>УКП</span><span>КИП</span></div>
+          <figcaption class="chart-caption">
             Рисунок 2 — Статистика трудоустройства выпускных групп по ИТ (АДМс, АДМ) и техническим профилям (УКП, КИП) за 2023–2024 гг. Схема по данным статьи.
           </figcaption>
         </figure>
@@ -387,7 +399,7 @@
 
     <div class="prose-row">
       <a href="../articles.html" class="mono prose-row group">
-        <span class="arrow group-hover:-translate-x-0.5">←</span> все статьи
+        <span class="arrow">←</span> все статьи
       </a>
       <span class="mono">следующая статья скоро</span>
     </div>

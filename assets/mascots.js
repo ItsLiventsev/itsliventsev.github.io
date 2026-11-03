@@ -13,7 +13,7 @@
 
   var INK = '#1d242e';      // тёмные детали (нос, зрачки)
   var LIGHT = '#f5f7fa';    // светлые части (щёки, живот)
-  var LINE = 'var(--st-line-strong, #39424d)';
+  var LINE = 'var(--u-line-strong)';
 
   /* Общие глаза: моргание делает CSS через transform-scaleY */
   function eyes(cx1, cx2, cy, r, big) {

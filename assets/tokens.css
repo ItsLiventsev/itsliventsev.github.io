@@ -141,7 +141,6 @@
   --u-fs-2xl: 2rem;      /* 32 */
   --u-fs-3xl: 2.5rem;    /* 40 */
   --u-fs-4xl: 3.25rem;   /* 52 */
-  --u-fs-5xl: 4rem;      /* 64 */
   --u-fs-page-title: clamp(var(--u-fs-2xl), 5vw, var(--u-fs-4xl)); /* обложка раздела */
   --u-fs-card-title: clamp(1.75rem, 4vw, var(--u-fs-3xl));         /* заголовок внутри карточки */
 
@@ -166,7 +165,6 @@
   --u-s9: 48px;
   --u-s10: 64px;
   --u-s11: 80px;
-  --u-s12: 96px;
 
   /* ——— Geometry: card radii, pill controls ——— */
   --u-r-xs: 4px;
@@ -199,10 +197,8 @@
 
   /* ——— Focus ring, contrast-safe on paper and ink ——— */
   --u-focus: 0 0 0 2px var(--u-paper), 0 0 0 4px var(--u-accent);
-  --u-focus-inverse: 0 0 0 2px var(--u-inverse), 0 0 0 4px var(--u-accent-soft);
 
   /* Dotted grid used as a quiet texture inside cards (reference: vibecoding.ru) */
-  --u-dots: radial-gradient(var(--u-line-strong) 1px, transparent 1px);
 }
 
 /* ——— Dark: ink paper, warm highlights, same structure ——— */
@@ -249,137 +245,6 @@ body[data-area="network"] { --u-area: var(--u-net); --u-area-soft: var(--u-net-s
 body[data-area="office"] { --u-area: var(--u-office); --u-area-soft: var(--u-office-soft); }
 body[data-area="operations"] { --u-area: var(--u-ops); --u-area-soft: var(--u-ops-soft); }
 body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
-
-/* ==========================================================================
-   Compatibility bridge. Lesson engines and legacy inline styles keep reading
-   role variables (--text, --muted, --accent, --st-*). They are aliases only:
-   every value above is the single source of truth.
-   ========================================================================== */
-:root {
-  --bg: var(--u-paper);
-  --surface: var(--u-surface);
-  --surface-2: var(--u-surface-sunk);
-  --text: var(--u-ink);
-  --text-2: var(--u-ink-2);
-  --muted: var(--u-muted);
-  --faint: var(--u-faint);
-  --border: var(--u-line);
-  --border-strong: var(--u-line-strong);
-  --accent: var(--u-accent);
-  --accent-hover: var(--u-accent-hover);
-  --accent-soft: var(--u-accent-soft);
-  --font-sans: var(--u-font-ui);
-  --font-display: var(--u-font-display);
-  --font-serif: var(--u-font-serif);
-  --font-mono: var(--u-font-mono);
-  --danger-text: var(--u-danger);
-  --success-text: var(--u-ok);
-  --st-bg: var(--u-paper);
-  --st-bg-2: var(--u-surface-sunk);
-  --st-panel: var(--u-surface);
-  --st-panel-2: var(--u-surface-sunk);
-  --st-text: var(--u-ink);
-  --st-text-2: var(--u-ink-2);
-  --st-muted: var(--u-muted);
-  --st-faint: var(--u-faint);
-  --st-line: var(--u-line);
-  --st-line-strong: var(--u-line-strong);
-  --st-accent: var(--u-area);
-  --st-accent-2: var(--u-accent-hover);
-  --st-accent-soft: var(--u-area-soft);
-  --st-btn-bg: var(--u-ink);
-  --st-btn-text: var(--u-inverse-ink);
-  --st-ok: var(--u-ok);
-  --st-ok-soft: var(--u-ok-soft);
-  --st-on-ok: var(--u-inverse-ink);
-  --st-bad: var(--u-danger);
-  --st-bad-soft: var(--u-danger-soft);
-  --st-warn: var(--u-warn);
-  --st-cyan: var(--u-info);
-  --st-radius: var(--u-r-md);
-  --st-hard-color: transparent;
-  --st-sans: var(--u-font-ui);
-  --st-mono: var(--u-font-mono);
-  --st-sp-3: var(--u-s4);
-  --st-fs-h4: 1rem;
-  --st-fs-sm: var(--u-fs-sm);
-  --st-text-1: var(--u-ink);
-  --warn-text: var(--u-warn);
-  --tone-contrast: var(--u-inverse-ink);
-  --tone-verm-bright: var(--u-accent);
-  --tone-verm-ink: var(--u-accent-hover);
-  --fs-micro: var(--u-fs-2xs);
-  --fs-mini: var(--u-fs-xs);
-  --fs-small: var(--u-fs-sm);
-  --fs-body: var(--u-fs-base);
-  --fs-lead: var(--u-fs-md);
-  --fs-title: var(--u-fs-xl);
-  --lh-prose: var(--u-lh-read);
-  --lh-text: var(--u-lh-ui);
-  --lh-ui: var(--u-lh-ui);
-  --lh-tight: var(--u-lh-snug);
-  --ls-fine: 0;
-  --ls-label: var(--u-ls-mono);
-  --ls-kicker: var(--u-ls-mono);
-  --ls-display: var(--u-ls-display);
-  --page-max: var(--u-max);
-  --page-gutter: var(--u-gutter);
-  --space-section: var(--u-s8);
-  --header-h: var(--u-masthead);
-  --header-h-sm: 56px;
-  --grid-dot: var(--u-line-strong);
-  --dur-fast: var(--u-dur-1);
-  --dur-base: var(--u-dur-2);
-  --dur-slow: var(--u-dur-3);
-  --dur-slower: var(--u-dur-3);
-  --ease-standard: var(--u-ease);
-  --ease-emphasized: var(--u-ease);
-  --ease-exit: var(--u-ease);
-  --ease-spring: var(--u-ease);
-
-  /* legacy --ws-* names still referenced by engine templates */
-  --ws-canvas: var(--u-paper);
-  --ws-surface: var(--u-surface);
-  --ws-surface-soft: var(--u-surface-sunk);
-  --ws-ink: var(--u-ink);
-  --ws-ink-soft: var(--u-ink-2);
-  --ws-muted: var(--u-muted);
-  --ws-faint: var(--u-faint);
-  --ws-line: var(--u-line);
-  --ws-line-strong: var(--u-line-strong);
-  --ws-accent: var(--u-area);
-  --ws-accent-hover: var(--u-accent-hover);
-  --ws-accent-wash: var(--u-area-soft);
-  --ws-green: var(--u-ok);
-  --ws-green-wash: var(--u-ok-soft);
-  --ws-blue: var(--u-info);
-  --ws-blue-wash: var(--u-info-soft);
-  --ws-orange: var(--u-office);
-  --ws-orange-wash: var(--u-office-soft);
-  --ws-red: var(--u-danger);
-  --ws-red-wash: var(--u-danger-soft);
-  --ws-violet: var(--u-net);
-  --ws-violet-wash: var(--u-net-soft);
-  --ws-slate: var(--u-info);
-  --ws-slate-wash: var(--u-info-soft);
-  --ws-mustard: var(--u-warn);
-  --ws-mustard-wash: var(--u-warn-soft);
-  --ws-shadow-sm: var(--u-shadow-1);
-  --ws-shadow-md: var(--u-shadow-2);
-  --ws-shadow-lg: var(--u-shadow-3);
-  --ws-r-1: var(--u-r-sm);
-  --ws-r-2: var(--u-r-md);
-  --ws-r-3: var(--u-r-lg);
-  --ws-r-4: var(--u-r-lg);
-  --ws-space-1: var(--u-s1);
-  --ws-space-2: var(--u-s2);
-  --ws-space-3: var(--u-s3);
-  --ws-space-4: var(--u-s4);
-  --ws-space-6: var(--u-s6);
-  --ws-space-8: var(--u-s8);
-  --ws-font: var(--u-font-ui);
-  --ws-mono: var(--u-font-mono);
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

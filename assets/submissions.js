@@ -28,7 +28,8 @@
     var el = $('sub-msg');
     if (!el) return;
     el.textContent = msg;
-    el.style.color = isErr ? 'var(--danger-text)' : 'var(--accent)';
+    el.classList.toggle('is-bad', !!isErr);
+    el.classList.toggle('is-ok', !isErr);
   }
   var L = function () { return window.LEAGUE || null; };
   var O = function () { return (window.OPS && window.OPS.REWARDS_OPS) ? window.OPS : null; };
@@ -111,7 +112,7 @@
         '<td><span class="ps-dot ' + (p.online ? 'is-online' : '') + '"></span>' +
         (p.online ? 'онлайн' : 'неактивен') + '</td>' +
         '<td><strong>' + esc(p.name) + '</strong>' +
-          (p.handle ? '<br><small class="mono" style="color:var(--muted);">#' + esc(p.handle) + '</small>' : '') + '</td>' +
+          (p.handle ? '<br><small class="mono-note">#' + esc(p.handle) + '</small>' : '') + '</td>' +
         '<td class="mono">' + esc(p.group || '—') + '</td>' +
         '<td class="mono">' + esc(p.standId ? standLabel(p.standId) : '—') + '</td>' +
         '<td class="mono" title="' + esc(fmtDate(p.lastSeen)) + '">' + ago(p.lastSeen) + '</td>' +
@@ -147,7 +148,7 @@
     var tbody = $('sub-tbody');
     var rows = filtered();
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="8" style="padding:1.4rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">' +
+      tbody.innerHTML = '<tr><td colspan="8" class="sub-empty">' +
         (loadItems().length ? 'по фильтрам ничего не найдено' : 'работ пока нет — импорт JSON, приём по коду ITS-LAB1 или папка submissions/ репозитория') + '</td></tr>';
       return;
     }
@@ -159,15 +160,15 @@
       return '<tr>' +
         '<td class="mono">' + String(i + 1).padStart(2, '0') + '</td>' +
         '<td><strong>' + esc(s.student.name) + '</strong>' +
-          (s.student.handle ? '<br><small class="mono" style="color:var(--muted);">#' + esc(s.student.handle) + '</small>' : '') + '</td>' +
+          (s.student.handle ? '<br><small class="mono-note">#' + esc(s.student.handle) + '</small>' : '') + '</td>' +
         '<td class="mono">' + esc(s.student.group || '—') + '</td>' +
         '<td>' + esc(s.standTitle || standLabel(s.standId)) + '</td>' +
         '<td><span class="sub-score ' + scoreClass(r.score || 0) + '">' + (r.score != null ? r.score + '%' : '—') + '</span></td>' +
-        '<td class="mono" style="font-size:.78rem;">' +
+        '<td class="sub-meta-cell">' +
           (s.autotests ? 'АТ ' + esc(s.autotests.passed + '/' + s.autotests.total) + ' · ' : '') +
           (s.quiz && s.quiz.done ? 'тест ' + esc(s.quiz.correct) : 'тест —') +
-          '<br><span style="color:var(--muted);">взаимная оценка ' + peer + ' · эксперт ' + expert + '</span></td>' +
-        '<td class="mono" style="color:var(--muted);">' + fmtDate(s.submittedAt) + '</td>' +
+          '<br><span class="sub-meta-note">взаимная оценка ' + peer + ' · эксперт ' + expert + '</span></td>' +
+        '<td class="mono-note">' + fmtDate(s.submittedAt) + '</td>' +
         '<td class="sub-actions">' +
           '<button class="btn btn-sm" type="button" data-open="' + esc(s.id) + '">открыть</button> ' +
           '<button class="btn btn-sm btn-ghost" type="button" data-del="' + esc(s.id) + '">удалить</button>' +
@@ -191,49 +192,49 @@
     var revs = reviewsOf(s.id);
     var revHtml = revs.length ? revs.map(function (rv) {
       var avg = Math.round(((rv.scores.config + rv.scores.completeness + rv.scores.journal + rv.scores.communication) / 4) * 10) / 10;
-      return '<div class="rv-review ' + (rv.kind === 'expert' ? 'is-expert' : '') + '" style="border-left:2px solid ' + (rv.kind === 'expert' ? 'var(--warn-text,#b45309)' : 'var(--accent)') + ';padding:.6rem .75rem;margin:.4rem 0;background:var(--surface-2);">' +
-        '<p class="rv-review-meta" style="font-family:var(--font-mono);font-size:.72rem;color:var(--muted);margin:0 0 .25rem;">' +
+      return '<div class="rv-review' + (rv.kind === 'expert' ? ' is-expert' : '') + '">' +
+        '<p class="rv-review-meta">' +
         (rv.kind === 'expert' ? '★ экспертная оценка' : 'взаимная оценка') + ' · ' + esc(rv.reviewer.name) + ' · ' + avg + '/5</p>' +
-        '<p style="margin:0;font-size:.88rem;line-height:1.55;">' + esc(rv.comment) + '</p></div>';
+        '<p class="rv-review-text">' + esc(rv.comment) + '</p></div>';
     }).join('') : '<p class="admin-hint">оценок пока нет</p>';
 
     $('sub-modal-body').innerHTML =
       '<div class="sub-detail-head">' +
-        '<div><strong style="font-size:1.05rem;">' + esc(s.student.name) + '</strong>' +
-        '<div class="mono text-xs" style="color:var(--muted);margin-top:.2rem;">' + esc(s.student.group || '—') + ' · ' + esc(s.standTitle || standLabel(s.standId)) +
+        '<div><strong class="sub-detail-name">' + esc(s.student.name) + '</strong>' +
+        '<div class="mono-note">' + esc(s.student.group || '—') + ' · ' + esc(s.standTitle || standLabel(s.standId)) +
         (s.student.handle ? ' · #' + esc(s.student.handle) : '') + '</div></div>' +
-        '<span class="sub-score ' + scoreClass(r.score || 0) + '" style="font-size:1rem;">' + (r.score != null ? r.score + '%' : '—') + '</span>' +
+        '<span class="sub-score sub-score--lg ' + scoreClass(r.score || 0) + '">' + (r.score != null ? r.score + '%' : '—') + '</span>' +
       '</div>' +
-      '<p class="mono text-xs" style="color:var(--muted);">начало: ' + fmtDate(s.startedAt) + ' · сдача: ' + fmtDate(s.submittedAt) +
+      '<p class="mono-note sub-detail-line">начало: ' + fmtDate(s.startedAt) + ' · сдача: ' + fmtDate(s.submittedAt) +
       ' · проверок: ' + (r.passed != null ? r.passed + '/' + r.total : '—') + '</p>' +
-      (s.skills ? '<p class="admin-hint" style="margin-top:.5rem;">навыки ФГОС: ' + esc((s.skills.pk || []).join(', ')) + '</p>' : '') +
-      '<p class="section-label" style="margin-top:1rem;">результаты CI-проверок</p>' +
+      (s.skills ? '<p class="admin-hint sub-hint">навыки ФГОС: ' + esc((s.skills.pk || []).join(', ')) + '</p>' : '') +
+      '<p class="section-label sub-section">результаты CI-проверок</p>' +
       '<div class="lab-checks">' + checks + '</div>' + auto +
-      (s.quiz && s.quiz.done ? '<p class="section-label" style="margin-top:1.2rem;">контрольный мини-тест</p><p class="sub-detail-meta">результат: ' + esc(s.quiz.correct) + ' из ' + esc(Object.keys(s.quiz.answers || {}).length) + '</p>' : '') +
-      '<p class="section-label" style="margin-top:1.2rem;">итоговая конфигурация стенда</p>' +
+      (s.quiz && s.quiz.done ? '<p class="section-label sub-section">контрольный мини-тест</p><p class="sub-detail-meta">результат: ' + esc(s.quiz.correct) + ' из ' + esc(Object.keys(s.quiz.answers || {}).length) + '</p>' : '') +
+      '<p class="section-label sub-section">итоговая конфигурация стенда</p>' +
       '<pre class="sub-code">' + esc(s.config || '') + '</pre>' +
-      '<p class="section-label" style="margin-top:1.2rem;">журнал терминала</p>' +
+      '<p class="section-label sub-section">журнал терминала</p>' +
       '<pre class="sub-code">' + esc((s.terminalLog || []).map(function (h) { return (h.line || '') + (h.out ? '\n' + h.out : ''); }).join('\n')) + '</pre>' +
-      '<p class="section-label" style="margin-top:1.2rem;">журнал действий</p>' +
+      '<p class="section-label sub-section">журнал действий</p>' +
       '<pre class="sub-code">' + esc((s.actionLog || []).map(function (l) { return '[' + fmtDate(l.t) + '] ' + l.type + ': ' + l.msg; }).join('\n')) + '</pre>' +
-      '<p class="section-label" style="margin-top:1.2rem;">взаимные и экспертные оценки</p>' + revHtml +
+      '<p class="section-label sub-section">взаимные и экспертные оценки</p>' + revHtml +
       (L() ? expertForm(s) : '');
 
     if (L()) bindExpertForm(s);
   }
 
   function expertForm(s) {
-    return '<div style="margin-top:1rem;border:1px solid var(--border);border-radius:10px;padding:1rem;">' +
-      '<p class="section-label" style="margin:0 0 .6rem;">★ экспертная оценка преподавателя</p>' +
-      '<div id="expert-crits" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.6rem;">' +
+    return '<div class="expert-form">' +
+      '<p class="section-label expert-form-title">★ экспертная оценка преподавателя</p>' +
+      '<div class="expert-crits" id="expert-crits">' +
       [['config', 'корректность конфигурации'], ['completeness', 'полнота работы'], ['journal', 'журнал и аккуратность'], ['communication', 'объяснения']].map(function (c) {
-        return '<label style="font-size:.8rem;color:var(--text-2);">' + c[1] +
-          ' <select class="admin-input expert-score" data-crit="' + c[0] + '" style="margin-top:.25rem;width:100%;">' +
+        return '<label class="expert-crit">' + c[1] +
+          ' <select class="admin-input expert-score" data-crit="' + c[0] + '">' +
           [1, 2, 3, 4, 5].map(function (n) { return '<option value="' + n + '"' + (n === 4 ? ' selected' : '') + '>' + n + ' из 5</option>'; }).join('') +
           '</select></label>';
       }).join('') + '</div>' +
-      '<textarea id="expert-comment" class="admin-input" rows="3" style="margin-top:.7rem;width:100%;" placeholder="Экспертное заключение: сильные стороны и точки роста"></textarea>' +
-      '<button class="btn btn-primary" id="expert-save" type="button" style="margin-top:.7rem;">сохранить экспертную оценку</button></div>';
+      '<textarea id="expert-comment" class="admin-input expert-comment" rows="3" placeholder="Экспертное заключение: сильные стороны и точки роста"></textarea>' +
+      '<button class="btn btn-primary expert-save" id="expert-save" type="button">сохранить экспертную оценку</button></div>';
   }
 
   function bindExpertForm(s) {
@@ -374,7 +375,7 @@
     var count = $('claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="sub-empty">ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
       return;
     }
     var rewards = L().REWARDS || {};
@@ -387,11 +388,11 @@
       var actions = c.status === 'local'
         ? '<button class="btn btn-sm" type="button" data-clm-ok="' + esc(c.id) + '">выдать</button> ' +
           '<button class="btn btn-sm btn-ghost" type="button" data-clm-no="' + esc(c.id) + '">отклонить</button>'
-        : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
+        : '<span class="mono-note">решение принято</span>';
       return '<tr>' +
         '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
         '<td>' + esc((rewards[c.rewardId] || REWARD_TITLES[c.rewardId] || {}).title || c.rewardId) + '</td>' +
-        '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
+        '<td class="mono-note">' + fmtDate(c.at) + '</td>' +
         '<td class="mono">' + esc(statusLabel) + '</td>' +
         '<td class="sub-actions">' + actions + '</td></tr>';
     }).join('');
@@ -412,7 +413,7 @@
     var count = $('ops-claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины эксплуатации на stands/ops/rewards.html, ордера приходят в ops-бандлах</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="sub-empty">ордеров нет: студенты обменивают неткоины эксплуатации на stands/ops/rewards.html, ордера приходят в ops-бандлах</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (c) {
@@ -424,12 +425,12 @@
       var actions = c.status === 'local'
         ? '<button class="btn btn-sm" type="button" data-oclm-ok="' + esc(c.id) + '">выдать</button> ' +
           '<button class="btn btn-sm btn-ghost" type="button" data-oclm-no="' + esc(c.id) + '">отклонить</button>'
-        : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
+        : '<span class="mono-note">решение принято</span>';
       var title = (catalog[c.rewardId] || OPS_REWARD_TITLES[c.rewardId] || {}).title || c.rewardId;
       return '<tr>' +
         '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
         '<td>' + esc(title) + '</td>' +
-        '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
+        '<td class="mono-note">' + fmtDate(c.at) + '</td>' +
         '<td class="mono">' + esc(statusLabel) + '</td>' +
         '<td class="sub-actions">' + actions + '</td></tr>';
     }).join('');
@@ -450,7 +451,7 @@
     var count = $('office-claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины бюро на stands/office/rewards.html, ордера приходят в office-бандлах</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="sub-empty">ордеров нет: студенты обменивают неткоины бюро на stands/office/rewards.html, ордера приходят в office-бандлах</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (c) {
@@ -462,12 +463,12 @@
       var actions = c.status === 'local'
         ? '<button class="btn btn-sm" type="button" data-fclm-ok="' + esc(c.id) + '">выдать</button> ' +
           '<button class="btn btn-sm btn-ghost" type="button" data-fclm-no="' + esc(c.id) + '">отклонить</button>'
-        : '<span class="mono" style="color:var(--muted);font-size:.75rem;">решение принято</span>';
+        : '<span class="mono-note">решение принято</span>';
       var title = (catalog[c.rewardId] || OFFICE_REWARD_TITLES[c.rewardId] || {}).title || c.rewardId;
       return '<tr>' +
         '<td><strong>' + esc(c.handle || '—') + '</strong></td>' +
         '<td>' + esc(title) + '</td>' +
-        '<td class="mono" style="color:var(--muted);">' + fmtDate(c.at) + '</td>' +
+        '<td class="mono-note">' + fmtDate(c.at) + '</td>' +
         '<td class="mono">' + esc(statusLabel) + '</td>' +
         '<td class="sub-actions">' + actions + '</td></tr>';
     }).join('');

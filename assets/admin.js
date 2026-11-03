@@ -17,7 +17,6 @@
     blog: { note: 'заметка', thought: 'мысль', digest: 'подборка', extra: 'доп. материал' },
     articles: { conference: 'конференция', methodical: 'методичка', book: 'книга/сборник' }
   };
-  const SECTION_ACCENT = { blog: 'rose', articles: 'orange' };
 
   /* ---------- утилиты ---------- */
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
@@ -361,7 +360,7 @@ ${bodyHtml}
     if (!rows.length) { box.innerHTML = '<p class="admin-hint">постов пока нет</p>'; return; }
     box.innerHTML = rows.map((f) =>
       '<div class="admin-postrow">'
-      + '<span class="mono text-xs" style="color:var(--text-2);">' + esc(f.path) + '</span>'
+      + '<span class="mono-note mono-note--ink">' + esc(f.path) + '</span>'
       + '<button class="btn btn-sm admin-del" type="button" data-path="' + esc(f.path) + '" data-sha="' + esc(f.sha) + '">удалить</button>'
       + '</div>').join('');
 

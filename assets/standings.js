@@ -211,7 +211,7 @@
         var title = (dp.opsTitles && dp.opsTitles[id]) || id;
         return esc(title) + ' ×' + dp.opsDone[id];
       });
-      if (parts.length) opsLine = '<p class="std-meta" style="margin-top:var(--st-sp-3);">операций проведено: ' + parts.join(' · ') + '</p>';
+      if (parts.length) opsLine = '<p class="std-meta">операций проведено: ' + parts.join(' · ') + '</p>';
     }
     var table = '<div class="std-table-wrap"><table class="std-table">' +
       '<thead><tr><th>экипаж</th><th>очков</th><th class="std-col-bar">копилка экипажа</th></tr></thead><tbody>' +
@@ -239,7 +239,6 @@
       else if (kind === 'ops-claims') el.innerHTML = datapolisClaimsList(snap);
       else if (kind === 'office-claims') el.innerHTML = officeClaimsList(snap);
       else if (kind === 'meta') el.innerHTML = snap ? metaLine(snap) : '';
-      el.classList.add('std-ready');
     });
   }
 

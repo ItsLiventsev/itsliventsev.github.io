@@ -479,7 +479,6 @@
       reboot: { usage: 'reboot', help: 'перезагрузка виртуальной машины', run: function () { state.bootAt = Date.now(); Object.keys(state.services).forEach(function (u) { var s = state.services[u]; if (!s.enabled) s.active = false; }); return R('Connection to ' + state.host + ' closed by remote host.\n// перезагрузка стенда: службы с автозапуском поднялись'); } }
     };
 
-    function a0flags() { return ''; }
     function editorRun(a) { return R('[' + (a.positionals[0] || 'файл') + '] ' + world.editorMessage); }
 
     function aptRun(a, c) {
