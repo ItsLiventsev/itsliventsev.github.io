@@ -206,5 +206,41 @@
     "readtime": "4 мин",
     "source": "",
     "status": "published"
+  },
+  {
+    "slug": "2026-10-26-kak-ustroen-etot-blog",
+    "file": "2026-10-26-kak-ustroen-etot-blog.html",
+    "title": "Заметка переехала",
+    "excerpt": "Первая заметка блога стала входной страницей базы знаний: связи между записями, рубрики, граф и источники с датой обращения.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "graph",
+    "file": "graph.html",
+    "title": "Граф заметок",
+    "excerpt": "Граф перекрёстных ссылок базы знаний: как заметки о типографике, токенах, композиции, движении, доступности и данных ссылаются друг на друга.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "topics",
+    "file": "topics.html",
+    "title": "Рубрики заметок",
+    "excerpt": "Шесть рубрик базы знаний: типографика, токены, композиция, движение, доступность и данные. Каждая рубрика собирает заметки по одной теме.",
+    "date": "",
+    "type": "note",
+    "tags": [],
+    "readtime": "",
+    "source": "",
+    "status": "published"
   }
 ]
