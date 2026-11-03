@@ -2155,6 +2155,16 @@ label.btn { cursor: pointer; }
 .iter-strip-toggle:hover { color: var(--u-ink); border-color: var(--u-line-strong); }
 .iter-strip-toggle:focus-visible { outline: 3px solid var(--u-accent); outline-offset: 2px; }
 
+/* Живой маркер у заголовка: мягкая пульсация, пока лента едет. */
+@media (prefers-reduced-motion: no-preference) {
+  .iter-strip .ui-eyebrow::before { animation: u-iter-pulse 2.4s var(--u-ease) infinite; }
+  .iter-strip.is-paused .ui-eyebrow::before { animation-play-state: paused; }
+}
+@keyframes u-iter-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.78); }
+}
+
 @media (max-width: 900px) {
   .iter-strip { grid-template-columns: minmax(0, 1fr); }
   .iter-strip-window { height: 92px; }
