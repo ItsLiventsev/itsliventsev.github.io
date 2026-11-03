@@ -168,25 +168,48 @@
 
       <div class="st-section-head">
         <span class="st-section-num">01</span>
-        <h2>Пропуск и квесты</h2>
+        <h2>Пропуск стажёра</h2>
         <span class="st-section-tag">личный кабинет</span>
       </div>
 
       <div class="cab-grid">
         <aside>
-          <div id="cab-id-card"></div>
-          <div class="st-mt-4">
-            <button class="flat-btn ghost flat-btn--block" id="profile-change" type="button">изменить ФИО / группу</button>
+          <div class="id-card">
+            <div id="cab-id-card"></div>
+            <div class="id-card-actions">
+              <a class="flat-btn" href="league.html">лига и достижения</a>
+              <a class="flat-btn" href="teams.html">трайбы и команды</a>
+              <button class="flat-btn" id="cab-mascot-change" type="button">маскот</button>
+              <button class="flat-btn" id="profile-change" type="button">ФИО / группа</button>
+            </div>
           </div>
         </aside>
 
         <section>
-          <div id="cab-quests"></div>
+          <div class="ops-statusbar">
+            <span><span class="ops-dot"></span>стенд <b>в работе</b></span>
+            <span>смена: <b id="cab-day">—</b></span>
+            <span>профиль закреплён за этим браузером</span>
+          </div>
         </section>
       </div>
 
       <div class="st-section-head">
         <span class="st-section-num">02</span>
+        <h2>Метрики практики</h2>
+        <span class="st-section-tag">работы и опыт</span>
+      </div>
+      <div class="metrics-block"><div class="sla-grid" id="cab-metrics"></div></div>
+
+      <div class="st-section-head">
+        <span class="st-section-num">03</span>
+        <h2>Роадмап и квесты</h2>
+        <span class="st-section-tag">пять спринтов</span>
+      </div>
+      <div id="cab-quests"></div>
+
+      <div class="st-section-head">
+        <span class="st-section-num">04</span>
         <h2>Лента событий</h2>
         <span class="st-section-tag">последние награды</span>
       </div>
@@ -196,7 +219,7 @@
 
       <!-- Обмен кодами: сердце взаимных проверок без сервера -->
       <div class="st-section-head">
-        <span class="st-section-num">03</span>
+        <span class="st-section-num">05</span>
         <h2>Обмен кодами с однокурсниками</h2>
         <span class="st-section-tag">без сервера</span>
       </div>
@@ -225,7 +248,7 @@
 
       <!-- Как устроено -->
       <div class="st-section-head">
-        <span class="st-section-num">04</span>
+        <span class="st-section-num">06</span>
         <h2>Как это работает</h2>
         <span class="st-section-tag">процесс</span>
       </div>

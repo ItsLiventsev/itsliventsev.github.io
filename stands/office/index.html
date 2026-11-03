@@ -135,16 +135,15 @@
 
     <!-- Кабинет -->
     <div id="dash" hidden>
-      <div class="flat-profile" id="lab-profile">
-        <span class="fp-name" id="fp-name">—</span>
-        <span class="fp-group" id="fp-group">—</span>
-        <span class="fp-spacer"></span>
-        <button class="flat-btn ghost" id="profile-change" type="button">изменить ФИО / группу</button>
-      </div>
-
       <div class="cab-grid st-mt-4">
         <aside>
-          <div id="id-card"></div>
+          <div class="id-card">
+            <div id="id-card"></div>
+            <div class="id-card-actions">
+              <a class="flat-btn" href="rewards.html">биржа привилегий</a>
+              <button class="flat-btn" id="profile-change" type="button">ФИО / группа</button>
+            </div>
+          </div>
         </aside>
         <section>
           <div class="ops-statusbar">
@@ -160,7 +159,7 @@
         <h2>Метрики бюро</h2>
         <span class="st-section-tag">без штрафов</span>
       </div>
-      <div class="sla-grid" id="sla-grid"></div>
+      <div class="metrics-block"><div class="sla-grid" id="sla-grid"></div></div>
 
       <div class="st-section-head">
         <span class="st-section-num">02</span>

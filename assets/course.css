@@ -713,12 +713,16 @@ pre, .term-screen {
 }
 .lp-body { display: grid; gap: var(--u-s4); }
 
-.sprint-group { display: grid; gap: 4px; }
+.sprint-group { display: grid; gap: var(--u-s2); }
+.sprint-group + .sprint-group { margin-block-start: var(--u-s5); }
 .sprint-head {
   display: flex;
   align-items: baseline;
   gap: var(--u-s3);
   min-width: 0;
+  margin-block: var(--u-s2) var(--u-s1);
+  padding-block-end: var(--u-s2);
+  border-block-end: 1px solid var(--u-line);
 }
 .sprint-head h3 {
   margin: 0;
@@ -866,18 +870,23 @@ pre, .term-screen {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--u-s2);
-  padding-block: var(--u-s4);
+  padding-block: var(--u-s4) 0;
 }
 .id-collapse { display: grid; gap: var(--u-s2); min-width: 0; }
 .id-stats > .id-collapse { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.id-stat {
+/* Плитка метрики одна на все три вселенные: профиль (.id-stat) и панели
+   бюро (.sla-stat) раньше расходились по рамке, отступам и кеглю. */
+.id-stat,
+.sla-stat {
   display: grid;
   gap: 2px;
-  padding: var(--u-s3);
-  border-radius: var(--u-r-sm);
+  padding: var(--u-s3) var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
   background: var(--u-surface-sunk);
 }
-.id-stat b {
+.id-stat b,
+.sla-stat b {
   font-family: var(--u-font-display);
   font-size: var(--u-fs-lg);
   font-weight: 600;
@@ -886,13 +895,14 @@ pre, .term-screen {
   color: var(--u-ink);
   font-variant-numeric: tabular-nums;
 }
-.id-stat span {
+.id-stat span,
+.sla-stat span {
   font-family: var(--u-font-mono);
   font-size: var(--u-fs-2xs);
   letter-spacing: var(--u-ls-mono);
   color: var(--u-muted);
 }
-.id-level { display: grid; gap: var(--u-s2); }
+.id-level { display: grid; gap: var(--u-s2); margin-block-start: var(--u-s4); }
 .xp-meta {
   font-family: var(--u-font-mono);
   font-size: var(--u-fs-2xs);
@@ -909,12 +919,48 @@ pre, .term-screen {
   letter-spacing: var(--u-ls-mono);
   color: var(--u-muted);
 }
+.id-card {
+  display: grid;
+  padding: var(--u-s5);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.id-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--u-s2);
+  margin-block-start: var(--u-s4);
+  padding-block-start: var(--u-s4);
+  border-block-start: 1px solid var(--u-line);
+}
+.id-card-actions .flat-btn {
+  flex: 1 1 auto;
+  min-height: 34px;
+  padding-inline: var(--u-s3);
+  font-size: var(--u-fs-xs);
+}
 .cab-grid {
   display: grid;
   grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
   gap: var(--u-s5);
   align-items: start;
 }
+/* Пропуск едет слева: колонка липнет под шапкой, пока листаешь работы. */
+.cab-grid > aside {
+  position: sticky;
+  inset-block-start: calc(var(--u-masthead) + var(--u-s4));
+  min-width: 0;
+}
+.metrics-block {
+  padding: var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.metrics-block .sla-grid { margin: 0; }
 .fp-group { display: grid; gap: var(--u-s2); }
 .fp-group > * { min-width: 0; }
 
@@ -1977,7 +2023,7 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   color: var(--u-ink);
 }
 .quest-card p { margin: 0 0 var(--u-s2); font-size: var(--u-fs-xs); line-height: 1.5; color: var(--u-ink-2); }
-.quest-side { display: grid; gap: 4px; justify-items: end; text-align: end; }
+.quest-side { display: grid; gap: var(--u-s1); justify-items: end; align-content: center; text-align: end; min-width: 0; }
 .quest-card .quest-progress { width: min(100%, 320px); margin-block-start: 6px; }
 .quest-card.is-soon { opacity: 0.62; }
 .quest-card.is-soon::after {
@@ -1989,23 +2035,6 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 }
 
 .sla-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--u-s2); }
-.sla-stat {
-  display: grid;
-  gap: 2px;
-  padding: var(--u-s3) var(--u-s4);
-  border-radius: var(--u-r-sm);
-  border: 1px solid var(--u-line);
-  background: var(--u-surface-sunk);
-}
-.sla-stat b {
-  font-family: var(--u-font-display);
-  font-size: var(--u-fs-lg);
-  font-weight: 600;
-  line-height: 1.1;
-  color: var(--u-ink);
-  font-variant-numeric: tabular-nums;
-}
-.sla-stat span { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-muted); }
 .ops-board[hidden] { display: none; }
 
 /* ——— Лента событий в кабинетах ——— */
