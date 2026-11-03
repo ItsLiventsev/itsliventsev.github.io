@@ -685,7 +685,7 @@
           '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
           '<div class="flat-row flat-row--spaced">' +
           '<a class="flat-btn ghost" href="league.html">моя лига и достижения →</a>' +
-          '<a class="flat-btn ghost" href="teams.html">трайн и команды</a>' +
+          '<a class="flat-btn ghost" href="teams.html">трайбы и команды</a>' +
           '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div></div>';
 
       (function renderQuests() {

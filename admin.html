@@ -37,7 +37,7 @@
   <main id="main-content">
 
     <h1 class="hero-title">Админ-панель</h1>
-    <p class="hero-sub admin-hero-sub">приём работ стендов, мониторинг сессий и публикация постов · токен не покидает вкладку</p>
+    <p class="hero-sub">приём работ стендов, мониторинг сессий и публикация постов · токен не покидает вкладку</p>
 
     <!-- Сегментированная навигация панели: липнет под фиксированной шапкой -->
     <div class="admin-segments" role="tablist" aria-label="Разделы админ-панели">
@@ -60,7 +60,7 @@
         <div class="admin-btngroup">
           <p class="admin-grouplabel">приём работ</p>
           <div class="admin-btnrow">
-            <label class="btn btn-primary btn-sm is-clickable" for="sub-import">импорт JSON ↥
+            <label class="btn btn-primary btn-sm" for="sub-import">импорт JSON ↥
               <input id="sub-import" type="file" accept="application/json,.json" multiple hidden>
             </label>
             <button class="btn btn-sm" id="sub-repo" type="button">загрузить из репозитория</button>
@@ -228,7 +228,7 @@
       <!-- Рабочая область -->
       <section id="workspace" hidden>
         <div class="admin-bar">
-          <div class="mono text-sm">вошли как <strong id="gh-login">—</strong></div>
+          <div class="mono-note">вошли как <strong id="gh-login">—</strong></div>
           <button class="btn btn-sm" id="logout" type="button">выйти</button>
         </div>
 
