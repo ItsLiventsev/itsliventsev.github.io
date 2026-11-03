@@ -683,10 +683,26 @@
         '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
           (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : '') + '</span>' +
           '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
-          '<div class="flat-row flat-row--spaced">' +
-          '<a class="flat-btn ghost" href="league.html">моя лига и достижения →</a>' +
-          '<a class="flat-btn ghost" href="teams.html">трайбы и команды</a>' +
-          '<button class="flat-btn ghost" id="cab-mascot-change" type="button">сменить маскота</button></div></div></div>';
+          '</div></div>';
+
+      var metricsHost = $('cab-metrics');
+      if (metricsHost) {
+        var submitted = QUESTS.filter(function (q) { return L.bestSubmission(profile.id, q.id); }).length;
+        var excellent = QUESTS.filter(function (q) { return L.standMastery(profile.id, q.id).percent >= 95; }).length;
+        var masterySum = QUESTS.reduce(function (sum, q) { return sum + L.standMastery(profile.id, q.id).percent; }, 0);
+        metricsHost.innerHTML = [
+          ['работ открыто', QUESTS.length - submitted],
+          ['работ сдано', submitted],
+          ['на отлично (≥95%)', excellent],
+          ['средний балл, %', Math.round(masterySum / QUESTS.length)],
+          ['неткоинов', t.coins],
+          ['опыт, XP', t.xp]
+        ].map(function (m) {
+          return '<div class="sla-stat"><b>' + m[1] + '</b><span>' + m[0] + '</span></div>';
+        }).join('');
+      }
+      var cabDay = $('cab-day');
+      if (cabDay) cabDay.textContent = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'short' });
 
       (function renderQuests() {
         var doneCount = 0;
@@ -706,7 +722,7 @@
         });
         var overall = Math.round(doneCount / QUESTS.length * 100);
         var head = '<div class="roadmap-overview">' +
-          '<div><strong>роадмап практики</strong>' +
+          '<div>' +
           '<p class="admin-hint">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
           '<div class="roadmap-meter"><span class="xp-meta">' + doneCount + ' из ' + QUESTS.length + ' работ · ' + overall + '%</span>' +
           '<div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>';
