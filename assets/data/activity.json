@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-03T18:18:53.960Z",
+  "generated": "2026-11-03T18:25:37.183Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 265,
+  "total": 263,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 54
+      "count": 51
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-03",
-      "count": 4
+      "count": 5
     }
   ],
   "commits": [
+    {
+      "sha": "abea83d",
+      "title": "chore(code): дочистить разметку админки, архив и кейсы",
+      "date": "2026-11-03T18:19:52Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/abea83d8fdcd0759e710c713ff14b87917ac1f37"
+    },
     {
       "sha": "ec0fe48",
       "title": "chore(code): убрать мёртвый код и достроить стили JS-компонентов",
@@ -481,12 +487,6 @@
       "title": "docs: AGENT_PLAN — оркестрация 5 суб-агентов (Navigator/Visual/Motion/Data/Integrator)",
       "date": "2026-11-01T19:48:30Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/e02c666ae952a9d91aae58c5e5736d26e68c3208"
-    },
-    {
-      "sha": "5650e52",
-      "title": "Add live activity journal to homepage",
-      "date": "2026-11-01T19:37:17Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5650e521b3bf0ff59ac3d870aea382df289cbb9e"
     }
   ]
 }
