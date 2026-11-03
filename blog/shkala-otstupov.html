@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Одна шкала отступов вместо двадцати решений · itsliventsev</title>
+<meta name="description" content="Шкала отступов — это набор из восьми-десяти шагов, между которыми выбирают, а не изобретают значение. Шаг 4 px даёт ритм, при котором 12 и 16 px перестают спорить друг с другом.">
+<meta name="post-date" content="2026-10-24">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="токены,сетка,плотность">
+<meta name="post-readtime" content="5 мин">
+<meta name="post-excerpt" content="Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».">
+<meta name="kn-zone" content="tokens">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/shkala-otstupov.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Одна шкала отступов вместо двадцати решений · itsliventsev">
+  <meta property="og:description" content="Шкала отступов — это набор из восьми-десяти шагов, между которыми выбирают, а не изобретают значение. Шаг 4 px даёт ритм, при котором 12 и 16 px перестают спорить друг с другом.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/shkala-otstupov.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/tokens.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-24">
+  <meta property="article:tag" content="токены">
+  <meta property="article:tag" content="сетка">
+  <meta property="article:tag" content="плотность">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Одна шкала отступов вместо двадцати решений · itsliventsev">
+  <meta name="twitter:description" content="Шкала отступов — это набор из восьми-десяти шагов, между которыми выбирают, а не изобретают значение. Шаг 4 px даёт ритм, при котором 12 и 16 px перестают спорить друг с другом.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/tokens.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Одна шкала отступов вместо двадцати решений","description":"Шкала отступов — это набор из восьми-десяти шагов, между которыми выбирают, а не изобретают значение. Шаг 4 px даёт ритм, при котором 12 и 16 px перестают спорить друг с другом.","url":"https://itsliventsev.github.io/blog/shkala-otstupov.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/shkala-otstupov.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/tokens.webp","datePublished":"2026-10-24","dateModified":"2026-10-24","keywords":"токены, сетка, плотность"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Одна шкала отступов вместо двадцати решений","item":"https://itsliventsev.github.io/blog/shkala-otstupov.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/tokens.html">Токены</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-24">24 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 01.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>5 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Одна шкала отступов вместо двадцати решений</h1>
+        <p class="kn-def">Шкала отступов — это набор из восьми-десяти шагов, между которыми выбирают, а не изобретают значение. Шаг 4 px даёт ритм, при котором 12 и 16 px перестают спорить друг с другом.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Отступы — самый незаметный слой системы и самый заметный, когда его нет. Страница, где 12 px соседствуют с 14 px и 18 px, выглядит неопрятной, хотя каждый отдельный отступ выбран «правильно». Причина в том, что глаз читает не значения, а ритм.</p>
+        <h2>Восемь шагов вместо бесконечности</h2>
+        <p>Шкала даёт конечный выбор: между 16 px и 20 px есть решение, между 14 px и 16 px — нет. Это не ограничение, а экономия: в момент вёрстки автор не придумывает расстояние, а выбирает ступень.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Токен</th><th scope="col">Значение</th><th scope="col">Где применяется</th></tr></thead><tbody><tr><th scope="row">--u-s1</th><td>4 px</td><td>зазор между иконкой и подписью</td></tr><tr><th scope="row">--u-s2</th><td>8 px</td><td>внутренние зазоры пилюль и меток</td></tr><tr><th scope="row">--u-s3</th><td>12 px</td><td>строки списков</td><td>отступы в таблице</td></tr><tr><th scope="row">--u-s4</th><td>16 px</td><td>базовый внутренний отступ карточки</td></tr><tr><th scope="row">--u-s5</th><td>20 px</td><td>отступы компактных карточек</td></tr><tr><th scope="row">--u-s6</th><td>24 px</td><td>стандартная карточка</td></tr><tr><th scope="row">--u-s7</th><td>32 px</td><td>заголовок и первый абзац</td></tr><tr><th scope="row">--u-s8</th><td>40 px</td><td>начало секции</td></tr><tr><th scope="row">--u-s9</th><td>48 px</td><td>крупный раздел страницы</td></tr><tr><th scope="row">--u-s10</th><td>64 px</td><td>поля страницы на десктопе</td></tr><tr><th scope="row">--u-s11</th><td>80 px</td><td>нижний отступ документа</td></tr></tbody><caption>Крупные ступени растут быстрее мелких: расстояния между блоками воспринимаются нелинейно.</caption></table></div>
+        <p>Шаг 4 px выбран по компромиссу: он достаточно мал, чтобы управлять мелкими зазорами внутри пилюли или строки таблицы, и достаточно кратен, чтобы все крупные отступы делились на 8. Крупные ступени растут быстрее мелких, потому что большие расстояния глаз оценивает нелинейно: разница между 40 и 48 px читается сильнее, чем между 4 и 12.</p>
+        <h2>Плотность — это управляемая переменная</h2>
+        <p>Одна и та же шкала даёт разные характеры страниц:</p>
+        <ul><li><strong>Плотная страница</strong> — внутренние отступы <code>--u-s3</code> и <code>--u-s4</code>, между секциями <code>--u-s6</code>. Так выглядят ленты, каталоги, таблицы.</li><li><strong>Спокойная страница</strong> — внутри <code>--u-s5</code>–<code>--u-s6</code>, между секциями <code>--u-s9</code>. Так выглядят заметки и статьи.</li><li><strong>Витрина</strong> — крупные карточки <code>--u-card-pad</code>, между блоками <code>--u-s7</code>. Так выглядит главная.</li></ul>
+        <p>Проблема начинается, когда на одной странице встречаются все три характера без причины. Лента заметок — материал плотный, но каждая карточка внутри дышит: это осознанная разница между «между блоками» и «внутри блока».</p>
+        <h2>Отступы и воздух — разные вещи</h2>
+        <p>Частая ошибка — лечить «тесноту» увеличением отступов. Если текст стоит слишком широко (<code>90ch</code> вместо <code>68ch</code>), добавление полей не помогает: строка всё равно длинная, а страница становится пустой. Сначала <a class="kn-ref" href="/blog/merka-stroki.html">мера строки</a>, потом <a class="kn-ref" href="/blog/setka-i-plotnost.html">сетка и плотность</a>, и только после этого — шкала.</p>
+        <dl class="kn-facts"><dt>Шаг</dt><dd>4 px — минимальная ступень; 8 px — ритмическая база</dd><dt>Плотность</dt><dd>карточки 20–24 px внутри, секции 40–48 px между</dd><dt>Мера</dt><dd>отступы живут рядом с мерой строки 68ch, а не вместо неё</dd><dt>Проверка</dt><dd>любое значение вне шкалы — повод завести токен или отказаться от него</dd></dl>
+        <h2>Как шкала связана с токенами цвета</h2>
+        <p>Механика одна: имя вместо значения. <code>padding: var(--u-s5)</code> не сообщает, сколько это пикселей; при желании всю систему можно сжать или расширить, поменяв значения шкалы в одном файле. Ровно так же работает <a class="kn-ref" href="/blog/tokeny-tsveta.html">слой цвета</a>: роли в компонентах, значения в токенах.</p>
+        <p>Ограничение тоже общее: литерал в компоненте — ошибка. <code>padding: 14px</code> живёт до первого редизайна, после которого его ищут по всему проекту. Так же, как таблица без <a class="kn-ref" href="/blog/tablicy-kak-most.html">единой оси сравнения</a>, набор случайных отступов выглядит структурой, но ею не является.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/tokeny-tsveta.html"><strong>Цвет живёт в токенах, а не в компонентах</strong><span>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span></a></li>
+          <li><a href="/blog/setka-i-plotnost.html"><strong>Сетка 12 колонок и поток карточек разных размеров</strong><span>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span></a></li>
+          <li><a href="/blog/tablicy-kak-most.html"><strong>Таблица как мост между текстом и решением</strong><span>Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/srezy-i-razrezy.html">Срезы и разрезы</a> — ссылается на эту заметку</li><li><a href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.nngroup.com/articles/spacing-design-systems/" target="_blank" rel="noopener">Spacing, grids, and layout — design systems</a><small>Nielsen Norman Group</small><small>обращение: 1 ноября 2026</small></li><li><a href="https://spec.fm/specifics/8-pt-grid" target="_blank" rel="noopener">8-point grid: a consistent spacing system</a><small>Spec</small><small>обращение: 25 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/tokens.html">все заметки рубрики «Токены»</a>
+        <span><a href="/blog/tablica-i-eho-zebra.html">Зебра, границы и плотность внутри таблицы →</a><a href="/blog/fokus-i-klaviatura.html">← Видимый фокус — не украшение, а навигация</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Токены. Запись 05 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#shkala-otstupov"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#токены">токены</a></li><li><a href="/blog/topics.html#сетка">сетка</a></li><li><a href="/blog/topics.html#плотность">плотность</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 24.10.2026, обновлено 01.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

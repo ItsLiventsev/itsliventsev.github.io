@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Срезы и разрезы · itsliventsev</title>
+<meta name="description" content="Срез показывает разрез темы на одном листе: что было, что стало и почему. Для сравнения до и после он честнее абзаца, но только когда обе половины показаны в одном масштабе.">
+<meta name="post-date" content="2026-10-16">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="сетка,типографика,статика">
+<meta name="post-readtime" content="4 мин">
+<meta name="post-excerpt" content="Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.">
+<meta name="kn-zone" content="layout">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/srezy-i-razrezy.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Срезы и разрезы · itsliventsev">
+  <meta property="og:description" content="Срез показывает разрез темы на одном листе: что было, что стало и почему. Для сравнения до и после он честнее абзаца, но только когда обе половины показаны в одном масштабе.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/srezy-i-razrezy.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/bento.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-16">
+  <meta property="article:tag" content="сетка">
+  <meta property="article:tag" content="типографика">
+  <meta property="article:tag" content="статика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Срезы и разрезы · itsliventsev">
+  <meta name="twitter:description" content="Срез показывает разрез темы на одном листе: что было, что стало и почему. Для сравнения до и после он честнее абзаца, но только когда обе половины показаны в одном масштабе.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/bento.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Срезы и разрезы","description":"Срез показывает разрез темы на одном листе: что было, что стало и почему. Для сравнения до и после он честнее абзаца, но только когда обе половины показаны в одном масштабе.","url":"https://itsliventsev.github.io/blog/srezy-i-razrezy.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/srezy-i-razrezy.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/bento.webp","datePublished":"2026-10-16","dateModified":"2026-10-16","keywords":"сетка, типографика, статика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Срезы и разрезы","item":"https://itsliventsev.github.io/blog/srezy-i-razrezy.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/layout.html">Композиция</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-16">16 октября 2026</time>
+          
+          <span aria-hidden="true">·</span>
+          <span>4 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Срезы и разрезы</h1>
+        <p class="kn-def">Срез показывает разрез темы на одном листе: что было, что стало и почему. Для сравнения до и после он честнее абзаца, но только когда обе половины показаны в одном масштабе.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Срез — это страница с двумя состояниями одного элемента. Он отвечает на вопрос «что изменилось» быстрее любого абзаца, потому что читатель сравнивает глазами, а не держит в голове описание прошлого.</p>
+        <h2>Одно изменение — один срез</h2>
+        <p>Если на срезе сразу поменялись кегль, ширина и цвет, читатель не поймёт, что именно дало эффект. Поэтому в срезе меняется одна переменная, а подпись называет её: «мера строки 90ch → 68ch», «шаг сетки 8 → 4», «контраст текста 2.8:1 → 5.1:1».</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Что меняется</th><th scope="col">Форма</th><th scope="col">Чего не хватает</th></tr></thead><tbody><tr><th scope="row">Ширина</th><td>две колонки одинаковой высоты</td><td>подписи с размерами</td></tr><tr><th scope="row">Кегль</th><td>два абзаца одного текста</td><td>линейка рядом</td></tr><tr><th scope="row">Плотность</th><td>две ленты карточек</td><td>подпись с шагом сетки</td></tr><tr><th scope="row">Цвет</th><td>две плашки</td><td>значение контраста</td></tr></tbody><caption>Форма среза зависит от того, что именно изменилось.</caption></table></div>
+        <h2>Один масштаб</h2>
+        <p>Главная ошибка — увеличить «удачную» половину, чтобы она выглядела выразительнее. Тогда срез показывает не изменение, а предпочтение автора. Обе половины рендерятся одним компонентом с одинаковой шириной, шрифтом и плотностью; различается только та переменная, которую проверяли.</p>
+        <dl class="kn-facts"><dt>Масштаб</dt><dd>обе половины в одном масштабе, иначе срез врёт</dd><dt>Подпись</dt><dd>у каждой половины дата или версия</dd><dt>Ось</dt><dd>одно изменение на срез, не три сразу</dd></dl>
+        <h2>Без JavaScript</h2>
+        <p>Срез собирается на обычной сетке: два одинаковых блока в двух колонках, на узком экране — друг под другом. Ползунок «до/после» выглядит эффектно, но ломает мобильную версию и требует скрипта там, где хватает CSS. Если нужен именно ползунок, он остаётся прогрессивным улучшением: без него видны оба состояния.</p>
+        <p>Связанное: <a class="kn-ref" href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — как срезом проверяют пару гарнитур, <a class="kn-ref" href="/blog/shkala-otstupov.html">Одна шкала отступов вместо двадцати решений</a> — почему шаг сетки показывают, а не описывают, <a class="kn-ref" href="/blog/setka-i-plotnost.html">Сетка 12 колонок и поток карточек разных размеров</a> — где срезу место в ленте.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/dve-garnitury.html"><strong>Две гарнитуры на страницу — и ни одной больше</strong><span>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span></a></li>
+          <li><a href="/blog/setka-i-plotnost.html"><strong>Сетка 12 колонок и поток карточек разных размеров</strong><span>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span></a></li>
+          <li><a href="/blog/shkala-otstupov.html"><strong>Одна шкала отступов вместо двадцати решений</strong><span>Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.nngroup.com/articles/before-after-testing/" target="_blank" rel="noopener">Before and after: showing design changes</a><small>Nielsen Norman Group</small><small>обращение: 16 октября 2026</small></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" target="_blank" rel="noopener">CSS comparison: side-by-side layouts without JavaScript</a><small>MDN Web Docs</small><small>обращение: 15 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/layout.html">все заметки рубрики «Композиция»</a>
+        <span><a href="/blog/dvizhenie-120-320.html">Движение 120–320 мс: когда анимация объясняет →</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Композиция. Запись 01 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#srezy-i-razrezy"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#сетка">сетка</a></li><li><a href="/blog/topics.html#типографика">типографика</a></li><li><a href="/blog/topics.html#статика">статика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 16.10.2026. В графе 3 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

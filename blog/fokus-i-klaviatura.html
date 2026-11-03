@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Видимый фокус — не украшение, а навигация · itsliventsev</title>
+<meta name="description" content="Фокус — это курсор для тех, кто не пользуется мышью. Если его убрать или сделать незаметным, страница остаётся рабочей только для части читателей.">
+<meta name="post-date" content="2026-10-22">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="фокус,доступность,контраст">
+<meta name="post-readtime" content="6 мин">
+<meta name="post-excerpt" content="Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.">
+<meta name="kn-zone" content="accessibility">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/fokus-i-klaviatura.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Видимый фокус — не украшение, а навигация · itsliventsev">
+  <meta property="og:description" content="Фокус — это курсор для тех, кто не пользуется мышью. Если его убрать или сделать незаметным, страница остаётся рабочей только для части читателей.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/fokus-i-klaviatura.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/accessibility.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-22">
+  <meta property="article:tag" content="фокус">
+  <meta property="article:tag" content="доступность">
+  <meta property="article:tag" content="контраст">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Видимый фокус — не украшение, а навигация · itsliventsev">
+  <meta name="twitter:description" content="Фокус — это курсор для тех, кто не пользуется мышью. Если его убрать или сделать незаметным, страница остаётся рабочей только для части читателей.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/accessibility.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Видимый фокус — не украшение, а навигация","description":"Фокус — это курсор для тех, кто не пользуется мышью. Если его убрать или сделать незаметным, страница остаётся рабочей только для части читателей.","url":"https://itsliventsev.github.io/blog/fokus-i-klaviatura.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/fokus-i-klaviatura.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/accessibility.webp","datePublished":"2026-10-22","dateModified":"2026-10-22","keywords":"фокус, доступность, контраст"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Видимый фокус — не украшение, а навигация","item":"https://itsliventsev.github.io/blog/fokus-i-klaviatura.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/accessibility.html">Доступность</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-22">22 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 02.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>6 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Видимый фокус — не украшение, а навигация</h1>
+        <p class="kn-def">Фокус — это курсор для тех, кто не пользуется мышью. Если его убрать или сделать незаметным, страница остаётся рабочей только для части читателей.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Интерфейс, в котором нельзя пройти по странице клавиатурой, — это интерфейс с выключенной половиной управления. Фокус здесь выполняет работу курсора: показывает, где сейчас находится человек, и подтверждает, что нажатие сработает.</p>
+        <h2>Почему <code>outline: none</code> — почти всегда ошибка</h2>
+        <p>Стандартное кольцо браузера часто выглядит чужеродно. Соблазн убрать его понятен: оно появляется при клике, ломает аккуратную сетку и спорит с дизайном. Проблема в том, что вместе с ним исчезает единственный индикатор позиции. Решение не «убрать», а «заменить своим» — и показать его только там, где он нужен:</p>
+        <pre><code>:focus-visible { outline: 2px solid var(--u-accent); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }</code></pre>
+        <p><code>:focus-visible</code> отличает клавиатурный фокус от клика мышью. Это компромисс, который устраивает обе стороны: аккуратный вид при работе мышью и заметное кольцо при работе с клавиатуры.</p>
+        <h2>Кольцо должно быть видно на любом фоне</h2>
+        <p>Кольцо цвета акцента на белой карточке видно, на подложке — хуже, на тёмной теме — может исчезнуть совсем. Здесь работает тот же принцип, что и с <a class="kn-ref" href="/blog/tokeny-tsveta.html">токенами цвета</a>: фокус описывается двумя слоями — светлый контур по фону страницы плюс тёмный контур по элементу. В этой системе он записан как <code>--u-focus</code> и переопределяется в тёмной теме вместе с остальными значениями.</p>
+        <p>Порог для индикатора — 3:1 к соседнему цвету: это требование к нетекстовым элементам управления. Для текста порог выше, о нём — в заметке <a class="kn-ref" href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Проверка</th><th scope="col">Как выполнить</th><th scope="col">Признак провала</th></tr></thead><tbody><tr><th scope="row">Порядок Tab</th><td>пройти страницу только клавиатурой</td><td>фокус прыгает не по порядку чтения</td></tr><tr><th scope="row">Видимость</th><td>смотреть на каждый переход</td><td>кольцо не видно на части фона</td></tr><tr><th scope="row">Перекрытие</th><td>открыть меню и пролистать</td><td>фокус уезжает под липкую шапку</td></tr><tr><th scope="row">Ловушка</th><td>открыть поиск и нажать Escape</td><td>фокус остаётся в диалоге</td></tr><tr><th scope="row">Пропуск</th><td>нажать Tab один раз со старта</td><td>нет ссылки «к содержанию»</td></tr></tbody><caption>Пять проверок, которые ловят почти все проблемы с клавиатурой за пять минут.</caption></table></div>
+        <h2>Порядок Tab — это структура документа</h2>
+        <p>Порядок обхода почти всегда повторяет порядок в разметке. Значит, если визуально блоки переставлены CSS-ом (<code>order</code>, <code>grid-row</code>), клавиатура пойдёт не туда, куда смотрит читатель. Отсюда правило: <strong>визуальный порядок и порядок в DOM совпадают</strong>, а перестановки в CSS — только косметические, не смысловые.</p>
+        <p>Три вещи ломают порядок чаще всего:</p>
+        <ol><li>Модальные окна без управления фокусом: Tab уходит в страницу под диалогом.</li><li>Липкие панели: элемент, получивший фокус, оказывается под шапкой — об этом отдельный критерий WCAG про перекрытие фокуса.</li><li><code>tabindex</code> с положительными значениями: он вырывает элемент из естественного порядка.</li></ol>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">разметка<em>2</em></p><div class="kn-tile"><strong>Настоящие кнопки</strong>button, a, input вместо div с onclick</div><div class="kn-tile"><strong>Один h1 и земля</strong>main, nav, footer вместо голых div</div></div><div class="kn-lane"><p class="kn-lane-head">стиль<em>2</em></p><div class="kn-tile"><strong>:focus-visible</strong>кольцо 2 px + отступ 2 px через тень</div><div class="kn-tile"><strong>Контраст кольца</strong>не ниже 3:1 к соседнему фону</div></div><div class="kn-lane"><p class="kn-lane-head">движение<em>2</em></p><div class="kn-tile"><strong>scroll-margin</strong>якоря не прячутся под шапкой</div><div class="kn-tile"><strong>Escape закрывает</strong>фокус возвращается на кнопку</div></div><div class="kn-lane"><p class="kn-lane-head">антипаттерн<em>1</em></p><div class="kn-tile"><strong>outline: none</strong>без замены — самый частый провал</div></div></div>
+        <h2>Пропустить навигацию</h2>
+        <p>Первое, что получает человек с клавиатуры, — ссылка «перейти к содержанию». Она визуально спрятана и появляется при фокусе. Без неё каждый переход между страницами начинается с двадцати нажатий Tab по пунктам меню — это и есть реальная стоимость «красивой шапки».</p>
+        <p>Тот же принцип работает внутри длинных заметок: якорные ссылки на разделы получают <code>scroll-margin-top</code>, равный высоте липкой шапки, иначе заголовок после перехода прячется под ней.</p>
+        <h2>Что проверить перед публикацией</h2>
+        <ul><li>Пройти страницу целиком только клавиатурой: Tab, Shift+Tab, Enter, Escape.</li><li>Убедиться, что кольцо фокуса видно на всех поверхностях — карточка, подложка, тёмная тема.</li><li>Открыть и закрыть меню и поиск: фокус возвращается туда, откуда пришёл.</li><li>Проверить, что фокус не уезжает под липкую шапку.</li><li>Убедиться, что порядок Tab совпадает с чтением сверху вниз.</li></ul>
+        <p>Связанное: <a class="kn-ref" href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a> — числовой порог контраста, <a class="kn-ref" href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — почему кегль мелких меток тоже влияет на доступность.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/tokeny-tsveta.html"><strong>Цвет живёт в токенах, а не в компонентах</strong><span>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span></a></li>
+          <li><a href="/blog/kontrast-aa.html"><strong>Контраст AA: 4.5 к 1 и что за этим стоит</strong><span>Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</span></a></li>
+          <li><a href="/blog/dve-garnitury.html"><strong>Две гарнитуры на страницу — и ни одной больше</strong><span>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/dvizhenie-120-320.html">Движение 120–320 мс: когда анимация объясняет</a> — ссылается на эту заметку</li><li><a href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a> — ссылается на эту заметку</li><li><a href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> — ссылается на эту заметку</li><li><a href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html" target="_blank" rel="noopener">WCAG 2.2 — 2.4.7 Focus Visible</a><small>W3C</small><small>обращение: 2 ноября 2026</small></li><li><a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — 2.4.11 Focus Not Obscured (Minimum)</a><small>W3C</small><small>обращение: 30 октября 2026</small></li><li><a href="https://webaim.org/techniques/keyboard/" target="_blank" rel="noopener">Keyboard accessibility basics</a><small>WebAIM</small><small>обращение: 20 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/accessibility.html">все заметки рубрики «Доступность»</a>
+        <span><a href="/blog/shkala-otstupov.html">Одна шкала отступов вместо двадцати решений →</a><a href="/blog/kontrast-aa.html">← Контраст AA: 4.5 к 1 и что за этим стоит</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Доступность. Запись 04 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#fokus-i-klaviatura"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#фокус">фокус</a></li><li><a href="/blog/topics.html#доступность">доступность</a></li><li><a href="/blog/topics.html#контраст">контраст</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 22.10.2026, обновлено 02.11.2026. В графе 7 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

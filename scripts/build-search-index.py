@@ -7,6 +7,9 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 SKIP = {'admin.html', '404.html', 'projects/glossary.html', 'assets/offline.html'}
+# Навигацию и обвязку в индекс не берём, но карта сайта — это целиком навигация:
+# без списка разделов у неё остаётся одна подпись и документ выпадает из поиска.
+SKIP_TAGS = {'script', 'style', 'noscript', 'svg', 'header', 'footer'}
 
 class Extract(HTMLParser):
     def __init__(self):
@@ -18,7 +21,7 @@ class Extract(HTMLParser):
         self.text = []
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        if tag in ('script', 'style', 'noscript', 'svg', 'header', 'nav', 'footer'):
+        if tag in SKIP_TAGS:
             self.skip += 1
         if tag == 'title': self.title_depth += 1
         if tag == 'h1': self.h1_depth += 1

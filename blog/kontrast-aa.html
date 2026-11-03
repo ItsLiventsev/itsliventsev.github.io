@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Контраст AA: 4.5 к 1 и что за этим стоит · itsliventsev</title>
+<meta name="description" content="Контраст — отношение яркостей текста и фона. AA требует 4.5:1 для обычного текста и 3:1 для крупного; проверять нужно каждую пару «текст на фоне», включая подписи и состояния.">
+<meta name="post-date" content="2026-10-21">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="контраст,доступность,цвет">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.">
+<meta name="kn-zone" content="accessibility">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kontrast-aa.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Контраст AA: 4.5 к 1 и что за этим стоит · itsliventsev">
+  <meta property="og:description" content="Контраст — отношение яркостей текста и фона. AA требует 4.5:1 для обычного текста и 3:1 для крупного; проверять нужно каждую пару «текст на фоне», включая подписи и состояния.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kontrast-aa.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/accessibility.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-21">
+  <meta property="article:tag" content="контраст">
+  <meta property="article:tag" content="доступность">
+  <meta property="article:tag" content="цвет">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Контраст AA: 4.5 к 1 и что за этим стоит · itsliventsev">
+  <meta name="twitter:description" content="Контраст — отношение яркостей текста и фона. AA требует 4.5:1 для обычного текста и 3:1 для крупного; проверять нужно каждую пару «текст на фоне», включая подписи и состояния.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/accessibility.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Контраст AA: 4.5 к 1 и что за этим стоит","description":"Контраст — отношение яркостей текста и фона. AA требует 4.5:1 для обычного текста и 3:1 для крупного; проверять нужно каждую пару «текст на фоне», включая подписи и состояния.","url":"https://itsliventsev.github.io/blog/kontrast-aa.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kontrast-aa.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/accessibility.webp","datePublished":"2026-10-21","dateModified":"2026-10-21","keywords":"контраст, доступность, цвет"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Контраст AA: 4.5 к 1 и что за этим стоит","item":"https://itsliventsev.github.io/blog/kontrast-aa.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/accessibility.html">Доступность</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-21">21 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 03.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Контраст AA: 4.5 к 1 и что за этим стоит</h1>
+        <p class="kn-def">Контраст — отношение яркостей текста и фона. AA требует 4.5:1 для обычного текста и 3:1 для крупного; проверять нужно каждую пару «текст на фоне», включая подписи и состояния.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Контраст — самая частая причина, по которой хороший визуально интерфейс оказывается недоступным. Он не про вкус и не про «слишком резко»: это числовое отношение, которое можно посчитать до публикации и проверить в тесте.</p>
+        <h2>Как считается</h2>
+        <p>Каждый цвет переводится в относительную яркость: каналы sRGB нормализуются, к ним применяется гамма-коррекция, затем берутся веса 0.2126 / 0.7152 / 0.0722. Контраст — отношение <code>(L1 + 0.05) / (L2 + 0.05)</code>, где <code>L1</code> — более светлый цвет. Минимум — 1:1 (цвета совпали), максимум — 21:1 (чёрный на белом).</p>
+        <p>Практический вывод: контраст падает быстро. Разница между <code>#000</code> и <code>#555</code> на глаз невелика, а по числу это уже не 21:1, а примерно 7.5:1. Поэтому «чуть-чуть приглушить» — самая опасная операция в палитре.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Что</th><th scope="col">Порог AA</th><th scope="col">Порог AAA</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">Обычный текст</th><td>4.5:1</td><td>7:1</td><td>основной текст на карточке</td></tr><tr><th scope="row">Крупный текст</th><td>3:1</td><td>4.5:1</td><td>заголовок 32 px</td></tr><tr><th scope="row">Иконки и границы</th><td>3:1</td><td>—</td><td>кольцо фокуса</td><td>рамка поля</td></tr><tr><th scope="row">Неактивные элементы</th><td>без требования</td><td>—</td><td>отключённая кнопка</td></tr></tbody><caption>Крупный текст — от 24 px обычного начертания или от 18.66 px полужирного.</caption></table></div>
+        <h2>Три пары, которые проваливаются чаще всего</h2>
+        <ol><li><strong>Подписи и метаданные.</strong> Серый текст 12 px на белой карточке — классика. Решение не «сделать темнее на глаз», а взять токен <code>--u-muted</code>, у которого контраст проверен.</li><li><strong>Заглушки в полях ввода.</strong> Placeholder часто светлее основного текста; при кегле 15 px он должен проходить те же 4.5:1.</li><li><strong>Кнопка в состоянии hover.</strong> Акцент темнеет на светлой теме и светлеет на тёмной — обе пары нужно считать отдельно.</li></ol>
+        <p>Отдельная история — контраст <strong>нетекстовых</strong> элементов: границы полей, иконки, кольцо фокуса. Здесь порог 3:1, и именно он чаще всего нарушается, когда кольцо фокуса делают полупрозрачным (см. <a class="kn-ref" href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a>).</p>
+        <dl class="kn-facts"><dt>Формула</dt><dd>(L1 + 0.05) / (L2 + 0.05), где L — относительная яркость</dd><dt>Диапазон</dt><dd>от 1:1 (цвет совпадает) до 21:1 (чёрный на белом)</dd><dt>Провал</dt><dd>серый #999999 на белом даёт около 2.8:1 — ниже AA</dd><dt>Норма</dt><dd>текст --u-muted на --u-surface проходит с запасом</dd></dl>
+        <h2>Почему это решается токенами, а не правками</h2>
+        <p>Если проверять каждую страницу руками, контраст будет ломаться на каждой новой странице. Если значения живут в <a class="kn-ref" href="/blog/tokeny-tsveta.html">токенах</a>, проверять нужно пары «токен на токене» — их конечное число, и они считаются скриптом в CI. В этом проекте тест перебирает пары «текст / мягкий фон» для светлой темы и падает, если хоть одна ниже AA.</p>
+        <p>Ограничение метода: тест видит только комбинации, которые кто-то объявил. Текст поверх изображения, полупрозрачные слои и цветовые состояния, собранные в компоненте, он не поймает. Поэтому автоматическая проверка дополняется ручной — по чек-листу.</p>
+        <h2>Крупный текст — не индульгенция</h2>
+        <p>Порог 3:1 для крупного текста не означает, что крупный заголовок можно сделать бледным. Читатель видит не только буквы, но и общий тон страницы: бледный заголовок 40 px воспринимается как второстепенная подпись, даже если формально проходит. Правило простое: заголовки берут <code>--u-ink</code>, подписи берут <code>--u-muted</code>, промежуточных оттенков в системе нет.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">найти пары<em>2</em></p><div class="kn-tile"><strong>Текст на поверхностях</strong>paper, surface, surface-sunk</div><div class="kn-tile"><strong>Текст в состояниях</strong>hover, focus, active, disabled</div></div><div class="kn-lane"><p class="kn-lane-head">посчитать<em>2</em></p><div class="kn-tile"><strong>Обе темы</strong>светлая и тёмная отдельно</div><div class="kn-tile"><strong>Мягкие фоны</strong>плашки ok / warn / info / danger</div></div><div class="kn-lane"><p class="kn-lane-head">закрепить<em>1</em></p><div class="kn-tile"><strong>Тест в CI</strong>пары считаются скриптом</div></div><div class="kn-lane"><p class="kn-lane-head">пересмотреть<em>1</em></p><div class="kn-tile"><strong>Смена палитры</strong>любое новое значение — повторная проверка</div></div></div>
+        <h2>Чек-лист</h2>
+        <ul><li>Каждая пара «текст / фон» посчитана для обеих тем.</li><li>Подписи и метаданные используют токен, а не подобранный серый.</li><li>Кольцо фокуса и границы полей не ниже 3:1.</li><li>Состояния (hover, active, disabled) проверены отдельно.</li><li>Есть автоматический тест, который ловит регрессию при смене палитры.</li></ul>
+        <p>Дальше по базе: <a class="kn-ref" href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — как кегль и начертание влияют на порог крупного текста, <a class="kn-ref" href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> — где живут значения цвета.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/fokus-i-klaviatura.html"><strong>Видимый фокус — не украшение, а навигация</strong><span>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span></a></li>
+          <li><a href="/blog/tokeny-tsveta.html"><strong>Цвет живёт в токенах, а не в компонентах</strong><span>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span></a></li>
+          <li><a href="/blog/dve-garnitury.html"><strong>Две гарнитуры на страницу — и ни одной больше</strong><span>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/dvizhenie-120-320.html">Движение 120–320 мс: когда анимация объясняет</a> — ссылается на эту заметку</li><li><a href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a> — ссылается на эту заметку</li><li><a href="/blog/tablica-i-eho-zebra.html">Зебра, границы и плотность внутри таблицы</a> — ссылается на эту заметку</li><li><a href="/blog/merka-stroki.html">Мера строки: 68 знаков против пустоты</a> — ссылается на эту заметку</li><li><a href="/blog/tablicy-kak-most.html">Таблица как мост между текстом и решением</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — 1.4.3 Contrast (Minimum)</a><small>W3C</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html" target="_blank" rel="noopener">WCAG 2.2 — 1.4.11 Non-text Contrast</a><small>W3C</small><small>обращение: 1 ноября 2026</small></li><li><a href="https://webaim.org/articles/contrast/" target="_blank" rel="noopener">WebAIM — Contrast and Color Accessibility</a><small>WebAIM</small><small>обращение: 19 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/accessibility.html">все заметки рубрики «Доступность»</a>
+        <span><a href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация →</a><a href="/blog/dvizhenie-120-320.html">← Движение 120–320 мс: когда анимация объясняет</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Доступность. Запись 03 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kontrast-aa"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#контраст">контраст</a></li><li><a href="/blog/topics.html#доступность">доступность</a></li><li><a href="/blog/topics.html#цвет">цвет</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 21.10.2026, обновлено 03.11.2026. В графе 8 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

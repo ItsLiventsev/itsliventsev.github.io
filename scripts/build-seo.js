@@ -106,7 +106,7 @@ function pageInfo(rel, html) {
   return { title, headline, description, tags, date: normDate, type, schema, crumbs, dir };
 }
 
-function jsonLd(rel, info) {
+function jsonLd(rel, info, html = '') {
   const url = abs(rel);
   const person = {
     '@type': 'Person', name: 'itsliventsev', url: SITE_URL + '/',
@@ -133,7 +133,7 @@ function jsonLd(rel, info) {
       headline: info.headline, description: info.description, url,
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       inLanguage: 'ru-RU', author: person, publisher: { '@type': 'Person', name: 'itsliventsev' },
-      image: ogImage(rel),
+      image: ogImage(rel, html),
     };
     if (info.date) { node.datePublished = info.date; node.dateModified = info.date; }
     if (info.tags.length) node.keywords = info.tags.join(', ');
@@ -154,16 +154,31 @@ function jsonLd(rel, info) {
 
 /* OG-картинка выбирается по вселенной: stands/ops → ДатаПолис, stands → СетьПолис,
    корневые страницы → общая карточка. */
-function ogImage(rel) {
+function ogImage(rel, html = '') {
   if (rel.startsWith('stands/ops/')) return SITE_URL + '/assets/og-ops.png';
   if (rel.startsWith('stands/office/')) return SITE_URL + '/assets/og-office.png';
   if (rel.startsWith('stands/')) return SITE_URL + '/assets/og-stands.png';
+  /* Заметка базы знаний несёт свою обложку: у записи с картинкой превью
+     должно совпадать с картинкой на странице. */
+  const cover = /<meta\s+property="og:image"\s+content="([^"]+)"/i.exec(html);
+  if (cover) return cover[1];
+  if (rel === 'blog/graph.html') return SITE_URL + '/assets/img/notes/notes-graph.webp';
+  if (rel === 'blog/topics.html') return SITE_URL + '/assets/img/notes/how-notes-work.webp';
+  const covers = {
+    typography: 'typography', tokens: 'tokens', layout: 'bento',
+    motion: 'motion', accessibility: 'accessibility', data: 'table',
+  };
+  const zone = /<meta\s+name="kn-zone"\s+content="([a-z-]+)"/i.exec(html);
+  if (zone && covers[zone[1]]) return SITE_URL + '/assets/img/notes/' + covers[zone[1]] + '.webp';
+  const topic = /^blog\/topics\/([a-z-]+)\.html$/.exec(rel);
+  if (topic && covers[topic[1]]) return SITE_URL + '/assets/img/notes/' + covers[topic[1]] + '.webp';
+  if (rel === 'blog.html') return SITE_URL + '/assets/img/notes/notes-graph.webp';
   return SITE_URL + '/assets/og.png';
 }
 
-function buildBlock(rel, info) {
+function buildBlock(rel, info, html = '') {
   const url = abs(rel);
-  const img = ogImage(rel);
+  const img = ogImage(rel, html);
   const lines = [BLOCK_START];
   lines.push(`<link rel="canonical" href="${url}">`);
   lines.push('<link rel="icon" type="image/png" sizes="192x192" href="' + SITE_URL + '/assets/icon-192.png">');
@@ -191,7 +206,7 @@ function buildBlock(rel, info) {
   lines.push(`<meta name="twitter:description" content="${esc(info.description)}">`);
   lines.push(`<meta name="twitter:image" content="${img}">`);
 
-  lines.push(jsonLd(rel, info));
+  lines.push(jsonLd(rel, info, html));
   lines.push(BLOCK_END);
   return lines.join('\n  ');
 }
@@ -220,7 +235,7 @@ for (const rel of pages) {
     console.warn('! без description:', rel);
   }
   html = stripAutoAndSocial(html);
-  const block = buildBlock(rel, info);
+  const block = buildBlock(rel, info, html);
   if (!html.includes('</head>')) throw new Error('нет </head>: ' + rel);
   html = html.replace('</head>', '  ' + block + '\n</head>');
   write(rel, html);
@@ -276,9 +291,14 @@ for (const idx of ['blog/posts.json', 'articles/posts.json']) {
   const dir = idx.split('/')[0];
   for (const p of JSON.parse(fs.readFileSync(fp, 'utf8'))) {
     if (p.status === 'draft') continue;
+    /* <category> — это рубрика заметки или тип статьи, а не имя папки:
+       читатель ленты фильтрует по смыслу. Для заметок рубрика лежит в
+       assets/data/knowledge/registry.json рядом с метаданными. */
     feedItems.push({
       title: p.title, desc: p.excerpt || '', date: String(p.date),
       url: SITE_URL + '/' + dir + '/' + p.file, dir,
+      category: (p.tags && p.tags[0]) || (dir === 'blog' ? 'заметки' : 'статьи'),
+      categories: Array.isArray(p.tags) ? p.tags : [],
     });
   }
 }
@@ -297,7 +317,7 @@ const rss = ['<?xml version="1.0" encoding="UTF-8"?>',
     `      <link>${esc(i.url)}</link>`,
     `      <guid isPermaLink="true">${esc(i.url)}</guid>`,
     `      <pubDate>${rfc822(i.date)}</pubDate>`,
-    `      <category>${esc(i.dir === 'blog' ? 'заметки' : 'статьи')}</category>`,
+    ...i.categories.map((tag) => `      <category>${esc(tag)}</category>`),
     `      <description>${esc(i.desc)}</description>`,
     '    </item>',
   ].join('\n')),

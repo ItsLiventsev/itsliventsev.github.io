@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Цвет живёт в токенах, а не в компонентах · itsliventsev</title>
+<meta name="description" content="Токен — это имя роли, а не значение цвета. Пока компонент ссылается на `--u-accent`, а не на `#a8391d`, тёмная тема собирается одной таблицей переопределений.">
+<meta name="post-date" content="2026-10-27">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="токены,цвет,тёмная-тема">
+<meta name="post-readtime" content="6 мин">
+<meta name="post-excerpt" content="Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.">
+<meta name="kn-zone" content="tokens">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/tokeny-tsveta.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Цвет живёт в токенах, а не в компонентах · itsliventsev">
+  <meta property="og:description" content="Токен — это имя роли, а не значение цвета. Пока компонент ссылается на `--u-accent`, а не на `#a8391d`, тёмная тема собирается одной таблицей переопределений.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/tokeny-tsveta.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/tokens.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-27">
+  <meta property="article:tag" content="токены">
+  <meta property="article:tag" content="цвет">
+  <meta property="article:tag" content="тёмная-тема">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Цвет живёт в токенах, а не в компонентах · itsliventsev">
+  <meta name="twitter:description" content="Токен — это имя роли, а не значение цвета. Пока компонент ссылается на `--u-accent`, а не на `#a8391d`, тёмная тема собирается одной таблицей переопределений.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/tokens.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Цвет живёт в токенах, а не в компонентах","description":"Токен — это имя роли, а не значение цвета. Пока компонент ссылается на `--u-accent`, а не на `#a8391d`, тёмная тема собирается одной таблицей переопределений.","url":"https://itsliventsev.github.io/blog/tokeny-tsveta.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/tokeny-tsveta.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/tokens.webp","datePublished":"2026-10-27","dateModified":"2026-10-27","keywords":"токены, цвет, тёмная-тема"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Цвет живёт в токенах, а не в компонентах","item":"https://itsliventsev.github.io/blog/tokeny-tsveta.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/tokens.html">Токены</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-27">27 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 03.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>6 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Цвет живёт в токенах, а не в компонентах</h1>
+        <p class="kn-def">Токен — это имя роли, а не значение цвета. Пока компонент ссылается на <code>--u-accent</code>, а не на <code>#a8391d</code>, тёмная тема собирается одной таблицей переопределений.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Цвет в интерфейсе — это не палитра, а словарь ролей. «Тёплый серый» ничего не говорит компоненту. «Фон карточки» говорит всё: где этот цвет применяется, что на нём лежит и как он меняется в тёмной теме.</p>
+        <h2>Имя вместо значения</h2>
+        <p>Токен — пара «имя роли → значение». Пока компонент пишет <code>background: var(--u-surface)</code>, он не знает, белый это или тёмно-коричневый. Знает только система. Достаточно переопределить <code>--u-surface</code> в блоке <code>[data-theme=&quot;dark&quot;]</code>, и вся страница инвертируется без единого изменения в компонентах.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Токен</th><th scope="col">Роль</th><th scope="col">Светлая тема</th><th scope="col">Тёмная тема</th></tr></thead><tbody><tr><th scope="row">--u-paper</th><td>фон страницы</td><td>тёплый серый</td><td>почти чёрный</td></tr><tr><th scope="row">--u-surface</th><td>карточка</td><td>белый</td><td>тёмный тёплый</td></tr><tr><th scope="row">--u-ink</th><td>основной текст</td><td>почти чёрный</td><td>тёплый белый</td></tr><tr><th scope="row">--u-muted</th><td>подписи</td><td>серый 5d5a52</td><td>серый b0a996</td></tr><tr><th scope="row">--u-accent</th><td>действие и ссылка</td><td>глина a8391d</td><td>светлая глина ff9c73</td></tr><tr><th scope="row">--u-ok</th><td>подтверждение</td><td>зелёный 236a45</td><td>светло-зелёный 8fd3a9</td></tr><tr><th scope="row">--u-warn</th><td>предупреждение</td><td>янтарный 7a5310</td><td>песочный e4c079</td></tr><tr><th scope="row">--u-danger</th><td>ошибка</td><td>тёмно-красный 983038</td><td>розовый f2a3a3</td></tr></tbody><caption>Каждый оттенок отвечает на вопрос «что это значит», а не «как это выглядит».</caption></table></div>
+        <p>Правило, которое делает это возможным, звучит жёстко: <strong>hex в компоненте — ошибка</strong>. Не «нежелательно», а ошибка: если значение понадобилось, сначала появляется токен в <code>tokens.css</code>, потом используется. Иначе через месяц в проекте живёт пять почти одинаковых серых, и никто не помнит, какой из них «правильный».</p>
+        <h2>Один акцент</h2>
+        <p>Акцент — глина <code>#a8391d</code>. Он отвечает за действие: ссылку, активный пункт, кнопку, фокус. Все остальные оттенки зарезервированы под смысл:</p>
+        <ul><li>зелёный — подтверждение, выполненное состояние;</li><li>синий — информационная справка;</li><li>янтарный — предупреждение, требующее внимания;</li><li>красный — ошибка, разрушительное действие.</li></ul>
+        <p>Второй декоративный акцент почти всегда означает, что иерархия не построена: если синяя кнопка и красная кнопка одинаково важны, важных кнопок нет. Поэтому в системе ровно один акцент и четыре смысловых состояния.</p>
+        <h2>Две темы без второго набора стилей</h2>
+        <p>Тёмная тема здесь — не отдельный файл и не <code>filter: invert()</code>. Это второй набор значений тех же токенов. Требования к нему:</p>
+        <ol><li><strong>Структура совпадает.</strong> Те же имена, те же роли, те же пары «текст на фоне».</li><li><strong>Контраст проверяется заново.</strong> Светлая глина на светлом фоне не проходит — в тёмной теме акцент становится светлее (<code>#ff9c73</code>), а не темнее.</li><li><strong>Тени слабее.</strong> На тёмном фоне мягкая тень почти не видна, её заменяет разница поверхностей: карточка чуть светлее подложки.</li></ol>
+        <p>Проверка автоматизирована: тест считает контраст для каждой пары «текст / мягкий фон» и падает, если хоть одна ниже AA. Подробнее о пороге — в заметке <a class="kn-ref" href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a>.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">смысл<em>2</em></p><div class="kn-tile"><strong>Назвать роль</strong>«фон карточки», не «светло-бежевый»</div><div class="kn-tile"><strong>Проверить пару</strong>текст на фоне — не ниже 4.5:1</div></div><div class="kn-lane"><p class="kn-lane-head">значение<em>2</em></p><div class="kn-tile"><strong>Значение в токенах</strong>hex только в tokens.css</div><div class="kn-tile"><strong>Инверсия в теме</strong>второй набор — под [data-theme=&quot;dark&quot;]</div></div><div class="kn-lane"><p class="kn-lane-head">проверка<em>2</em></p><div class="kn-tile"><strong>Поиск литералов</strong>hex в компоненте — ошибка сборки</div><div class="kn-tile"><strong>Контраст AA</strong>тест считает пары автоматически</div></div><div class="kn-lane"><p class="kn-lane-head">отказ<em>1</em></p><div class="kn-tile"><strong>Второй акцент</strong>синий рядом с глиной ломает иерархию</div></div></div>
+        <h2>Риски, о которых стоит помнить</h2>
+        <ul><li><strong>Токен-обманка.</strong> <code>--u-gray-100</code> — это значение, а не роль: через полгода непонятно, где его можно менять.</li><li><strong>Слишком много токенов.</strong> Пятьдесят оттенков серого означают, что система не решила, сколько их нужно.</li><li><strong>Тема как картинка.</strong> Если тёмная тема сделана скриншотом-инверсией, изображения и схемы в ней выглядят мёртвыми.</li></ul>
+        <p>Дальше по базе: <a class="kn-ref" href="/blog/shkala-otstupov.html">Одна шкала отступов вместо двадцати решений</a> — почему отступы тоже живут в токенах, и <a class="kn-ref" href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — как роли распределяются между шрифтами.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/shkala-otstupov.html"><strong>Одна шкала отступов вместо двадцати решений</strong><span>Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</span></a></li>
+          <li><a href="/blog/fokus-i-klaviatura.html"><strong>Видимый фокус — не украшение, а навигация</strong><span>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span></a></li>
+          <li><a href="/blog/dve-garnitury.html"><strong>Две гарнитуры на страницу — и ни одной больше</strong><span>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a> — ссылается на эту заметку</li><li><a href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a> — ссылается на эту заметку</li><li><a href="/blog/shkala-otstupov.html">Одна шкала отступов вместо двадцати решений</a> — ссылается на эту заметку</li><li><a href="/blog/tablica-i-eho-zebra.html">Зебра, границы и плотность внутри таблицы</a> — ссылается на эту заметку</li><li><a href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.w3.org/community/design-tokens/" target="_blank" rel="noopener">Design tokens — the single source of truth</a><small>W3C Design Tokens Community Group</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://m3.material.io/styles/color/roles" target="_blank" rel="noopener">Material Design — color roles and tokens</a><small>Google Material Design</small><small>обращение: 1 ноября 2026</small></li><li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">WebAIM Contrast Checker</a><small>WebAIM</small><small>обращение: 30 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/tokens.html">все заметки рубрики «Токены»</a>
+        <span><a href="/blog/dve-garnitury.html">Две гарнитуры на страницу — и ни одной больше →</a><a href="/blog/tablica-i-eho-zebra.html">← Зебра, границы и плотность внутри таблицы</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Токены. Запись 07 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#tokeny-tsveta"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#токены">токены</a></li><li><a href="/blog/topics.html#цвет">цвет</a></li><li><a href="/blog/topics.html#тёмная-тема">тёмная-тема</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 27.10.2026, обновлено 03.11.2026. В графе 8 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

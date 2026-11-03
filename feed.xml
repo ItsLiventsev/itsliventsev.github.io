@@ -7,19 +7,144 @@
     <language>ru-RU</language>
     <atom:link href="https://itsliventsev.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Как устроены заметки</title>
-      <link>https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</guid>
+      <title>Как устроена база знаний</title>
+      <link>https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</guid>
+      <pubDate>Tue, 03 Nov 2026 12:00:00 GMT</pubDate>
+      <category>граф</category>
+      <category>статика</category>
+      <category>карточки</category>
+      <description>Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.</description>
+    </item>
+    <item>
+      <title>Таблица как мост между текстом и решением</title>
+      <link>https://itsliventsev.github.io/blog/tablicy-kak-most.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablicy-kak-most.html</guid>
+      <pubDate>Mon, 02 Nov 2026 12:00:00 GMT</pubDate>
+      <category>таблицы</category>
+      <category>граф</category>
+      <category>карточки</category>
+      <description>Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</description>
+    </item>
+    <item>
+      <title>Сетка 12 колонок и поток карточек разных размеров</title>
+      <link>https://itsliventsev.github.io/blog/setka-i-plotnost.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/setka-i-plotnost.html</guid>
+      <pubDate>Sun, 01 Nov 2026 12:00:00 GMT</pubDate>
+      <category>сетка</category>
+      <category>карточки</category>
+      <category>плотность</category>
+      <description>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</description>
+    </item>
+    <item>
+      <title>Карта темы: как из десяти заметок собрать одну мысль</title>
+      <link>https://itsliventsev.github.io/blog/karta-temy.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/karta-temy.html</guid>
+      <pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate>
+      <category>граф</category>
+      <category>карточки</category>
+      <category>статика</category>
+      <description>Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.</description>
+    </item>
+    <item>
+      <title>Мера строки: 68 знаков против пустоты</title>
+      <link>https://itsliventsev.github.io/blog/merka-stroki.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/merka-stroki.html</guid>
+      <pubDate>Thu, 29 Oct 2026 12:00:00 GMT</pubDate>
+      <category>мера-строки</category>
+      <category>типографика</category>
+      <category>читаемость</category>
+      <description>Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</description>
+    </item>
+    <item>
+      <title>Две гарнитуры на страницу — и ни одной больше</title>
+      <link>https://itsliventsev.github.io/blog/dve-garnitury.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dve-garnitury.html</guid>
+      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
+      <category>типографика</category>
+      <category>читаемость</category>
+      <category>токены</category>
+      <description>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</description>
+    </item>
+    <item>
+      <title>Цвет живёт в токенах, а не в компонентах</title>
+      <link>https://itsliventsev.github.io/blog/tokeny-tsveta.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tokeny-tsveta.html</guid>
+      <pubDate>Tue, 27 Oct 2026 12:00:00 GMT</pubDate>
+      <category>токены</category>
+      <category>цвет</category>
+      <category>тёмная-тема</category>
+      <description>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</description>
+    </item>
+    <item>
+      <title>Зебра, границы и плотность внутри таблицы</title>
+      <link>https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</guid>
       <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
-      <category>заметки</category>
-      <description>Первая заметка: чем заметки отличаются от статей и проектов, какие бывают типы записей и как новая страница сама появляется в ленте.</description>
+      <category>таблицы</category>
+      <category>плотность</category>
+      <category>цвет</category>
+      <description>Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.</description>
+    </item>
+    <item>
+      <title>Одна шкала отступов вместо двадцати решений</title>
+      <link>https://itsliventsev.github.io/blog/shkala-otstupov.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/shkala-otstupov.html</guid>
+      <pubDate>Sat, 24 Oct 2026 12:00:00 GMT</pubDate>
+      <category>токены</category>
+      <category>сетка</category>
+      <category>плотность</category>
+      <description>Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</description>
+    </item>
+    <item>
+      <title>Видимый фокус — не украшение, а навигация</title>
+      <link>https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</guid>
+      <pubDate>Thu, 22 Oct 2026 12:00:00 GMT</pubDate>
+      <category>фокус</category>
+      <category>доступность</category>
+      <category>контраст</category>
+      <description>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</description>
+    </item>
+    <item>
+      <title>Контраст AA: 4.5 к 1 и что за этим стоит</title>
+      <link>https://itsliventsev.github.io/blog/kontrast-aa.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kontrast-aa.html</guid>
+      <pubDate>Wed, 21 Oct 2026 12:00:00 GMT</pubDate>
+      <category>контраст</category>
+      <category>доступность</category>
+      <category>цвет</category>
+      <description>Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</description>
+    </item>
+    <item>
+      <title>Движение 120–320 мс: когда анимация объясняет</title>
+      <link>https://itsliventsev.github.io/blog/dvizhenie-120-320.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dvizhenie-120-320.html</guid>
+      <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
+      <category>движение</category>
+      <category>доступность</category>
+      <category>плотность</category>
+      <description>Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.</description>
+    </item>
+    <item>
+      <title>Срезы и разрезы</title>
+      <link>https://itsliventsev.github.io/blog/srezy-i-razrezy.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/srezy-i-razrezy.html</guid>
+      <pubDate>Fri, 16 Oct 2026 12:00:00 GMT</pubDate>
+      <category>сетка</category>
+      <category>типографика</category>
+      <category>статика</category>
+      <description>Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.</description>
     </item>
     <item>
       <title>Практикоориентированное формирование знаний</title>
       <link>https://itsliventsev.github.io/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html</guid>
       <pubDate>Mon, 01 Jan 2024 12:00:00 GMT</pubDate>
-      <category>статьи</category>
+      <category>СПО</category>
+      <category>трудоустройство</category>
+      <category>ФГОС</category>
+      <category>практика</category>
       <description>Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.</description>
     </item>
   </channel>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Две гарнитуры на страницу — и ни одной больше · itsliventsev</title>
+<meta name="description" content="Гарнитуры делят роли, а не украшают: гротеск ведёт интерфейс и заголовки, сериф несёт длинный текст, моноширинный показывает машинные метки. Четвёртая гарнитура почти всегда лишняя.">
+<meta name="post-date" content="2026-10-28">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="типографика,читаемость,токены">
+<meta name="post-readtime" content="5 мин">
+<meta name="post-excerpt" content="Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.">
+<meta name="kn-zone" content="typography">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/dve-garnitury.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Две гарнитуры на страницу — и ни одной больше · itsliventsev">
+  <meta property="og:description" content="Гарнитуры делят роли, а не украшают: гротеск ведёт интерфейс и заголовки, сериф несёт длинный текст, моноширинный показывает машинные метки. Четвёртая гарнитура почти всегда лишняя.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/dve-garnitury.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/typography.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-10-28">
+  <meta property="article:tag" content="типографика">
+  <meta property="article:tag" content="читаемость">
+  <meta property="article:tag" content="токены">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Две гарнитуры на страницу — и ни одной больше · itsliventsev">
+  <meta name="twitter:description" content="Гарнитуры делят роли, а не украшают: гротеск ведёт интерфейс и заголовки, сериф несёт длинный текст, моноширинный показывает машинные метки. Четвёртая гарнитура почти всегда лишняя.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/typography.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Две гарнитуры на страницу — и ни одной больше","description":"Гарнитуры делят роли, а не украшают: гротеск ведёт интерфейс и заголовки, сериф несёт длинный текст, моноширинный показывает машинные метки. Четвёртая гарнитура почти всегда лишняя.","url":"https://itsliventsev.github.io/blog/dve-garnitury.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/dve-garnitury.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/typography.webp","datePublished":"2026-10-28","dateModified":"2026-10-28","keywords":"типографика, читаемость, токены"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Две гарнитуры на страницу — и ни одной больше","item":"https://itsliventsev.github.io/blog/dve-garnitury.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/typography.html">Типографика</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-10-28">28 октября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 02.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>5 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Две гарнитуры на страницу — и ни одной больше</h1>
+        <p class="kn-def">Гарнитуры делят роли, а не украшают: гротеск ведёт интерфейс и заголовки, сериф несёт длинный текст, моноширинный показывает машинные метки. Четвёртая гарнитура почти всегда лишняя.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Гарнитуры в интерфейсе — это не палитра вкусов, а распределение обязанностей. У каждой — своя задача и свой диапазон кеглей. Как только задач становится больше трёх, появляется четвертая гарнитура, и страница начинает выглядеть как образец шрифтового каталога.</p>
+        <h2>Роли, а не вкусы</h2>
+        <p>На этом сайте ролей ровно три, и они записаны в токенах (<code>--u-font-display</code>, <code>--u-font-ui</code>, <code>--u-font-serif</code>, плюс <code>--u-font-mono</code> для машинных меток):</p>
+        <ul><li><strong>Golos Display</strong> ведёт заголовки и крупные числа. Это вариативная ось того же Golos, подключённая как отдельное семейство: большой кегль не перерисовывается при загрузке, поэтому заголовки не «прыгают».</li><li><strong>Golos Text</strong> отвечает за интерфейс: кнопки, метки, навигация, таблицы, подписи. Тот же характер, но посаженный плотнее.</li><li><strong>Literata</strong> — голос длинного текста. Засечки держат строку в мере 68ch, а курсив читается как настоящий, а не наклонённый.</li><li><strong>JetBrains Mono</strong> не текстовая гарнитура: это маркер машинного — версии, идентификаторы, номера записей, даты в ленте.</li></ul>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Роль</th><th scope="col">Гарнитура</th><th scope="col">Кегль</th><th scope="col">Где встречается</th></tr></thead><tbody><tr><th scope="row">Заголовки и числа</th><td>Golos Display</td><td>26–52 px</td><td>h1</td><td>h2</td><td>счётчики</td><td>метрики</td></tr><tr><th scope="row">Интерфейс</th><td>Golos Text</td><td>13–18 px</td><td>кнопки</td><td>метки</td><td>навигация</td><td>таблицы</td></tr><tr><th scope="row">Длинный текст</th><td>Literata</td><td>18 px</td><td>тело заметок</td><td>статей</td><td>цитаты</td></tr><tr><th scope="row">Машинные метки</th><td>JetBrains Mono</td><td>11–12 px</td><td>версии</td><td>идентификаторы</td><td>даты в ленте</td></tr></tbody><caption>Роль первична: гарнитура выбирается под задачу, а не под настроение.</caption></table></div>
+        <h2>Почему не одна гарнитура</h2>
+        <p>Соблазн «взять один хороший шрифт и не усложнять» понятен, но у него есть цена. Гротеск в длинном тексте при кегле 18 px требует более щедрого интерлиньяжа и всё равно проигрывает антикве в усталости на третьем экране. Антиква в интерфейсе при кегле 13 px теряет чёткость в мелких метках. Разделение ролей — это не украшение, а допуск по кеглю: каждая гарнитура работает в своём диапазоне.</p>
+        <dl class="kn-terms"><div class="kn-term"><dt>Гротеск</dt><dd>шрифт без засечек; хорошо держит мелкий кегль и интерфейсные надписи.</dd></div><div class="kn-term"><dt>Антиква</dt><dd>шрифт с засечками; в длинном тексте засечки помогают глазу держать строку.</dd></div><div class="kn-term"><dt>Моноширинный</dt><dd>все знаки одной ширины; нужен там, где важна машинная точность.</dd></div><div class="kn-term"><dt>Переменный шрифт</dt><dd>один файл с осью насыщенности; экономит вес на три начертания.</dd></div></dl>
+        <h2>Кириллица — обязательное условие</h2>
+        <p>Половина красивых гарнитур отваливается на первом же тесте: в наборе нет кириллицы, или она нарисована как приложение к латинице — с чужими пропорциями и выпадающими знаками. Проверка занимает минуту: набрать фразу с «ё», «ж», «щ», «ы» и посмотреть, не выбивается ли строка из ритма. Как это связано с мерой строки — в заметке <a class="kn-ref" href="/blog/merka-stroki.html">Мера строки: 68 знаков против пустоты</a>.</p>
+        <h2>Файлы, вес и CLS</h2>
+        <p>Каждая гарнитура — это загрузка. Здесь выбраны переменные шрифты: один файл на кириллицу и один на латиницу, начертания получаются осью <code>wght</code>. Плюс <code>font-display: optional</code> для дисплейных семейств — если шрифт не успел, браузер не перерисовывает текст, и метрика страницы не дёргается.</p>
+        <ul><li>Три семейства, максимум четыре файла на язык.</li><li>Начертания — от 400 до 700, промежуточные берёт вариативная ось.</li><li>Предзагрузка только двух критичных файлов: Literata и Golos Text.</li></ul>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">до выбора<em>1</em></p><div class="kn-tile"><strong>Задачи текста</strong>заголовок, интерфейс, чтение, метка</div></div><div class="kn-lane"><p class="kn-lane-head">выбор<em>2</em></p><div class="kn-tile"><strong>Кириллица в наборе</strong>без неё гарнитура не подходит вовсе</div><div class="kn-tile"><strong>Вес файла</strong>два начертания максимум, лучше переменные</div></div><div class="kn-lane"><p class="kn-lane-head">проверка<em>2</em></p><div class="kn-tile"><strong>Смешанный набор</strong>русский плюс латиница в одном абзаце</div><div class="kn-tile"><strong>Табличные цифры</strong>числа не «пляшут» в столбце</div></div><div class="kn-lane"><p class="kn-lane-head">отказ<em>1</em></p><div class="kn-tile"><strong>Четвёртая гарнитура</strong>декоративная врезка съедает систему</div></div></div>
+        <h2>Что это даёт системе</h2>
+        <p>Правило «две гарнитуры» (плюс машинная для меток) закрывает вопрос выбора на каждой новой странице. Автор не решает, каким шрифтом набрать таблицу или подпись: это уже решено токенами. Цена ошибки тоже падает: если в компоненте появился <code>font-family</code> строкой, а не токеном — это видно на ревью моментально.</p>
+        <p>Дальше по теме: <a class="kn-ref" href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> о том, почему цвет живёт в том же слое токенов, и <a class="kn-ref" href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a> о том, что видимый фокус — такая же часть типографики интерфейса, как и кегль.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/merka-stroki.html"><strong>Мера строки: 68 знаков против пустоты</strong><span>Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</span></a></li>
+          <li><a href="/blog/tokeny-tsveta.html"><strong>Цвет живёт в токенах, а не в компонентах</strong><span>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span></a></li>
+          <li><a href="/blog/fokus-i-klaviatura.html"><strong>Видимый фокус — не украшение, а навигация</strong><span>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/srezy-i-razrezy.html">Срезы и разрезы</a> — ссылается на эту заметку</li><li><a href="/blog/kontrast-aa.html">Контраст AA: 4.5 к 1 и что за этим стоит</a> — ссылается на эту заметку</li><li><a href="/blog/fokus-i-klaviatura.html">Видимый фокус — не украшение, а навигация</a> — ссылается на эту заметку</li><li><a href="/blog/tokeny-tsveta.html">Цвет живёт в токенах, а не в компонентах</a> — ссылается на эту заметку</li><li><a href="/blog/merka-stroki.html">Мера строки: 68 знаков против пустоты</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://fonts.google.com/specimen/Golos+Text" target="_blank" rel="noopener">Golos Text — описание гарнитуры</a><small>Google Fonts</small><small>обращение: 2 ноября 2026</small></li><li><a href="https://fonts.google.com/specimen/Literata" target="_blank" rel="noopener">Literata — variable font</a><small>Google Fonts</small><small>обращение: 2 ноября 2026</small></li><li><a href="https://practicaltypography.com/font-choices.html" target="_blank" rel="noopener">Butterick&#39;s Practical Typography — font choices</a><small>Matthew Butterick</small><small>обращение: 26 октября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/typography.html">все заметки рубрики «Типографика»</a>
+        <span><a href="/blog/merka-stroki.html">Мера строки: 68 знаков против пустоты →</a><a href="/blog/tokeny-tsveta.html">← Цвет живёт в токенах, а не в компонентах</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Типографика. Запись 08 из 13.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#dve-garnitury"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#типографика">типографика</a></li><li><a href="/blog/topics.html#читаемость">читаемость</a></li><li><a href="/blog/topics.html#токены">токены</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 28.10.2026, обновлено 02.11.2026. В графе 8 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

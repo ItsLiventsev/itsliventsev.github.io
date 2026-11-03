@@ -33,6 +33,10 @@
 - `assets/data/activity.json` — снимок истории GitHub (пишется `scripts/build-activity.js`).
 - `assets/search-index.json` — поисковый индекс, поддерживается **вручную** + проверка целостности в `regression-static.js`.
 - `blog/posts.json`, `articles/posts.json` — индексы публикаций; `feed-counts.json` — счётчики.
+- `assets/data/knowledge/` — база знаний заметок: `notes/*.md` (источник), `notes.json` (сборка),
+  `taxonomy.json` (рубрики и теги), `registry.json` (рёбра графа и обратные ссылки).
+  Страницы `blog/<id>.html`, `blog/topics/*.html`, `blog/graph.html` и лента в `blog.html`
+  генерируются `scripts/build-knowledge.js` — контракт в `docs/notes.md`.
 - `localStorage`: `stands-profile` (СетьПолис), `league-*`, `office-*`, `ops-*`. Контракты ключей менять нельзя.
 
 ---
@@ -51,6 +55,7 @@
    и `scripts/test-service-worker.js` (ожидаемая версия и список удаляемых кешей) правятся в одном коммите.
 5. **Поисковый индекс.** Новая страница → запись в `assets/search-index.json` (title, url, category,
    description, content ≥ 200 символов). Редиректы-заглушки в индекс не попадают.
+   Индекс собирается `scripts/build-search-index.py`; руками он не правится.
 6. **Ноль зависимостей в рантайме.** jsdom, playwright, axe — только для проверок в `scripts/`.
 7. **Работа без JS.** Любая навигация и контент доступны без скриптов; `shell.js` только достраивает
    шапку. `.st-*`-классы в стендах — это осознанный no-JS фолбэк, удалять их нельзя.
@@ -242,6 +247,13 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
   сначала `git log --oneline -3` и поиск характерных маркеров, потом выводы.
 - **Кеш service worker**: после правки CSS/JS поднимать `CACHE` до `vNN+1` и править тест, иначе
   пользователи увидят старый интерфейс, а CI — расхождение.
+- **Генераторы контента пишут в отслеживаемые файлы.** `scripts/build-knowledge.js` перезаписывает
+  `blog.html` (блок `KN:AUTO`), `blog/*.html`, `blog/topics/`, `blog/posts.json` и `feed-counts.json`.
+  Правка внутри маркеров `KN:AUTO`/`SEO:AUTO` теряется при следующей сборке: контент правится в
+  Markdown-источнике `assets/data/knowledge/notes/*.md`.
+- **`style=` в HTML проверяется регрессией.** Для данных, которые считает скрипт (координаты графа,
+  проценты, высоты столбиков), в разметке используют `data-*`, а в CSS — переменную; инлайновый
+  `style` роняет `regression-static.js`.
 
 ---
 
