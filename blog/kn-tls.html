@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev</title>
+<meta name="description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="tls,безопасность,nginx">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-tls.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev">
+  <meta property="og:description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tls.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="tls">
+  <meta property="article:tag" content="безопасность">
+  <meta property="article:tag" content="nginx">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev">
+  <meta name="twitter:description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Сертификаты и TLS 1.3: одна поездка вместо двух","description":"TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.","url":"https://itsliventsev.github.io/blog/kn-tls.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tls.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tls, безопасность, nginx"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Сертификаты и TLS 1.3: одна поездка вместо двух","item":"https://itsliventsev.github.io/blog/kn-tls.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Сертификаты и TLS 1.3: одна поездка вместо двух</h1>
+        <p class="kn-def">TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Сертификат — это подписанное утверждение «такой-то открытый ключ принадлежит такому-то имени». Браузер не «верит сертификату»: он строит цепочку до корневого сертификата из своего хранилища и проверяет подписи на каждом шаге. Поэтому самоподписанный сертификат даёт предупреждение, даже если он технически безупречен — цепочка не сходится к известному корню.</p>
+        <h2>TLS 1.3: что стало лучше</h2>
+        <p>В TLS 1.2 клиент и сервер тратят два круга: сначала договариваются о параметрах, потом обмениваются ключами. TLS 1.3 отправляет свою часть ключевого обмена сразу в первом сообщении, и после одного круга стороны уже шифруют данные. Заодно убраны конструкции, которые десять лет приносили уязвимости: CBC-режимы, RC4, статический RSA, пересогласование, сжатие.</p>
+        <dl class="kn-facts"><dt>TLS 1.2</dt><dd>2 RTT, разрешён статический RSA, CBC-шифры, сертификат открыт</dd><dt>TLS 1.3</dt><dd>1 RTT и 0-RTT при возобновлении, только AEAD</dd><dt>Ключевой обмен</dt><dd>ECDHE: утечка ключа сертификата не расшифрует старые записи</dd><dt>Возобновление</dt><dd>PSK-билет; 0-RTT уязвим к повтору — только для идемпотентных запросов</dd></dl>
+        <p>Для администратора вывод простой: в конфигурации оставляйте <code>TLSv1.2 TLSv1.3</code>, а в 1.2 — только AEAD-шифры с ECDHE. Всё остальное — поддержка старых клиентов ценой известных проблем, и включать её стоит осознанно.</p>
+        <h2>Цепочка, имя, срок</h2>
+        <p>Три вещи ломаются чаще всего, и все три видны одной командой:</p>
+        <pre><code>openssl s_client -connect example.com:443 -servername example.com &lt;/dev/null \
+  | openssl x509 -noout -subject -issuer -dates -ext subjectAltName</code></pre>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Шаг</th><th scope="col">Команда</th><th scope="col">Что видно</th></tr></thead><tbody><tr><th scope="row">срок</th><td>openssl x509 -noout -dates -in cert.pem</td><td>notBefore и notAfter</td></tr><tr><th scope="row">цепочка</th><td>openssl verify -untrusted chain.pem cert.pem</td><td>OK или сломанный элемент</td></tr><tr><th scope="row">имя</th><td>openssl x509 -noout -ext subjectAltName -in cert.pem</td><td>SAN — по нему проверяет браузер</td></tr><tr><th scope="row">обмен</th><td>openssl s_client -connect host:443 -servername host</td><td>версия и шифр</td></tr></tbody><caption>Порядок проверки: если цепочка не собралась, имя проверять бессмысленно.</caption></table></div>
+        <p><strong>Имя</strong> проверяется по <code>subjectAltName</code>, а не по <code>CN</code>: современные клиенты <code>CN</code> игнорируют. Сертификат на <code>example.com</code> при обращении к <code>www.example.com</code> даст «недействителен», хотя сам сертификат исправен.</p>
+        <p><strong>Цепочка</strong> должна содержать промежуточные сертификаты. Корневой в файл класть не нужно, промежуточные — обязательно. Симптом отсутствия промежуточного: браузер работает (он умеет докачивать), а <code>curl</code> и мобильные приложения — нет.</p>
+        <h2>Автоматизация — не роскошь</h2>
+        <p>Сертификат на 90 дней, который забыли продлить, — не гипотетический сценарий, а регулярная авария. Схема: автоматическое продление, проверка «осталось больше 30 дней» в мониторинге и проверка <strong>после</strong> продления — перезагрузился ли сервис и отдаёт ли он новый сертификат.</p>
+        <p>Мониторить надо не наличие файла, а то, что отдаётся по сети: запрос к порту 443 раз в час, разбор <code>notAfter</code>, алерт за 21 день. Файл может быть свежим, а nginx — не перечитавшим конфигурацию. Про алерты — <a class="kn-ref" href="/blog/kn-prometheus.html">мониторинг</a>.</p>
+        <p>Отдельно про внутренние сервисы: свой корень удобен, но требует распространить корневой сертификат на все клиенты. Если это невозможно — либо покупать публичный сертификат на внутреннее имя, либо честно признать, что проверка отключена, и компенсировать это на другом уровне. Зависимость от DNS при выпуске — в <a class="kn-ref" href="/blog/kn-dns.html">заметке про DNS</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: что важно кроме proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
+          <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
+          <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-nginx.html">nginx как reverse proxy: что важно кроме proxy_pass</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc8446" target="_blank" rel="noopener">RFC 8446 — The Transport Layer Security (TLS) Protocol Version 1.3</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc5280" target="_blank" rel="noopener">RFC 5280 — Internet X.509 Public Key Infrastructure Certificate</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man1/openssl-verify.1.html" target="_blank" rel="noopener">openssl-verify(1) — проверка цепочки</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад →</a><a href="/blog/kn-tcp.html">← TCP: три пакета, четыре состояния и одна минута</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 39 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-tls"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#tls">tls</a></li><li><a href="/blog/topics.html#безопасность">безопасность</a></li><li><a href="/blog/topics.html#nginx">nginx</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>nginx как reverse proxy: что важно кроме proxy_pass · itsliventsev</title>
+<meta name="description" content="Директива proxy_pass — это три строки, а рабочая конфигурация — это заголовки, таймауты, буферы и логи. Именно они определяют, будет ли прокси быстрым, честным в логах и предсказуемым при отказе бэкенда.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="nginx,tls,производительность">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-nginx.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="nginx как reverse proxy: что важно кроме proxy_pass · itsliventsev">
+  <meta property="og:description" content="Директива proxy_pass — это три строки, а рабочая конфигурация — это заголовки, таймауты, буферы и логи. Именно они определяют, будет ли прокси быстрым, честным в логах и предсказуемым при отказе бэкенда.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-nginx.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="nginx">
+  <meta property="article:tag" content="tls">
+  <meta property="article:tag" content="производительность">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="nginx как reverse proxy: что важно кроме proxy_pass · itsliventsev">
+  <meta name="twitter:description" content="Директива proxy_pass — это три строки, а рабочая конфигурация — это заголовки, таймауты, буферы и логи. Именно они определяют, будет ли прокси быстрым, честным в логах и предсказуемым при отказе бэкенда.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"nginx как reverse proxy: что важно кроме proxy_pass","description":"Директива proxy_pass — это три строки, а рабочая конфигурация — это заголовки, таймауты, буферы и логи. Именно они определяют, будет ли прокси быстрым, честным в логах и предсказуемым при отказе бэкенда.","url":"https://itsliventsev.github.io/blog/kn-nginx.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-nginx.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"nginx, tls, производительность"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"nginx как reverse proxy: что важно кроме proxy_pass","item":"https://itsliventsev.github.io/blog/kn-nginx.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>nginx как reverse proxy: что важно кроме proxy_pass</h1>
+        <p class="kn-def">Директива proxy_pass — это три строки, а рабочая конфигурация — это заголовки, таймауты, буферы и логи. Именно они определяют, будет ли прокси быстрым, честным в логах и предсказуемым при отказе бэкенда.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>nginx ставят как «прокси перед приложением», и на этом останавливаются. Через месяц выясняется, что в логах приложения все клиенты — это адрес прокси, загрузка файлов падает с 413, а при медленной базе пользователи получают 504 через минуту. Всё это свойства конфигурации, а не приложения.</p>
+        <h2>Клиент виден только через заголовки</h2>
+        <p>Приложение за прокси видит адрес nginx. Чтобы оно знало настоящий адрес клиента, прокси передаёт его заголовком:</p>
+        <pre><code>location / {
+    proxy_pass http://app_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Connection &quot;&quot;;
+}</code></pre>
+        <p>Риск здесь очевидный: <code>X-Forwarded-For</code> — обычный заголовок, его подставит кто угодно, если nginx слушает мир напрямую. Поэтому приложение должно доверять заголовку только от известного прокси, а nginx — перезаписывать его, а не добавлять к пользовательскому. Для этого есть модуль <code>real_ip</code> с явным списком доверенных сетей.</p>
+        <dl class="kn-facts"><dt>proxy_http_version</dt><dd>1.1 — без этого нет keepalive к бэкенду</dd><dt>Connection</dt><dd>пустое значение вместе с 1.1 включает переиспользование</dd><dt>proxy_read_timeout</dt><dd>60 с по умолчанию; длинные отчёты требуют большего</dd><dt>client_max_body_size</dt><dd>1 МБ по умолчанию — тихая причина 413</dd></dl>
+        <h2>Таймауты: где живёт «минута»</h2>
+        <p><code>proxy_connect_timeout</code> — сколько ждать установки соединения; 60 секунд по умолчанию, разумно снизить до 3–5. <code>proxy_read_timeout</code> — сколько ждать данных от бэкенда между чтениями. Если приложение обрабатывает тяжёлый отчёт две минуты и не отдаёт ничего, а таймаут 60 — пользователь получит 504, хотя запрос ещё выполняется. Обратная ошибка тоже бывает: таймаут 600 секунд на публичном API означает, что зависшие запросы копятся и съедают воркеры.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Код</th><th scope="col">Что случилось</th><th scope="col">Куда смотреть</th></tr></thead><tbody><tr><th scope="row">502</th><td>бэкенд закрыл соединение или вернул мусор</td><td>журнал приложения</td><td>proxy_next_upstream</td></tr><tr><th scope="row">504</th><td>бэкенд не ответил за таймаут</td><td>proxy_read_timeout и время ответа приложения</td></tr><tr><th scope="row">499</th><td>клиент ушёл</td><td>не дождавшись</td><td>медленный бэкенд или слишком малый таймаут</td></tr><tr><th scope="row">413</th><td>тело больше client_max_body_size</td><td>лимит 1 МБ по умолчанию</td></tr></tbody><caption>Код ошибки говорит, кто виноват, — но только если таймауты настроены осознанно.</caption></table></div>
+        <h2>Буферы, тела и keepalive</h2>
+        <p><code>client_max_body_size</code> — самая частая причина «загрузка не работает, а в приложении ошибок нет». Поднимайте его в конкретном <code>location</code>, а не глобально.</p>
+        <p><code>proxy_buffering on</code> позволяет nginx принять ответ целиком и отдать клиенту в его темпе: хорошо для медленных клиентов, плохо для SSE — там буферизацию отключают, иначе события приходят пачками.</p>
+        <p>По умолчанию nginx ходит в бэкенд по HTTP/1.0 и закрывает соединение после каждого запроса. На нагрузке это тысячи лишних рукопожатий. Лечится группой с <code>keepalive 32</code> и парой директив из таблицы выше. Это одна из самых дешёвых оптимизаций: пропадает установка соединения, и задержка ответа падает.</p>
+        <h2>Проверка и наблюдаемость</h2>
+        <p>Логи — первое. Формат с <code>$request_time</code>, <code>$upstream_response_time</code> и <code>$upstream_addr</code> сразу показывает, кто тормозил: разница между двумя первыми числами и есть время, потерянное вне приложения. <code>nginx -T</code> проверяет конфигурацию целиком, <code>stub_status</code> или экспортёр дают метрики для <a class="kn-ref" href="/blog/kn-prometheus.html">мониторинга</a>.</p>
+        <p>Про сертификаты, без которых прокси бесполезен снаружи, — <a class="kn-ref" href="/blog/kn-tls.html">TLS и сертификаты</a>; про то, кто может молча отбросить соединение до nginx, — <a class="kn-ref" href="/blog/kn-netfilter.html">файрвол</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-tls.html"><strong>Сертификаты и TLS 1.3: одна поездка вместо двух</strong><span>Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».</span></a></li>
+          <li><a href="/blog/kn-netfilter.html"><strong>Файрвол в Linux: nftables и порядок правил</strong><span>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-docker.html">Контейнеры: образ, слой и том</a> — ссылается на эту заметку</li><li><a href="/blog/kn-redis.html">Redis: кеш, который умеет терять данные</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://nginx.org/ru/docs/http/ngx_http_proxy_module.html" target="_blank" rel="noopener">nginx — модуль ngx_http_proxy_module</a><small>nginx.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc7239" target="_blank" rel="noopener">RFC 7239 — Forwarded HTTP Extension</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://nginx.org/ru/docs/http/ngx_http_upstream_module.html" target="_blank" rel="noopener">ngx_http_upstream_module — группы серверов и keepalive</a><small>nginx.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-ntp.html">Время в сети: NTP и почему 30 секунд ломают всё →</a><a href="/blog/kn-netfilter.html">← Файрвол в Linux: nftables и порядок правил</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 24 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-nginx"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#nginx">nginx</a></li><li><a href="/blog/topics.html#tls">tls</a></li><li><a href="/blog/topics.html#производительность">производительность</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>План адресации: сеть начинается с таблицы · itsliventsev</title>
+<meta name="description" content="Адресное пространство — единственный ресурс в сети, который нельзя расширить задним числом без переделки всего. Поэтому план адресации делают до настройки, а не после: частные диапазоны, размер подсети под число хостов и одна таблица, где записано всё.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="маршрутизация,vlan,dhcp">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-ipam.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="План адресации: сеть начинается с таблицы · itsliventsev">
+  <meta property="og:description" content="Адресное пространство — единственный ресурс в сети, который нельзя расширить задним числом без переделки всего. Поэтому план адресации делают до настройки, а не после: частные диапазоны, размер подсети под число хостов и одна таблица, где записано всё.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-ipam.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="маршрутизация">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="dhcp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="План адресации: сеть начинается с таблицы · itsliventsev">
+  <meta name="twitter:description" content="Адресное пространство — единственный ресурс в сети, который нельзя расширить задним числом без переделки всего. Поэтому план адресации делают до настройки, а не после: частные диапазоны, размер подсети под число хостов и одна таблица, где записано всё.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"План адресации: сеть начинается с таблицы","description":"Адресное пространство — единственный ресурс в сети, который нельзя расширить задним числом без переделки всего. Поэтому план адресации делают до настройки, а не после: частные диапазоны, размер подсети под число хостов и одна таблица, где записано всё.","url":"https://itsliventsev.github.io/blog/kn-ipam.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ipam.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"маршрутизация, vlan, dhcp"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"План адресации: сеть начинается с таблицы","item":"https://itsliventsev.github.io/blog/kn-ipam.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>План адресации: сеть начинается с таблицы</h1>
+        <p class="kn-def">Адресное пространство — единственный ресурс в сети, который нельзя расширить задним числом без переделки всего. Поэтому план адресации делают до настройки, а не после: частные диапазоны, размер подсети под число хостов и одна таблица, где записано всё.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Сеть ломается не от сложных протоколов, а от адресов, выданных «на глазок». Через год выясняется, что в одной подсети два DHCP-сервера, в другой адреса кончились, а статический принтер стоит в диапазоне, который кто-то отдал под гостевой Wi-Fi. Всё это лечится одним документом, сделанным до первого кабеля.</p>
+        <h2>Сначала диапазон, потом всё остальное</h2>
+        <p>Внутри организации используют частные диапазоны из RFC 1918: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>. Они не маршрутизируются в интернете, поэтому конфликт с внешним адресом невозможен. Отдельно стоит помнить про <code>100.64.0.0/10</code> (RFC 6598) — это диапазон операторского NAT; если он внезапно встретился внутри, значит, сеть проектировали с оглядкой на провайдера. И про <code>169.254.0.0/16</code>: адрес из него на интерфейсе — почти всегда признак того, что DHCP не ответил.</p>
+        <p>Принцип выбора: <strong>один блок, нарезанный на равные части</strong>, а не набор случайных подсетей. Если у вас <code>10.20.0.0/16</code>, то <code>10.20.10.0/24</code> — офис, <code>10.20.20.0/24</code> — серверы, <code>10.20.30.0/24</code> — гости. Номер VLAN, номер подсети и номер порта в документации должны читаться как одна фраза.</p>
+        <p>{diapazony}</p>
+        <h2>Арифметика, которая всегда нужна</h2>
+        <p>Размер подсети — это <code>2^(32−маска)</code>, из которых два адреса уходят на сеть и broadcast (кроме <code>/31</code> и <code>/32</code>). Для 60 хостов нужен <code>/26</code> (62 адреса), для 200 — <code>/24</code>, для двух роутеров на линке — <code>/30</code> или <code>/31</code>.</p>
+        <p>{schet}</p>
+        <p>Практическое правило: не делайте подсеть ровно по числу устройств. Проектор, который поставили вчера, камера и тестовый ноутбук съедят запас быстрее, чем кажется.</p>
+        <h2>Служебные диапазоны внутри подсети</h2>
+        <p>Даже в <code>/24</code> стоит договориться о зонах: первые адреса — шлюз и инфраструктура, дальше — статические серверы, дальше — пул DHCP, в конце — резерв под рост. Тогда <code>nmap -sn</code> по подсети даёт осмысленную картину, а не список «кто-то занял». DHCP-сервер настраивается так, чтобы его пул не пересекался со статикой: это единственная защита от конфликта адресов, кроме ручной дисциплины. Как работает сама выдача — <a class="kn-ref" href="/blog/kn-dhcp.html">DORA и таймеры аренды</a>.</p>
+        <h2>Где заканчивается таблица</h2>
+        <p>Excel работает до определённого момента: пока подсетей десятки, а людей, вносящих правки, — один. Дальше начинается то, что называется IPAM: учёт занятости, связь адреса с портом и VLAN, история изменений. Признак, что пора: вы перестали отвечать на вопрос «свободен ли 10.20.20.37» без звонка коллеге.</p>
+        <p>Минимальный набор полей в любом реестре — подсеть, VLAN, шлюз, DHCP-диапазон, назначение, ответственный, дата изменения. Даже в таблице, но с обязательным правилом: <strong>сначала запись, потом настройка</strong>. Обратный порядок гарантирует, что через полгода документация будет врать.</p>
+        <p>Связанные темы: почему один и тот же адрес не должен появляться в двух VLAN — <a class="kn-ref" href="/blog/kn-vlan.html">802.1Q</a>; как адрес попадает на устройство — <a class="kn-ref" href="/blog/kn-dhcp.html">DHCP</a>; что происходит с пакетом между подсетями — <a class="kn-ref" href="/blog/kn-routing.html">таблица маршрутов</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Диапазон</th><th scope="col">Маска</th><th scope="col">Назначение</th><th scope="col">Сколько адресов</th></tr></thead><tbody><tr><th scope="row">10.0.0.0</th><td>/8</td><td>крупные организации</td><td>ЦОД</td><td>16 777 216</td></tr><tr><th scope="row">172.16.0.0</th><td>/12</td><td>средние сети</td><td>1 048 576</td></tr><tr><th scope="row">192.168.0.0</th><td>/16</td><td>дом</td><td>малый офис</td><td>65 536</td></tr><tr><th scope="row">100.64.0.0</th><td>/10</td><td>CGNAT у провайдера</td><td>4 194 304</td></tr><tr><th scope="row">169.254.0.0</th><td>/16</td><td>link-local</td><td>когда DHCP не ответил</td><td>65 536</td></tr></tbody><caption>Частные диапазоны не маршрутизируются в интернете — значит, внутри можно планировать свободно.</caption></table></div>
+        <dl class="kn-facts"><dt>/24</dt><dd>254 хоста; типовой размер пользовательского сегмента</dd><dt>/25</dt><dd>126 хостов; деление /24 пополам</dd><dt>/30</dt><dd>2 хоста; классика для point-to-point</dd><dt>/31</dt><dd>2 хоста без сети и broadcast — RFC 3021</dd><dt>Запас</dt><dd>20–30 % свободных адресов в каждой подсети, иначе рост встанет</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
+          <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-documentation.html">Документация и регламенты: то, что спасает в три ночи</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener">RFC 1918 — Address Allocation for Private Internets</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc3021" target="_blank" rel="noopener">RFC 3021 — Using 31-Bit Prefixes on IPv4 Point-to-Point Links</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc6598" target="_blank" rel="noopener">RFC 6598 — IANA-Reserved IPv4 Prefix for Shared Address Space</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет» →</a><a href="/blog/kn-indexes.html">← Индексы и планы: почему запрос медленный</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 14 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-ipam"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#маршрутизация">маршрутизация</a></li><li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#dhcp">dhcp</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

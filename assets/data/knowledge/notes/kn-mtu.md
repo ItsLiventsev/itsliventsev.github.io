@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.
 excerpt: Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.
 readtime: 7 мин
-cover: kn-mtu
 ai: true
 related: [kn-gre, kn-tcp, kn-troubleshoot]
 sources:

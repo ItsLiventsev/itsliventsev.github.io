@@ -48,6 +48,38 @@
     "status": "published"
   },
   {
+    "slug": "kn-bgp",
+    "file": "kn-bgp.html",
+    "title": "BGP: политика вместо метрики",
+    "excerpt": "Зачем нужен eBGP и iBGP, как читается AS_PATH, что решает local preference и почему медитация над «BGP не поднялся» начинается с TCP-сессии.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "bgp",
+      "маршрутизация",
+      "диагностика"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-cron",
+    "file": "kn-cron.html",
+    "title": "Планировщик: cron, systemd timers и тихие сбои",
+    "excerpt": "Пять полей cron и почему их шесть, PATH в cron, лог выполнения, Persistent и RandomizedDelaySec у таймеров, а также проверка, что задание действительно выполнилось.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "systemd",
+      "автоматизация",
+      "журналы"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "kn-dhcp",
     "file": "kn-dhcp.html",
     "title": "DHCP: аренда адреса на четыре шага",
@@ -80,6 +112,54 @@
     "status": "published"
   },
   {
+    "slug": "kn-docker",
+    "file": "kn-docker.html",
+    "title": "Контейнеры: образ, слой и том",
+    "excerpt": "Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "контейнеры",
+      "виртуализация",
+      "автоматизация"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-documentation",
+    "file": "kn-documentation.html",
+    "title": "Документация и регламенты: то, что спасает в три ночи",
+    "excerpt": "Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "документация",
+      "инциденты",
+      "обучение"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-git",
+    "file": "kn-git.html",
+    "title": "Git в работе администратора: ветка, откат, конфиг",
+    "excerpt": "Рабочее дерево, индекс и коммит, ветка как указатель, revert против reset, конфликт и его разбор, а также конфигурация, которая экономит время каждый день.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "автоматизация",
+      "документация",
+      "shell"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "kn-gre",
     "file": "kn-gre.html",
     "title": "Туннель и MTU: 24 байта, которые ломают передачу",
@@ -90,6 +170,22 @@
       "туннели",
       "mtu",
       "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-incident",
+    "file": "kn-incident.html",
+    "title": "Разбор инцидента: от «всё лежит» до списка действий",
+    "excerpt": "Приоритет и коммуникация, «сначала стабилизируй, потом разбирайся», таймлайн, пять почему и постмортем с задачами, а не с выводами.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "инциденты",
+      "документация",
+      "мониторинг"
     ],
     "readtime": "8 мин",
     "source": "",
@@ -112,6 +208,22 @@
     "status": "published"
   },
   {
+    "slug": "kn-ipam",
+    "file": "kn-ipam.html",
+    "title": "План адресации: сеть начинается с таблицы",
+    "excerpt": "RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "маршрутизация",
+      "vlan",
+      "dhcp"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "kn-ipsec",
     "file": "kn-ipsec.html",
     "title": "IPsec: две фазы и одна причина «туннель поднят, трафика нет»",
@@ -122,6 +234,38 @@
       "vpn",
       "туннели",
       "mtu"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-lacp",
+    "file": "kn-lacp.html",
+    "title": "LACP: два кабеля, один адрес",
+    "excerpt": "active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "vlan",
+      "диагностика",
+      "отказоустойчивость"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-logrotate",
+    "file": "kn-logrotate.html",
+    "title": "logrotate: почему журналы съели диск",
+    "excerpt": "Порядок директив rotate, size и maxsize, copytruncate против postrotate, сжатие и delaycompress, а также journald и его собственные лимиты.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "журналы",
+      "systemd",
+      "диагностика"
     ],
     "readtime": "8 мин",
     "source": "",
@@ -144,6 +288,38 @@
     "status": "published"
   },
   {
+    "slug": "kn-lvm",
+    "file": "kn-lvm.html",
+    "title": "Диски: разделы, LVM и что делать, когда место кончилось",
+    "excerpt": "PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "хранение",
+      "отказоустойчивость",
+      "диагностика"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-monitoring",
+    "file": "kn-monitoring.html",
+    "title": "Мониторинг: метрика, симптом и алерт, который не будит зря",
+    "excerpt": "Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "мониторинг",
+      "инциденты",
+      "производительность"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "kn-mtu",
     "file": "kn-mtu.html",
     "title": "MTU и PMTU: почему ping идёт, а скачивание нет",
@@ -156,6 +332,86 @@
       "диагностика"
     ],
     "readtime": "7 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-mysql",
+    "file": "kn-mysql.html",
+    "title": "MySQL: InnoDB, кеш запросов и почему он мешает",
+    "excerpt": "Буферный пул и его размер, redo log вместо кеша запросов, уровни изоляции по умолчанию, разница между REPEATABLE READ у MySQL и PostgreSQL, медленный журнал и EXPLAIN.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "mysql",
+      "индексы",
+      "транзакции"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-netfilter",
+    "file": "kn-netfilter.html",
+    "title": "Файрвол в Linux: nftables и порядок правил",
+    "excerpt": "Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "файрвол",
+      "безопасность",
+      "tcp"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-nginx",
+    "file": "kn-nginx.html",
+    "title": "nginx как reverse proxy: что важно кроме proxy_pass",
+    "excerpt": "X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "nginx",
+      "tls",
+      "производительность"
+    ],
+    "readtime": "9 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-ntp",
+    "file": "kn-ntp.html",
+    "title": "Время в сети: NTP и почему 30 секунд ломают всё",
+    "excerpt": "Страта, смещение, джиттер, почему нельзя вручную переводить часы на работающем сервере, chrony вместо ntpd и проверка синхронизации без иллюзий.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "время",
+      "systemd",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-packet",
+    "file": "kn-packet.html",
+    "title": "tcpdump: как читать пакет, а не гадать",
+    "excerpt": "Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "сеть",
+      "диагностика",
+      "tcp"
+    ],
+    "readtime": "9 мин",
     "source": "",
     "status": "published"
   },
@@ -201,7 +457,7 @@
     "tags": [
       "проекты",
       "обучение",
-      "доступность"
+      "документация"
     ],
     "readtime": "7 мин",
     "source": "",
@@ -236,6 +492,22 @@
       "диагностика"
     ],
     "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-redis",
+    "file": "kn-redis.html",
+    "title": "Redis: кеш, который умеет терять данные",
+    "excerpt": "Однопоточная модель и блокирующие команды, TTL и вытеснение, RDB и AOF с их ценой, реплика и Sentinel, а также три способа испортить кеш.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "redis",
+      "производительность",
+      "отказоустойчивость"
+    ],
+    "readtime": "9 мин",
     "source": "",
     "status": "published"
   },
@@ -288,6 +560,22 @@
     "status": "published"
   },
   {
+    "slug": "kn-stp",
+    "file": "kn-stp.html",
+    "title": "STP: почему коммутатор сам выключил порт",
+    "excerpt": "Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "vlan",
+      "vlan",
+      "диагностика"
+    ],
+    "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
     "slug": "kn-systemd",
     "file": "kn-systemd.html",
     "title": "systemd: юниты, цели и порядок загрузки",
@@ -316,6 +604,22 @@
       "mtu"
     ],
     "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-tls",
+    "file": "kn-tls.html",
+    "title": "Сертификаты и TLS 1.3: одна поездка вместо двух",
+    "excerpt": "Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "tls",
+      "безопасность",
+      "nginx"
+    ],
+    "readtime": "9 мин",
     "source": "",
     "status": "published"
   },
@@ -364,6 +668,22 @@
       "диагностика"
     ],
     "readtime": "8 мин",
+    "source": "",
+    "status": "published"
+  },
+  {
+    "slug": "kn-zfs",
+    "file": "kn-zfs.html",
+    "title": "ZFS: контрольные суммы, которые ловят тихие ошибки",
+    "excerpt": "Пул, vdev и dataset, RAIDZ и его честная ёмкость, scrub вместо «оно само», ashift и recordsize, а также почему ECC-память рекомендуют, но она не обязательна.",
+    "date": "2026-11-04",
+    "type": "note",
+    "tags": [
+      "zfs",
+      "хранение",
+      "raid"
+    ],
+    "readtime": "9 мин",
     "source": "",
     "status": "published"
   },

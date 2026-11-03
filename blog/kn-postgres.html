@@ -33,7 +33,7 @@
   <meta property="og:title" content="PostgreSQL: версии строк, VACUUM и заворот XID · itsliventsev">
   <meta property="og:description" content="PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-postgres.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -44,8 +44,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PostgreSQL: версии строк, VACUUM и заворот XID · itsliventsev">
   <meta name="twitter:description" content="PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PostgreSQL: версии строк, VACUUM и заворот XID","description":"PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.","url":"https://itsliventsev.github.io/blog/kn-postgres.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-postgres.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"postgresql, mvcc, индексы"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PostgreSQL: версии строк, VACUUM и заворот XID","description":"PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.","url":"https://itsliventsev.github.io/blog/kn-postgres.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-postgres.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"postgresql, mvcc, индексы"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"PostgreSQL: версии строк, VACUUM и заворот XID","item":"https://itsliventsev.github.io/blog/kn-postgres.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -100,7 +100,7 @@ FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;</code></pre>
           <li><a href="/blog/kn-tx.html"><strong>Транзакции: уровни изоляции и три аномалии</strong><span>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span></a></li>
           <li><a href="/blog/kn-backups.html"><strong>Бэкап: 3-2-1, RPO и проверка восстановлением</strong><span>Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -112,14 +112,14 @@ FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;</code></pre>
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
-        <span><a href="/blog/kn-practice.html">Практикоориентированное обучение: навык проверяют на стенде →</a><a href="/blog/kn-mtu.html">← MTU и PMTU: почему ping идёт, а скачивание нет</a></span>
+        <span><a href="/blog/kn-practice.html">Практикоориентированное обучение: навык проверяют на стенде →</a><a href="/blog/kn-packet.html">← tcpdump: как читать пакет, а не гадать</a></span>
       </nav>
     </div>
 
     <aside class="kn-rail" aria-label="Паспорт заметки">
       <div class="kn-rail-card">
         <h2>Паспорт</h2>
-        <p>Рубрика: Базы данных. Запись 11 из 23.</p>
+        <p>Рубрика: Базы данных. Запись 27 из 43.</p>
         <ul class="kn-rail-list">
           <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
           <li><a href="/blog/graph.html#kn-postgres"><span>граф</span>место в графе связей</a></li>
@@ -135,7 +135,7 @@ FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;</code></pre>
       <div class="kn-rail-card">
         <h2>Как читать связи</h2>
         <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 7 связей.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 8 связей.</p>
       </div>
     </aside>
   </article>

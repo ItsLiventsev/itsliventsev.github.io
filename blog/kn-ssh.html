@@ -33,7 +33,7 @@
   <meta property="og:title" content="SSH: ключ вместо пароля и что закрыть в sshd · itsliventsev">
   <meta property="og:description" content="Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-ssh.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -44,8 +44,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SSH: ключ вместо пароля и что закрыть в sshd · itsliventsev">
   <meta name="twitter:description" content="Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SSH: ключ вместо пароля и что закрыть в sshd","description":"Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.","url":"https://itsliventsev.github.io/blog/kn-ssh.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ssh.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"ssh, диагностика, автоматизация"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SSH: ключ вместо пароля и что закрыть в sshd","description":"Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.","url":"https://itsliventsev.github.io/blog/kn-ssh.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ssh.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"ssh, диагностика, автоматизация"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"SSH: ключ вместо пароля и что закрыть в sshd","item":"https://itsliventsev.github.io/blog/kn-ssh.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -103,7 +103,7 @@ PermitTunnel no</code></pre>
           <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
           <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ntp.html">Время в сети: NTP и почему 30 секунд ломают всё</a> — ссылается на эту заметку</li><li><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -115,14 +115,14 @@ PermitTunnel no</code></pre>
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
-        <span><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки →</a><a href="/blog/kn-routing.html">← Таблица маршрутов: как пакет выбирает выход</a></span>
+        <span><a href="/blog/kn-stp.html">STP: почему коммутатор сам выключил порт →</a><a href="/blog/kn-routing.html">← Таблица маршрутов: как пакет выбирает выход</a></span>
       </nav>
     </div>
 
     <aside class="kn-rail" aria-label="Паспорт заметки">
       <div class="kn-rail-card">
         <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 18 из 23.</p>
+        <p>Рубрика: Linux и службы. Запись 35 из 43.</p>
         <ul class="kn-rail-list">
           <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
           <li><a href="/blog/graph.html#kn-ssh"><span>граф</span>место в графе связей</a></li>
@@ -138,7 +138,7 @@ PermitTunnel no</code></pre>
       <div class="kn-rail-card">
         <h2>Как читать связи</h2>
         <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 7 связей.</p>
       </div>
     </aside>
   </article>

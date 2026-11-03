@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.
 excerpt: B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.
 readtime: 8 мин
-cover: kn-indexes
 ai: true
 related: [kn-postgres, kn-tx, kn-prometheus]
 sources:

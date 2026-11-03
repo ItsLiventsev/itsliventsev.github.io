@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Время в сети: NTP и почему 30 секунд ломают всё · itsliventsev</title>
+<meta name="description" content="Kerberos, TLS, журналы и репликация опираются на часы. Расхождение в 5 минут рвёт аутентификацию, а 30 секунд делают бессмысленными корреляции в логах. NTP решает это стратой и дисциплиной частоты, а не «переводом времени».">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="время,systemd,диагностика">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="Страта, смещение, джиттер, почему нельзя вручную переводить часы на работающем сервере, chrony вместо ntpd и проверка синхронизации без иллюзий.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-ntp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Время в сети: NTP и почему 30 секунд ломают всё · itsliventsev">
+  <meta property="og:description" content="Kerberos, TLS, журналы и репликация опираются на часы. Расхождение в 5 минут рвёт аутентификацию, а 30 секунд делают бессмысленными корреляции в логах. NTP решает это стратой и дисциплиной частоты, а не «переводом времени».">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-ntp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="время">
+  <meta property="article:tag" content="systemd">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Время в сети: NTP и почему 30 секунд ломают всё · itsliventsev">
+  <meta name="twitter:description" content="Kerberos, TLS, журналы и репликация опираются на часы. Расхождение в 5 минут рвёт аутентификацию, а 30 секунд делают бессмысленными корреляции в логах. NTP решает это стратой и дисциплиной частоты, а не «переводом времени».">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Время в сети: NTP и почему 30 секунд ломают всё","description":"Kerberos, TLS, журналы и репликация опираются на часы. Расхождение в 5 минут рвёт аутентификацию, а 30 секунд делают бессмысленными корреляции в логах. NTP решает это стратой и дисциплиной частоты, а не «переводом времени».","url":"https://itsliventsev.github.io/blog/kn-ntp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ntp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"время, systemd, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Время в сети: NTP и почему 30 секунд ломают всё","item":"https://itsliventsev.github.io/blog/kn-ntp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Время в сети: NTP и почему 30 секунд ломают всё</h1>
+        <p class="kn-def">Kerberos, TLS, журналы и репликация опираются на часы. Расхождение в 5 минут рвёт аутентификацию, а 30 секунд делают бессмысленными корреляции в логах. NTP решает это стратой и дисциплиной частоты, а не «переводом времени».</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Часы на сервере кажутся мелочью, пока не начинают мешать. Kerberos не примет билет, если расхождение больше пяти минут. TLS-сертификат «не действует», если часы ушли за дату выпуска. Журналы двух машин нельзя сопоставить, если между ними тридцать секунд разницы: события выстроятся в неверном порядке, и вы будете искать причину там, где её нет.</p>
+        <h2>Страта, смещение, джиттер</h2>
+        <p>NTP — иерархия: stratum 0 — эталонные часы, stratum 1 — серверы рядом с ними, stratum 2 — те, кто синхронизируется с первыми. Клиент не «копирует время», а измеряет задержку туда-обратно и корректирует <strong>частоту</strong> своих часов, чтобы они шли быстрее или медленнее. Резкий перевод — крайняя мера: он ломает монотонность, и приложения, измеряющие интервалы, получают отрицательные значения.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Показатель</th><th scope="col">Что значит</th><th scope="col">Тревожное значение</th></tr></thead><tbody><tr><th scope="row">Stratum</th><td>насколько далеко от эталонных часов; 1 — напрямую от источника</td><td>больше 4 — доверять с оговоркой</td></tr><tr><th scope="row">System time</th><td>смещение локальных часов от расчётного</td><td>больше 1 с</td></tr><tr><th scope="row">Last offset</th><td>насколько часы ушли за последнюю коррекцию</td><td>стабильно растёт</td></tr><tr><th scope="row">Root delay</th><td>задержка до опорного источника</td><td>десятки миллисекунд и больше</td></tr></tbody><caption>Три числа из chronyc tracking объясняют почти всё состояние синхронизации.</caption></table></div>
+        <p>Смотреть надо не только на смещение, но и на его поведение. Растущее смещение при исправной сети — это уходящий генератор или перегрузка виртуализации, а не проблема NTP.</p>
+        <h2>Настройка и проверка</h2>
+        <p>В современных дистрибутивах NTP-клиент — это chrony. systemd-timesyncd годится для простых случаев: он не умеет быть сервером и хуже держит точность при плохой сети.</p>
+        <pre><code>timedatectl          # синхронизированы ли часы и какой пояс
+chronyc sources -v   # список источников и их состояние
+chronyc tracking     # смещение, страта, дрейф</code></pre>
+        <dl class="kn-facts"><dt>Порт</dt><dd>UDP 123 — запрос и ответ, клиенту достаточно исходящего</dd><dt>Источники</dt><dd>минимум 3–4, чтобы алгоритм отбросил врущий сервер</dd><dt>Прыжок</dt><dd>больше 1000 секунд chrony по умолчанию не исправляет</dd><dt>Пояс</dt><dd>timedatectl set-timezone меняет отображение, не момент времени</dd></dl>
+        <p>Конфигурация минимальна: 3–4 источника, <code>iburst</code> для быстрой первичной синхронизации и <code>makestep 1.0 3</code> — разрешить шаг, только если расхождение больше секунды в первые три обновления.</p>
+        <h2>Где это кусается на практике</h2>
+        <ol><li><strong>Виртуальные машины.</strong> Гипервизор подстраивает время гостя, chrony подстраивает своё — они конфликтуют. Выберите одно: либо гость синхронизируется по сети, либо от гипервизора.</li><li><strong>Устройства без интернета.</strong> Коммутаторы и камеры в изолированном сегменте должны получать время от внутреннего сервера. Иначе после перезагрузки журналы датированы 1970 годом, и разбор инцидента превращается в археологию.</li><li><strong>Неправильный часовой пояс.</strong> Время в журналах обычно в UTC, и это правильно: пояс нужен людям, а не логам.</li></ol>
+        <p>Ручной <code>date -s</code> на работающем сервере — почти всегда ошибка: часы прыгают, таймеры ломаются, а в журналах появляются события из будущего или прошлого. Если нужно срочно — остановите сервисы, поменяйте время, запустите.</p>
+        <p>Смежные темы: юниты, которые запускают синхронизацию, — <a class="kn-ref" href="/blog/kn-systemd.html">systemd</a>; журналы с корректными метками — <a class="kn-ref" href="/blog/kn-logs.html">журналы и ротация</a>; время в билетах аутентификации — <a class="kn-ref" href="/blog/kn-ssh.html">SSH и ключи</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-systemd.html"><strong>systemd: юниты, цели и порядок загрузки</strong><span>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span></a></li>
+          <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+          <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc5905" target="_blank" rel="noopener">RFC 5905 — Network Time Protocol Version 4</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man5/chrony.conf.5.html" target="_blank" rel="noopener">chrony.conf(5) — настройка chrony</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man1/timedatectl.1.html" target="_blank" rel="noopener">timedatectl(1) — время и часовой пояс</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать →</a><a href="/blog/kn-nginx.html">← nginx как reverse proxy: что важно кроме proxy_pass</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 25 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-ntp"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#время">время</a></li><li><a href="/blog/topics.html#systemd">systemd</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

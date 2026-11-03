@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: VLAN отделяет сегмент на уровне кадра, а не кабеля; тег 802.1Q — это 4 байта, из которых 12 бит отведены под номер сети, поэтому в одном домене можно держать 4094 VLAN.
 excerpt: Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.
 readtime: 8 мин
-cover: kn-vlan
 ai: true
 related: [kn-routing, kn-dhcp, kn-troubleshoot]
 sources:

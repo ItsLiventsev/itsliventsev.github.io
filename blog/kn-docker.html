@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Контейнеры: образ, слой и том · itsliventsev</title>
+<meta name="description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="контейнеры,виртуализация,автоматизация">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-docker.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Контейнеры: образ, слой и том · itsliventsev">
+  <meta property="og:description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-docker.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="контейнеры">
+  <meta property="article:tag" content="виртуализация">
+  <meta property="article:tag" content="автоматизация">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Контейнеры: образ, слой и том · itsliventsev">
+  <meta name="twitter:description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Контейнеры: образ, слой и том","description":"Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.","url":"https://itsliventsev.github.io/blog/kn-docker.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-docker.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"контейнеры, виртуализация, автоматизация"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Контейнеры: образ, слой и том","item":"https://itsliventsev.github.io/blog/kn-docker.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Контейнеры: образ, слой и том</h1>
+        <p class="kn-def">Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Контейнер не эмулирует железо: он запускает обычный процесс, которому ядро показывает урезанную картину мира. <code>namespaces</code> отвечают за то, что процесс видит (свои PID, сеть, точки монтирования), <code>cgroups</code> — за то, сколько ресурсов он может взять. Понимание этой пары объясняет и быстрый старт, и то, почему контейнер не заменяет виртуальную машину там, где нужна жёсткая изоляция.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Свойство</th><th scope="col">Контейнер</th><th scope="col">Виртуальная машина</th></tr></thead><tbody><tr><th scope="row">ядро</th><td>общее с хостом</td><td>своё</td><td>гостевое</td></tr><tr><th scope="row">запуск</th><td>доли секунды</td><td>десятки секунд</td></tr><tr><th scope="row">изоляция</th><td>namespaces и cgroups</td><td>аппаратная</td><td>полная</td></tr><tr><th scope="row">образ</th><td>мегабайты</td><td>слои</td><td>гигабайты</td><td>диск</td></tr></tbody><caption>Контейнер и виртуальная машина решают разные задачи, и путать их дорого.</caption></table></div>
+        <h2>Образ собирается слоями</h2>
+        <p>Каждая инструкция в Dockerfile добавляет слой, и слои кешируются. Отсюда правило: <strong>сначала то, что меняется редко</strong>. Скопировать список зависимостей и установить их — потом копировать исходники. Если сделать наоборот, любая правка в коде сбрасывает кеш установки, и сборка занимает минуты вместо секунд.</p>
+        <pre><code>FROM python:3.12-slim AS build
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+
+FROM python:3.12-slim
+WORKDIR /app
+COPY --from=build /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=build /app /app
+USER 10001
+CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
+        <p>Multi-stage сборка — способ не тащить в прод компиляторы и заголовочные файлы. Итоговый образ получается в разы меньше, а поверхность атаки — уже.</p>
+        <dl class="kn-facts"><dt>Слой</dt><dd>каждая RUN и COPY создаёт слой; неизменное ставят выше изменяемого</dd><dt>Тег</dt><dd>latest не значит «свежий» — фиксируйте версию и digest</dd><dt>Том</dt><dd>volume переживает контейнер, без него данные исчезнут</dd><dt>Логи</dt><dd>пишите в stdout и stderr — иначе docker logs пуст</dd></dl>
+        <h2>Данные, сеть, конфигурация</h2>
+        <ol><li><strong>Данные.</strong> Файл, записанный внутри контейнера, исчезнет при пересоздании. База должна писать в том или в каталог хоста. Том управляется Docker и переживает контейнер; bind mount — просто путь на хосте, удобен для конфигов, но зависит от прав и SELinux.</li><li><strong>Сеть.</strong> Контейнеры одной пользовательской сети видят друг друга по имени сервиса. Порт, опубликованный через <code>-p</code>, доступен снаружи — и обычно нужен только для отладки.</li><li><strong>Конфигурация.</strong> Не вшивайте секреты в образ: они останутся в слоях навсегда. Переменные окружения при запуске, файлы — через секреты или монтирование.</li></ol>
+        <h2>Диагностика</h2>
+        <p>Контейнер упал — смотрите не <code>docker ps</code>, а <code>docker logs</code> и <code>docker inspect --format &#39;{{.State.ExitCode}}&#39;</code>. Код 137 — это SIGKILL, чаще всего OOM: приложение съело лимит памяти. Код 1 — приложение само завершилось с ошибкой, читайте его вывод. Пустой лог при падении почти всегда означает, что приложение писало в файл внутри контейнера.</p>
+        <p>Для отладки сети удобен отдельный контейнер в сети проблемного: <code>docker run --rm -it --network container:&lt;id&gt; nicolaka/netshoot</code>. В минимальных образах нет ни <code>ps</code>, ни <code>curl</code>, и это нормально.</p>
+        <h2>Что дальше</h2>
+        <p>Когда контейнеров больше десятка, ручной запуск перестаёт быть управляемым: нужны healthcheck, рестарт-политика и внешний мониторинг. Метрики — <a class="kn-ref" href="/blog/kn-prometheus.html">Prometheus</a>, автоматизация развёртывания — <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>, публикация наружу — <a class="kn-ref" href="/blog/kn-nginx.html">reverse proxy</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: что важно кроме proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://docs.docker.com/get-started/overview/" target="_blank" rel="noopener">Docker — обзор образов, контейнеров и томов</a><small>docs.docker.com</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man7/namespaces.7.html" target="_blank" rel="noopener">namespaces(7) — изоляция процессов</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man7/cgroups.7.html" target="_blank" rel="noopener">cgroups(7) — контроль ресурсов</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-documentation.html">Документация и регламенты: то, что спасает в три ночи →</a><a href="/blog/kn-dns.html">← DNS: кеш, TTL и два резолвера</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 08 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-docker"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#контейнеры">контейнеры</a></li><li><a href="/blog/topics.html#виртуализация">виртуализация</a></li><li><a href="/blog/topics.html#автоматизация">автоматизация</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

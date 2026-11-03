@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.
 excerpt: Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.
 readtime: 7 мин
-cover: kn-tx
 ai: true
 related: [kn-postgres, kn-indexes, kn-replication]
 sources:

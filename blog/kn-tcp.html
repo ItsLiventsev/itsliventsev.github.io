@@ -33,7 +33,7 @@
   <meta property="og:title" content="TCP: три пакета, четыре состояния и одна минута · itsliventsev">
   <meta property="og:description" content="TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tcp.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -44,8 +44,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TCP: три пакета, четыре состояния и одна минута · itsliventsev">
   <meta name="twitter:description" content="TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"TCP: три пакета, четыре состояния и одна минута","description":"TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.","url":"https://itsliventsev.github.io/blog/kn-tcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tcp, диагностика, mtu"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"TCP: три пакета, четыре состояния и одна минута","description":"TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.","url":"https://itsliventsev.github.io/blog/kn-tcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tcp, диагностика, mtu"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"TCP: три пакета, четыре состояния и одна минута","item":"https://itsliventsev.github.io/blog/kn-tcp.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -103,7 +103,7 @@ tcpdump -ni any &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-rst) != 0&#39;</code></pre
           <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: почему ping идёт, а скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
           <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: почему ping идёт, а скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-bgp.html">BGP: политика вместо метрики</a> — ссылается на эту заметку</li><li><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: почему ping идёт, а скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a> — ссылается на эту заметку</li><li><a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -115,14 +115,14 @@ tcpdump -ni any &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-rst) != 0&#39;</code></pre
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад →</a><a href="/blog/kn-systemd.html">← systemd: юниты, цели и порядок загрузки</a></span>
+        <span><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух →</a><a href="/blog/kn-systemd.html">← systemd: юниты, цели и порядок загрузки</a></span>
       </nav>
     </div>
 
     <aside class="kn-rail" aria-label="Паспорт заметки">
       <div class="kn-rail-card">
         <h2>Паспорт</h2>
-        <p>Рубрика: Сети. Запись 20 из 23.</p>
+        <p>Рубрика: Сети. Запись 38 из 43.</p>
         <ul class="kn-rail-list">
           <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
           <li><a href="/blog/graph.html#kn-tcp"><span>граф</span>место в графе связей</a></li>
@@ -138,7 +138,7 @@ tcpdump -ni any &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-rst) != 0&#39;</code></pre
       <div class="kn-rail-card">
         <h2>Как читать связи</h2>
         <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 7 связей.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 10 связей.</p>
       </div>
     </aside>
   </article>

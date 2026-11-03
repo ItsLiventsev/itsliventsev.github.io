@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: RAID 5 переживает отказ одного диска, RAID 6 — двух, RAID 10 — до половины массива; паритет считается по XOR, а ёмкость и риск меняются вместе с уровнем.
 excerpt: Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.
 readtime: 8 мин
-cover: kn-raid
 ai: true
 related: [kn-backups, kn-postgres, kn-prometheus]
 sources:

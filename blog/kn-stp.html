@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>STP: почему коммутатор сам выключил порт · itsliventsev</title>
+<meta name="description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="vlan,vlan,диагностика">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-stp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="STP: почему коммутатор сам выключил порт · itsliventsev">
+  <meta property="og:description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-stp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="STP: почему коммутатор сам выключил порт · itsliventsev">
+  <meta name="twitter:description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"STP: почему коммутатор сам выключил порт","description":"Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.","url":"https://itsliventsev.github.io/blog/kn-stp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-stp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, vlan, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"STP: почему коммутатор сам выключил порт","item":"https://itsliventsev.github.io/blog/kn-stp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>STP: почему коммутатор сам выключил порт</h1>
+        <p class="kn-def">Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Два коммутатора, соединённые двумя кабелями, — это кольцо. Ethernet-кадр не имеет поля TTL, поэтому широковещательный кадр из кольца не выйдет никогда: он будет размножаться, пока таблица MAC не начнёт метаться между портами, а полоса не кончится. Такое состояние называется broadcast storm, и наступает оно за секунды. STP — это договор, по которому один из портов добровольно перестаёт передавать кадры и кольцо превращается в дерево.</p>
+        <h2>Корневой мост выбирают, а не назначают</h2>
+        <p>Каждый коммутатор шлёт BPDU с идентификатором моста: приоритет (2 байта) и MAC (6 байт). Побеждает наименьший идентификатор. Дальше все считают стоимость пути до корня и выбирают лучший порт — корневой; на каждом сегменте один порт становится назначенным, остальные уходят в blocking.</p>
+        <p>Практика простая и почти всегда обязательная: <strong>корнем назначают вручную</strong>. Приоритет 4096 на ядре и 8192 на резервном — и топология перестаёт зависеть от того, у какого коммутатора случайно оказался меньший MAC. Если этого не сделать, после замены оборудования дерево может перевернуться, и трафик пойдёт через доступ, а не через ядро.</p>
+        <p>{chisla}</p>
+        <h2>Тридцать секунд, которые ломают работу</h2>
+        <p>Классический STP после изменения топологии ждёт: до 20 секунд max age, затем 15 секунд listening и ещё 15 learning. Итого до 50 секунд без трафика — и это не авария, а расчётное поведение. Принтер, который «отвалился на минуту и сам починился», часто объясняется именно этим.</p>
+        <p>RSTP (802.1w, вошёл в 802.1D-2004) заменяет ожидание явным рукопожатием между соседями и переводит порт в forwarding почти сразу, если порт граничный. В Linux это видно как обычный мост: <code>bridge link show</code> показывает состояние, <code>bridge fdb show</code> — изученные MAC.</p>
+        <p>{sostoyanija}</p>
+        <h2>Три защиты, без которых STP опасен</h2>
+        <ol><li><strong>PortFast (edge port)</strong> — порт к конечному устройству не участвует в STP и включается сразу. Без него каждая перезагрузка компьютера — это полминуты ожидания. С ним — обязателен BPDU guard, иначе подключённый «умный» коммутатор устроит петлю.</li><li><strong>BPDU guard</strong> — получили BPDU на порту, где его быть не должно, — порт уходит в err-disabled. Это защита от петли, устроенной пользователем, который принёс свой свитч.</li><li><strong>Root guard</strong> — не даёт нижестоящему устройству стать корнем. Ставится на портах в сторону доступа; нарушение тоже блокирует порт, но не ломает дерево целиком.</li></ol>
+        <h2>Что смотреть в первую очередь</h2>
+        <p>Первым делом — кто корень: <code>show spanning-tree</code> (или <code>bridge -d link show</code> в Linux). Если корнем оказался коммутатор в дальнем кабинете, все пути идут через него, и это объясняет и медленную сеть, и странные задержки. Второе — счётчики: <code>show spanning-tree detail</code> покажет число изменений топологии; растущий счётчик означает флап, а не стабильную сеть.</p>
+        <p>Про VLAN важно помнить: у каждого VLAN своё дерево (PVST+ или MSTP), поэтому петля в одном VLAN не обязательно видна в другом. Если сеть «местами работает», проверяйте STP по VLAN, а не «в целом». Как устроена разметка кадров — в <a class="kn-ref" href="/blog/kn-vlan.html">заметке про 802.1Q</a>; про агрегацию каналов, где STP и LACP работают вместе, — <a class="kn-ref" href="/blog/kn-lacp.html">LACP</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Состояние</th><th scope="col">Что делает</th><th scope="col">Сколько длится</th></tr></thead><tbody><tr><th scope="row">Blocking</th><td>кадры не передаёт</td><td>BPDU слушает</td><td>до 20 с (max age)</td></tr><tr><th scope="row">Listening</th><td>изучает топологию</td><td>кадры не идут</td><td>forward delay</td><td>15 с</td></tr><tr><th scope="row">Learning</th><td>учит MAC-таблицу</td><td>кадры не идут</td><td>forward delay</td><td>15 с</td></tr><tr><th scope="row">Forwarding</th><td>передаёт кадры</td><td>бессрочно</td></tr></tbody><caption>В классическом STP переход занимает до 50 секунд; RSTP почти всегда обходится без ожидания.</caption></table></div>
+        <dl class="kn-facts"><dt>BPDU</dt><dd>служебный кадр раз в 2 секунды, адрес 01:80:c2:00:00:00</dd><dt>Max age</dt><dd>20 секунд: сколько ждать BPDU, прежде чем считать путь мёртвым</dd><dt>Forward delay</dt><dd>15 секунд на listening и столько же на learning</dd><dt>Приоритет моста</dt><dd>32768 по умолчанию; младший выигрывает, при равенстве решает MAC</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-lacp.html"><strong>LACP: два кабеля, один адрес</strong><span>active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-lacp.html">LACP: два кабеля, один адрес</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://en.wikipedia.org/wiki/Spanning_Tree_Protocol" target="_blank" rel="noopener">IEEE 802.1D — MAC Bridges (включает RSTP с редакции 2004 года)</a><small>Wikipedia (сводка по IEEE 802.1D)</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man8/bridge.8.html" target="_blank" rel="noopener">bridge(8) — STP и настройки моста в Linux</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки →</a><a href="/blog/kn-ssh.html">← SSH: ключ вместо пароля и что закрыть в sshd</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 36 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-stp"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Разбор инцидента: от «всё лежит» до списка действий · itsliventsev</title>
+<meta name="description" content="Инцидент — это не только время, когда что-то сломано, но и час после, когда можно узнать, почему. Порядок действий важнее интуиции: сначала остановить кровотечение, потом искать причину, потом менять систему так, чтобы это не повторилось.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="инциденты,документация,мониторинг">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="Приоритет и коммуникация, «сначала стабилизируй, потом разбирайся», таймлайн, пять почему и постмортем с задачами, а не с выводами.">
+<meta name="kn-zone" content="practice">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-incident.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Разбор инцидента: от «всё лежит» до списка действий · itsliventsev">
+  <meta property="og:description" content="Инцидент — это не только время, когда что-то сломано, но и час после, когда можно узнать, почему. Порядок действий важнее интуиции: сначала остановить кровотечение, потом искать причину, потом менять систему так, чтобы это не повторилось.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-incident.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="инциденты">
+  <meta property="article:tag" content="документация">
+  <meta property="article:tag" content="мониторинг">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Разбор инцидента: от «всё лежит» до списка действий · itsliventsev">
+  <meta name="twitter:description" content="Инцидент — это не только время, когда что-то сломано, но и час после, когда можно узнать, почему. Порядок действий важнее интуиции: сначала остановить кровотечение, потом искать причину, потом менять систему так, чтобы это не повторилось.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Разбор инцидента: от «всё лежит» до списка действий","description":"Инцидент — это не только время, когда что-то сломано, но и час после, когда можно узнать, почему. Порядок действий важнее интуиции: сначала остановить кровотечение, потом искать причину, потом менять систему так, чтобы это не повторилось.","url":"https://itsliventsev.github.io/blog/kn-incident.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-incident.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"инциденты, документация, мониторинг"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Разбор инцидента: от «всё лежит» до списка действий","item":"https://itsliventsev.github.io/blog/kn-incident.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/practice.html">Практика и обучение</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Разбор инцидента: от «всё лежит» до списка действий</h1>
+        <p class="kn-def">Инцидент — это не только время, когда что-то сломано, но и час после, когда можно узнать, почему. Порядок действий важнее интуиции: сначала остановить кровотечение, потом искать причину, потом менять систему так, чтобы это не повторилось.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>В момент аварии хочется понять причину. Это ловушка: пока вы разбираетесь, сервис лежит, а пользователи считают минуты. Правильный порядок обратный — сначала вернуть работу, потом понять, что произошло. Причина никуда не денется, а простой не прощает.</p>
+        <h2>Стабилизация прежде диагностики</h2>
+        <p>Если последнее изменение было час назад — откатывайте его. Если есть резервный узел — переключайтесь. Если сервис завис и рестарт помогает — перезапускайте, а логи снимите <strong>до</strong> рестарта. Всё это не «настоящее решение», но это возвращает сервис, и только после этого начинается работа.</p>
+        <p>Единственное исключение — когда перезапуск уничтожит улики. Тогда сначала снимаются дампы, логи и состояние, потом перезапуск.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Фаза</th><th scope="col">Что делают</th><th scope="col">Чего не делают</th></tr></thead><tbody><tr><th scope="row">обнаружение</th><td>фиксируют время и симптом</td><td>не начинают с догадок</td></tr><tr><th scope="row">стабилизация</th><td>возвращают сервис: откат</td><td>переключение</td><td>перезапуск</td><td>не ищут корневую причину</td></tr><tr><th scope="row">локализация</th><td>сужают область до компонента</td><td>не меняют всё сразу</td></tr><tr><th scope="row">разбор</th><td>находят причину и воспроизводят</td><td>не правят систему в спешке</td></tr><tr><th scope="row">изменения</th><td>задачи с исполнителями и сроками</td><td>не ограничиваются словами «быть внимательнее»</td></tr></tbody><caption>Порядок фаз нарушать нельзя: причина, найденная до стабилизации, ничего не спасает.</caption></table></div>
+        <h2>Таймлайн</h2>
+        <p>Пишите время и действие по ходу, а не по памяти:</p>
+        <pre><code>21:14  алерт: 5xx на api.example.com вырос до 30 %
+21:16  подтвердили: ошибки на двух из трёх узлов
+21:19  откатили выкладку версии 2.4.1
+21:23  ошибки прекратились, метрики в норме
+22:05  нашли причину: миграция добавила NOT NULL без значения по умолчанию</code></pre>
+        <p>Таймлайн — единственный артефакт, который нельзя восстановить задним числом. По нему потом видно, где потеряли двадцать минут, и это чаще всего самое ценное наблюдение.</p>
+        <h2>Пять почему — и их предел</h2>
+        <p>Классический приём: почему упало? Потому что миграция. Почему миграция уронила? Потому что колонка без значения по умолчанию. Почему это не проверили? Потому что не было теста миграции. Почему не было теста? Потому что процесс выкладки не требует прогона миграции на копии.</p>
+        <p>На четвёртом-пятом шаге приём упирается в системные причины — и именно там лежат настоящие исправления. Но важно не уйти в бесконечную рекурсию «почему в компании так принято»: останавливайтесь на том уровне, где можете что-то изменить.</p>
+        <dl class="kn-facts"><dt>Время</dt><dd>записывают каждое действие с меткой — таймлайн потом бесценен</dd><dt>Один командир</dt><dd>у инцидента один человек, принимающий решения, остальные не спорят в канале</dd><dt>Коммуникация</dt><dd>обновление статуса каждые 15–30 минут, даже если новостей нет</dd><dt>Постмортем</dt><dd>без поиска виноватых, с задачами и сроками</dd></dl>
+        <h2>Коммуникация</h2>
+        <p>Правило, которое экономит больше всего нервов: <strong>один канал и один ответственный</strong>. Обновления по расписанию, даже если новостей нет — «пока без изменений, работаем над X». Это снимает половину паники у смежников, которые не понимают, происходит ли что-то.</p>
+        <p>Полезно заранее договориться о формулировках: «деградация», «частичный отказ», «полный отказ» — чтобы все понимали одно и то же.</p>
+        <h2>Постмортем, который работает</h2>
+        <p>Разбор пишется в течение 72 часов и содержит три части: таймлайн, причину (с доказательствами, а не догадками) и <strong>список изменений</strong>. Каждый пункт — с исполнителем и сроком. Если пункт звучит как «быть внимательнее при выкладке», это не изменение, а пожелание; правильно — «добавить в CI прогон миграций на копии базы».</p>
+        <p>Хороший признак работающей культуры: количество постмортемов растёт, а количество повторных инцидентов падает.</p>
+        <p>Смежные темы: что делать до того, как всё упало, — <a class="kn-ref" href="/blog/kn-monitoring.html">мониторинг и алерты</a>; методика поиска причины — <a class="kn-ref" href="/blog/kn-troubleshoot.html">диагностика</a>; где хранить разборы — <a class="kn-ref" href="/blog/kn-documentation.html">документация</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-documentation.html"><strong>Документация и регламенты: то, что спасает в три ночи</strong><span>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-documentation.html">Документация и регламенты: то, что спасает в три ночи</a> — ссылается на эту заметку</li><li><a href="/blog/kn-monitoring.html">Мониторинг: метрика, симптом и алерт, который не будит зря</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://sre.google/sre-book/managing-incidents/" target="_blank" rel="noopener">Google SRE Book — Managing Incidents</a><small>sre.google</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://sre.google/workbook/postmortem-culture/" target="_blank" rel="noopener">Google SRE Workbook — Postmortem Culture</a><small>sre.google</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://csrc.nist.gov/pubs/sp/800/61/r2/final" target="_blank" rel="noopener">NIST SP 800-61 — Incident Handling Guide</a><small>NIST</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/practice.html">все заметки рубрики «Практика и обучение»</a>
+        <span><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный →</a><a href="/blog/kn-gre.html">← Туннель и MTU: 24 байта, которые ломают передачу</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Практика и обучение. Запись 12 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-incident"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#инциденты">инциденты</a></li><li><a href="/blog/topics.html#документация">документация</a></li><li><a href="/blog/topics.html#мониторинг">мониторинг</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

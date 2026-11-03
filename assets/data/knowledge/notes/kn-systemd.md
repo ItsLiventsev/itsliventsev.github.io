@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.
 excerpt: unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.
 readtime: 7 мин
-cover: kn-systemd
 ai: true
 related: [kn-logs, kn-ssh, kn-ansible]
 sources:

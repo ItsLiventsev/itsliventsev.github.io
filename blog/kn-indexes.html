@@ -33,7 +33,7 @@
   <meta property="og:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
   <meta property="og:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-indexes.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -44,8 +44,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
   <meta name="twitter:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Индексы и планы: почему запрос медленный","description":"Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.","url":"https://itsliventsev.github.io/blog/kn-indexes.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-indexes.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"индексы, postgresql, транзакции"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Индексы и планы: почему запрос медленный","description":"Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.","url":"https://itsliventsev.github.io/blog/kn-indexes.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-indexes.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"индексы, postgresql, транзакции"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Индексы и планы: почему запрос медленный","item":"https://itsliventsev.github.io/blog/kn-indexes.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -102,7 +102,7 @@ SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></p
           <li><a href="/blog/kn-tx.html"><strong>Транзакции: уровни изоляции и три аномалии</strong><span>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span></a></li>
           <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -114,14 +114,14 @@ SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></p
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
-        <span><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет» →</a><a href="/blog/kn-gre.html">← Туннель и MTU: 24 байта, которые ломают передачу</a></span>
+        <span><a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы →</a><a href="/blog/kn-incident.html">← Разбор инцидента: от «всё лежит» до списка действий</a></span>
       </nav>
     </div>
 
     <aside class="kn-rail" aria-label="Паспорт заметки">
       <div class="kn-rail-card">
         <h2>Паспорт</h2>
-        <p>Рубрика: Базы данных. Запись 07 из 23.</p>
+        <p>Рубрика: Базы данных. Запись 13 из 43.</p>
         <ul class="kn-rail-list">
           <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
           <li><a href="/blog/graph.html#kn-indexes"><span>граф</span>место в графе связей</a></li>
@@ -137,7 +137,7 @@ SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></p
       <div class="kn-rail-card">
         <h2>Как читать связи</h2>
         <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
       </div>
     </aside>
   </article>

@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Counter только растёт, gauge меняется в обе стороны, histogram даёт распределение, summary — квантили на клиенте; алерт строят по тому, что чувствует пользователь, а не по температуре процессора.
 excerpt: rate и histogram_quantile, почему CPU > 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.
 readtime: 8 мин
-cover: kn-prometheus
 ai: true
 related: [kn-logs, kn-ansible, kn-replication]
 sources:

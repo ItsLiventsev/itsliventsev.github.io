@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.
 excerpt: Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.
 readtime: 8 мин
-cover: kn-gre
 ai: true
 related: [kn-mtu, kn-ipsec, kn-routing]
 sources:

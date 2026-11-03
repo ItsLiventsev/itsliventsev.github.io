@@ -27,15 +27,15 @@ undefined
   <meta property="og:title" content="Эксплуатация — заметки · itsliventsev">
   <meta property="og:description" content="Заметки об эксплуатации: типы метрик Prometheus и осмысленные алерты, идемпотентные плейбуки Ansible и проверка через --check.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/topics/ops.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-notes.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Эксплуатация — заметки · itsliventsev">
   <meta name="twitter:description" content="Заметки об эксплуатации: типы метрик Prometheus и осмысленные алерты, идемпотентные плейбуки Ansible и проверка через --check.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Эксплуатация — заметки","description":"Заметки об эксплуатации: типы метрик Prometheus и осмысленные алерты, идемпотентные плейбуки Ansible и проверка через --check.","url":"https://itsliventsev.github.io/blog/topics/ops.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/ops.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-prometheus.webp"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-notes.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Эксплуатация — заметки","description":"Заметки об эксплуатации: типы метрик Prometheus и осмысленные алерты, идемпотентные плейбуки Ansible и проверка через --check.","url":"https://itsliventsev.github.io/blog/topics/ops.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/ops.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-notes.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Эксплуатация — заметки","item":"https://itsliventsev.github.io/blog/topics/ops.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -46,23 +46,29 @@ undefined
     <p class="ui-eyebrow">рубрика 05 · заметки</p>
     <h1>Эксплуатация</h1>
     <p class="kn-head-lede">Как понять, что сервис работает, и как повторить настройку на десятом хосте.</p>
-    <div class="ui-pagehead-meta"><span>2 заметки</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
+    <div class="ui-pagehead-meta"><span>3 заметки</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
   </header>
 
   <div class="kn-stream">
       <a class="kn-card kn-card--wide" data-kn-zone="ops" href="/blog/kn-ansible.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ansible.webp" alt="схема: два запуска плейбука с разным числом изменений и список модулей" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Эксплуатация</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
           <span class="kn-card-title">Ansible: плейбук, который можно запускать дважды</span>
           <span class="kn-card-excerpt">Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-prometheus.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-prometheus.webp" alt="схема: четыре типа метрик и примеры хорошего и плохого алерта" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-monitoring.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Эксплуатация</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
+          <span class="kn-card-title">Мониторинг: метрика, симптом и алерт, который не будит зря</span>
+          <span class="kn-card-excerpt">Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--flat" data-kn-zone="ops" href="/blog/kn-prometheus.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
           <span class="kn-card-title">Prometheus: четыре типа метрик и один хороший алерт</span>
           <span class="kn-card-excerpt">rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>

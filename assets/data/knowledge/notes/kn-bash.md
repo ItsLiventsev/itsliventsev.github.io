@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; `set -euo pipefail` делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.
 excerpt: grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.
 readtime: 7 мин
-cover: kn-bash
 ai: true
 related: [kn-logs, kn-systemd, kn-ansible]
 sources:

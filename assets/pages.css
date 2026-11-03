@@ -2298,7 +2298,7 @@ html.u-theme-switch *::after {
 .kn-card {
   grid-column: span 4;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
   border-radius: var(--u-r-lg);
   background: var(--u-surface);
@@ -2314,10 +2314,6 @@ html.u-theme-switch *::after {
 .kn-card--wide.kn-card--text { grid-column: span 8; }
 .kn-card--flat.kn-card--text { grid-column: span 12; }
 .kn-card--flat { grid-column: span 12; }
-.kn-card-cover { display: block; aspect-ratio: 16 / 9; background: var(--u-surface-sunk); }
-.kn-card--lead .kn-card-cover { aspect-ratio: 16 / 8; }
-.kn-card--tall .kn-card-cover { aspect-ratio: 4 / 5; }
-.kn-card-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .kn-card-body { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--u-s2); padding: var(--u-s5); }
 .kn-card--lead .kn-card-body { gap: var(--u-s3); padding: var(--u-s6); }
 .kn-card-zone {
@@ -2366,7 +2362,6 @@ html.u-theme-switch *::after {
 .kn-card:hover { box-shadow: var(--u-shadow-2); }
 .kn-card[hidden] { display: none; }
 .kn-card:hover .kn-card-title { color: var(--u-accent); }
-.kn-card:hover .kn-card-cover img { transform: scale(1.015); }
 
 /* ——— Плашка машинного текста: обязательна на каждой такой заметке ——— */
 .kn-ai {
@@ -2453,9 +2448,6 @@ html.u-theme-switch *::after {
 .kn-ref::after { content: "↗"; margin-inline-start: 2px; font-size: 0.8em; }
 
 /* ——— Визуальные блоки внутри заметки ——— */
-.kn-figure { margin: var(--u-s6) 0; }
-.kn-figure img { display: block; width: 100%; height: auto; border-radius: var(--u-r-md); background: var(--u-surface-sunk); }
-.kn-figure figcaption { margin-block-start: var(--u-s2); color: var(--u-muted); font-family: var(--u-font-ui); font-size: var(--u-fs-xs); line-height: 1.45; }
 
 .kn-facts {
   display: grid;
@@ -2671,7 +2663,6 @@ html.u-theme-switch *::after {
   .kn-related a {
     transition: box-shadow var(--u-dur-2) var(--u-ease), transform var(--u-dur-2) var(--u-ease);
   }
-  .kn-card-cover img { transition: transform var(--u-dur-3) var(--u-ease); }
   .kn-card:hover,
   .kn-topic-row:hover { transform: translateY(-2px); }
   .kn-node { transition: box-shadow var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
@@ -2679,3 +2670,17 @@ html.u-theme-switch *::after {
 @media print {
   .kn-rail, .kn-filterbar, .kn-graph-stage { display: none; }
 }
+
+/* ——— Карточка заметки без обложки: номер рубрики вместо картинки ———
+   Обложки убраны совсем: лента читается как типографский указатель,
+   а не как галерея. Номер рубрики работает якорем для глаза (он же
+   стоит на странице рубрики), поэтому карточки различаются по номеру,
+   а не по цвету — второго акцента в системе нет. */
+.kn-card-num {
+  min-width: 2.2em;
+  color: var(--u-ink);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.kn-card--wide .kn-card-excerpt { -webkit-line-clamp: 2; }
+.kn-card--lead .kn-card-excerpt { -webkit-line-clamp: 3; }

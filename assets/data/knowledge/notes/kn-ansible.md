@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Плейбук описывает желаемое состояние, а не последовательность команд; идемпотентный модуль на повторном запуске показывает changed=0, и это главный признак того, что автоматизация написана правильно.
 excerpt: Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.
 readtime: 8 мин
-cover: kn-ansible
 ai: true
 related: [kn-ssh, kn-systemd, kn-prometheus]
 sources:
