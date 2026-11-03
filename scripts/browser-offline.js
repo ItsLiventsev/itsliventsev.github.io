@@ -36,7 +36,18 @@ const server = http.createServer((req, res) => {
     assert.equal(response.status(), 200);
     await page.waitForSelector('.ui-masthead');
     await page.locator('[data-reading-filter="all"]').waitFor({ state: 'visible' });
-    assert.equal(await page.locator('[data-reading-list] .ui-reading-row').count(), 2);
+    /* Полка чтения показывает четыре последние публикации из двух манифестов;
+       точное число зависит от контента, поэтому сверяем с данными, а не с константой. */
+    const shelf = await page.evaluate(async () => {
+      const load = async (url) => {
+        const response = await fetch(url);
+        return response.ok ? response.json() : [];
+      };
+      const manifests = [...await load('/blog/posts.json'), ...await load('/articles/posts.json')];
+      const published = manifests.filter((item) => item && item.status === 'published');
+      return { expected: Math.min(4, published.length), rendered: document.querySelectorAll('[data-reading-list] .ui-reading-row').length };
+    });
+    assert.equal(shelf.rendered, shelf.expected, 'полка чтения показывает четыре последние публикации');
     const assets = await page.evaluate(async () => ({
       css: (await fetch('/assets/pages.css')).status,
       js: (await fetch('/assets/feed.js')).status,

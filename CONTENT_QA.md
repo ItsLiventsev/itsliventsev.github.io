@@ -66,6 +66,9 @@ node scripts/test-service-worker.js / test-palette.js / runtime-smoke.js → OK
 ## 7. Что осталось за границей PR
 
 - Браузерные тесты CI (`browser-smoke`, `browser-reading`, `audit-classes`) не запускались локально:
-  в песочнице нет Chromium. Они не затрагивают пути `blog/*` и запустятся в CI на PR.
+  в песочнице нет Chromium и нет сети до CDN playwright.
+- `scripts/browser-offline.js` проверял ровно две строки полки чтения на главной. После появления
+  базы знаний полка показывает четыре последние публикации, поэтому тест сверяет число строк
+  с манифестами (`blog/posts.json` + `articles/posts.json`), а не с константой.
 - `sw.js` не менялся: новые страницы попадают в кэш по стратегии network-first, как и остальные.
 - Плотность ленты на 1080–1280 px — в бэклоге `CONTENT_AUDIT.md` (P2, п. 15).
