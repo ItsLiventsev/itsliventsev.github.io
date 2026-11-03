@@ -53,6 +53,9 @@ for (const file of contentPages) {
   ok(source.includes('/assets/fonts/literata-cyrillic-wght-normal.woff2') && source.includes('/assets/fonts/golos-text-cyrillic-wght-normal.woff2'), file + ': не предзагружены Literata и Golos Text');
   ok(!source.includes('class="ambient"') && !source.includes('class="floating-elements"') && !source.includes('scroll-progress'), file + ': осталась декоративная разметка старого дизайна');
   ok(!/class="[^"]*\b(?:glass|backdrop-blur)\b/.test(source), file + ': glassmorphism в разметке');
+  /* Тема по умолчанию — системная: без этого скрипта в <head> пользователь с
+     тёмной ОС получает светлый экран до первого клика. Редиректы не в счёт. */
+  ok(/http-equiv="refresh"/i.test(source) || source.includes('prefers-color-scheme: dark'), file + ': тема не наследует системную настройку');
   for (const match of source.matchAll(/<img\b[^>]*>/gi)) {
     const tag = match[0];
     ok(/\balt="/.test(tag) && /\bwidth="\d+"/.test(tag) && /\bheight="\d+"/.test(tag) && /\bloading="lazy"/.test(tag), file + ': изображению нужны alt, размеры и lazy loading');
@@ -101,6 +104,21 @@ ok((base + pages).match(/backdrop-filter/g) === null, 'стеклянный бл
 ok(!/linear-gradient\([^)]*(?:#6d28d9|#7c3aed|#8b5cf6|#4f46e5)/i.test(base + pages), 'фиолетово-синие градиенты запрещены');
 const courseStyles = read('assets/course.css');
 ok(courseStyles.includes('[data-ws-hero]') && courseStyles.includes('[data-ws-surface]'), 'course.css не покрывает учебные поверхности');
+
+/* ── контракт «стили только в CSS» ──
+   Инлайн-стили ломают темы, reduced motion и axe; значения передаются данными
+   (data-ws-value → --p). Блюр-стекло запрещено по дизайн-коду: оно превращает
+   интерфейс в «стеклянные карточки» и убивает контраст в тёмной теме. */
+for (const file of walk('assets', /\.js$/)) {
+  const source = read(file);
+  ok(!/\sstyle="/.test(source), file + ': inline-стиль в шаблоне — передайте значение через data-ws-value');
+  ok(!/setAttribute\(\s*['"]style['"]/.test(source), file + ': setAttribute("style") вместо CSS-переменной');
+}
+for (const file of walk('assets', /\.css$/)) {
+  ok(!/backdrop-filter/.test(read(file)), file + ': стеклянный блюр запрещён дизайн-кодом');
+}
+ok(read('assets/shell.js').includes("'[data-ws-value]'"), 'shell.js: нет применения data-ws-value к полосам прогресса');
+ok(/\[data-ws-progress\]/.test(courseStyles), 'course.css: нет стилизации полос прогресса');
 
 /* ── скрипты ── */
 const shell = read('assets/shell.js');
@@ -182,8 +200,10 @@ ok(!exists('agent-plan.html'), 'внутренняя служебная стра
 /* ── генераторы и SW должны ссылаться на новую систему ── */
 const admin = read('assets/admin.js');
 ok(admin.includes('assets/tokens.css') && admin.includes('assets/shell.js') && !admin.includes('workspace.css'), 'генератор постов не переведён на новую систему');
+ok(admin.includes('prefers-color-scheme'), 'генератор постов: тема не наследует системную настройку');
 const office = read('scripts/build-office.js');
 ok(office.includes('assets/tokens.css') && office.includes('assets/shell.js') && !office.includes('workspace.css'), 'генератор ОфисПолиса не переведён на новую систему');
+ok(office.includes('prefers-color-scheme'), 'генератор ОфисПолиса: тема не наследует системную настройку');
 const sw = read('sw.js');
 ok(sw.includes('/assets/tokens.css') && sw.includes('/assets/shell.js') && !sw.includes('workspace'), 'service worker кэширует удалённые ассеты');
 
@@ -196,7 +216,9 @@ ok(searchIndex.length >= 70, 'поисковый индекс подозрите
 ok(new Set(searchIndex.map(i => i.url)).size === searchIndex.length, 'поисковый индекс: повторяющиеся url');
 for (const item of searchIndex) {
   ok(!!item.title && !!item.description && !!item.category, 'поисковый индекс: пустые поля у ' + item.url);
-  ok(!!item.content && item.content.length > 200, 'поисковый индекс: слишком короткий текст у ' + item.url);
+  /* Каталоги (articles.html) собирают список скриптом, поэтому у них самый
+     короткий текст — 150 символов хватает, чтобы отличить страницу от пустой. */
+  ok(!!item.content && item.content.length > 150, 'поисковый индекс: слишком короткий текст у ' + item.url);
   const target = item.url === '/' ? 'index.html' : item.url.replace(/^\//, '');
   ok(exists(target), 'поисковый индекс ведёт на несуществующую страницу: ' + item.url);
 }

@@ -20,16 +20,16 @@
     5: { title: 'Инфраструктура и веб', note: 'мониторинг сети и создание простого сайта' }
   };
   var QUESTS = [
-    { id: 'office-docs', sprint: 1, glyph: 'fox', title: 'Сложные текстовые документы', href: 'office-docs.html' },
-    { id: 'office-scan', sprint: 1, glyph: 'hedgehog', title: 'Сканированные документы и OCR', href: 'office-scan.html' },
-    { id: 'office-sheets', sprint: 2, glyph: 'otter', title: 'Таблицы и вычисления', href: 'office-sheets.html' },
-    { id: 'office-charts', sprint: 2, glyph: 'owl', title: 'Диаграммы и графики', href: 'office-charts.html' },
-    { id: 'office-slides', sprint: 3, glyph: 'raccoon', title: 'Презентации и слайд-шоу', href: 'office-slides.html' },
-    { id: 'office-animation', sprint: 3, glyph: 'cat', title: 'Анимация, графика и звук слайда', href: 'office-animation.html' },
-    { id: 'office-draw', sprint: 4, glyph: 'crab', title: 'Простые схемы и чертежи', href: 'office-draw.html' },
-    { id: 'office-db', sprint: 4, glyph: 'wolf', title: 'Работа с базами данных', href: 'office-db.html' },
-    { id: 'office-monitor', sprint: 5, glyph: 'owl', title: 'Мониторинг сетевой инфраструктуры', href: 'office-monitor.html' },
-    { id: 'office-web', sprint: 5, glyph: 'fox', title: 'Создание простого сайта', href: 'office-web.html' }
+    { id: 'office-docs', sprint: 1, glyph: 'fox', title: 'Сложные текстовые документы', href: 'office-docs.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-scan', sprint: 1, glyph: 'hedgehog', title: 'Сканированные документы и OCR', href: 'office-scan.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-sheets', sprint: 2, glyph: 'otter', title: 'Таблицы и вычисления', href: 'office-sheets.html', format: 'практическая работа', hours: '5 ч' },
+    { id: 'office-charts', sprint: 2, glyph: 'owl', title: 'Диаграммы и графики', href: 'office-charts.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-slides', sprint: 3, glyph: 'raccoon', title: 'Презентации и слайд-шоу', href: 'office-slides.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-animation', sprint: 3, glyph: 'cat', title: 'Анимация, графика и звук слайда', href: 'office-animation.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-draw', sprint: 4, glyph: 'crab', title: 'Простые схемы и чертежи', href: 'office-draw.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-db', sprint: 4, glyph: 'wolf', title: 'Работа с базами данных', href: 'office-db.html', format: 'практическая работа', hours: '5 ч' },
+    { id: 'office-monitor', sprint: 5, glyph: 'owl', title: 'Мониторинг сетевой инфраструктуры', href: 'office-monitor.html', format: 'практическая работа', hours: '4 ч' },
+    { id: 'office-web', sprint: 5, glyph: 'fox', title: 'Создание простого сайта', href: 'office-web.html', format: 'практическая работа', hours: '5 ч' }
   ];
 
   function mascotPicker(current) {
@@ -69,7 +69,7 @@
       '<div class="id-stat"><b>' + t.coins + ' ◈</b><span>неткоины</span></div>' +
       '<div class="id-stat"><b>' + done + '/' + QUESTS.length + '</b><span>работы</span></div></div></div>' +
       '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP</span>' +
-      '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div></div></div>';
+      '<div class="xp-bar"><i data-ws-value="' + t.level.progress + '"></i></div></div></div>';
 
     $('sla-grid').innerHTML = [
       ['работ открыто', QUESTS.length - done], ['работ сдано', done], ['на отлично (≥95%)', ready],
@@ -91,17 +91,18 @@
         if (mst.pct >= 95) done++;
         return '<a class="quest-card" href="' + q.href + '">' +
           '<div class="quest-glyph">' + mascotSvg(q.glyph, 42) + '</div>' +
-          '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag linux">практическая работа</span></p>' +
-          '<div class="quest-progress"><i style="--p:' + (mst.pct / 100) + '"></i></div></div>' +
-          '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span></div></a>';
+          '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag">' + esc(q.format) + '</span></p>' +
+          '<div class="quest-progress"><i data-ws-value="' + mst.pct + '"></i></div></div>' +
+          '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span>' +
+          '<span class="flat-badge">' + esc(q.hours) + '</span></div></a>';
       }).join('');
       return '<div class="sprint-group"><div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(SPRINTS[sp].title) + '</h3>' +
         '<span class="sprint-meta">' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';
     }).join('');
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап бюро</strong>' +
-      '<p class="admin-hint">Пять спринтов от сложного документа до простого сайта. Приложения: LibreOffice и Microsoft Office, пара работ — с сетевыми инструментами.</p></div>' +
-      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>' + groups;
+      '<p class="admin-hint">Пять спринтов от сложного документа до простого сайта. Приложения: LibreOffice и Microsoft Office, пара работ — с сетевыми инструментами. Формат у всех десяти работ общий — практическая работа оператора ЭВМ на 4–5 часов.</p></div>' +
+      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i data-ws-value="' + overall + '"></i></div></div></div>' + groups;
   }
 
   function renderFeed(p) {

@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-03T19:27:22.032Z",
+  "generated": "2026-11-03T20:11:16.217Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 257,
+  "total": 253,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 41
+      "count": 34
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,28 @@
     },
     {
       "date": "2026-11-03",
-      "count": 9
+      "count": 12
     }
   ],
   "commits": [
+    {
+      "sha": "b51ca2c",
+      "title": "docs(agents): индекс собирается скриптом, нижняя граница 150 символов",
+      "date": "2026-11-03T20:08:50Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/b51ca2c572fae9391a9a44fd6d04a90e9b6f9468"
+    },
+    {
+      "sha": "590414f",
+      "title": "feat(shell): системная тема, прогресс без инлайн-стилей, поиск из HTML",
+      "date": "2026-11-03T20:02:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/590414faa37db80afaabb381caeac7edd82a9fa1"
+    },
+    {
+      "sha": "95f595b",
+      "title": "feat(stands): очередь U-04…U-06 — узкий кабинет, роадмап с форматом, порядок разделов",
+      "date": "2026-11-03T19:47:00Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/95f595b26d9498f5f36b43f85a35d2bfa78401e0"
+    },
     {
       "sha": "5455634",
       "title": "feat(stands): единый пропуск, метрики и роадмап во всех трёх вселенных",
@@ -469,24 +487,6 @@
       "title": "feat(index): активность наверх, плавные фильтры, компактный стек",
       "date": "2026-11-01T20:06:12Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/06719d9e54a257fd3c1bbf93136faea13baf2c78"
-    },
-    {
-      "sha": "ac68bc2",
-      "title": "feat(agent-plan): план в рамках сайта — agent-plan.html, ссылка в футере/карте, поиск и sitemap",
-      "date": "2026-11-01T20:03:05Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ac68bc2a789a2a2c7b2579d3f206a9eb98d2a1ce"
-    },
-    {
-      "sha": "a100e24",
-      "title": "feat(v2): компактный 2-колонный дашборд, кастомный скролл, анимация цикла и структурный рефреш",
-      "date": "2026-11-01T19:57:58Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a100e2418991355300e16aeb9f0250dac9d7b249"
-    },
-    {
-      "sha": "2632a98",
-      "title": "chore: обновлена регрессия под новую навигацию и индикатор",
-      "date": "2026-11-01T19:48:30Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2632a98d3a0f6928a71a99896311369348b735fe"
     }
   ]
 }

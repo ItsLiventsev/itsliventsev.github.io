@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="dark light">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>ДатаПолис · операции экипажа · общая работа сервисного центра</title>
 <meta name="description" content="Командные операции ДатаПолиса: смена дежурства NOC, war room по инциденту, аудит доступов, репетиция отката, день Service Desk парой. Чек-листы, составы, очки экипажа и награды за командную работу.">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
@@ -173,7 +173,7 @@
 <script defer src="../../assets/ops-engine.js?v=20261031bf"></script>
 <script defer src="../../assets/dom-kit.js?v=20261031bf"></script>
 <script defer src="../../assets/standings.js?v=20261031bf"></script>
-<script defer src="../../assets/ops-hub.js?v=20261102r1"></script>
+<script defer src="../../assets/ops-hub.js?v=20261103r1"></script>
 
 <script src="/assets/shell.js" defer></script>
 </body>

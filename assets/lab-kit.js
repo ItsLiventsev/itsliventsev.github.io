@@ -313,7 +313,7 @@
     /* ----------------------------- Сборка страницы ----------------------------- */
     var root = $('lab-root');
     root.innerHTML =
-      '<div class="lk-progress-strip"><div class="xp-bar"><i id="lk-progress-bar" style="--p:0"></i></div>' +
+      '<div class="lk-progress-strip"><div class="xp-bar"><i id="lk-progress-bar" data-ws-value="0"></i></div>' +
         '<span class="xp-meta" id="lk-progress-label">—</span>' +
         '<span class="flat-badge is-run" id="lk-sprint-chip"></span></div>' +
       briefHtml() + theoryHtml() + commandsHtml() + tasksHtml() + situationalHtml() + quizHtml() + reflectionHtml() + finishHtml();
