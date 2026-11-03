@@ -2288,22 +2288,6 @@ html.u-theme-switch *::after {
   hyphens: auto;
 }
 .kn-head-lede { margin: 0; max-width: 62ch; color: var(--u-ink-2); font-size: var(--u-fs-md); line-height: 1.55; }
-/* ——— Рубрики: номер, название, счётчик ——— */
-/* ——— Ведущий блок: крупная заметка + короткая полка обновлений ——— */
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--u-card-gap);
-  margin-block: var(--u-s5) var(--u-s6);
-}
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--u-s3);
-  padding-block: var(--u-s3);
-  border-block-start: 1px solid var(--u-line);
-  color: var(--u-ink);
-  text-decoration: none;
-}
-
 /* ——— Поток заметок: сетка из 12 колонок, карточки разных размеров ——— */
 .kn-stream {
   display: grid;
@@ -2677,19 +2661,7 @@ html.u-theme-switch *::after {
   .kn-facts { grid-template-columns: minmax(0, 1fr); gap: var(--u-s1); }
   .kn-facts dd + dt { margin-block-start: var(--u-s2); }
   .kn-topic-row { grid-template-columns: 32px minmax(0, 1fr); }
-  /* Номер рубрики: та же плашка, что у индексов каталога, но внутри строки-ссылки. */
-.kn-zone-num {
-  display: inline-grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--u-r-sm);
-  background: var(--u-surface-sunk);
-  color: var(--u-muted);
-  font-family: var(--u-font-mono);
-  font-size: var(--u-fs-2xs);
-}
-.kn-topic-row .kn-zone-count { grid-column: 2; }
+  .kn-topic-row .kn-zone-count { grid-column: 2; }
 }
 
 /* ——— Движение: только тень и картинка, всё под reduced-motion ——— */
