@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>systemd: юниты, цели и порядок загрузки · itsliventsev</title>
+<meta name="description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="systemd,журналы,диагностика">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-systemd.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="systemd: юниты, цели и порядок загрузки · itsliventsev">
+  <meta property="og:description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-systemd.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="systemd">
+  <meta property="article:tag" content="журналы">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="systemd: юниты, цели и порядок загрузки · itsliventsev">
+  <meta name="twitter:description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"systemd: юниты, цели и порядок загрузки","description":"systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.","url":"https://itsliventsev.github.io/blog/kn-systemd.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-systemd.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, журналы, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"systemd: юниты, цели и порядок загрузки","item":"https://itsliventsev.github.io/blog/kn-systemd.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>systemd: юниты, цели и порядок загрузки</h1>
+        <p class="kn-def">systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>«Почему сервис не поднялся после перезагрузки» — вопрос, который systemd решает лучше старых init-скриптов, но и путаницы добавляет больше. Причина в том, что порядок задаётся не файлом, а графом.</p>
+        <h2>Юнит, цель и зависимости</h2>
+        <p>Юнит — это файл с секциями <code>[Unit]</code>, <code>[Service]</code>, <code>[Install]</code>. Цель (target) — именованная точка, к которой система стремится при загрузке: <code>multi-user.target</code> — обычный сервер без графики, <code>graphical.target</code> — с ним.</p>
+        <p>Зависимости бывают двух видов, и их постоянно путают:</p>
+        <ul><li><code>Wants=</code> — «было бы хорошо». Если зависимость не стартует, всё равно продолжаем.</li><li><code>Requires=</code> — «без этого нельзя». Зависимость упала — юнит не запускается.</li><li><code>After=</code> — только порядок. Само по себе ничего не гарантирует: если юнит не в списке зависимостей, <code>After</code> может быть проигнорирован.</li></ul>
+        <p>Практический пример: сервису нужен настроенный адрес на интерфейсе. В юните пишут <code>After=network.target</code> — и получают падение при загрузке, потому что <code>network.target</code> означает «сетевая подсистема инициализирована», а не «адрес назначен». Правильно — <code>network-online.target</code> плюс <code>Wants=network-online.target</code>.</p>
+        <h2>enable не равно start</h2>
+        <ul><li><code>systemctl start nginx</code> — запустить сейчас.</li><li><code>systemctl enable nginx</code> — включить автозапуск при загрузке (создаёт симлинк в <code>wants/</code> целевого юнита).</li><li><code>systemctl enable --now nginx</code> — и то, и другое.</li></ul>
+        <p>Ошибка «включил, а после перезагрузки не работает» почти всегда означает, что сделан только <code>start</code> (или только <code>enable</code>, а сервис падает при старте — тогда смотреть <code>journalctl</code>).</p>
+        <h2>Как переопределить юнит, не ломая пакет</h2>
+        <p>Правка файлов в <code>/usr/lib/systemd/system</code> — плохая идея: обновление пакета перезапишет изменения. Правильно — drop-in:</p>
+        <pre><code>systemctl edit nginx          # создаёт /etc/systemd/system/nginx.service.d/override.conf
+systemctl daemon-reload       # обязательно после любой правки
+systemctl restart nginx</code></pre>
+        <p><code>daemon-reload</code> — самая забываемая команда. Без неё systemd продолжает работать со старым описанием: вы правите лимиты памяти, а сервис их не видит.</p>
+        <h2>Три команды, которые отвечают почти всегда</h2>
+        <pre><code>systemctl status nginx --no-pager -l    # состояние, последние строки, код выхода
+journalctl -u nginx -n 100 --no-pager   # её журнал
+systemd-analyze blame                   # кто тормозил загрузку</code></pre>
+        <p><code>systemctl status</code> показывает и причину падения: <code>status=203/EXEC</code> — нет файла или прав, <code>status=1/FAILURE</code> — упало само приложение, <code>start-limit-hit</code> — слишком много рестартов за короткое время (помогает <code>systemctl reset-failed</code>).</p>
+        <h2>Таймеры вместо cron</h2>
+        <p>Таймер systemd умеет то, чего не умеет cron: не запускать задачу, если прошлая ещё идёт, писать в журнал, повторять при неудаче. Описание состоит из двух юнитов — <code>.service</code> с самой задачей и <code>.timer</code> с расписанием:</p>
+        <pre><code># backup.timer
+[Timer]
+OnCalendar=daily
+Persistent=true</code></pre>
+        <p><code>Persistent=true</code> означает «если машина была выключена в момент запуска, выполнить при следующем включении» — важная деталь для бэкапов, о которых <a class="kn-ref" href="/blog/kn-backups.html">отдельная заметка</a>.</p>
+        <h2>Что помнить</h2>
+        <ol><li>После любой правки — <code>daemon-reload</code>.</li><li><code>After</code> без <code>Wants</code>/<code>Requires</code> часто не работает так, как ожидают.</li><li>Порядок в файле не имеет значения: важны только директивы.</li><li>Логи службы — в journald; про уровни и ротацию — в <a class="kn-ref" href="/blog/kn-logs.html">заметке про журналы</a>.</li><li>Автоматизировать управление службами лучше модулем <code>ansible.builtin.service</code>, а не <code>shell</code> — см. <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>.</li></ol>
+        <dl class="kn-terms"><div class="kn-term"><dt>unit</dt><dd>описание объекта — службы, точки монтирования, таймера, сокета</dd></div><div class="kn-term"><dt>target</dt><dd>группа юнитов, аналог уровня выполнения; multi-user.target — обычная загрузка</dd></div><div class="kn-term"><dt>Wants</dt><dd>мягкая зависимость: если юнит не поднялся, загрузка продолжается</dd></div><div class="kn-term"><dt>Requires</dt><dd>жёсткая зависимость: без него юнит не стартует</dd></div><div class="kn-term"><dt>After</dt><dd>только порядок, без зависимости: «запускай после», но не «требуй»</dd></div></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+          <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-bash.html">Конвейер: одна строка вместо цикла</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logs.html">Журналы: уровни, ротация и лимит на диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html" target="_blank" rel="noopener">systemd.unit(5): юниты, зависимости, цели</a><small>freedesktop.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.freedesktop.org/software/systemd/man/latest/systemctl.html" target="_blank" rel="noopener">systemctl(1): команды управления службами</a><small>freedesktop.org</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.freedesktop.org/software/systemd/man/latest/journalctl.html" target="_blank" rel="noopener">journalctl(1): фильтры по юниту, времени и приоритету</a><small>freedesktop.org</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута →</a><a href="/blog/kn-ssh.html">← SSH: ключ вместо пароля и что закрыть в sshd</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 19 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-systemd"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#systemd">systemd</a></li><li><a href="/blog/topics.html#журналы">журналы</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 9 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

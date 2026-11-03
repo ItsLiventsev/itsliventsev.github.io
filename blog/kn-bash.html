@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Конвейер: одна строка вместо цикла · itsliventsev</title>
+<meta name="description" content="Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; `set -euo pipefail` делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="shell,журналы,автоматизация">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-bash.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Конвейер: одна строка вместо цикла · itsliventsev">
+  <meta property="og:description" content="Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; `set -euo pipefail` делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-bash.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="shell">
+  <meta property="article:tag" content="журналы">
+  <meta property="article:tag" content="автоматизация">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Конвейер: одна строка вместо цикла · itsliventsev">
+  <meta name="twitter:description" content="Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; `set -euo pipefail` делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Конвейер: одна строка вместо цикла","description":"Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; `set -euo pipefail` делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.","url":"https://itsliventsev.github.io/blog/kn-bash.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-bash.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"shell, журналы, автоматизация"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Конвейер: одна строка вместо цикла","item":"https://itsliventsev.github.io/blog/kn-bash.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Конвейер: одна строка вместо цикла</h1>
+        <p class="kn-def">Конвейер передаёт поток, а не файл, поэтому каждая команда начинает работу раньше, чем предыдущая закончила; <code>set -euo pipefail</code> делает ошибки видимыми, а кавычки предотвращают половину сюрпризов.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Администраторская работа — это на 80% разбор текста: логов, конфигов, вывода команд. Оболочка даёт для этого язык, который не надо компилировать, и конвейер, который не надо объяснять.</p>
+        <h2>Конвейер — это поток</h2>
+        <p><code>|</code> не сохраняет промежуточный результат на диск: он соединяет stdout первой команды со stdin второй через буфер в памяти. Команды работают одновременно, поэтому <code>tail -f</code> в конвейере ведёт себя как ожидается — строки появляются по мере поступления.</p>
+        <pre><code>awk &#39;{print $1}&#39; access.log \
+  | grep -v &#39;^192.0.2.&#39; \
+  | sort | uniq -c | sort -rn | head -5</code></pre>
+        <p>Разбор: взять первый столбец (IP), убрать внутренние адреса, отсортировать, посчитать повторы, отсортировать по частоте, показать пять первых. Пять инструментов, каждый делает одно.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Команда</th><th scope="col">Работает с</th><th scope="col">Типичная задача</th></tr></thead><tbody><tr><th scope="row">grep</th><td>строками</td><td>отфильтровать по шаблону</td></tr><tr><th scope="row">awk</th><td>полями</td><td>взять колонку и посчитать</td></tr><tr><th scope="row">sed</th><td>потоком</td><td>заменить или вырезать</td></tr><tr><th scope="row">sort / uniq</th><td>порядком</td><td>сгруппировать и посчитать</td></tr><tr><th scope="row">xargs</th><td>аргументами</td><td>применить к списку</td></tr></tbody><caption>Каждая команда делает одно и передаёт результат дальше — так строка остаётся читаемой через месяц.</caption></table></div>
+        <h2>Три строки в начале любого скрипта</h2>
+        <pre><code>set -euo pipefail
+IFS=$&#39;\n\t&#39;</code></pre>
+        <ul><li><code>-e</code> — выйти при первой ошибке вместо того, чтобы идти дальше «как будто ничего».</li><li><code>-u</code> — считать обращение к необъявленной переменной ошибкой (спасает от <code>rm -rf &quot;$DIR/&quot;</code> с пустой переменной).</li><li><code>pipefail</code> — код возврата конвейера = код последней <strong>упавшей</strong> команды. Без него <code>grep ... | head</code> вернёт 0, даже если grep упал.</li></ul>
+        <p><code>IFS</code> переопределяют по умолчанию в новых строках и табах: иначе <code>for f in $(ls)</code> развалится на файлах с пробелами.</p>
+        <h2>Кавычки: где именно ломается</h2>
+        <p>Правило простое: <strong>переменные — в двойных, шаблоны и литералы — в одинарных, «сырой» текст — через <code>--</code></strong>.</p>
+        <pre><code>find . -name &quot;*.log&quot; -mtime +7 -print0 | xargs -0 rm -v
+grep -- &quot;-o&quot; config.txt      # ищем строку -o, а не просим опцию</code></pre>
+        <p>Без <code>-print0 | xargs -0</code> файл с пробелом в имени разрежется на два аргумента. Без <code>--</code> строка, начинающаяся с дефиса, будет принята за опцию.</p>
+        <h2>Когда конвейер медленный</h2>
+        <p><code>xargs -P 4</code> запускает до четырёх процессов параллельно — на сетевых операциях это даёт кратный выигрыш:</p>
+        <pre><code>cat hosts.txt | xargs -P 8 -I{} ssh -o BatchMode=yes {} &#39;uptime&#39;</code></pre>
+        <p>Осторожно с <code>-I{}</code>: он неявно ставит <code>-L 1</code> и уменьшает порцию аргументов, что медленнее, но безопаснее.</p>
+        <p><code>tee</code> разветвляет поток: одна копия дальше по конвейеру, вторая — в файл. Удобно, когда нужно и посмотреть, и сохранить:</p>
+        <pre><code>./upgrade.sh 2&gt;&amp;1 | tee /var/log/upgrade-$(date +%F).log</code></pre>
+        <h2>Что писать в скрипте, а что оставить в конвейере</h2>
+        <p>Конвейер — для разового вопроса. Скрипт — когда операцию повторить придётся: с <code>set -euo pipefail</code>, проверкой аргументов и кодом возврата. Но если операция меняет состояние десяти серверов, правильный инструмент — не bash, а <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>, потому что он умеет идемпотентность и отчёт по каждому хосту.</p>
+        <p>Типичная связка: конвейером вы разбираете <a class="kn-ref" href="/blog/kn-logs.html">журналы</a> и находите проблему, а исправление оформляете плейбуком.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+          <li><a href="/blog/kn-systemd.html"><strong>systemd: юниты, цели и порядок загрузки</strong><span>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-logs.html">Журналы: уровни, ротация и лимит на диск</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.gnu.org/software/bash/manual/bash.html" target="_blank" rel="noopener">bash(1): опции оболочки, pipefail, quoting</a><small>GNU Bash Reference Manual</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html" target="_blank" rel="noopener">POSIX Shell Command Language: конвейеры и списки</a><small>The Open Group</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.gnu.org/software/gawk/manual/gawk.html" target="_blank" rel="noopener">GNU awk: поля, шаблоны и действия</a><small>GNU</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-dhcp.html">DHCP: аренда адреса на четыре шага →</a><a href="/blog/kn-backups.html">← Бэкап: 3-2-1, RPO и проверка восстановлением</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 03 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-bash"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#shell">shell</a></li><li><a href="/blog/topics.html#журналы">журналы</a></li><li><a href="/blog/topics.html#автоматизация">автоматизация</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

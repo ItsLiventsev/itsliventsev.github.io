@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Таблица маршрутов: как пакет выбирает выход · itsliventsev</title>
+<meta name="description" content="Маршрутизатор не «думает», он сравнивает префиксы: побеждает самый длинный совпавший, а маршрут по умолчанию — это префикс нулевой длины, который проигрывает всем остальным.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="маршрутизация,vlan,диагностика">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-routing.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Таблица маршрутов: как пакет выбирает выход · itsliventsev">
+  <meta property="og:description" content="Маршрутизатор не «думает», он сравнивает префиксы: побеждает самый длинный совпавший, а маршрут по умолчанию — это префикс нулевой длины, который проигрывает всем остальным.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-routing.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="маршрутизация">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Таблица маршрутов: как пакет выбирает выход · itsliventsev">
+  <meta name="twitter:description" content="Маршрутизатор не «думает», он сравнивает префиксы: побеждает самый длинный совпавший, а маршрут по умолчанию — это префикс нулевой длины, который проигрывает всем остальным.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Таблица маршрутов: как пакет выбирает выход","description":"Маршрутизатор не «думает», он сравнивает префиксы: побеждает самый длинный совпавший, а маршрут по умолчанию — это префикс нулевой длины, который проигрывает всем остальным.","url":"https://itsliventsev.github.io/blog/kn-routing.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-routing.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"маршрутизация, vlan, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Таблица маршрутов: как пакет выбирает выход","item":"https://itsliventsev.github.io/blog/kn-routing.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Таблица маршрутов: как пакет выбирает выход</h1>
+        <p class="kn-def">Маршрутизатор не «думает», он сравнивает префиксы: побеждает самый длинный совпавший, а маршрут по умолчанию — это префикс нулевой длины, который проигрывает всем остальным.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>У маршрутизации плохая репутация из-за слова «маршрут»: кажется, что где-то есть карта и кто-то выбирает дорогу. На самом деле нет карты, есть таблица и одно правило: из всех строк, чей префикс совпал с адресом назначения, берётся самая длинная маска. Всё.</p>
+        <h2>Почему /24 сильнее /8</h2>
+        <p>Пусть в таблице есть <code>10.0.0.0/8 via 192.0.2.2</code> и <code>10.20.0.0/16 via 192.0.2.3</code>. Пакет на <code>10.20.4.7</code> совпадает с обеими строками. Побеждает /16: он описывает более узкую область, то есть, вероятно, более точное знание. Именно поэтому маршрут по умолчанию — это <code>0.0.0.0/0</code>: он совпадает со всем и проигрывает любому конкретному префиксу.</p>
+        <p>Отсюда типичная ошибка «добавил маршрут, а он не работает»: маршрут добавлен, но более длинный префикс уже существует и ведёт в другое место. Смотреть надо не на наличие строки, а на результат выбора.</p>
+        <pre><code>ip route get 10.20.4.7
+# 10.20.4.7 via 192.0.2.3 dev eth0 src 10.20.0.1 uid 0</code></pre>
+        <p>Эта команда — половина диагностики маршрутизации. Она прогоняет настоящий алгоритм ядра, включая policy routing, и сразу показывает и next-hop, и интерфейс, и source-адрес.</p>
+        <h2>Метрика и административное расстояние</h2>
+        <p>Если два маршрута одинаковой длины, выбирается тот, у которого меньше метрика — она показывает «стоимость» пути. В Linux метрика задаётся вручную или наследуется от протокола (OSPF, BGP). В Cisco к этому добавляется административное расстояние: статический маршрут (1) предпочтительнее OSPF (110), OSPF — предпочтительнее RIP (120). Логика одна: «доверие к источнику знания», а не «качество линии».</p>
+        <p>Равные маршруты с равной метрикой включают ECMP: пакеты распределяются по нескольким next-hop, обычно по хешу от адресов и портов. Отсюда два следствия: одно TCP-соединение всегда идёт по одному пути (порядок сохраняется), а разные соединения могут идти разными — и попадать в разные файрволы, если те не синхронизированы.</p>
+        <h2>Когда одной таблицы мало</h2>
+        <p>Policy routing отвечает на вопрос «маршрут для кого», а не «маршрут куда»:</p>
+        <pre><code>ip rule add from 10.20.0.0/24 table 100
+ip route add default via 192.0.2.9 table 100
+ip rule show</code></pre>
+        <p>Так делают, когда два провайдера и нужно, чтобы ответы уходили через тот же канал, откуда пришёл запрос. Без этого получается асимметрия: пакет ушёл через первого, ответ пришёл через второго, и stateful-файрвол его спокойно дропнул как «неизвестное соединение».</p>
+        <p>Второй смежный механизм — <code>rp_filter</code> в ядре. Он выбрасывает пакеты, пришедшие не с того интерфейса, с которого ушёл бы ответ. На симметричной сети это защита от подмены адреса, на многосвязной — источник загадочных потерь. Значение <code>2</code> (loose) обычно и есть компромисс.</p>
+        <h2>Что проверить, когда «не пингуется»</h2>
+        <ol><li><code>ip -br addr</code> — адрес и маска на месте? Маска важнее, чем кажется: /24 вместо /25 даёт «половину сети вижу, половину нет».</li><li><code>ip route get &lt;цель&gt;</code> — какой выход выбран фактически.</li><li><code>ip neigh show &lt;next-hop&gt;</code> — ARP разрешился? Если состояние <code>FAILED</code> или <code>INCOMPLETE</code>, проблема на L2, и дальше идти в <a class="kn-ref" href="/blog/kn-vlan.html">VLAN</a> бессмысленно.</li><li><code>sysctl net.ipv4.ip_forward</code> — если хост должен быть роутером, а forwarding выключен, он просто не пересылает пакеты и молчит.</li><li><code>tcpdump -ni any icmp</code> — уходит ли ICMP-ответ вообще.</li></ol>
+        <h2>Про туннели</h2>
+        <p>Маршрут может указывать не на физический интерфейс, а на туннель. Тогда к выбору маршрута добавляется вопрос MTU: пакет, который влез в 1500 на физическом интерфейсе, после инкапсуляции может вырасти. Это уже не про таблицу, а про <a class="kn-ref" href="/blog/kn-gre.html">размер пакета в туннеле</a>.</p>
+        <p>И общий принцип, который экономит часы: маршрутизация детерминирована. Если пакет пошёл не туда, в таблице есть строка, которая это объясняет. Задача администратора — не «перезагрузить маршрутизатор», а найти эту строку. Как это делать по слоям — в <a class="kn-ref" href="/blog/kn-troubleshoot.html">порядке диагностики</a>.</p>
+        <div class="kn-kanban"><div class="kn-lane"><p class="kn-lane-head">пришёл пакет<em>2</em></p><div class="kn-tile"><strong>адрес назначения</strong>сравнивается со всеми префиксами</div><div class="kn-tile"><strong>longest match</strong>/24 выигрывает у /8</div></div><div class="kn-lane"><p class="kn-lane-head">выбрали маршрут<em>2</em></p><div class="kn-tile" data-state="ok"><strong>next-hop</strong>нужен ARP или neighbor</div><div class="kn-tile"><strong>прямо подключён</strong>если префикс = адрес на интерфейсе</div></div><div class="kn-lane"><p class="kn-lane-head">не нашли<em>2</em></p><div class="kn-tile"><strong>default</strong>0.0.0.0/0 — последний шанс</div><div class="kn-tile" data-state="danger"><strong>нет и его</strong>ICMP network unreachable</div></div></div>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, которые ломают передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, которые ломают передачу</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li><li><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://man7.org/linux/man-pages/man8/ip-route.8.html" target="_blank" rel="noopener">ip-route(8): таблицы маршрутизации, метрики, policy routing</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://docs.kernel.org/networking/ip-sysctl.html" target="_blank" rel="noopener">ip-sysctl: forwarding, rp_filter, ICMP-поведение ядра</a><small>The Linux Kernel documentation</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc1812" target="_blank" rel="noopener">RFC 1812: Requirements for IP Version 4 Routers</a><small>IETF</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd →</a><a href="/blog/kn-replication.html">← Репликация: копия отстаёт, и это нормально</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 17 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-routing"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#маршрутизация">маршрутизация</a></li><li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 7 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

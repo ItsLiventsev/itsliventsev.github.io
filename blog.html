@@ -27,14 +27,14 @@
   <meta property="og:title" content="Заметки · itsliventsev">
   <meta property="og:description" content="База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/notes-graph.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Заметки · itsliventsev">
   <meta name="twitter:description" content="База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/notes-graph.webp">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Заметки","description":"База знаний: короткие связанные заметки о типографике, токенах, композиции, движении, доступности и данных. У каждой записи — рубрика, теги, соседние заметки и источники с датой обращения.","url":"https://itsliventsev.github.io/blog.html","inLanguage":"ru-RU","isPartOf":{"@type":"WebSite","name":"itsliventsev","url":"https://itsliventsev.github.io/"}}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -45,16 +45,16 @@
   <div class="kn-head">
     <p class="ui-eyebrow">база знаний · лента</p>
     <h1>Заметки</h1>
-    <p class="kn-head-lede">Рабочий блокнот: короткие записи о дизайне, типографике и данных, которые проверены на живом сайте. Каждая заметка ссылается на соседние — из связей собирается база знаний, а не архив страниц.</p>
+    <p class="kn-head-lede">Рабочий блокнот сетевого администратора: как устроены протоколы и службы, что показывает диагностика, как ведут себя базы данных и что делать, когда что-то отказывает. Каждая заметка ссылается на соседние — из связей собирается база знаний, а не архив страниц.</p>
     <div class="ui-pagehead-meta">
-      <span><b>13</b> заметок</span>
+      <span><b>23</b> заметки</span>
       <span>6 рубрик</span>
-      <span>44 связи</span>
-      <span>обновлено 03.11.2026</span>
+      <span>78 связей</span>
+      <span>обновлено 04.11.2026</span>
     </div>
   </div>
 
-    <div class="kn-group-head"><h2>Все записи</h2><span>от новых к старым · 13 заметок</span></div>
+    <div class="kn-group-head"><h2>Все записи</h2><span>от новых к старым · 23 заметки</span></div>
 
   <div class="catalog-toolbar">
     <div class="catalog-search" data-catalog-search hidden>
@@ -66,142 +66,233 @@
       <button type="button" data-catalog-clear hidden>Очистить</button>
     </div>
     <div class="kn-rail-row">
-      <div class="kn-filterbar" data-kn-filters role="group" aria-label="Рубрика"><button class="catalog-filter" type="button" aria-pressed="true" data-kn-zone="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="typography">Типографика</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="tokens">Токены</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="layout">Композиция</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="motion">Движение</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="accessibility">Доступность</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="data">Данные</button></div>
+      <div class="kn-filterbar" data-kn-filters role="group" aria-label="Рубрика"><button class="catalog-filter" type="button" aria-pressed="true" data-kn-zone="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="network">Сети</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="linux">Linux и службы</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="databases">Базы данных</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="storage">Хранение и отказоустойчивость</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="ops">Эксплуатация</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="practice">Практика и обучение</button></div>
       <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/blog/graph.html">граф связей</a><a href="/feed.xml">RSS</a></nav>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
 
   <div class="kn-stream" data-kn-stream>
-      <a class="kn-card kn-card--wide" data-kn-zone="layout" href="/blog/setka-i-plotnost.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/bento.webp" alt="иллюстрация к заметке: карточки разного размера на сетке" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-troubleshoot.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-troubleshoot.webp" alt="схема: пять уровней диагностики от линка до приложения с командами" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Композиция</span>
-          <span class="kn-card-title">Сетка 12 колонок и поток карточек разных размеров</span>
-          <span class="kn-card-excerpt">Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</span>
-          <span class="kn-card-meta"><time datetime="2026-11-01">01.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">Диагностика сети: снизу вверх, а не наугад</span>
+          <span class="kn-card-excerpt">Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="data" href="/blog/kak-ustroena-baza-znaniy.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/notes-graph.webp" alt="иллюстрация к заметке: карточки, связанные линиями" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-ansible.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ansible.webp" alt="схема: два запуска плейбука с разным числом изменений и список модулей" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Данные</span>
-          <span class="kn-card-title">Как устроена база знаний</span>
-          <span class="kn-card-excerpt">Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.</span>
-          <span class="kn-card-meta"><time datetime="2026-11-03">03.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Эксплуатация</span>
+          <span class="kn-card-title">Ansible: плейбук, который можно запускать дважды</span>
+          <span class="kn-card-excerpt">Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="data" href="/blog/tablicy-kak-most.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/table.webp" alt="иллюстрация к заметке: таблица с тонкими линиями и подписью" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-backups.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-backups.webp" alt="схема: правило трёх копий, двух носителей и одной площадки" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Данные</span>
-          <span class="kn-card-title">Таблица как мост между текстом и решением</span>
-          <span class="kn-card-excerpt">Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</span>
-          <span class="kn-card-meta"><time datetime="2026-11-02">02.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Хранение и отказоустойчивость</span>
+          <span class="kn-card-title">Бэкап: 3-2-1, RPO и проверка восстановлением</span>
+          <span class="kn-card-excerpt">Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--text" data-kn-zone="data" href="/blog/karta-temy.html">
-        
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-bash.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-bash.webp" alt="схема: конвейер из пяти команд и опции оболочки" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Данные</span>
-          <span class="kn-card-title">Карта темы: как из десяти заметок собрать одну мысль</span>
-          <span class="kn-card-excerpt">Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-30">30.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-title">Конвейер: одна строка вместо цикла</span>
+          <span class="kn-card-excerpt">grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="typography" href="/blog/merka-stroki.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/measure.webp" alt="иллюстрация к заметке: три колонки текста разной ширины" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-dhcp.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-dhcp.webp" alt="схема: четыре шага DORA и таймеры продления аренды" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Типографика</span>
-          <span class="kn-card-title">Мера строки: 68 знаков против пустоты</span>
-          <span class="kn-card-excerpt">Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-29">29.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">DHCP: аренда адреса на четыре шага</span>
+          <span class="kn-card-excerpt">Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--half kn-card--text" data-kn-zone="typography" href="/blog/dve-garnitury.html">
-        
+      <a class="kn-card kn-card--half" data-kn-zone="network" href="/blog/kn-dns.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-dns.webp" alt="схема: цепочка от клиента через резолвер и корневые серверы к авторитетной зоне" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Типографика</span>
-          <span class="kn-card-title">Две гарнитуры на страницу — и ни одной больше</span>
-          <span class="kn-card-excerpt">Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-28">28.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">DNS: кеш, TTL и два резолвера</span>
+          <span class="kn-card-excerpt">Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="tokens" href="/blog/tokeny-tsveta.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/tokens.webp" alt="иллюстрация к заметке: образцы цвета на бумаге" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-gre.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-gre.webp" alt="схема: пакет до и после инкапсуляции GRE с ростом на 24 байта" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Токены</span>
-          <span class="kn-card-title">Цвет живёт в токенах, а не в компонентах</span>
-          <span class="kn-card-excerpt">Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-27">27.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">Туннель и MTU: 24 байта, которые ломают передачу</span>
+          <span class="kn-card-excerpt">Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--text" data-kn-zone="layout" href="/blog/tablica-i-eho-zebra.html">
-        
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-indexes.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-indexes.webp" alt="схема: дерево индекса с корнем и листьями, ведущими к строкам таблицы" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Композиция</span>
-          <span class="kn-card-title">Зебра, границы и плотность внутри таблицы</span>
-          <span class="kn-card-excerpt">Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-26">26.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-title">Индексы и планы: почему запрос медленный</span>
+          <span class="kn-card-excerpt">B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="tokens" href="/blog/shkala-otstupov.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/spacing-scale.webp" alt="иллюстрация к заметке: шкала отступов из полос разной ширины" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-ipsec.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ipsec.webp" alt="схема: две фазы IPsec с протоколами и портами" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Токены</span>
-          <span class="kn-card-title">Одна шкала отступов вместо двадцати решений</span>
-          <span class="kn-card-excerpt">Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</span>
-          <span class="kn-card-meta"><time datetime="2026-10-24">24.10.2026</time><span aria-hidden="true">·</span><span>5 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</span>
+          <span class="kn-card-excerpt">IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="accessibility" href="/blog/fokus-i-klaviatura.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/accessibility.webp" alt="иллюстрация к заметке: кольцо фокуса вокруг кнопки" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-logs.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-logs.webp" alt="схема: уровни журналирования и настройки ротации" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Доступность</span>
-          <span class="kn-card-title">Видимый фокус — не украшение, а навигация</span>
-          <span class="kn-card-excerpt">Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-22">22.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-title">Журналы: уровни, ротация и лимит на диск</span>
+          <span class="kn-card-excerpt">Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="accessibility" href="/blog/kontrast-aa.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/typography.webp" alt="иллюстрация к заметке: страница с мерой строки и линейкой" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-mtu.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-mtu.webp" alt="схема: четыре шага диагностики MTU от ping до смены размера" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Доступность</span>
-          <span class="kn-card-title">Контраст AA: 4.5 к 1 и что за этим стоит</span>
-          <span class="kn-card-excerpt">Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-21">21.10.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">MTU и PMTU: почему ping идёт, а скачивание нет</span>
+          <span class="kn-card-excerpt">Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--flat" data-kn-zone="motion" href="/blog/dvizhenie-120-320.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/motion.webp" alt="иллюстрация к заметке: кривая ускорения на сетке" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--flat" data-kn-zone="databases" href="/blog/kn-postgres.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-postgres.webp" alt="схема: версии одной строки с номерами транзакций и порог заворота XID" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Движение</span>
-          <span class="kn-card-title">Движение 120–320 мс: когда анимация объясняет</span>
-          <span class="kn-card-excerpt">Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-18">18.10.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-title">PostgreSQL: версии строк, VACUUM и заворот XID</span>
+          <span class="kn-card-excerpt">xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--flat" data-kn-zone="layout" href="/blog/srezy-i-razrezy.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/srez.webp" alt="иллюстрация к заметке: два состояния одного элемента рядом" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--wide" data-kn-zone="practice" href="/blog/kn-practice.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-practice.webp" alt="схема: три уровня освоения от знания к опыту и критерии практики" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Композиция</span>
-          <span class="kn-card-title">Срезы и разрезы</span>
-          <span class="kn-card-excerpt">Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.</span>
-          <span class="kn-card-meta"><time datetime="2026-10-16">16.10.2026</time><span aria-hidden="true">·</span><span>4 мин</span><span class="kn-ai">ии-структура</span></span>
+          <span class="kn-card-zone">Практика и обучение</span>
+          <span class="kn-card-title">Практикоориентированное обучение: навык проверяют на стенде</span>
+          <span class="kn-card-excerpt">Три уровня освоения, чем демонстрационный экзамен отличается от зачёта, зачем нужна воспроизводимость стенда и как разбирать ошибки после защиты.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="practice" href="/blog/kn-project.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-project.webp" alt="схема: два проекта с их содержанием и критерием проверки" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Практика и обучение</span>
+          <span class="kn-card-title">Проект как кейс: навигация корпуса и киберспорт</span>
+          <span class="kn-card-excerpt">Семь типов знаков в коридоре, 108 часов программы, критерий приёмки, который пришлось формулировать самому, и честный разбор того, что не получилось.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-prometheus.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-prometheus.webp" alt="схема: четыре типа метрик и примеры хорошего и плохого алерта" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Эксплуатация</span>
+          <span class="kn-card-title">Prometheus: четыре типа метрик и один хороший алерт</span>
+          <span class="kn-card-excerpt">rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-raid.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-raid.webp" alt="схема: раскладка блоков и паритета по пяти дискам RAID 5" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Хранение и отказоустойчивость</span>
+          <span class="kn-card-title">RAID: паритет — это арифметика, а не магия</span>
+          <span class="kn-card-excerpt">Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-replication.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-replication.webp" alt="схема: основной сервер, реплика с отставанием и два режима синхронизации" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-title">Репликация: копия отстаёт, и это нормально</span>
+          <span class="kn-card-excerpt">Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--half" data-kn-zone="network" href="/blog/kn-routing.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-routing.webp" alt="схема: узел с таблицей маршрутов и выбранным путём до сети" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">Таблица маршрутов: как пакет выбирает выход</span>
+          <span class="kn-card-excerpt">Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-ssh.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ssh.webp" alt="схема: сравнение входа по паролю и по ключу с настройками sshd" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-title">SSH: ключ вместо пароля и что закрыть в sshd</span>
+          <span class="kn-card-excerpt">ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-systemd.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-systemd.webp" alt="схема: цель загрузки и три юнита с командами управления" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-title">systemd: юниты, цели и порядок загрузки</span>
+          <span class="kn-card-excerpt">unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-tcp.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-tcp.webp" alt="схема: рукопожатие TCP и состояние TIME-WAIT между клиентом и сервером" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">TCP: три пакета, четыре состояния и одна минута</span>
+          <span class="kn-card-excerpt">Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-tx.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-tx.webp" alt="схема: аномалии чтения и четыре уровня изоляции транзакций" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-title">Транзакции: уровни изоляции и три аномалии</span>
+          <span class="kn-card-excerpt">Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-vlan.html">
+        <span class="kn-card-cover"><img src="/assets/img/notes/kn-vlan.webp" alt="схема: магистральный порт с несколькими VLAN и три порта доступа" width="960" height="540" loading="lazy" decoding="async"></span>
+        <span class="kn-card-body">
+          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-title">VLAN и 802.1Q: один провод, много сетей</span>
+          <span class="kn-card-excerpt">Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
   </div>
   <p class="kn-empty" data-kn-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
 
-  <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
+  <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот администратора: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
   <!-- KN:AUTO:END -->
 
   <noscript>
     <div class="ui-callout"><strong>Лента собрана статически.</strong> Все заметки доступны по ссылкам:
-      <a href="/blog/kak-ustroena-baza-znaniy.html">как устроена база знаний</a>,
-      <a href="/blog/setka-i-plotnost.html">сетка и плотность</a>,
-      <a href="/blog/merka-stroki.html">мера строки</a>,
-      <a href="/blog/tokeny-tsveta.html">цвет в токенах</a>,
+      <a href="/blog/kn-vlan.html">VLAN и 802.1Q</a>,
+      <a href="/blog/kn-tcp.html">TCP и TIME-WAIT</a>,
+      <a href="/blog/kn-ssh.html">SSH по ключу</a>,
+      <a href="/blog/kn-postgres.html">PostgreSQL и VACUUM</a>,
+      <a href="/blog/kn-raid.html">уровни RAID</a>,
       <a href="/blog/topics.html">рубрики</a> и <a href="/blog/graph.html">граф связей</a>.
     </div>
   </noscript>

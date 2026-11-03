@@ -7,134 +7,234 @@
     <language>ru-RU</language>
     <atom:link href="https://itsliventsev.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Как устроена база знаний</title>
-      <link>https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</guid>
-      <pubDate>Tue, 03 Nov 2026 12:00:00 GMT</pubDate>
-      <category>граф</category>
-      <category>статика</category>
-      <category>карточки</category>
-      <description>Метаданные, перекрёстные ссылки и генератор: почему заметка без связей — просто страница, а заметка со связями — уже база.</description>
+      <title>Ansible: плейбук, который можно запускать дважды</title>
+      <link>https://itsliventsev.github.io/blog/kn-ansible.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ansible.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>автоматизация</category>
+      <category>shell</category>
+      <category>systemd</category>
+      <description>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</description>
     </item>
     <item>
-      <title>Таблица как мост между текстом и решением</title>
-      <link>https://itsliventsev.github.io/blog/tablicy-kak-most.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablicy-kak-most.html</guid>
-      <pubDate>Mon, 02 Nov 2026 12:00:00 GMT</pubDate>
-      <category>таблицы</category>
-      <category>граф</category>
-      <category>карточки</category>
-      <description>Одна ось сравнения, зебра только на поверхности, подпись снизу. Таблица отвечает на вопрос, а не пересказывает текст.</description>
+      <title>Бэкап: 3-2-1, RPO и проверка восстановлением</title>
+      <link>https://itsliventsev.github.io/blog/kn-backups.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-backups.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>бэкапы</category>
+      <category>raid</category>
+      <category>мониторинг</category>
+      <description>Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</description>
     </item>
     <item>
-      <title>Сетка 12 колонок и поток карточек разных размеров</title>
-      <link>https://itsliventsev.github.io/blog/setka-i-plotnost.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/setka-i-plotnost.html</guid>
-      <pubDate>Sun, 01 Nov 2026 12:00:00 GMT</pubDate>
-      <category>сетка</category>
-      <category>карточки</category>
-      <category>плотность</category>
-      <description>Как раскладывать много заметок: ведущая карточка, боковая полка, чередование 8/4 и 4/4/4, переход к одной колонке на узком экране.</description>
+      <title>Конвейер: одна строка вместо цикла</title>
+      <link>https://itsliventsev.github.io/blog/kn-bash.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-bash.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>shell</category>
+      <category>журналы</category>
+      <category>автоматизация</category>
+      <description>grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</description>
     </item>
     <item>
-      <title>Карта темы: как из десяти заметок собрать одну мысль</title>
-      <link>https://itsliventsev.github.io/blog/karta-temy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/karta-temy.html</guid>
-      <pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate>
-      <category>граф</category>
-      <category>карточки</category>
-      <category>статика</category>
-      <description>Три роли заметок в базе — карта, узел и лист. Пока роли не назначены, граф выглядит сетью, но работает как свалка.</description>
+      <title>DHCP: аренда адреса на четыре шага</title>
+      <link>https://itsliventsev.github.io/blog/kn-dhcp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-dhcp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>dhcp</category>
+      <category>vlan</category>
+      <category>диагностика</category>
+      <description>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</description>
     </item>
     <item>
-      <title>Мера строки: 68 знаков против пустоты</title>
-      <link>https://itsliventsev.github.io/blog/merka-stroki.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/merka-stroki.html</guid>
-      <pubDate>Thu, 29 Oct 2026 12:00:00 GMT</pubDate>
-      <category>мера-строки</category>
-      <category>типографика</category>
-      <category>читаемость</category>
-      <description>Короткая строка утомляет частыми переносами, длинная — потерей места. Рабочая мера и три способа её проверить.</description>
+      <title>DNS: кеш, TTL и два резолвера</title>
+      <link>https://itsliventsev.github.io/blog/kn-dns.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-dns.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>dns</category>
+      <category>диагностика</category>
+      <category>dhcp</category>
+      <description>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</description>
     </item>
     <item>
-      <title>Две гарнитуры на страницу — и ни одной больше</title>
-      <link>https://itsliventsev.github.io/blog/dve-garnitury.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dve-garnitury.html</guid>
-      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
-      <category>типографика</category>
-      <category>читаемость</category>
-      <category>токены</category>
-      <description>Почему на странице живут Golos, Literata и JetBrains Mono, кто из них за что отвечает и как это закреплено в токенах.</description>
+      <title>Туннель и MTU: 24 байта, которые ломают передачу</title>
+      <link>https://itsliventsev.github.io/blog/kn-gre.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-gre.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>туннели</category>
+      <category>mtu</category>
+      <category>диагностика</category>
+      <description>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</description>
     </item>
     <item>
-      <title>Цвет живёт в токенах, а не в компонентах</title>
-      <link>https://itsliventsev.github.io/blog/tokeny-tsveta.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tokeny-tsveta.html</guid>
-      <pubDate>Tue, 27 Oct 2026 12:00:00 GMT</pubDate>
-      <category>токены</category>
-      <category>цвет</category>
-      <category>тёмная-тема</category>
-      <description>Один акцент, семь смысловых оттенков и два слоя поверхностей: как палитра переживает инверсию темы без второго набора стилей.</description>
+      <title>Индексы и планы: почему запрос медленный</title>
+      <link>https://itsliventsev.github.io/blog/kn-indexes.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-indexes.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>индексы</category>
+      <category>postgresql</category>
+      <category>транзакции</category>
+      <description>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</description>
     </item>
     <item>
-      <title>Зебра, границы и плотность внутри таблицы</title>
-      <link>https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</guid>
-      <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
-      <category>таблицы</category>
-      <category>плотность</category>
-      <category>цвет</category>
-      <description>Три приёма удержания строки: слабая зебра, редкие горизонтальные линии и достаточная высота ячейки.</description>
+      <title>IPsec: две фазы и одна причина «туннель поднят, трафика нет»</title>
+      <link>https://itsliventsev.github.io/blog/kn-ipsec.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ipsec.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>vpn</category>
+      <category>туннели</category>
+      <category>mtu</category>
+      <description>IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</description>
     </item>
     <item>
-      <title>Одна шкала отступов вместо двадцати решений</title>
-      <link>https://itsliventsev.github.io/blog/shkala-otstupov.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/shkala-otstupov.html</guid>
-      <pubDate>Sat, 24 Oct 2026 12:00:00 GMT</pubDate>
-      <category>токены</category>
-      <category>сетка</category>
-      <category>плотность</category>
-      <description>Почему в системе шаг 4 px, зачем крупные ступени растут быстрее мелких и как это удерживает страницу от «на глаз».</description>
+      <title>Журналы: уровни, ротация и лимит на диск</title>
+      <link>https://itsliventsev.github.io/blog/kn-logs.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-logs.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>журналы</category>
+      <category>systemd</category>
+      <category>диагностика</category>
+      <description>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</description>
     </item>
     <item>
-      <title>Видимый фокус — не украшение, а навигация</title>
-      <link>https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</guid>
-      <pubDate>Thu, 22 Oct 2026 12:00:00 GMT</pubDate>
-      <category>фокус</category>
+      <title>MTU и PMTU: почему ping идёт, а скачивание нет</title>
+      <link>https://itsliventsev.github.io/blog/kn-mtu.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-mtu.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>mtu</category>
+      <category>туннели</category>
+      <category>диагностика</category>
+      <description>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</description>
+    </item>
+    <item>
+      <title>PostgreSQL: версии строк, VACUUM и заворот XID</title>
+      <link>https://itsliventsev.github.io/blog/kn-postgres.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-postgres.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>postgresql</category>
+      <category>mvcc</category>
+      <category>индексы</category>
+      <description>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</description>
+    </item>
+    <item>
+      <title>Практикоориентированное обучение: навык проверяют на стенде</title>
+      <link>https://itsliventsev.github.io/blog/kn-practice.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-practice.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>обучение</category>
+      <category>проекты</category>
+      <category>диагностика</category>
+      <description>Три уровня освоения, чем демонстрационный экзамен отличается от зачёта, зачем нужна воспроизводимость стенда и как разбирать ошибки после защиты.</description>
+    </item>
+    <item>
+      <title>Проект как кейс: навигация корпуса и киберспорт</title>
+      <link>https://itsliventsev.github.io/blog/kn-project.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-project.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>проекты</category>
+      <category>обучение</category>
       <category>доступность</category>
-      <category>контраст</category>
-      <description>Кольцо фокуса, порядок Tab, ссылка «перейти к содержанию» и контраст 3:1: минимальный набор, ниже которого интерфейс перестаёт быть управляемым.</description>
+      <description>Семь типов знаков в коридоре, 108 часов программы, критерий приёмки, который пришлось формулировать самому, и честный разбор того, что не получилось.</description>
     </item>
     <item>
-      <title>Контраст AA: 4.5 к 1 и что за этим стоит</title>
-      <link>https://itsliventsev.github.io/blog/kontrast-aa.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kontrast-aa.html</guid>
-      <pubDate>Wed, 21 Oct 2026 12:00:00 GMT</pubDate>
-      <category>контраст</category>
-      <category>доступность</category>
-      <category>цвет</category>
-      <description>Как считается контраст, почему серый текст на белом проваливается чаще всего и как это ловить тестом, а не глазами.</description>
+      <title>Prometheus: четыре типа метрик и один хороший алерт</title>
+      <link>https://itsliventsev.github.io/blog/kn-prometheus.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-prometheus.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>мониторинг</category>
+      <category>журналы</category>
+      <category>автоматизация</category>
+      <description>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
     </item>
     <item>
-      <title>Движение 120–320 мс: когда анимация объясняет</title>
-      <link>https://itsliventsev.github.io/blog/dvizhenie-120-320.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dvizhenie-120-320.html</guid>
-      <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
-      <category>движение</category>
-      <category>доступность</category>
-      <category>плотность</category>
-      <description>Три длительности, одна кривая, два анимируемых свойства и честный reduced-motion — минимальный набор, который не выглядит дёшево.</description>
+      <title>RAID: паритет — это арифметика, а не магия</title>
+      <link>https://itsliventsev.github.io/blog/kn-raid.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-raid.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>raid</category>
+      <category>бэкапы</category>
+      <category>диагностика</category>
+      <description>Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</description>
     </item>
     <item>
-      <title>Срезы и разрезы</title>
-      <link>https://itsliventsev.github.io/blog/srezy-i-razrezy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/srezy-i-razrezy.html</guid>
-      <pubDate>Fri, 16 Oct 2026 12:00:00 GMT</pubDate>
-      <category>сетка</category>
-      <category>типографика</category>
-      <category>статика</category>
-      <description>Один лист, два состояния, одна ось. Срез заменяет описание изменения и не требует анимации.</description>
+      <title>Репликация: копия отстаёт, и это нормально</title>
+      <link>https://itsliventsev.github.io/blog/kn-replication.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-replication.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>репликация</category>
+      <category>postgresql</category>
+      <category>мониторинг</category>
+      <description>Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</description>
+    </item>
+    <item>
+      <title>Таблица маршрутов: как пакет выбирает выход</title>
+      <link>https://itsliventsev.github.io/blog/kn-routing.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-routing.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>маршрутизация</category>
+      <category>vlan</category>
+      <category>диагностика</category>
+      <description>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</description>
+    </item>
+    <item>
+      <title>SSH: ключ вместо пароля и что закрыть в sshd</title>
+      <link>https://itsliventsev.github.io/blog/kn-ssh.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ssh.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>ssh</category>
+      <category>диагностика</category>
+      <category>автоматизация</category>
+      <description>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</description>
+    </item>
+    <item>
+      <title>systemd: юниты, цели и порядок загрузки</title>
+      <link>https://itsliventsev.github.io/blog/kn-systemd.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-systemd.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>systemd</category>
+      <category>журналы</category>
+      <category>диагностика</category>
+      <description>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</description>
+    </item>
+    <item>
+      <title>TCP: три пакета, четыре состояния и одна минута</title>
+      <link>https://itsliventsev.github.io/blog/kn-tcp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-tcp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>tcp</category>
+      <category>диагностика</category>
+      <category>mtu</category>
+      <description>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</description>
+    </item>
+    <item>
+      <title>Диагностика сети: снизу вверх, а не наугад</title>
+      <link>https://itsliventsev.github.io/blog/kn-troubleshoot.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-troubleshoot.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>диагностика</category>
+      <category>маршрутизация</category>
+      <category>dns</category>
+      <description>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</description>
+    </item>
+    <item>
+      <title>Транзакции: уровни изоляции и три аномалии</title>
+      <link>https://itsliventsev.github.io/blog/kn-tx.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-tx.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>транзакции</category>
+      <category>postgresql</category>
+      <category>mvcc</category>
+      <description>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</description>
+    </item>
+    <item>
+      <title>VLAN и 802.1Q: один провод, много сетей</title>
+      <link>https://itsliventsev.github.io/blog/kn-vlan.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-vlan.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>vlan</category>
+      <category>маршрутизация</category>
+      <category>диагностика</category>
+      <description>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</description>
     </item>
     <item>
       <title>Практикоориентированное формирование знаний</title>
@@ -146,13 +246,6 @@
       <category>ФГОС</category>
       <category>практика</category>
       <description>Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Первая заметка блога стала входной страницей базы знаний: связи между записями, рубрики, граф и источники с датой обращения.</description>
     </item>
     <item>
       <title>Граф заметок</title>

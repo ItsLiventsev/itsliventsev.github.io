@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Бэкап: 3-2-1, RPO и проверка восстановлением · itsliventsev</title>
+<meta name="description" content="Правило 3-2-1 задаёт количество копий, RPO — допустимую потерю данных, RTO — допустимое время простоя; без теста восстановления всё это остаётся гипотезой.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="бэкапы,raid,мониторинг">
+<meta name="post-readtime" content="7 мин">
+<meta name="post-excerpt" content="Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.">
+<meta name="kn-zone" content="storage">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-backups.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Бэкап: 3-2-1, RPO и проверка восстановлением · itsliventsev">
+  <meta property="og:description" content="Правило 3-2-1 задаёт количество копий, RPO — допустимую потерю данных, RTO — допустимое время простоя; без теста восстановления всё это остаётся гипотезой.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-backups.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="бэкапы">
+  <meta property="article:tag" content="raid">
+  <meta property="article:tag" content="мониторинг">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Бэкап: 3-2-1, RPO и проверка восстановлением · itsliventsev">
+  <meta name="twitter:description" content="Правило 3-2-1 задаёт количество копий, RPO — допустимую потерю данных, RTO — допустимое время простоя; без теста восстановления всё это остаётся гипотезой.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Бэкап: 3-2-1, RPO и проверка восстановлением","description":"Правило 3-2-1 задаёт количество копий, RPO — допустимую потерю данных, RTO — допустимое время простоя; без теста восстановления всё это остаётся гипотезой.","url":"https://itsliventsev.github.io/blog/kn-backups.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-backups.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-raid.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"бэкапы, raid, мониторинг"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Бэкап: 3-2-1, RPO и проверка восстановлением","item":"https://itsliventsev.github.io/blog/kn-backups.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/storage.html">Хранение и отказоустойчивость</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>7 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Бэкап: 3-2-1, RPO и проверка восстановлением</h1>
+        <p class="kn-def">Правило 3-2-1 задаёт количество копий, RPO — допустимую потерю данных, RTO — допустимое время простоя; без теста восстановления всё это остаётся гипотезой.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Резервное копирование — единственная задача администрирования, которую нельзя проверить по факту выполнения. Команда <code>rsync</code> завершилась успешно, но восстановится ли из этой копии база — вопрос открытый, пока вы не попробуете.</p>
+        <h2>Сначала цифры, потом инструменты</h2>
+        <p>Не «какой бэкап делать», а «сколько данных можно потерять». Если ответ «сутки», подойдёт ночной дамп. Если «15 минут», нужен непрерывный архив журналов: WAL в PostgreSQL, binlog в MySQL, снапшоты на уровне хранилища.</p>
+        <dl class="kn-facts"><dt>RPO</dt><dd>recovery point objective — сколько данных допустимо потерять; задаёт частоту копий</dd><dt>RTO</dt><dd>recovery time objective — сколько времени допустимо восстанавливаться</dd><dt>3-2-1</dt><dd>три копии, два разных носителя, одна копия вне основной площадки</dd><dt>3-2-1-1-0</dt><dd>расширение: одна копия offline или неизменяемая, ноль ошибок при проверке</dd></dl>
+        <p>Отсюда выбор инструмента:</p>
+        <ul><li><strong>Логический дамп</strong> (<code>pg_dump</code>) — читаемый, переносимый, но восстанавливается долго и не даёт RPO меньше частоты дампа.</li><li><strong>Физическая копия + WAL</strong> (<code>pg_basebackup</code> + archive) — восстановление на точку во времени (PITR) с точностью до транзакции.</li><li><strong>Снапшот тома</strong> — быстрый и почти мгновенный, но требует согласованности: приложение должно быть заморожено или использовать собственный механизм флаша.</li></ul>
+        <h2>Формула 3-2-1</h2>
+        <p>Три копии (прод + две резервные), два разных носителя (например, диск и объектное хранилище), одна копия вне площадки. Смысл в том, чтобы одно событие не уничтожило всё: пожар выключает первую и вторую копию, если они в одном шкафу.</p>
+        <p>Современное расширение — 3-2-1-1-0: плюс одна копия offline или immutable (защита от шифровальщика) и ноль ошибок при проверке.</p>
+        <p>Важная деталь: копия «в облаке» — это тоже носитель, но только если у неё отдельные учётные данные. Если у скомпрометированного аккаунта есть доступ к бакету с бэкапами, шифровальщик удалит и их.</p>
+        <h2>Шифрование и ключи</h2>
+        <p>Копию шифруют до отправки — трафик и хранилище не должны видеть данные в открытом виде. Но ключ не должен лежать рядом с копией: иначе шифрование защищает только от случайного доступа.</p>
+        <p>Практика: ключ в отдельном хранилище секретов, доступ к ключу — у двух человек, восстановление без одного из них — невозможно (процедура описана в документе, а не в голове администратора).</p>
+        <h2>Тест восстановления: как он выглядит</h2>
+        <p>Не «посмотрели размер файла», а:</p>
+        <ol><li>Взять копию за прошлую неделю на тестовый стенд.</li><li>Развернуть с нуля, замерить время (это и есть реальный RTO).</li><li>Сверить контрольные суммы или количество строк в ключевых таблицах.</li><li>Прогнать приложение против восстановленной базы.</li><li>Записать результат: дата, объём, время, кто проверял.</li></ol>
+        <p>Раз в квартал — минимум. Тест, который делали год назад, не подтверждает ничего: изменились схема, версия СУБД и скрипты.</p>
+        <h2>Расписание и автоматизация</h2>
+        <pre><code># инкрементальная копия с жёсткими ссылками на предыдущую
+rsync -a --delete --link-dest=/backup/latest /srv/data/ /backup/$(date +%F)/</code></pre>
+        <p>Запуск — таймером systemd с <code>Persistent=true</code>, чтобы пропущенный из-за выключения запуск выполнился позже (см. <a class="kn-ref" href="/blog/kn-systemd.html">юниты и таймеры</a>). И обязательно — алерт на «копия не создалась»: бэкап, который молча перестал работать, хуже отсутствующего, потому что создаёт ложную уверенность. Как ставить такие алерты — в <a class="kn-ref" href="/blog/kn-prometheus.html">заметке про мониторинг</a>.</p>
+        <h2>Что помнить про RAID</h2>
+        <p>RAID и бэкап решают разные задачи: массив переживает отказ диска, копия — удаление, шифровальщика и ошибку человека. Подробнее — в <a class="kn-ref" href="/blog/kn-raid.html">заметке про уровни RAID</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-raid.html"><strong>RAID: паритет — это арифметика, а не магия</strong><span>Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</span></a></li>
+          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
+          <li><a href="/blog/kn-systemd.html"><strong>systemd: юниты, цели и порядок загрузки</strong><span>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально</a> — ссылается на эту заметку</li><li><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final" target="_blank" rel="noopener">NIST SP 800-34 Rev.1: Contingency Planning Guide</a><small>NIST</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.postgresql.org/docs/current/backup.html" target="_blank" rel="noopener">pg_dump и pg_basebackup: документация PostgreSQL</a><small>PostgreSQL Global Development Group</small><small>обращение: 3 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man1/rsync.1.html" target="_blank" rel="noopener">rsync(1): инкрементальные копии и --link-dest</a><small>man7.org</small><small>обращение: 2 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/storage.html">все заметки рубрики «Хранение и отказоустойчивость»</a>
+        <span><a href="/blog/kn-bash.html">Конвейер: одна строка вместо цикла →</a><a href="/blog/kn-ansible.html">← Ansible: плейбук, который можно запускать дважды</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Хранение и отказоустойчивость. Запись 02 из 23.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-backups"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#бэкапы">бэкапы</a></li><li><a href="/blog/topics.html#raid">raid</a></li><li><a href="/blog/topics.html#мониторинг">мониторинг</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 9 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>
