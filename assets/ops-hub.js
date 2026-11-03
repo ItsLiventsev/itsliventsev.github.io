@@ -19,22 +19,22 @@
     5: { title: 'Изменения и релиз', note: 'безопасность, план отката и запуск сервиса под ключ' }
   };
   var QUESTS = [
-    { id: 'ops-install-alt', sprint: 1, glyph: 'wolf', os: 'linux', title: 'Установка и база ALT Server', href: 'ops-install-alt.html' },
-    { id: 'ops-install-win', sprint: 1, glyph: 'cat', os: 'windows', title: 'Установка Windows Server', href: 'ops-install-win.html' },
-    { id: 'ops-inventory', sprint: 1, glyph: 'otter', os: 'mixed', title: 'Инвентаризация и сервисный каталог', href: 'ops-inventory.html' },
-    { id: 'ops-samba-ad', sprint: 2, glyph: 'raccoon', os: 'linux', title: 'Samba DC · домен и учётные записи', href: 'ops-samba-ad.html' },
-    { id: 'ops-win-ad', sprint: 2, glyph: 'cat', os: 'windows', title: 'Windows AD · подразделения и политики', href: 'ops-win-ad.html' },
-    { id: 'ops-domain-join', sprint: 2, glyph: 'fox', os: 'mixed', title: 'Ввод рабочих станций в домен', href: 'ops-domain-join.html' },
-    { id: 'ops-dns-time', sprint: 3, glyph: 'owl', os: 'linux', title: 'DNS и синхронизация времени', href: 'ops-dns-time.html' },
-    { id: 'ops-files', sprint: 3, glyph: 'hedgehog', os: 'linux', title: 'Файловые сервисы NFS и права', href: 'ops-files.html' },
-    { id: 'ops-web', sprint: 3, glyph: 'otter', os: 'linux', title: 'Веб-стек, Docker и reverse proxy', href: 'ops-web.html' },
-    { id: 'ops-remote', sprint: 3, glyph: 'raccoon', os: 'mixed', title: 'Удалённый доступ SSH и RDP', href: 'ops-remote.html' },
-    { id: 'ops-monitor', sprint: 4, glyph: 'wolf', os: 'linux', title: 'Мониторинг, алерты и логи', href: 'ops-monitor.html' },
-    { id: 'ops-backup', sprint: 4, glyph: 'hedgehog', os: 'mixed', title: 'Резервное копирование', href: 'ops-backup.html' },
-    { id: 'ops-log-audit', sprint: 4, glyph: 'otter', os: 'linux', title: 'Журналы, auditd и ротация', href: 'ops-log-audit.html' },
-    { id: 'ops-net-tshoot', sprint: 4, glyph: 'crab', os: 'mixed', title: 'Диагностика сети · парный инцидент', href: 'ops-net-tshoot.html' },
-    { id: 'ops-security-change', sprint: 5, glyph: 'cat', os: 'mixed', title: 'Безопасность и управление изменениями', href: 'ops-security-change.html' },
-    { id: 'ops-final', sprint: 5, glyph: 'wolf', os: 'mixed', title: 'Запуск сервиса под ключ', href: 'ops-final.html' }
+    { id: 'ops-install-alt', sprint: 1, glyph: 'wolf', os: 'linux', title: 'Установка и база ALT Server', href: 'ops-install-alt.html', format: 'индивидуально' },
+    { id: 'ops-install-win', sprint: 1, glyph: 'cat', os: 'windows', title: 'Установка Windows Server', href: 'ops-install-win.html', format: 'индивидуально' },
+    { id: 'ops-inventory', sprint: 1, glyph: 'otter', os: 'mixed', title: 'Инвентаризация и сервисный каталог', href: 'ops-inventory.html', format: 'группа' },
+    { id: 'ops-samba-ad', sprint: 2, glyph: 'raccoon', os: 'linux', title: 'Samba DC · домен и учётные записи', href: 'ops-samba-ad.html', format: 'пара' },
+    { id: 'ops-win-ad', sprint: 2, glyph: 'cat', os: 'windows', title: 'Windows AD · подразделения и политики', href: 'ops-win-ad.html', format: 'индивидуально' },
+    { id: 'ops-domain-join', sprint: 2, glyph: 'fox', os: 'mixed', title: 'Ввод рабочих станций в домен', href: 'ops-domain-join.html', format: 'пара' },
+    { id: 'ops-dns-time', sprint: 3, glyph: 'owl', os: 'linux', title: 'DNS и синхронизация времени', href: 'ops-dns-time.html', format: 'инцидент-день' },
+    { id: 'ops-files', sprint: 3, glyph: 'hedgehog', os: 'linux', title: 'Файловые сервисы NFS и права', href: 'ops-files.html', format: 'пара' },
+    { id: 'ops-web', sprint: 3, glyph: 'otter', os: 'linux', title: 'Веб-стек, Docker и reverse proxy', href: 'ops-web.html', format: 'пара' },
+    { id: 'ops-remote', sprint: 3, glyph: 'raccoon', os: 'mixed', title: 'Удалённый доступ SSH и RDP', href: 'ops-remote.html', format: 'индивидуально' },
+    { id: 'ops-monitor', sprint: 4, glyph: 'wolf', os: 'linux', title: 'Мониторинг, алерты и логи', href: 'ops-monitor.html', format: 'группа' },
+    { id: 'ops-backup', sprint: 4, glyph: 'hedgehog', os: 'mixed', title: 'Резервное копирование', href: 'ops-backup.html', format: 'пара' },
+    { id: 'ops-log-audit', sprint: 4, glyph: 'otter', os: 'linux', title: 'Журналы, auditd и ротация', href: 'ops-log-audit.html', format: 'индивидуально' },
+    { id: 'ops-net-tshoot', sprint: 4, glyph: 'crab', os: 'mixed', title: 'Диагностика сети · парный инцидент', href: 'ops-net-tshoot.html', format: 'пара' },
+    { id: 'ops-security-change', sprint: 5, glyph: 'cat', os: 'mixed', title: 'Безопасность и управление изменениями', href: 'ops-security-change.html', format: 'группа' },
+    { id: 'ops-final', sprint: 5, glyph: 'wolf', os: 'mixed', title: 'Запуск сервиса под ключ', href: 'ops-final.html', format: 'командный проект' }
   ];
 
   function mascotPicker(current) {
@@ -119,7 +119,8 @@
           '<div class="quest-glyph">' + mascotSvg(q.glyph, 42) + '</div>' +
           '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag ' + (q.os === 'windows' ? 'windows' : q.os === 'linux' ? 'linux' : 'linux') + '">' + (q.os === 'windows' ? 'Windows' : q.os === 'linux' ? 'ALT Linux' : 'смешанно') + '</span></p>' +
           '<div class="quest-progress"><i style="--p:' + (mst.pct / 100) + '"></i></div></div>' +
-          '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span></div></a>';
+          '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span>' +
+          '<span class="flat-badge">' + esc(q.format) + '</span></div></a>';
       }).join('');
       return '<div class="sprint-group"><div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(SPRINTS[sp].title) + '</h3>' +
         '<span class="sprint-meta">' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';

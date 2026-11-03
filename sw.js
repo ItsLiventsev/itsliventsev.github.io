@@ -1,5 +1,5 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v22';
+const CACHE = 'itsliventsev-v23';
 const RUNTIME_CACHE = CACHE + '-runtime';
 const MAX_RUNTIME_ENTRIES = 120;
 const PRECACHE = [

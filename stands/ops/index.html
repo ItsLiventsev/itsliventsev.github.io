@@ -136,7 +136,13 @@
 
     <!-- Кабинет -->
     <div id="dash" hidden>
-      <div class="cab-grid st-mt-4">
+      <div class="st-section-head">
+        <span class="st-section-num">01</span>
+        <h2>Пропуск инженера</h2>
+        <span class="st-section-tag">личный кабинет</span>
+      </div>
+
+      <div class="cab-grid">
         <aside>
           <div class="id-card">
             <div id="id-card"></div>
@@ -157,21 +163,21 @@
       </div>
 
       <div class="st-section-head">
-        <span class="st-section-num">01</span>
+        <span class="st-section-num">02</span>
         <h2>Метрики сервиса</h2>
         <span class="st-section-tag">SLA без штрафов</span>
       </div>
       <div class="metrics-block"><div class="sla-grid" id="sla-grid"></div></div>
 
       <div class="st-section-head">
-        <span class="st-section-num">02</span>
+        <span class="st-section-num">03</span>
         <h2>Доска заявок и инцидентов</h2>
         <span class="st-section-tag">kanban</span>
       </div>
       <div class="ops-board" id="board"></div>
 
       <div class="st-section-head">
-        <span class="st-section-num">03</span>
+        <span class="st-section-num">04</span>
         <h2>Операции экипажа</h2>
         <span class="st-section-tag">общая работа</span>
       </div>
@@ -191,14 +197,21 @@
       </section>
 
       <div class="st-section-head">
-        <span class="st-section-num">04</span>
+        <span class="st-section-num">05</span>
         <h2>Роадмап эксплуатации</h2>
         <span class="st-section-tag">5 спринтов · 16 работ</span>
       </div>
       <div id="roadmap"></div>
 
       <div class="st-section-head">
-        <span class="st-section-num">05</span>
+        <span class="st-section-num">06</span>
+        <h2>Лента смены</h2>
+        <span class="st-section-tag">последние награды</span>
+      </div>
+      <section class="lab-panel"><div id="feed"></div></section>
+
+      <div class="st-section-head">
+        <span class="st-section-num">07</span>
         <h2>Обмен артефактами</h2>
         <span class="st-section-tag">без сервера</span>
       </div>
@@ -220,13 +233,6 @@
         </div>
       </section>
 
-      <div class="st-section-head">
-        <span class="st-section-num">06</span>
-        <h2>Лента смены</h2>
-        <span class="st-section-tag">последние награды</span>
-      </div>
-      <section class="lab-panel"><div id="feed"></div></section>
-
       <p class="uni-footnote mono">
         Пасхалка для своих: коллеги из СетьПолиса — лис Итан и краб Клешня — уже строили здесь сеть.
         В ДатаПолисе вы принимаете её на сопровождение: их конфиги встретятся в заявках и runbook.
@@ -247,7 +253,7 @@
 <script defer src="../../assets/ops-engine.js?v=20261031bf"></script>
 <script defer src="../../assets/dom-kit.js?v=20261031bf"></script>
 <script defer src="../../assets/stands.js?v=20261101r4"></script>
-<script defer src="../../assets/ops-hub.js?v=20261102r1"></script>
+<script defer src="../../assets/ops-hub.js?v=20261103r1"></script>
 
 <script src="/assets/shell.js" defer></script>
 </body>
