@@ -95,12 +95,24 @@ ok(!/linear-gradient\([^)]*(?:#6d28d9|#7c3aed|#8b5cf6|#4f46e5)/i.test(base + pag
 const courseStyles = read('assets/course.css');
 ok(courseStyles.includes('[data-ws-hero]') && courseStyles.includes('[data-ws-surface]'), 'course.css не покрывает учебные поверхности');
 
+/* ── гигиена разметки: ни одного инлайнового стиля ──
+   Стили живут только в слоях, а значения прогресса — в data-ws-progress, откуда их
+   читает attr(). Проверяем не только HTML, но и скрипты: они собирают разметку
+   строками, и именно там инлайновый стиль возвращается легче всего. */
+const styleLayers = ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/course.css'];
+const inlineStyleFiles = [...styleLayers, ...walk('assets', /\.js$/)].filter(file => /style="/.test(read(file)));
+ok(inlineStyleFiles.length === 0, 'инлайновый стиль в разметке или в генераторах: ' + inlineStyleFiles.join(', '));
+const glassyFiles = walk('assets', /\.css$/).filter(file => read(file).includes('backdrop-filter'));
+ok(glassyFiles.length === 0, 'стеклянный блюр в CSS-слое: ' + glassyFiles.join(', '));
+ok(/\[data-ws-progress\][^{]*\{[^}]*attr\(data-ws-progress\b/.test(courseStyles), 'course.css: значение прогресса должно читаться из data-ws-progress через attr()');
+
 /* ── скрипты ── */
 const shell = read('assets/shell.js');
 for (const behavior of ['aria-current', 'aria-expanded', 'IntersectionObserver', 'search-index.json', "'Escape'", 'data-ui-theme-toggle', 'ui-toc', 'ui-drawer', 'ui-tabbar', 'matchMedia']) {
   ok(shell.includes(behavior), 'shell.js: отсутствует функциональный контракт ' + behavior);
 }
 ok(shell.includes("doc.querySelector('.st-topbar')") && !/root\.querySelector\('\.st-topbar'\)/.test(shell), 'shell.js должен искать верхнюю полосу в документе, а не в контенте');
+ok(shell.includes("all('[data-ws-progress]')") && shell.includes("setProperty('--p'"), 'shell.js: нет фолбэка прогресса из data-ws-progress для старых браузеров');
 const feed = read('assets/feed.js');
 for (const behavior of ['/assets/data/activity.json', 'api.github.com/repos/ItsLiventsev/itsliventsev.github.io/commits', "per_page', '100'", 'sessionStorage', 'itsliventsev:activity:v2', 'data-activity-chart', 'data-activity-commit', 'data-activity-count', 'data-activity-total']) {
   ok(feed.includes(behavior), 'feed.js: отсутствует контракт ' + behavior);

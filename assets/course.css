@@ -394,6 +394,10 @@ button:disabled, [aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
   transform: scaleX(var(--p, 0));
   transform-origin: left center;
 }
+/* Значение прогресса приходит атрибутом, а не инлайновым стилем: скрипты пишут
+   data-ws-progress="0.62". Ниже — декларация намерения для браузеров, которые умеют
+   attr() вне content; shell.js на всякий случай дублирует значение в --p. */
+[data-ws-progress]:not([data-ws-progress="true"]) { --p: attr(data-ws-progress, 0); }
 [data-ws-progress-strip], .ops-statusbar {
   display: flex;
   align-items: center;

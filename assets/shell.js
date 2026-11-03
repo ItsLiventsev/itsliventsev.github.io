@@ -664,6 +664,14 @@
     attr('.article-meta', 'data-ws-meta');
     attr('.flat-row, .step-card, .mat-row', 'data-ws-row');
     attr('.lab-progress, .xp-bar, .lg-bar, .quest-progress', 'data-ws-progress');
+    /* Прогресс лежит в data-ws-progress, а CSS читает его через attr(). Тут — фолбэк для
+       браузеров без типизированного attr() и зажим значения в 0…1. */
+    all('[data-ws-progress]').forEach(el => {
+      const raw = el.getAttribute('data-ws-progress');
+      const value = parseFloat(raw);
+      if (raw === null || raw === 'true' || !Number.isFinite(value)) return;
+      el.style.setProperty('--p', String(Math.min(1, Math.max(0, value))));
+    });
     attr('.lp-head', 'data-ws-panel-head');
     attr('.lp-body', 'data-ws-panel-body');
     attr('.lab-layout, .ops-board, .lab-steps', 'data-ws-grid', 'cards');

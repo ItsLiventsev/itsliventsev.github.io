@@ -219,7 +219,7 @@
 
     var root = $('office-root');
     root.innerHTML =
-      '<div class="lk-progress-strip"><div class="xp-bar"><i id="office-progress-bar" style="--p:0"></i></div><span class="xp-meta" id="office-progress-label">—</span>' +
+      '<div class="lk-progress-strip"><div class="xp-bar"><i id="office-progress-bar" data-ws-progress="0"></i></div><span class="xp-meta" id="office-progress-label">—</span>' +
       '<span class="kind-badge">спринт ' + cfg.sprint + ' · ' + esc(cfg.sprintTitle) + '</span></div>' +
       briefHtml() + theoryHtml() + referenceHtml() + tasksHtml() + quizHtml() + reflectionHtml() + finishHtml();
 

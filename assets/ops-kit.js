@@ -124,7 +124,7 @@
         '<span class="ticket-state ' + stateCls + '">' + stateLabel + '</span></div>' +
         '<p class="ticket-text">' + esc(t.text) + '</p>' +
         (t.deliverables ? '<ul class="submit-channels">' + t.deliverables.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') +
-        '<div class="sla-meter"><span class="sla-num">SLA-окно: ' + esc(OPS.SLA_MIN[t.priority]) + ' мин</span><div class="xp-bar"><i id="ops-sla-bar" style="--p:0"></i></div><span class="sla-num" id="ops-sla-state">не взят</span></div>' +
+        '<div class="sla-meter"><span class="sla-num">SLA-окно: ' + esc(OPS.SLA_MIN[t.priority]) + ' мин</span><div class="xp-bar"><i id="ops-sla-bar" data-ws-progress="0"></i></div><span class="sla-num" id="ops-sla-state">не взят</span></div>' +
         rollback +
         '<div class="ticket-actions">' +
         '<button class="flat-btn" type="button" id="ops-ticket-ack">взять в работу</button>' +
@@ -343,7 +343,7 @@
 
     var root = $('ops-root');
     root.innerHTML =
-      '<div class="lk-progress-strip"><div class="xp-bar"><i id="ops-progress-bar" style="--p:0"></i></div><span class="xp-meta" id="ops-progress-label">—</span>' +
+      '<div class="lk-progress-strip"><div class="xp-bar"><i id="ops-progress-bar" data-ws-progress="0"></i></div><span class="xp-meta" id="ops-progress-label">—</span>' +
       '<span class="kind-badge">спринт ' + cfg.sprint + ' · ' + esc(cfg.sprintTitle) + '</span></div>' +
       briefHtml() + theoryHtml() + commandsHtml() + tasksHtml() + ticketHtml() + runbookHtml() + rcaHtml() + quizHtml() + reflectionHtml() + finishHtml();
 
