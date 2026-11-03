@@ -474,8 +474,14 @@
   /* ----------------------------- Ротация ролей ----------------------------- */
   function currentRole() {
     var r = read(KEYS.role, null);
-    if (!r) return null;
-    return ROLES.filter(function (x) { return x.id === r.roleId; })[0] || null;
+    var found = r ? ROLES.filter(function (x) { return x.id === r.roleId; })[0] : null;
+    if (found) return found;
+    /* Профиль мог прийти из бандла или из старой версии без роли: без неё
+       кабинет падал на role.name и оставался пустым. Назначаем роль сами. */
+    var p = getProfile();
+    var seed = ROLES[hash((p && p.id) || 'service') % ROLES.length];
+    write(KEYS.role, { roleId: seed.id, since: nowISO() });
+    return seed;
   }
   function rotateRole() {
     var cur = currentRole();

@@ -96,7 +96,7 @@
           '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span></div></a>';
       }).join('');
       return '<div class="sprint-group"><div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(SPRINTS[sp].title) + '</h3>' +
-        '<span class="sprint-meta">// ' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';
+        '<span class="sprint-meta">' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';
     }).join('');
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап бюро</strong>' +
@@ -111,7 +111,7 @@
       var d = new Date(e.at);
       return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) + '</span>' +
         '<span class="feed-date">' + d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
-    }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('fox', 44) + '<span>// лента пуста: откройте первую работу бюро</span></div>';
+    }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('fox', 44) + '<span>лента пуста: откройте первую работу бюро</span></div>';
   }
 
   function init() {

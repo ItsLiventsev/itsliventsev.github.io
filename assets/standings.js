@@ -80,7 +80,7 @@
 
   function emptyState(hint) {
     return '<div class="std-empty">' +
-      '<p class="std-empty-title">// стенда пока нет</p>' +
+      '<p class="std-empty-title">стенда пока нет</p>' +
       '<p class="std-empty-hint">' + esc(hint || 'преподаватель опубликует общий рейтинг после первого импорта работ: админка → «журнал работ» → импорт бандлов → «опубликовать стенд лиги»') + '</p></div>';
   }
 

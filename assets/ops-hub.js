@@ -104,7 +104,7 @@
         var kind = t.type === 'incident' ? 'инцидент' : t.type === 'change' ? 'изменение' : 'заявка';
         return '<div class="ops-ticket-mini"><span class="sev sev-' + esc(t.priority) + '">' + esc(t.priority) + '</span> <span class="kind-badge">' + kind + '</span>' +
           '<h4>' + esc(t.title) + '</h4><p>' + (t.slaMet === null ? 'SLA идёт' : t.slaMet ? 'SLA выдержан' : 'SLA нарушен · нужен разбор') + '</p></div>';
-      }).join('') : '<div class="ops-empty">// пусто: тикеты появятся из лабораторных</div>';
+      }).join('') : '<div class="ops-empty">пусто: тикеты появятся из лабораторных</div>';
       return '<div class="ops-column"><div class="ops-column-head"><span>' + label[k] + '</span><span class="count">' + cols[k].length + '</span></div><div class="ops-column-body">' + body + '</div></div>';
     }).join('');
   }
@@ -122,7 +122,7 @@
           '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span></div></a>';
       }).join('');
       return '<div class="sprint-group"><div class="sprint-head"><h3>спринт ' + sp + ' · ' + esc(SPRINTS[sp].title) + '</h3>' +
-        '<span class="sprint-meta">// ' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';
+        '<span class="sprint-meta">' + esc(SPRINTS[sp].note) + '</span><span class="sprint-line"></span></div>' + rows + '</div>';
     }).join('');
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап эксплуатации</strong>' +
@@ -137,7 +137,7 @@
       var d = new Date(e.at);
       return '<li><span class="feed-type">+' + e.xp + ' XP</span><span class="feed-note">' + esc(e.note || e.type) + '</span>' +
         '<span class="feed-date">' + d.toLocaleDateString('ru-RU') + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '</span></li>';
-    }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('otter', 44) + '<span>// лента пуста: выйдите на первую смену</span></div>';
+    }).join('') + '</ul>' : '<div class="rv-empty rv-empty--mascot">' + mascotSvg('otter', 44) + '<span>лента пуста: выйдите на первую смену</span></div>';
   }
 
   /* --------------------- Страница «операции экипажа» (crew-ops.html) ---------------------
@@ -180,7 +180,7 @@
         '<span class="ops-op-done mono">' + (closed ? 'проведено: ' + closed : 'ещё не проводилась') + '</span></div></div>' +
         '<div class="ops-role-row">' + roleList + '<span class="ops-role-note mono">минимум ' + op.minParticipants + ' участн.</span></div>' +
         stepList +
-        (recent ? '<p class="ops-recent-label mono">// последние составы:</p><ul class="ops-recent">' + recent + '</ul>' : '') +
+        (recent ? '<p class="ops-recent-label mono">последние составы:</p><ul class="ops-recent">' + recent + '</ul>' : '') +
         '<div class="ops-close-row">' +
         '<input class="ops-participants" id="participants-' + op.id + '" type="text" ' +
         'placeholder="участники через запятую (минимум ' + op.minParticipants + ')">' +

@@ -42,7 +42,7 @@
   }
 
   function stateToText(state) {
-    if (!state.bridge) return '// мост ещё не создан (ovs-vsctl add-br ' + SPEC.bridge + ')';
+    if (!state.bridge) return 'мост ещё не создан (ovs-vsctl add-br ' + SPEC.bridge + ')';
     var lines = [state.bridge];
     SPEC.ifaces.forEach(function (name) {
       var p = state.ports[name];
@@ -155,7 +155,7 @@
       initFs: function (vfs) {
         vfs.mkdirp('/etc/openvswitch');
         vfs.write('/etc/hostname', 'ovs-node\n');
-        vfs.write('/etc/openvswitch/conf.db', '// OVSDB: база создаётся службой openvswitch\n');
+        vfs.write('/etc/openvswitch/conf.db', 'OVSDB: база создаётся службой openvswitch\n');
       },
       resolvePackage: function (pkg) {
         if (/openvswitch/.test(pkg)) return { package: PKG, service: UNIT, version: '3.2-alt1', hint: 'подсказка: запустите службу — systemctl enable --now ' + UNIT };
@@ -275,10 +275,10 @@
       }
       if (sub === 'list') {
         var what = args[1] || 'br';
-        if (what === 'br' || what === 'bridge') return { out: '_uuid               name\n' + (s.bridge ? 'uuid-0001            ' + s.bridge : '// записей нет'), code: 0 };
+        if (what === 'br' || what === 'bridge') return { out: '_uuid               name\n' + (s.bridge ? 'uuid-0001            ' + s.bridge : 'записей нет'), code: 0 };
         if (what === 'port' || what === 'interface') {
           var names = Object.keys(s.ports);
-          return { out: names.length ? names.map(function (n) { return 'uuid-' + n + '  name=' + n; }).join('\n') : '// записей нет', code: 0 };
+          return { out: names.length ? names.map(function (n) { return 'uuid-' + n + '  name=' + n; }).join('\n') : 'записей нет', code: 0 };
         }
         return { out: 'ovs-vsctl: неизвестная таблица ' + what, code: 1, isErr: true };
       }

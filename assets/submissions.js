@@ -103,7 +103,7 @@
     $('presence-count').textContent = list.length;
     $('presence-online').textContent = list.filter(function (p) { return p.online; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" class="presence-empty">// пока нет ни одной сессии: откройте стенд в этом браузере или импортируйте JSON-бандл лиги студента через «импорт JSON» ниже</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="presence-empty">пока нет ни одной сессии: откройте стенд в этом браузере или импортируйте JSON-бандл лиги студента через «импорт JSON» ниже</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (p) {
@@ -148,7 +148,7 @@
     var rows = filtered();
     if (!rows.length) {
       tbody.innerHTML = '<tr><td colspan="8" style="padding:1.4rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">' +
-        (loadItems().length ? '// по фильтрам ничего не найдено' : '// работ пока нет — импорт JSON, приём по коду ITS-LAB1 или папка submissions/ репозитория') + '</td></tr>';
+        (loadItems().length ? 'по фильтрам ничего не найдено' : 'работ пока нет — импорт JSON, приём по коду ITS-LAB1 или папка submissions/ репозитория') + '</td></tr>';
       return;
     }
     tbody.innerHTML = rows.map(function (s, i) {
@@ -374,7 +374,7 @@
     var count = $('claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины на stands/rewards.html, ордера приходят в бандлах лиги</td></tr>';
       return;
     }
     var rewards = L().REWARDS || {};
@@ -412,7 +412,7 @@
     var count = $('ops-claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины эксплуатации на stands/ops/rewards.html, ордера приходят в ops-бандлах</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины эксплуатации на stands/ops/rewards.html, ордера приходят в ops-бандлах</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (c) {
@@ -450,7 +450,7 @@
     var count = $('office-claims-count');
     if (count) count.textContent = list.filter(function (c) { return c.status === 'local'; }).length;
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">// ордеров нет: студенты обменивают неткоины бюро на stands/office/rewards.html, ордера приходят в office-бандлах</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="padding:1.2rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;">ордеров нет: студенты обменивают неткоины бюро на stands/office/rewards.html, ордера приходят в office-бандлах</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(function (c) {
