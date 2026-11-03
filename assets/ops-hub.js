@@ -69,7 +69,7 @@
       '<div class="id-stat"><b>' + t.coins + ' ◈</b><span>неткоины</span></div>' +
       '<div class="id-stat"><b>' + OPS.prpBalance(p.id) + '</b><span>PRP</span></div></div></div>' +
       '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP</span>' +
-      '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div></div></div>';
+      '<div class="xp-bar"><i data-ws-value="' + t.level.progress + '"></i></div></div></div>';
 
     $('role-ribbon').innerHTML =
       '<span class="rr-label">роль этой смены</span><span class="rr-name" aria-live="polite">' + esc(role.name) + '</span>' +
@@ -118,7 +118,7 @@
         return '<a class="quest-card" href="' + q.href + '">' +
           '<div class="quest-glyph">' + mascotSvg(q.glyph, 42) + '</div>' +
           '<div><h3>' + esc(q.title) + '</h3><p><span class="os-tag ' + (q.os === 'windows' ? 'windows' : q.os === 'linux' ? 'linux' : 'linux') + '">' + (q.os === 'windows' ? 'Windows' : q.os === 'linux' ? 'ALT Linux' : 'смешанно') + '</span></p>' +
-          '<div class="quest-progress"><i style="--p:' + (mst.pct / 100) + '"></i></div></div>' +
+          '<div class="quest-progress"><i data-ws-value="' + mst.pct + '"></i></div></div>' +
           '<div class="quest-side"><span class="flat-badge ' + mst.cls + '">' + mst.label + '</span>' +
           '<span class="flat-badge">' + esc(q.format) + '</span></div></a>';
       }).join('');
@@ -128,7 +128,7 @@
     var overall = Math.round(done / QUESTS.length * 100);
     $('roadmap').innerHTML = '<div class="roadmap-overview"><div><strong>роадмап эксплуатации</strong>' +
       '<p class="admin-hint">Пять спринтов от приёмки сервера до запуска сервиса с дежурством. ~70% ALT Linux, ~30% Windows.</p></div>' +
-      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>' + groups;
+      '<div class="roadmap-meter"><span class="xp-meta">' + done + ' из ' + QUESTS.length + ' · ' + overall + '%</span><div class="xp-bar"><i data-ws-value="' + overall + '"></i></div></div></div>' + groups;
   }
 
   function renderFeed(p) {
