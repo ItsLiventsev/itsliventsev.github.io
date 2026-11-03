@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-03T20:11:16.217Z",
+  "generated": "2026-11-03T20:47:07.503Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 253,
+  "total": 249,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 34
+      "count": 28
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,22 @@
     },
     {
       "date": "2026-11-03",
-      "count": 12
+      "count": 14
     }
   ],
   "commits": [
+    {
+      "sha": "0717dd5",
+      "title": "test(offline): полка чтения сверяется с манифестами, а не с константой",
+      "date": "2026-11-03T20:44:10Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/0717dd579ca56dd9358118dbf049df607cb7df07"
+    },
+    {
+      "sha": "1395584",
+      "title": "feat(notes): база знаний заметок — связи, рубрики, граф и визуальные блоки",
+      "date": "2026-11-03T20:38:43Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1395584085540f0340b3990907e7578051b8e941"
+    },
     {
       "sha": "b51ca2c",
       "title": "docs(agents): индекс собирается скриптом, нижняя граница 150 символов",
@@ -475,18 +487,6 @@
       "title": "feat(orchestrator v4): Depth & Flow — hero orbs, Bento levels, timeline line, spring motion",
       "date": "2026-11-01T20:12:09Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8ab7328993c96d2eba1030c20b0cf792c1a8829a"
-    },
-    {
-      "sha": "ea94a98",
-      "title": "docs: AGENT_PLAN — 30 библиотек vibecoding.ru, 5 агентов, v3 оптимизация",
-      "date": "2026-11-01T20:08:57Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ea94a98a9a3595cc55ab767137a981c2db828d15"
-    },
-    {
-      "sha": "06719d9",
-      "title": "feat(index): активность наверх, плавные фильтры, компактный стек",
-      "date": "2026-11-01T20:06:12Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/06719d9e54a257fd3c1bbf93136faea13baf2c78"
     }
   ]
 }
