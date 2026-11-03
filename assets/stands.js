@@ -255,7 +255,7 @@
     strip.innerHTML =
       '<span class="xp-handle" title="ваш хэндл во взаимных оценках">' + mascotSvg(profile.mascotId, 22, false) + ' ' + esc(handle) + '</span>' +
       '<span class="xp-level">ур. ' + t.level.level + ' · ' + esc(t.level.title) + '</span>' +
-      '<div class="xp-bar" title="опыт до следующего уровня"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
+      '<div class="xp-bar" title="опыт до следующего уровня"><i data-ws-value="' + t.level.progress + '"></i></div>' +
       '<span class="xp-meta">' + t.xp + ' XP</span>' +
       '<span class="xp-meta xp-coins">◈ ' + t.coins + '</span>' +
       '<span class="prp-pill" title="PRP — очки взаимных проверок: сдача тратит 1, проверка коллеги даёт 1">PRP ' +
@@ -682,7 +682,7 @@
         '</div></div>' +
         '<div class="id-level"><div class="id-collapse"><span class="xp-meta">' + esc(t.level.title) + ' · ' + t.xp + ' XP' +
           (t.level.next ? ' · до «' + esc(t.level.next) + '» ' + (t.level.span - t.level.into) + ' XP' : '') + '</span>' +
-          '<div class="xp-bar"><i style="--p:' + (t.level.progress / 100) + '"></i></div>' +
+          '<div class="xp-bar"><i data-ws-value="' + t.level.progress + '"></i></div>' +
           '</div></div>';
 
       var metricsHost = $('cab-metrics');
@@ -716,7 +716,7 @@
           return '<a class="quest-card" href="' + q.href + '">' +
             '<div class="quest-glyph">' + mascotSvg(q.glyph, 44) + '</div>' +
             '<div><h3>' + esc(q.title) + '</h3><p>' + esc(q.desc) + '</p>' +
-            '<div class="quest-progress"><i style="--p:' + (m.percent / 100) + '"></i></div></div>' +
+            '<div class="quest-progress"><i data-ws-value="' + m.percent + '"></i></div></div>' +
             '<div class="quest-side"><span class="flat-badge ' + state.cls + '">' + state.label + '</span>' +
             '<span class="flat-badge">' + esc(q.format) + '</span></div></a>';
         });
@@ -725,7 +725,7 @@
           '<div>' +
           '<p class="admin-hint">Пять спринтов ведут от базовых команд до проекта ЛВС под ключ. Порядок рекомендован, но не заперт: выбирайте свою траекторию.</p></div>' +
           '<div class="roadmap-meter"><span class="xp-meta">' + doneCount + ' из ' + QUESTS.length + ' работ · ' + overall + '%</span>' +
-          '<div class="xp-bar"><i style="--p:' + (overall / 100) + '"></i></div></div></div>';
+          '<div class="xp-bar"><i data-ws-value="' + overall + '"></i></div></div></div>';
 
         var groups = '';
         Object.keys(SPRINT_STORY).map(Number).sort().forEach(function (sp) {

@@ -53,6 +53,18 @@
   window.addEventListener('storage', event => {
     if (event.key === THEME_KEY) paintTheme(event.newValue === 'dark' ? 'dark' : 'light');
   });
+  /* Системная тема — тема по умолчанию. Пока пользователь не выбрал свою
+     (в localStorage пусто), страница следует за prefers-color-scheme и
+     перекрашивается, если ОС переключила режим на ходу. */
+  const systemDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  if (systemDark && systemDark.addEventListener) {
+    systemDark.addEventListener('change', event => {
+      let chosen = '';
+      try { chosen = localStorage.getItem(THEME_KEY) || ''; } catch (error) { chosen = ''; }
+      if (chosen === 'dark' || chosen === 'light') return;
+      paintTheme(event.matches ? 'dark' : 'light');
+    });
+  }
 
   /* ——— navigation model ——— */
   const navItems = [
@@ -664,6 +676,14 @@
     attr('.article-meta', 'data-ws-meta');
     attr('.flat-row, .step-card, .mat-row', 'data-ws-row');
     attr('.lab-progress, .xp-bar, .lg-bar, .quest-progress', 'data-ws-progress');
+    /* Полосы прогресса получают значение из данных, а не из inline-стиля:
+       <i data-ws-value="42"> → --p: 0.42 (наследуется заливкой). Статическая
+       проверка запрещает inline-стили в шаблонах, поэтому вход один — атрибут. */
+    all('[data-ws-value]').forEach(el => {
+      const raw = Number(String(el.getAttribute('data-ws-value')).replace('%', '').replace(',', '.'));
+      if (!Number.isFinite(raw)) return;
+      el.style.setProperty('--p', String(Math.max(0, Math.min(100, raw)) / 100));
+    });
     attr('.lp-head', 'data-ws-panel-head');
     attr('.lp-body', 'data-ws-panel-body');
     attr('.lab-layout, .ops-board, .lab-steps', 'data-ws-grid', 'cards');

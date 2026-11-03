@@ -105,7 +105,7 @@
           '<td class="mono">' + num(r.coins) + ' ◈</td>' +
           '<td class="mono">' + num(r.works) + '</td>' +
           '<td class="mono">' + num(r.members) + '</td>' +
-          '<td class="std-col-bar"><span class="std-bar"><span class="std-bar-fill" style="--p:' + (num(r.xp) / max).toFixed(3) + '"></span></span></td>' +
+          '<td class="std-col-bar"><span class="std-bar"><span class="std-bar-fill" data-ws-value="' + (num(r.xp) / max * 100).toFixed(1) + '"></span></span></td>' +
           '</tr>';
       }).join('') + '</tbody></table></div>';
   }
@@ -220,7 +220,7 @@
         return '<tr>' +
           '<td class="std-place">' + head + esc(c.name || c.id) + '</td>' +
           '<td class="mono">' + num(c.points) + '</td>' +
-          '<td class="std-col-bar"><span class="std-bar" aria-hidden="true"><span class="std-bar-fill" style="--p:' + (num(c.points) / max).toFixed(3) + '"></span></span></td>' +
+          '<td class="std-col-bar"><span class="std-bar" aria-hidden="true"><span class="std-bar-fill" data-ws-value="' + (num(c.points) / max * 100).toFixed(1) + '"></span></span></td>' +
           '</tr>';
       }).join('') + '</tbody></table></div>';
     return '<p class="list-lead"><strong>экипажи ДатаПолиса · очки за операции</strong></p>' + table + opsLine;

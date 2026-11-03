@@ -31,7 +31,8 @@
 **Данные**
 
 - `assets/data/activity.json` — снимок истории GitHub (пишется `scripts/build-activity.js`).
-- `assets/search-index.json` — поисковый индекс, поддерживается **вручную** + проверка целостности в `regression-static.js`.
+- `assets/search-index.json` — поисковый индекс, **собирается** из HTML: `python3 scripts/build-search-index.py`;
+  в CI `--check` падает, если файл разошёлся с разметкой. Руками не правится.
 - `blog/posts.json`, `articles/posts.json` — индексы публикаций; `feed-counts.json` — счётчики.
 - `localStorage`: `stands-profile` (СетьПолис), `league-*`, `office-*`, `ops-*`. Контракты ключей менять нельзя.
 
@@ -49,8 +50,11 @@
    обратная совместимость. Старые профили должны открываться новым кодом.
 4. **Service worker меняется парой.** `sw.js` (константа `CACHE = 'itsliventsev-vNN'` и `PRECACHE`)
    и `scripts/test-service-worker.js` (ожидаемая версия и список удаляемых кешей) правятся в одном коммите.
-5. **Поисковый индекс.** Новая страница → запись в `assets/search-index.json` (title, url, category,
-   description, content ≥ 200 символов). Редиректы-заглушки в индекс не попадают.
+5. **Поисковый индекс только собирается.** Руками `assets/search-index.json` не правят:
+   `python3 scripts/build-search-index.py` берёт текст `<main>`, h1, meta description и раздел.
+   `--check` в CI падает, если файл разошёлся с разметкой; короткие страницы (каталоги с JS-списком)
+   дают от 150 символов — это нижняя граница проверки, пустых записей быть не может.
+   Редиректы-заглушки в индекс не попадают.
 6. **Ноль зависимостей в рантайме.** jsdom, playwright, axe — только для проверок в `scripts/`.
 7. **Работа без JS.** Любая навигация и контент доступны без скриптов; `shell.js` только достраивает
    шапку. `.st-*`-классы в стендах — это осознанный no-JS фолбэк, удалять их нельзя.
@@ -69,8 +73,8 @@
 - **Только токены** `--u-*`: цвета, кегли, отступы (4→96: `--u-s1…--u-s11`), радиусы, тени, движение.
   Хекс в компоненте — ошибка. Новый оттенок — сначала токен в `tokens.css`.
 - **Один акцент** — глина. Синий / зелёный / янтарный / красный — только смысл.
-- **Запрещено:** `backdrop-filter`, инлайновые `style=` (легаси `style="--p:…"` в прогрессе не расширять),
-  эмодзи-иконки, капс в русских надписях, второй акцент, градиентные заголовки.
+- **Запрещено:** `backdrop-filter`, инлайновые `style=` (значения передаются данными: `<i data-ws-value="42">`
+  → `--p` ставит `shell.js`), эмодзи-иконки, капс в русских надписях, второй акцент, градиентные заголовки.
 - **`!important`** — только служебный: `[hidden]` и блоки `prefers-reduced-motion`.
 - **Движение:** 120–320 мс, `--u-ease`, анимируются `transform`/`opacity`; всё под
   `@media (prefers-reduced-motion: no-preference)`, бесконечных декоративных циклов нет (кроме ленты
@@ -141,11 +145,11 @@
 | Команда | Что проверяет | Ориентир |
 |---|---|---|
 | `python3 scripts/audit-html.py` | структура 76 страниц, один `h1`, битые ссылки, дубли `id` | 0 ошибок, 0 битых ссылок |
-| `node scripts/regression-static.js` | контракты: токены, инлайн-стили, кеш, поисковый индекс, тексты | число passing не уменьшается |
+| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс | число passing не уменьшается (сейчас 1912) |
 | `node scripts/runtime-smoke.js` | синтаксис и базовое поведение JS | `RUNTIME SMOKE OK` |
 | `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция | `OK` |
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
-| `node scripts/test-{activity,search,reading,catalog}.js` | лента, поиск, полка, каталог | `OK` |
+| `node scripts/test-{activity,search,reading,catalog,theme}.js` | лента, поиск, полка, каталог, тема от системы | `OK` |
 | `AUDIT_STRICT=1 node scripts/audit-classes.js` | классы в DOM vs CSS на 13 страницах стендов | без «сирот» |
 | `node scripts/browser-{smoke,reading,faq,offline}.js` | Chromium: переполнение 360/390, диалог поиска, drawer, тема, axe | `OK` |
 
@@ -220,11 +224,11 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-04 | C | ✅ Липкий пропуск на узких экранах: ниже 980 px колонка `static`, карточка компактная, кнопки сеткой 2×2 | `course.css` | — |
 | U-05 | C | ✅ Роадмап Офиса и Даты: два бейджа в карточке (состояние + формат), часы работ в Офисе, формат операций в Дате | `assets/office-hub.js`, `assets/ops-hub.js` | — |
 | U-06 | C | ✅ Кабинеты Офиса и Даты: пропуск стал разделом 01, дальше нумерация подряд по общему порядку | `stands/office/index.html`, `stands/ops/index.html` | — |
-| U-07 | A | 🔜 Убрать последние инлайновые `style="--p:…"`: прогресс через `data-ws-progress` + `attr()`-фолбэк | 8 JS-файлов (18 мест), `base.css` | P1 |
-| U-08 | A | 🔜 Тема по умолчанию от системы (`prefers-color-scheme`), если пользователь ещё не выбирал | `shell.js`, инлайн-скрипт темы в `<head>` | P2 |
-| U-09 | D | 🔜 Автоматизировать сборку поискового индекса из HTML (сейчас ручной; проверка целостности уже есть) | `scripts/build-search-index.py`, `assets/search-index.json` | P1 |
+| U-07 | A | ✅ Прогресс без инлайн-стилей: `data-ws-value` + `--p` в `shell.js` (18 шаблонов в 8 файлах) | `shell.js`, `course.css`, `stands.js`, `*-hub.js`, `*-kit.js`, `league-page.js`, `standings.js` | — |
+| U-08 | A | ✅ Тема по умолчанию от системы + живое переключение ОС; выбор пользователя главнее | `shell.js`, инлайн-скрипт в 75 страницах, `test-theme.js` | — |
+| U-09 | D | ✅ Индекс собирается из `<main>` (без шапки и крошек), `--check` в CI ловит расхождение | `scripts/build-search-index.py`, `assets/search-index.json`, `site-checks.yml` | — |
 | U-10 | E | 🔜 axe на всех 76 страницах в CI (сейчас 13 стендов + несколько страниц) | `scripts/audit-classes.js`, `site-checks.yml` | P1 |
-| U-11 | E | 🔜 Проверка «нет инлайновых стилей» и «нет `backdrop-filter`» в `regression-static.js` как отдельные assert-ы с понятным сообщением | `scripts/regression-static.js` | P2 |
+| U-11 | E | ✅ Отдельные assert-ы: инлайн-стили в HTML **и** в `assets/*.js`, `setAttribute("style")`, `backdrop-filter` во всех CSS | `scripts/regression-static.js` | — |
 | U-12 | D | 🔜 `assets/og.png`/OG-картинки генерировать в CI по шаблону кейса | `scripts/build-og.js` | P2 |
 | U-13 | B | 🔜 Кейсы `projects/*`: единый шаблон (герой, факты, итоги) для киберспорта и навигации | `projects/*.html`, `pages.css` | P2 |
 | U-14 | F | 🔜 Свести `DESIGN_SYSTEM.md`, `docs/design-system.md` и `docs/motion.md` без расхождений | `docs/`, `DESIGN_SYSTEM.md` | P2 |
@@ -246,6 +250,13 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 - **Heredoc с русским текстом в python** ломается на кавычках — использовать точные строки + `assert` на число вхождений.
 - **Не «чинить» отсутствие правок из прошлых PR.** Ветка может быть срезана с более старого коммита;
   сначала `git log --oneline -3` и поиск характерных маркеров, потом выводы.
+- **Инлайн-прогресс.** `style="--p:…"` в шаблонах запрещён тестом. Значение живёт в
+  `<i data-ws-value="42">`, а `--p` выставляет `decorate()` из `shell.js`. Добавили новую полосу — дайте ей атрибут.
+- **Системная тема.** Инлайн-скрипт в `<head>` читает `prefers-color-scheme`, если в localStorage пусто.
+  Он продублирован в 75 страницах и в двух генераторах (`scripts/build-office.js`, `assets/admin.js`) —
+  правится одной заменой по репозиторию, иначе `regression-static` ругнётся на отставшие страницы.
+- **Поисковый индекс** собирается скриптом. Правили `<main>` — запустите `python3 scripts/build-search-index.py`,
+  иначе `--check` в CI упадёт с diff-ом по url.
 - **Кеш service worker**: после правки CSS/JS поднимать `CACHE` до `vNN+1` и править тест, иначе
   пользователи увидят старый интерфейс, а CI — расхождение.
 

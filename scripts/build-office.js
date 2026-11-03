@@ -391,7 +391,7 @@ function shell(cfg, n) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f3f4f7">
 <meta name="color-scheme" content="dark light">
-<script>(function(){try{if(localStorage.getItem('itsliventsev-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}catch(e){}})();</script>
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>${cfg.title} · ОфисПолис · itsliventsev</title>
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">

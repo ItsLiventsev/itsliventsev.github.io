@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f6f2e9">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow">
-<script>(function(){try{var t=localStorage.getItem("itsliventsev-theme");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>админка · itsliventsev</title>
 <meta name="description" content="Служебная панель: приём работ виртуальных стендов, мониторинг сессий и публикация постов. Страница не индексируется.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
