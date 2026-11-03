@@ -777,7 +777,7 @@ dialog.ui-search {
   border-radius: var(--u-r-md);
   background: var(--u-surface);
   color: var(--u-ink);
-  box-shadow: var(--u-shadow-lg, 0 24px 60px rgba(25, 23, 18, .18));
+  box-shadow: var(--u-shadow-3);
 }
 dialog.ui-search::backdrop { background: color-mix(in srgb, var(--u-ink) 42%, transparent); }
 

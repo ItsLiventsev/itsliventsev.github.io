@@ -210,8 +210,8 @@
     $('lg-standings').innerHTML = LEAGUE.tribeStandings().map(function (row, i) {
       var mine = row.tribe.id === profile.tribeId;
       return '<tr' + (mine ? ' class="lg-row-mine"' : '') + '><td class="mono">' + (i + 1) + '</td>' +
-        '<td><span class="lg-glyph" style="color:' + row.tribe.color + ';">' + row.tribe.glyph + '</span> ' +
-        esc(row.tribe.name) + (mine ? ' <small>(ваш трайн)</small>' : '') + '</td>' +
+        '<td><span class="lg-glyph lg-glyph--' + esc(row.tribe.glyph.toLowerCase()) + '">' + row.tribe.glyph + '</span> ' +
+        esc(row.tribe.name) + (mine ? ' <small class="lg-mine-note">(ваш трайб)</small>' : '') + '</td>' +
         '<td class="mono">' + row.members + '</td><td class="mono"><strong>' + row.xp + ' XP</strong></td></tr>';
     }).join('');
   }
@@ -245,7 +245,7 @@
   function dataMsg(text, isErr) {
     var el = $('lg-data-msg');
     el.textContent = text;
-    el.style.color = isErr ? 'var(--st-bad, #f87171)' : '';
+    el.style.color = isErr ? 'var(--u-danger)' : '';
   }
 
   function renderAll() {
