@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-03T20:58:32.143Z",
+  "generated": "2026-11-03T21:36:11.118Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 247,
+  "total": 244,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 25
+      "count": 21
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-03",
-      "count": 15
+      "count": 16
     }
   ],
   "commits": [
+    {
+      "sha": "66ca980",
+      "title": "feat(notes): база знаний сетевого администратора — 23 заметки со схемами",
+      "date": "2026-11-03T21:28:50Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/66ca980835867b05a02026d913f649b59ad0ebd4"
+    },
     {
       "sha": "3a6ed47",
       "title": "fix(css): вернуть ленте заметок сетку — снять висячие объявления в разделе 18",
@@ -481,12 +487,6 @@
       "title": "feat(orchestrator v6): smooth filter FLIP, no badge, cozy cycle, dense about, no empty",
       "date": "2026-11-01T20:21:14Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bfa07fe874ce1435f43399b0a78c21ff23f1e615"
-    },
-    {
-      "sha": "a9f59b4",
-      "title": "feat(orchestrator v5): Cozy Accents — warm canvas, multi-accent palette",
-      "date": "2026-11-01T20:14:35Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a9f59b45e4180ec4c2496304085ca3c052f48282"
     }
   ]
 }
