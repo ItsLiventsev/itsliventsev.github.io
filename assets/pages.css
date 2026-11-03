@@ -2044,3 +2044,225 @@ label.btn { cursor: pointer; }
   }
   .faq summary::after { content: ""; }
 }
+
+/* ==========================================================================
+   15. Главная: плотнее ритм, лента итераций, скелетоны, слой движения
+   ========================================================================== */
+
+/* ——— Плотность главной: меньше воздуха между блоками и внутри карточек ——— */
+.home .ui-section { gap: var(--u-s3); padding-block: var(--u-s5) 0; }
+.home .ui-section + .ui-section { margin-block-start: var(--u-s6); padding-block-start: var(--u-s5); }
+.home-hero { gap: var(--u-s5); margin-block-start: var(--u-s4); padding: clamp(18px, 2.3vw, 26px); }
+.home-hero h1 { margin-block-end: var(--u-s4); }
+.home-lede { margin-block-end: var(--u-s5); }
+.home-stats { padding-block-start: var(--u-s4); }
+.home-paths { margin-block-start: var(--u-s4); }
+.home .bento-panel { padding: clamp(16px, 2vw, 24px); }
+.home .bento-head { margin-block-end: var(--u-s2); }
+.home .space { padding: var(--u-s4) var(--u-s5); gap: var(--u-s4); }
+.home .stack-group { padding: var(--u-s4); gap: var(--u-s2); }
+.home .resource-row { padding: var(--u-s3) var(--u-s4); }
+.home .def-row { padding-block: var(--u-s3); }
+.home .contact-row { padding: var(--u-s4); }
+.home .contact-row > span:last-child { inset-block-start: var(--u-s4); inset-inline-end: var(--u-s4); }
+
+/* ——— Лента итераций: машина читает, проверяет и передаёт правки ———
+   Узкая карточка под героем. Строки едут вверх бесконечно (две копии списка
+   дают бесшовный круг), пауза — кнопкой, при prefers-reduced-motion движение
+   выключено и видна только первая копия. */
+.iter-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: var(--u-s4) var(--u-s6);
+  align-items: center;
+  margin-block-start: var(--u-s4);
+  padding: var(--u-s4) var(--u-s5);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-xl);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.iter-strip-head { min-width: 0; }
+.iter-strip-head .ui-eyebrow { margin-block-end: var(--u-s2); }
+.iter-strip-lede { margin: 0 0 var(--u-s2); color: var(--u-muted); font-size: var(--u-fs-sm); line-height: 1.45; }
+.iter-strip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-xs);
+  font-weight: 600;
+  color: var(--u-ink);
+  text-decoration: none;
+}
+.iter-strip-link span { transition: transform var(--u-dur-2) var(--u-ease); }
+.iter-strip-link:hover { color: var(--u-accent); }
+.iter-strip-link:hover span { transform: translateX(3px); }
+
+.iter-strip-window {
+  position: relative;
+  height: 104px;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+}
+.iter-strip-track {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: u-iter-scroll 26s linear infinite;
+}
+.iter-strip.is-paused .iter-strip-track { animation-play-state: paused; }
+.iter-strip-window:hover .iter-strip-track,
+.iter-strip-window:focus-within .iter-strip-track { animation-play-state: paused; }
+.iter-line {
+  display: grid;
+  grid-template-columns: 18px 96px minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--u-s3);
+  padding-block: 5px;
+  font-size: var(--u-fs-sm);
+  line-height: 1.3;
+}
+.iter-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-ok); text-align: center; }
+.iter-line[data-state="work"] .iter-mark { color: var(--u-accent); }
+.iter-src {
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  text-transform: lowercase;
+  color: var(--u-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.iter-text { color: var(--u-ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iter-strip-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s3); }
+.iter-strip-toggle {
+  min-height: 22px;
+  padding: 0 10px;
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-pill);
+  background: var(--u-paper);
+  color: var(--u-muted);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  cursor: pointer;
+  transition: color var(--u-dur-1) var(--u-ease), border-color var(--u-dur-1) var(--u-ease);
+}
+.iter-strip-toggle:hover { color: var(--u-ink); border-color: var(--u-line-strong); }
+.iter-strip-toggle:focus-visible { outline: 3px solid var(--u-accent); outline-offset: 2px; }
+
+/* Живой маркер у заголовка: мягкая пульсация, пока лента едет. */
+@media (prefers-reduced-motion: no-preference) {
+  .iter-strip .ui-eyebrow::before { animation: u-iter-pulse 2.4s var(--u-ease) infinite; }
+  .iter-strip.is-paused .ui-eyebrow::before { animation-play-state: paused; }
+}
+@keyframes u-iter-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.78); }
+}
+
+@media (max-width: 900px) {
+  .iter-strip { grid-template-columns: minmax(0, 1fr); }
+  .iter-strip-window { height: 92px; }
+}
+
+@keyframes u-iter-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iter-strip-track { animation: none; }
+  .iter-strip-window { height: auto; max-height: 150px; -webkit-mask-image: none; mask-image: none; }
+  .iter-strip-track > li:nth-child(n + 9) { display: none; }
+  .iter-strip-toggle { display: none; }
+}
+
+/* ——— Скелетоны: заглушки на время сборки данных ——— */
+.u-skeleton { position: relative; overflow: hidden; }
+.u-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(100deg, transparent 32%, color-mix(in srgb, var(--u-ink) 6%, transparent) 50%, transparent 68%);
+  animation: u-shimmer 1.6s var(--u-ease) infinite;
+  pointer-events: none;
+}
+.feed-empty.u-skeleton { padding: var(--u-s4); border: 1px dashed var(--u-line-strong); border-radius: var(--u-r-md); }
+.chart-grid.u-skeleton::after { border-radius: var(--u-r-sm); }
+@keyframes u-shimmer { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .u-skeleton::after { display: none; }
+}
+
+/* ——— Слой движения ———
+   Короткие физичные сдвиги на 1–2px: кнопки, строки, стрелки. Всё выключено
+   при prefers-reduced-motion; прозрачность и контраст не трогаем вовсе. */
+@media (prefers-reduced-motion: no-preference) {
+  .ui-btn,
+  .ui-iconbtn,
+  .ui-search-open {
+    transition: background var(--u-dur-1) var(--u-ease), border-color var(--u-dur-1) var(--u-ease),
+      color var(--u-dur-1) var(--u-ease), box-shadow var(--u-dur-2) var(--u-ease),
+      transform var(--u-dur-1) var(--u-ease);
+  }
+  .ui-btn:hover,
+  .ui-search-open:hover { transform: translateY(-1px); }
+  .ui-btn:active,
+  .ui-iconbtn:active,
+  .ui-search-open:active { transform: translateY(0) scale(0.98); }
+  .ui-brand,
+  .ui-navlink { transition: background var(--u-dur-2) var(--u-ease), color var(--u-dur-2) var(--u-ease),
+      box-shadow var(--u-dur-2) var(--u-ease), transform var(--u-dur-2) var(--u-ease); }
+  .ui-navlink:active { transform: scale(0.97); }
+
+  .home-path,
+  .space,
+  .bento-panel,
+  .resource-row,
+  .contact-row,
+  .catalog-row,
+  .index-row,
+  .ui-reading-row,
+  .stack-group {
+    transition: box-shadow var(--u-dur-2) var(--u-ease), transform var(--u-dur-2) var(--u-ease),
+      background var(--u-dur-2) var(--u-ease), border-color var(--u-dur-2) var(--u-ease);
+  }
+  .home-path:hover,
+  .space:hover,
+  .resource-row:hover,
+  .contact-row:hover { transform: translateY(-2px); }
+
+  .ui-inline-link span,
+  .catalog-arrow,
+  .home-path-arrow,
+  .index-row .ui-num[aria-hidden="true"],
+  .contact-row > span:last-child {
+    transition: transform var(--u-dur-2) var(--u-ease), color var(--u-dur-2) var(--u-ease);
+  }
+  .ui-inline-link:hover span { transform: translateX(3px); }
+  .catalog-row:hover .catalog-arrow,
+  .index-row:hover .ui-num[aria-hidden="true"],
+  .contact-row:hover > span:last-child { transform: translate(2px, -2px); }
+  .home-path:hover .home-path-arrow { transform: translateX(3px); }
+}
+
+/* Плавная смена темы: на время переключения все цвета переходят за 320 мс,
+   после чего класс снимается — постоянных переходов на странице не остаётся. */
+html.u-theme-switch,
+html.u-theme-switch *,
+html.u-theme-switch *::before,
+html.u-theme-switch *::after {
+  transition: background-color var(--u-dur-3) var(--u-ease), color var(--u-dur-3) var(--u-ease),
+    border-color var(--u-dur-3) var(--u-ease), box-shadow var(--u-dur-3) var(--u-ease) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.u-theme-switch,
+  html.u-theme-switch *,
+  html.u-theme-switch *::before,
+  html.u-theme-switch *::after { transition: none !important; }
+}

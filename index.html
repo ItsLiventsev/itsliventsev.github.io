@@ -45,13 +45,12 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"],"jobTitle":"мастер производственного обучения"}</script>
   <!-- SEO:AUTO:END -->
 </head>
-<body>
+<body class="home">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <main id="main-content">
 
   <section class="home-hero" id="about" aria-labelledby="home-title">
     <div class="home-hero-main">
-      <p class="ui-eyebrow">мастер производственного обучения · Москва</p>
       <h1 id="home-title">Учу сети и системы <em>на практике</em>, а не на слайдах</h1>
       <p class="home-lede">Готовлю сетевых и системных администраторов: студент собирает инфраструктуру руками — от первой команды в консоли до проекта локальной сети. Искусственный интеллект изучаю постепенно и применяю там, где он действительно экономит время.</p>
       <div class="home-actions">
@@ -65,6 +64,38 @@
       <li><b>52</b><span>маршрута</span></li>
       <li><b>74</b><span>термина</span></li>
     </ul>
+  </section>
+
+  <section class="iter-strip" aria-labelledby="iter-strip-title" data-iter-strip>
+    <div class="iter-strip-head">
+      <p class="ui-eyebrow" id="iter-strip-title">сайт собирается итерациями</p>
+      <p class="iter-strip-lede">Машина листает страницы, сверяет разметку и контраст и передаёт правки на ревью — пока вы читаете.</p>
+      <div class="iter-strip-controls">
+        <a class="iter-strip-link" href="#activity">журнал изменений <span aria-hidden="true">→</span></a>
+        <button class="iter-strip-toggle" type="button" aria-pressed="false" data-iter-toggle>пауза</button>
+      </div>
+    </div>
+    <div class="iter-strip-window">
+      <ol class="iter-strip-track" aria-hidden="true">
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">76 страниц: заголовки, ссылки и id на месте</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span></li>
+        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 72 страницы и 74 термина</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">браузер</span><span class="iter-text">шапка не прыгает, кнопки держат фокус</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span></li>
+        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">дальше</span><span class="iter-text">в очереди — тренажёры по витой паре</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">76 страниц: заголовки, ссылки и id на месте</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span></li>
+        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 72 страницы и 74 термина</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">браузер</span><span class="iter-text">шапка не прыгает, кнопки держат фокус</span></li>
+        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span></li>
+        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">дальше</span><span class="iter-text">в очереди — тренажёры по витой паре</span></li>
+      </ol>
+    </div>
+    <p class="sr-only">Лента показывает шаги сборки сайта: прочитать страницы, проверить разметку и контраст, передать правку на ревью, обновить поисковый индекс. Полная история изменений — в разделе «Сайт собирается итерациями» ниже.</p>
   </section>
 
   <nav class="home-paths" aria-label="С чего начать">
@@ -224,7 +255,7 @@
           </div>
         </div>
         <div class="feed-list" data-activity-list role="list" aria-live="polite">
-          <p class="feed-empty">Читаю публичную историю GitHub…</p>
+          <p class="feed-empty u-skeleton">Читаю публичную историю GitHub…</p>
         </div>
         <p class="ui-reading-status" data-activity-status role="status" aria-live="polite"></p>
       </div>

@@ -780,10 +780,64 @@ dialog.ui-search {
   box-shadow: var(--u-shadow-3);
 }
 dialog.ui-search::backdrop { background: color-mix(in srgb, var(--u-ink) 42%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  dialog.ui-search[open] { animation: u-dialog-in 190ms var(--u-ease) both; }
+  dialog.ui-search[open]::backdrop { animation: u-backdrop-in 190ms var(--u-ease) both; }
+}
+@keyframes u-dialog-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes u-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 /* ——— Scroll reveal: transforms only, so contrast and layout stay intact ——— */
 .ui-reveal { transform: translateY(14px); transition: transform 520ms var(--u-ease); }
 .ui-reveal.is-revealed { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .ui-reveal { transform: none; transition: none; }
+}
+
+/* ==========================================================================
+   Загрузка без скачка: до запуска shell.js
+   Оболочка вставляет шапку и заворачивает страницу в .ui-shell уже после
+   парсинга. Чтобы контент не переезжал из «полной ширины» в колонку и не
+   прыгал вниз на высоту шапки, статичная разметка сразу получает ту же
+   геометрию, а место под шапку занято скелетоном до body.ui-ready.
+   ========================================================================== */
+body > main,
+body > .page-wrap,
+body > .st-wrap,
+body > [data-ui-root],
+body > [data-workspace-root] {
+  max-width: var(--u-max);
+  margin-inline: auto;
+  padding: 0 var(--u-gutter) var(--u-s11);
+  min-width: 0;
+}
+/* На страницах стендов шапка уже есть в разметке (.st-topbar) — второй
+   скелетон над ней не нужен. :has() понимают все актуальные браузеры;
+   там, где его нет, правило просто не применяется. */
+body:not(.ui-ready):not(:has(.st-topbar))::before {
+  content: "";
+  display: block;
+  height: var(--u-masthead);
+  border-block-end: 1px solid var(--u-line);
+  background-color: var(--u-paper);
+  background-image: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--u-ink) 5%, transparent) 50%, transparent 65%);
+  background-size: 220% 100%;
+  animation: u-boot 1.5s linear infinite;
+}
+@keyframes u-boot {
+  from { background-position: 120% 0; }
+  to { background-position: -30% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:not(.ui-ready):not(:has(.st-topbar))::before { animation: none; }
+}
+/* Совсем без скрипта шапки не будет — не оставляем пустую полосу. */
+@media (scripting: none) {
+  body:not(.ui-ready):not(:has(.st-topbar))::before { display: none; }
 }
