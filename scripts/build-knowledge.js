@@ -25,6 +25,7 @@
 const fs = require('fs');
 const path = require('path');
 const related = require('./lib/related');
+const critical = require('./lib/critical-knowledge');
 
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, 'assets/data/knowledge');
@@ -391,7 +392,7 @@ function renderBody(markdown, note, notesById) {
 const YEAR = 2026;
 const order = (note) => String(note.date) + '-' + String(note.id);
 
-function head({ title, description, canonical, extraMeta }) {
+function head({ title, description, canonical, extraMeta, criticalNote = false }) {
   return `<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -406,10 +407,10 @@ ${extraMeta || ''}
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/tokens.css">
-<link rel="stylesheet" href="/assets/base.css">
-<link rel="stylesheet" href="/assets/pages.css">
-<link rel="stylesheet" href="/assets/knowledge.css">
+${criticalNote ? critical.criticalBlock() + '\n' : ''}${critical.stylesheet('tokens', criticalNote)}
+${critical.stylesheet('base', false)}
+${critical.stylesheet('pages', criticalNote)}
+${critical.stylesheet('knowledge', criticalNote)}
 ${canonical || '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->'}
 </head>`;
 }
@@ -463,6 +464,7 @@ function renderNotePage(note, notes, notesById, index, registry) {
      из общей карточки сайта. */
 
   return `${head({
+    criticalNote: true,
     title: note.title + ' · itsliventsev',
     description: note.summary,
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
