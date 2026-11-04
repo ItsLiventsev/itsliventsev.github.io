@@ -71,30 +71,30 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Администраторская работа — это на 80% разбор текста: логов, конфигов, вывода команд. Оболочка даёт для этого язык, который не надо компилировать, и конвейер, который не надо объяснять.</p>
-        <h2>Конвейер — это поток</h2>
+        <h2 id="konveyer-eto-potok">Конвейер — это поток</h2>
         <p><code>|</code> не сохраняет промежуточный результат на диск: он соединяет stdout первой команды со stdin второй через буфер в памяти. Команды работают одновременно, поэтому <code>tail -f</code> в конвейере ведёт себя как ожидается — строки появляются по мере поступления.</p>
         <pre><code>awk &#39;{print $1}&#39; access.log \
   | grep -v &#39;^192.0.2.&#39; \
   | sort | uniq -c | sort -rn | head -5</code></pre>
         <p>Разбор: взять первый столбец (IP), убрать внутренние адреса, отсортировать, посчитать повторы, отсортировать по частоте, показать пять первых. Пять инструментов, каждый делает одно.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Команда</th><th scope="col">Работает с</th><th scope="col">Типичная задача</th></tr></thead><tbody><tr><th scope="row">grep</th><td>строками</td><td>отфильтровать по шаблону</td></tr><tr><th scope="row">awk</th><td>полями</td><td>взять колонку и посчитать</td></tr><tr><th scope="row">sed</th><td>потоком</td><td>заменить или вырезать</td></tr><tr><th scope="row">sort / uniq</th><td>порядком</td><td>сгруппировать и посчитать</td></tr><tr><th scope="row">xargs</th><td>аргументами</td><td>применить к списку</td></tr></tbody><caption>Каждая команда делает одно и передаёт результат дальше — так строка остаётся читаемой через месяц.</caption></table></div>
-        <h2>Три строки в начале любого скрипта</h2>
+        <h2 id="tri-stroki-v-nachale-lyubogo-skripta">Три строки в начале любого скрипта</h2>
         <pre><code>set -euo pipefail
 IFS=$&#39;\n\t&#39;</code></pre>
         <ul><li><code>-e</code> — выйти при первой ошибке вместо того, чтобы идти дальше «как будто ничего».</li><li><code>-u</code> — считать обращение к необъявленной переменной ошибкой (спасает от <code>rm -rf &quot;$DIR/&quot;</code> с пустой переменной).</li><li><code>pipefail</code> — код возврата конвейера = код последней <strong>упавшей</strong> команды. Без него <code>grep ... | head</code> вернёт 0, даже если grep упал.</li></ul>
         <p><code>IFS</code> переопределяют по умолчанию в новых строках и табах: иначе <code>for f in $(ls)</code> развалится на файлах с пробелами.</p>
-        <h2>Кавычки: где именно ломается</h2>
+        <h2 id="kavychki-gde-imenno-lomaetsya">Кавычки: где именно ломается</h2>
         <p>Правило простое: <strong>переменные — в двойных, шаблоны и литералы — в одинарных, «сырой» текст — через <code>--</code></strong>.</p>
         <pre><code>find . -name &quot;*.log&quot; -mtime +7 -print0 | xargs -0 rm -v
 grep -- &quot;-o&quot; config.txt      # ищем строку -o, а не просим опцию</code></pre>
         <p>Без <code>-print0 | xargs -0</code> файл с пробелом в имени разрежется на два аргумента. Без <code>--</code> строка, начинающаяся с дефиса, будет принята за опцию.</p>
-        <h2>Когда конвейер медленный</h2>
+        <h2 id="kogda-konveyer-medlennyy">Когда конвейер медленный</h2>
         <p><code>xargs -P 4</code> запускает до четырёх процессов параллельно — на сетевых операциях это даёт кратный выигрыш:</p>
         <pre><code>cat hosts.txt | xargs -P 8 -I{} ssh -o BatchMode=yes {} &#39;uptime&#39;</code></pre>
         <p>Осторожно с <code>-I{}</code>: он неявно ставит <code>-L 1</code> и уменьшает порцию аргументов, что медленнее, но безопаснее.</p>
         <p><code>tee</code> разветвляет поток: одна копия дальше по конвейеру, вторая — в файл. Удобно, когда нужно и посмотреть, и сохранить:</p>
         <pre><code>./upgrade.sh 2&gt;&amp;1 | tee /var/log/upgrade-$(date +%F).log</code></pre>
-        <h2>Что писать в скрипте, а что оставить в конвейере</h2>
+        <h2 id="chto-pisat-v-skripte-a-chto-ostavit-v-konveyere">Что писать в скрипте, а что оставить в конвейере</h2>
         <p>Конвейер — для разового вопроса. Скрипт — когда операцию повторить придётся: с <code>set -euo pipefail</code>, проверкой аргументов и кодом возврата. Но если операция меняет состояние десяти серверов, правильный инструмент — не bash, а <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>, потому что он умеет идемпотентность и отчёт по каждому хосту.</p>
         <p>Типичная связка: конвейером вы разбираете <a class="kn-ref" href="/blog/kn-logs.html">журналы</a> и находите проблему, а исправление оформляете плейбуком.</p>
       </div>
@@ -122,15 +122,17 @@ grep -- &quot;-o&quot; config.txt      # ищем строку -o, а не пр�
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 03 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-bash"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Linux и службы · 03 из 43 · 7 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#konveyer-eto-potok">Конвейер — это поток</a></li>
+          <li><a href="#tri-stroki-v-nachale-lyubogo-skripta">Три строки в начале любого скрипта</a></li>
+          <li><a href="#kavychki-gde-imenno-lomaetsya">Кавычки: где именно ломается</a></li>
+          <li><a href="#kogda-konveyer-medlennyy">Когда конвейер медленный</a></li>
+          <li><a href="#chto-pisat-v-skripte-a-chto-ostavit-v-konveyere">Что писать в скрипте, а что оставить в конвейере</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -139,9 +141,12 @@ grep -- &quot;-o&quot; config.txt      # ищем строку -o, а не пр�
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-bash"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

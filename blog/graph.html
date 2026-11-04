@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>Граф заметок · itsliventsev</title>
-<meta name="description" content="Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.">
+<meta name="description" content="Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.">
 undefined
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -25,7 +25,7 @@ undefined
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Граф заметок · itsliventsev">
-  <meta property="og:description" content="Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.">
+  <meta property="og:description" content="Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/graph.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -33,9 +33,9 @@ undefined
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Граф заметок · itsliventsev">
-  <meta name="twitter:description" content="Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.">
+  <meta name="twitter:description" content="Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Граф заметок","description":"Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.","url":"https://itsliventsev.github.io/blog/graph.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/graph.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Граф заметок","description":"Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.","url":"https://itsliventsev.github.io/blog/graph.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/graph.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Граф заметок","item":"https://itsliventsev.github.io/blog/graph.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -45,203 +45,217 @@ undefined
   <header class="ui-pagehead">
     <p class="ui-eyebrow">база знаний · связи</p>
     <h1>Граф заметок</h1>
-    <p>43 заметки, 142 связи. Линия означает, что одна заметка ссылается на другую. Наведите курсор или перейдите по Tab, чтобы подсветить связи узла.</p>
+    <p>43 заметки, 142 связи. Каждая рубрика стягивает свои узлы к своему сектору, связи работают как пружины. Наведите курсор или перейдите по Tab — окружение подсветится, остальное отойдёт на второй план.</p>
     <div class="ui-pagehead-meta"><span data-graph-count>43 узлов</span><span>142 рёбер</span><span><a href="/blog/topics.html">рубрики</a></span></div>
   </header>
 
-  <div class="kn-graph-stage" data-kn-graph>
-    <svg class="kn-graph-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <line data-from="kn-ansible" data-to="kn-ssh" x1="14.63%" y1="36.85%" x2="44.34%" y2="85.60"></line>
-        <line data-from="kn-ansible" data-to="kn-systemd" x1="14.63%" y1="36.85%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-ansible" data-to="kn-prometheus" x1="14.63%" y1="36.85%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-ansible" data-to="kn-backups" x1="14.63%" y1="36.85%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-backups" data-to="kn-raid" x1="12.11%" y1="52.69%" x2="12.11%" y2="47.31"></line>
-        <line data-from="kn-backups" data-to="kn-postgres" x1="12.11%" y1="52.69%" x2="20.29%" y2="72.45"></line>
-        <line data-from="kn-backups" data-to="kn-systemd" x1="12.11%" y1="52.69%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-backups" data-to="kn-prometheus" x1="12.11%" y1="52.69%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-bash" data-to="kn-logs" x1="82.91%" y1="68.00%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-bash" data-to="kn-systemd" x1="82.91%" y1="68.00%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-bash" data-to="kn-ansible" x1="82.91%" y1="68.00%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-bgp" data-to="kn-routing" x1="50.00%" y1="14.00%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-bgp" data-to="kn-tcp" x1="50.00%" y1="14.00%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-bgp" data-to="kn-troubleshoot" x1="50.00%" y1="14.00%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-cron" data-to="kn-systemd" x1="79.71%" y1="72.45%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-cron" data-to="kn-bash" x1="79.71%" y1="72.45%" x2="82.91%" y2="68.00"></line>
-        <line data-from="kn-cron" data-to="kn-logs" x1="79.71%" y1="72.45%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-dhcp" data-to="kn-vlan" x1="55.66%" y1="14.40%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-dhcp" data-to="kn-dns" x1="55.66%" y1="14.40%" x2="61.20%" y2="15.60"></line>
-        <line data-from="kn-dhcp" data-to="kn-troubleshoot" x1="55.66%" y1="14.40%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-dns" data-to="kn-dhcp" x1="61.20%" y1="15.60%" x2="55.66%" y2="14.40"></line>
-        <line data-from="kn-dns" data-to="kn-tcp" x1="61.20%" y1="15.60%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-dns" data-to="kn-troubleshoot" x1="61.20%" y1="15.60%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-docker" data-to="kn-nginx" x1="75.85%" y1="76.39%" x2="55.66%" y2="85.60"></line>
-        <line data-from="kn-docker" data-to="kn-ansible" x1="75.85%" y1="76.39%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-docker" data-to="kn-prometheus" x1="75.85%" y1="76.39%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-documentation" data-to="kn-git" x1="24.15%" y1="23.61%" x2="28.59%" y2="20.26"></line>
-        <line data-from="kn-documentation" data-to="kn-ipam" x1="24.15%" y1="23.61%" x2="71.41%" y2="20.26"></line>
-        <line data-from="kn-documentation" data-to="kn-incident" x1="24.15%" y1="23.61%" x2="33.51%" y2="17.57"></line>
-        <line data-from="kn-documentation" data-to="kn-ansible" x1="24.15%" y1="23.61%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-git" data-to="kn-ansible" x1="28.59%" y1="20.26%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-git" data-to="kn-bash" x1="28.59%" y1="20.26%" x2="82.91%" y2="68.00"></line>
-        <line data-from="kn-git" data-to="kn-documentation" x1="28.59%" y1="20.26%" x2="24.15%" y2="23.61"></line>
-        <line data-from="kn-gre" data-to="kn-mtu" x1="66.49%" y1="17.57%" x2="82.91%" y2="32.00"></line>
-        <line data-from="kn-gre" data-to="kn-ipsec" x1="66.49%" y1="17.57%" x2="75.85%" y2="23.61"></line>
-        <line data-from="kn-gre" data-to="kn-routing" x1="66.49%" y1="17.57%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-incident" data-to="kn-documentation" x1="33.51%" y1="17.57%" x2="24.15%" y2="23.61"></line>
-        <line data-from="kn-incident" data-to="kn-prometheus" x1="33.51%" y1="17.57%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-incident" data-to="kn-troubleshoot" x1="33.51%" y1="17.57%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-incident" data-to="kn-monitoring" x1="33.51%" y1="17.57%" x2="17.09%" y2="32.00"></line>
-        <line data-from="kn-indexes" data-to="kn-postgres" x1="28.59%" y1="79.74%" x2="20.29%" y2="72.45"></line>
-        <line data-from="kn-indexes" data-to="kn-tx" x1="28.59%" y1="79.74%" x2="12.95%" y2="58.01"></line>
-        <line data-from="kn-indexes" data-to="kn-prometheus" x1="28.59%" y1="79.74%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-ipam" data-to="kn-vlan" x1="71.41%" y1="20.26%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-ipam" data-to="kn-dhcp" x1="71.41%" y1="20.26%" x2="55.66%" y2="14.40"></line>
-        <line data-from="kn-ipam" data-to="kn-routing" x1="71.41%" y1="20.26%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-ipsec" data-to="kn-gre" x1="75.85%" y1="23.61%" x2="66.49%" y2="17.57"></line>
-        <line data-from="kn-ipsec" data-to="kn-mtu" x1="75.85%" y1="23.61%" x2="82.91%" y2="32.00"></line>
-        <line data-from="kn-ipsec" data-to="kn-troubleshoot" x1="75.85%" y1="23.61%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-ipsec" data-to="kn-routing" x1="75.85%" y1="23.61%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-lacp" data-to="kn-stp" x1="79.71%" y1="27.55%" x2="87.89%" y2="52.69"></line>
-        <line data-from="kn-lacp" data-to="kn-vlan" x1="79.71%" y1="27.55%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-lacp" data-to="kn-troubleshoot" x1="79.71%" y1="27.55%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-logrotate" data-to="kn-logs" x1="71.41%" y1="79.74%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-logrotate" data-to="kn-lvm" x1="71.41%" y1="79.74%" x2="61.20%" y2="84.40"></line>
-        <line data-from="kn-logrotate" data-to="kn-systemd" x1="71.41%" y1="79.74%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-logs" data-to="kn-systemd" x1="66.49%" y1="82.43%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-logs" data-to="kn-bash" x1="66.49%" y1="82.43%" x2="82.91%" y2="68.00"></line>
-        <line data-from="kn-logs" data-to="kn-prometheus" x1="66.49%" y1="82.43%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-logs" data-to="kn-troubleshoot" x1="66.49%" y1="82.43%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-lvm" data-to="kn-zfs" x1="61.20%" y1="84.40%" x2="12.95%" y2="41.99"></line>
-        <line data-from="kn-lvm" data-to="kn-backups" x1="61.20%" y1="84.40%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-lvm" data-to="kn-logs" x1="61.20%" y1="84.40%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-monitoring" data-to="kn-prometheus" x1="17.09%" y1="32.00%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-monitoring" data-to="kn-incident" x1="17.09%" y1="32.00%" x2="33.51%" y2="17.57"></line>
-        <line data-from="kn-monitoring" data-to="kn-troubleshoot" x1="17.09%" y1="32.00%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-mtu" data-to="kn-gre" x1="82.91%" y1="32.00%" x2="66.49%" y2="17.57"></line>
-        <line data-from="kn-mtu" data-to="kn-tcp" x1="82.91%" y1="32.00%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-mtu" data-to="kn-troubleshoot" x1="82.91%" y1="32.00%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-mysql" data-to="kn-postgres" x1="24.15%" y1="76.39%" x2="20.29%" y2="72.45"></line>
-        <line data-from="kn-mysql" data-to="kn-indexes" x1="24.15%" y1="76.39%" x2="28.59%" y2="79.74"></line>
-        <line data-from="kn-mysql" data-to="kn-tx" x1="24.15%" y1="76.39%" x2="12.95%" y2="58.01"></line>
-        <line data-from="kn-netfilter" data-to="kn-tcp" x1="85.37%" y1="36.85%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-netfilter" data-to="kn-packet" x1="85.37%" y1="36.85%" x2="87.05%" y2="41.99"></line>
-        <line data-from="kn-netfilter" data-to="kn-troubleshoot" x1="85.37%" y1="36.85%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-nginx" data-to="kn-tls" x1="55.66%" y1="85.60%" x2="33.51%" y2="82.43"></line>
-        <line data-from="kn-nginx" data-to="kn-netfilter" x1="55.66%" y1="85.60%" x2="85.37%" y2="36.85"></line>
-        <line data-from="kn-nginx" data-to="kn-prometheus" x1="55.66%" y1="85.60%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-ntp" data-to="kn-systemd" x1="50.00%" y1="86.00%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-ntp" data-to="kn-logs" x1="50.00%" y1="86.00%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-ntp" data-to="kn-ssh" x1="50.00%" y1="86.00%" x2="44.34%" y2="85.60"></line>
-        <line data-from="kn-packet" data-to="kn-tcp" x1="87.05%" y1="41.99%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-packet" data-to="kn-netfilter" x1="87.05%" y1="41.99%" x2="85.37%" y2="36.85"></line>
-        <line data-from="kn-packet" data-to="kn-troubleshoot" x1="87.05%" y1="41.99%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-postgres" data-to="kn-indexes" x1="20.29%" y1="72.45%" x2="28.59%" y2="79.74"></line>
-        <line data-from="kn-postgres" data-to="kn-tx" x1="20.29%" y1="72.45%" x2="12.95%" y2="58.01"></line>
-        <line data-from="kn-postgres" data-to="kn-backups" x1="20.29%" y1="72.45%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-practice" data-to="kn-project" x1="38.80%" y1="15.60%" x2="44.34%" y2="14.40"></line>
-        <line data-from="kn-practice" data-to="kn-troubleshoot" x1="38.80%" y1="15.60%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-practice" data-to="kn-ansible" x1="38.80%" y1="15.60%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-project" data-to="kn-practice" x1="44.34%" y1="14.40%" x2="38.80%" y2="15.60"></line>
-        <line data-from="kn-project" data-to="kn-troubleshoot" x1="44.34%" y1="14.40%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-project" data-to="kn-ansible" x1="44.34%" y1="14.40%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-prometheus" data-to="kn-logs" x1="20.29%" y1="27.55%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-prometheus" data-to="kn-ansible" x1="20.29%" y1="27.55%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-prometheus" data-to="kn-replication" x1="20.29%" y1="27.55%" x2="14.63%" y2="63.15"></line>
-        <line data-from="kn-raid" data-to="kn-backups" x1="12.11%" y1="47.31%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-raid" data-to="kn-postgres" x1="12.11%" y1="47.31%" x2="20.29%" y2="72.45"></line>
-        <line data-from="kn-raid" data-to="kn-prometheus" x1="12.11%" y1="47.31%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-redis" data-to="kn-mysql" x1="17.09%" y1="68.00%" x2="24.15%" y2="76.39"></line>
-        <line data-from="kn-redis" data-to="kn-prometheus" x1="17.09%" y1="68.00%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-redis" data-to="kn-nginx" x1="17.09%" y1="68.00%" x2="55.66%" y2="85.60"></line>
-        <line data-from="kn-redis" data-to="kn-netfilter" x1="17.09%" y1="68.00%" x2="85.37%" y2="36.85"></line>
-        <line data-from="kn-replication" data-to="kn-tx" x1="14.63%" y1="63.15%" x2="12.95%" y2="58.01"></line>
-        <line data-from="kn-replication" data-to="kn-backups" x1="14.63%" y1="63.15%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-replication" data-to="kn-prometheus" x1="14.63%" y1="63.15%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-routing" data-to="kn-vlan" x1="87.89%" y1="47.31%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-routing" data-to="kn-troubleshoot" x1="87.89%" y1="47.31%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-routing" data-to="kn-gre" x1="87.89%" y1="47.31%" x2="66.49%" y2="17.57"></line>
-        <line data-from="kn-ssh" data-to="kn-systemd" x1="44.34%" y1="85.60%" x2="38.80%" y2="84.40"></line>
-        <line data-from="kn-ssh" data-to="kn-ansible" x1="44.34%" y1="85.60%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-ssh" data-to="kn-troubleshoot" x1="44.34%" y1="85.60%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-stp" data-to="kn-vlan" x1="87.89%" y1="52.69%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-stp" data-to="kn-lacp" x1="87.89%" y1="52.69%" x2="79.71%" y2="27.55"></line>
-        <line data-from="kn-stp" data-to="kn-troubleshoot" x1="87.89%" y1="52.69%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-systemd" data-to="kn-logs" x1="38.80%" y1="84.40%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-systemd" data-to="kn-ssh" x1="38.80%" y1="84.40%" x2="44.34%" y2="85.60"></line>
-        <line data-from="kn-systemd" data-to="kn-ansible" x1="38.80%" y1="84.40%" x2="14.63%" y2="36.85"></line>
-        <line data-from="kn-systemd" data-to="kn-backups" x1="38.80%" y1="84.40%" x2="12.11%" y2="52.69"></line>
-        <line data-from="kn-tcp" data-to="kn-troubleshoot" x1="87.05%" y1="58.01%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-tcp" data-to="kn-mtu" x1="87.05%" y1="58.01%" x2="82.91%" y2="32.00"></line>
-        <line data-from="kn-tcp" data-to="kn-dns" x1="87.05%" y1="58.01%" x2="61.20%" y2="15.60"></line>
-        <line data-from="kn-tcp" data-to="kn-gre" x1="87.05%" y1="58.01%" x2="66.49%" y2="17.57"></line>
-        <line data-from="kn-tls" data-to="kn-nginx" x1="33.51%" y1="82.43%" x2="55.66%" y2="85.60"></line>
-        <line data-from="kn-tls" data-to="kn-ssh" x1="33.51%" y1="82.43%" x2="44.34%" y2="85.60"></line>
-        <line data-from="kn-tls" data-to="kn-dns" x1="33.51%" y1="82.43%" x2="61.20%" y2="15.60"></line>
-        <line data-from="kn-tls" data-to="kn-prometheus" x1="33.51%" y1="82.43%" x2="20.29%" y2="27.55"></line>
-        <line data-from="kn-troubleshoot" data-to="kn-routing" x1="50.00%" y1="50.00%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-troubleshoot" data-to="kn-dns" x1="50.00%" y1="50.00%" x2="61.20%" y2="15.60"></line>
-        <line data-from="kn-troubleshoot" data-to="kn-logs" x1="50.00%" y1="50.00%" x2="66.49%" y2="82.43"></line>
-        <line data-from="kn-troubleshoot" data-to="kn-vlan" x1="50.00%" y1="50.00%" x2="85.37%" y2="63.15"></line>
-        <line data-from="kn-troubleshoot" data-to="kn-tcp" x1="50.00%" y1="50.00%" x2="87.05%" y2="58.01"></line>
-        <line data-from="kn-tx" data-to="kn-postgres" x1="12.95%" y1="58.01%" x2="20.29%" y2="72.45"></line>
-        <line data-from="kn-tx" data-to="kn-indexes" x1="12.95%" y1="58.01%" x2="28.59%" y2="79.74"></line>
-        <line data-from="kn-tx" data-to="kn-replication" x1="12.95%" y1="58.01%" x2="14.63%" y2="63.15"></line>
-        <line data-from="kn-vlan" data-to="kn-routing" x1="85.37%" y1="63.15%" x2="87.89%" y2="47.31"></line>
-        <line data-from="kn-vlan" data-to="kn-dhcp" x1="85.37%" y1="63.15%" x2="55.66%" y2="14.40"></line>
-        <line data-from="kn-vlan" data-to="kn-troubleshoot" x1="85.37%" y1="63.15%" x2="50.00%" y2="50.00"></line>
-        <line data-from="kn-vlan" data-to="kn-mtu" x1="85.37%" y1="63.15%" x2="82.91%" y2="32.00"></line>
-        <line data-from="kn-zfs" data-to="kn-raid" x1="12.95%" y1="41.99%" x2="12.11%" y2="47.31"></line>
-        <line data-from="kn-zfs" data-to="kn-lvm" x1="12.95%" y1="41.99%" x2="61.20%" y2="84.40"></line>
-        <line data-from="kn-zfs" data-to="kn-backups" x1="12.95%" y1="41.99%" x2="12.11%" y2="52.69"></line>
-    </svg>
-      <a class="kn-node" href="/blog/kn-ansible.html" data-node="kn-ansible" style-x="14.63" style-y="36.85" title="Ansible: плейбук, который можно запускать дважды">Ansible: плейбук, который можно запускать дважды</a>
-      <a class="kn-node" href="/blog/kn-backups.html" data-node="kn-backups" style-x="12.11" style-y="52.69" title="Бэкап: 3-2-1, RPO и проверка восстановлением">Бэкап: 3-2-1, RPO и проверка восстановлением</a>
-      <a class="kn-node" href="/blog/kn-bash.html" data-node="kn-bash" style-x="82.91" style-y="68.00" title="Конвейер: одна строка вместо цикла">Конвейер: одна строка вместо цикла</a>
-      <a class="kn-node" href="/blog/kn-bgp.html" data-node="kn-bgp" style-x="50.00" style-y="14.00" title="BGP: политика вместо метрики">BGP: политика вместо метрики</a>
-      <a class="kn-node" href="/blog/kn-cron.html" data-node="kn-cron" style-x="79.71" style-y="72.45" title="Планировщик: cron, systemd timers и тихие сбои">Планировщик: cron, systemd timers и тихие сбои</a>
-      <a class="kn-node" href="/blog/kn-dhcp.html" data-node="kn-dhcp" style-x="55.66" style-y="14.40" title="DHCP: аренда адреса на четыре шага">DHCP: аренда адреса на четыре шага</a>
-      <a class="kn-node" href="/blog/kn-dns.html" data-node="kn-dns" style-x="61.20" style-y="15.60" title="DNS: кеш, TTL и два резолвера">DNS: кеш, TTL и два резолвера</a>
-      <a class="kn-node" href="/blog/kn-docker.html" data-node="kn-docker" style-x="75.85" style-y="76.39" title="Контейнеры: образ, слой и том">Контейнеры: образ, слой и том</a>
-      <a class="kn-node" href="/blog/kn-documentation.html" data-node="kn-documentation" style-x="24.15" style-y="23.61" title="Документация и регламенты: то, что спасает в три ночи">Документация и регламенты: то, что спасает в три ночи</a>
-      <a class="kn-node" href="/blog/kn-git.html" data-node="kn-git" style-x="28.59" style-y="20.26" title="Git в работе администратора: ветка, откат, конфиг">Git в работе администратора: ветка, откат, конфиг</a>
-      <a class="kn-node" href="/blog/kn-gre.html" data-node="kn-gre" style-x="66.49" style-y="17.57" title="Туннель и MTU: 24 байта, которые ломают передачу">Туннель и MTU: 24 байта, которые ломают передачу</a>
-      <a class="kn-node" href="/blog/kn-incident.html" data-node="kn-incident" style-x="33.51" style-y="17.57" title="Разбор инцидента: от «всё лежит» до списка действий">Разбор инцидента: от «всё лежит» до списка действий</a>
-      <a class="kn-node" href="/blog/kn-indexes.html" data-node="kn-indexes" style-x="28.59" style-y="79.74" title="Индексы и планы: почему запрос медленный">Индексы и планы: почему запрос медленный</a>
-      <a class="kn-node" href="/blog/kn-ipam.html" data-node="kn-ipam" style-x="71.41" style-y="20.26" title="План адресации: сеть начинается с таблицы">План адресации: сеть начинается с таблицы</a>
-      <a class="kn-node" href="/blog/kn-ipsec.html" data-node="kn-ipsec" style-x="75.85" style-y="23.61" title="IPsec: две фазы и одна причина «туннель поднят, трафика нет»">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a>
-      <a class="kn-node" href="/blog/kn-lacp.html" data-node="kn-lacp" style-x="79.71" style-y="27.55" title="LACP: два кабеля, один адрес">LACP: два кабеля, один адрес</a>
-      <a class="kn-node" href="/blog/kn-logrotate.html" data-node="kn-logrotate" style-x="71.41" style-y="79.74" title="logrotate: почему журналы съели диск">logrotate: почему журналы съели диск</a>
-      <a class="kn-node" href="/blog/kn-logs.html" data-node="kn-logs" style-x="66.49" style-y="82.43" title="Журналы: уровни, ротация и лимит на диск">Журналы: уровни, ротация и лимит на диск</a>
-      <a class="kn-node" href="/blog/kn-lvm.html" data-node="kn-lvm" style-x="61.20" style-y="84.40" title="Диски: разделы, LVM и что делать, когда место кончилось">Диски: разделы, LVM и что делать, когда место кончилось</a>
-      <a class="kn-node" href="/blog/kn-monitoring.html" data-node="kn-monitoring" style-x="17.09" style-y="32.00" title="Мониторинг: метрика, симптом и алерт, который не будит зря">Мониторинг: метрика, симптом и алерт, который не будит зря</a>
-      <a class="kn-node" href="/blog/kn-mtu.html" data-node="kn-mtu" style-x="82.91" style-y="32.00" title="MTU и PMTU: почему ping идёт, а скачивание нет">MTU и PMTU: почему ping идёт, а скачивание нет</a>
-      <a class="kn-node" href="/blog/kn-mysql.html" data-node="kn-mysql" style-x="24.15" style-y="76.39" title="MySQL: InnoDB, кеш запросов и почему он мешает">MySQL: InnoDB, кеш запросов и почему он мешает</a>
-      <a class="kn-node" href="/blog/kn-netfilter.html" data-node="kn-netfilter" style-x="85.37" style-y="36.85" title="Файрвол в Linux: nftables и порядок правил">Файрвол в Linux: nftables и порядок правил</a>
-      <a class="kn-node" href="/blog/kn-nginx.html" data-node="kn-nginx" style-x="55.66" style-y="85.60" title="nginx как reverse proxy: что важно кроме proxy_pass">nginx как reverse proxy: что важно кроме proxy_pass</a>
-      <a class="kn-node" href="/blog/kn-ntp.html" data-node="kn-ntp" style-x="50.00" style-y="86.00" title="Время в сети: NTP и почему 30 секунд ломают всё">Время в сети: NTP и почему 30 секунд ломают всё</a>
-      <a class="kn-node" href="/blog/kn-packet.html" data-node="kn-packet" style-x="87.05" style-y="41.99" title="tcpdump: как читать пакет, а не гадать">tcpdump: как читать пакет, а не гадать</a>
-      <a class="kn-node" href="/blog/kn-postgres.html" data-node="kn-postgres" style-x="20.29" style-y="72.45" title="PostgreSQL: версии строк, VACUUM и заворот XID">PostgreSQL: версии строк, VACUUM и заворот XID</a>
-      <a class="kn-node" href="/blog/kn-practice.html" data-node="kn-practice" style-x="38.80" style-y="15.60" title="Практикоориентированное обучение: навык проверяют на стенде">Практикоориентированное обучение: навык проверяют на стенде</a>
-      <a class="kn-node" href="/blog/kn-project.html" data-node="kn-project" style-x="44.34" style-y="14.40" title="Проект как кейс: навигация корпуса и киберспорт">Проект как кейс: навигация корпуса и киберспорт</a>
-      <a class="kn-node" href="/blog/kn-prometheus.html" data-node="kn-prometheus" style-x="20.29" style-y="27.55" title="Prometheus: четыре типа метрик и один хороший алерт">Prometheus: четыре типа метрик и один хороший алерт</a>
-      <a class="kn-node" href="/blog/kn-raid.html" data-node="kn-raid" style-x="12.11" style-y="47.31" title="RAID: паритет — это арифметика, а не магия">RAID: паритет — это арифметика, а не магия</a>
-      <a class="kn-node" href="/blog/kn-redis.html" data-node="kn-redis" style-x="17.09" style-y="68.00" title="Redis: кеш, который умеет терять данные">Redis: кеш, который умеет терять данные</a>
-      <a class="kn-node" href="/blog/kn-replication.html" data-node="kn-replication" style-x="14.63" style-y="63.15" title="Репликация: копия отстаёт, и это нормально">Репликация: копия отстаёт, и это нормально</a>
-      <a class="kn-node" href="/blog/kn-routing.html" data-node="kn-routing" style-x="87.89" style-y="47.31" title="Таблица маршрутов: как пакет выбирает выход">Таблица маршрутов: как пакет выбирает выход</a>
-      <a class="kn-node" href="/blog/kn-ssh.html" data-node="kn-ssh" style-x="44.34" style-y="85.60" title="SSH: ключ вместо пароля и что закрыть в sshd">SSH: ключ вместо пароля и что закрыть в sshd</a>
-      <a class="kn-node" href="/blog/kn-stp.html" data-node="kn-stp" style-x="87.89" style-y="52.69" title="STP: почему коммутатор сам выключил порт">STP: почему коммутатор сам выключил порт</a>
-      <a class="kn-node" href="/blog/kn-systemd.html" data-node="kn-systemd" style-x="38.80" style-y="84.40" title="systemd: юниты, цели и порядок загрузки">systemd: юниты, цели и порядок загрузки</a>
-      <a class="kn-node" href="/blog/kn-tcp.html" data-node="kn-tcp" style-x="87.05" style-y="58.01" title="TCP: три пакета, четыре состояния и одна минута">TCP: три пакета, четыре состояния и одна минута</a>
-      <a class="kn-node" href="/blog/kn-tls.html" data-node="kn-tls" style-x="33.51" style-y="82.43" title="Сертификаты и TLS 1.3: одна поездка вместо двух">Сертификаты и TLS 1.3: одна поездка вместо двух</a>
-      <a class="kn-node" href="/blog/kn-troubleshoot.html" data-node="kn-troubleshoot" style-x="50.00" style-y="50.00" title="Диагностика сети: снизу вверх, а не наугад">Диагностика сети: снизу вверх, а не наугад</a>
-      <a class="kn-node" href="/blog/kn-tx.html" data-node="kn-tx" style-x="12.95" style-y="58.01" title="Транзакции: уровни изоляции и три аномалии">Транзакции: уровни изоляции и три аномалии</a>
-      <a class="kn-node" href="/blog/kn-vlan.html" data-node="kn-vlan" style-x="85.37" style-y="63.15" title="VLAN и 802.1Q: один провод, много сетей">VLAN и 802.1Q: один провод, много сетей</a>
-      <a class="kn-node" href="/blog/kn-zfs.html" data-node="kn-zfs" style-x="12.95" style-y="41.99" title="ZFS: контрольные суммы, которые ловят тихие ошибки">ZFS: контрольные суммы, которые ловят тихие ошибки</a>
-  </div>
+  <section class="kn-graph-shell" aria-labelledby="graph-title">
+    <h2 class="kn-graph-title" id="graph-title">Поле связей</h2>
+    <div class="kn-graph-toolbar">
+      <div class="kn-filterbar kn-filterbar--graph" data-graph-filters role="group" aria-label="Рубрика на графе"><button class="catalog-filter" type="button" aria-pressed="true" data-graph-zone="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="network">01 Сети</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="linux">02 Linux и службы</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="databases">03 Базы данных</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="storage">04 Хранение и отказоустойчивость</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="ops">05 Эксплуатация</button><button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="practice">06 Практика и обучение</button></div>
+      <div class="kn-graph-actions" role="group" aria-label="Движение графа">
+        <button class="catalog-filter" type="button" data-graph-action="toggle" aria-pressed="false">движение: включено</button>
+        <button class="catalog-filter" type="button" data-graph-action="reset">собрать заново</button>
+      </div>
+      <p class="catalog-status" data-graph-status role="status" aria-live="polite"></p>
+    </div>
 
-  <p class="kn-graph-legend"><span>узлы — заметки</span><span>рёбра — перекрёстные ссылки</span><span>обратные ссылки считаются автоматически</span></p>
+    <div class="kn-graph-stage" data-kn-graph>
+      <svg class="kn-graph-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <line data-from="kn-ansible" data-to="kn-ssh" data-from-zone="ops" data-to-zone="linux" x1="8.00" y1="50.00" x2="81.79" y2="48.06"></line>
+        <line data-from="kn-ansible" data-to="kn-systemd" data-from-zone="ops" data-to-zone="linux" x1="8.00" y1="50.00" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-ansible" data-to="kn-prometheus" data-from-zone="ops" data-to-zone="ops" x1="8.00" y1="50.00" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-ansible" data-to="kn-backups" data-from-zone="ops" data-to-zone="storage" x1="8.00" y1="50.00" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-backups" data-to="kn-raid" data-from-zone="storage" data-to-zone="storage" x1="40.56" y1="65.87" x2="21.71" y2="81.61"></line>
+        <line data-from="kn-backups" data-to="kn-postgres" data-from-zone="storage" data-to-zone="databases" x1="40.56" y1="65.87" x2="66.58" y2="63.21"></line>
+        <line data-from="kn-backups" data-to="kn-systemd" data-from-zone="storage" data-to-zone="linux" x1="40.56" y1="65.87" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-backups" data-to="kn-prometheus" data-from-zone="storage" data-to-zone="ops" x1="40.56" y1="65.87" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-bash" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="84.65" y1="48.59" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-bash" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="84.65" y1="48.59" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-bash" data-to="kn-ansible" data-from-zone="linux" data-to-zone="ops" x1="84.65" y1="48.59" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-bgp" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="92.00" y1="31.45" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-bgp" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="92.00" y1="31.45" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-bgp" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="92.00" y1="31.45" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-cron" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="56.54" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-cron" data-to="kn-bash" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="56.54" x2="84.65" y2="48.59"></line>
+        <line data-from="kn-cron" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="56.54" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-dhcp" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="78.29" y1="18.39" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-dhcp" data-to="kn-dns" data-from-zone="network" data-to-zone="network" x1="78.29" y1="18.39" x2="66.53" y2="28.28"></line>
+        <line data-from="kn-dhcp" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="78.29" y1="18.39" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-dns" data-to="kn-dhcp" data-from-zone="network" data-to-zone="network" x1="66.53" y1="28.28" x2="78.29" y2="18.39"></line>
+        <line data-from="kn-dns" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="66.53" y1="28.28" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-dns" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="66.53" y1="28.28" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-docker" data-to="kn-nginx" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="58.81" x2="92.00" y2="47.03"></line>
+        <line data-from="kn-docker" data-to="kn-ansible" data-from-zone="linux" data-to-zone="ops" x1="92.00" y1="58.81" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-docker" data-to="kn-prometheus" data-from-zone="linux" data-to-zone="ops" x1="92.00" y1="58.81" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-documentation" data-to="kn-git" data-from-zone="practice" data-to-zone="practice" x1="33.42" y1="36.79" x2="24.42" y2="21.42"></line>
+        <line data-from="kn-documentation" data-to="kn-ipam" data-from-zone="practice" data-to-zone="network" x1="33.42" y1="36.79" x2="83.60" y2="25.12"></line>
+        <line data-from="kn-documentation" data-to="kn-incident" data-from-zone="practice" data-to-zone="practice" x1="33.42" y1="36.79" x2="33.49" y2="34.51"></line>
+        <line data-from="kn-documentation" data-to="kn-ansible" data-from-zone="practice" data-to-zone="ops" x1="33.42" y1="36.79" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-git" data-to="kn-ansible" data-from-zone="practice" data-to-zone="ops" x1="24.42" y1="21.42" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-git" data-to="kn-bash" data-from-zone="practice" data-to-zone="linux" x1="24.42" y1="21.42" x2="84.65" y2="48.59"></line>
+        <line data-from="kn-git" data-to="kn-documentation" data-from-zone="practice" data-to-zone="practice" x1="24.42" y1="21.42" x2="33.42" y2="36.79"></line>
+        <line data-from="kn-gre" data-to="kn-mtu" data-from-zone="network" data-to-zone="network" x1="71.77" y1="16.31" x2="72.67" y2="20.42"></line>
+        <line data-from="kn-gre" data-to="kn-ipsec" data-from-zone="network" data-to-zone="network" x1="71.77" y1="16.31" x2="84.34" y2="20.99"></line>
+        <line data-from="kn-gre" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="71.77" y1="16.31" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-incident" data-to="kn-documentation" data-from-zone="practice" data-to-zone="practice" x1="33.49" y1="34.51" x2="33.42" y2="36.79"></line>
+        <line data-from="kn-incident" data-to="kn-prometheus" data-from-zone="practice" data-to-zone="ops" x1="33.49" y1="34.51" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-incident" data-to="kn-troubleshoot" data-from-zone="practice" data-to-zone="network" x1="33.49" y1="34.51" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-incident" data-to="kn-monitoring" data-from-zone="practice" data-to-zone="ops" x1="33.49" y1="34.51" x2="8.00" y2="35.64"></line>
+        <line data-from="kn-indexes" data-to="kn-postgres" data-from-zone="databases" data-to-zone="databases" x1="79.46" y1="76.98" x2="66.58" y2="63.21"></line>
+        <line data-from="kn-indexes" data-to="kn-tx" data-from-zone="databases" data-to-zone="databases" x1="79.46" y1="76.98" x2="66.88" y2="65.32"></line>
+        <line data-from="kn-indexes" data-to="kn-prometheus" data-from-zone="databases" data-to-zone="ops" x1="79.46" y1="76.98" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-ipam" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="83.60" y1="25.12" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-ipam" data-to="kn-dhcp" data-from-zone="network" data-to-zone="network" x1="83.60" y1="25.12" x2="78.29" y2="18.39"></line>
+        <line data-from="kn-ipam" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="83.60" y1="25.12" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-ipsec" data-to="kn-gre" data-from-zone="network" data-to-zone="network" x1="84.34" y1="20.99" x2="71.77" y2="16.31"></line>
+        <line data-from="kn-ipsec" data-to="kn-mtu" data-from-zone="network" data-to-zone="network" x1="84.34" y1="20.99" x2="72.67" y2="20.42"></line>
+        <line data-from="kn-ipsec" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="84.34" y1="20.99" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-ipsec" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="84.34" y1="20.99" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-lacp" data-to="kn-stp" data-from-zone="network" data-to-zone="network" x1="89.82" y1="24.08" x2="92.00" y2="27.59"></line>
+        <line data-from="kn-lacp" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="89.82" y1="24.08" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-lacp" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="89.82" y1="24.08" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-logrotate" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="62.87" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-logrotate" data-to="kn-lvm" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="62.87" x2="92.00" y2="50.00"></line>
+        <line data-from="kn-logrotate" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="62.87" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-logs" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="76.03" y1="47.34" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-logs" data-to="kn-bash" data-from-zone="linux" data-to-zone="linux" x1="76.03" y1="47.34" x2="84.65" y2="48.59"></line>
+        <line data-from="kn-logs" data-to="kn-prometheus" data-from-zone="linux" data-to-zone="ops" x1="76.03" y1="47.34" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-logs" data-to="kn-troubleshoot" data-from-zone="linux" data-to-zone="network" x1="76.03" y1="47.34" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-lvm" data-to="kn-zfs" data-from-zone="linux" data-to-zone="storage" x1="92.00" y1="50.00" x2="8.00" y2="68.55"></line>
+        <line data-from="kn-lvm" data-to="kn-backups" data-from-zone="linux" data-to-zone="storage" x1="92.00" y1="50.00" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-lvm" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="50.00" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-monitoring" data-to="kn-prometheus" data-from-zone="ops" data-to-zone="ops" x1="8.00" y1="35.64" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-monitoring" data-to="kn-incident" data-from-zone="ops" data-to-zone="practice" x1="8.00" y1="35.64" x2="33.49" y2="34.51"></line>
+        <line data-from="kn-monitoring" data-to="kn-troubleshoot" data-from-zone="ops" data-to-zone="network" x1="8.00" y1="35.64" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-mtu" data-to="kn-gre" data-from-zone="network" data-to-zone="network" x1="72.67" y1="20.42" x2="71.77" y2="16.31"></line>
+        <line data-from="kn-mtu" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="72.67" y1="20.42" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-mtu" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="72.67" y1="20.42" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-mysql" data-to="kn-postgres" data-from-zone="databases" data-to-zone="databases" x1="62.82" y1="81.95" x2="66.58" y2="63.21"></line>
+        <line data-from="kn-mysql" data-to="kn-indexes" data-from-zone="databases" data-to-zone="databases" x1="62.82" y1="81.95" x2="79.46" y2="76.98"></line>
+        <line data-from="kn-mysql" data-to="kn-tx" data-from-zone="databases" data-to-zone="databases" x1="62.82" y1="81.95" x2="66.88" y2="65.32"></line>
+        <line data-from="kn-netfilter" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="78.37" y1="22.54" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-netfilter" data-to="kn-packet" data-from-zone="network" data-to-zone="network" x1="78.37" y1="22.54" x2="88.27" y2="28.10"></line>
+        <line data-from="kn-netfilter" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="78.37" y1="22.54" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-nginx" data-to="kn-tls" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="47.03" x2="92.00" y2="52.97"></line>
+        <line data-from="kn-nginx" data-to="kn-netfilter" data-from-zone="linux" data-to-zone="network" x1="92.00" y1="47.03" x2="78.37" y2="22.54"></line>
+        <line data-from="kn-nginx" data-to="kn-prometheus" data-from-zone="linux" data-to-zone="ops" x1="92.00" y1="47.03" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-ntp" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="64.36" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-ntp" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="64.36" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-ntp" data-to="kn-ssh" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="64.36" x2="81.79" y2="48.06"></line>
+        <line data-from="kn-packet" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="88.27" y1="28.10" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-packet" data-to="kn-netfilter" data-from-zone="network" data-to-zone="network" x1="88.27" y1="28.10" x2="78.37" y2="22.54"></line>
+        <line data-from="kn-packet" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="88.27" y1="28.10" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-postgres" data-to="kn-indexes" data-from-zone="databases" data-to-zone="databases" x1="66.58" y1="63.21" x2="79.46" y2="76.98"></line>
+        <line data-from="kn-postgres" data-to="kn-tx" data-from-zone="databases" data-to-zone="databases" x1="66.58" y1="63.21" x2="66.88" y2="65.32"></line>
+        <line data-from="kn-postgres" data-to="kn-backups" data-from-zone="databases" data-to-zone="storage" x1="66.58" y1="63.21" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-practice" data-to="kn-project" data-from-zone="practice" data-to-zone="practice" x1="33.36" y1="15.11" x2="46.25" y2="17.09"></line>
+        <line data-from="kn-practice" data-to="kn-troubleshoot" data-from-zone="practice" data-to-zone="network" x1="33.36" y1="15.11" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-practice" data-to="kn-ansible" data-from-zone="practice" data-to-zone="ops" x1="33.36" y1="15.11" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-project" data-to="kn-practice" data-from-zone="practice" data-to-zone="practice" x1="46.25" y1="17.09" x2="33.36" y2="15.11"></line>
+        <line data-from="kn-project" data-to="kn-troubleshoot" data-from-zone="practice" data-to-zone="network" x1="46.25" y1="17.09" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-project" data-to="kn-ansible" data-from-zone="practice" data-to-zone="ops" x1="46.25" y1="17.09" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-prometheus" data-to="kn-logs" data-from-zone="ops" data-to-zone="linux" x1="23.97" y1="52.66" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-prometheus" data-to="kn-ansible" data-from-zone="ops" data-to-zone="ops" x1="23.97" y1="52.66" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-prometheus" data-to="kn-replication" data-from-zone="ops" data-to-zone="databases" x1="23.97" y1="52.66" x2="73.77" y2="83.12"></line>
+        <line data-from="kn-raid" data-to="kn-backups" data-from-zone="storage" data-to-zone="storage" x1="21.71" y1="81.61" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-raid" data-to="kn-postgres" data-from-zone="storage" data-to-zone="databases" x1="21.71" y1="81.61" x2="66.58" y2="63.21"></line>
+        <line data-from="kn-raid" data-to="kn-prometheus" data-from-zone="storage" data-to-zone="ops" x1="21.71" y1="81.61" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-redis" data-to="kn-mysql" data-from-zone="databases" data-to-zone="databases" x1="54.14" y1="86.40" x2="62.82" y2="81.95"></line>
+        <line data-from="kn-redis" data-to="kn-prometheus" data-from-zone="databases" data-to-zone="ops" x1="54.14" y1="86.40" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-redis" data-to="kn-nginx" data-from-zone="databases" data-to-zone="linux" x1="54.14" y1="86.40" x2="92.00" y2="47.03"></line>
+        <line data-from="kn-redis" data-to="kn-netfilter" data-from-zone="databases" data-to-zone="network" x1="54.14" y1="86.40" x2="78.37" y2="22.54"></line>
+        <line data-from="kn-replication" data-to="kn-tx" data-from-zone="databases" data-to-zone="databases" x1="73.77" y1="83.12" x2="66.88" y2="65.32"></line>
+        <line data-from="kn-replication" data-to="kn-backups" data-from-zone="databases" data-to-zone="storage" x1="73.77" y1="83.12" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-replication" data-to="kn-prometheus" data-from-zone="databases" data-to-zone="ops" x1="73.77" y1="83.12" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-routing" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="64.59" y1="29.68" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-routing" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="64.59" y1="29.68" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-routing" data-to="kn-gre" data-from-zone="network" data-to-zone="network" x1="64.59" y1="29.68" x2="71.77" y2="16.31"></line>
+        <line data-from="kn-ssh" data-to="kn-systemd" data-from-zone="linux" data-to-zone="linux" x1="81.79" y1="48.06" x2="78.91" y2="47.64"></line>
+        <line data-from="kn-ssh" data-to="kn-ansible" data-from-zone="linux" data-to-zone="ops" x1="81.79" y1="48.06" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-ssh" data-to="kn-troubleshoot" data-from-zone="linux" data-to-zone="network" x1="81.79" y1="48.06" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-stp" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="92.00" y1="27.59" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-stp" data-to="kn-lacp" data-from-zone="network" data-to-zone="network" x1="92.00" y1="27.59" x2="89.82" y2="24.08"></line>
+        <line data-from="kn-stp" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="92.00" y1="27.59" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-systemd" data-to="kn-logs" data-from-zone="linux" data-to-zone="linux" x1="78.91" y1="47.64" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-systemd" data-to="kn-ssh" data-from-zone="linux" data-to-zone="linux" x1="78.91" y1="47.64" x2="81.79" y2="48.06"></line>
+        <line data-from="kn-systemd" data-to="kn-ansible" data-from-zone="linux" data-to-zone="ops" x1="78.91" y1="47.64" x2="8.00" y2="50.00"></line>
+        <line data-from="kn-systemd" data-to="kn-backups" data-from-zone="linux" data-to-zone="storage" x1="78.91" y1="47.64" x2="40.56" y2="65.87"></line>
+        <line data-from="kn-tcp" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="61.05" y1="32.60" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-tcp" data-to="kn-mtu" data-from-zone="network" data-to-zone="network" x1="61.05" y1="32.60" x2="72.67" y2="20.42"></line>
+        <line data-from="kn-tcp" data-to="kn-dns" data-from-zone="network" data-to-zone="network" x1="61.05" y1="32.60" x2="66.53" y2="28.28"></line>
+        <line data-from="kn-tcp" data-to="kn-gre" data-from-zone="network" data-to-zone="network" x1="61.05" y1="32.60" x2="71.77" y2="16.31"></line>
+        <line data-from="kn-tls" data-to="kn-nginx" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="52.97" x2="92.00" y2="47.03"></line>
+        <line data-from="kn-tls" data-to="kn-ssh" data-from-zone="linux" data-to-zone="linux" x1="92.00" y1="52.97" x2="81.79" y2="48.06"></line>
+        <line data-from="kn-tls" data-to="kn-dns" data-from-zone="linux" data-to-zone="network" x1="92.00" y1="52.97" x2="66.53" y2="28.28"></line>
+        <line data-from="kn-tls" data-to="kn-prometheus" data-from-zone="linux" data-to-zone="ops" x1="92.00" y1="52.97" x2="23.97" y2="52.66"></line>
+        <line data-from="kn-troubleshoot" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="59.44" y1="34.13" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-troubleshoot" data-to="kn-dns" data-from-zone="network" data-to-zone="network" x1="59.44" y1="34.13" x2="66.53" y2="28.28"></line>
+        <line data-from="kn-troubleshoot" data-to="kn-logs" data-from-zone="network" data-to-zone="linux" x1="59.44" y1="34.13" x2="76.03" y2="47.34"></line>
+        <line data-from="kn-troubleshoot" data-to="kn-vlan" data-from-zone="network" data-to-zone="network" x1="59.44" y1="34.13" x2="62.77" y2="31.12"></line>
+        <line data-from="kn-troubleshoot" data-to="kn-tcp" data-from-zone="network" data-to-zone="network" x1="59.44" y1="34.13" x2="61.05" y2="32.60"></line>
+        <line data-from="kn-tx" data-to="kn-postgres" data-from-zone="databases" data-to-zone="databases" x1="66.88" y1="65.32" x2="66.58" y2="63.21"></line>
+        <line data-from="kn-tx" data-to="kn-indexes" data-from-zone="databases" data-to-zone="databases" x1="66.88" y1="65.32" x2="79.46" y2="76.98"></line>
+        <line data-from="kn-tx" data-to="kn-replication" data-from-zone="databases" data-to-zone="databases" x1="66.88" y1="65.32" x2="73.77" y2="83.12"></line>
+        <line data-from="kn-vlan" data-to="kn-routing" data-from-zone="network" data-to-zone="network" x1="62.77" y1="31.12" x2="64.59" y2="29.68"></line>
+        <line data-from="kn-vlan" data-to="kn-dhcp" data-from-zone="network" data-to-zone="network" x1="62.77" y1="31.12" x2="78.29" y2="18.39"></line>
+        <line data-from="kn-vlan" data-to="kn-troubleshoot" data-from-zone="network" data-to-zone="network" x1="62.77" y1="31.12" x2="59.44" y2="34.13"></line>
+        <line data-from="kn-vlan" data-to="kn-mtu" data-from-zone="network" data-to-zone="network" x1="62.77" y1="31.12" x2="72.67" y2="20.42"></line>
+        <line data-from="kn-zfs" data-to="kn-raid" data-from-zone="storage" data-to-zone="storage" x1="8.00" y1="68.55" x2="21.71" y2="81.61"></line>
+        <line data-from="kn-zfs" data-to="kn-lvm" data-from-zone="storage" data-to-zone="linux" x1="8.00" y1="68.55" x2="92.00" y2="50.00"></line>
+        <line data-from="kn-zfs" data-to="kn-backups" data-from-zone="storage" data-to-zone="storage" x1="8.00" y1="68.55" x2="40.56" y2="65.87"></line>
+      </svg>
+      <div class="kn-graph-field" data-kn-graph-field>
+        <a class="kn-node" href="/blog/kn-ansible.html" data-node="kn-ansible" data-zone="ops" data-degree="13" data-rank="hub" style-x="8.00" style-y="50.00" title="Ansible: плейбук, который можно запускать дважды"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Ansible: плейбук, который можно запускать дважды</span></a>
+      <a class="kn-node" href="/blog/kn-backups.html" data-node="kn-backups" data-zone="storage" data-degree="11" data-rank="hub" style-x="40.56" style-y="65.87" title="Бэкап: 3-2-1, RPO и проверка восстановлением"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Бэкап: 3-2-1, RPO и проверка восстановлением</span></a>
+      <a class="kn-node" href="/blog/kn-bash.html" data-node="kn-bash" data-zone="linux" data-degree="6" data-rank="link" style-x="84.65" style-y="48.59" title="Конвейер: одна строка вместо цикла"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Конвейер: одна строка вместо цикла</span></a>
+      <a class="kn-node" href="/blog/kn-bgp.html" data-node="kn-bgp" data-zone="network" data-degree="3" data-rank="leaf" style-x="92.00" style-y="31.45" title="BGP: политика вместо метрики"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">BGP: политика вместо метрики</span></a>
+      <a class="kn-node" href="/blog/kn-cron.html" data-node="kn-cron" data-zone="linux" data-degree="3" data-rank="leaf" style-x="92.00" style-y="56.54" title="Планировщик: cron, systemd timers и тихие сбои"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Планировщик: cron, systemd timers и тихие сбои</span></a>
+      <a class="kn-node" href="/blog/kn-dhcp.html" data-node="kn-dhcp" data-zone="network" data-degree="6" data-rank="link" style-x="78.29" style-y="18.39" title="DHCP: аренда адреса на четыре шага"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">DHCP: аренда адреса на четыре шага</span></a>
+      <a class="kn-node" href="/blog/kn-dns.html" data-node="kn-dns" data-zone="network" data-degree="7" data-rank="link" style-x="66.53" style-y="28.28" title="DNS: кеш, TTL и два резолвера"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">DNS: кеш, TTL и два резолвера</span></a>
+      <a class="kn-node" href="/blog/kn-docker.html" data-node="kn-docker" data-zone="linux" data-degree="3" data-rank="leaf" style-x="92.00" style-y="58.81" title="Контейнеры: образ, слой и том"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Контейнеры: образ, слой и том</span></a>
+      <a class="kn-node" href="/blog/kn-documentation.html" data-node="kn-documentation" data-zone="practice" data-degree="6" data-rank="link" style-x="33.42" style-y="36.79" title="Документация и регламенты: то, что спасает в три ночи"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Документация и регламенты: то, что спасает в три ночи</span></a>
+      <a class="kn-node" href="/blog/kn-git.html" data-node="kn-git" data-zone="practice" data-degree="4" data-rank="leaf" style-x="24.42" style-y="21.42" title="Git в работе администратора: ветка, откат, конфиг"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Git в работе администратора: ветка, откат, конфиг</span></a>
+      <a class="kn-node" href="/blog/kn-gre.html" data-node="kn-gre" data-zone="network" data-degree="7" data-rank="link" style-x="71.77" style-y="16.31" title="Туннель и MTU: 24 байта, которые ломают передачу"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Туннель и MTU: 24 байта, которые ломают передачу</span></a>
+      <a class="kn-node" href="/blog/kn-incident.html" data-node="kn-incident" data-zone="practice" data-degree="6" data-rank="link" style-x="33.49" style-y="34.51" title="Разбор инцидента: от «всё лежит» до списка действий"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Разбор инцидента: от «всё лежит» до списка действий</span></a>
+      <a class="kn-node" href="/blog/kn-indexes.html" data-node="kn-indexes" data-zone="databases" data-degree="6" data-rank="link" style-x="79.46" style-y="76.98" title="Индексы и планы: почему запрос медленный"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Индексы и планы: почему запрос медленный</span></a>
+      <a class="kn-node" href="/blog/kn-ipam.html" data-node="kn-ipam" data-zone="network" data-degree="4" data-rank="leaf" style-x="83.60" style-y="25.12" title="План адресации: сеть начинается с таблицы"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">План адресации: сеть начинается с таблицы</span></a>
+      <a class="kn-node" href="/blog/kn-ipsec.html" data-node="kn-ipsec" data-zone="network" data-degree="5" data-rank="leaf" style-x="84.34" style-y="20.99" title="IPsec: две фазы и одна причина «туннель поднят, трафика нет»"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</span></a>
+      <a class="kn-node" href="/blog/kn-lacp.html" data-node="kn-lacp" data-zone="network" data-degree="4" data-rank="leaf" style-x="89.82" style-y="24.08" title="LACP: два кабеля, один адрес"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">LACP: два кабеля, один адрес</span></a>
+      <a class="kn-node" href="/blog/kn-logrotate.html" data-node="kn-logrotate" data-zone="linux" data-degree="3" data-rank="leaf" style-x="92.00" style-y="62.87" title="logrotate: почему журналы съели диск"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">logrotate: почему журналы съели диск</span></a>
+      <a class="kn-node" href="/blog/kn-logs.html" data-node="kn-logs" data-zone="linux" data-degree="12" data-rank="hub" style-x="76.03" style-y="47.34" title="Журналы: уровни, ротация и лимит на диск"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Журналы: уровни, ротация и лимит на диск</span></a>
+      <a class="kn-node" href="/blog/kn-lvm.html" data-node="kn-lvm" data-zone="linux" data-degree="5" data-rank="leaf" style-x="92.00" style-y="50.00" title="Диски: разделы, LVM и что делать, когда место кончилось"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Диски: разделы, LVM и что делать, когда место кончилось</span></a>
+      <a class="kn-node" href="/blog/kn-monitoring.html" data-node="kn-monitoring" data-zone="ops" data-degree="4" data-rank="leaf" style-x="8.00" style-y="35.64" title="Мониторинг: метрика, симптом и алерт, который не будит зря"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Мониторинг: метрика, симптом и алерт, который не будит зря</span></a>
+      <a class="kn-node" href="/blog/kn-mtu.html" data-node="kn-mtu" data-zone="network" data-degree="7" data-rank="link" style-x="72.67" style-y="20.42" title="MTU и PMTU: почему ping идёт, а скачивание нет"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">MTU и PMTU: почему ping идёт, а скачивание нет</span></a>
+      <a class="kn-node" href="/blog/kn-mysql.html" data-node="kn-mysql" data-zone="databases" data-degree="4" data-rank="leaf" style-x="62.82" style-y="81.95" title="MySQL: InnoDB, кеш запросов и почему он мешает"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">MySQL: InnoDB, кеш запросов и почему он мешает</span></a>
+      <a class="kn-node" href="/blog/kn-netfilter.html" data-node="kn-netfilter" data-zone="network" data-degree="6" data-rank="link" style-x="78.37" style-y="22.54" title="Файрвол в Linux: nftables и порядок правил"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Файрвол в Linux: nftables и порядок правил</span></a>
+      <a class="kn-node" href="/blog/kn-nginx.html" data-node="kn-nginx" data-zone="linux" data-degree="6" data-rank="link" style-x="92.00" style-y="47.03" title="nginx как reverse proxy: что важно кроме proxy_pass"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">nginx как reverse proxy: что важно кроме proxy_pass</span></a>
+      <a class="kn-node" href="/blog/kn-ntp.html" data-node="kn-ntp" data-zone="linux" data-degree="3" data-rank="leaf" style-x="92.00" style-y="64.36" title="Время в сети: NTP и почему 30 секунд ломают всё"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Время в сети: NTP и почему 30 секунд ломают всё</span></a>
+      <a class="kn-node" href="/blog/kn-packet.html" data-node="kn-packet" data-zone="network" data-degree="4" data-rank="leaf" style-x="88.27" style-y="28.10" title="tcpdump: как читать пакет, а не гадать"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">tcpdump: как читать пакет, а не гадать</span></a>
+      <a class="kn-node" href="/blog/kn-postgres.html" data-node="kn-postgres" data-zone="databases" data-degree="8" data-rank="link" style-x="66.58" style-y="63.21" title="PostgreSQL: версии строк, VACUUM и заворот XID"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">PostgreSQL: версии строк, VACUUM и заворот XID</span></a>
+      <a class="kn-node" href="/blog/kn-practice.html" data-node="kn-practice" data-zone="practice" data-degree="4" data-rank="leaf" style-x="33.36" style-y="15.11" title="Практикоориентированное обучение: навык проверяют на стенде"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Практикоориентированное обучение: навык проверяют на стенде</span></a>
+      <a class="kn-node" href="/blog/kn-project.html" data-node="kn-project" data-zone="practice" data-degree="4" data-rank="leaf" style-x="46.25" style-y="17.09" title="Проект как кейс: навигация корпуса и киберспорт"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Проект как кейс: навигация корпуса и киберспорт</span></a>
+      <a class="kn-node" href="/blog/kn-prometheus.html" data-node="kn-prometheus" data-zone="ops" data-degree="15" data-rank="hub" style-x="23.97" style-y="52.66" title="Prometheus: четыре типа метрик и один хороший алерт"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Prometheus: четыре типа метрик и один хороший алерт</span></a>
+      <a class="kn-node" href="/blog/kn-raid.html" data-node="kn-raid" data-zone="storage" data-degree="5" data-rank="leaf" style-x="21.71" style-y="81.61" title="RAID: паритет — это арифметика, а не магия"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">RAID: паритет — это арифметика, а не магия</span></a>
+      <a class="kn-node" href="/blog/kn-redis.html" data-node="kn-redis" data-zone="databases" data-degree="4" data-rank="leaf" style-x="54.14" style-y="86.40" title="Redis: кеш, который умеет терять данные"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Redis: кеш, который умеет терять данные</span></a>
+      <a class="kn-node" href="/blog/kn-replication.html" data-node="kn-replication" data-zone="databases" data-degree="5" data-rank="leaf" style-x="73.77" style-y="83.12" title="Репликация: копия отстаёт, и это нормально"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Репликация: копия отстаёт, и это нормально</span></a>
+      <a class="kn-node" href="/blog/kn-routing.html" data-node="kn-routing" data-zone="network" data-degree="9" data-rank="link" style-x="64.59" style-y="29.68" title="Таблица маршрутов: как пакет выбирает выход"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Таблица маршрутов: как пакет выбирает выход</span></a>
+      <a class="kn-node" href="/blog/kn-ssh.html" data-node="kn-ssh" data-zone="linux" data-degree="7" data-rank="link" style-x="81.79" style-y="48.06" title="SSH: ключ вместо пароля и что закрыть в sshd"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">SSH: ключ вместо пароля и что закрыть в sshd</span></a>
+      <a class="kn-node" href="/blog/kn-stp.html" data-node="kn-stp" data-zone="network" data-degree="4" data-rank="leaf" style-x="92.00" style-y="27.59" title="STP: почему коммутатор сам выключил порт"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">STP: почему коммутатор сам выключил порт</span></a>
+      <a class="kn-node" href="/blog/kn-systemd.html" data-node="kn-systemd" data-zone="linux" data-degree="12" data-rank="hub" style-x="78.91" style-y="47.64" title="systemd: юниты, цели и порядок загрузки"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">systemd: юниты, цели и порядок загрузки</span></a>
+      <a class="kn-node" href="/blog/kn-tcp.html" data-node="kn-tcp" data-zone="network" data-degree="10" data-rank="hub" style-x="61.05" style-y="32.60" title="TCP: три пакета, четыре состояния и одна минута"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">TCP: три пакета, четыре состояния и одна минута</span></a>
+      <a class="kn-node" href="/blog/kn-tls.html" data-node="kn-tls" data-zone="linux" data-degree="5" data-rank="leaf" style-x="92.00" style-y="52.97" title="Сертификаты и TLS 1.3: одна поездка вместо двух"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Сертификаты и TLS 1.3: одна поездка вместо двух</span></a>
+      <a class="kn-node" href="/blog/kn-troubleshoot.html" data-node="kn-troubleshoot" data-zone="network" data-degree="23" data-rank="hub" style-x="59.44" style-y="34.13" title="Диагностика сети: снизу вверх, а не наугад"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Диагностика сети: снизу вверх, а не наугад</span></a>
+      <a class="kn-node" href="/blog/kn-tx.html" data-node="kn-tx" data-zone="databases" data-degree="7" data-rank="link" style-x="66.88" style-y="65.32" title="Транзакции: уровни изоляции и три аномалии"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">Транзакции: уровни изоляции и три аномалии</span></a>
+      <a class="kn-node" href="/blog/kn-vlan.html" data-node="kn-vlan" data-zone="network" data-degree="10" data-rank="hub" style-x="62.77" style-y="31.12" title="VLAN и 802.1Q: один провод, много сетей"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">VLAN и 802.1Q: один провод, много сетей</span></a>
+      <a class="kn-node" href="/blog/kn-zfs.html" data-node="kn-zfs" data-zone="storage" data-degree="4" data-rank="leaf" style-x="8.00" style-y="68.55" title="ZFS: контрольные суммы, которые ловят тихие ошибки"><span class="kn-node-dot" aria-hidden="true"></span><span class="kn-node-label">ZFS: контрольные суммы, которые ловят тихие ошибки</span></a>
+      </div>
+    </div>
 
-  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии. Без скриптов подсветка связей не работает, но навигация доступна.</p></noscript>
+    <p class="kn-graph-legend"><span>точка — заметка, размер по числу связей</span><span>линия — перекрёстная ссылка</span><span>сектор — рубрика</span><span>узел можно перетащить</span></p>
+  </section>
+
+  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии, рубрики разнесены по секторам. Без скриптов нет движения и подсветки, но навигация и таблица связей ниже работают полностью.</p></noscript>
 
   <section class="ui-section" aria-labelledby="edges-title">
     <div class="ui-section-head"><h2 id="edges-title">Связи таблицей</h2><span class="ui-kicker">та же структура, без графики</span></div>

@@ -71,21 +71,21 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>MySQL кажется простым: поставил, создал таблицу, работает. Сложности начинаются, когда данных становится больше памяти и запросов больше одного. Тогда всё решают три вещи: как устроен буферный пул, какие есть индексы и насколько короткие транзакции.</p>
-        <h2>Буферный пул — это почти вся производительность</h2>
+        <h2 id="bufernyy-pul-eto-pochti-vsya-proizvoditelnost">Буферный пул — это почти вся производительность</h2>
         <p>InnoDB не работает с диском напрямую. Страницы данных читаются в буферный пул, изменения пишутся в журнал (redo log) и позже сбрасываются на диск. Если рабочее множество помещается в пул, чтение идёт из памяти; если нет — начинаются случайные чтения с диска, и разница в скорости измеряется десятками раз.</p>
         <p><code>innodb_buffer_pool_size</code> — первый параметр, который надо выставить осознанно. 60–75 % памяти выделенного сервера — разумная отправная точка; на сервере с другими сервисами меньше. Проверить попадание можно по <code>Innodb_buffer_pool_read_requests</code> и <code>Innodb_buffer_pool_reads</code>: отношение показывает долю чтений, которые не нашли страницу в памяти.</p>
         <dl class="kn-facts"><dt>Движок</dt><dd>InnoDB по умолчанию с 5.5; MyISAM не транзакционный и не восстанавливается</dd><dt>Буферный пул</dt><dd>innodb_buffer_pool_size — главный параметр; 60–75 % памяти выделенного сервера</dd><dt>Уровень изоляции</dt><dd>REPEATABLE READ по умолчанию, в отличие от READ COMMITTED у PostgreSQL</dd><dt>Кеш запросов</dt><dd>удалён в 8.0: глобальная блокировка при инвалидации сводила выигрыш к нулю</dd></dl>
-        <h2>Кеш запросов удалили — и правильно</h2>
+        <h2 id="kesh-zaprosov-udalili-i-pravilno">Кеш запросов удалили — и правильно</h2>
         <p>Старые руководства советуют включить query cache. В MySQL 8.0 его нет: любая запись в таблицу инвалидировала <strong>все</strong> записи кеша, связанные с ней, под глобальной блокировкой. На нагрузке с записью это давало больше накладных расходов, чем экономии. Сейчас кеширование — задача приложения или внешнего слоя (Redis), и там оно управляется явно.</p>
-        <h2>Индексы и EXPLAIN</h2>
+        <h2 id="indeksy-i-explain">Индексы и EXPLAIN</h2>
         <p>Правило простое: индекс нужен под конкретный запрос, а не «на всякий случай». Составной индекс <code>(user_id, created_at)</code> обслуживает запросы с фильтром по <code>user_id</code> и сортировкой по дате, а два отдельных индекса — нет. Порядок колонок в составном индексе имеет значение: работает префикс слева.</p>
         <pre><code>EXPLAIN ANALYZE SELECT id, total FROM orders
 WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;</code></pre>
         <p>Смотрите на <code>type</code> (<code>ALL</code> — полный перебор, плохо), <code>rows</code> (сколько строк просмотрено) и <code>Using filesort</code> (сортировка без индекса). <code>EXPLAIN ANALYZE</code> выполняет запрос и показывает реальные числа — расхождение с оценкой означает, что статистика устарела.</p>
-        <h2>Транзакции и блокировки</h2>
+        <h2 id="tranzakcii-i-blokirovki">Транзакции и блокировки</h2>
         <p>Короткая транзакция — залог того, что система не встанет. <code>BEGIN; ... COMMIT;</code> должен занимать миллисекунды, а не минуты: пока транзакция открыта, она держит блокировки и мешает purge старых версий строк.</p>
         <p><code>REPEATABLE READ</code> в MySQL использует gap-блокировки: запрос по диапазону блокирует не только найденные строки, но и промежутки между ними. Отсюда deadlock там, где в PostgreSQL его не было бы. <code>SHOW ENGINE INNODB STATUS</code> показывает последний deadlock целиком, с обоими запросами — это самый полезный вывод при разборе.</p>
-        <h2>Что смотреть в первую очередь</h2>
+        <h2 id="chto-smotret-v-pervuyu-ochered">Что смотреть в первую очередь</h2>
         <ol><li><strong>Медленный журнал</strong>: <code>slow_query_log = ON</code>, <code>long_query_time = 0.5</code>, затем <code>pt-query-digest</code> или <code>mysqldumpslow</code> — сразу видно, какие запросы дают нагрузку.</li><li><strong><code>SHOW PROCESSLIST</code></strong> — что выполняется прямо сейчас; часто находится запрос <code>Sending data</code> на минуты, который держит таблицу.</li><li><strong>Размер таблиц и фрагментация</strong>: <code>information_schema.tables</code>, <code>data_free</code>. <code>OPTIMIZE TABLE</code> на InnoDB пересоздаёт таблицу и блокирует запись — делайте в окно обслуживания.</li></ol>
         <p>Смежные темы: MVCC и очистка версий в PostgreSQL — <a class="kn-ref" href="/blog/kn-postgres.html">PostgreSQL</a>; как читать планы — <a class="kn-ref" href="/blog/kn-indexes.html">индексы и планы</a>; общая теория изоляции — <a class="kn-ref" href="/blog/kn-tx.html">уровни изоляции</a>.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Свойство</th><th scope="col">MySQL (InnoDB)</th><th scope="col">PostgreSQL</th></tr></thead><tbody><tr><th scope="row">изоляция по умолчанию</th><td>REPEATABLE READ</td><td>READ COMMITTED</td></tr><tr><th scope="row">gap-блокировки</th><td>есть</td><td>отсюда deadlock на диапазонах</td><td>нет</td><td>но есть свой набор аномалий</td></tr><tr><th scope="row">текстовый поиск</th><td>полнотекстовый индекс InnoDB</td><td>GIN и tsvector</td></tr><tr><th scope="row">репликация</th><td>binlog</td><td>GTID</td><td>асинхронная по умолчанию</td><td>WAL</td><td>logical и streaming</td></tr></tbody><caption>Отличия, о которые спотыкаются при переходе с PostgreSQL.</caption></table></div>
@@ -114,15 +114,17 @@ WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Базы данных. Запись 22 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-mysql"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Базы данных · 22 из 43 · 9 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#bufernyy-pul-eto-pochti-vsya-proizvoditelnost">Буферный пул — это почти вся производительность</a></li>
+          <li><a href="#kesh-zaprosov-udalili-i-pravilno">Кеш запросов удалили — и правильно</a></li>
+          <li><a href="#indeksy-i-explain">Индексы и EXPLAIN</a></li>
+          <li><a href="#tranzakcii-i-blokirovki">Транзакции и блокировки</a></li>
+          <li><a href="#chto-smotret-v-pervuyu-ochered">Что смотреть в первую очередь</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -131,9 +133,12 @@ WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-mysql"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

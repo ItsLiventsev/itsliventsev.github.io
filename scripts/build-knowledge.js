@@ -256,9 +256,26 @@ function renderVisual(visual, note) {
   return '';
 }
 
+/* Транслитерация заголовка в якорь: кириллица в href допустима, но длинные
+   русские id неудобно копировать и они ломаются в старых клиентах. Поэтому
+   простая таблица, без зависимостей. */
+const TRANSLIT = {
+  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i',
+  й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't',
+  у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '',
+  э: 'e', ю: 'yu', я: 'ya',
+};
+function headingSlug(text) {
+  const plain = String(text).replace(/[*`_]/g, '').replace(/\[\[([a-z0-9-]+)(?:\|[^\]]+)?\]\]/g, '$1').toLowerCase();
+  const latin = plain.replace(/[а-яё]/g, (ch) => TRANSLIT[ch] ?? ch).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return latin || 'razdel';
+}
+
 function renderBody(markdown, note, notesById) {
   const visuals = note.visuals || [];
   const used = new Set();
+  const usedAnchors = new Set();
+  const sectionAnchors = [];
   const takeVisual = (key) => {
     const visual = visuals.find((item) => !used.has(item) && (item.key || item.type) === key);
     if (!visual) return '';
@@ -306,7 +323,19 @@ function renderBody(markdown, note, notesById) {
     if (heading) {
       flushAll();
       const level = heading[1].length;
-      out.push('<h' + level + '>' + inline(heading[2], notesById) + '</h' + level + '>');
+      const text = heading[2];
+      const slug = headingSlug(text);
+      /* Якорь нужен конспекту в рельсе: он ведёт к разделу, а не к странице
+         целиком. Первый повтор темы получает суффикс, чтобы id не дублились. */
+      if (level === 2) {
+        let id = slug; let n = 2;
+        while (usedAnchors.has(id)) { id = slug + '-' + n; n++; }
+        usedAnchors.add(id);
+        sectionAnchors.push({ id, text: text.replace(/[*`_]/g, ''), level });
+        out.push('<h2 id="' + id + '">' + inline(text, notesById) + '</h2>');
+      } else {
+        out.push('<h' + level + '>' + inline(text, notesById) + '</h' + level + '>');
+      }
       continue;
     }
     if (/^>\s?/.test(line)) { flushAll(); out.push('<blockquote><p>' + inline(line.replace(/^>\s?/, ''), notesById) + '</p></blockquote>'); continue; }
@@ -351,7 +380,7 @@ function renderBody(markdown, note, notesById) {
   flushAll();
   /* визуальные блоки, которые автор не поставил в текст, идут перед связями */
   for (const visual of visuals) if (!used.has(visual)) out.push(renderVisual(visual, note));
-  return out.join('\n        ');
+  return { html: out.join('\n        '), anchors: sectionAnchors };
 }
 
 /* ─────────────────────────── страница заметки ─────────────────────────── */
@@ -456,7 +485,7 @@ function notePage(note, notes, notesById, index, registry) {
 
       <div class="kn-note-body">
         ${aiNote}
-        ${body}
+        ${body.html}
       </div>
 
       <section class="kn-section" aria-labelledby="related-title">
@@ -482,15 +511,13 @@ function notePage(note, notes, notesById, index, registry) {
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: ${esc(zone.title)}. Запись ${String(index + 1).padStart(2, '0')} из ${notes.length}.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#${esc(note.id)}"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>${esc(zone.title)} · ${String(index + 1).padStart(2, '0')} из ${notes.length} · ${esc(note.readtime)}</p>
+        <ol class="kn-minitoc">
+          ${body.anchors.map((anchor) => '<li><a href="#' + esc(anchor.id) + '">' + esc(anchor.text) + '</a></li>').join('\n          ')}
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -499,9 +526,12 @@ function notePage(note, notes, notesById, index, registry) {
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено ${esc(shortDate(note.date))}${note.updated ? ', обновлено ' + esc(shortDate(note.updated)) : ''}. В графе ${registry.edges.filter((edge) => edge.from === note.id || edge.to === note.id).length} ${plural(registry.edges.filter((edge) => edge.from === note.id || edge.to === note.id).length, 'связь', 'связи', 'связей')}.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#${esc(note.id)}"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>
@@ -634,20 +664,43 @@ function zonePage(zone, notes) {
 `;
 }
 
+/* Граф — «живая» схема: узлы и рёбра отрисованы статически (работает без
+   скриптов), а knowledge.js запускает поверх физику: притяжение к своей
+   рубрике, отталкивание соседей, пружины по связям. Позиции из разметки —
+   детерминированные, поэтому при отключённых скриптах схема не дёргается. */
 function graphPage(notes, registry) {
   const positions = layoutGraph(notes, registry);
+  const degree = new Map(notes.map((note) => [note.id, 0]));
+  for (const edge of registry.edges) {
+    degree.set(edge.from, (degree.get(edge.from) || 0) + 1);
+    degree.set(edge.to, (degree.get(edge.to) || 0) + 1);
+  }
+  const rank = (value) => (value >= 10 ? 'hub' : value >= 6 ? 'link' : 'leaf');
   const nodes = notes.map((note) => {
     const point = positions.get(note.id);
+    const deg = degree.get(note.id) || 0;
     return '<a class="kn-node" href="/blog/' + esc(note.id) + '.html" data-node="' + esc(note.id)
-      + '" style-x="' + point.x.toFixed(2) + '" style-y="' + point.y.toFixed(2) + '"'
-      + ' title="' + esc(note.title) + '">' + esc(note.title) + '</a>';
+      + '" data-zone="' + esc(note.zone) + '" data-degree="' + deg + '" data-rank="' + rank(deg) + '"'
+      + ' style-x="' + point.x.toFixed(2) + '" style-y="' + point.y.toFixed(2) + '"'
+      + ' title="' + esc(note.title) + '">'
+      + '<span class="kn-node-dot" aria-hidden="true"></span>'
+      + '<span class="kn-node-label">' + esc(note.title) + '</span></a>';
   }).join('\n      ');
   const edges = registry.edges.map((edge) => {
     const from = positions.get(edge.from), to = positions.get(edge.to);
     if (!from || !to) return '';
-    return '<line data-from="' + esc(edge.from) + '" data-to="' + esc(edge.to)
-      + '" x1="' + from.x.toFixed(2) + '%" y1="' + from.y.toFixed(2) + '%" x2="' + to.x.toFixed(2) + '%" y2="' + to.y.toFixed(2) + '"></line>';
+    return '<line data-from="' + esc(edge.from) + '" data-to="' + esc(edge.to) + '"'
+      + ' data-from-zone="' + esc((notes.find((n) => n.id === edge.from) || {}).zone || '') + '"'
+      + ' data-to-zone="' + esc((notes.find((n) => n.id === edge.to) || {}).zone || '') + '"'
+      + ' x1="' + from.x.toFixed(2) + '" y1="' + from.y.toFixed(2) + '" x2="' + to.x.toFixed(2) + '" y2="' + to.y.toFixed(2) + '"></line>';
   }).join('\n        ');
+
+  const counts = new Map();
+  for (const note of notes) counts.set(note.zone, (counts.get(note.zone) || 0) + 1);
+  const filters = ['<button class="catalog-filter" type="button" aria-pressed="true" data-graph-zone="all">Все</button>']
+    .concat(TAXONOMY.zones.filter((zone) => counts.get(zone.id)).map((zone) =>
+      '<button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="' + esc(zone.id) + '">'
+      + esc(zone.num) + ' ' + esc(zone.title) + '</button>')).join('');
 
   const list = notes.map((note) => {
     const out = registry.edges.filter((edge) => edge.from === note.id).map((edge) => edge.to);
@@ -664,7 +717,7 @@ function graphPage(notes, registry) {
 
   return `${head({
     title: 'Граф заметок · itsliventsev',
-    description: 'Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.',
+    description: 'Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.',
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
   })}
 <body>
@@ -673,20 +726,34 @@ function graphPage(notes, registry) {
   <header class="ui-pagehead">
     <p class="ui-eyebrow">база знаний · связи</p>
     <h1>Граф заметок</h1>
-    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}, ${registry.edges.length} ${plural(registry.edges.length, 'связь', 'связи', 'связей')}. Линия означает, что одна заметка ссылается на другую. Наведите курсор или перейдите по Tab, чтобы подсветить связи узла.</p>
+    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}, ${registry.edges.length} ${plural(registry.edges.length, 'связь', 'связи', 'связей')}. Каждая рубрика стягивает свои узлы к своему сектору, связи работают как пружины. Наведите курсор или перейдите по Tab — окружение подсветится, остальное отойдёт на второй план.</p>
     <div class="ui-pagehead-meta"><span data-graph-count>${notes.length} узлов</span><span>${registry.edges.length} рёбер</span><span><a href="/blog/topics.html">рубрики</a></span></div>
   </header>
 
-  <div class="kn-graph-stage" data-kn-graph>
-    <svg class="kn-graph-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+  <section class="kn-graph-shell" aria-labelledby="graph-title">
+    <h2 class="kn-graph-title" id="graph-title">Поле связей</h2>
+    <div class="kn-graph-toolbar">
+      <div class="kn-filterbar kn-filterbar--graph" data-graph-filters role="group" aria-label="Рубрика на графе">${filters}</div>
+      <div class="kn-graph-actions" role="group" aria-label="Движение графа">
+        <button class="catalog-filter" type="button" data-graph-action="toggle" aria-pressed="false">движение: включено</button>
+        <button class="catalog-filter" type="button" data-graph-action="reset">собрать заново</button>
+      </div>
+      <p class="catalog-status" data-graph-status role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="kn-graph-stage" data-kn-graph>
+      <svg class="kn-graph-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         ${edges}
-    </svg>
-      ${nodes}
-  </div>
+      </svg>
+      <div class="kn-graph-field" data-kn-graph-field>
+        ${nodes}
+      </div>
+    </div>
 
-  <p class="kn-graph-legend"><span>узлы — заметки</span><span>рёбра — перекрёстные ссылки</span><span>обратные ссылки считаются автоматически</span></p>
+    <p class="kn-graph-legend"><span>точка — заметка, размер по числу связей</span><span>линия — перекрёстная ссылка</span><span>сектор — рубрика</span><span>узел можно перетащить</span></p>
+  </section>
 
-  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии. Без скриптов подсветка связей не работает, но навигация доступна.</p></noscript>
+  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии, рубрики разнесены по секторам. Без скриптов нет движения и подсветки, но навигация и таблица связей ниже работают полностью.</p></noscript>
 
   <section class="ui-section" aria-labelledby="edges-title">
     <div class="ui-section-head"><h2 id="edges-title">Связи таблицей</h2><span class="ui-kicker">та же структура, без графики</span></div>
@@ -708,8 +775,10 @@ function graphPage(notes, registry) {
 `;
 }
 
-/* Детерминированная раскладка: рубрики задают сектор, внутри сектора —
-   заметки по кругу. Никаких случайных чисел: граф не «прыгает» между сборками. */
+/* Домашние координаты узлов. Рубрика получает сектор (по часовой стрелке от
+   верха), внутри сектора заметки стоят по рангу связности: чем больше связей,
+   тем ближе к центру. Случайных чисел нет — при пересборке граф не «прыгает»,
+   а смена данных проявляется сдвигом, а не новой картинкой. */
 function layoutGraph(notes, registry) {
   const positions = new Map();
   const degree = new Map(notes.map((note) => [note.id, 0]));
@@ -717,20 +786,31 @@ function layoutGraph(notes, registry) {
     degree.set(edge.from, (degree.get(edge.from) || 0) + 1);
     degree.set(edge.to, (degree.get(edge.to) || 0) + 1);
   }
-  const zoneOrder = TAXONOMY.zones.map((zone) => zone.id);
-  const hub = [...degree.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
-  const hubNote = hub ? notes.find((note) => note.id === hub[0]) : null;
-  if (hubNote) positions.set(hubNote.id, { x: 50, y: 50 });
-  const rest = notes.filter((note) => !positions.has(note.id))
-    .sort((a, b) => zoneOrder.indexOf(a.zone) - zoneOrder.indexOf(b.zone) || a.id.localeCompare(b.id));
-  const radiusX = 38, radiusY = 36;
-  rest.forEach((note, index) => {
-    const angle = (index / Math.max(1, rest.length)) * Math.PI * 2 - Math.PI / 2;
-    positions.set(note.id, {
-      x: 50 + Math.cos(angle) * radiusX,
-      y: 50 + Math.sin(angle) * radiusY,
+  const zones = TAXONOMY.zones.filter((zone) => notes.some((note) => note.zone === zone.id));
+  const sector = (Math.PI * 2) / Math.max(1, zones.length);
+  zones.forEach((zone, zoneIndex) => {
+    const own = notes.filter((note) => note.zone === zone.id)
+      .sort((a, b) => (degree.get(b.id) || 0) - (degree.get(a.id) || 0) || a.id.localeCompare(b.id));
+    const start = zoneIndex * sector - Math.PI / 2 + sector / 2;
+    own.forEach((note, index) => {
+      /* Два кольца: хабы ближе к центру сектора, остальные — по дуге снаружи.
+         Так ядро рубрики читается без подписей. */
+      const inner = index < Math.ceil(own.length / 3);
+      const ring = inner ? 17 + index * 1.8 : 33 + (index % 2) * 3.5;
+      const spread = inner ? sector * 0.5 : sector * 0.86;
+      const offset = own.length > 1 ? (index / (own.length - 1) - 0.5) * spread : 0;
+      const angle = start + (inner ? offset * 0.6 : offset);
+      const radiusX = ring * 1.55, radiusY = ring;
+      positions.set(note.id, {
+        x: 50 + Math.cos(angle) * radiusX,
+        y: 50 + Math.sin(angle) * radiusY,
+      });
     });
   });
+  /* Жёсткие границы: узел не должен упираться в край поля. */
+  for (const [id, point] of positions) {
+    positions.set(id, { x: Math.min(92, Math.max(8, point.x)), y: Math.min(92, Math.max(8, point.y)) });
+  }
   return positions;
 }
 

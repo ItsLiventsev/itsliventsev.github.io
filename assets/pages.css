@@ -2268,7 +2268,7 @@ html.u-theme-switch *::after {
 }
 
 /* ==========================================================================
-   18. Knowledge base — лента заметок, страница заметки, граф, рубрики (kn-)
+   18. Knowledge base — лента заметок, страница заметки, живой граф, рубрики (kn-)
    Слой только добавляет новые классы: существующие правила каталога, карточек
    и прозы не меняются. Все значения — токены --u-*; второй акцент не вводится,
    поэтому рубрики различаются номером, кеглем и плотностью, а не цветом.
@@ -2684,3 +2684,149 @@ html.u-theme-switch *::after {
 }
 .kn-card--wide .kn-card-excerpt { -webkit-line-clamp: 2; }
 .kn-card--lead .kn-card-excerpt { -webkit-line-clamp: 3; }
+
+/* ——— Граф 2: живое поле связей ———
+   Узел стал точкой с подписью: точка показывает ранг связности, подпись
+   читается глазом и остаётся доступной без скриптов. Рубрики разнесены по
+   секторам на этапе сборки, скрипт только добавляет движение. Второй акцент
+   не вводится: активное состояние — тот же глиняный --u-accent, приглушённое —
+   --u-faint, поэтому в тёмной теме всё остаётся в палитре сайта. */
+.kn-graph-shell { display: grid; gap: var(--u-s3); margin-block-start: var(--u-s6); }
+.kn-graph-title {
+  margin: 0;
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-graph-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s3); }
+.kn-graph-actions { display: flex; flex-wrap: wrap; gap: var(--u-s2); }
+.kn-graph-toolbar .catalog-status { flex: 1 1 100%; min-height: 1.2em; margin: 0; }
+.kn-graph-stage { aspect-ratio: 3 / 2; min-height: 480px; background: var(--u-surface-sunk); }
+.kn-graph-field { position: absolute; inset: 0; }
+.kn-graph-svg line { stroke: var(--u-line-strong); stroke-width: 1; transition: stroke var(--u-dur-1) var(--u-ease); }
+.kn-graph-svg line[data-muted="true"] { stroke: var(--u-line); }
+.kn-graph-svg line[data-hidden="true"] { stroke: var(--u-line); opacity: 0.4; }
+.kn-node {
+  width: auto;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--u-ink-2);
+  font-weight: 500;
+  gap: 4px;
+  touch-action: none;
+  cursor: grab;
+}
+.kn-node-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface);
+  box-shadow: inset 0 0 0 1.5px var(--u-line-strong);
+  transition: box-shadow var(--u-dur-1) var(--u-ease), transform var(--u-dur-1) var(--u-ease);
+}
+.kn-node[data-rank="link"] .kn-node-dot { width: 14px; height: 14px; }
+.kn-node[data-rank="hub"] .kn-node-dot { width: 20px; height: 20px; box-shadow: inset 0 0 0 2px var(--u-muted); background: var(--u-accent-soft); }
+.kn-node-label {
+  max-width: 132px;
+  color: var(--u-muted);
+  font-family: var(--u-font-ui);
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+  transition: color var(--u-dur-1) var(--u-ease);
+}
+.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; color: var(--u-ink); font-size: var(--u-fs-2xs); font-weight: 600; }
+.kn-node[data-dim="true"] { opacity: 0.32; }
+.kn-node[data-active="true"] .kn-node-dot { background: var(--u-accent); box-shadow: inset 0 0 0 2px var(--u-accent), 0 0 0 6px var(--u-accent-soft); }
+.kn-node[data-active="true"] .kn-node-label { color: var(--u-accent); font-weight: 600; }
+.kn-node[data-dragging="true"] { cursor: grabbing; z-index: 3; }
+.kn-node[data-dragging="true"] .kn-node-dot { background: var(--u-accent); }
+.kn-node:focus-visible { outline: none; box-shadow: var(--u-focus); border-radius: var(--u-r-sm); }
+.kn-node:focus-visible .kn-node-label { color: var(--u-accent); }
+.kn-node[hidden] { display: none; }
+.kn-graph-stage[data-motion="on"] .kn-node { will-change: left, top; }
+.kn-graph-stage[data-filter="all"] .kn-node-label { opacity: 1; }
+.kn-graph-legend { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); }
+@media (max-width: 900px) {
+  .kn-graph-stage { aspect-ratio: auto; min-height: 420px; }
+  .kn-node-label { max-width: 92px; font-size: 9px; }
+  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
+}
+@media (max-width: 560px) {
+  .kn-node[data-rank="link"] .kn-node-label { display: none; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kn-node-dot { transition: none; }
+  .kn-node-label { transition: none; }
+  .kn-graph-svg line { transition: none; }
+}
+@media print {
+  .kn-graph-toolbar { display: none; }
+}
+
+/* ——— Конспект в рельсе заметки ———
+   Вместо служебного «паспорта» — оглавление по разделам текста. Якоря
+   строит генератор из заголовков h2, поэтому список всегда совпадает с
+   содержанием: перепутать его с текстом нельзя. */
+.kn-minitoc { display: grid; gap: var(--u-s2); margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+.kn-minitoc li { counter-increment: toc; }
+.kn-minitoc a {
+  display: grid;
+  grid-template-columns: 1.9em minmax(0, 1fr);
+  gap: var(--u-s2);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-xs);
+  line-height: 1.4;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.kn-minitoc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--u-faint);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-minitoc a:hover { color: var(--u-accent); }
+.kn-minitoc a:hover::before { color: var(--u-accent); }
+.kn-rail-summary { position: relative; }
+@media (min-width: 1081px) {
+  .kn-rail-summary { position: sticky; inset-block-start: calc(var(--u-masthead) + var(--u-s6)); }
+}
+
+/* ——— Граф: снятие старых рамок с узла ———
+   Прежний узел был карточкой и на hover получал внутреннюю обводку. Теперь
+   узел — точка с подписью, поэтому кольцо рисует только сама точка, а
+   рамка вокруг текста убирается. Здесь же нейтрализуются фиксированные
+   ширины узла из медиазапросов первой версии. */
+.kn-node:hover, .kn-node:focus-visible { box-shadow: none; color: var(--u-ink-2); }
+.kn-node:hover .kn-node-label { color: var(--u-accent); }
+.kn-graph-stage[data-motion="off"] .kn-node { will-change: auto; }
+@media (max-width: 1080px) {
+  .kn-node { width: auto; font-size: var(--u-fs-2xs); }
+}
+@media (max-width: 560px) {
+  .kn-graph-stage { min-height: 380px; }
+}
+
+/* ——— Граф: подписи по требованию ———
+   Сорок три подписи одновременно превращают поле в кашу. Хабы и связующие
+   узлы подписаны всегда (по ним читается структура), листья показывают
+   подпись при наведении, фокусе и в режиме фильтра, когда узлов на поле
+   остаётся немного. Подпись есть в разметке всегда — скрипт ничего не
+   дописывает, поисковик и скринридер видят её без движения. */
+.kn-node[data-rank="leaf"] .kn-node-label { opacity: 0; }
+.kn-node[data-rank="leaf"]:hover .kn-node-label,
+.kn-node[data-rank="leaf"]:focus-visible .kn-node-label,
+.kn-node[data-rank="leaf"][data-active="true"] .kn-node-label { opacity: 1; }
+.kn-graph-stage:not([data-filter="all"]) .kn-node-label { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .kn-node-label { transition: opacity var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
+}

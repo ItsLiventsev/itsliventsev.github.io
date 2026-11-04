@@ -72,7 +72,7 @@
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Контейнер не эмулирует железо: он запускает обычный процесс, которому ядро показывает урезанную картину мира. <code>namespaces</code> отвечают за то, что процесс видит (свои PID, сеть, точки монтирования), <code>cgroups</code> — за то, сколько ресурсов он может взять. Понимание этой пары объясняет и быстрый старт, и то, почему контейнер не заменяет виртуальную машину там, где нужна жёсткая изоляция.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Свойство</th><th scope="col">Контейнер</th><th scope="col">Виртуальная машина</th></tr></thead><tbody><tr><th scope="row">ядро</th><td>общее с хостом</td><td>своё</td><td>гостевое</td></tr><tr><th scope="row">запуск</th><td>доли секунды</td><td>десятки секунд</td></tr><tr><th scope="row">изоляция</th><td>namespaces и cgroups</td><td>аппаратная</td><td>полная</td></tr><tr><th scope="row">образ</th><td>мегабайты</td><td>слои</td><td>гигабайты</td><td>диск</td></tr></tbody><caption>Контейнер и виртуальная машина решают разные задачи, и путать их дорого.</caption></table></div>
-        <h2>Образ собирается слоями</h2>
+        <h2 id="obraz-sobiraetsya-sloyami">Образ собирается слоями</h2>
         <p>Каждая инструкция в Dockerfile добавляет слой, и слои кешируются. Отсюда правило: <strong>сначала то, что меняется редко</strong>. Скопировать список зависимостей и установить их — потом копировать исходники. Если сделать наоборот, любая правка в коде сбрасывает кеш установки, и сборка занимает минуты вместо секунд.</p>
         <pre><code>FROM python:3.12-slim AS build
 WORKDIR /app
@@ -88,12 +88,12 @@ USER 10001
 CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
         <p>Multi-stage сборка — способ не тащить в прод компиляторы и заголовочные файлы. Итоговый образ получается в разы меньше, а поверхность атаки — уже.</p>
         <dl class="kn-facts"><dt>Слой</dt><dd>каждая RUN и COPY создаёт слой; неизменное ставят выше изменяемого</dd><dt>Тег</dt><dd>latest не значит «свежий» — фиксируйте версию и digest</dd><dt>Том</dt><dd>volume переживает контейнер, без него данные исчезнут</dd><dt>Логи</dt><dd>пишите в stdout и stderr — иначе docker logs пуст</dd></dl>
-        <h2>Данные, сеть, конфигурация</h2>
+        <h2 id="dannye-set-konfiguraciya">Данные, сеть, конфигурация</h2>
         <ol><li><strong>Данные.</strong> Файл, записанный внутри контейнера, исчезнет при пересоздании. База должна писать в том или в каталог хоста. Том управляется Docker и переживает контейнер; bind mount — просто путь на хосте, удобен для конфигов, но зависит от прав и SELinux.</li><li><strong>Сеть.</strong> Контейнеры одной пользовательской сети видят друг друга по имени сервиса. Порт, опубликованный через <code>-p</code>, доступен снаружи — и обычно нужен только для отладки.</li><li><strong>Конфигурация.</strong> Не вшивайте секреты в образ: они останутся в слоях навсегда. Переменные окружения при запуске, файлы — через секреты или монтирование.</li></ol>
-        <h2>Диагностика</h2>
+        <h2 id="diagnostika">Диагностика</h2>
         <p>Контейнер упал — смотрите не <code>docker ps</code>, а <code>docker logs</code> и <code>docker inspect --format &#39;{{.State.ExitCode}}&#39;</code>. Код 137 — это SIGKILL, чаще всего OOM: приложение съело лимит памяти. Код 1 — приложение само завершилось с ошибкой, читайте его вывод. Пустой лог при падении почти всегда означает, что приложение писало в файл внутри контейнера.</p>
         <p>Для отладки сети удобен отдельный контейнер в сети проблемного: <code>docker run --rm -it --network container:&lt;id&gt; nicolaka/netshoot</code>. В минимальных образах нет ни <code>ps</code>, ни <code>curl</code>, и это нормально.</p>
-        <h2>Что дальше</h2>
+        <h2 id="chto-dalshe">Что дальше</h2>
         <p>Когда контейнеров больше десятка, ручной запуск перестаёт быть управляемым: нужны healthcheck, рестарт-политика и внешний мониторинг. Метрики — <a class="kn-ref" href="/blog/kn-prometheus.html">Prometheus</a>, автоматизация развёртывания — <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>, публикация наружу — <a class="kn-ref" href="/blog/kn-nginx.html">reverse proxy</a>.</p>
       </div>
 
@@ -120,15 +120,16 @@ CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 08 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-docker"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Linux и службы · 08 из 43 · 9 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#obraz-sobiraetsya-sloyami">Образ собирается слоями</a></li>
+          <li><a href="#dannye-set-konfiguraciya">Данные, сеть, конфигурация</a></li>
+          <li><a href="#diagnostika">Диагностика</a></li>
+          <li><a href="#chto-dalshe">Что дальше</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -137,9 +138,12 @@ CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-docker"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

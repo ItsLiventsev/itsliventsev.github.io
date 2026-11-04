@@ -71,13 +71,13 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Планировщик — самая обманчивая часть системы: он молчит, когда всё хорошо, и молчит, когда всё плохо. Задание может месяцами не выполняться, а вы узнаете об этом в момент, когда понадобился результат. Поэтому главное в работе с планировщиком — не синтаксис, а проверка того, что запуск действительно произошёл.</p>
-        <h2>Cron: пять полей и окружение</h2>
+        <h2 id="cron-pyat-poley-i-okruzhenie">Cron: пять полей и окружение</h2>
         <pre><code>30 2 * * * /usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1</code></pre>
         <p>Пять полей: минута, час, день месяца, месяц, день недели. <code>*/15</code> — каждые 15 минут, <code>1-5</code> — по будням. Дальше команда, и здесь начинаются отличия от интерактивной оболочки: у cron нет tty, PATH обычно <code>/usr/bin:/bin</code>, а переменные из <code>.bashrc</code> не подхватываются.</p>
         <p>Отсюда классика: скрипт работает вручную и падает в cron. Причины — <code>python3</code> не в PATH, относительный путь считается от домашнего каталога, нужная переменная не задана. Лечение: полные пути к бинарникам, <code>cd</code> в начало скрипта, явный <code>PATH</code> в crontab.</p>
         <dl class="kn-facts"><dt>Пять полей</dt><dd>минута, час, день месяца, месяц, день недели; шестое — команда</dd><dt>PATH</dt><dd>в cron обычно только /usr/bin:/bin — используйте полные пути или задайте PATH</dd><dt>Секунды</dt><dd>в cron нет секунд; для «раз в 30 секунд» нужен systemd timer</dd><dt>RandomizedDelaySec</dt><dd>разносит запуски, чтобы сотня машин не била в один сервис одновременно</dd></dl>
         <p><strong>Логирование обязательно.</strong> Без <code>&gt;&gt; log 2&gt;&amp;1</code> весь вывод уходит в почту, которой на сервере обычно нет. Перенаправление в файл — минимум; лучше писать в journald через <code>systemd-cat</code> или запускать задачу таймером.</p>
-        <h2>Systemd timer: то же, но с журналом</h2>
+        <h2 id="systemd-timer-to-zhe-no-s-zhurnalom">Systemd timer: то же, но с журналом</h2>
         <pre><code># /etc/systemd/system/backup.timer
 [Unit]
 Description=Ежедневный бэкап
@@ -91,9 +91,9 @@ RandomizedDelaySec=10min
 WantedBy=timers.target</code></pre>
         <p>Пара <code>backup.service</code> + <code>backup.timer</code> даёт то, чего у cron нет: результат каждой попытки в журнале (<code>journalctl -u backup.service</code>), зависимости (<code>After=network-online.target</code>), ограничения ресурсов и автоматический догон пропущенного запуска при <code>Persistent=true</code>.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Свойство</th><th scope="col">cron</th><th scope="col">systemd timer</th></tr></thead><tbody><tr><th scope="row">журнал</th><td>письмо на почту</td><td>часто никуда</td><td>journalctl -u unit — каждая попытка</td></tr><tr><th scope="row">окружение</th><td>минимальный PATH</td><td>без tty</td><td>задаётся явно в unit</td></tr><tr><th scope="row">пропущенный запуск</th><td>теряется</td><td>если машина выключена</td><td>Persistent=true догоняет</td></tr><tr><th scope="row">зависимости</th><td>нет</td><td>After</td><td>Requires</td><td>сеть и монтирования</td></tr></tbody><caption>Таймеры дают журнал и зависимости, cron — простоту и переносимость.</caption></table></div>
-        <h2>Как проверить, что задание выполняется</h2>
+        <h2 id="kak-proverit-chto-zadanie-vypolnyaetsya">Как проверить, что задание выполняется</h2>
         <ol><li><strong><code>systemctl list-timers</code></strong> — когда следующий запуск и когда был последний. Для cron — <code>grep CRON /var/log/syslog</code> или <code>journalctl -u cron</code>.</li><li><strong><code>systemctl status backup.service</code></strong> — код возврата и вывод последнего запуска. Ненулевой код — это провал, о котором никто не узнает, если не настроен алерт.</li><li><strong>Результат, а не факт запуска.</strong> «Задание выполнилось» и «бэкап создан» — разные утверждения. Проверяйте артефакт: размер файла, дату, успешное восстановление на тестовом стенде.</li><li><strong>Алерт на отсутствие.</strong> Самый надёжный способ: внешняя проверка «есть ли свежий результат». Если задание не запустилось, никто внутри сервера об этом не сообщит.</li></ol>
-        <h2>Чего избегать</h2>
+        <h2 id="chego-izbegat">Чего избегать</h2>
         <ul><li><strong>Секреты в командной строке</strong>: видны в <code>ps</code> всем пользователям. Используйте файлы с правами 600.</li><li><strong>Перекрывающиеся запуски</strong>: задание, которое идёт дольше интервала, наслаивается. Блокировка через <code>flock</code> — три слова и решает проблему.</li><li>**<code>0 0 * * *</code> на сотнях машин** одной инфраструктуры: одновременный удар по общему сервису. <code>RandomizedDelaySec</code> или разнесённые минуты решают это.</li></ul>
         <p>Смежные темы: как писать сами скрипты — <a class="kn-ref" href="/blog/kn-bash.html">конвейер и сценарии</a>; как читать журналы запусков — <a class="kn-ref" href="/blog/kn-logs.html">журналы</a>; устройство юнитов и зависимостей — <a class="kn-ref" href="/blog/kn-systemd.html">systemd</a>.</p>
       </div>
@@ -121,15 +121,16 @@ WantedBy=timers.target</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 05 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-cron"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Linux и службы · 05 из 43 · 8 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#cron-pyat-poley-i-okruzhenie">Cron: пять полей и окружение</a></li>
+          <li><a href="#systemd-timer-to-zhe-no-s-zhurnalom">Systemd timer: то же, но с журналом</a></li>
+          <li><a href="#kak-proverit-chto-zadanie-vypolnyaetsya">Как проверить, что задание выполняется</a></li>
+          <li><a href="#chego-izbegat">Чего избегать</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -138,9 +139,12 @@ WantedBy=timers.target</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-cron"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>
