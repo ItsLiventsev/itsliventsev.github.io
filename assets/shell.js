@@ -31,7 +31,12 @@
   function paintTheme(theme) {
     if (theme === 'dark') dcl.dataset.theme = 'dark'; else delete dcl.dataset.theme;
     const meta = themeMeta();
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#131210' : '#f6f2e9');
+    /* Цвет оболочки браузера — из токена --u-paper: раньше здесь жили литералы
+       #131210 и #f6f2e9, которые разъехались с палитрой (#121109 / #efeee9). */
+    if (meta) {
+      const paper = getComputedStyle(dcl).getPropertyValue('--u-paper').trim();
+      meta.setAttribute('content', paper || (theme === 'dark' ? '#121109' : '#efeee9'));
+    }
     doc.querySelectorAll('[data-ui-theme-toggle]').forEach(button => {
       button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
       const label = theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему';

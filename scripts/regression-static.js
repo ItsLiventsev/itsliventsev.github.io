@@ -90,6 +90,9 @@ for (const file of contentPages) {
     ok(source.includes('/assets/course.css'), file + ': учебная страница без course.css');
     if (file !== 'stands/index.html') ok(/data-ws-|class="(?:st-|ops-|office-|lab-|league-)/.test(source), file + ': учебная страница без хуков course.css');
   }
+  /* data-accent — мёртвый атрибут: ни один селектор и ни один скрипт его не
+     читает, а значения разъехались (cocoa у двух страниц, amber у десяти). */
+  ok(!/data-accent=/.test(source), file + ': мёртвый атрибут data-accent');
   if (file.includes('/') && file !== 'projects/glossary.html') {
     ok(/<time\b[^>]*data-footer-updated/.test(source) || file.startsWith('archive/'), file + ': нет семантической даты обновления');
   }
@@ -395,7 +398,8 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
     'лента: числа должны совпадать с картой сайта, индексом и графом');
   ok(!/76 страниц|72 страниц|74 термина/.test(strip), 'лента: в текстах остались устаревшие числа');
   ok(strip.includes('<p class="sr-only">'), 'лента: нужен sr-only пересказ для скринридеров');
-  ok(iterIndex.includes('<script src="/assets/iter-strip.js" defer></script>'), 'главная не подключает движок ленты');
+  /* Версия статики — хэш в адресе, поэтому ссылку сверяем без привязки к конкретному токену. */
+  ok(/<script src="\/assets\/iter-strip\.js(?:\?v=[\w]+)?" defer><\/script>/.test(iterIndex), 'главная не подключает движок ленты');
   ok(iterSw.includes("'/assets/iter-strip.js'"), 'service worker не кэширует движок ленты');
   ok(/\.iter-strip \{[^}]*background: var\(--u-inverse\)/.test(iterCss), 'лента: подложка должна быть инверсной');
   ok(/\.iter-strip \{[^}]*color: var\(--u-inverse-ink\)/.test(iterCss), 'лента: текст на инверсной подложке — inverse-ink');

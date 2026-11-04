@@ -41,10 +41,13 @@ const esc = (value) => String(value == null ? '' : value)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
+/* Версия статики в разметке — хэш содержимого файла (scripts/lib/asset-version.js):
+   шаблоны пишут пути без `?v=`, штамп добавляет версию при записи. */
+const { stamp } = require('./lib/asset-version');
 const write = (file, body) => {
   const full = path.join(ROOT, file);
   fs.mkdirSync(path.dirname(full), { recursive: true });
-  fs.writeFileSync(full, body);
+  fs.writeFileSync(full, stamp(body));
 };
 const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
   'августа', 'сентября', 'октября', 'ноября', 'декабря'];
@@ -394,9 +397,9 @@ function head({ title, description, canonical, extraMeta }) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f6f2e9">
+<meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${extraMeta || ''}
@@ -545,7 +548,7 @@ function renderNotePage(note, notes, notesById, index, registry) {
   </article>
   ${footer('Заметки')}
 </main>
-<script src="/assets/knowledge.js?v=20261104r4" defer></script>
+<script src="/assets/knowledge.js" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
@@ -852,7 +855,7 @@ function graphPage(notes, registry, stands, bridge) {
   </section>
   ${footer('Заметки · граф')}
 </main>
-<script src="/assets/knowledge.js?v=20261104r4" defer></script>
+<script src="/assets/knowledge.js" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
