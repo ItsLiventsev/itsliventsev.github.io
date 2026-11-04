@@ -1206,21 +1206,6 @@ label.btn { cursor: pointer; }
 .toc-link:last-child { border-bottom: 0; }
 .toc-link:hover { color: var(--u-accent); }
 
-/* Calm note block: surface card with a tone marker, no alert bar */
-.ui-callout {
-  display: grid;
-  gap: 4px;
-  margin-block-start: var(--u-s4);
-  padding: var(--u-s4) var(--u-s5);
-  border-radius: var(--u-r-lg);
-  background: var(--u-surface);
-  box-shadow: var(--u-shadow-1);
-  color: var(--u-ink-2);
-  font-size: var(--u-fs-sm);
-  line-height: 1.55;
-}
-.ui-callout strong { color: var(--u-ink); }
-
 /* ==========================================================================
    10. Case studies — the same card language for hand-written showcase pages
    (навигация колледжа, киберспорт). These pages carry their own hooks:
