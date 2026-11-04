@@ -732,7 +732,7 @@
 .esp-title, .hero-title { font-family: var(--u-font-display); }
 
 /* ==========================================================================
-   8. Responsive
+   7. Responsive
    ========================================================================== */
 @media (max-width: 1080px) {
   .home-hero { grid-template-columns: minmax(0, 1fr); padding: var(--u-s6); }
@@ -775,7 +775,7 @@
 }
 
 /* ==========================================================================
-   9. Content components carried by the existing publications and case studies
+   8. Content components carried by the existing publications and case studies
    These hooks live inside real articles (charts, swatches, sign systems,
    timelines). They are content, not chrome, so the new layer styles them
    instead of asking the author to rewrite the text.
@@ -1143,7 +1143,7 @@ label.btn { cursor: pointer; }
 }
 
 /* ==========================================================================
-   10. Reading passages (hand-written articles) — Literata body, sans chrome
+   9. Reading passages (hand-written articles) — Literata body, sans chrome
    The older publications mark paragraphs with .prose-p inside .prose-measure
    rather than the .prose wrapper, so both paths are covered here.
    ========================================================================== */
@@ -1237,7 +1237,7 @@ label.btn { cursor: pointer; }
 .ui-callout strong { color: var(--u-ink); }
 
 /* ==========================================================================
-   11. Case studies — the same card language for hand-written showcase pages
+   10. Case studies — the same card language for hand-written showcase pages
    (навигация колледжа, киберспорт). These pages carry their own hooks:
    esp-*, p-card, step-card, sign-*, stair-*, flow-*.
    ========================================================================== */
@@ -1427,7 +1427,7 @@ label.btn { cursor: pointer; }
 .p-tag.tag-green { background: var(--u-ok-soft); color: var(--u-ok); }
 
 /* ==========================================================================
-   12. Responsive rules that must win over the case/section layers above
+   11. Responsive rules that must win over the case/section layers above
    ========================================================================== */
 @media (max-width: 1080px) {
   .esp-hero { grid-template-columns: minmax(0, 1fr); }
@@ -1458,7 +1458,7 @@ label.btn { cursor: pointer; }
 :root[data-theme="dark"] .ui-brand:hover { background: var(--u-accent-soft); color: var(--u-accent); }
 
 /* ==========================================================================
-   13. Document pages — archive notes, blog notes, admin
+   12. Document pages — archive notes, blog notes, admin
    The archive imports wrap every numbered block in its own card and mark
    headings with .mono. Here they read as one document in the v13 voice:
    display headings with real weight, sans body at a comfortable measure,
@@ -1601,7 +1601,7 @@ label.btn { cursor: pointer; }
 }
 
 /* ==========================================================================
-   14. Universes — three practice worlds with inline SVG schematics
+   13. Universes — three practice worlds with inline SVG schematics
    Each card is a schematic of what the space actually is: a topology,
    a workstation, a shift dashboard. Strokes come from the tone colour,
    no inline styles, no raster images.
@@ -1754,7 +1754,7 @@ label.btn { cursor: pointer; }
 }
 
 /* ==========================================================================
-   15. Type layer — one set of text rules for every page type
+   14. Type layer — one set of text rules for every page type
    Legacy publications carry utility classes from earlier iterations
    (.fs-1, .ink-muted, .p-title…). They are mapped onto the v13 scale here
    so a heading, a paragraph or a list looks the same everywhere.
@@ -1909,7 +1909,7 @@ label.btn { cursor: pointer; }
 .catalog-toolbar { margin-block: var(--u-s4) var(--u-s2); }
 
 /* ==========================================================================
-   16. Home hero — the same shape as a case-study hero
+   15. Home hero — the same shape as a case-study hero
    On wide screens the numbers move to the right column as fact tiles,
    so the card has no dead half and the pattern matches /projects/*.
    ========================================================================== */
@@ -1944,7 +1944,7 @@ label.btn { cursor: pointer; }
 :root[data-theme="dark"] .u-art-panel { stroke: color-mix(in srgb, var(--space-tone) 48%, transparent); }
 
 /* ==========================================================================
-   17. Справка: поиск по вопросам, ответы, деплинки
+   16. Справка: поиск по вопросам, ответы, деплинки
    ========================================================================== */
 .faq-tools {
   display: flex;
@@ -2051,7 +2051,7 @@ label.btn { cursor: pointer; }
 }
 
 /* ==========================================================================
-   15. Главная: плотнее ритм, лента итераций, скелетоны, слой движения
+   17. Главная: плотнее ритм, лента итераций, скелетоны, слой движения
    ========================================================================== */
 
 /* ——— Плотность главной: меньше воздуха между блоками и внутри карточек ——— */
