@@ -450,11 +450,11 @@
 /* ——— Учебные материалы: левое wiki-меню и страница темы ———
    Дерево живёт на <details> и работает без скриптов; активная тема
    помечена aria-current="page" и подсвечивается тем же глиняным
-   акцентом, что и остальная навигация. Сетка — 280px + контент,
+   акцентом, что и остальная навигация. Сетка — 260px + контент,
    ниже 1081px меню уезжает наверх и раскрывается одним блоком. */
 .kn-wiki-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
   gap: var(--u-s6);
   align-items: start;
   margin-block-start: var(--u-s5);
@@ -467,10 +467,16 @@
   max-height: calc(100dvh - var(--u-masthead) - var(--u-s6));
   overflow: auto;
   overscroll-behavior: contain;
-  padding-inline-end: var(--u-s2);
+  min-width: 0;
+  padding: var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
   font-family: var(--u-font-ui);
   font-size: var(--u-fs-sm);
 }
+.kn-wiki-disclosure { min-width: 0; }
 .kn-wiki-home {
   display: flex;
   align-items: baseline;
@@ -478,12 +484,24 @@
   gap: var(--u-s2);
   padding: var(--u-s2) 0 var(--u-s3);
   border-block-end: 1px solid var(--u-line);
+  cursor: pointer;
+  list-style: none;
   color: var(--u-ink);
   font-weight: 600;
   text-decoration: none;
 }
+.kn-wiki-home::-webkit-details-marker { display: none; }
+.kn-wiki-home::before { content: ""; width: 7px; height: 7px; flex: none; border-inline-end: 1.5px solid var(--u-muted); border-block-end: 1.5px solid var(--u-muted); transform: rotate(-45deg); }
+.kn-wiki-disclosure[open] > .kn-wiki-home::before { transform: rotate(45deg); }
 .kn-wiki-home span { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
 .kn-wiki-home:hover { color: var(--u-accent); }
+.kn-wiki-all { display: flex; justify-content: space-between; align-items: center; gap: var(--u-s2); padding: var(--u-s3) var(--u-s2); color: var(--u-accent); font-size: var(--u-fs-xs); font-weight: 600; text-decoration: none; }
+.kn-wiki-all:hover { text-decoration: underline; }
+.kn-page-material .ui-shell, .kn-page-notes .ui-shell { max-width: 1560px; }
+.kn-unified-content { display: block; }
+.kn-unified-notice { margin-block: var(--u-s4) var(--u-s6); }
+.kn-materials-index { margin-block-start: var(--u-s9); scroll-margin-top: calc(var(--u-masthead) + var(--u-s5)); }
+.kn-mat-section { scroll-margin-top: calc(var(--u-masthead) + var(--u-s5)); }
 .kn-wiki-tree, .kn-wiki-tree ul { margin: 0; padding: 0; list-style: none; }
 .kn-wiki-tree ul { display: grid; gap: 2px; margin-block-start: 2px; padding-inline-start: var(--u-s3); border-inline-start: 1px solid var(--u-line); }
 .kn-wiki-tree details > summary {
@@ -527,7 +545,7 @@
 .kn-wiki-tree a[aria-current="page"] { background: var(--u-accent-soft); color: var(--u-ink); font-weight: 600; }
 
 /* ——— Документ темы: крошки, цель, код ——— */
-.kn-wiki-doc { display: grid; gap: var(--u-s4); min-width: 0; }
+.kn-wiki-doc { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--u-s4); min-width: 0; }
 .kn-crumbs { display: flex; flex-wrap: wrap; gap: var(--u-s1) var(--u-s2); margin: 0; padding: 0; color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); list-style: none; }
 .kn-crumbs li + li::before { content: "/"; margin-inline-end: var(--u-s2); color: var(--u-faint); }
 .kn-crumbs a { color: var(--u-muted); text-decoration: none; }
@@ -567,7 +585,7 @@
 .kn-mat-about { margin: 0; max-width: 68ch; color: var(--u-muted); font-size: var(--u-fs-sm); line-height: 1.55; }
 .kn-mat-list { display: grid; gap: var(--u-s3); margin: 0; padding: 0; list-style: none; }
 .kn-mat-group { padding: 0; }
-.kn-mat-group > h3 { margin: 0 0 var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
+.kn-mat-group > h4 { margin: 0 0 var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
 .kn-mat-list ul { display: grid; gap: var(--u-s2); margin: 0; padding: 0; list-style: none; }
 .kn-mat-list a {
   display: grid;
@@ -582,11 +600,11 @@
 }
 .kn-mat-list a:hover { box-shadow: var(--u-shadow-2); }
 .kn-mat-list strong { font-family: var(--u-font-ui); font-size: var(--u-fs-sm); font-weight: 600; line-height: 1.35; }
-.kn-mat-list small { color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }
+.kn-mat-list span { color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }
 
 @media (max-width: 1080px) {
   .kn-wiki-layout { grid-template-columns: minmax(0, 1fr); gap: var(--u-s4); }
-  .kn-wiki { position: static; max-height: none; overflow: visible; padding: var(--u-s4); border-radius: var(--u-r-md); background: var(--u-surface-sunk); }
+  .kn-wiki { position: static; max-height: none; overflow: visible; }
 }
 @media (max-width: 720px) {
   .kn-wiki { font-size: var(--u-fs-xs); }

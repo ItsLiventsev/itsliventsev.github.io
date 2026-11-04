@@ -206,6 +206,11 @@
     body.dataset.hasToc = 'true';
   }
 
+  /* Свернутое на мобильном дерево не отодвигает заметки за пределы экрана;
+     без JS оно остаётся обычным управляемым с клавиатуры <details>. */
+  const wiki = root.querySelector('.kn-wiki-disclosure');
+  if (wiki && window.matchMedia && window.matchMedia('(max-width: 1080px)').matches) wiki.open = false;
+
   /* ——— shell grid ——— */
   const shell = doc.createElement('div');
   shell.className = 'ui-shell';

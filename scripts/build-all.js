@@ -12,8 +12,8 @@ const path = require('node:path');
 const ROOT = path.resolve(__dirname, '..');
 const steps = [
   ['стили моста', ['scripts/build-related-css.js']],
-  ['заметки базы знаний', ['scripts/build-knowledge.js']],
   ['учебные материалы', ['scripts/build-materials.js']],
+  ['заметки базы знаний', ['scripts/build-knowledge.js']],
   ['стенды ОфисПолис', ['scripts/build-office.js']],
   /* Статический текст работ идёт ДО моста «теория ↔ практика»: мост ищет
      якорь `#lab-root` и вставляет блок перед ним. Если статику добавить после,
