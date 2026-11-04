@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T08:31:25.293Z",
+  "generated": "2026-11-04T08:46:15.023Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
@@ -84,11 +84,11 @@
     },
     {
       "date": "2026-10-25",
-      "count": 1
+      "count": 0
     },
     {
       "date": "2026-10-26",
-      "count": 15
+      "count": 14
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,22 @@
     },
     {
       "date": "2026-11-04",
-      "count": 7
+      "count": 9
     }
   ],
   "commits": [
+    {
+      "sha": "6732df0",
+      "title": "test(a11y): гейт падает, если список страниц пуст или подозрительно мал",
+      "date": "2026-11-04T08:43:05Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6732df0b99e9b4d2cc96b44219e240f66a55695d"
+    },
+    {
+      "sha": "54b5ea9",
+      "title": "feat(a11y): гейт доступности на всех страницах и разбор ориентиров",
+      "date": "2026-11-04T08:39:51Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/54b5ea9348baa7aba7ad3335cda155793f38f123"
+    },
     {
       "sha": "2ed51ee",
       "title": "feat(knowledge): мост «теория ↔ практика» между заметками и стендами",
@@ -475,18 +487,6 @@
       "title": "feat(autonomous-polish-v15): reading progress + scroll-spy + copy pre + lightbox + print",
       "date": "2026-11-01T20:51:33Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8646e02f0a0f83bc0a33121e2618c2ffa1f630fe"
-    },
-    {
-      "sha": "1210c5a",
-      "title": "feat(autonomous-polish-v14): command palette > actions + BroadcastChannel realtime + ticker + perf hints",
-      "date": "2026-11-01T20:50:31Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1210c5a74b34e3b95fb489e1af4e09496f262a78"
-    },
-    {
-      "sha": "709bd98",
-      "title": "feat(autonomous-polish-v13): kanban drag-n-drop + offline banner + reveal stagger + SW dedupe + prefetch link",
-      "date": "2026-11-01T20:49:28Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/709bd98f83e789c41b4ee45508b700ca283616c2"
     }
   ]
 }
