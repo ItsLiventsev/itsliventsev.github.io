@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>Git в работе администратора: ветка, откат, конфиг · itsliventsev</title>
-<meta name="description" content="Git нужен администратору не для красоты, а чтобы отвечать на вопрос «что изменилось и когда» — в конфигурации, в плейбуке, в скрипте. Три команды (status, diff, log) дают больше, чем час воспоминаний, а revert безопаснее reset.">
+<title>Git администратора: ветка, откат, конфиг · itsliventsev</title>
+<meta name="description" content="Git администратору нужен, чтобы отвечать на вопрос «что изменилось и когда» — в конфиге, плейбуке, скрипте; status, diff и log дают больше, чем память.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="автоматизация,документация,shell">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="Git в работе администратора: ветка, откат, конфиг · itsliventsev">
-  <meta property="og:description" content="Git нужен администратору не для красоты, а чтобы отвечать на вопрос «что изменилось и когда» — в конфигурации, в плейбуке, в скрипте. Три команды (status, diff, log) дают больше, чем час воспоминаний, а revert безопаснее reset.">
+  <meta property="og:title" content="Git администратора: ветка, откат, конфиг · itsliventsev">
+  <meta property="og:description" content="Git администратору нужен, чтобы отвечать на вопрос «что изменилось и когда» — в конфиге, плейбуке, скрипте; status, diff и log дают больше, чем память.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-git.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="документация">
   <meta property="article:tag" content="shell">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Git в работе администратора: ветка, откат, конфиг · itsliventsev">
-  <meta name="twitter:description" content="Git нужен администратору не для красоты, а чтобы отвечать на вопрос «что изменилось и когда» — в конфигурации, в плейбуке, в скрипте. Три команды (status, diff, log) дают больше, чем час воспоминаний, а revert безопаснее reset.">
+  <meta name="twitter:title" content="Git администратора: ветка, откат, конфиг · itsliventsev">
+  <meta name="twitter:description" content="Git администратору нужен, чтобы отвечать на вопрос «что изменилось и когда» — в конфиге, плейбуке, скрипте; status, diff и log дают больше, чем память.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Git в работе администратора: ветка, откат, конфиг","description":"Git нужен администратору не для красоты, а чтобы отвечать на вопрос «что изменилось и когда» — в конфигурации, в плейбуке, в скрипте. Три команды (status, diff, log) дают больше, чем час воспоминаний, а revert безопаснее reset.","url":"https://itsliventsev.github.io/blog/kn-git.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-git.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"автоматизация, документация, shell"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Git в работе администратора: ветка, откат, конфиг","item":"https://itsliventsev.github.io/blog/kn-git.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Git администратора: ветка, откат, конфиг","description":"Git администратору нужен, чтобы отвечать на вопрос «что изменилось и когда» — в конфиге, плейбуке, скрипте; status, diff и log дают больше, чем память.","url":"https://itsliventsev.github.io/blog/kn-git.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-git.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"автоматизация, документация, shell"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Git администратора: ветка, откат, конфиг","item":"https://itsliventsev.github.io/blog/kn-git.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>Git в работе администратора: ветка, откат, конфиг</h1>
-        <p class="kn-def">Git нужен администратору не для красоты, а чтобы отвечать на вопрос «что изменилось и когда» — в конфигурации, в плейбуке, в скрипте. Три команды (status, diff, log) дают больше, чем час воспоминаний, а revert безопаснее reset.</p>
+        <h1>Git администратора: ветка, откат, конфиг</h1>
+        <p class="kn-def">Git администратору нужен, чтобы отвечать на вопрос «что изменилось и когда» — в конфиге, плейбуке, скрипте; status, diff и log дают больше, чем память.</p>
       </header>
 
       <div class="kn-note-body">
@@ -606,11 +606,11 @@ git config --global alias.lg &quot;log --oneline --graph --decorate -20&quot;</c
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который не боится повтора</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
           <li><a href="/blog/kn-bash.html"><strong>Конвейер: одна строка вместо цикла</strong><span>grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</span></a></li>
-          <li><a href="/blog/kn-documentation.html"><strong>Документация и регламенты: то, что спасает в три ночи</strong><span>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</span></a></li>
+          <li><a href="/blog/kn-documentation.html"><strong>Документация и регламенты: что спасает ночью</strong><span>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-documentation.html">Документация и регламенты: то, что спасает в три ночи</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-documentation.html">Документация и регламенты: что спасает ночью</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -622,7 +622,7 @@ git config --global alias.lg &quot;log --oneline --graph --decorate -20&quot;</c
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/practice.html">все заметки рубрики «Практика и обучение»</a>
-        <span><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, которые ломают передачу →</a><a href="/blog/kn-documentation.html">← Документация и регламенты: то, что спасает в три ночи</a></span>
+        <span><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, ломающие передачу →</a><a href="/blog/kn-documentation.html">← Документация и регламенты: что спасает ночью</a></span>
       </nav>
     </div>
 

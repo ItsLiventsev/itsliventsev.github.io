@@ -46,6 +46,11 @@ jobs:
       - name: Build knowledge base (notes, topics, graph, blog feed)
         run: node scripts/build-knowledge.js
 
+      - name: Build static lab text and catalog lists
+        run: |
+          node scripts/build-lab-static.js
+          node scripts/build-stand-catalog.js
+
       - name: Build post indexes, search index and feed counts
         run: |
           node scripts/build-post-index.js

@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>Туннель и MTU: 24 байта, которые ломают передачу · itsliventsev</title>
-<meta name="description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.">
+<title>Туннель и MTU: 24 байта, ломающие передачу · itsliventsev</title>
+<meta name="description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476: без правки MTU и MSS крупные передачи молча умирают.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="туннели,mtu,диагностика">
 <meta name="post-readtime" content="8 мин">
-<meta name="post-excerpt" content="Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.">
+<meta name="post-excerpt" content="Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя полностью блокировать проходящий ICMP.">
 <meta name="kn-zone" content="network">
 <meta name="kn-ai" content="machine-assisted">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="Туннель и MTU: 24 байта, которые ломают передачу · itsliventsev">
-  <meta property="og:description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.">
+  <meta property="og:title" content="Туннель и MTU: 24 байта, ломающие передачу · itsliventsev">
+  <meta property="og:description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476: без правки MTU и MSS крупные передачи молча умирают.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-gre.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="mtu">
   <meta property="article:tag" content="диагностика">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Туннель и MTU: 24 байта, которые ломают передачу · itsliventsev">
-  <meta name="twitter:description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.">
+  <meta name="twitter:title" content="Туннель и MTU: 24 байта, ломающие передачу · itsliventsev">
+  <meta name="twitter:description" content="GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476: без правки MTU и MSS крупные передачи молча умирают.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Туннель и MTU: 24 байта, которые ломают передачу","description":"GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.","url":"https://itsliventsev.github.io/blog/kn-gre.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-gre.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"туннели, mtu, диагностика"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Туннель и MTU: 24 байта, которые ломают передачу","item":"https://itsliventsev.github.io/blog/kn-gre.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Туннель и MTU: 24 байта, ломающие передачу","description":"GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476: без правки MTU и MSS крупные передачи молча умирают.","url":"https://itsliventsev.github.io/blog/kn-gre.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-gre.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"туннели, mtu, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Туннель и MTU: 24 байта, ломающие передачу","item":"https://itsliventsev.github.io/blog/kn-gre.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>Туннель и MTU: 24 байта, которые ломают передачу</h1>
-        <p class="kn-def">GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476; если не уменьшить MTU и MSS, крупные передачи молча умирают, а ping продолжает работать.</p>
+        <h1>Туннель и MTU: 24 байта, ломающие передачу</h1>
+        <p class="kn-def">GRE упаковывает пакет в пакет и добавляет 24 байта, поэтому полезная нагрузка падает с 1500 до 1476: без правки MTU и MSS крупные передачи молча умирают.</p>
       </header>
 
       <div class="kn-note-body">
@@ -592,11 +592,11 @@ iptables -t mangle -A FORWARD -p tcp --syn -j TCPMSS --clamp-mss-to-pmtu</code><
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: почему ping идёт, а скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
-          <li><a href="/blog/kn-ipsec.html"><strong>IPsec: две фазы и одна причина «туннель поднят, трафика нет»</strong><span>IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</span></a></li>
+          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: ping идёт, скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
+          <li><a href="/blog/kn-ipsec.html"><strong>IPsec: две фазы и пустой туннель</strong><span>IKEv2, ESP и AH, порты 500 и 4500, селекторы трафика и почему MTU тоннеля надо уменьшать примерно на 50 байт на каждом конце.</span></a></li>
           <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: почему ping идёт, а скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-routing.html">Таблица маршрутов: как пакет выбирает выход</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и пустой туннель</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: ping идёт, скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-routing.html">Таблица маршрутов: как пакет выбирает выход</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета и одна минута</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -616,7 +616,7 @@ iptables -t mangle -A FORWARD -p tcp --syn -j TCPMSS --clamp-mss-to-pmtu</code><
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-incident.html">Разбор инцидента: от «всё лежит» до списка действий →</a><a href="/blog/kn-git.html">← Git в работе администратора: ветка, откат, конфиг</a></span>
+        <span><a href="/blog/kn-incident.html">Разбор инцидента: от «всё лежит» к делу →</a><a href="/blog/kn-git.html">← Git администратора: ветка, откат, конфиг</a></span>
       </nav>
     </div>
 

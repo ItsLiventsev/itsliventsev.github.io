@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>Транзакции: уровни изоляции и три аномалии · itsliventsev</title>
-<meta name="description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+<meta name="description" content="Уровни изоляции — это выбор между аномалиями: грязное чтение, неповторяющееся чтение и фантомы; PostgreSQL по умолчанию даёт Read Committed.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="транзакции,postgresql,mvcc">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Транзакции: уровни изоляции и три аномалии · itsliventsev">
-  <meta property="og:description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+  <meta property="og:description" content="Уровни изоляции — это выбор между аномалиями: грязное чтение, неповторяющееся чтение и фантомы; PostgreSQL по умолчанию даёт Read Committed.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tx.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="mvcc">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Транзакции: уровни изоляции и три аномалии · itsliventsev">
-  <meta name="twitter:description" content="Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.">
+  <meta name="twitter:description" content="Уровни изоляции — это выбор между аномалиями: грязное чтение, неповторяющееся чтение и фантомы; PostgreSQL по умолчанию даёт Read Committed.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Транзакции: уровни изоляции и три аномалии","description":"Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.","url":"https://itsliventsev.github.io/blog/kn-tx.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tx.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"транзакции, postgresql, mvcc"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Транзакции: уровни изоляции и три аномалии","description":"Уровни изоляции — это выбор между аномалиями: грязное чтение, неповторяющееся чтение и фантомы; PostgreSQL по умолчанию даёт Read Committed.","url":"https://itsliventsev.github.io/blog/kn-tx.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tx.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"транзакции, postgresql, mvcc"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Транзакции: уровни изоляции и три аномалии","item":"https://itsliventsev.github.io/blog/kn-tx.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>Транзакции: уровни изоляции и три аномалии</h1>
-        <p class="kn-def">Уровень изоляции определяет, какие изменения параллельных транзакций видит ваша; в PostgreSQL по умолчанию read committed, а serializable защищает от аномалий ценой повторных попыток.</p>
+        <p class="kn-def">Уровни изоляции — это выбор между аномалиями: грязное чтение, неповторяющееся чтение и фантомы; PostgreSQL по умолчанию даёт Read Committed.</p>
       </header>
 
       <div class="kn-note-body">
@@ -600,11 +600,11 @@ WHERE state &lt;&gt; &#39;idle&#39;;</code></pre>
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
-          <li><a href="/blog/kn-indexes.html"><strong>Индексы и планы: почему запрос медленный</strong><span>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</span></a></li>
+          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк и VACUUM</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
+          <li><a href="/blog/kn-indexes.html"><strong>Индексы и планы: почему запрос медленный</strong><span>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым планировщик СУБД не использует индекс.</span></a></li>
           <li><a href="/blog/kn-replication.html"><strong>Репликация: копия отстаёт, и это нормально</strong><span>Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и вред кеша</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк и VACUUM</a> — ссылается на эту заметку</li><li><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">

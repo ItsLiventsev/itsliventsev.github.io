@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>Контейнеры: образ, слой и том · itsliventsev</title>
-<meta name="description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+<meta name="description" content="Контейнер — процесс с изолированным представлением о системе, а не маленькая виртуальная машина: данные живут в томе, изменения в контейнере исчезают.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="контейнеры,виртуализация,автоматизация">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Контейнеры: образ, слой и том · itsliventsev">
-  <meta property="og:description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+  <meta property="og:description" content="Контейнер — процесс с изолированным представлением о системе, а не маленькая виртуальная машина: данные живут в томе, изменения в контейнере исчезают.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-docker.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="автоматизация">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Контейнеры: образ, слой и том · itsliventsev">
-  <meta name="twitter:description" content="Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.">
+  <meta name="twitter:description" content="Контейнер — процесс с изолированным представлением о системе, а не маленькая виртуальная машина: данные живут в томе, изменения в контейнере исчезают.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Контейнеры: образ, слой и том","description":"Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.","url":"https://itsliventsev.github.io/blog/kn-docker.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-docker.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"контейнеры, виртуализация, автоматизация"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Контейнеры: образ, слой и том","description":"Контейнер — процесс с изолированным представлением о системе, а не маленькая виртуальная машина: данные живут в томе, изменения в контейнере исчезают.","url":"https://itsliventsev.github.io/blog/kn-docker.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-docker.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"контейнеры, виртуализация, автоматизация"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Контейнеры: образ, слой и том","item":"https://itsliventsev.github.io/blog/kn-docker.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>Контейнеры: образ, слой и том</h1>
-        <p class="kn-def">Контейнер — это процесс с изолированным представлением о системе, а не маленькая виртуальная машина. Отсюда все следствия: данные живут в томе, изменения в контейнере исчезают, а образ собирается слоями и кешируется.</p>
+        <p class="kn-def">Контейнер — процесс с изолированным представлением о системе, а не маленькая виртуальная машина: данные живут в томе, изменения в контейнере исчезают.</p>
       </header>
 
       <div class="kn-note-body">
@@ -597,9 +597,9 @@ CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: что важно кроме proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
-          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
-          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: не только proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который не боится повтора</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре метрики и алерт</strong><span>rate и histogram_quantile, почему CPU выше 80% — плохой алерт, что даёт `for: 5m` и как не утонуть в потоке уведомлений.</span></a></li>
         </ul>
         
       </section>
@@ -621,7 +621,7 @@ CMD [&quot;python&quot;, &quot;-m&quot;, &quot;app&quot;]</code></pre>
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
-        <span><a href="/blog/kn-documentation.html">Документация и регламенты: то, что спасает в три ночи →</a><a href="/blog/kn-dns.html">← DNS: кеш, TTL и два резолвера</a></span>
+        <span><a href="/blog/kn-documentation.html">Документация и регламенты: что спасает ночью →</a><a href="/blog/kn-dns.html">← DNS: кеш, TTL и два резолвера</a></span>
       </nav>
     </div>
 

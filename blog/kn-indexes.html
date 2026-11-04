@@ -7,12 +7,12 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>Индексы и планы: почему запрос медленный · itsliventsev</title>
-<meta name="description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+<meta name="description" content="Индекс ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор Seq Scan или Index Scan делает планировщик по статистике.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="индексы,postgresql,транзакции">
 <meta name="post-readtime" content="8 мин">
-<meta name="post-excerpt" content="B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.">
+<meta name="post-excerpt" content="B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым планировщик СУБД не использует индекс.">
 <meta name="kn-zone" content="databases">
 <meta name="kn-ai" content="machine-assisted">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
-  <meta property="og:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+  <meta property="og:description" content="Индекс ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор Seq Scan или Index Scan делает планировщик по статистике.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-indexes.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="транзакции">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Индексы и планы: почему запрос медленный · itsliventsev">
-  <meta name="twitter:description" content="Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.">
+  <meta name="twitter:description" content="Индекс ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор Seq Scan или Index Scan делает планировщик по статистике.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Индексы и планы: почему запрос медленный","description":"Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.","url":"https://itsliventsev.github.io/blog/kn-indexes.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-indexes.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"индексы, postgresql, транзакции"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Индексы и планы: почему запрос медленный","description":"Индекс ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор Seq Scan или Index Scan делает планировщик по статистике.","url":"https://itsliventsev.github.io/blog/kn-indexes.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-indexes.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"индексы, postgresql, транзакции"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Индексы и планы: почему запрос медленный","item":"https://itsliventsev.github.io/blog/kn-indexes.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>Индексы и планы: почему запрос медленный</h1>
-        <p class="kn-def">Индекс — отдельная структура с собственной стоимостью: он ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор между Seq Scan и Index Scan делает планировщик по статистике.</p>
+        <p class="kn-def">Индекс ускоряет поиск по равенству и диапазону, но замедляет вставку и занимает место; выбор Seq Scan или Index Scan делает планировщик по статистике.</p>
       </header>
 
       <div class="kn-note-body">
@@ -595,11 +595,11 @@ SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></p
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
+          <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк и VACUUM</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
           <li><a href="/blog/kn-tx.html"><strong>Транзакции: уровни изоляции и три аномалии</strong><span>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span></a></li>
-          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
+          <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре метрики и алерт</strong><span>rate и histogram_quantile, почему CPU выше 80% — плохой алерт, что даёт `for: 5m` и как не утонуть в потоке уведомлений.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и вред кеша</a> — ссылается на эту заметку</li><li><a href="/blog/kn-postgres.html">PostgreSQL: версии строк и VACUUM</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -619,7 +619,7 @@ SELECT * FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;</code></p
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
-        <span><a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы →</a><a href="/blog/kn-incident.html">← Разбор инцидента: от «всё лежит» до списка действий</a></span>
+        <span><a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы →</a><a href="/blog/kn-incident.html">← Разбор инцидента: от «всё лежит» к делу</a></span>
       </nav>
     </div>
 

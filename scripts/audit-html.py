@@ -30,7 +30,10 @@ class P(HTMLParser):
             h = d['href']
             if h.startswith(('mailto:', 'javascript:', 'http')):
                 return
-            base = h.split('#')[0]
+            # ?query отбрасываем вместе с якорем: ссылка вида
+            # `setpolis.html?return=lab-final.html` ведёт на существующую
+            # страницу, а с параметром проверка искала файл с '?' в имени.
+            base = h.split('#')[0].split('?')[0]
             if base:
                 p = (base.lstrip('/') if base.startswith('/')
                      else os.path.normpath(os.path.join(os.path.dirname(self.path), base)))

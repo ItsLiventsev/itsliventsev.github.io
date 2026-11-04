@@ -29,6 +29,19 @@ function pages(dir = '.', acc = []) {
   return acc;
 }
 
+/* Сниппет обрезается, поэтому длины — не вкусовщина: title до 60 символов,
+   description до 165. Раньше правило жило только в документации, и 42 заголовка
+   с 48 описаниями вышли за пределы (худший — 107 символов в title, он
+   обрезался на середине слова). */
+const TITLE_MAX = 60;
+const DESC_MAX = 165;
+/* Нижняя граница — не дефект, а метрика: короткое описание честно
+   описывает короткую страницу, и добивать его «водой» ради символов
+   вреднее, чем оставить. Поэтому такие страницы попадают в отчёт,
+   а не в падающий тест. */
+const DESC_SHORT = 110;
+const shortDesc = [];
+
 const problems = [];
 const counts = new Map();
 let blocks = 0;
@@ -87,6 +100,21 @@ for (const file of pages()) {
     }
   }
 
+  if (!/name="robots"\s+content="[^"]*noindex/i.test(head)) {
+    const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+    const description = (head.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+    if (title.length > TITLE_MAX) {
+      problems.push(file + ': title ' + title.length + ' символов (максимум ' + TITLE_MAX + '): ' + title);
+    }
+    if (!description) {
+      problems.push(file + ': нет description');
+    } else if (description.length > DESC_MAX) {
+      problems.push(file + ': description ' + description.length + ' символов (максимум ' + DESC_MAX + ')');
+    } else if (description.length < DESC_SHORT) {
+      shortDesc.push(description.length + ' ' + file);
+    }
+  }
+
   /* Каждая страница без noindex должна иметь ровно один canonical,
      ведущий на собственный URL: молчаливый «чужой» canonical выключает
      страницу из индекса, и это не видно ни в одном отчёте. */
@@ -94,6 +122,11 @@ for (const file of pages()) {
     const canonical = (head.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];
     if (!canonical) problems.push(file + ': нет canonical');
   }
+}
+
+if (shortDesc.length) {
+  console.log('SEO: описания короче ' + DESC_SHORT + ' — ' + shortDesc.length + ' шт. (не блокирует; см. бэклог B-03):');
+  for (const row of shortDesc.sort((a, b) => parseInt(a) - parseInt(b)).slice(0, 5)) console.log('  ' + row);
 }
 
 assert.deepEqual(problems, [], 'структурированные данные требуют правки:\n  ' + problems.join('\n  '));

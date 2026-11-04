@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>PostgreSQL: версии строк, VACUUM и заворот XID · itsliventsev</title>
-<meta name="description" content="PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.">
+<title>PostgreSQL: версии строк и VACUUM · itsliventsev</title>
+<meta name="description" content="PostgreSQL хранит несколько версий строки, поэтому UPDATE создаёт новую версию: старые чистит VACUUM, а 32-битный счётчик транзакций требует freezing.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="postgresql,mvcc,индексы">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="PostgreSQL: версии строк, VACUUM и заворот XID · itsliventsev">
-  <meta property="og:description" content="PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.">
+  <meta property="og:title" content="PostgreSQL: версии строк и VACUUM · itsliventsev">
+  <meta property="og:description" content="PostgreSQL хранит несколько версий строки, поэтому UPDATE создаёт новую версию: старые чистит VACUUM, а 32-битный счётчик транзакций требует freezing.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-postgres.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="mvcc">
   <meta property="article:tag" content="индексы">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PostgreSQL: версии строк, VACUUM и заворот XID · itsliventsev">
-  <meta name="twitter:description" content="PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.">
+  <meta name="twitter:title" content="PostgreSQL: версии строк и VACUUM · itsliventsev">
+  <meta name="twitter:description" content="PostgreSQL хранит несколько версий строки, поэтому UPDATE создаёт новую версию: старые чистит VACUUM, а 32-битный счётчик транзакций требует freezing.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PostgreSQL: версии строк, VACUUM и заворот XID","description":"PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.","url":"https://itsliventsev.github.io/blog/kn-postgres.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-postgres.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"postgresql, mvcc, индексы"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"PostgreSQL: версии строк, VACUUM и заворот XID","item":"https://itsliventsev.github.io/blog/kn-postgres.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PostgreSQL: версии строк и VACUUM","description":"PostgreSQL хранит несколько версий строки, поэтому UPDATE создаёт новую версию: старые чистит VACUUM, а 32-битный счётчик транзакций требует freezing.","url":"https://itsliventsev.github.io/blog/kn-postgres.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-postgres.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"postgresql, mvcc, индексы"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"PostgreSQL: версии строк и VACUUM","item":"https://itsliventsev.github.io/blog/kn-postgres.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>PostgreSQL: версии строк, VACUUM и заворот XID</h1>
-        <p class="kn-def">PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.</p>
+        <h1>PostgreSQL: версии строк и VACUUM</h1>
+        <p class="kn-def">PostgreSQL хранит несколько версий строки, поэтому UPDATE создаёт новую версию: старые чистит VACUUM, а 32-битный счётчик транзакций требует freezing.</p>
       </header>
 
       <div class="kn-note-body">
@@ -593,11 +593,11 @@ FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;</code></pre>
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-indexes.html"><strong>Индексы и планы: почему запрос медленный</strong><span>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</span></a></li>
+          <li><a href="/blog/kn-indexes.html"><strong>Индексы и планы: почему запрос медленный</strong><span>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым планировщик СУБД не использует индекс.</span></a></li>
           <li><a href="/blog/kn-tx.html"><strong>Транзакции: уровни изоляции и три аномалии</strong><span>Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span></a></li>
           <li><a href="/blog/kn-backups.html"><strong>Бэкап: 3-2-1, RPO и проверка восстановлением</strong><span>Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-indexes.html">Индексы и планы: почему запрос медленный</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и вред кеша</a> — ссылается на эту заметку</li><li><a href="/blog/kn-raid.html">RAID: паритет — это арифметика, а не магия</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tx.html">Транзакции: уровни изоляции и три аномалии</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -617,7 +617,7 @@ FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;</code></pre>
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/databases.html">все заметки рубрики «Базы данных»</a>
-        <span><a href="/blog/kn-practice.html">Практикоориентированное обучение: навык проверяют на стенде →</a><a href="/blog/kn-packet.html">← tcpdump: как читать пакет, а не гадать</a></span>
+        <span><a href="/blog/kn-practice.html">Практикоориентированность: проверка на стенде →</a><a href="/blog/kn-packet.html">← tcpdump: как читать пакет, а не гадать</a></span>
       </nav>
     </div>
 

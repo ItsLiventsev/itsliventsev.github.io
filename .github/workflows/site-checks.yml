@@ -39,6 +39,8 @@ jobs:
           node scripts/build-seo.js --check
           node scripts/test-sitemap.js
           node scripts/test-seo.js
+          node scripts/build-lab-static.js --check
+          node scripts/build-stand-catalog.js --check
           python3 scripts/seo-audit.py --quiet
       - name: Install browser test dependencies outside the repository
         run: |

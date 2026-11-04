@@ -15,6 +15,11 @@ const steps = [
   ['заметки базы знаний', ['scripts/build-knowledge.js']],
   ['стенды ОфисПолис', ['scripts/build-office.js']],
   ['мост «теория ↔ практика»', ['scripts/build-related.js']],
+  /* Статический текст работ и списки работ в каталогах: оба шага читают
+     JSON движков и стоят после них, но до SEO — иначе canonical и sitemap
+     соберутся по неполной разметке. */
+  ['статический текст работ', ['scripts/build-lab-static.js']],
+  ['списки работ в каталогах', ['scripts/build-stand-catalog.js']],
   /* SEO-блок между маркерами SEO:AUTO генерируется из разметки: без этого шага
      свежесгенерированные страницы остаются с пустыми canonical/og/JSON-LD. */
   ['SEO-блоки, sitemap и лента', ['scripts/build-seo.js']],

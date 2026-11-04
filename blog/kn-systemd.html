@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>systemd: юниты, цели и порядок загрузки · itsliventsev</title>
-<meta name="description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+<meta name="description" content="Юнит — это договор о запуске: зависимости, перезапуск, лимиты и журнал; понимание After/Requires объясняет половину «сервис не поднялся».">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="systemd,журналы,диагностика">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="systemd: юниты, цели и порядок загрузки · itsliventsev">
-  <meta property="og:description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+  <meta property="og:description" content="Юнит — это договор о запуске: зависимости, перезапуск, лимиты и журнал; понимание After/Requires объясняет половину «сервис не поднялся».">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-systemd.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="диагностика">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="systemd: юниты, цели и порядок загрузки · itsliventsev">
-  <meta name="twitter:description" content="systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.">
+  <meta name="twitter:description" content="Юнит — это договор о запуске: зависимости, перезапуск, лимиты и журнал; понимание After/Requires объясняет половину «сервис не поднялся».">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"systemd: юниты, цели и порядок загрузки","description":"systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.","url":"https://itsliventsev.github.io/blog/kn-systemd.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-systemd.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, журналы, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"systemd: юниты, цели и порядок загрузки","description":"Юнит — это договор о запуске: зависимости, перезапуск, лимиты и журнал; понимание After/Requires объясняет половину «сервис не поднялся».","url":"https://itsliventsev.github.io/blog/kn-systemd.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-systemd.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, журналы, диагностика"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"systemd: юниты, цели и порядок загрузки","item":"https://itsliventsev.github.io/blog/kn-systemd.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>systemd: юниты, цели и порядок загрузки</h1>
-        <p class="kn-def">systemd запускает службы по графу зависимостей и целям, а не по порядку строк в файле; поэтому After задаёт очерёдность, Requires — жёсткую зависимость, а Wants — мягкую.</p>
+        <p class="kn-def">Юнит — это договор о запуске: зависимости, перезапуск, лимиты и журнал; понимание After/Requires объясняет половину «сервис не поднялся».</p>
       </header>
 
       <div class="kn-note-body">
@@ -604,9 +604,9 @@ Persistent=true</code></pre>
         <ul class="kn-related">
           <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
           <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
-          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который не боится повтора</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-bash.html">Конвейер: одна строка вместо цикла</a> — ссылается на эту заметку</li><li><a href="/blog/kn-cron.html">Планировщик: cron, systemd timers и тихие сбои</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logs.html">Журналы: уровни, ротация и лимит на диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ntp.html">Время в сети: NTP и почему 30 секунд ломают всё</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который не боится повтора</a> — ссылается на эту заметку</li><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-bash.html">Конвейер: одна строка вместо цикла</a> — ссылается на эту заметку</li><li><a href="/blog/kn-cron.html">Планировщик: cron, таймеры и тихие сбои</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-logs.html">Журналы: уровни, ротация и лимит на диск</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ntp.html">Время в сети: NTP и 30 секунд</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -627,7 +627,7 @@ Persistent=true</code></pre>
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
-        <span><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута →</a><a href="/blog/kn-stp.html">← STP: почему коммутатор сам выключил порт</a></span>
+        <span><a href="/blog/kn-tcp.html">TCP: три пакета и одна минута →</a><a href="/blog/kn-stp.html">← STP: почему коммутатор сам выключил порт</a></span>
       </nav>
     </div>
 

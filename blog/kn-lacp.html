@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>LACP: два кабеля, один адрес · itsliventsev</title>
-<meta name="description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+<meta name="description" content="Агрегация даёт не двойную скорость, а сумму по потокам: один TCP-поток едет по одному линку, а LACP договаривается о членах группы.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="vlan,диагностика,отказоустойчивость">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="LACP: два кабеля, один адрес · itsliventsev">
-  <meta property="og:description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+  <meta property="og:description" content="Агрегация даёт не двойную скорость, а сумму по потокам: один TCP-поток едет по одному линку, а LACP договаривается о членах группы.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-lacp.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="отказоустойчивость">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LACP: два кабеля, один адрес · itsliventsev">
-  <meta name="twitter:description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+  <meta name="twitter:description" content="Агрегация даёт не двойную скорость, а сумму по потокам: один TCP-поток едет по одному линку, а LACP договаривается о членах группы.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LACP: два кабеля, один адрес","description":"Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.","url":"https://itsliventsev.github.io/blog/kn-lacp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-lacp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, диагностика, отказоустойчивость"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LACP: два кабеля, один адрес","description":"Агрегация даёт не двойную скорость, а сумму по потокам: один TCP-поток едет по одному линку, а LACP договаривается о членах группы.","url":"https://itsliventsev.github.io/blog/kn-lacp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-lacp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, диагностика, отказоустойчивость"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"LACP: два кабеля, один адрес","item":"https://itsliventsev.github.io/blog/kn-lacp.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>LACP: два кабеля, один адрес</h1>
-        <p class="kn-def">Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.</p>
+        <p class="kn-def">Агрегация даёт не двойную скорость, а сумму по потокам: один TCP-поток едет по одному линку, а LACP договаривается о членах группы.</p>
       </header>
 
       <div class="kn-note-body">
@@ -593,8 +593,8 @@ cat /proc/net/bonding/bond0     # состояние, активные порт�
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
           <li><a href="/blog/kn-stp.html"><strong>STP: почему коммутатор сам выключил порт</strong><span>Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</span></a></li>
-          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
         <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-stp.html">STP: почему коммутатор сам выключил порт</a> — ссылается на эту заметку</li></ul></div>
       </section>
@@ -616,7 +616,7 @@ cat /proc/net/bonding/bond0     # состояние, активные порт�
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск →</a><a href="/blog/kn-ipsec.html">← IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a></span>
+        <span><a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск →</a><a href="/blog/kn-ipsec.html">← IPsec: две фазы и пустой туннель</a></span>
       </nav>
     </div>
 

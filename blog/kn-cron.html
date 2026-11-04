@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>Планировщик: cron, systemd timers и тихие сбои · itsliventsev</title>
-<meta name="description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+<title>Планировщик: cron, таймеры и тихие сбои · itsliventsev</title>
+<meta name="description" content="Задание, которое работает вручную, но не по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="systemd,автоматизация,журналы">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="Планировщик: cron, systemd timers и тихие сбои · itsliventsev">
-  <meta property="og:description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+  <meta property="og:title" content="Планировщик: cron, таймеры и тихие сбои · itsliventsev">
+  <meta property="og:description" content="Задание, которое работает вручную, но не по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-cron.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="автоматизация">
   <meta property="article:tag" content="журналы">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Планировщик: cron, systemd timers и тихие сбои · itsliventsev">
-  <meta name="twitter:description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+  <meta name="twitter:title" content="Планировщик: cron, таймеры и тихие сбои · itsliventsev">
+  <meta name="twitter:description" content="Задание, которое работает вручную, но не по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Планировщик: cron, systemd timers и тихие сбои","description":"Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.","url":"https://itsliventsev.github.io/blog/kn-cron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-cron.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, автоматизация, журналы"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Планировщик: cron, systemd timers и тихие сбои","item":"https://itsliventsev.github.io/blog/kn-cron.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Планировщик: cron, таймеры и тихие сбои","description":"Задание, которое работает вручную, но не по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь.","url":"https://itsliventsev.github.io/blog/kn-cron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-cron.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, автоматизация, журналы"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Планировщик: cron, таймеры и тихие сбои","item":"https://itsliventsev.github.io/blog/kn-cron.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>Планировщик: cron, systemd timers и тихие сбои</h1>
-        <p class="kn-def">Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.</p>
+        <h1>Планировщик: cron, таймеры и тихие сбои</h1>
+        <p class="kn-def">Задание, которое работает вручную, но не по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь.</p>
       </header>
 
       <div class="kn-note-body">

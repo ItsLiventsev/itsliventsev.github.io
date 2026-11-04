@@ -30,6 +30,23 @@
     host.insertBefore(box, host.firstChild);
   }
 
+
+  /* Плашка «режим чтения» свёрстана статически (scripts/build-lab-static.js) и
+     скрыта: показываем её только когда профиля нет, чтобы вошедшему студенту
+     не объяснять то, что ему уже не нужно. */
+  function revealReadOnly() {
+    var note = document.querySelector('[data-lab-readonly-note]');
+    if (note) note.hidden = false;
+  }
+
+  /* Вошедшему студенту движок рисует интерактив — статический текст той же
+     работы на экране был бы дублем. Прячем его только здесь, после успешного
+     рендера: если движок упал или профиля нет, страница остаётся читаемой. */
+  function dropStatic() {
+    var block = document.querySelector('[data-lab-static]');
+    if (block) block.hidden = true;
+  }
+
   function boot() {
     var node = $('ops-data');
     if (!node || typeof OPS === 'undefined') return;
@@ -37,11 +54,14 @@
     try { cfg = JSON.parse(node.textContent); }
     catch (e) { showBootError('данные лабораторной', e); return; }
 
+    /* Без профиля страница остаётся читаемой: текст работы уже свёрстан
+       статически (scripts/build-lab-static.js), интерактив подключается
+       после входа. Раньше здесь стоял location.href на кабинет, и читатель
+       из поиска оказывался на другой странице вместо лабораторной. */
     var profile = OPS.getProfile();
-    if (!profile || !profile.name) {
-      location.href = 'index.html?return=' + encodeURIComponent(location.pathname.split('/').pop());
-      return;
-    }
+    var readOnly = !profile || !profile.name;
+    /* Режим чтения: статический текст работы остаётся, интерактив не дублируется. */
+    if (readOnly) { revealReadOnly(); return; }
     var fpName = $('fp-name'), fpGroup = $('fp-group');
     if (fpName) fpName.textContent = profile.name;
     if (fpGroup) fpGroup.textContent = OPS.handleFor(profile).text;
@@ -346,6 +366,7 @@
       '<div class="lk-progress-strip"><div class="xp-bar"><i id="ops-progress-bar" data-ws-value="0"></i></div><span class="xp-meta" id="ops-progress-label">—</span>' +
       '<span class="kind-badge">спринт ' + cfg.sprint + ' · ' + esc(cfg.sprintTitle) + '</span></div>' +
       briefHtml() + theoryHtml() + commandsHtml() + tasksHtml() + ticketHtml() + runbookHtml() + rcaHtml() + quizHtml() + reflectionHtml() + finishHtml();
+    dropStatic();
 
     root.querySelectorAll('input[type="checkbox"][data-task]').forEach(function (cb) {
       cb.addEventListener('change', function () {
