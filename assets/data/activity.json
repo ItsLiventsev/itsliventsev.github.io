@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T18:23:31.753Z",
+  "generated": "2026-11-04T19:28:26.460Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 204,
+  "total": 203,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 18
+      "count": 11
     },
     {
       "date": "2026-10-29",
@@ -124,10 +124,46 @@
     },
     {
       "date": "2026-11-04",
-      "count": 44
+      "count": 50
     }
   ],
   "commits": [
+    {
+      "sha": "4fd9317",
+      "title": "материалы: подписи {{tema}} из заголовка темы, проверка ссылок без текста",
+      "date": "2026-11-04T19:21:53Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4fd9317cb5351f2f2780d3dbeecdda4946f2ab89"
+    },
+    {
+      "sha": "d7dd51d",
+      "title": "browser-smoke: переход с заглушки графа ждёт редирект и не падает на медленной сети",
+      "date": "2026-11-04T19:14:05Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d7dd51de112e02133800992ca294a6e2301c9006"
+    },
+    {
+      "sha": "fc13baa",
+      "title": "browser-smoke: редирект graph.html проверяется через meta refresh и ссылку",
+      "date": "2026-11-04T19:09:35Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/fc13baa9a1b54c4411df1685a52dbe122d5c43a4"
+    },
+    {
+      "sha": "6dacac0",
+      "title": "browser-smoke: живая проверка wiki-дерева вместо графа",
+      "date": "2026-11-04T19:05:21Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6dacac031560186401581ff965fca31c386adc52"
+    },
+    {
+      "sha": "15ec124",
+      "title": "Материалы: SEO-поля в пределах сниппета, head и слои CSS по контракту",
+      "date": "2026-11-04T18:59:36Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/15ec124f906148c777981d3bbc9289cb1f1c3e2b"
+    },
+    {
+      "sha": "9d5e5a7",
+      "title": "Материалы: 24 темы с wiki-деревом, граф связей убран",
+      "date": "2026-11-04T18:56:32Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9d5e5a7cf3b1b20541ddd5732d9620d1c8a94103"
+    },
     {
       "sha": "ecd5d8e",
       "title": "fix(build): сделать три вставки на стендах идемпотентными",
@@ -451,42 +487,6 @@
       "title": "feat(ui): пульс маркера ленты итераций, пока строки едут",
       "date": "2026-11-03T19:00:33Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/e90b45ce3ef78d75d690c57deca5b370894d43a9"
-    },
-    {
-      "sha": "957fde6",
-      "title": "feat(ui): лента итераций, плотная главная и загрузка без прыжка",
-      "date": "2026-11-03T18:58:17Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/957fde6300ccf563622fe2ffd597071bb9cbd790"
-    },
-    {
-      "sha": "c526bc5",
-      "title": "chore(css): одно правило на компонент и шапка стендов без JS",
-      "date": "2026-11-03T18:34:51Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/c526bc570ba12d7233860be33657934214d6373c"
-    },
-    {
-      "sha": "abea83d",
-      "title": "chore(code): дочистить разметку админки, архив и кейсы",
-      "date": "2026-11-03T18:19:52Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/abea83d8fdcd0759e710c713ff14b87917ac1f37"
-    },
-    {
-      "sha": "ec0fe48",
-      "title": "chore(code): убрать мёртвый код и достроить стили JS-компонентов",
-      "date": "2026-11-03T18:14:39Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ec0fe481321e01ab790802efff1a3ee7b88b28ef"
-    },
-    {
-      "sha": "ba3e9b5",
-      "title": "fix(stands): окна пользователя на всех стендах и страницах вселенных",
-      "date": "2026-11-03T14:49:00Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ba3e9b5ff97fcef9b49b2c1645b2d13445e0dd7b"
-    },
-    {
-      "sha": "07e5da3",
-      "title": "ci(activity): не терять снимок, когда post-index коммитит первым",
-      "date": "2026-11-03T13:27:55Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/07e5da309fa815c960a0d7999c4fa44fb1541228"
     }
   ]
 }
