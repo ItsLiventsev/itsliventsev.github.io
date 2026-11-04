@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T15:46:49.540Z",
+  "generated": "2026-11-04T16:50:16.230Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 206,
+  "total": 205,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 26
+      "count": 22
     },
     {
       "date": "2026-10-29",
@@ -124,10 +124,28 @@
     },
     {
       "date": "2026-11-04",
-      "count": 38
+      "count": 41
     }
   ],
   "commits": [
+    {
+      "sha": "862a062",
+      "title": "chore: синхронизировать рабочие изменения PR",
+      "date": "2026-11-04T16:44:14Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/862a06284a9eac26f5e681a36d657f909649a560"
+    },
+    {
+      "sha": "cdcd378",
+      "title": "test(css): сверять критические стили в пределах экрана",
+      "date": "2026-11-04T16:44:01Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/cdcd3786c65b7df8825c21df9f4d90527c124df3"
+    },
+    {
+      "sha": "57c38f8",
+      "title": "perf(css): критический экран заметок базы знаний",
+      "date": "2026-11-04T15:54:01Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/57c38f8cd00995fe3064044da4456455038a6e77"
+    },
     {
       "sha": "d7a4bdc",
       "title": "docs: зафиксировать лабораторный замер LCP",
@@ -469,24 +487,6 @@
       "title": "feat(design): v13 «Витрина» — язык референсов вместо тёплой «Мастерской»",
       "date": "2026-11-02T21:52:45Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bd22a5d8d1faf965cef7bbfa6b3e6a9b7231d964"
-    },
-    {
-      "sha": "9bb2a77",
-      "title": "perf(fonts): инстанцирование вариативных шрифтов и отказ от латинского курсива",
-      "date": "2026-11-02T20:45:14Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9bb2a77ee027117a43031980c64ec6d71765e26c"
-    },
-    {
-      "sha": "091a5cf",
-      "title": "docs: аудит, дизайн-система, QA и референсы итерации v12",
-      "date": "2026-11-02T20:38:55Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/091a5cf19128838e4ead9439fd5d3dad066532ca"
-    },
-    {
-      "sha": "a9344cc",
-      "title": "feat(pages): все 76 страниц на общей оболочке и редакционном шаблоне",
-      "date": "2026-11-02T20:38:51Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/a9344cce568c44a84da862489ee4e313a1572cdb"
     }
   ]
 }
