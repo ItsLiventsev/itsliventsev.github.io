@@ -227,13 +227,12 @@
           "id": "projects-works",
           "title": "Практикумы",
           "items": [
-            "praktikum-obzhim-vitoy-pary"
-          ],
-          "planned": [
+            "praktikum-obzhim-vitoy-pary",
             "praktikum-montazh-shkafa",
             "praktikum-prokladka-trass",
             "praktikum-rozetki"
-          ]
+          ],
+          "planned": []
         },
         {
           "id": "projects-office",
@@ -252,12 +251,12 @@
           "id": "projects-cases",
           "title": "Кейсы и задачи",
           "items": [
-            "keys-set-ceha"
-          ],
-          "planned": [
+            "keys-set-ceha",
             "keys-sety-kafe",
             "keys-kibersportivnaya-arena",
-            "keys-gibridnaya-infrastruktura",
+            "keys-gibridnaya-infrastruktura"
+          ],
+          "planned": [
             "it-kvest",
             "zadachi-docker"
           ]
