@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/assets/tokens.css?v=d777ff20">
 <link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
 <link rel="stylesheet" href="/assets/pages.css?v=a3631e2b">
-<link rel="stylesheet" href="/assets/course.css?v=82bd9cb9">
+<link rel="stylesheet" href="/assets/course.css?v=d2bcc698">
   <!-- SEO:AUTO:START -->
   <link rel="canonical" href="https://itsliventsev.github.io/stands/glossary.html">
   <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
@@ -120,6 +120,28 @@
       </p>
       <p class="glossary-status" id="glossary-status" role="status" aria-live="polite"></p>
     </div>
+
+    <div class="glossary-drill-zone" data-drill-zone hidden>
+      <button class="flat-btn primary" type="button" data-drill-open hidden>тренажёр: десять терминов на память</button>
+      <span class="glossary-drill-note">вопросы собираются из того же словаря — случайные десять, четыре варианта определения</span>
+    </div>
+
+    <section class="gl-drill" data-drill hidden aria-labelledby="drill-title">
+      <div class="gl-drill-head">
+        <h2 class="gl-drill-title" id="drill-title">тренажёр по словарю</h2>
+        <span class="gl-drill-count" data-drill-count></span>
+        <span class="gl-drill-dots" data-drill-dots aria-hidden="true"></span>
+        <button class="gl-drill-close" type="button" data-drill-close aria-label="закрыть тренажёр">×</button>
+      </div>
+      <p class="gl-drill-term" id="drill-term" data-drill-term></p>
+      <div class="gl-drill-options" data-drill-options role="group" aria-labelledby="drill-term"></div>
+      <p class="gl-drill-verdict" data-drill-verdict role="status" aria-live="polite"></p>
+      <div class="gl-drill-foot">
+        <button class="flat-btn" type="button" data-drill-next hidden>дальше</button>
+        <button class="flat-btn ghost" type="button" data-drill-again hidden>ещё раунд</button>
+        <span class="gl-drill-best" data-drill-best></span>
+      </div>
+    </section>
 
     <div class="st-section-head" id="g1">
       <span class="st-section-num">01</span>
@@ -282,50 +304,7 @@
 <script defer src="/assets/dom-kit.js?v=e2471e3d"></script>
 <script defer src="/assets/stands.js?v=7dfe60f6"></script>
 
-<script>
-/* Живой фильтр словаря: zero-dep, работает только на этой странице.
-   Скрываем несовпавшие карточки и секции без совпадений; статус доступен
-   скринридерам через role=status. */
-(function () {
-  var input = document.getElementById('glossary-search');
-  if (!input) return;
-  var heads = Array.prototype.slice.call(document.querySelectorAll('.st-section-head'));
-  var grids = Array.prototype.slice.call(document.querySelectorAll('dl.glossary-grid'));
-  var filters = Array.prototype.slice.call(document.querySelectorAll('[data-ws-glossary-filter]'));
-  var status = document.getElementById('glossary-status');
-  var empty = document.getElementById('glossary-empty');
-  var total = document.querySelectorAll('.glossary-item').length;
-  var activeFilter = 'all';
-  function render() {
-    var q = input.value.trim().toLocaleLowerCase('ru');
-    var shown = 0;
-    grids.forEach(function (dl, idx) {
-      var sectionCount = 0;
-      dl.querySelectorAll('.glossary-item').forEach(function (item) {
-        var text = item.textContent.toLocaleLowerCase('ru');
-        var universeMatch = activeFilter === 'all' || text.indexOf(activeFilter.toLocaleLowerCase('ru')) !== -1;
-        var textMatch = !q || text.indexOf(q) !== -1;
-        var hit = universeMatch && textMatch;
-        item.hidden = !hit;
-        if (hit) sectionCount++;
-      });
-      if (heads[idx]) heads[idx].hidden = sectionCount === 0;
-      dl.hidden = sectionCount === 0;
-      shown += sectionCount;
-    });
-    empty.hidden = shown !== 0;
-    status.textContent = (q || activeFilter !== 'all') ? ('найдено: ' + shown + ' из ' + total) : '';
-  }
-  input.addEventListener('input', render);
-  filters.forEach(function (button) {
-    button.addEventListener('click', function () {
-      activeFilter = button.getAttribute('data-ws-glossary-filter');
-      filters.forEach(function (other) { other.setAttribute('aria-pressed', other === button ? 'true' : 'false'); });
-      render();
-    });
-  });
-})();
-</script>
+<script src="/assets/glossary.js?v=31892657" defer></script>
 <script src="/assets/shell.js?v=d874024f" defer></script>
 </body>
 </html>
