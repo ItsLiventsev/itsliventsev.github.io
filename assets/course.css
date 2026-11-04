@@ -21,6 +21,16 @@
   scrollbar-width: none;
 }
 .ui-subbar > *::-webkit-scrollbar { display: none; }
+/* Подбар — сам <nav> (после shell.js), а не контейнер с вложенным nav. */
+.ui-subbar.ui-subbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--u-s2);
+  padding-block: var(--u-s2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ui-subbar.ui-subbar-nav::-webkit-scrollbar { display: none; }
 .ui-subbar nav, .ui-subbar-nav, .ui-subbar .st-topnav {
   display: flex;
   gap: var(--u-s1);
