@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T13:48:39.232Z",
+  "generated": "2026-11-04T13:54:14.626Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 219,
+  "total": 217,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 21
+      "count": 18
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 27
+      "count": 28
     }
   ],
   "commits": [
+    {
+      "sha": "35043e2",
+      "title": "fix(head): убрать дубли служебных ссылок и JSON-LD на главной + мёртвый .kn-card--text",
+      "date": "2026-11-04T13:49:49Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/35043e22a44266ad5517a613716b3cd6fac15bae"
+    },
     {
       "sha": "e36196f",
       "title": "test(a11y): тёмная тема проверяется на всех страницах, а не на выборке",
@@ -481,12 +487,6 @@
       "title": "Expose axe node details in CI output",
       "date": "2026-11-02T06:50:53Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1b4fe55c69878558d3b2d0c8aac41ad906c9d22e"
-    },
-    {
-      "sha": "d93f44d",
-      "title": "Include accessibility failure details",
-      "date": "2026-11-02T06:50:49Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d93f44d8c02e2652e9c8155ca5506f714138425f"
     }
   ]
 }
