@@ -416,6 +416,26 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   ok(!/iterStrip/.test(read('assets/shell.js')), 'пауза ленты должна жить в одном месте — assets/iter-strip.js');
 }
 
+/* ── Журнал изменений: та же инверсная подложка, что у ленты итераций ── */
+{
+  const journalIndex = read('index.html');
+  const journalCss = read('assets/pages.css');
+  ok(journalIndex.includes('<section class="ui-section journal" id="activity"'),
+    'секция журнала должна быть инверсной панелью (класс journal)');
+  ok(/\.journal \{[^}]*background: var\(--u-inverse\)/.test(journalCss), 'журнал: подложка должна быть инверсной');
+  ok(/\.journal \{[^}]*--u-ink: var\(--u-inverse-ink\)/.test(journalCss), 'журнал: токены темы внутри панели переопределены');
+  ok(/\.journal \{[^}]*--u-accent: var\(--u-inverse-accent\)/.test(journalCss), 'журнал: акцент внутри панели — инверсный');
+  ok(/\.journal \{[^}]*--u-line: color-mix/.test(journalCss), 'журнал: линии должны быть из инверсных чернил');
+  ok(/\.journal \.feed-filter\[aria-pressed="true"\] \{ background: var\(--u-inverse-accent\)/.test(journalCss),
+    'журнал: активный фильтр не должен растворяться в тёмной панели');
+  ok(/\.journal \.ui-inline-link:hover \{ background: var\(--u-inverse-accent\)/.test(journalCss),
+    'журнал: у ссылки «Вся история» должен быть глиняный hover');
+  ok(/\.journal \.ui-section-head \{[^}]*border-block-end/.test(journalCss), 'журнал: шапка раздела отделена линией');
+  ok(!/\.journal \{[^}]*--u-paper:/.test(journalCss), 'журнал: --u-paper не переопределяем — он нужен вложенным компонентам');
+  ok(journalIndex.includes('data-activity-list') && journalIndex.includes('data-activity-chart')
+    && journalIndex.includes('data-activity-count'), 'журнал: хуки данных должны остаться на месте');
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);

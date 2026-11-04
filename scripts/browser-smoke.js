@@ -152,6 +152,21 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await livePage.locator('.iter-strip-window').innerText(), pausedScreen, 'на паузе лента стоит');
     await livePage.locator('[data-iter-toggle]').click();
     assert.equal(await livePage.locator('[data-iter-toggle]').getAttribute('aria-pressed'), 'false', 'продолжение снимает паузу');
+    /* Журнал изменений — вторая инверсная панель: тёмная в светлой теме,
+       светлая в тёмной, активный чип глиняный. */
+    const journal = await livePage.evaluate(() => {
+      const section = getComputedStyle(document.querySelector('#activity'));
+      const card = getComputedStyle(document.querySelector('#activity .feed-main'));
+      const chip = getComputedStyle(document.querySelector('#activity .feed-filter[aria-pressed="true"]'));
+      const title = getComputedStyle(document.querySelector('#activity h2'));
+      return { bg: section.backgroundColor, card: card.backgroundColor, chipBg: chip.backgroundColor, chipText: chip.color, title: title.color };
+    });
+    assert.equal(journal.bg, 'rgb(20, 19, 14)', 'светлая тема: журнал на тёмной панели #14130e');
+    assert.notEqual(journal.card, journal.bg, 'карточки журнала должны быть на тон светлее панели');
+    assert.equal(journal.chipBg, 'rgb(255, 156, 115)', 'активный фильтр журнала — глиняный');
+    assert.equal(journal.chipText, 'rgb(20, 19, 14)', 'текст активного фильтра — тёмный');
+    assert.equal(journal.title, 'rgb(248, 247, 242)', 'заголовок журнала — инверсные чернила');
+
     const surface = await livePage.evaluate(() => {
       const strip = getComputedStyle(document.querySelector('.iter-strip'));
       const root = getComputedStyle(document.documentElement);
@@ -164,6 +179,10 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     await livePage.waitForTimeout(150);
     assert.equal(await livePage.evaluate(() => getComputedStyle(document.querySelector('.iter-strip')).backgroundColor),
       'rgb(245, 242, 231)', 'тёмная тема: инверсная лента становится светлой');
+    assert.equal(await livePage.evaluate(() => getComputedStyle(document.querySelector('#activity')).backgroundColor),
+      'rgb(245, 242, 231)', 'тёмная тема: журнал тоже становится светлым');
+    assert.equal(await livePage.evaluate(() => getComputedStyle(document.querySelector('#activity .feed-filter[aria-pressed="true"]')).backgroundColor),
+      'rgb(168, 57, 29)', 'тёмная тема: активный чип — глиняный');
     await livePage.setViewportSize({ width: 360, height: 800 });
     await livePage.waitForTimeout(150);
     assert(await noOverflow(livePage), 'лента не даёт горизонтальной прокрутки на 360px');
