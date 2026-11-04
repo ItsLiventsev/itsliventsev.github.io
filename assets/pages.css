@@ -907,6 +907,9 @@
 .flow-step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: var(--u-s3); padding: var(--u-s3) 0; border-bottom: 1px solid var(--u-line); }
 .flow-step-num { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-accent); }
 .verdict-col { display: grid; gap: var(--u-s2); }
+/* Итог кейса — последний блок страницы-кейса, один и тот же на всех кейсах:
+   `.esp-section` отделяется линией, у итога та же линия, но без метки раздела. */
+.case-outcome { padding-block-start: var(--u-s7); border-top: 1px solid var(--u-line); margin-block-start: var(--u-s7); }
 /* esports case */
 .esp-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--u-s7); align-items: start; padding-block: var(--u-s8) var(--u-s6); border-bottom: 1px solid var(--u-line-strong); }
 .esp-badges { display: flex; flex-wrap: wrap; gap: var(--u-s2); margin-block: var(--u-s3); }
@@ -1249,7 +1252,7 @@ label.btn { cursor: pointer; }
   background: var(--u-surface);
   box-shadow: var(--u-shadow-2);
 }
-.esp-hero > *:first-child { grid-column: span 8; min-width: 0; }
+.esp-hero > .esp-hero-main, .esp-hero > *:first-child { grid-column: span 8; min-width: 0; }
 .esp-hero .case-facts { grid-column: span 4; }
 .esp-hero h1, .esp-hero .hero-title {
   margin: 0 0 var(--u-s4);
@@ -1379,9 +1382,11 @@ label.btn { cursor: pointer; }
 .seg-theory { background: var(--u-line-strong); }
 .seg-practice { background: var(--u-accent); }
 
-/* Result columns */
-.result-done h3::before, .result-growth h3::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-inline-end: 8px; border-radius: 2px; background: var(--u-ok); }
-.result-growth h3::before { background: var(--u-warn); }
+/* Точка-маркер колонок «Честного разбора»: зелёная — что получилось,
+   янтарная — что вышло слабо. Третья колонка намеренно без маркера. */
+.verdict-col h3::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-inline-end: 8px; border-radius: 2px; background: var(--u-ok); }
+.verdict-col.is-growth h3::before { background: var(--u-warn); }
+.verdict-col.is-future h3::before { background: var(--u-accent); }
 
 /* Legend pills on case pages */
 .editorial .pill, .prose .pill {
