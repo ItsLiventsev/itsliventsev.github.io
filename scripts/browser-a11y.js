@@ -90,6 +90,12 @@ async function scan(page, path, theme) {
 (async () => {
   const pages = only ? [only] : contentPages();
   const list = limit ? pages.slice(0, limit) : pages;
+  /* Гейт, который ничего не проверил, — хуже отсутствия гейта: молчаливое
+     «0 страниц, 0 нарушений» выглядит как успех. */
+  if (!list.length || (!only && !limit && list.length < 100)) {
+    console.error('a11y: список страниц подозрительно мал (' + list.length + ') — проверьте ROOT и запуск');
+    process.exit(1);
+  }
   const axe = axeSource();
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args: browserArgs, headless: true });
   const report = [];
