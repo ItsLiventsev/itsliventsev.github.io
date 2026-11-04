@@ -1122,8 +1122,6 @@ label.btn { cursor: pointer; }
 /* Generic page section rhythm used by archive, FAQ, sitemap and stands hub. */
 .ui-section { display: grid; gap: var(--u-s4); padding-block: var(--u-s6) 0; }
 .ui-section + .ui-section { margin-block-start: var(--u-s7); padding-block-start: var(--u-s6); border-top: 1px solid var(--u-line); }
-.ui-section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--u-s2) var(--u-s4); }
-.ui-section-head h2 { margin: 0; font-family: var(--u-font-display); font-size: var(--u-fs-2xl); font-weight: 400; line-height: 1.12; }
 /* Swatch captions sit on solid signage colours: ink must contrast with the paint. */
 .swatch-color .hex { color: #ffffff; font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: 0.04em; }
 .swatch-color.is-sign-blue .hex, .swatch-color.is-sign-green .hex { color: #10201c; }
