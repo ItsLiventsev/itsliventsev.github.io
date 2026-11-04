@@ -99,6 +99,12 @@
   --u-line-strong: #d2cfc6;
   --u-inverse: #14130e;
   --u-inverse-ink: #f8f7f2;
+  /* Акценты на инверсной подложке: это цвета «другой» темы, поэтому пара
+     объявлена явно. На тёмной карточке работает светлый акцент, на светлой
+     (в тёмной теме) — глиняный. Контраст проверяет scripts/test-palette.js. */
+  --u-inverse-accent: #ff9c73;
+  --u-inverse-ok: #8fd3a9;
+  --u-inverse-muted: #b0a996;
 
   /* ——— One accent: clay. Never violet, never a blue-violet gradient ——— */
   --u-accent: #a8391d;
@@ -216,6 +222,9 @@
   --u-line-strong: #46412f;
   --u-inverse: #f5f2e7;
   --u-inverse-ink: #14130e;
+  --u-inverse-accent: #a8391d;
+  --u-inverse-ok: #236a45;
+  --u-inverse-muted: #5d5a52;
   --u-accent: #ff9c73;
   --u-accent-hover: #ffb897;
   --u-accent-soft: #3b2419;

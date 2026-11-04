@@ -2071,25 +2071,85 @@ label.btn { cursor: pointer; }
 .home .contact-row { padding: var(--u-s4); }
 .home .contact-row > span:last-child { inset-block-start: var(--u-s4); inset-inline-end: var(--u-s4); }
 
-/* ——— Лента итераций: машина читает, проверяет и передаёт правки ———
-   Узкая карточка под героем. Строки едут вверх бесконечно (две копии списка
-   дают бесшовный круг), пауза — кнопкой, при prefers-reduced-motion движение
-   выключено и видна только первая копия. */
+/* ——— Лента итераций: инверсная консоль под героем ———
+   Блок намеренно вывернут: тёмная бумага на светлом листе, а в тёмной теме —
+   светлая на тёмном. Так он читается как акцент, а не как ещё одна карточка.
+   Сверху живая строка: пульс, секундомер и счётчики. Ниже окно с журналом:
+   пока JS не загрузился, строки едут бесконечно (две копии списка дают
+   бесшовный круг), после — assets/iter-strip.js включает живой режим: шаги
+   сменяются каждые ~1.2 с, у каждого строки своё время и полоска прогресса. */
 .iter-strip {
+  --iter-rule: color-mix(in srgb, var(--u-inverse-ink) 12%, transparent);
+  --iter-rule-soft: color-mix(in srgb, var(--u-inverse-ink) 8%, transparent);
   display: grid;
-  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
-  gap: var(--u-s4) var(--u-s6);
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  grid-template-areas: "status status" "head window";
+  gap: var(--u-s4) var(--u-s7);
   align-items: center;
   margin-block-start: var(--u-s4);
-  padding: var(--u-s4) var(--u-s5);
-  border: 1px solid var(--u-line);
+  padding: var(--u-s5) var(--u-s6) var(--u-s6);
   border-radius: var(--u-r-xl);
-  background: var(--u-surface);
-  box-shadow: var(--u-shadow-1);
+  background: var(--u-inverse);
+  color: var(--u-inverse-ink);
+  box-shadow: var(--u-shadow-2);
 }
-.iter-strip-head { min-width: 0; }
-.iter-strip-head .ui-eyebrow { margin-block-end: var(--u-s2); }
-.iter-strip-lede { margin: 0 0 var(--u-s2); color: var(--u-muted); font-size: var(--u-fs-sm); line-height: 1.45; }
+.iter-strip a:focus-visible,
+.iter-strip button:focus-visible { outline: 3px solid var(--u-inverse-accent); outline-offset: 2px; }
+
+/* ——— Строка состояния: «работа идёт», секундомер, счётчики ——— */
+.iter-strip-status {
+  grid-area: status;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--u-s2) var(--u-s3);
+  padding-block-end: var(--u-s3);
+  border-block-end: 1px solid var(--iter-rule);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  text-transform: lowercase;
+  color: var(--u-inverse-muted);
+}
+.iter-pulse {
+  position: relative;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--u-inverse-accent);
+}
+.iter-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--u-inverse-accent);
+  border-radius: inherit;
+  opacity: 0;
+}
+.iter-strip-state { color: var(--u-inverse-ink); font-weight: 600; }
+.iter-strip-clock {
+  padding: 1px 6px;
+  border-radius: var(--u-r-xs);
+  background: color-mix(in srgb, var(--u-inverse-ink) 10%, transparent);
+  color: var(--u-inverse-ink);
+  font-variant-numeric: tabular-nums;
+}
+.iter-strip-meter { display: inline-flex; flex-wrap: wrap; gap: var(--u-s2); align-items: baseline; margin-inline-start: auto; }
+.iter-strip-meter b { color: var(--u-inverse-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.iter-strip-meter .iter-checks b { color: var(--u-inverse-accent); }
+.iter-strip-meter > span + span::before {
+  content: "· ";
+  margin-inline-end: 2px;
+  color: var(--u-inverse-muted);
+}
+
+/* ——— Текстовая колонка ——— */
+.iter-strip-head { grid-area: head; min-width: 0; }
+.iter-strip-head .ui-eyebrow { margin-block-end: var(--u-s2); color: var(--u-inverse-muted); }
+.iter-strip-head .ui-eyebrow::before { display: none; }
+.iter-strip-lede { margin: 0 0 var(--u-s3); color: var(--u-inverse-muted); font-size: var(--u-fs-sm); line-height: 1.45; }
+.iter-strip-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s4); }
 .iter-strip-link {
   display: inline-flex;
   align-items: center;
@@ -2097,93 +2157,164 @@ label.btn { cursor: pointer; }
   font-family: var(--u-font-ui);
   font-size: var(--u-fs-xs);
   font-weight: 600;
-  color: var(--u-ink);
+  color: var(--u-inverse-ink);
   text-decoration: none;
 }
 .iter-strip-link span { transition: transform var(--u-dur-2) var(--u-ease); }
-.iter-strip-link:hover { color: var(--u-accent); }
+.iter-strip-link:hover { color: var(--u-inverse-accent); }
 .iter-strip-link:hover span { transform: translateX(3px); }
+.iter-strip-toggle {
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--iter-rule);
+  border-radius: var(--u-r-pill);
+  background: transparent;
+  color: var(--u-inverse-ink);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: background var(--u-dur-1) var(--u-ease), border-color var(--u-dur-1) var(--u-ease);
+}
+.iter-strip-toggle:hover { border-color: var(--iter-rule-soft); background: color-mix(in srgb, var(--u-inverse-ink) 10%, transparent); }
+.iter-strip-toggle[aria-pressed="true"] { border-color: var(--u-inverse-accent); color: var(--u-inverse-accent); }
 
+/* ——— Окно журнала ——— */
 .iter-strip-window {
   position: relative;
-  height: 104px;
+  grid-area: window;
+  height: 140px;
   min-width: 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
 }
 .iter-strip-track {
   display: grid;
+  grid-auto-rows: min-content;
   margin: 0;
   padding: 0;
   list-style: none;
-  animation: u-iter-scroll 26s linear infinite;
+  animation: u-iter-scroll 16s linear infinite;
 }
 .iter-strip.is-paused .iter-strip-track { animation-play-state: paused; }
 .iter-strip-window:hover .iter-strip-track,
 .iter-strip-window:focus-within .iter-strip-track { animation-play-state: paused; }
+/* Живой режим: строки стоят, новые приезжают снизу. */
+.iter-strip.is-live .iter-strip-track {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  animation: none;
+}
 .iter-line {
+  position: relative;
   display: grid;
-  grid-template-columns: 18px 96px minmax(0, 1fr);
+  grid-template-columns: 16px 88px minmax(0, 1fr) 54px;
   align-items: baseline;
   gap: var(--u-s3);
   padding-block: 5px;
+  border-block-end: 1px dashed var(--iter-rule-soft);
   font-size: var(--u-fs-sm);
-  line-height: 1.3;
+  line-height: 1.35;
 }
-.iter-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); color: var(--u-ok); text-align: center; }
-.iter-line[data-state="work"] .iter-mark { color: var(--u-accent); }
+.iter-mark { font-family: var(--u-font-mono); font-size: var(--u-fs-xs); color: var(--u-inverse-ok); text-align: center; }
+.iter-line[data-state="work"] .iter-mark { color: var(--u-inverse-accent); }
+.iter-line[data-state="queue"] .iter-mark { color: var(--u-inverse-muted); }
 .iter-src {
   font-family: var(--u-font-mono);
   font-size: var(--u-fs-2xs);
   letter-spacing: var(--u-ls-mono);
   text-transform: lowercase;
-  color: var(--u-faint);
+  color: var(--u-inverse-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.iter-text { color: var(--u-ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.iter-strip-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s3); }
-.iter-strip-toggle {
-  min-height: 22px;
-  padding: 0 10px;
-  border: 1px solid var(--u-line);
-  border-radius: var(--u-r-pill);
-  background: var(--u-paper);
-  color: var(--u-muted);
-  font-family: var(--u-font-ui);
+.iter-line[data-state="work"] .iter-src { color: var(--u-inverse-accent); }
+.iter-text { color: var(--u-inverse-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iter-line[data-state="queue"] .iter-text { color: var(--u-inverse-muted); }
+.iter-time {
+  font-family: var(--u-font-mono);
   font-size: var(--u-fs-2xs);
-  cursor: pointer;
-  transition: color var(--u-dur-1) var(--u-ease), border-color var(--u-dur-1) var(--u-ease);
+  color: var(--u-inverse-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
 }
-.iter-strip-toggle:hover { color: var(--u-ink); border-color: var(--u-line-strong); }
-.iter-strip-toggle:focus-visible { outline: 3px solid var(--u-accent); outline-offset: 2px; }
+.iter-bar {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1px;
+  height: 1px;
+  background: color-mix(in srgb, var(--u-inverse-accent) 28%, transparent);
+}
+.iter-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--u-inverse-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: u-iter-bar var(--iter-tick, 1200ms) linear forwards;
+}
+.iter-line.is-new { animation: u-iter-in 280ms var(--u-ease) both; }
+.iter-line.is-out { animation: u-iter-out 220ms var(--u-ease) forwards; }
 
-/* Живой маркер у заголовка: мягкая пульсация, пока лента едет. */
 @media (prefers-reduced-motion: no-preference) {
-  .iter-strip .ui-eyebrow::before { animation: u-iter-pulse 2.4s var(--u-ease) infinite; }
-  .iter-strip.is-paused .ui-eyebrow::before { animation-play-state: paused; }
+  .iter-pulse::after { animation: u-iter-ring 1.8s var(--u-ease) infinite; }
+  .iter-line[data-state="work"] .iter-mark { animation: u-iter-pulse 1.6s var(--u-ease) infinite; }
+  .iter-strip.is-paused .iter-pulse::after,
+  .iter-strip.is-paused .iter-line[data-state="work"] .iter-mark,
+  .iter-strip.is-paused .iter-bar::after { animation-play-state: paused; }
 }
 @keyframes u-iter-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.78); }
+  50% { opacity: 0.4; transform: scale(0.76); }
 }
-
-@media (max-width: 900px) {
-  .iter-strip { grid-template-columns: minmax(0, 1fr); }
-  .iter-strip-window { height: 92px; }
+@keyframes u-iter-ring {
+  0% { opacity: 0.7; transform: scale(0.5); }
+  70%, 100% { opacity: 0; transform: scale(2.6); }
 }
-
+@keyframes u-iter-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes u-iter-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes u-iter-out {
+  to { opacity: 0; transform: translateY(-10px); }
+}
 @keyframes u-iter-scroll {
   from { transform: translateY(0); }
   to { transform: translateY(-50%); }
 }
+
+@media (max-width: 900px) {
+  .iter-strip {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "status" "head" "window";
+    gap: var(--u-s4);
+    padding: var(--u-s4) var(--u-s5) var(--u-s5);
+  }
+  .iter-strip-window { height: 124px; }
+  .iter-line { grid-template-columns: 16px 72px minmax(0, 1fr) 46px; gap: var(--u-s2); }
+}
+@media (max-width: 520px) {
+  .iter-line { grid-template-columns: 16px minmax(0, 1fr) 46px; }
+  .iter-src { display: none; }
+  .iter-strip-meter { margin-inline-start: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .iter-strip-track { animation: none; }
-  .iter-strip-window { height: auto; max-height: 150px; -webkit-mask-image: none; mask-image: none; }
-  .iter-strip-track > li:nth-child(n + 9) { display: none; }
+  .iter-strip-window { height: auto; max-height: 214px; -webkit-mask-image: none; mask-image: none; }
+  .iter-strip-track > li:nth-child(n + 10) { display: none; }
   .iter-strip-toggle { display: none; }
+  .iter-bar { display: none; }
 }
 
 /* ——— Скелетоны: заглушки на время сборки данных ——— */

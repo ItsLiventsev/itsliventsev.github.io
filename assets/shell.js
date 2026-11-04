@@ -558,21 +558,8 @@
     }
   }
 
-  /* ——— лента итераций на главной: пауза по кнопке ———
-     Движение выключено в CSS при prefers-reduced-motion; кнопка тогда скрыта,
-     а состояние всё равно помечается, чтобы разметка оставалась честной. */
-  const iterStrip = doc.querySelector('[data-iter-strip]');
-  if (iterStrip) {
-    const iterToggle = iterStrip.querySelector('[data-iter-toggle]');
-    const setPaused = paused => {
-      iterStrip.classList.toggle('is-paused', paused);
-      if (!iterToggle) return;
-      iterToggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
-      iterToggle.textContent = paused ? 'продолжить' : 'пауза';
-    };
-    if (iterToggle) iterToggle.addEventListener('click', () => setPaused(!iterStrip.classList.contains('is-paused')));
-    if (reduceMotion()) setPaused(true);
-  }
+  /* Лента итераций на главной живёт в assets/iter-strip.js: она сама ведёт
+     паузу, секундомер и очередь шагов, поэтому здесь её поведения нет. */
 
   /* ——— code blocks: keyboard-focusable, copy action ——— */
   main?.querySelectorAll('pre').forEach(pre => {
