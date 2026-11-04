@@ -93,6 +93,15 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-monitoring.html"><span class="rel-area">База знаний</span><span class="rel-title">Мониторинг: метрика, симптом и алерт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-prometheus.html"><span class="rel-area">База знаний</span><span class="rel-title">Prometheus: четыре метрики и алерт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Эксплуатация · 6 ч · 100 неткоинов</p><p class="lab-static-lead">Prometheus и Grafana, журнал systemd, ротация логов и учебный P1-инцидент с war room.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>волк Тихон — NOC-командир инцидент-дня</strong> · бриф практики</p><p>Сегодня инцидент-день: учебная тревога P1. Веб-сервис «лежит», алерты сыплются в NOC, у вас ограниченное время. Сначала вы строите систему наблюдения — Prometheus собирает метрики, Grafana показывает дашборд, journald и ротация логов дают доказательную базу, — а затем по боевой тревоге поднимаете сервис и проводите разбор. Это сердце эксплуатации.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Метрики и алерты</h3><p>Prometheus опрашивает экспортёры по HTTP и хранит временные ряды. Алерт — правило на метрику (недоступность, диск, нагрузка), Grafana — визуализация. Мониторинг без алертов превращается в картинку.</p><pre class="lab-codeblock"><code># apt-get install prometheus grafana
@@ -112,15 +121,6 @@ scrape_configs:
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-monitor.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-monitoring.html"><span class="rel-area">База знаний</span><span class="rel-title">Мониторинг: метрика, симптом и алерт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-prometheus.html"><span class="rel-area">База знаний</span><span class="rel-title">Prometheus: четыре метрики и алерт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-monitor · autosave: on</span>

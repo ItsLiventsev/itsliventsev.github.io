@@ -93,6 +93,15 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-backups.html"><span class="rel-area">База знаний</span><span class="rel-title">Бэкап: 3-2-1, RPO и проверка восстановлением</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-cron.html"><span class="rel-area">База знаний</span><span class="rel-title">Планировщик: cron, таймеры и тихие сбои</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Эксплуатация · 5 ч · 85 неткоинов</p><p class="lab-static-lead">Стратегия 3-2-1, планы бэкапа, проверка восстановления и регламент на ALT и Windows.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>ёжик Боря — хранитель резервных копий</strong> · бриф практики</p><p>Бэкап, который ни разу не восстанавливали, — это не бэкап, а надежда. Вы настроите резервное копирование конфигурации и данных на ALT (включая подход cyberbackup из практики демоэкзамена), средства Windows Server на стороне Windows, и главное — отработаете восстановление. Изменение с планом отката и понятной схемой ретеншена закрывает спринт эксплуатации.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Принцип 3-2-1</h3><p>Три копии данных, на двух типах носителей, одна вне площадки. Бэкап без регулярной проверки восстановления не считается рабочим.</p><pre class="lab-codeblock"><code># контроль точек монтирования и места
@@ -109,15 +118,6 @@
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-backup.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-backups.html"><span class="rel-area">База знаний</span><span class="rel-title">Бэкап: 3-2-1, RPO и проверка восстановлением</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-cron.html"><span class="rel-area">База знаний</span><span class="rel-title">Планировщик: cron, таймеры и тихие сбои</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-backup · autosave: on</span>

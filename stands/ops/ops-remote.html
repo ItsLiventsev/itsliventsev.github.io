@@ -93,6 +93,16 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-ssh.html"><span class="rel-area">База знаний</span><span class="rel-title">SSH: ключ вместо пароля и что закрыть в sshd</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-gre.html"><span class="rel-area">База знаний</span><span class="rel-title">Туннель и MTU: 24 байта, ломающие передачу</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-ipsec.html"><span class="rel-area">База знаний</span><span class="rel-title">IPsec: две фазы и пустой туннель</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 3 · Сервисы · 5 ч · 85 неткоинов</p><p class="lab-static-lead">Ключи вместо паролей, защита от перебора, баннер доступа и управляемый RDP в Windows.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>енот Арчи — безопасник удалённых подключений</strong> · бриф практики</p><p>Дежурства требуют удалённого доступа к серверам, но открытый наружу SSH с паролем root — приглашение для ботов. Вы усилите SSH на ALT (ключи, запрет root, нестандартный порт, баннер), поставите fail2ban против перебора и параллельно настроите безопасный RDP на Windows. В конце — изменение с коротким планом отката, чтобы не заблокировать собственный доступ.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Усиление SSH</h3><p>Переход на ключи, запрет пароля и входа root, ограничение пользователей и смена порта снижают поверхность атаки. Правило дежурного: не закрывать текущую сессию, пока не проверен новый вход.</p><pre class="lab-codeblock"><code># apt-get install openssh-server
@@ -118,16 +128,6 @@ Enable-NetFirewallRule -DisplayGroup &quot;Remote Desktop&quot;</code></pre></ar
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-remote.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-ssh.html"><span class="rel-area">База знаний</span><span class="rel-title">SSH: ключ вместо пароля и что закрыть в sshd</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-gre.html"><span class="rel-area">База знаний</span><span class="rel-title">Туннель и MTU: 24 байта, ломающие передачу</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-ipsec.html"><span class="rel-area">База знаний</span><span class="rel-title">IPsec: две фазы и пустой туннель</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-remote · autosave: on</span>

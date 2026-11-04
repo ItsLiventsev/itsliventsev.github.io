@@ -93,6 +93,14 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>1 заметка</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-project.html"><span class="rel-area">База знаний</span><span class="rel-title">Проект как кейс: корпус и киберспорт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 5 · Изменения и релиз · 12 ч (3 спринт-цикла) · 200 неткоинов</p><p class="lab-static-lead">Итоговый сервисный проект: бэклог, релиз, дежурство, SLA и postmortem командой.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>вся дежурная смена ДатаПолиса — приёмка проекта</strong> · бриф практики</p><p>Финал. Заказчик — знакомый по практике завод «Промприбор» — отдаёт ДатаПолису сервис на сопровождение под ключ: каталог пользователей, DNS и время, файловое хранилище, веб-портал за reverse proxy, мониторинг с алертами, бэкапы и защищённый удалённый доступ. Команда ведёт проект как боевой: бэклог на три спринта, релиз через CAB, дежурство с учебным P1 и postmortem. Пасхалка для выпускников СетьПолиса: сетевую инфраструктуру под этот сервис когда-то настроили Итан и Клешня — теперь её принимаете на сопровождение вы.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Сервисный бэклог и спринты</h3><p>Проект делится на управляемые задачи с приоритетами и владельцами. Каждый спринт даёт рабочий инкремент и демо. Definition of Done включает runbook, схему, мониторинг и план отката.</p></article><article class="theory-block"><h3><span class="theory-num">02</span> Запуск и дежурство</h3><p>Релиз проходит через CAB, затем сервис встаёт на дежурство: алерты, регламент реакции, эскалация P1. Учебная тревога проверяет готовность команды и runbook.</p></article><article class="theory-block"><h3><span class="theory-num">03</span> Приёмка по SLA и ретроспектива</h3><p>Сервис принимается по измеримым критериям: доступность, время реакции, восстановление после сбоя. Завершает проект blameless postmortem и ретроспектива: плюсы, минусы, улучшения.</p><p class="lab-note">⚑ Это мостик между вселенными: СетьПолис строил инфраструктуру, ОфисПолис готовил документы и инструкции, ДатаПолис принимает всё на сопровождение.</p></article></div></section>
@@ -105,14 +113,6 @@
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-final.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>1 заметка</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-project.html"><span class="rel-area">База знаний</span><span class="rel-title">Проект как кейс: корпус и киберспорт</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-final · autosave: on</span>

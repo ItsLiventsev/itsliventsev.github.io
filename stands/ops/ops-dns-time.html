@@ -93,6 +93,16 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-dhcp.html"><span class="rel-area">База знаний</span><span class="rel-title">DHCP: аренда адреса на четыре шага</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-dns.html"><span class="rel-area">База знаний</span><span class="rel-title">DNS: кеш, TTL и два резолвера</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-ntp.html"><span class="rel-area">База знаний</span><span class="rel-title">Время в сети: NTP и 30 секунд</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 3 · Сервисы · 5 ч · 85 неткоинов</p><p class="lab-static-lead">BIND, прямые и обратные зоны, chrony/NTP и разбор инцидента «не резолвится имя».</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>сова Агата — координатор разрешения имён и времени</strong> · бриф практики</p><p>Утром в Service Desk посыпались заявки: внутренние сайты открываются по IP, но не по имени, а Kerberos то и дело отказывает в билетах. Два связанных корня — сломанная зона DNS и разъехавшееся время на контроллерах. Вы поднимете BIND, опишете прямую и обратную зоны, настроите chrony и проведёте полный разбор инцидента без поиска виноватого.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Зоны прямого и обратного просмотра</h3><p>DNS переводит имена в адреса (A) и обратно (PTR). Зона — файл записей с серийным номером SOA; при каждом изменении серийник увеличивается, иначе вторичные серверы не подхватят правку.</p><pre class="lab-codeblock"><code># apt-get install bind bind-utils
@@ -112,16 +122,6 @@ server ntp.datapolis.local iburst
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-dns-time.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-dhcp.html"><span class="rel-area">База знаний</span><span class="rel-title">DHCP: аренда адреса на четыре шага</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-dns.html"><span class="rel-area">База знаний</span><span class="rel-title">DNS: кеш, TTL и два резолвера</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-ntp.html"><span class="rel-area">База знаний</span><span class="rel-title">Время в сети: NTP и 30 секунд</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-dns-time · autosave: on</span>

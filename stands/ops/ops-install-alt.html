@@ -93,6 +93,16 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-systemd.html"><span class="rel-area">База знаний</span><span class="rel-title">systemd: юниты, цели и порядок загрузки</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-lvm.html"><span class="rel-area">База знаний</span><span class="rel-title">Диски: разделы, LVM и кончившееся место</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-raid.html"><span class="rel-area">База знаний</span><span class="rel-title">RAID: паритет — это арифметика, а не магия</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 1 · Приёмка · 4 ч · 60 неткоинов</p><p class="lab-static-lead">Развёртывание серверной ОС с нуля: разметка, сеть, обновления и приёмка по чек-листу.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>волк Тихон — старший дежурный сервисного центра</strong> · бриф практики</p><p>В ДатаПолис поступила новая серверная стойка. Первая смена — приёмка: развернуть ALT Server, задать имя и сеть, обновить пакеты и передать машину дальше по регламенту. В СетьПолисе коллеги уже настраивали сеть на ALT — лис Итан оставил заметку, что конфигурация интерфейсов лежит в /etc/net/ifaces. Здесь вы действуете как дежурный, который отвечает за результат, а не просто выполняет команды.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Установка и первая загрузка</h3><p>Серверная ОС ставится с образа ALT Server. На этапе установки выбираются разметка диска (отдельные разделы /, /home, swap), профиль пакетов и пароль root. После первой загрузки проверяют версию системы и журналы.</p><pre class="lab-codeblock"><code># cat /etc/os-release
@@ -115,16 +125,6 @@ ONBOOT=yes
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-install-alt.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-systemd.html"><span class="rel-area">База знаний</span><span class="rel-title">systemd: юниты, цели и порядок загрузки</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-lvm.html"><span class="rel-area">База знаний</span><span class="rel-title">Диски: разделы, LVM и кончившееся место</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-raid.html"><span class="rel-area">База знаний</span><span class="rel-title">RAID: паритет — это арифметика, а не магия</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-install-alt · autosave: on</span>

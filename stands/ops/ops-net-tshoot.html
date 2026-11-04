@@ -93,6 +93,15 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-troubleshoot.html"><span class="rel-area">База знаний</span><span class="rel-title">Диагностика сети: снизу вверх, а не наугад</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-packet.html"><span class="rel-area">База знаний</span><span class="rel-title">tcpdump: как читать пакет, а не гадать</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Эксплуатация · 6 ч · 90 неткоинов</p><p class="lab-static-lead">Слои снизу вверх: кабель, адрес, маршрут, DNS, сервис — и парный обмен инцидентами.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>краб Гоша — сетевой диагност</strong> · бриф практики</p><p>Тикеты «ничего не работает» приходят в службу каждый день. Вы отработаете методику послойной диагностики от L1 до L7 на учебных сбое, который подготовит ваш напарник: одна сторона вносит регламентированную неисправность и фиксирует ожидаемые симптомы, вторая — находит причину только штатными инструментами, не заглядывая в конфиг заранее. Роли меняются, результаты принимаются по чек-листу и обмену кодами ITS-LAB1/ITS-REV1.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Модель снизу вверх: L1–L3</h3><p>Сначала физика и линк (ip link, свет линка), потом адресация (ip addr, правильная подсеть и маска), затем маршрут (ip route, шлюз по умолчанию). Прыгать сразу на DNS — частая ошибка: если не пингуется даже шлюз, имена ни при чём.</p><pre class="lab-codeblock"><code># ip -br link
@@ -119,15 +128,6 @@
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-net-tshoot.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-troubleshoot.html"><span class="rel-area">База знаний</span><span class="rel-title">Диагностика сети: снизу вверх, а не наугад</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-packet.html"><span class="rel-area">База знаний</span><span class="rel-title">tcpdump: как читать пакет, а не гадать</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-net-tshoot · autosave: on</span>

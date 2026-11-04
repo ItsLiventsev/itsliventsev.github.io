@@ -97,7 +97,18 @@
       </div>
     </div>
 
-<!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Графика и базы · 5 ч · 85 неткоинов</p><p class="lab-static-lead">Таблицы и связи, нормализация, формы, запросы (QBE и SQL), отчёты в LibreOffice Base и Access.</p></header>
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>4 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-indexes.html"><span class="rel-area">База знаний</span><span class="rel-title">Индексы и планы: почему запрос медленный</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-mysql.html"><span class="rel-area">База знаний</span><span class="rel-title">MySQL: InnoDB, кеш запросов и вред кеша</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-postgres.html"><span class="rel-area">База знаний</span><span class="rel-title">PostgreSQL: версии строк и VACUUM</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-tx.html"><span class="rel-area">База знаний</span><span class="rel-title">Транзакции: уровни изоляции и три аномалии</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
+    <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Графика и базы · 5 ч · 85 неткоинов</p><p class="lab-static-lead">Таблицы и связи, нормализация, формы, запросы (QBE и SQL), отчёты в LibreOffice Base и Access.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>волк Тихон — держит базы в порядке: ключи, связи и никакого дубляжа</strong> · бриф практики</p><p>Учебная часть вела записи в одной гигантской таблице: один студент дублировался в шести строках, а опечатка в названии группы ломала фильтры. Тихон разбирает базу по нормальным таблицам со связями «один ко многим», формы для ввода и запросы, которые отвечают на вопросы без ручного перебора.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Таблицы, ключи и нормализация</h3><p>Каждая сущность — своя таблица: студенты, группы, работы. Первичный ключ однозначно задаёт запись, внешний ключ ссылается на неё из другой таблицы. Первая нормальная форма убирает списки в ячейке, вторая убирает повторяющиеся факты — дубликаты исчезают.</p><pre class="lab-codeblock"><code>-- пример связи и запроса
 CREATE TABLE groups (
@@ -114,19 +125,8 @@ ORDER BY students DESC;</code></pre></article></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-quiz"><div class="lp-head"><h2>Проверь себя</h2><span class="flat-badge">контрольный тест</span></div><div class="lp-body"><details class="lab-static-quiz"><summary>Вопрос 1. Зачем данные раскладывают по разным таблицам со связями?</summary><ul><li>Чтобы было сложнее</li><li>Убрать дубли и обеспечить целостность <span class="flat-badge is-run">верно</span></li><li>Чтобы замедлить запросы</li><li>Это устаревший приём</li></ul><p><strong>Ответ:</strong> Убрать дубли и обеспечить целостность</p><p>Нормализация устраняет повторяющиеся факты: правка названия группы происходит в одной записи.</p></details><details class="lab-static-quiz"><summary>Вопрос 2. Что такое внешний ключ?</summary><ul><li>Пароль к базе</li><li>Поле, ссылающееся на первичный ключ другой таблицы <span class="flat-badge is-run">верно</span></li><li>Резервная копия</li><li>Тип шрифта</li></ul><p><strong>Ответ:</strong> Поле, ссылающееся на первичный ключ другой таблицы</p><p>Внешний ключ строит связь один-ко-многим и не даёт ссылаться на несуществующую запись.</p></details><details class="lab-static-quiz"><summary>Вопрос 3. Форма в базе данных нужна, чтобы…</summary><ul><li>Украсить таблицу</li><li>Вводить данные контролируемо: списки, маски, обязательные поля <span class="flat-badge is-run">верно</span></li><li>Удалить связи</li><li>Заменить запросы</li></ul><p><strong>Ответ:</strong> Вводить данные контролируемо: списки, маски, обязательные поля</p><p>Форма ловит ошибки на входе и делает ввод доступным неподготовленному пользователю.</p></details><details class="lab-static-quiz"><summary>Вопрос 4. Что делает SQL-конструкция GROUP BY?</summary><ul><li>Удаляет группы</li><li>Сворачивает строки в группы и считает по ним итоги <span class="flat-badge is-run">верно</span></li><li>Группирует окна приложения</li><li>Сортирует по алфавиту только</li></ul><p><strong>Ответ:</strong> Сворачивает строки в группы и считает по ним итоги</p><p>GROUP BY в паре с COUNT/SUM даёт сводки, например число студентов в каждой группе.</p></details></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-reflection"><div class="lp-head"><h2>Рефлексия</h2></div><div class="lp-body"><ul class="lab-static-reflection"><li>Какой список в учебной части вы первым делом превратили бы в базу?</li><li>Какие ошибки ввода отсеет форма, но не голая таблица?</li><li>Как объяснить разницу между запросом и отчётом коллеге?</li></ul></div></section>
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=office-db.html">кабинет бюро</a>.</p></article>
-<!-- LAB:STATIC:END -->
-<div id="office-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>4 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-indexes.html"><span class="rel-area">База знаний</span><span class="rel-title">Индексы и планы: почему запрос медленный</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-mysql.html"><span class="rel-area">База знаний</span><span class="rel-title">MySQL: InnoDB, кеш запросов и вред кеша</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-postgres.html"><span class="rel-area">База знаний</span><span class="rel-title">PostgreSQL: версии строк и VACUUM</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-tx.html"><span class="rel-area">База знаний</span><span class="rel-title">Транзакции: уровни изоляции и три аномалии</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
+    <!-- LAB:STATIC:END -->
+    <div id="office-root"></div>
   </main>
   <footer class="st-footer"><span>// © 2026 itsliventsev · ОфисПолис</span><span>lab: office-db · autosave: on · storage: localStorage (office-*)</span>
     <time class="st-footer-updated" data-footer-updated></time>

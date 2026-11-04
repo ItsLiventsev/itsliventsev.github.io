@@ -239,7 +239,17 @@ for (const rel of pages()) {
     process.exitCode = 1;
     continue;
   }
-  html = html.replace(marker, START + block + '\n' + END + '\n' + marker);
+  /* Порядок на странице фиксирован: «Теория по теме» (мост) → статический
+     текст работы → интерактивный `#lab-root`. Статика всегда встаёт вплотную
+     к контейнеру, а мост — перед ней (`scripts/lib/related.js` знает про
+     LAB:STATIC:START). Любая другая комбинация давала «прыгающие» блоки:
+     разметка не менялась, а `--check` обоих шагов расходился при пересборке.
+     Отступ берём у самого контейнера — иначе блок, вставленный генератором
+     стенда с отступом, после пересборки «съезжал» влево. */
+  const at = html.indexOf(marker);
+  const lineStart = html.lastIndexOf('\n', at) + 1;
+  const indent = /^[ \t]*/.exec(html.slice(lineStart))[0];
+  html = html.slice(0, at) + START + block + '\n' + indent + END + '\n' + indent + html.slice(at);
   pending.push([rel, html]);
   touched += 1;
   const visible = block.replace(/<[^>]+>/g, ' ');

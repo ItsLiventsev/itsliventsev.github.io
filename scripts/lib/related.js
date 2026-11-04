@@ -20,7 +20,11 @@ const END = '<!-- RELATED:END -->';
 const NOTE_INDENT = '      ';
 const PRACTICE_INDENT = '    ';
 const NOTE_ANCHOR = /\n([ \t]*)<nav class="kn-pager"/;
-const PRACTICE_ANCHOR = /\n([ \t]*)<div id="lab-root"/;
+/* Якорь стенда — первый постоянный блок после шапки. Раньше это был
+   `#lab-root`, но перед ним теперь стоят статический текст работы и список
+   работ в каталоге; блок, вставленный «вплотную к #lab-root», каждый раз
+   перескакивал через них и `--check` расходился сам с собой. */
+const PRACTICE_ANCHOR = /\n([ \t]*)<div id="lab-root"|\n([ \t]*)<!-- LAB:STATIC:START -->|\n([ \t]*)<!-- STAND:CATALOG:START -->/;
 const PRACTICE_FALLBACK = /\n([ \t]*)<\/main>/;
 
 const escapeRe = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

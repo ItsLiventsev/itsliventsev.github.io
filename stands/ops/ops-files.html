@@ -93,6 +93,14 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>1 заметка</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-zfs.html"><span class="rel-area">База знаний</span><span class="rel-title">ZFS: контрольные суммы тихих ошибок</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 3 · Сервисы · 5 ч · 80 неткоинов</p><p class="lab-static-lead">Сетевые папки, экспорт NFS, монтирование через fstab и модель прав Linux.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>ёжик Боря — ответственный за хранилища</strong> · бриф практики</p><p>Отделу архива нужно общее хранилище, которое переживает перезагрузку и не открыто всем подряд. Вы развернёте NFS на ALT Server, настроите экспорт с ограничением по подсети, смонтируете папку на рабочих станциях через fstab и разберётесь в правах и владельцах. Заодно поймёте, почему фраза «у меня нет доступа» почти никогда не решается командой chmod 777.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> Экспорт NFS на сервере</h3><p>Каталог публикуется в /etc/exports с указанием клиентской подсети и опций (rw, sync, root_squash). root_squash безопаснее: root клиента не становится root на сервере.</p><pre class="lab-codeblock"><code># apt-get install nfs-server
@@ -113,14 +121,6 @@ srv-hq:/srv/archive /mnt/archive nfs defaults,_netdev 0 0
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-files.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>1 заметка</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-zfs.html"><span class="rel-area">База знаний</span><span class="rel-title">ZFS: контрольные суммы тихих ошибок</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-files · autosave: on</span>

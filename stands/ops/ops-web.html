@@ -93,6 +93,16 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-nginx.html"><span class="rel-area">База знаний</span><span class="rel-title">nginx как reverse proxy: не только proxy_pass</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-docker.html"><span class="rel-area">База знаний</span><span class="rel-title">Контейнеры: образ, слой и том</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-tls.html"><span class="rel-area">База знаний</span><span class="rel-title">Сертификаты и TLS 1.3: одна поездка</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 3 · Сервисы · 6 ч · 95 неткоинов</p><p class="lab-static-lead">LAMP, контейнеры через compose, reverse proxy и проброс портов как управляемое изменение.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>выдра Лин — релиз-инженер веб-доставки</strong> · бриф практики</p><p>Заказчик хочет внутренний сайт отдела. В арсенале два пути: классический LAMP и современный контейнерный запуск через Docker Compose с nginx как обратным прокси. Вы пройдёте оба, настроите проброс портов и опишете откат — потому что выпуск веб-сервиса в эксплуатацию это изменение, а не эксперимент на проде.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> LAMP как база</h3><p>Linux + Apache/httpd + MariaDB + PHP — классический стек. Сервис включается в systemd, база инициализируется, файлы сайта лежат в каталоге веб-сервера.</p><pre class="lab-codeblock"><code># apt-get install -y lamp-server
@@ -116,16 +126,6 @@ location / { proxy_pass http://127.0.0.1:8080; }
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-web.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>3 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-nginx.html"><span class="rel-area">База знаний</span><span class="rel-title">nginx как reverse proxy: не только proxy_pass</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-docker.html"><span class="rel-area">База знаний</span><span class="rel-title">Контейнеры: образ, слой и том</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-tls.html"><span class="rel-area">База знаний</span><span class="rel-title">Сертификаты и TLS 1.3: одна поездка</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-web · autosave: on</span>

@@ -93,6 +93,15 @@
       </div>
     </div>
 
+    <!-- RELATED:START -->
+    <aside class="rel-block" aria-labelledby="rel-theory">
+      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
+      <ul class="rel-list">
+      <li><a class="rel-item" href="/blog/kn-logs.html"><span class="rel-area">База знаний</span><span class="rel-title">Журналы: уровни, ротация и лимит на диск</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      <li><a class="rel-item" href="/blog/kn-logrotate.html"><span class="rel-area">База знаний</span><span class="rel-title">logrotate: почему журналы съели диск</span><span class="rel-go" aria-hidden="true">→</span></a></li>
+      </ul>
+    </aside>
+    <!-- RELATED:END -->
 <!-- LAB:STATIC:START --><article class="lab-static" data-lab-static><header class="lab-static-head"><h2>О работе</h2><p class="lab-static-meta">спринт 4 · Эксплуатация · 5 ч · 85 неткоинов</p><p class="lab-static-lead">systemd-journald, auditd, logrotate и поиск инцидента в логах без воды и паники.</p></header>
 <section class="lab-panel lab-static-section" id="lab-static-brief"><div class="lp-head"><h2>Бриф практики</h2></div><div class="lp-body"><p class="lab-static-who"><strong>выдра Лина — аудитор журналов</strong> · бриф практики</p><p>После ночного инцидента с правами доступа выяснилось, что логи никто не читает, а часть журналов вообще не пережила перезагрузку. Вы наведёте порядок в журналировании сервисов ДатаПолиса: настроите постоянное хранение journald, правила auditd на критичные файлы, ротацию через logrotate и отработаете разбор реального инцидента по таймлайну событий.</p></div></section>
 <section class="lab-panel lab-static-section" id="lab-static-theory"><div class="lp-head"><h2>Теория</h2><span class="flat-badge">опорный конспект</span></div><div class="lp-body"><article class="theory-block"><h3><span class="theory-num">01</span> journald: уровни, фильтры и персистентность</h3><p>journalctl умеет фильтровать по юниту, приоритету, времени и идентификатору. По умолчанию журнал может жить в tmpfs и пропадать после ребута; Storage=persistent в journald.conf создаёт /var/log/journal.</p><pre class="lab-codeblock"><code># journalctl -u sshd --since &#39;today 09:00&#39; --until &#39;09:30&#39;
@@ -124,15 +133,6 @@
 <p class="lab-static-note" data-lab-readonly-note hidden><strong>Режим чтения.</strong> Текст работы доступен без профиля, а прогресс, автотесты и сдача появляются после входа: <a href="index.html?return=ops-log-audit.html">консоль сервисного центра</a>.</p></article>
 <!-- LAB:STATIC:END -->
 <div id="ops-root"></div>
-    <!-- RELATED:START -->
-    <aside class="rel-block" aria-labelledby="rel-theory">
-      <div class="rel-head"><h2 id="rel-theory">Теория по теме</h2><span>2 заметки</span></div>
-      <ul class="rel-list">
-      <li><a class="rel-item" href="/blog/kn-logs.html"><span class="rel-area">База знаний</span><span class="rel-title">Журналы: уровни, ротация и лимит на диск</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      <li><a class="rel-item" href="/blog/kn-logrotate.html"><span class="rel-area">База знаний</span><span class="rel-title">logrotate: почему журналы съели диск</span><span class="rel-go" aria-hidden="true">→</span></a></li>
-      </ul>
-    </aside>
-    <!-- RELATED:END -->
   </main>
   <footer class="st-footer"><span>© 2026 itsliventsev · ДатаПолис</span>
     <a href="../../sitemap.html">карта сайта</a><span>lab: ops-log-audit · autosave: on</span>
