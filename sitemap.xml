@@ -76,11 +76,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/graph.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://itsliventsev.github.io/blog/kn-ansible.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
@@ -335,6 +330,131 @@
   <url>
     <loc>https://itsliventsev.github.io/blog/kn-zfs.html</loc>
     <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/acl-i-firewall.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/ad-ds.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/analiz-trafika.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/dhcp.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/dns.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/docker-osnovy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/faylovye-sluzhby.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/ip-adresaciya.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/keys-set-ceha.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/kommutaciya-i-switch.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/kubernetes-osnovy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/linii-svyazi-i-kabely.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/model-osi.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/osnovy-setey.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/praktikum-obzhim-vitoy-pary.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/raschet-podsetey.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/staticheskaya-marshrutizaciya.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/stp-i-petli.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/virtualizaciya-osnovy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>

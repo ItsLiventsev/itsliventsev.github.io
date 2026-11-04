@@ -267,41 +267,6 @@
 .kn-backlinks ul { display: grid; gap: 6px; margin: 0; padding-inline-start: var(--u-s5); }
 .kn-backlinks li { color: var(--u-ink-2); }
 
-/* ——— Граф связей: SVG-рёбра + узлы, раскладку считает knowledge.js ——— */
-.kn-graph-stage {
-  position: relative;
-  margin-block: var(--u-s5);
-  aspect-ratio: 16 / 9;
-  min-height: 320px;
-  border-radius: var(--u-r-lg);
-  background: var(--u-surface);
-  box-shadow: var(--u-shadow-1);
-  overflow: hidden;
-}
-.kn-graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.kn-graph-svg line { stroke: var(--u-line-strong); stroke-width: 1; }
-.kn-graph-svg line[data-active="true"] { stroke: var(--u-accent); stroke-width: 1.5; }
-.kn-node {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: 152px;
-  padding: 8px 10px;
-  border-radius: var(--u-r-sm);
-  background: var(--u-surface);
-  box-shadow: var(--u-shadow-1), inset 0 0 0 1px var(--u-line);
-  color: var(--u-ink);
-  font-family: var(--u-font-ui);
-  font-size: var(--u-fs-2xs);
-  font-weight: 600;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-  transform: translate(-50%, -50%);
-}
-.kn-node:hover, .kn-node:focus-visible { box-shadow: var(--u-shadow-2), inset 0 0 0 1.5px var(--u-accent); color: var(--u-accent); z-index: 2; }
-.kn-graph-legend { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
-
 /* ——— Рубрики и теги ——— */
 .kn-topic-list { display: grid; gap: var(--u-s2); margin-block: var(--u-s4); padding: 0; list-style: none; }
 .kn-topic-row {
@@ -372,8 +337,6 @@
 }
 @media (max-width: 720px) {
   .kn-card, .kn-card--wide { grid-column: span 12; }
-  .kn-graph-stage { aspect-ratio: auto; min-height: 260px; }
-  .kn-node { width: 118px; font-size: 10px; }
   .kn-facts { grid-template-columns: minmax(0, 1fr); gap: var(--u-s1); }
   .kn-facts dd + dt { margin-block-start: var(--u-s2); }
   .kn-topic-row { grid-template-columns: 32px minmax(0, 1fr); }
@@ -389,10 +352,9 @@
   }
   .kn-card:hover,
   .kn-topic-row:hover { transform: translateY(-2px); }
-  .kn-node { transition: box-shadow var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
 }
 @media print {
-  .kn-rail, .kn-filterbar, .kn-graph-stage { display: none; }
+  .kn-rail, .kn-filterbar, .kn-wiki { display: none; }
 }
 
 /* ——— Карточка заметки без обложки: номер рубрики вместо картинки ———
@@ -407,95 +369,6 @@
   letter-spacing: 0;
 }
 .kn-card--wide .kn-card-excerpt { -webkit-line-clamp: 2; }
-
-/* ——— Граф 2: живое поле связей ———
-   Узел стал точкой с подписью: точка показывает ранг связности, подпись
-   читается глазом и остаётся доступной без скриптов. Рубрики разнесены по
-   секторам на этапе сборки, скрипт только добавляет движение. Второй акцент
-   не вводится: активное состояние — тот же глиняный --u-accent, приглушённое —
-   --u-faint, поэтому в тёмной теме всё остаётся в палитре сайта. */
-.kn-graph-shell { display: grid; gap: var(--u-s3); margin-block-start: var(--u-s6); }
-.kn-graph-title {
-  margin: 0;
-  color: var(--u-muted);
-  font-family: var(--u-font-mono);
-  font-size: var(--u-fs-2xs);
-  font-weight: 500;
-  letter-spacing: var(--u-ls-mono);
-}
-.kn-graph-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s3); }
-.kn-graph-actions { display: flex; flex-wrap: wrap; gap: var(--u-s2); }
-.kn-graph-toolbar .catalog-status { flex: 1 1 100%; min-height: 1.2em; margin: 0; }
-.kn-graph-stage { aspect-ratio: 3 / 2; min-height: 480px; background: var(--u-surface-sunk); }
-.kn-graph-field { position: absolute; inset: 0; }
-.kn-graph-svg line { stroke: var(--u-line-strong); stroke-width: 1; transition: stroke var(--u-dur-1) var(--u-ease); }
-.kn-graph-svg line[data-muted="true"] { stroke: var(--u-line); }
-.kn-graph-svg line[data-hidden="true"] { stroke: var(--u-line); opacity: 0.4; }
-.kn-node {
-  width: auto;
-  padding: 0;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  color: var(--u-ink-2);
-  font-weight: 500;
-  gap: 4px;
-  touch-action: none;
-  cursor: grab;
-}
-.kn-node-dot {
-  display: block;
-  width: 10px;
-  height: 10px;
-  border-radius: var(--u-r-pill);
-  background: var(--u-surface);
-  box-shadow: inset 0 0 0 1.5px var(--u-line-strong);
-  transition: box-shadow var(--u-dur-1) var(--u-ease), transform var(--u-dur-1) var(--u-ease);
-}
-.kn-node[data-rank="link"] .kn-node-dot { width: 14px; height: 14px; }
-.kn-node[data-rank="hub"] .kn-node-dot { width: 20px; height: 20px; box-shadow: inset 0 0 0 2px var(--u-muted); background: var(--u-accent-soft); }
-.kn-node-label {
-  max-width: 132px;
-  color: var(--u-muted);
-  font-family: var(--u-font-ui);
-  font-size: 10px;
-  line-height: 1.2;
-  text-align: center;
-  text-wrap: balance;
-  transition: color var(--u-dur-1) var(--u-ease);
-}
-.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; color: var(--u-ink); font-size: var(--u-fs-2xs); font-weight: 600; }
-.kn-node[data-dim="true"] { opacity: 0.32; }
-.kn-node[data-active="true"] .kn-node-dot { background: var(--u-accent); box-shadow: inset 0 0 0 2px var(--u-accent), 0 0 0 6px var(--u-accent-soft); }
-.kn-node[data-active="true"] .kn-node-label { color: var(--u-accent); font-weight: 600; }
-.kn-node[data-dragging="true"] { cursor: grabbing; z-index: 3; }
-/* Стенд — квадрат на том же поле. Форма, а не второй цвет: палитра остаётся
-   двухцветной, а «мост теория ↔ практика» видно даже на статической картинке. */
-.kn-node--stand .kn-node-dot { border-radius: 2px; transform: rotate(45deg); }
-.kn-node[data-dragging="true"] .kn-node-dot { background: var(--u-accent); }
-.kn-node:focus-visible { outline: none; box-shadow: var(--u-focus); border-radius: var(--u-r-sm); }
-.kn-node:focus-visible .kn-node-label { color: var(--u-accent); }
-.kn-node[hidden] { display: none; }
-.kn-graph-stage[data-motion="on"] .kn-node { will-change: left, top; }
-.kn-graph-stage[data-filter="all"] .kn-node-label { opacity: 1; }
-.kn-graph-legend { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); }
-@media (max-width: 900px) {
-  .kn-graph-stage { aspect-ratio: auto; min-height: 420px; }
-  .kn-node-label { max-width: 92px; font-size: 9px; }
-  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
-}
-@media (max-width: 560px) {
-  .kn-node[data-rank="link"] .kn-node-label { display: none; }
-  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .kn-node-dot { transition: none; }
-  .kn-node-label { transition: none; }
-  .kn-graph-svg line { transition: none; }
-}
-@media print {
-  .kn-graph-toolbar { display: none; }
-}
 
 /* ——— Конспект в рельсе заметки ———
    Вместо служебного «паспорта» — оглавление по разделам текста. Якоря
@@ -525,87 +398,6 @@
 .kn-rail-summary { position: relative; }
 @media (min-width: 1081px) {
   .kn-rail-summary { position: sticky; inset-block-start: calc(var(--u-masthead) + var(--u-s6)); }
-}
-
-/* ——— Граф: снятие старых рамок с узла ———
-   Прежний узел был карточкой и на hover получал внутреннюю обводку. Теперь
-   узел — точка с подписью, поэтому кольцо рисует только сама точка, а
-   рамка вокруг текста убирается. Здесь же нейтрализуются фиксированные
-   ширины узла из медиазапросов первой версии. */
-.kn-node:hover, .kn-node:focus-visible { box-shadow: none; color: var(--u-ink-2); }
-.kn-node:hover .kn-node-label { color: var(--u-accent); }
-.kn-graph-stage[data-motion="off"] .kn-node { will-change: auto; }
-@media (max-width: 1080px) {
-  .kn-node { width: auto; font-size: var(--u-fs-2xs); }
-}
-@media (max-width: 560px) {
-  .kn-graph-stage { min-height: 380px; }
-}
-
-/* ——— Граф: подписи по требованию ———
-   Сорок три подписи одновременно превращают поле в кашу. Хабы и связующие
-   узлы подписаны всегда (по ним читается структура), листья показывают
-   подпись при наведении, фокусе и в режиме фильтра, когда узлов на поле
-   остаётся немного. Подпись есть в разметке всегда — скрипт ничего не
-   дописывает, поисковик и скринридер видят её без движения. */
-.kn-node[data-rank="leaf"] .kn-node-label { opacity: 0; }
-.kn-node[data-rank="leaf"]:hover .kn-node-label,
-.kn-node[data-rank="leaf"]:focus-visible .kn-node-label,
-.kn-node[data-rank="leaf"][data-active="true"] .kn-node-label { opacity: 1; }
-.kn-graph-stage:not([data-filter="all"]) .kn-node[data-kind="note"] .kn-node-label { opacity: 1; }
-/* Стенд — квадрат без постоянной подписи: 26 заголовков поверх 43 заметок
-   не помещаются ни в одной раскладке. Заголовок проявляется на наведении,
-   фокусе и в фокусе окружения; полный список — в таблице связей.
-   Подпись вынесена из потока: у заметки она держит ширину узла, а у стенда
-   занимала бы 96 px прозрачного места и перехватывала наведение у соседей. */
-.kn-node--stand .kn-node-label {
-  position: absolute;
-  inset-block-start: calc(100% + 5px);
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-  max-width: 96px;
-  font-size: 9px;
-  line-height: 1.15;
-  opacity: 0;
-  pointer-events: none;
-}
-.kn-node--stand:hover .kn-node-label,
-.kn-node--stand:focus-visible .kn-node-label,
-.kn-node--stand[data-active="true"] .kn-node-label { opacity: 1; }
-@media (prefers-reduced-motion: no-preference) {
-  .kn-node-label { transition: opacity var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
-}
-
-
-/* ——— Граф 3: ядро, пояс, орбита ———
-   Первая версия графа читалась плохо: карточки-плашки лежали друг на друге,
-   подписи срезались, «движение» не было видно. Теперь узел — точка, подпись
-   ограничена по ширине и переносится, у листьев подпись появляется только
-   при наведении, а поле выше: сорока трём заметкам нужно место.
-
-   Ширины подписей (148 / 136 / 96 и медиазапросы 96 / 84) обязаны совпадать
-   с widthOf() в assets/knowledge.js: по ним считается разведение рамок. */
-.kn-graph-stage { aspect-ratio: 16 / 10; min-height: 560px; }
-.kn-node { max-width: 158px; }
-.kn-node-label { max-width: 96px; font-size: 11px; line-height: 1.25; }
-.kn-node[data-rank="link"] .kn-node-label { max-width: 136px; }
-.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; font-size: var(--u-fs-xs); }
-.kn-node[data-rank="hub"] .kn-node-dot { width: 22px; height: 22px; }
-.kn-node[data-rank="link"] .kn-node-dot { width: 15px; height: 15px; }
-.kn-node[data-rank="leaf"] .kn-node-dot { width: 9px; height: 9px; }
-.kn-graph-svg line[data-mutual="true"] { stroke-width: 1.6; }
-.kn-graph-svg line[data-active="true"] { stroke-width: 2; }
-.kn-graph-shell { margin-block-start: var(--u-s7); }
-.kn-graph-toolbar .kn-filterbar { flex: 1 1 auto; }
-@media (max-width: 900px) {
-  .kn-graph-stage { aspect-ratio: auto; min-height: 460px; }
-  .kn-node[data-rank="link"] .kn-node-label { display: none; }
-  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
-  .kn-node[data-rank="hub"] .kn-node-label { max-width: 96px; }
-}
-@media (max-width: 560px) {
-  .kn-graph-stage { min-height: 400px; }
-  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; font-size: 10px; }
 }
 
 /* RELATED CSS:START — generated from assets/related.css */
@@ -654,3 +446,151 @@
   .rel-go { display: none; }
 }
 /* RELATED CSS:END */
+
+/* ——— Учебные материалы: левое wiki-меню и страница темы ———
+   Дерево живёт на <details> и работает без скриптов; активная тема
+   помечена aria-current="page" и подсвечивается тем же глиняным
+   акцентом, что и остальная навигация. Сетка — 280px + контент,
+   ниже 1081px меню уезжает наверх и раскрывается одним блоком. */
+.kn-wiki-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: var(--u-s6);
+  align-items: start;
+  margin-block-start: var(--u-s5);
+}
+.kn-wiki {
+  position: sticky;
+  inset-block-start: calc(var(--u-masthead) + var(--u-s5));
+  display: grid;
+  gap: var(--u-s2);
+  max-height: calc(100dvh - var(--u-masthead) - var(--u-s6));
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: var(--u-s2);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+}
+.kn-wiki-home {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--u-s2);
+  padding: var(--u-s2) 0 var(--u-s3);
+  border-block-end: 1px solid var(--u-line);
+  color: var(--u-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.kn-wiki-home span { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
+.kn-wiki-home:hover { color: var(--u-accent); }
+.kn-wiki-tree, .kn-wiki-tree ul { margin: 0; padding: 0; list-style: none; }
+.kn-wiki-tree ul { display: grid; gap: 2px; margin-block-start: 2px; padding-inline-start: var(--u-s3); border-inline-start: 1px solid var(--u-line); }
+.kn-wiki-tree details > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--u-s2);
+  padding: 5px var(--u-s1);
+  border-radius: var(--u-r-sm);
+  color: var(--u-ink-2);
+  cursor: pointer;
+  line-height: 1.35;
+  list-style: none;
+}
+.kn-wiki-tree summary::-webkit-details-marker { display: none; }
+.kn-wiki-tree details > summary::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-inline-end: 1.5px solid var(--u-faint);
+  border-block-end: 1.5px solid var(--u-faint);
+  transform: rotate(-45deg);
+  transition: transform var(--u-dur-1) var(--u-ease);
+}
+.kn-wiki-tree details[open] > summary::before { transform: rotate(45deg); }
+.kn-wiki-tree details > summary:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
+.kn-wiki-tree summary > span:last-child:not(.kn-wiki-num) { margin-inline-start: auto; color: var(--u-faint); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
+.kn-wiki-section > details > summary { color: var(--u-ink); font-weight: 600; }
+.kn-wiki-num { color: var(--u-faint); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
+.kn-wiki-tree a {
+  display: block;
+  padding: 4px var(--u-s2);
+  border-radius: var(--u-r-sm);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-xs);
+  line-height: 1.4;
+  text-decoration: none;
+  text-wrap: pretty;
+}
+.kn-wiki-tree a:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
+.kn-wiki-tree a[aria-current="page"] { background: var(--u-accent-soft); color: var(--u-ink); font-weight: 600; }
+
+/* ——— Документ темы: крошки, цель, код ——— */
+.kn-wiki-doc { display: grid; gap: var(--u-s4); min-width: 0; }
+.kn-crumbs { display: flex; flex-wrap: wrap; gap: var(--u-s1) var(--u-s2); margin: 0; padding: 0; color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); list-style: none; }
+.kn-crumbs li + li::before { content: "/"; margin-inline-end: var(--u-s2); color: var(--u-faint); }
+.kn-crumbs a { color: var(--u-muted); text-decoration: none; }
+.kn-crumbs a:hover { color: var(--u-accent); }
+.kn-goal {
+  margin: 0;
+  padding: var(--u-s4) var(--u-s5);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface-sunk);
+  box-shadow: inset 0 0 0 1px var(--u-line);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+  line-height: 1.55;
+}
+.kn-goal h2 { margin: 0 0 var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
+.kn-goal ul { display: grid; gap: 6px; margin: 0; padding-inline-start: var(--u-s5); }
+.kn-goal li::marker { color: var(--u-accent); }
+.kn-code {
+  margin: var(--u-s4) 0;
+  padding: var(--u-s4);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface-sunk);
+  box-shadow: inset 0 0 0 1px var(--u-line);
+  color: var(--u-ink);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-xs);
+  line-height: 1.6;
+  overflow-x: auto;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* ——— Индекс раздела: разделы, группы, темы ——— */
+.kn-mat-section { display: grid; gap: var(--u-s3); margin-block-start: var(--u-s6); }
+.kn-mat-section > h2 { display: flex; align-items: baseline; gap: var(--u-s3); margin: 0; font-size: var(--u-fs-lg); }
+.kn-mat-section > h2 .kn-wiki-num { font-size: var(--u-fs-xs); }
+.kn-mat-about { margin: 0; max-width: 68ch; color: var(--u-muted); font-size: var(--u-fs-sm); line-height: 1.55; }
+.kn-mat-list { display: grid; gap: var(--u-s3); margin: 0; padding: 0; list-style: none; }
+.kn-mat-group { padding: 0; }
+.kn-mat-group > h3 { margin: 0 0 var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); }
+.kn-mat-list ul { display: grid; gap: var(--u-s2); margin: 0; padding: 0; list-style: none; }
+.kn-mat-list a {
+  display: grid;
+  gap: 4px;
+  padding: var(--u-s3) var(--u-s4);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  color: var(--u-ink);
+  text-decoration: none;
+  transition: box-shadow var(--u-dur-1) var(--u-ease);
+}
+.kn-mat-list a:hover { box-shadow: var(--u-shadow-2); }
+.kn-mat-list strong { font-family: var(--u-font-ui); font-size: var(--u-fs-sm); font-weight: 600; line-height: 1.35; }
+.kn-mat-list small { color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }
+
+@media (max-width: 1080px) {
+  .kn-wiki-layout { grid-template-columns: minmax(0, 1fr); gap: var(--u-s4); }
+  .kn-wiki { position: static; max-height: none; overflow: visible; padding: var(--u-s4); border-radius: var(--u-r-md); background: var(--u-surface-sunk); }
+}
+@media (max-width: 720px) {
+  .kn-wiki { font-size: var(--u-fs-xs); }
+  .kn-wiki-tree ul { padding-inline-start: var(--u-s2); }
+  .kn-code { padding: var(--u-s3); font-size: 11px; }
+  .kn-goal { padding: var(--u-s4); }
+}

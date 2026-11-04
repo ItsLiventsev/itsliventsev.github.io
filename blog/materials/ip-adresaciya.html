@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>IP-адресация: адрес, маска, шлюз · Учебные материалы · itsliventsev</title>
+<meta name="description" content="IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/ip-adresaciya.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="IP-адресация: адрес, маска, шлюз · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/ip-adresaciya.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IP-адресация: адрес, маска, шлюз · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"IP-адресация: адрес, маска, шлюз · Учебные материалы","description":"IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.","url":"https://itsliventsev.github.io/blog/materials/ip-adresaciya.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/ip-adresaciya.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"IP-адресация: адрес, маска, шлюз · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/ip-adresaciya.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html" aria-current="page">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Адресация и маршрутизация</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Адресация и маршрутизация</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>база</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>IP-адресация: адрес, маска, шлюз</h1>
+      <p class="kn-def">IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>читать адрес вместе с маской и называть адрес сети и широковещательный;</li><li>объяснять роль шлюза и почему без него нет выхода наружу;</li><li>выбирать диапазоны для офиса, гостей и оборудования.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="iz-chego-sostoit-adres">Из чего состоит адрес</h2>
+        <p>IPv4-адрес — 32 бита, записанные четырьмя числами: <code>192.168.10.25</code>. Он ничего не значит без маски: <code>255.255.255.0</code> (или <code>/24</code>) говорит, что первые 24 бита — это номер сети, а последние 8 — номер узла.</p>
+        <p>Отсюда всё остальное:</p>
+        <ul><li><strong>Адрес сети</strong> — все биты узла в нуле: <code>192.168.10.0</code>. Узлу его назначать нельзя.</li><li><strong>Широковещательный адрес</strong> — все биты узла в единице: <code>192.168.10.255</code>. Тоже не назначается.</li><li><strong>Диапазон узлов</strong> — между ними: <code>192.168.10.1</code> … <code>192.168.10.254</code>, то есть 254 адреса в /24.</li></ul>
+        <p>Два адреса в каждой подсети заняты служебно, поэтому «/24 = 256 адресов для устройств» — ошибка планирования, которая всплывает, когда подсеть заполнена ровно.</p>
+        <h2 id="klassy-i-chastnye-diapazony">Классы и частные диапазоны</h2>
+        <p>Исторические классы A/B/C давно заменены бесклассовой схемой (CIDR), но частные диапазоны остаются неизменными по RFC 1918:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Диапазон</th><th scope="col">Маска</th><th scope="col">Размер</th><th scope="col">Где уместен</th></tr></thead><tbody><tr><th scope="row">10.0.0.0/8</th><td>/8</td><td>16,7 млн</td><td>крупная организация</td></tr><tr><th scope="row">172.16.0.0/12</th><td>/12</td><td>1 млн</td><td>средняя сеть, кампус</td></tr><tr><th scope="row">192.168.0.0/16</th><td>/16</td><td>65 тыс</td><td>офис, дом, филиал</td></tr><tr><th scope="row">169.254.0.0/16</th><td>/16</td><td>—</td><td>self-assigned, признак проблемы с DHCP</td></tr></tbody></table></div>
+        <p>Диапазон <code>169.254.x.x</code> (APIPA) — важный диагностический признак: если компьютер получил такой адрес, значит DHCP-сервер недоступен. Это первое, что стоит проверить, когда «сеть есть, но интернета нет».</p>
+        <h2 id="shlyuz-po-umolchaniyu">Шлюз по умолчанию</h2>
+        <p>Шлюз — адрес маршрутизатора в той же подсети. Логика проста: если адрес назначения попадает в «свою» подсеть, узел отправляет кадр напрямую по MAC-адресу; если нет — отдаёт кадр шлюзу и просит его разобраться.</p>
+        <p>Из этого следуют две частые ошибки:</p>
+        <ul><li><strong>Шлюз из другой подсети.</strong> Формально настраивается, фактически не работает: узел не может отправить кадр шлюзу, потому что тот за пределами локального сегмента.</li><li><strong>Нет шлюза.</strong> Всё внутри работает, всё снаружи — нет. Симптом ровно такой: пинги по локальным адресам идут, интернет молчит.</li></ul>
+        <h2 id="sluzhebnye-i-gostevye-diapazony">Служебные и гостевые диапазоны</h2>
+        <p>В плане адресации полезно держать разделение по назначению, а не по «где свободно»:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Назначение</th><th scope="col">Пример</th><th scope="col">Почему отдельно</th></tr></thead><tbody><tr><th scope="row">Управление оборудованием</th><td>192.168.250.0/24</td><td>доступ только администраторам</td></tr><tr><th scope="row">Серверы</th><td>192.168.20.0/24</td><td>фиксированные адреса, резерв под рост</td></tr><tr><th scope="row">Рабочие места</th><td>192.168.10.0/23</td><td>DHCP, запас на 500 мест</td></tr><tr><th scope="row">Гости</th><td>192.168.99.0/24</td><td>изоляция и лимиты</td></tr><tr><th scope="row">Точка-точка</th><td>10.255.0.0/30 или /31</td><td>без широковещательного адреса</td></tr></tbody></table></div>
+        <p>Для линков между маршрутизаторами по RFC 3021 используют /31: два адреса, ни одного занятого служебно. Это экономит адреса на магистралях с десятками сессий.</p>
+        <h2 id="proverka-na-meste">Проверка на месте</h2>
+        <pre class="kn-code"><code>ip address show            # адрес и маска
+ip route                   # шлюз по умолчанию и маршруты
+ip neigh                   # какие MAC выучены в сегменте
+ping -c 3 &lt;шлюз&gt;           # доступен ли шлюз
+traceroute 8.8.8.8         # где обрывается путь</code></pre>
+        <p>Порядок проверки важен: сначала адрес и маска, потом шлюз, потом маршрут. Если адрес получен от DHCP не из той подсети, остальное диагностировать бессмысленно.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Адрес имеет смысл только с маской: она отделяет сеть от узла.</li><li>В каждой подсети два адреса заняты — сетевой и широковещательный.</li><li>Без шлюза узел не выходит за пределы сегмента; шлюз обязан быть в той же подсети.</li><li><code>169.254.x.x</code> — сигнал, что DHCP недоступен.</li></ul>
+        <p>Как считать подсети — <a href="/blog/materials/raschet-podsetey.html"></a>, как планировать диапазоны — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-ipam.html"><strong>План адресации: сеть начинается с таблицы</strong><span>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</span></a></li>
+        <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+        <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Адресация и маршрутизация</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/raschet-podsetey.html"><strong>Расчёт подсетей без калькулятора</strong><span>Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.</span></a></li>
+        <li><a href="/blog/materials/staticheskaya-marshrutizaciya.html"><strong>Статическая маршрутизация и шлюз по умолчанию</strong><span>Маршрут — это правило «адресата искать там-то»; статика проста, предсказуема и остаётся единственным способом задать поведение сети в филиале без динамических протоколов.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>3 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc791" target="_blank" rel="noopener">RFC 791: Internet Protocol</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener">RFC 1918: Address Allocation for Private Internets</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc3021" target="_blank" rel="noopener">RFC 3021: Using 31-Bit Prefixes on IPv4 Point-to-Point Links</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора →</a><a href="/blog/materials/stp-i-petli.html">← STP: почему порт сам выключился</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

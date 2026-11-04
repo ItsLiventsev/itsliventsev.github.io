@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Мониторинг инфраструктуры · Учебные материалы · itsliventsev</title>
+<meta name="description" content="Мониторинг — это ответ на вопрос «что сломалось раньше, чем позвонил пользователь»; набор метрик важнее выбора инструмента, а плохой алерт хуже его отсутствия.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Мониторинг инфраструктуры · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="Мониторинг — это ответ на вопрос «что сломалось раньше, чем позвонил пользователь»; набор метрик важнее выбора инструмента, а плохой алерт хуже его отсутствия.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Мониторинг инфраструктуры · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="Мониторинг — это ответ на вопрос «что сломалось раньше, чем позвонил пользователь»; набор метрик важнее выбора инструмента, а плохой алерт хуже его отсутствия.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Мониторинг инфраструктуры · Учебные материалы","description":"Мониторинг — это ответ на вопрос «что сломалось раньше, чем позвонил пользователь»; набор метрик важнее выбора инструмента, а плохой алерт хуже его отсутствия.","url":"https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Мониторинг инфраструктуры · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/monitoring-infrastruktury.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html" aria-current="page">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#systems">Системы и серверы</a><span aria-hidden="true">/</span><span aria-current="page">Эксплуатация</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#systems">02 Системы и серверы</a>
+        <span aria-hidden="true">·</span>
+        <span>Эксплуатация</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Мониторинг инфраструктуры</h1>
+      <p class="kn-def">Мониторинг — это ответ на вопрос «что сломалось раньше, чем позвонил пользователь»; набор метрик важнее выбора инструмента, а плохой алерт хуже его отсутствия.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>выбирать метрики по симптомам, а не по возможностям инструмента;</li><li>настраивать опрос доступности и порогов;</li><li>не превращать дежурство в поток уведомлений.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="chto-monitorit-v-pervuyu-ochered">Что мониторить в первую очередь</h2>
+        <p>Хороший набор отвечает на четыре вопроса: жива ли служба, видит ли её пользователь, хватает ли ресурсов, не деградирует ли она.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Уровень</th><th scope="col">Что смотрим</th><th scope="col">Как проверяем</th></tr></thead><tbody><tr><th scope="row">Доступность</th><td>пинг, порт, HTTP-код</td><td>ICMP, TCP-connect, HTTP-запрос</td></tr><tr><th scope="row">Ресурсы</th><td>CPU, память, диск, сеть</td><td>агент на хосте</td></tr><tr><th scope="row">Служба</th><td>очередь, ошибки, время ответа</td><td>метрики приложения</td></tr><tr><th scope="row">Пользователь</th><td>реальный сценарий (вход, запрос)</td><td>синтетическая проверка</td></tr></tbody></table></div>
+        <p>Первая строка — не «пинг сервера», а «открывается ли нужный порт и отдаётся ли правильный код». Сервер может пинговаться, а служба — не работать.</p>
+        <h2 id="metriki-kotorye-deystvitelno-govoryat">Метрики, которые действительно говорят</h2>
+        <ul><li><strong>Заполнение диска</strong> — в процентах и в абсолютных значениях, с прогнозом: «закончится через 6 дней» полезнее, чем «сейчас 92 %».</li><li><strong>Время ответа</strong> — не среднее, а 95-й процентиль: среднее скрывает деградацию.</li><li><strong>Ошибки</strong> — доля 5xx или отказов соединения, а не абсолютное число.</li><li><strong>Очередь</strong> — длина и скорость роста: это метрика, которая предсказывает отказ.</li><li><strong>Насыщение</strong> — CPU load, но с оговоркой: на виртуалке load 4 при двух vCPU — уже проблема.</li></ul>
+        <h2 id="porogi-i-alert-kotoryy-ne-budit-zrya">Пороги и «алерт, который не будит зря»</h2>
+        <p>Плохой алерт — тот, который срабатывает на нормальную работу. Его отключают, и вместе с ним отключается всё остальное. Поэтому:</p>
+        <ul><li>Порог ставится по поведению, а не по «красивой цифре»: загрузка 85 % днём — норма, в 3 часа ночи — сигнал.</li><li>Обязателен интервал подтверждения: срабатывание только если условие держится 5–10 минут.</li><li>Один алерт — одно действие. «Что мне сейчас сделать» должно быть понятно из текста.</li><li>У каждого алерта есть владелец: без владельца он не нужен.</li></ul>
+        <pre class="kn-code"><code># пример правила: диск заполняется
+- alert: DiskWillFillIn4Hours
+  expr: predict_linear(node_filesystem_avail_bytes[6h], 4*3600) &lt; 0
+  for: 10m
+  labels:
+    severity: warning
+  annotations:
+    summary: &quot;Диск {{ $labels.mountpoint }} на {{ $labels.instance }} заполнится за 4 часа&quot;</code></pre>
+        <h2 id="opros-dostupnosti">Опрос доступности</h2>
+        <p>Простейшая база, которая есть в любом инструменте:</p>
+        <pre class="kn-code"><code># проверить порт и код ответа
+curl -sS -o /dev/null -w &#39;%{http_code} %{time_total}\n&#39; https://example.local/health
+# проверить серию пингов
+ping -c 4 -W 2 192.168.10.1
+# посмотреть открытые порты на хосте
+ss -tulpen</code></pre>
+        <p>Смысл не в самом <code>curl</code>, а в том, что проверка должна быть регулярной, с сохранением результата и оповещением при отклонении. Однократный ручной запуск — не мониторинг.</p>
+        <h2 id="zhurnaly-i-metriki-dopolnyayut-drug-druga">Журналы и метрики дополняют друг друга</h2>
+        <p>Метрика говорит «что», журнал — «почему». Пример: время ответа выросло (метрика), в журнале приложения — серия таймаутов к базе (журнал), в логах базы — рост числа блокировок (причина). Поэтому рядом с метриками обязательно должна быть сборка журналов с одинаковыми метками времени — они выставляются синхронизацией времени.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Минимум: доступность службы, ресурсы, ошибки, время ответа, очередь.</li><li>Средние значения обманывают; 95-й процентиль — нет.</li><li>Алерт обязан быть действенным, с интервалом подтверждения и владельцем.</li><li>Метрика отвечает «что», журнал — «почему»; время должно быть синхронизировано.</li></ul>
+        <p>Углублённо: <a href="/blog/kn-monitoring.html">Мониторинг: метрика, симптом и алерт</a>, <a href="/blog/kn-prometheus.html">Prometheus: четыре метрики и алерт</a>, <a href="/blog/materials/proektirovanie-obshey-topologii.html"></a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-monitoring.html"><strong>Мониторинг: метрика, симптом и алерт</strong><span>Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.</span></a></li>
+        <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре метрики и алерт</strong><span>rate и histogram_quantile, почему CPU выше 80% — плохой алерт, что даёт `for: 5m` и как не утонуть в потоке уведомлений.</span></a></li>
+        <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+        <li><a href="/blog/kn-incident.html"><strong>Разбор инцидента: от «всё лежит» к делу</strong><span>Приоритет и коммуникация, «сначала стабилизируй, потом разбирайся», таймлайн, пять почему и постмортем с задачами, а не с выводами.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc8632" target="_blank" rel="noopener">RFC 8632: A YANG Data Model for Alarm Management</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://prometheus.io/docs/practices/" target="_blank" rel="noopener">Prometheus: best practices</a><small>Prometheus</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#systems">раздел «Системы и серверы»</a>
+      <span><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор →</a><a href="/blog/materials/faylovye-sluzhby.html">← Файловые службы и общие папки</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

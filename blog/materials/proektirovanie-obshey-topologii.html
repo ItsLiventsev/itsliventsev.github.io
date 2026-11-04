@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Проектирование топологии сети: с чего начать · Учебные материалы · itsliventsev</title>
+<meta name="description" content="Проект сети начинается не с выбора коммутатора, а с требований: сколько рабочих мест, какие службы, какая нагрузка, что критично — и только потом рисуется схема.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Проектирование топологии сети: с чего начать · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="Проект сети начинается не с выбора коммутатора, а с требований: сколько рабочих мест, какие службы, какая нагрузка, что критично — и только потом рисуется схема.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Проектирование топологии сети: с чего начать · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="Проект сети начинается не с выбора коммутатора, а с требований: сколько рабочих мест, какие службы, какая нагрузка, что критично — и только потом рисуется схема.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Проектирование топологии сети: с чего начать · Учебные материалы","description":"Проект сети начинается не с выбора коммутатора, а с требований: сколько рабочих мест, какие службы, какая нагрузка, что критично — и только потом рисуется схема.","url":"https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Проектирование топологии сети: с чего начать · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/proektirovanie-obshey-topologii.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details open><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html" aria-current="page">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#projects">Проектирование и практика</a><span aria-hidden="true">/</span><span aria-current="page">Проектирование сети</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#projects">05 Проектирование и практика</a>
+        <span aria-hidden="true">·</span>
+        <span>Проектирование сети</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Проектирование топологии сети: с чего начать</h1>
+      <p class="kn-def">Проект сети начинается не с выбора коммутатора, а с требований: сколько рабочих мест, какие службы, какая нагрузка, что критично — и только потом рисуется схема.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>собирать требования до выбора оборудования;</li><li>строить трёхуровневую логику сети и объяснять её;</li><li>проверять проект по чек-листу перед сдачей.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="shag-1-trebovaniya">Шаг 1. Требования</h2>
+        <p>Пока требований нет, любой проект — угадывание. Минимальный набор вопросов:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Вопрос</th><th scope="col">Зачем</th><th scope="col">Пример ответа</th></tr></thead><tbody><tr><th scope="row">Сколько рабочих мест?</th><td>размер подсетей и число портов</td><td>120</td></tr><tr><th scope="row">Какие службы нужны?</th><td>серверный сегмент</td><td>файлы, DHCP, DNS, веб</td></tr><tr><th scope="row">Есть ли гости?</th><td>отдельная зона и изоляция</td><td>да, до 40 устройств</td></tr><tr><th scope="row">Что критично?</th><td>резервирование</td><td>файловый сервер и интернет</td></tr><tr><th scope="row">Какие помещения?</th><td>длины трасс и шкафы</td><td>2 этажа, 3 шкафа</td></tr><tr><th scope="row">Кто обслуживает?</th><td>сложность решения</td><td>один администратор</td></tr></tbody></table></div>
+        <p>Ответы фиксируются письменно: они же станут основой технического задания и критериями приёмки.</p>
+        <h2 id="shag-2-logika-tri-urovnya">Шаг 2. Логика: три уровня</h2>
+        <p>Классическая схема остаётся рабочей:</p>
+        <ul><li><strong>Доступ</strong> — коммутаторы, к которым подключены рабочие места. Дешёвые, много портов, VLAN доступа.</li><li><strong>Распределение</strong> — агрегация шкафов этажа, маршрутизация между VLAN (L3-коммутатор), связь с ядром.</li><li><strong>Ядро</strong> — небольшая зона, где сходятся магистрали и стоят серверы.</li></ul>
+        <p>В малом офисе уровни сжимаются: один L3-коммутатор выполняет роли распределения и ядра. Принцип остаётся: чем ближе к ядру, тем выше требования к надёжности и полосе.</p>
+        <h2 id="shag-3-adresaciya">Шаг 3. Адресация</h2>
+        <p>Адресный план — не «что осталось свободным», а таблица:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Зона</th><th scope="col">Подсеть</th><th scope="col">Размер</th><th scope="col">DHCP</th></tr></thead><tbody><tr><th scope="row">Управление</th><td>10.10.250.0/24</td><td>254</td><td>выключен</td></tr><tr><th scope="row">Серверы</th><td>10.10.20.0/24</td><td>254</td><td>выключен</td></tr><tr><th scope="row">Рабочие места</th><td>10.10.10.0/23</td><td>510</td><td>включён</td></tr><tr><th scope="row">Гости</th><td>10.10.99.0/24</td><td>254</td><td>включён</td></tr><tr><th scope="row">Транзит</th><td>10.10.255.0/30</td><td>2</td><td>выключен</td></tr></tbody></table></div>
+        <p>Проверка: сумма по зонам с запасом 30–40 % не должна превышать выделенный блок. Расчёт размеров — <a href="/blog/materials/raschet-podsetey.html"></a>, пошаговый план — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
+        <h2 id="shag-4-shema">Шаг 4. Схема</h2>
+        <p>На схеме обязательно:</p>
+        <ul><li>каждое устройство с моделью и портами;</li><li>линии с типом кабеля и длиной;</li><li>VLAN и адрес шлюза на каждом сегменте;</li><li>точка выхода в интернет и фильтрация;</li><li>места размещения шкафов.</li></ul>
+        <p>Без VLAN на схеме получается «картинка», а не проект: через месяц никто не вспомнит, в каком VLAN шкаф второго этажа.</p>
+        <h2 id="shag-5-proverka-proekta">Шаг 5. Проверка проекта</h2>
+        <p>Чек-лист, который закрывает большинство ошибок:</p>
+        <ol><li>У каждой подсети есть шлюз и понятное назначение.</li><li>В DHCP-пулах исключены адреса серверов и оборудования.</li><li>Расстояние до любого рабочего места не превышает 90 м по кабелю.</li><li>Гостевая сеть изолирована от служебной.</li><li>Есть план резервного копирования конфигураций оборудования.</li><li>Определено, что мониторится и кто получает оповещения.</li><li>Есть схема L1–L3 и таблица адресов, а не только «файл в голове».</li></ol>
+        <p>Пункт 7 проверяется вопросом: «сможет ли новый администратор восстановить сеть по вашим документам?» Если ответ «нет», проект не закончен.</p>
+        <h2 id="chto-menyaetsya-v-realnosti">Что меняется в реальности</h2>
+        <p>Проект почти всегда корректируется: появился отдел, добавилась камера, понадобилась гостевая зона. Поэтому в нём закладывают:</p>
+        <ul><li>свободные порты (10–20 % на каждом коммутаторе);</li><li>свободные адреса (30–40 % на подсеть);</li><li>свободные VLAN (не занимать номера подряд без запаса);</li><li>запас по питанию и месту в шкафу.</li></ul>
+        <p>Проект без запаса живёт до первого изменения.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Требования собираются до оборудования и фиксируются письменно.</li><li>Логика: доступ, распределение, ядро — в малом офисе сжимаются, но не исчезают.</li><li>Адресный план — таблица с назначением, а не свободные диапазоны.</li><li>Чек-лист приёмки заканчивается документом, по которому сеть можно восстановить.</li></ul>
+        <p>Смежные темы: <a href="/blog/materials/ip-adresaciya.html"></a>, <a href="/blog/materials/vlan-i-trunk.html"></a>, <a href="/blog/materials/monitoring-infrastruktury.html"></a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-ipam.html"><strong>План адресации: сеть начинается с таблицы</strong><span>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</span></a></li>
+        <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+        <li><a href="/blog/kn-documentation.html"><strong>Документация и регламенты: что спасает ночью</strong><span>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</span></a></li>
+        <li><a href="/blog/kn-monitoring.html"><strong>Мониторинг: метрика, симптом и алерт</strong><span>Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.iso.org/standard/66182.html" target="_blank" rel="noopener">ISO/IEC 11801: Generic cabling for customer premises</a><small>ISO</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener">RFC 1918: Address Allocation for Private Internets</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#projects">раздел «Проектирование и практика»</a>
+      <span><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка →</a><a href="/blog/materials/uyazvimost-ftp.html">← Исследование протокола FTP: где он не защищён</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>DHCP: как устройство получает адрес · Учебные материалы · itsliventsev</title>
+<meta name="description" content="Аренда адреса — это четыре сообщения и набор таймеров; понимание процесса объясняет, почему компьютер остался без сети и почему в подсети кончились адреса.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/dhcp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="DHCP: как устройство получает адрес · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="Аренда адреса — это четыре сообщения и набор таймеров; понимание процесса объясняет, почему компьютер остался без сети и почему в подсети кончились адреса.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/dhcp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DHCP: как устройство получает адрес · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="Аренда адреса — это четыре сообщения и набор таймеров; понимание процесса объясняет, почему компьютер остался без сети и почему в подсети кончились адреса.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DHCP: как устройство получает адрес · Учебные материалы","description":"Аренда адреса — это четыре сообщения и набор таймеров; понимание процесса объясняет, почему компьютер остался без сети и почему в подсети кончились адреса.","url":"https://itsliventsev.github.io/blog/materials/dhcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/dhcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"DHCP: как устройство получает адрес · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/dhcp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html" aria-current="page">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Службы сети</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Службы сети</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>база</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>DHCP: как устройство получает адрес</h1>
+      <p class="kn-def">Аренда адреса — это четыре сообщения и набор таймеров; понимание процесса объясняет, почему компьютер остался без сети и почему в подсети кончились адреса.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>описывать четыре шага аренды и роль широковещания;</li><li>настраивать область и исключения без ошибок планирования;</li><li>находить причину «адрес 169.254» за одну проверку.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="chetyre-shaga">Четыре шага</h2>
+        <p>Устройство без адреса не знает, где сервер DHCP, поэтому первый шаг — широковещательный.</p>
+        <ol><li><strong>Discover</strong> — клиент отправляет broadcast: «есть ли здесь DHCP-сервер?».</li><li><strong>Offer</strong> — сервер отвечает предложением: адрес, маска, шлюз, DNS, срок аренды.</li><li><strong>Request</strong> — клиент просит именно этот адрес (широковещательно, чтобы о решении узнали все серверы).</li><li><strong>ACK</strong> — сервер подтверждает, и клиент применяет настройки.</li></ol>
+        <p>Все четыре сообщения — UDP: клиент с порта 68, сервер на порт 67. Широковещательность шага 1 и 3 объясняет, почему DHCP-сервер должен быть в том же сегменте или за relay-агентом.</p>
+        <h2 id="rele-mezhdu-vlan">Реле между VLAN</h2>
+        <p>Сервер DHCP обычно один на организацию, а подсетей много. Чтобы запрос из VLAN 20 дошёл до сервера в VLAN 10, на маршрутизаторе настраивают relay (DHCP helper):</p>
+        <pre class="kn-code"><code>interface gi0/0.20
+ ip helper-address 192.168.10.5</code></pre>
+        <p>Маршрутизатор получает broadcast, превращает его в unicast к указанному серверу и запоминает, из какой подсети пришёл запрос. Сервер выбирает область по адресу шлюза (giaddr), а не по адресу клиента — клиент своего адреса ещё не имеет.</p>
+        <p>Если relay не настроен, устройство в новом VLAN не получит адрес никогда, хотя в соседнем VLAN всё работает. Это одна из самых частых ошибок при добавлении подсети.</p>
+        <h2 id="taymery-arendy">Таймеры аренды</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Таймер</th><th scope="col">Значение по умолчанию</th><th scope="col">Что происходит</th></tr></thead><tbody><tr><th scope="row">T1 (renew)</th><td>50 % срока аренды</td><td>клиент просит продлить у того же сервера</td></tr><tr><th scope="row">T2 (rebind)</th><td>87,5 % срока аренды</td><td>клиент рассылает запрос всем серверам</td></tr><tr><th scope="row">Истечение</th><td>100 %</td><td>адрес освобождается, устройство теряет сеть</td></tr></tbody></table></div>
+        <p>При аренде на 8 часов продление начнётся через 4 часа, а в 7 часов клиент начнёт искать любой сервер. Пока устройство выключено, адрес не продлевается — именно поэтому после долгого простоя машина может получить другой адрес.</p>
+        <h2 id="nastroyka-oblasti">Настройка области</h2>
+        <pre class="kn-code"><code>ip dhcp pool office
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.10.10 192.168.10.11
+ lease 0 8
+ domain-name example.local
+ip dhcp excluded-address 192.168.10.1 192.168.10.20</code></pre>
+        <p>Две строки критичны:</p>
+        <ul><li><strong>excluded-address</strong> — диапазон, который сервер не выдаёт. Туда входят шлюз, серверы, принтеры, камеры и оборудование с фиксированными адресами.</li><li><strong>lease</strong> — срок аренды. Слишком короткий создаёт лишний трафик, слишком длинный мешает переиспользовать адреса в гостевой сети.</li></ul>
+        <p>В Linux сервер настраивается через <code>dnsmasq</code> или <code>isc-dhcp-server</code>:</p>
+        <pre class="kn-code"><code># dnsmasq
+dhcp-range=192.168.10.50,192.168.10.200,12h
+dhcp-option=3,192.168.10.1
+dhcp-option=6,192.168.10.10</code></pre>
+        <h2 id="diagnostika">Диагностика</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Симптом</th><th scope="col">Причина</th></tr></thead><tbody><tr><th scope="row">адрес 169.254.x.x</th><td>сервер недоступен или не отвечает</td></tr><tr><th scope="row">адрес из чужой подсети</th><td>в сегменте второй DHCP-сервер</td></tr><tr><th scope="row">адрес есть, интернета нет</th><td>неверный шлюз или DNS в опции</td></tr><tr><th scope="row">«кончились адреса»</th><td>пул меньше числа устройств или много долгих аренд</td></tr></tbody></table></div>
+        <p>Команды:</p>
+        <pre class="kn-code"><code>ip address show                 # какой адрес фактически
+sudo dhclient -v eth0           # запрос с раскрытием диалога
+journalctl -u dhcpd -n 50       # что видел сервер
+sudo tcpdump -ni eth0 port 67 or port 68   # полный диалог</code></pre>
+        <p><code>169.254.x.x</code> (APIPA) — самый быстрый сигнал: адрес не получен, сервер не ответил. Дальше вопрос один: сервер, релей или VLAN.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Аренда — четыре сообщения: Discover, Offer, Request, ACK.</li><li>Relay нужен, если сервер в другом сегменте.</li><li>Таймеры T1/T2 управляют продлением; выключенное устройство не продлевает адрес.</li><li>Исключить из пула оборудование с фиксированными адресами — обязательно.</li></ul>
+        <p>Технические детали — в заметке <a href="/blog/kn-dhcp.html">DHCP: аренда адреса на четыре шага</a>, продолжение пути запроса — <a href="/blog/materials/dns.html"></a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
+        <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
+        <li><a href="/blog/kn-ipam.html"><strong>План адресации: сеть начинается с таблицы</strong><span>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</span></a></li>
+        <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Службы сети</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/dns.html"><strong>DNS: имена, зоны и резолверы</strong><span>DNS переводит имя в адрес по цепочке от корневых серверов до зоны организации; почти каждое «интернета нет» начинается с проверки, разрешается ли имя.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc2131" target="_blank" rel="noopener">RFC 2131: Dynamic Host Configuration Protocol</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc2132" target="_blank" rel="noopener">RFC 2132: DHCP Options and BOOTP Vendor Extensions</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы →</a><a href="/blog/materials/staticheskaya-marshrutizaciya.html">← Статическая маршрутизация и шлюз по умолчанию</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

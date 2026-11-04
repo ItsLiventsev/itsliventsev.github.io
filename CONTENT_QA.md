@@ -49,7 +49,7 @@
 
 - [x] Хлебные крошки на страницах заметок и рубрик (строит `shell.js`).
 - [x] `blog/topics.html` — указатель рубрик, `blog/topics/<zone>.html` — шесть страниц.
-- [x] `blog/graph.html` — граф плюс таблица связей как текстовый дубль.
+- [x] `blog/materials.html` — учебные материалы с левым wiki-деревом; `blog/graph.html` — редирект.
 - [x] RSS: новые записи в `feed.xml` с тегами в `<category>`; `sitemap.xml` пересобран.
 - [x] `assets/search-index.json`: 122 записи, ни одна не короче 200 символов, все url существуют.
 

@@ -43,8 +43,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build knowledge base (notes, topics, graph, blog feed)
+      - name: Build knowledge base (notes, topics, blog feed)
         run: node scripts/build-knowledge.js
+
+      - name: Build learning materials (wiki tree, topic pages)
+        run: node scripts/build-materials.js
 
       - name: Build static lab text and catalog lists
         run: |

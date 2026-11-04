@@ -688,18 +688,6 @@
     "status": "published"
   },
   {
-    "slug": "graph",
-    "file": "graph.html",
-    "title": "Граф связей",
-    "excerpt": "Граф связей сайта: 43 заметки базы знаний и 26 стендов связаны 187 связей — перекрёстные ссылки заметок и мост «теория ↔ практика».",
-    "date": "",
-    "type": "note",
-    "tags": [],
-    "readtime": "",
-    "source": "",
-    "status": "published"
-  },
-  {
     "slug": "topics",
     "file": "topics.html",
     "title": "Рубрики заметок",

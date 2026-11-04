@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Расчёт подсетей без калькулятора · Учебные материалы · itsliventsev</title>
+<meta name="description" content="Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/raschet-podsetey.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Расчёт подсетей без калькулятора · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/raschet-podsetey.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Расчёт подсетей без калькулятора · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Расчёт подсетей без калькулятора · Учебные материалы","description":"Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.","url":"https://itsliventsev.github.io/blog/materials/raschet-podsetey.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/raschet-podsetey.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Расчёт подсетей без калькулятора · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/raschet-podsetey.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html" aria-current="page">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Адресация и маршрутизация</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Адресация и маршрутизация</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Расчёт подсетей без калькулятора</h1>
+      <p class="kn-def">Деление на подсети — это арифметика степеней двойки; один раз поняв связь маски с количеством адресов, вы перестанете ошибаться в планировании.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>считать количество адресов по префиксу и наоборот;</li><li>делить сеть на подсети заданного размера без ошибок;</li><li>выбирать размер подсети с запасом, а не «впритык».</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="odna-tablica-kotoraya-zakryvaet-vopros">Одна таблица, которая закрывает вопрос</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Префикс</th><th scope="col">Маска</th><th scope="col">Всего адресов</th><th scope="col">Для узлов</th></tr></thead><tbody><tr><th scope="row">/30</th><td>255.255.255.252</td><td>4</td><td>2</td></tr><tr><th scope="row">/29</th><td>255.255.255.248</td><td>8</td><td>6</td></tr><tr><th scope="row">/28</th><td>255.255.255.240</td><td>16</td><td>14</td></tr><tr><th scope="row">/27</th><td>255.255.255.224</td><td>32</td><td>30</td></tr><tr><th scope="row">/26</th><td>255.255.255.192</td><td>64</td><td>62</td></tr><tr><th scope="row">/25</th><td>255.255.255.128</td><td>128</td><td>126</td></tr><tr><th scope="row">/24</th><td>255.255.255.0</td><td>256</td><td>254</td></tr><tr><th scope="row">/23</th><td>255.255.254.0</td><td>512</td><td>510</td></tr><tr><th scope="row">/22</th><td>255.255.252.0</td><td>1024</td><td>1022</td></tr></tbody></table></div>
+        <p>Правило одно: количество адресов равно 2 в степени (32 − префикс), для узлов вычитаем два — сетевой и широковещательный. Исключение — /31: два адреса, оба пригодны для узлов на point-to-point линках.</p>
+        <h2 id="delenie-na-podseti">Деление на подсети</h2>
+        <p>Задача: сеть <code>192.168.10.0/24</code> нужно разделить на четыре подсети.</p>
+        <p>Шаг 1. Сколько бит добавить? Четыре подсети — это 2², значит два бита. Префикс становится /26. Шаг 2. Каков размер каждой? 2^(32−26) = 64 адреса. Шаг 3. Выписать диапазоны с шагом 64:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Подсеть</th><th scope="col">Диапазон узлов</th><th scope="col">Широковещательный</th></tr></thead><tbody><tr><th scope="row">192.168.10.0/26</th><td>.1 – .62</td><td>.63</td></tr><tr><th scope="row">192.168.10.64/26</th><td>.65 – .126</td><td>.127</td></tr><tr><th scope="row">192.168.10.128/26</th><td>.129 – .190</td><td>.191</td></tr><tr><th scope="row">192.168.10.192/26</th><td>.193 – .254</td><td>.255</td></tr></tbody></table></div>
+        <p>Проверка: 4 × 62 = 248 пригодных адреса из 254 исходных — разница ушла на служебные адреса четырёх подсетей вместо двух. Каждое деление «съедает» по два адреса, и это нормально.</p>
+        <h2 id="neravnye-podseti-vlsm">Неравные подсети (VLSM)</h2>
+        <p>Когда отделы разного размера, делить на равные — расточительство. VLSM позволяет нарезать по потребности: сначала самая большая подсеть, потом следующая по размеру.</p>
+        <p>Пример для <code>10.20.0.0/22</code> (1024 адреса):</p>
+        <ol><li>Серверы, 200 адресов → ближайшая степень двойки 256 → <code>/24</code> = <code>10.20.0.0/24</code></li><li>Рабочие места, 500 адресов → 512 → <code>/23</code> = <code>10.20.2.0/23</code></li><li>Гости, 100 адресов → 128 → <code>/25</code> = <code>10.20.4.0/25</code></li><li>Транзит, 2 адреса → <code>/30</code> = <code>10.20.4.4/30</code></li></ol>
+        <p>Итого занято 256 + 512 + 128 + 4 = 900 из 1024, свободно 124 адреса под рост. Если бы делили на четыре равные /24, не хватило бы уже на втором шаге.</p>
+        <h2 id="zapas-kotoryy-nado-zakladyvat">Запас, который надо закладывать</h2>
+        <p>Планировщики сетей сходятся в одном правиле: подсеть не должна заполняться более чем на 60–70 %. Причины простые:</p>
+        <ul><li>DHCP-пул должен иметь свободные адреса для новых устройств.</li><li>Служебные адреса (принтеры, камеры, контроллеры) часто выдают статически «поверх» DHCP.</li><li>Гости приходят волной, а резервировать адреса заранее дешевле, чем перенастраивать подсеть.</li></ul>
+        <p>Поэтому «нужно 50 мест — беру /26 на 62» — плохой расчёт: через месяц будет 70 устройств. Нужно 50 — берётся /25 на 126.</p>
+        <h2 id="bystraya-proverka-na-meste">Быстрая проверка на месте</h2>
+        <pre class="kn-code"><code># какой адрес сети у конкретного IP
+ipcalc 192.168.10.130/26
+# или без ipcalc — арифметикой в shell
+ip -4 addr show eth0
+ip route get 192.168.10.100</code></pre>
+        <p>В <code>ipcalc</code> смотрите три строки: Network, Broadcast и HostMin/HostMax. Если HostMin/HostMax не совпадают с вашим планом, ошибка в префиксе, а не в «глючном DHCP».</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Адресов в подсети — 2^(32−префикс), для узлов на два меньше.</li><li>Деление: прибавляем биты под подсети, шаг считаем как размер новой подсети.</li><li>VLSM: сначала крупные подсети, потом мелкие.</li><li>Закладывать запас: заполнение выше 70 % — повод для следующей подсети.</li></ul>
+        <p>Планирование диапазонов — <a href="/blog/materials/ip-adresaciya.html"></a>, порядок в таблице адресов — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-ipam.html"><strong>План адресации: сеть начинается с таблицы</strong><span>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</span></a></li>
+        <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+        <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Адресация и маршрутизация</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/ip-adresaciya.html"><strong>IP-адресация: адрес, маска, шлюз</strong><span>IP-адрес без маски бессмысленен: маска отделяет адрес сети от адреса узла, а шлюз — единственный способ выйти за пределы своего сегмента.</span></a></li>
+        <li><a href="/blog/materials/staticheskaya-marshrutizaciya.html"><strong>Статическая маршрутизация и шлюз по умолчанию</strong><span>Маршрут — это правило «адресата искать там-то»; статика проста, предсказуема и остаётся единственным способом задать поведение сети в филиале без динамических протоколов.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc4632" target="_blank" rel="noopener">RFC 4632: Classless Inter-domain Routing (CIDR)</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc3021" target="_blank" rel="noopener">RFC 3021: 31-Bit Prefixes on Point-to-Point Links</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию →</a><a href="/blog/materials/ip-adresaciya.html">← IP-адресация: адрес, маска, шлюз</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

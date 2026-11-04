@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Исследование протокола FTP: где он не защищён · Учебные материалы · itsliventsev</title>
+<meta name="description" content="FTP передаёт пароль открытым текстом и держит отдельный канал данных; обе особенности — не «недостаток реализации», а свойства протокола, и именно их разбирают в учебном исследовании.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Исследование протокола FTP: где он не защищён · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="FTP передаёт пароль открытым текстом и держит отдельный канал данных; обе особенности — не «недостаток реализации», а свойства протокола, и именно их разбирают в учебном исследовании.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Исследование протокола FTP: где он не защищён · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="FTP передаёт пароль открытым текстом и держит отдельный канал данных; обе особенности — не «недостаток реализации», а свойства протокола, и именно их разбирают в учебном исследовании.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Исследование протокола FTP: где он не защищён · Учебные материалы","description":"FTP передаёт пароль открытым текстом и держит отдельный канал данных; обе особенности — не «недостаток реализации», а свойства протокола, и именно их разбирают в учебном исследовании.","url":"https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Исследование протокола FTP: где он не защищён · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/uyazvimost-ftp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html" aria-current="page">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#security">Безопасность</a><span aria-hidden="true">/</span><span aria-current="page">Исследования</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#security">04 Безопасность</a>
+        <span aria-hidden="true">·</span>
+        <span>Исследования</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Исследование протокола FTP: где он не защищён</h1>
+      <p class="kn-def">FTP передаёт пароль открытым текстом и держит отдельный канал данных; обе особенности — не «недостаток реализации», а свойства протокола, и именно их разбирают в учебном исследовании.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>объяснять, почему FTP нельзя считать защищённым;</li><li>показывать на практике, что видно в трафике;</li><li>выбирать замену и настраивать её.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="dva-svoystva-protokola">Два свойства протокола</h2>
+        <p><strong>Первое: управляющий канал открыт.</strong> Команды <code>USER</code> и <code>PASS</code> идут в открытом виде. Любой, кто видит трафик (порт-зеркало, точка доступа, промежуточный узел), читает пароль целиком.</p>
+        <p><strong>Второе: отдельный канал данных.</strong> Для передачи файла FTP открывает второе соединение: либо сервер подключается к клиенту (active mode), либо клиент к серверу (passive mode). Порты второго канала динамические, и именно из-за этого FTP тяжело фильтровать.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Режим</th><th scope="col">Кто инициирует данные</th><th scope="col">Проблема</th></tr></thead><tbody><tr><th scope="row">Active</th><td>сервер → клиент</td><td>блокируется NAT и файрволом клиента</td></tr><tr><th scope="row">Passive</th><td>клиент → сервер</td><td>нужен диапазон портов на сервере</td></tr><tr><th scope="row">Explicit FTPS (AUTH TLS)</th><td>как в FTP</td><td>канал шифруется, порт 21</td></tr><tr><th scope="row">Implicit FTPS</th><td>как в FTP</td><td>порт 990, устаревающая схема</td></tr></tbody></table></div>
+        <h2 id="chto-vidno-v-trafike">Что видно в трафике</h2>
+        <pre class="kn-code"><code>tcpdump -ni any port 21 -A | grep -Ei &#39;USER|PASS|RETR|STOR&#39;</code></pre>
+        <p>В выводе появятся строки вида:</p>
+        <pre class="kn-code"><code>USER operator
+PASS Qwerty123
+230 Login successful
+RETR report.xlsx
+150 Opening BINARY mode data connection</code></pre>
+        <p>Этого достаточно, чтобы понять масштаб: пароль читается без каких-либо инструментов взлома. Отсюда правило — FTP в открытом виде допустим только внутри изолированного сегмента и только для неконфиденциальных файлов.</p>
+        <h2 id="chto-proverit-v-issledovanii">Что проверить в исследовании</h2>
+        <ol><li><strong>Открытый управляющий канал.</strong> Показать <code>USER</code>/<code>PASS</code> в дампе.</li><li><strong>Режим данных.</strong> Сравнить active и passive: в passive клиент видит соединение на случайный порт, в active — попытку сервера подключиться к клиенту.</li><li><strong>Анонимный вход.</strong> Проверить, разрешён ли <code>anonymous</code> — часто включён «по умолчанию» и забыт.</li><li><strong>Права.</strong> Может ли пользователь выйти за пределы своего каталога (проверка на попытку <code>CWD ../../</code>).</li><li><strong>Брутфорс.</strong> Оценить, есть ли ограничение попыток: без него пароль подбирается за часы.</li><li><strong>Шифрование.</strong> Проверить, поддерживает ли сервер <code>AUTH TLS</code>.</li></ol>
+        <h2 id="kak-dolzhno-byt">Как должно быть</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Что</th><th scope="col">Как правильно</th></tr></thead><tbody><tr><th scope="row">Передача данных</th><td>SFTP (поверх SSH) или FTPS</td></tr><tr><th scope="row">Аутентификация</th><td>ключи (SFTP) вместо паролей</td></tr><tr><th scope="row">Анонимный доступ</th><td>выключен, если не нужен намеренно</td></tr><tr><th scope="row">Ограничение попыток</th><td>fail2ban или аналог</td></tr><tr><th scope="row">Каталог</th><td>chroot, выход за пределы запрещён</td></tr></tbody></table></div>
+        <pre class="kn-code"><code># SFTP-доступ через отдельного пользователя без shell
+useradd -m -s /usr/sbin/nologin sftpuser
+# в /etc/ssh/sshd_config
+# Match User sftpuser
+#   ForceCommand internal-sftp
+#   ChrootDirectory /srv/sftp/%u</code></pre>
+        <h2 id="chem-zamenit-ftp">Чем заменить FTP</h2>
+        <ul><li><strong>SFTP</strong> — тот же SSH, порт 22, шифрование и ключи «бесплатно», удобно для скриптов.</li><li><strong>rsync по SSH</strong> — для больших объёмов и инкрементальной передачи.</li><li><strong>HTTPS</strong> — для раздачи файлов пользователям: браузер уже умеет.</li></ul>
+        <p>Практический вывод: FTP остаётся в учебной программе как история и как пример «протокол без безопасности», а в работе его место занимают SFTP и HTTPS.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>FTP передаёт пароль открытым текстом и использует отдельный канал данных.</li><li>Passive-режим нужен из-за NAT, но требует диапазона портов на сервере.</li><li>Проверка уязвимости — это демонстрация в трафике, а не пересказ теории.</li><li>Замена: SFTP с ключами, FTPS при необходимости, HTTPS для пользователей.</li></ul>
+        <p>Шифрование подробнее — <a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка</a>, фильтрация — <a href="/blog/materials/acl-i-firewall.html"></a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-tls.html"><strong>Сертификаты и TLS 1.3: одна поездка</strong><span>Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, forward secrecy в TLS 1.3 и что смотреть в ошибке.</span></a></li>
+        <li><a href="/blog/kn-netfilter.html"><strong>Файрвол в Linux: nftables и порядок правил</strong><span>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</span></a></li>
+        <li><a href="/blog/kn-packet.html"><strong>tcpdump: как читать пакет, а не гадать</strong><span>Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>3 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc959" target="_blank" rel="noopener">RFC 959: File Transfer Protocol</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc4217" target="_blank" rel="noopener">RFC 4217: Securing FTP with TLS</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://csrc.nist.gov/pubs/sp/800/52/r2/final" target="_blank" rel="noopener">NIST SP 800-52 Rev. 2: Guidelines for TLS</a><small>NIST</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#security">раздел «Безопасность»</a>
+      <span><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать →</a><a href="/blog/materials/analiz-trafika.html">← Анализ трафика: что показывает сниффер</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

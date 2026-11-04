@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "updated": "2026-11-04",
+  "about": "Дерево учебных материалов. Источник правды для страниц /blog/materials/*.html и левого wiki-меню. Персональных данных нет и быть не должно: только темы, теория, практикумы и задачи.",
+  "sections": [
+    {
+      "id": "networks",
+      "num": "01",
+      "title": "Сети и передача данных",
+      "short": "кабель, кадр, адрес, маршрут",
+      "about": "От витой пары и коммутатора до маршрутизации и NAT: как данные находят адресата и где именно ломается связь.",
+      "groups": [
+        {
+          "id": "networks-basics",
+          "title": "Основы сетей",
+          "items": [
+            "osnovy-setey",
+            "model-osi",
+            "linii-svyazi-i-kabely"
+          ],
+          "planned": []
+        },
+        {
+          "id": "networks-l2",
+          "title": "Коммутация и VLAN",
+          "items": [
+            "kommutaciya-i-switch",
+            "vlan-i-trunk",
+            "stp-i-petli"
+          ],
+          "planned": [
+            "lacp",
+            "agregaciya-kanalov"
+          ]
+        },
+        {
+          "id": "networks-l3",
+          "title": "Адресация и маршрутизация",
+          "items": [
+            "ip-adresaciya",
+            "raschet-podsetey",
+            "staticheskaya-marshrutizaciya"
+          ],
+          "planned": [
+            "ospf",
+            "bgp-politika",
+            "ipv6"
+          ]
+        },
+        {
+          "id": "networks-services",
+          "title": "Службы сети",
+          "items": [
+            "dhcp",
+            "dns"
+          ],
+          "planned": [
+            "nat-i-dostup-v-internet",
+            "ntp-i-vremya"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "num": "02",
+      "title": "Системы и серверы",
+      "short": "ОС, домен, файлы, доступ",
+      "about": "Рабочая станция, сервер, каталог и права: то, что администратор трогает каждый день.",
+      "groups": [
+        {
+          "id": "systems-os",
+          "title": "Операционные системы",
+          "items": [
+            "ustanovka-i-nastroyka-os"
+          ],
+          "planned": [
+            "linux-osnovy",
+            "windows-osnovy",
+            "periferiya-i-po"
+          ]
+        },
+        {
+          "id": "systems-directory",
+          "title": "Каталог и учётные записи",
+          "items": [
+            "ad-ds"
+          ],
+          "planned": [
+            "gruppy-i-ou",
+            "grouppolicy",
+            "prava-dostupa-ntfs"
+          ]
+        },
+        {
+          "id": "systems-storage",
+          "title": "Данные и печать",
+          "items": [
+            "faylovye-sluzhby"
+          ],
+          "planned": [
+            "pechat-i-skanirovanie",
+            "diski-i-tomy"
+          ]
+        },
+        {
+          "id": "systems-monitoring",
+          "title": "Эксплуатация",
+          "items": [
+            "monitoring-infrastruktury"
+          ],
+          "planned": [
+            "rezevnoe-kopirovanie",
+            "diagnostika-pk"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "virtualization",
+      "num": "03",
+      "title": "Виртуализация и контейнеры",
+      "short": "гипервизор, Docker, Kubernetes",
+      "about": "Виртуальная машина, контейнер и оркестратор: как из одного сервера получить управляемую среду.",
+      "groups": [
+        {
+          "id": "virt-vm",
+          "title": "Виртуальные машины",
+          "items": [
+            "virtualizaciya-osnovy"
+          ],
+          "planned": [
+            "gipervizory",
+            "parametry-vm",
+            "migraciya-i-rezerv-vm",
+            "pxe-i-ustanovka-po-seti"
+          ]
+        },
+        {
+          "id": "virt-docker",
+          "title": "Контейнеры",
+          "items": [
+            "docker-osnovy"
+          ],
+          "planned": [
+            "docker-obraz-i-sloi",
+            "docker-seti",
+            "docker-bezopasnost",
+            "docker-swarm"
+          ]
+        },
+        {
+          "id": "virt-k8s",
+          "title": "Kubernetes",
+          "items": [
+            "kubernetes-osnovy"
+          ],
+          "planned": [
+            "kubernetes-klaster",
+            "kubernetes-pod",
+            "kubernetes-deploy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "num": "04",
+      "title": "Безопасность",
+      "short": "фильтрация, трафик, уязвимости",
+      "about": "Что именно защищают, чем смотрят трафик и как проверяют протокол на прочность.",
+      "groups": [
+        {
+          "id": "security-access",
+          "title": "Доступ и фильтрация",
+          "items": [
+            "acl-i-firewall"
+          ],
+          "planned": [
+            "bezopasnost-setey-osnovy",
+            "vpn-i-udalennyy-dostup"
+          ]
+        },
+        {
+          "id": "security-traffic",
+          "title": "Трафик",
+          "items": [
+            "analiz-trafika"
+          ],
+          "planned": [
+            "zahvat-i-razbor-paketov"
+          ]
+        },
+        {
+          "id": "security-research",
+          "title": "Исследования",
+          "items": [
+            "uyazvimost-ftp"
+          ],
+          "planned": [
+            "uyazvimost-http",
+            "zaschita-dostupa-nap"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "num": "05",
+      "title": "Проектирование и практика",
+      "short": "ТЗ, топология, смета, защита",
+      "about": "Полный цикл проекта сети и рабочих мест: от требований и топологии до сметы, документации и защиты решения.",
+      "groups": [
+        {
+          "id": "projects-design",
+          "title": "Проектирование сети",
+          "items": [
+            "proektirovanie-obshey-topologii"
+          ],
+          "planned": [
+            "fizicheskaya-topologiya",
+            "logicheskaya-topologiya",
+            "dokumentirovanie-seti"
+          ]
+        },
+        {
+          "id": "projects-works",
+          "title": "Практикумы",
+          "items": [
+            "praktikum-obzhim-vitoy-pary"
+          ],
+          "planned": [
+            "praktikum-montazh-shkafa",
+            "praktikum-prokladka-trass",
+            "praktikum-rozetki"
+          ]
+        },
+        {
+          "id": "projects-office",
+          "title": "Операторские работы",
+          "items": [],
+          "planned": [
+            "praktikum-ofisnye-dokumenty",
+            "praktikum-tablicy-i-vychisleniya",
+            "praktikum-prezentacii",
+            "praktikum-skanirovanie",
+            "praktikum-prostye-sayty",
+            "it-dokumentooborot"
+          ]
+        },
+        {
+          "id": "projects-cases",
+          "title": "Кейсы и задачи",
+          "items": [
+            "keys-set-ceha"
+          ],
+          "planned": [
+            "keys-sety-kafe",
+            "keys-kibersportivnaya-arena",
+            "keys-gibridnaya-infrastruktura",
+            "it-kvest",
+            "zadachi-docker"
+          ]
+        }
+      ]
+    }
+  ]
+}

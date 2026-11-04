@@ -1,5 +1,5 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v47';
+const CACHE = 'itsliventsev-v49';
 const RUNTIME_CACHE = CACHE + '-runtime';
 const MAX_RUNTIME_ENTRIES = 120;
 const PRECACHE = [
@@ -11,7 +11,7 @@ const PRECACHE = [
   '/assets/fonts/golos-text-cyrillic-wght-normal.woff2', '/assets/fonts/golos-text-latin-wght-normal.woff2',
   '/assets/fonts/jetbrains-mono-cyrillic-wght-normal.woff2', '/assets/fonts/jetbrains-mono-latin-wght-normal.woff2',
   '/assets/icons.svg', '/assets/favicon.svg',
-  '/projects.html', '/articles.html', '/blog.html', '/archive.html',
+  '/projects.html', '/articles.html', '/blog.html', '/archive.html', '/blog/materials.html',
   '/stands/index.html', '/faq.html', '/sitemap.html', '/site.webmanifest'
 ];
 self.addEventListener('install', event => {

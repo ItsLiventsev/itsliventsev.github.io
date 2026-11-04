@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Docker: контейнер, образ и слой · Учебные материалы · itsliventsev</title>
+<meta name="description" content="Контейнер — это процесс с изоляцией, а образ — набор слоёв файловой системы; понять эту разницу достаточно, чтобы не путать контейнер с виртуальной машиной и не терять данные при пересоздании.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/docker-osnovy.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Docker: контейнер, образ и слой · Учебные материалы · itsliventsev">
+  <meta property="og:description" content="Контейнер — это процесс с изоляцией, а образ — набор слоёв файловой системы; понять эту разницу достаточно, чтобы не путать контейнер с виртуальной машиной и не терять данные при пересоздании.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/docker-osnovy.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Docker: контейнер, образ и слой · Учебные материалы · itsliventsev">
+  <meta name="twitter:description" content="Контейнер — это процесс с изоляцией, а образ — набор слоёв файловой системы; понять эту разницу достаточно, чтобы не путать контейнер с виртуальной машиной и не терять данные при пересоздании.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Docker: контейнер, образ и слой · Учебные материалы","description":"Контейнер — это процесс с изоляцией, а образ — набор слоёв файловой системы; понять эту разницу достаточно, чтобы не путать контейнер с виртуальной машиной и не терять данные при пересоздании.","url":"https://itsliventsev.github.io/blog/materials/docker-osnovy.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/docker-osnovy.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Docker: контейнер, образ и слой · Учебные материалы","item":"https://itsliventsev.github.io/blog/materials/docker-osnovy.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html" aria-current="page">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#virtualization">Виртуализация и контейнеры</a><span aria-hidden="true">/</span><span aria-current="page">Контейнеры</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#virtualization">03 Виртуализация и контейнеры</a>
+        <span aria-hidden="true">·</span>
+        <span>Контейнеры</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Docker: контейнер, образ и слой</h1>
+      <p class="kn-def">Контейнер — это процесс с изоляцией, а образ — набор слоёв файловой системы; понять эту разницу достаточно, чтобы не путать контейнер с виртуальной машиной и не терять данные при пересоздании.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>объяснять, чем контейнер отличается от виртуальной машины;</li><li>собирать образ с кешем слоёв и без лишних мегабайт;</li><li>правильно хранить данные и логи вне контейнера.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="izolyaciya-bez-vtorogo-yadra">Изоляция без второго ядра</h2>
+        <p>Контейнер использует ядро хоста, но изолирует процесс двумя механизмами Linux: namespaces (что процесс видит) и cgroups (сколько ресурсов он получает). Внутри контейнера своя файловая система, свой сетевой стек, свой список процессов — но ядро общее.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col"></th><th scope="col">Контейнер</th><th scope="col">Виртуальная машина</th></tr></thead><tbody><tr><th scope="row">Запуск</th><td>секунды</td><td>десятки секунд</td></tr><tr><th scope="row">Размер</th><td>десятки–сотни МБ</td><td>гигабайты</td></tr><tr><th scope="row">Ядро</th><td>общее с хостом</td><td>собственное</td></tr><tr><th scope="row">Изоляция</th><td>слабее</td><td>сильнее</td></tr></tbody></table></div>
+        <p>Из этого следует правило безопасности: контейнер — не граница безопасности по умолчанию. Он изолирует приложение от соседей, но не защищает от ошибки в ядре. Для недоверенного кода нужна ВМ.</p>
+        <h2 id="obraz-i-sloi">Образ и слои</h2>
+        <p>Образ — это слои: каждый <code>RUN</code>, <code>COPY</code>, <code>ADD</code> в Dockerfile добавляет слой. Слои кешируются, поэтому порядок инструкций определяет скорость сборки.</p>
+        <pre class="kn-code"><code>FROM alpine:3.20
+# сначала зависимости — они меняются редко
+RUN apk add --no-cache nginx
+# потом код — он меняется часто
+COPY site/ /var/www/localhost/htdocs/
+EXPOSE 80
+CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</code></pre>
+        <p>Ключевой приём: то, что меняется редко, ставится выше. Если сначала копировать код, а потом ставить пакеты, кеш будет сбрасываться при каждом изменении файла.</p>
+        <p>Второй приём — многоступенчатая сборка: инструменты остаются в первом образе, в финальный попадает только результат.</p>
+        <pre class="kn-code"><code>FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html</code></pre>
+        <h2 id="dannye-i-zhurnaly">Данные и журналы</h2>
+        <p>Файловая система контейнера исчезает при его удалении. Всё, что должно пережить пересоздание, выносится наружу.</p>
+        <pre class="kn-code"><code>docker run -d --name web \
+  -p 8080:80 \
+  -v /srv/site:/usr/share/nginx/html:ro \
+  -v /srv/logs/nginx:/var/log/nginx \
+  nginx:alpine</code></pre>
+        <ul><li><strong>Bind mount</strong> (<code>/srv/site</code>) — каталог хоста, удобно для конфигураций и данных, которыми управляет администратор.</li><li><strong>Volume</strong> (<code>docker volume create data</code>) — управляемое Docker хранилище, удобнее при переносе между хостами.</li><li><strong>tmpfs</strong> — только память, для временных файлов.</li></ul>
+        <p>Журналы контейнера тоже надо ограничить, иначе диск кончится незаметно:</p>
+        <pre class="kn-code"><code>{
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-opts&quot;: { &quot;max-size&quot;: &quot;10m&quot;, &quot;max-file&quot;: &quot;3&quot; }
+}</code></pre>
+        <h2 id="osnovnye-komandy">Основные команды</h2>
+        <pre class="kn-code"><code>docker ps -a                     # все контейнеры, включая остановленные
+docker logs -f web --tail 100    # журнал
+docker stats                     # потребление ресурсов
+docker inspect web               # полная конфигурация
+docker exec -it web sh           # зайти внутрь
+docker image prune -f            # убрать висячие образы
+docker system df                 # сколько занимают образы, тома, кеш</code></pre>
+        <p><code>docker system df</code> стоит запускать раньше, чем «добавить диск»: часто место съедают старые образы и тома, а не данные.</p>
+        <h2 id="tipichnye-oshibki">Типичные ошибки</h2>
+        <ul><li><strong>Хранить данные в контейнере.</strong> После <code>docker rm</code> их нет.</li><li><strong>Копировать код перед установкой зависимостей.</strong> Кеш не работает, сборка медленная.</li><li><strong><code>latest</code> в теге.</strong> Неизвестно, какая версия запущена; обновление ломает неожиданно.</li><li><strong>Запускать в <code>--privileged</code>.</strong> Контейнер получает доступ к железу, изоляция исчезает.</li><li><strong>Не ограничивать журналы.</strong> Диск заполняется логами за недели.</li></ul>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Контейнер — процесс с namespaces и cgroups, ядро общее с хостом.</li><li>Образ — слои; порядок инструкций задаёт скорость сборки.</li><li>Данные и журналы живут вне контейнера, иначе исчезают.</li><li><code>docker system df</code> и <code>docker stats</code> — первые команды при «место кончилось».</li></ul>
+        <p>Смежные темы: <a href="/blog/materials/kubernetes-osnovy.html"></a>, <a href="/blog/kn-docker.html">Контейнеры: образ, слой и том</a>, <a href="/blog/materials/praktikum-obzhim-vitoy-pary.html"></a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-docker.html"><strong>Контейнеры: образ, слой и том</strong><span>Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.</span></a></li>
+        <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который не боится повтора</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+        <li><a href="/blog/kn-logrotate.html"><strong>logrotate: почему журналы съели диск</strong><span>Порядок директив rotate, size и maxsize, copytruncate против postrotate, сжатие и delaycompress, а также journald и его собственные лимиты.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>3 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker: get started</a><small>Docker Inc.</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://github.com/opencontainers/runtime-spec" target="_blank" rel="noopener">Open Container Initiative: runtime specification</a><small>OCI</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://man7.org/linux/man-pages/man7/namespaces.7.html" target="_blank" rel="noopener">Linux namespaces — man pages</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#virtualization">раздел «Виртуализация и контейнеры»</a>
+      <span><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор →</a><a href="/blog/materials/virtualizaciya-osnovy.html">← Виртуализация: зачем нужен гипервизор</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

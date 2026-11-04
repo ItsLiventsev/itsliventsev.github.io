@@ -26,12 +26,19 @@ const contentPages = html.filter(file => file !== 'assets/offline.html');
 const stands = html.filter(file => file.startsWith('stands/'));
 
 /* 74 базовых маршрута + страницы базы знаний (заметки, указатель рубрик, сами
-   рубрики, граф; §18 pages.css) = 95. Число базовых маршрутов уменьшилось на
-   один, потому что прежняя одиночная заметка блога теперь считается частью
-   базы знаний, а не отдельным документом. */
-const knowledgePages = contentPages.filter(file => file === 'blog/topics.html'
-  || /^blog\/topics\/[a-z-]+\.html$/.test(file) || /^blog\/[a-z0-9-]+\.html$/.test(file));
-ok(contentPages.length === 74 + knowledgePages.length, 'ожидалось ' + (74 + knowledgePages.length)
+   рубрики, заглушка графа; §18 pages.css) + страницы учебных материалов
+   (blog/materials.html и темы blog/materials/<id>.html) = 164. Число базовых
+   маршрутов уменьшилось на один, потому что прежняя одиночная заметка блога
+   теперь считается частью базы знаний, а не отдельным документом. */
+const materialPages = contentPages.filter(file => file === 'blog/materials.html'
+  || /^blog\/materials\/[a-z0-9-]+\.html$/.test(file));
+/* blog/materials.html тоже подходит под шаблон заметки верхнего уровня, поэтому
+   из базы знаний он исключён явно — иначе страница посчиталась бы дважды. */
+const knowledgePages = contentPages.filter(file => (file === 'blog/topics.html'
+  || /^blog\/topics\/[a-z-]+\.html$/.test(file) || /^blog\/[a-z0-9-]+\.html$/.test(file))
+  && file !== 'blog/materials.html');
+ok(contentPages.length === 74 + knowledgePages.length + materialPages.length,
+  'ожидалось ' + (74 + knowledgePages.length + materialPages.length)
   + ' контентных HTML-страниц, получено ' + contentPages.length);
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 ok(exists('assets/offline.html'), 'нет автономной страницы для офлайн-перехода');
@@ -242,26 +249,22 @@ for (const file of ['projects.html', 'articles.html', 'blog.html']) {
 ok((read('projects.html').match(/data-catalog-group/g) || []).length === 2, 'projects.html: два раздела должны сворачиваться при пустом фильтре');
 ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/knowledge.js').includes('data-kn-stream'),
   'knowledge.js: фильтр ленты должен жить в catalog.js, а не в базе знаний');
-/* ── граф связей: заметки и стенды на одном поле ──
-   Стенды берутся из assets/data/topics.json — того же файла, что кормит блоки
-   RELATED. Если граф начнёт считать узлы сам, мост «теория ↔ практика»
-   разойдётся со страницами; здесь это ловится до деплоя. */
+/* ── граф связей заменён учебными материалами ──
+   Раньше здесь сверялись узлы-стенды на поле графа. Теперь blog/graph.html —
+   заглушка-редирект, а раздел собран из materials.json; проверяем, что графа
+   нет ни в разметке, ни в движке, а дерево материалов знает про свои темы. */
 {
-  const topics = JSON.parse(read('assets/data/topics.json'));
-  const practices = new Set((topics.pairs || []).map((pair) => pair.practice));
   const graph = read('blog/graph.html');
   const knowledge = read('assets/knowledge.js');
-  ok(graph.includes('data-kind="stand"'), 'граф связей: стенды не стали узлами');
-  ok((graph.match(/data-kind="stand"/g) || []).length === practices.size,
-    'граф связей: узлов-стендов ' + (graph.match(/data-kind="stand"/g) || []).length + ', а в topics.json их ' + practices.size);
-  ok((graph.match(/<line /g) || []).length >= topics.pairs.length,
-    'граф связей: мостов меньше, чем пар в topics.json');
-  ok(graph.includes('data-graph-zone="stands"'), 'граф связей: нет кнопки фильтра по стендам');
-  ok(/<th scope="col">стенды<\/th>/.test(graph), 'граф связей: в таблице нет колонки стендов');
-  ok(knowledge.includes("body.kind !== 'stand'") && knowledge.includes('visibleIds'),
-    'knowledge.js: стенд должен оставаться на поле, пока видна его тема');
-  ok((graph.match(/class="kn-node kn-node--stand"/g) || []).length === practices.size,
-    'граф связей: у стендов нет своего класса узла');
+  const tree = JSON.parse(read('assets/data/knowledge/materials.json'));
+  const ids = tree.sections.flatMap((section) => section.groups.flatMap((group) => group.items || []));
+  ok(graph.includes('http-equiv="refresh"') && graph.includes('noindex, follow'),
+    'blog/graph.html: должен остаться заглушкой с редиректом и noindex');
+  ok(!/data-kind="stand"|kn-graph-stage|data-graph-zone/.test(graph), 'граф связей: разметка поля должна быть удалена');
+  ok(!/initGraph|kn-node|data-kn-graph/.test(knowledge), 'knowledge.js: движок графа должен быть удалён');
+  ok(ids.length >= 20, 'материалы: в дереве должно быть не меньше 20 активных тем');
+  for (const id of ids) ok(exists('blog/materials/' + id + '.html'), 'материалы: нет страницы темы ' + id);
+  ok(exists('blog/materials.html'), 'материалы: нет индексной страницы раздела');
 }
 
 /* ── страницы-кейсы собраны по одному шаблону ──
@@ -401,7 +404,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   ok((strip.match(/class="iter-bar"/g) || []).length === 2, 'лента: у текущего шага должна быть полоска прогресса');
   ok((strip.match(/<time class="iter-time">/g) || []).length === 18, 'лента: у каждой строки своё время');
   ok(strip.includes('121 страница') && strip.includes('122 записи') && strip.includes('45 связей'),
-    'лента: числа должны совпадать с картой сайта, индексом и графом');
+    'лента: числа должны совпадать с картой сайта и индексом');
   ok(!/76 страниц|72 страниц|74 термина/.test(strip), 'лента: в текстах остались устаревшие числа');
   ok(strip.includes('<p class="sr-only">'), 'лента: нужен sr-only пересказ для скринридеров');
   /* Версия статики — хэш в адресе, поэтому ссылку сверяем без привязки к конкретному токену. */
@@ -473,7 +476,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   for (const legacy of ['ui-btn--ghost', 'ui-meta-row', 'ui-hairline', 'ui-grid-2', 'ui-grid-3', 'ui-stack',
     'ui-field', 'ui-label', 'ui-input', 'ui-select', 'ui-textarea', 'catalog-stat', 'editorial-meta',
     'pill-rose', 'pill-red', 'pill-blue', 'pill-green', 'pill-amber', 'is-danger', 'fs-105',
-    'kn-graph-fallback', 'kn-card--lead', 'kn-card--tall', 'kn-card--text', 'is-now', 'flat-btn--block', 'notice-rose']) {
+    'kn-graph-fallback', 'kn-graph-stage', 'kn-node', 'kn-card--lead', 'kn-card--tall', 'kn-card--text', 'is-now', 'flat-btn--block', 'notice-rose']) {
     ok(!new RegExp('\\.' + legacy.replace(/-/g, '\\-') + '\\b').test(layers), 'мёртвый класс .' + legacy + ' вернулся в CSS');
   }
   ok(read('assets/base.css').includes('.ui-search-field input'), 'поле поиска должно остаться единственным стилизованным input');
