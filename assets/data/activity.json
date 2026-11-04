@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T07:12:10.432Z",
+  "generated": "2026-11-04T08:07:18.131Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 238,
+  "total": 236,
   "truncated": true,
   "days": [
     {
@@ -84,7 +84,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 11
+      "count": 8
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 3
+      "count": 4
     }
   ],
   "commits": [
+    {
+      "sha": "270210b",
+      "title": "fix(knowledge): убрать литерал undefined, развести подписи графа в пикселях поля",
+      "date": "2026-11-04T08:04:35Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/270210b06860704a8f9e00db0c4560fd08a738ac"
+    },
     {
       "sha": "4222055",
       "title": "fix(course.css): стиль для открытой ачивки",
@@ -481,12 +487,6 @@
       "title": "feat(orchestrator v10): typography safety — fluid overview grid + frame containment",
       "date": "2026-11-01T20:38:42Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1cc8a7cba5ceddbaad50d99c482d36d9002029b4"
-    },
-    {
-      "sha": "f7d109b",
-      "title": "feat(orchestrator v9): editorial prose + kanban polish + anchor nav spring",
-      "date": "2026-11-01T20:35:20Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f7d109b73d967c6dc07556fc3195d4bfb17f5f99"
     }
   ]
 }
