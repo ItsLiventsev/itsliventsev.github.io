@@ -525,6 +525,13 @@ function main() {
     }
   }
 
+  /* Заголовок темы берём из её файла: {{tema}} в тексте должен подписываться
+     так же, как пункт меню, иначе ссылка остаётся без текста (axe: link-name). */
+  for (const [id, item] of topics) {
+    const meta = topicMeta.get(id);
+    if (meta && meta.title) item.title = meta.title;
+  }
+
   const tree = {
     sections: TREE.sections,
     topics,

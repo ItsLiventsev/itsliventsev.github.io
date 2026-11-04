@@ -265,6 +265,12 @@ ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/kno
   ok(ids.length >= 20, 'материалы: в дереве должно быть не меньше 20 активных тем');
   for (const id of ids) ok(exists('blog/materials/' + id + '.html'), 'материалы: нет страницы темы ' + id);
   ok(exists('blog/materials.html'), 'материалы: нет индексной страницы раздела');
+  /* Ссылка без текста — дефект доступности (axe: link-name): {{tema}} берёт
+     подпись из meta темы, и молчаливая потеря заголовка ломала её. */
+  for (const id of ids) {
+    const page = read('blog/materials/' + id + '.html');
+    ok(!/<a href="[^"]*"><\/a>/.test(page), 'материалы: ссылка без подписи на странице ' + id);
+  }
 }
 
 /* ── страницы-кейсы собраны по одному шаблону ──

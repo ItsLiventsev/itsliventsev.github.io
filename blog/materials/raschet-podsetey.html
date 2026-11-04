@@ -95,7 +95,7 @@ ip route get 192.168.10.100</code></pre>
         <p>В <code>ipcalc</code> смотрите три строки: Network, Broadcast и HostMin/HostMax. Если HostMin/HostMax не совпадают с вашим планом, ошибка в префиксе, а не в «глючном DHCP».</p>
         <h2 id="itog">Итог</h2>
         <ul><li>Адресов в подсети — 2^(32−префикс), для узлов на два меньше.</li><li>Деление: прибавляем биты под подсети, шаг считаем как размер новой подсети.</li><li>VLSM: сначала крупные подсети, потом мелкие.</li><li>Закладывать запас: заполнение выше 70 % — повод для следующей подсети.</li></ul>
-        <p>Планирование диапазонов — <a href="/blog/materials/ip-adresaciya.html"></a>, порядок в таблице адресов — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
+        <p>Планирование диапазонов — <a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a>, порядок в таблице адресов — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">

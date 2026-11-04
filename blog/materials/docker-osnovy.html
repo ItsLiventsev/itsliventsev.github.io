@@ -119,7 +119,7 @@ docker system df                 # сколько занимают образы,
         <ul><li><strong>Хранить данные в контейнере.</strong> После <code>docker rm</code> их нет.</li><li><strong>Копировать код перед установкой зависимостей.</strong> Кеш не работает, сборка медленная.</li><li><strong><code>latest</code> в теге.</strong> Неизвестно, какая версия запущена; обновление ломает неожиданно.</li><li><strong>Запускать в <code>--privileged</code>.</strong> Контейнер получает доступ к железу, изоляция исчезает.</li><li><strong>Не ограничивать журналы.</strong> Диск заполняется логами за недели.</li></ul>
         <h2 id="itog">Итог</h2>
         <ul><li>Контейнер — процесс с namespaces и cgroups, ядро общее с хостом.</li><li>Образ — слои; порядок инструкций задаёт скорость сборки.</li><li>Данные и журналы живут вне контейнера, иначе исчезают.</li><li><code>docker system df</code> и <code>docker stats</code> — первые команды при «место кончилось».</li></ul>
-        <p>Смежные темы: <a href="/blog/materials/kubernetes-osnovy.html"></a>, <a href="/blog/kn-docker.html">Контейнеры: образ, слой и том</a>, <a href="/blog/materials/praktikum-obzhim-vitoy-pary.html"></a>.</p>
+        <p>Смежные темы: <a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a>, <a href="/blog/kn-docker.html">Контейнеры: образ, слой и том</a>, <a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">

@@ -117,7 +117,7 @@ nft monitor trace          # трассировка (на новых верси�
         <ul><li><strong>Нет правила для established.</strong> Соединения устанавливаются, но ответы блокируются — «сайт открывается через раз».</li><li><strong>Порядок: permit any выше deny.</strong> Запрет не работает.</li><li><strong>Блокировка ICMP.</strong> Ломается Path MTU Discovery: ping идёт, а скачивание зависает. См. <a href="/blog/kn-mtu.html">MTU и PMTU: ping идёт, скачивание нет</a>.</li><li><strong>Фильтр на входе, но не на транзите.</strong> Гости попадают в серверный сегмент напрямую.</li><li><strong>Правила не сохраняются после перезагрузки.</strong> Проверять <code>systemctl status nftables</code> и конфигурацию автозагрузки.</li></ul>
         <h2 id="itog">Итог</h2>
         <ul><li>Первое совпадение побеждает: порядок важнее содержания.</li><li>Действие по умолчанию должно быть явным и, как правило, <code>drop</code>.</li><li>conntrack обязателен, ICMP не блокируют.</li><li>Проверка — через второй сеанс, с откатом по таймеру.</li></ul>
-        <p>Углублённо — <a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a>, сегментация — <a href="/blog/materials/vlan-i-trunk.html"></a>.</p>
+        <p>Углублённо — <a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a>, сегментация — <a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">

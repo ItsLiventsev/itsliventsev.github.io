@@ -134,7 +134,7 @@ kubectl rollout undo deployment/web</code></pre>
         <p>С такой стратегией при обновлении никогда не уменьшается число доступных подов — сначала поднимается новый, потом гасится старый. Для сервиса без простоя этого достаточно.</p>
         <h2 id="itog">Итог</h2>
         <ul><li>Kubernetes хранит желаемое состояние и постоянно к нему возвращается.</li><li>Pod временный, Service — стабильная точка входа.</li><li>Без <code>resources</code> кластер неуправляем.</li><li>Разбор идёт в порядке: <code>get</code>, <code>describe</code>, <code>logs</code>.</li></ul>
-        <p>Основы контейнеров — <a href="/blog/materials/docker-osnovy.html"></a>, эксплуатация — <a href="/blog/materials/monitoring-infrastruktury.html"></a>.</p>
+        <p>Основы контейнеров — <a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a>, эксплуатация — <a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">

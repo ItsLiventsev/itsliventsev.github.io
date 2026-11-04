@@ -80,7 +80,7 @@
         <h2 id="shag-3-adresaciya">Шаг 3. Адресация</h2>
         <p>Адресный план — не «что осталось свободным», а таблица:</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Зона</th><th scope="col">Подсеть</th><th scope="col">Размер</th><th scope="col">DHCP</th></tr></thead><tbody><tr><th scope="row">Управление</th><td>10.10.250.0/24</td><td>254</td><td>выключен</td></tr><tr><th scope="row">Серверы</th><td>10.10.20.0/24</td><td>254</td><td>выключен</td></tr><tr><th scope="row">Рабочие места</th><td>10.10.10.0/23</td><td>510</td><td>включён</td></tr><tr><th scope="row">Гости</th><td>10.10.99.0/24</td><td>254</td><td>включён</td></tr><tr><th scope="row">Транзит</th><td>10.10.255.0/30</td><td>2</td><td>выключен</td></tr></tbody></table></div>
-        <p>Проверка: сумма по зонам с запасом 30–40 % не должна превышать выделенный блок. Расчёт размеров — <a href="/blog/materials/raschet-podsetey.html"></a>, пошаговый план — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
+        <p>Проверка: сумма по зонам с запасом 30–40 % не должна превышать выделенный блок. Расчёт размеров — <a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a>, пошаговый план — <a href="/blog/kn-ipam.html">План адресации: сеть начинается с таблицы</a>.</p>
         <h2 id="shag-4-shema">Шаг 4. Схема</h2>
         <p>На схеме обязательно:</p>
         <ul><li>каждое устройство с моделью и портами;</li><li>линии с типом кабеля и длиной;</li><li>VLAN и адрес шлюза на каждом сегменте;</li><li>точка выхода в интернет и фильтрация;</li><li>места размещения шкафов.</li></ul>
@@ -95,7 +95,7 @@
         <p>Проект без запаса живёт до первого изменения.</p>
         <h2 id="itog">Итог</h2>
         <ul><li>Требования собираются до оборудования и фиксируются письменно.</li><li>Логика: доступ, распределение, ядро — в малом офисе сжимаются, но не исчезают.</li><li>Адресный план — таблица с назначением, а не свободные диапазоны.</li><li>Чек-лист приёмки заканчивается документом, по которому сеть можно восстановить.</li></ul>
-        <p>Смежные темы: <a href="/blog/materials/ip-adresaciya.html"></a>, <a href="/blog/materials/vlan-i-trunk.html"></a>, <a href="/blog/materials/monitoring-infrastruktury.html"></a>.</p>
+        <p>Смежные темы: <a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a>, <a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a>, <a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">

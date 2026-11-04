@@ -92,7 +92,7 @@ nmcli con up &quot;Wired&quot;</code></pre>
         <pre class="kn-code"><code>hostnamectl set-hostname srv-files</code></pre>
         <h2 id="pervichnaya-zaschita">Первичная защита</h2>
         <p>Эти шаги делаются в первый час, а не «когда будет время»:</p>
-        <ol><li>Обновить пакеты и включить автоматические обновления безопасности.</li><li>Настроить SSH: запретить вход root, включить вход по ключу (<a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a>).</li><li>Включить межсетевой экран и оставить только нужные порты (<a href="/blog/materials/acl-i-firewall.html"></a>).</li><li>Настроить синхронизацию времени — без неё ломаются сертификаты и журналы.</li><li>Проверить, что резервное копирование настроено (<a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a>).</li></ol>
+        <ol><li>Обновить пакеты и включить автоматические обновления безопасности.</li><li>Настроить SSH: запретить вход root, включить вход по ключу (<a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a>).</li><li>Включить межсетевой экран и оставить только нужные порты (<a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a>).</li><li>Настроить синхронизацию времени — без неё ломаются сертификаты и журналы.</li><li>Проверить, что резервное копирование настроено (<a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a>).</li></ol>
         <pre class="kn-code"><code>apt update &amp;&amp; apt upgrade -y      # Debian/Ubuntu
 apt install -y nftables chrony
 systemctl enable --now chrony

@@ -107,7 +107,7 @@ ip -d link show eth0.10</code></pre>
         <ul><li><strong>Транк вместо access на рабочем месте.</strong> Линк есть, данных нет.</li><li><strong>VLAN не разрешён в транке.</strong> Пинг через коммутатор не идёт, хотя локально всё работает.</li><li><strong>Разные VLAN на концах.</strong> Один порт в VLAN 10, второй в 20 — кадры уходят «в никуда».</li><li><strong>Нативный VLAN не совпадает.</strong> Часть кадров уходит без тега и попадает в служебный домен.</li><li><strong>Шлюз не настроен.</strong> VLAN работают, но между собой не общаются, потому что нет SVI или подынтерфейса.</li></ul>
         <h2 id="itog">Итог</h2>
         <ul><li>VLAN — это логическое деление коммутатора на домены, а не «настройка порта».</li><li>Access отдаёт кадр без тега, trunk переносит теги 802.1Q по списку разрешённых.</li><li>Связь между VLAN обеспечивает маршрутизатор или L3-коммутатор.</li><li>Три проверки после настройки: <code>show vlan brief</code>, <code>show interfaces trunk</code>, пинг между VLAN.</li></ul>
-        <p>Подробный разбор самой технологии — в заметке <a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a>, защита от петель — в <a href="/blog/materials/stp-i-petli.html"></a>.</p>
+        <p>Подробный разбор самой технологии — в заметке <a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a>, защита от петель — в <a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a>.</p>
     </div>
 
     <section class="kn-section" aria-labelledby="materials-notes">
