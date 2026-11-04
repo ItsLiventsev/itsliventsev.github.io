@@ -106,7 +106,24 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.catalog-row:visible').count(), projectTotal, 'сброс возвращает все проекты');
     assert.equal(await page.locator('[data-catalog-group]:not([hidden])').count(), 2);
 
-    for (const path of ['/', '/projects.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
+    /* Граф связей: стенды — такие же узлы, как заметки. Проверяем, что кнопка
+       «стенды» оставляет ровно их, а рубрика не выкидывает практику своей темы. */
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(base + '/blog/graph.html', { waitUntil: 'load' });
+    const graphStands = page.locator('.kn-node--stand');
+    const standTotal = await graphStands.count();
+    assert(standTotal >= 20, 'на графе мало стендов: ' + standTotal);
+    assert(await page.locator('.kn-node').count() > standTotal, 'кроме стендов на графе должны быть заметки');
+    await page.locator('[data-graph-zone="stands"]').click();
+    assert.equal(await page.locator('.kn-node--stand:visible').count(), standTotal, 'кнопка «стенды» оставляет только стенды');
+    assert.equal(await page.locator('.kn-node[data-kind="note"]:visible').count(), 0, 'заметки при фильтре «стенды» скрыты');
+    assert.match(await page.locator('[data-graph-status]').innerText(), /Стенды/, 'статус объясняет фильтр стендов');
+    await page.locator('[data-graph-zone="linux"]').click();
+    assert(await page.locator('.kn-node[data-kind="note"]:visible').count() > 0, 'рубрика оставляет свои заметки');
+    assert(await page.locator('.kn-node--stand:visible').count() > 0, 'вместе с рубрикой остаются стенды её темы');
+    await page.locator('[data-graph-zone="all"]').click();
+
+    for (const path of ['/', '/projects.html', '/blog/graph.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(base + path, { waitUntil: 'load' });
       assert(await noOverflow(page), 'горизонтальная прокрутка на 360px: ' + path);

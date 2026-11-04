@@ -35,6 +35,7 @@ jobs:
           node scripts/test-search.js
           node scripts/test-reading.js
           node scripts/test-catalog.js
+          node scripts/test-graph.js
           node scripts/test-theme.js
           node scripts/browser-offline.js
       - name: Browser interaction checks

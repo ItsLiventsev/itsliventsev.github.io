@@ -66,6 +66,7 @@
       return {
         node,
         id: node.dataset.node,
+        kind: node.dataset.kind || 'note',
         zone: node.dataset.zone || '',
         x, y, vx: 0, vy: 0,
         homeX: x, homeY: y, baseX: x, baseY: y,
@@ -113,13 +114,16 @@
       /* Ширины подписей повторяют CSS-правила для .kn-node-label: на узком
          экране подписи листьев и пояса скрыты, и место под них не резервируется.
          Значения обязаны совпадать с assets/pages.css (блок «Граф 3»). */
-      const widthOf = (rank) => {
+      const widthOf = (rank, kind) => {
+        /* Стенд — квадрат без постоянной подписи: та же ширина, что в
+           BOX_W_STAND сборщика. Подпись проявляется на hover и focus. */
+        if (kind === 'stand') return 0;
         if (spanX <= 560) return rank === 'hub' ? 84 : 0;
         if (spanX <= 900) return rank === 'hub' ? 96 : 0;
         return rank === 'hub' ? 148 : rank === 'link' ? 136 : 96;
       };
       const box = order.map((body) => {
-        const labelW = widthOf(body.node.dataset.rank || 'leaf');
+        const labelW = widthOf(body.node.dataset.rank || 'leaf', body.kind);
         return { body, w: labelW ? labelW + 10 : 22, h: labelW ? 58 : 30 };
       });
       const boxes = new Map(box.map((item) => [item.body.id, item]));
@@ -308,24 +312,43 @@
       node.addEventListener('blur', () => highlight(activeFromHash()));
     });
 
-    /* ——— фильтр по рубрике ——— */
+    /* ——— фильтр по рубрике ———
+       Стенд остаётся на поле, если в выбранной рубрике есть тема, которую он
+       отрабатывает: иначе мост «теория ↔ практика» пропадал именно в тот
+       момент, когда смотришь на тему. Своя кнопка «стенды» показывает их одних. */
     const applyFilter = (zone) => {
-      let shown = 0;
+      const visibleIds = new Set();
+      if (zone !== 'all') {
+        bodies.forEach((body) => { if (body.zone === zone) visibleIds.add(body.id); });
+        bodies.forEach((body) => {
+          if (body.kind !== 'stand' || visibleIds.has(body.id)) return;
+          const around = neighbours.get(body.id);
+          if (!around) return;
+          for (const id of around) if (visibleIds.has(id)) { visibleIds.add(body.id); break; }
+        });
+      }
+      let shown = 0, shownStands = 0;
       bodies.forEach((body) => {
-        const visible = zone === 'all' || body.zone === zone;
+        const visible = zone === 'all' || visibleIds.has(body.id);
         body.node.hidden = !visible;
         if (!visible) return;
         shown++;
+        if (body.kind === 'stand') shownStands++;
       });
       pairs.forEach((pair) => {
-        const visible = (zone === 'all' || pair.a.zone === zone || pair.b.zone === zone);
+        const visible = zone === 'all' || visibleIds.has(pair.a.id) || visibleIds.has(pair.b.id);
         pair.line.dataset.hidden = visible ? 'false' : 'true';
       });
       stage.dataset.filter = zone;
       const many = (n) => n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? 'узел' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'узла' : 'узлов');
+      const links = (n) => n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? 'связь' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'связи' : 'связей');
+      const standsMany = (n) => n + ' ' + (n % 10 === 1 && n % 100 !== 11 ? 'стенд' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'стенда' : 'стендов');
+      const standsWord = shownStands ? ', из них ' + standsMany(shownStands) : '';
       if (status) status.textContent = zone === 'all'
-        ? 'Показаны все узлы: ' + many(shown) + ', ' + pairs.length + ' ' + (pairs.length % 10 === 1 && pairs.length % 100 !== 11 ? 'связь' : pairs.length % 10 >= 2 && pairs.length % 10 <= 4 && (pairs.length % 100 < 10 || pairs.length % 100 >= 20) ? 'связи' : 'связей') + '.'
-        : 'Рубрика: ' + many(shown) + '; связи с другими рубриками остаются на месте.';
+        ? 'Показаны все узлы: ' + many(shown) + standsWord + ', ' + links(pairs.length) + '.'
+        : zone === 'stands'
+          ? 'Стенды: ' + standsMany(shown) + '; темы, которые они отрабатывают, подсвечиваются при наведении.'
+          : 'Рубрика: ' + many(shown) + standsWord + '; связи с другими рубриками остаются на месте.';
     };
     filters.forEach((button) => button.addEventListener('click', () => {
       filters.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));

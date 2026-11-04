@@ -233,6 +233,36 @@ for (const file of ['projects.html', 'articles.html', 'blog.html']) {
 ok((read('projects.html').match(/data-catalog-group/g) || []).length === 2, 'projects.html: два раздела должны сворачиваться при пустом фильтре');
 ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/knowledge.js').includes('data-kn-stream'),
   'knowledge.js: фильтр ленты должен жить в catalog.js, а не в базе знаний');
+/* ── граф связей: заметки и стенды на одном поле ──
+   Стенды берутся из assets/data/topics.json — того же файла, что кормит блоки
+   RELATED. Если граф начнёт считать узлы сам, мост «теория ↔ практика»
+   разойдётся со страницами; здесь это ловится до деплоя. */
+{
+  const topics = JSON.parse(read('assets/data/topics.json'));
+  const practices = new Set((topics.pairs || []).map((pair) => pair.practice));
+  const graph = read('blog/graph.html');
+  const knowledge = read('assets/knowledge.js');
+  ok(graph.includes('data-kind="stand"'), 'граф связей: стенды не стали узлами');
+  ok((graph.match(/data-kind="stand"/g) || []).length === practices.size,
+    'граф связей: узлов-стендов ' + (graph.match(/data-kind="stand"/g) || []).length + ', а в topics.json их ' + practices.size);
+  ok((graph.match(/<line /g) || []).length >= topics.pairs.length,
+    'граф связей: мостов меньше, чем пар в topics.json');
+  ok(graph.includes('data-graph-zone="stands"'), 'граф связей: нет кнопки фильтра по стендам');
+  ok(/<th scope="col">стенды<\/th>/.test(graph), 'граф связей: в таблице нет колонки стендов');
+  ok(knowledge.includes("body.kind !== 'stand'") && knowledge.includes('visibleIds'),
+    'knowledge.js: стенд должен оставаться на поле, пока видна его тема');
+  ok((graph.match(/class="kn-node kn-node--stand"/g) || []).length === practices.size,
+    'граф связей: у стендов нет своего класса узла');
+}
+
+/* ── счётчик раздела считается по публикациям, а не по файлам ──
+   В blog/ лежат редирект-заглушки переехавших заметок; подсчёт по файлам
+   давал 59 вместо 45 и менял число в навигации на каждой сборке. */
+{
+  const posts = JSON.parse(read('blog/posts.json'));
+  const counts = JSON.parse(read('feed-counts.json'));
+  ok(counts.blog === posts.length, 'feed-counts.blog=' + counts.blog + ', а публикаций в blog/posts.json ' + posts.length);
+}
 
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
