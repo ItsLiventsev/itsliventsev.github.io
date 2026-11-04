@@ -43,19 +43,21 @@ const report = line => { console.log(line); if (process.env.GITHUB_ACTIONS === '
   try {
     for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
       // Alternate order to limit bias from a warming runner. No shared browser cache.
+      for (const measuredRoute of ['/', '/blog/kn-dns.html']) {
       if (baseline) {
         const before = [], after = [];
         for (let i = 0; i < 3; i++) {
           for (const [label, origin] of (i % 2 ? [['after', base], ['before', baseline]] : [['before', baseline], ['after', base]])) {
-            (label === 'before' ? before : after).push((await sample(origin, viewport, '/')).time);
+            (label === 'before' ? before : after).push((await sample(origin, viewport, measuredRoute)).time);
           }
         }
-        report(`LCP ${viewport.width}px / baseline ms [${before.map(Math.round).join(', ')}], current ms [${after.map(Math.round).join(', ')}]; median ${Math.round(median(before))} → ${Math.round(median(after))} ms`);
+        report(`LCP ${viewport.width}px ${measuredRoute} baseline ms [${before.map(Math.round).join(', ')}], current ms [${after.map(Math.round).join(', ')}]; median ${Math.round(median(before))} → ${Math.round(median(after))} ms`);
       } else {
-        const value = await sample(base, viewport, '/');
-        report(`LCP ${viewport.width}px / current: ${Math.round(value.time)} ms (${value.element}), no baseline`);
+        const value = await sample(base, viewport, measuredRoute);
+        report(`LCP ${viewport.width}px ${measuredRoute} current: ${Math.round(value.time)} ms (${value.element}), no baseline`);
       }
-      for (const route of ['/blog/kn-dns.html', '/stands/lab-vlan-cisco.html', '/projects/esports.html']) {
+      }
+      for (const route of ['/stands/lab-vlan-cisco.html', '/projects/esports.html']) {
         const value = await sample(base, viewport, route);
         report(`LCP ${viewport.width}px ${route}: ${Math.round(value.time)} ms (${value.element})`);
       }

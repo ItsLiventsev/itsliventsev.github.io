@@ -24,6 +24,7 @@ jobs:
           node scripts/build-related.js --check
           node scripts/build-related-css.js --check
           node scripts/build-critical-css.js --check
+          node scripts/test-critical-knowledge.js
           node scripts/regression-static.js
           node scripts/runtime-smoke.js
           node scripts/test-service-worker.js
