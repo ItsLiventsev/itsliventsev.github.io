@@ -16,6 +16,12 @@
  * как отчёт (это, как правило, best practice вроде «все ссылки в ориентирах»),
  * чтобы гейт не краснел от стилистики.
  *
+ * Контраст на «живых» страницах (setpolis, лента) считается по фактическим
+ * цветам, а те зависят от анимаций входа: одиночный прогон ловил панель в
+ * промежуточном кадре и ронял сборку без причины. Блокирующее нарушение
+ * перепроверяется один раз после паузы; если оно не повторилось, пишем
+ * «повтор: …», но сборку не роняем. Настоящая регрессия переживает повтор.
+ *
  * Запуск: python3 -m http.server 8000 & затем
  *   NODE_PATH=/path/to/node_modules BROWSER_BIN=/path/to/chromium node scripts/browser-a11y.js
  * Флаги: --page=/blog/kn-vlan.html (одна страница), --limit=10, --json.
@@ -87,6 +93,20 @@ async function scan(page, path, theme) {
   return result.violations;
 }
 
+/* Второй шанс для блокирующих нарушений: анимация входа успевает попасть
+   в кадр, и axe видит промежуточную прозрачность. Постоянная проблема
+   остаётся, разовая — отсеивается и попадает в лог. */
+async function scanWithRetry(page, route, theme, report) {
+  const first = await scan(page, route, theme);
+  if (!first.some(item => BLOCKING.has(item.impact))) return first;
+  await page.waitForTimeout(500);
+  const second = await scan(page, route, theme);
+  const stillBlocking = new Set(second.filter(item => BLOCKING.has(item.impact)).map(item => item.id));
+  const vanished = first.filter(item => BLOCKING.has(item.impact) && !stillBlocking.has(item.id)).map(item => item.id);
+  if (vanished.length) report.push({ route, theme, retried: vanished });
+  return second;
+}
+
 (async () => {
   const pages = only ? [only] : contentPages();
   const list = limit ? pages.slice(0, limit) : pages;
@@ -106,12 +126,16 @@ async function scan(page, path, theme) {
     page.on('dialog', dialog => dialog.dismiss());
     page.on('pageerror', () => {});
 
+    const retried = [];
     for (const route of list) {
-      report.push({ route, theme: 'light', violations: await scan(page, route, 'light') });
+      report.push({ route, theme: 'light', violations: await scanWithRetry(page, route, 'light', retried) });
     }
     const darkRoutes = only ? [] : DARK_SAMPLE.filter(route => pages.includes(route));
     for (const route of darkRoutes) {
-      report.push({ route, theme: 'dark', violations: await scan(page, route, 'dark') });
+      report.push({ route, theme: 'dark', violations: await scanWithRetry(page, route, 'dark', retried) });
+    }
+    for (const entry of retried) {
+      console.log('  повтор: ' + entry.route + ' (' + entry.theme + ') — «' + entry.retried.join(', ') + '» не подтвердилось');
     }
   } finally {
     await browser.close();
