@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T10:56:00.087Z",
+  "generated": "2026-11-04T12:37:23.380Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 226,
+  "total": 225,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-26",
-      "count": 2
+      "count": 0
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 15
+      "count": 16
     }
   ],
   "commits": [
+    {
+      "sha": "4d3a827",
+      "title": "feat(home): лента итераций стала инверсной консолью с живым журналом",
+      "date": "2026-11-04T12:33:47Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4d3a8279dae06fb7646785798b5a386db0341a03"
+    },
     {
       "sha": "03781b9",
       "title": "feat(og): карточки в языке сайта и сборка в CI",
@@ -481,12 +487,6 @@
       "title": "Improve responsive navigation and offline experience",
       "date": "2026-11-01T21:30:44Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/722a2bfd16bffd96c6e8b8e9c5667f98b1dfb0cb"
-    },
-    {
-      "sha": "6ac8883",
-      "title": "Fix activity accuracy and offline cache behavior",
-      "date": "2026-11-01T21:28:18Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6ac888377a9a011ec084020eb0b5f797894c0509"
     }
   ]
 }
