@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T12:37:23.380Z",
+  "generated": "2026-11-04T12:47:19.862Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 38
+      "count": 37
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 16
+      "count": 17
     }
   ],
   "commits": [
+    {
+      "sha": "834eaa6",
+      "title": "feat(home): журнал изменений стал второй инверсной панелью",
+      "date": "2026-11-04T12:43:40Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/834eaa6dc249b46f276dcc5b7b32ba86a9e1decf"
+    },
     {
       "sha": "4d3a827",
       "title": "feat(home): лента итераций стала инверсной консолью с живым журналом",
@@ -481,12 +487,6 @@
       "title": "Fix workspace navigation, profiles and offline reliability",
       "date": "2026-11-01T22:04:22Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ead2717215178c161100e3e692d720bff8258a8b"
-    },
-    {
-      "sha": "722a2bf",
-      "title": "Improve responsive navigation and offline experience",
-      "date": "2026-11-01T21:30:44Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/722a2bfd16bffd96c6e8b8e9c5667f98b1dfb0cb"
     }
   ]
 }
