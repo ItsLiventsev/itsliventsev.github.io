@@ -2464,10 +2464,6 @@ html.u-theme-switch *::after {
 }
 .kn-card--wide { grid-column: span 8; }
 .kn-card--half { grid-column: span 6; }
-.kn-card--text { grid-column: span 4; background: var(--u-surface-sunk); }
-.kn-card--half.kn-card--text { grid-column: span 6; }
-.kn-card--wide.kn-card--text { grid-column: span 8; }
-.kn-card--flat.kn-card--text { grid-column: span 12; }
 .kn-card--flat { grid-column: span 12; }
 .kn-card-body { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--u-s2); padding: var(--u-s5); }
 .kn-card-zone {
@@ -2827,11 +2823,11 @@ html.u-theme-switch *::after {
   .kn-rail { position: sticky; inset-block-start: calc(var(--u-masthead) + var(--u-s6)); }
 }
 @media (max-width: 1080px) {
-  .kn-card, .kn-card--text { grid-column: span 6; }
+  .kn-card { grid-column: span 6; }
   .kn-card--wide { grid-column: span 12; }
 }
 @media (max-width: 720px) {
-  .kn-card, .kn-card--text, .kn-card--wide { grid-column: span 12; }
+  .kn-card, .kn-card--wide { grid-column: span 12; }
   .kn-graph-stage { aspect-ratio: auto; min-height: 260px; }
   .kn-node { width: 118px; font-size: 10px; }
   .kn-facts { grid-template-columns: minmax(0, 1fr); gap: var(--u-s1); }

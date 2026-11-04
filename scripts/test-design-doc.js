@@ -47,7 +47,7 @@ for (const item of mentioned.filter(entry => entry.family)) {
 
 /* 4. Ключевые компоненты справка обязана называть: иначе её перестанут читать как контракт */
 for (const core of ['ui-tabbar', 'ui-subbar', 'home-stats', 'ui-callout', 'catalog-row', 'kn-card',
-  'kn-card--wide', 'kn-card--half', 'kn-card--text', 'kn-card--flat']) {
+  'kn-card--wide', 'kn-card--half', 'kn-card--flat']) {
   assert(doc.includes('`.' + core), 'в DESIGN_SYSTEM.md не описан компонент .' + core);
 }
 
