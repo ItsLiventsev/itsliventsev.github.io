@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T06:47:03.549Z",
+  "generated": "2026-11-04T07:12:10.432Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 241,
+  "total": 238,
   "truncated": true,
   "days": [
     {
@@ -84,7 +84,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 17
+      "count": 11
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,28 @@
     },
     {
       "date": "2026-11-04",
-      "count": 0
+      "count": 3
     }
   ],
   "commits": [
+    {
+      "sha": "4222055",
+      "title": "fix(course.css): стиль для открытой ачивки",
+      "date": "2026-11-04T07:07:49Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4222055e0249f0532d38ca2442ea3b957f575a7c"
+    },
+    {
+      "sha": "9b76d70",
+      "title": "ci(site-checks): показывать причину падения аудита классов",
+      "date": "2026-11-04T07:05:01Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9b76d708c89012ce9da2e9d5d44f05bb8b99cae5"
+    },
+    {
+      "sha": "62d863f",
+      "title": "feat(notes): конспект вместо паспорта, живой граф связей",
+      "date": "2026-11-04T06:59:22Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/62d863f5d91c99a38ae5a85e54d16fff031e6cac"
+    },
     {
       "sha": "7d54ba1",
       "title": "feat(notes): убрать обложки и добавить 20 заметок по администрированию",
@@ -469,24 +487,6 @@
       "title": "feat(orchestrator v9): editorial prose + kanban polish + anchor nav spring",
       "date": "2026-11-01T20:35:20Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f7d109b73d967c6dc07556fc3195d4bfb17f5f99"
-    },
-    {
-      "sha": "4565351",
-      "title": "feat(orchestrator v8): kanban + PWA offline + i18n hero + axe audit",
-      "date": "2026-11-01T20:31:34Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4565351ac153d87f684806f513315e62a534eff4"
-    },
-    {
-      "sha": "f10da2e",
-      "title": "fix(canvas): revert to pure light #F8F9FA per feedback",
-      "date": "2026-11-01T20:29:07Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f10da2ebcb318dab3d0e49a598ac5a442b7fb9e6"
-    },
-    {
-      "sha": "f1b7a71",
-      "title": "feat(orchestrator v7): autonomous polish — view-transitions + grain + Soft UI 18px + staggered + UI_KNOWLEDGE_BASE",
-      "date": "2026-11-01T20:26:37Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f1b7a7131139bd453727ff2ec2da4628c46b8411"
     }
   ]
 }
