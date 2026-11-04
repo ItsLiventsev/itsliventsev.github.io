@@ -546,18 +546,23 @@ svg.ui-icon,
   padding-block-start: var(--u-s6);
   margin-block-start: var(--u-s5);
 }
+/* Шапка раздела: единственный владелец — базовый слой.
+   До этого те же свойства задавал pages.css, поэтому правка здесь ничего не
+   меняла: побеждал поздний слой. Значения перенесены сюда как есть. */
 .ui-section-head {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: var(--u-s4) var(--u-s7);
+  gap: var(--u-s2) var(--u-s4);
   flex-wrap: wrap;
   margin-block-end: var(--u-s6);
 }
 .ui-section-head h2 {
   margin: 0;
-  font-size: clamp(var(--u-fs-xl), 2.8vw, var(--u-fs-2xl));
-  font-weight: 700;
+  font-family: var(--u-font-display);
+  font-size: var(--u-fs-2xl);
+  font-weight: 400;
+  line-height: 1.12;
   letter-spacing: var(--u-ls-display);
 }
 .ui-section-head p { margin: var(--u-s2) 0 0; max-width: 56ch; color: var(--u-muted); }

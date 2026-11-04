@@ -131,7 +131,7 @@
 
 | # | Полоса | Владеет файлами | Типичные задачи |
 |---|---|---|---|
-| **A** | Ядро и оболочка | `assets/tokens.css`, `assets/base.css`, `assets/shell.js`, `sw.js`, `scripts/test-service-worker.js` | шапка и таббар, фокус, тема, движение каркаса, кеш |
+| **A** | Ядро и оболочка | `assets/tokens.css`, `assets/base.css`, `assets/shell.js`, `sw.js`, `scripts/test-service-worker.js`, `scripts/test-css-layers.js` | шапка и таббар, фокус, тема, движение каркаса, кеш |
 | **B** | Витрина и контент | `index.html`, `assets/pages.css`, `projects.html`, `projects/`, `articles*`, `blog*`, `archive*`, `faq.html`, `sitemap.html` | главная, кейсы, публикации, справка |
 | **C** | Вселенные | `stands/`, `assets/course.css`, `assets/stands.js`, `assets/league*.js`, `assets/{office,ops}-*.js`, `assets/lab-kit.js`, `assets/mascots.js`, `assets/submissions.js` | кабинеты, роадмапы, стенды, проверки |
 | **D** | Данные и поиск | `assets/search-index.json`, `assets/feed.js`, `assets/home-reading.js`, `assets/data/`, `scripts/lib/site-stats.js`, `scripts/build-*.{js,py}`, `scripts/build-search-index.py` | индекс, лента активности, счётчики, числа главной |
@@ -193,6 +193,7 @@
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
 | `node scripts/build-og.js --check` | OG-карточки совпадают с шаблоном (нужны зависимости: см. `docs/seo.md`) | `5 карточек совпадают` |
 | `node scripts/test-stats.js` | числа главной считает `scripts/lib/site-stats.js`, а тест сверяет их с плитками, лидом практики, каталогом проектов и `REFERENCES.md` | `Stats: …` |
+| `node scripts/test-css-layers.js` | каскад без споров: простой селектор базового слоя не перекрывается поздним слоем, полные дубли правил запрещены | `CSS layers: …` |
 | `node scripts/test-design-doc.js` | справка по оформлению — контракт: каждый названный в `DESIGN_SYSTEM.md` класс существует в CSS, удалённые компоненты не возвращаются, ключевые компоненты описаны | `Design doc: …` |
 | `node scripts/test-tabbar.js` | таббар един на всех страницах: пять пунктов, ровно одна активная метка, ссылки подбара стендов приходят в меню группой «Раздел стендов» | `Tabbar: …` |
 | `node scripts/test-iter-strip.js` | лента итераций в jsdom: шаги сменяются, время шага измеряется, счётчики растут, пауза замирает, при `reduce` список статичен | `Iter strip: …` |
@@ -289,7 +290,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-21 | D | ✅ Числа главной перестали быть вписанными руками: один модуль `scripts/lib/site-stats.js` (3 пространства, 42 работы, 52 маршрута, 74 термина), `scripts/test-stats.js` сверяет плитки, лид практики, каталог проектов и `REFERENCES.md` | `scripts/lib/site-stats.js`, `scripts/test-stats.js`, `index.html`, `projects.html` | — |
 | U-22 | B | ✅ Убраны мёртвые правила CSS: утилиты без потребителей, легаси-пилюли, `.catalog-stat`, варианты карточек `--lead/--tall`, поля формы, `notice-rose`; возврат запрещён ассертами | `assets/{base,pages,course}.css`, `scripts/regression-static.js` | — |
 | U-28 | F | ✅ `DESIGN_SYSTEM.md` сверяется с кодом: `scripts/test-design-doc.js` проверяет 82 класса, ловит описания несуществующих компонентов (`.kn-card-cover`, `--lead`, обложки 960×540), требует упоминания ключевых компонентов; заодно `.ui-callout` сведён в одно определение, дубль из `pages.css` убран | `DESIGN_SYSTEM.md`, `scripts/test-design-doc.js`, `assets/{base,pages}.css` | — |
-| U-29 | F | 🔜 Аудит дублей между слоями: найти остальные классы, объявленные и в `base.css`, и в `pages.css`/`course.css`, свести каждый к одному владельцу (`test-design-doc` знает только справку) | `assets/*.css`, `scripts/test-design-doc.js` | P2 |
+| U-29 | A | ✅ Аудит слоёв: единственный настоящий конфликт — `.ui-section-head` (его `gap` и `h2` перекрывал `pages.css`), значения перенесены в `base.css`, дубль удалён; новый `scripts/test-css-layers.js` держит правило «одно свойство — один слой» и ловит полные дубли правил | `assets/{base,pages}.css`, `scripts/test-css-layers.js` | — |
 | U-23 | B | ✅ Пятая плитка «43 заметки» и ссылки у всех чисел героя: каждая плитка ведёт на страницу, которая это число доказывает (проекты, практика, карта, словарь, лента), раскладка 1 → 2 колонки без сироты, `test-stats` проверяет адреса и уникальность | `index.html`, `assets/pages.css`, `scripts/test-stats.js` | — |
 | U-24 | A | 🔜 Критический CSS: разложить `base.css` на каркас и остальное, откладывать `pages.css`/`course.css` по типу страницы, измерить LCP в `browser-smoke` | `assets/*.css`, `index.html`, `scripts/browser-smoke.js` | P2 |
 | U-25 | A | 🔜 Кэш без полного сброса: `sw.js` держит версии в URL (`?v=`) и обновляет файлы stale-while-revalidate вместо удаления всего кэша | `sw.js`, `scripts/test-service-worker.js` | P2 |
@@ -309,6 +310,8 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 - **jsdom не грузит относительные `link`/`script`.** Тестировать через `JSDOM.fromURL` на локальном сервере.
   «Not implemented: navigation» на страницах-редиректах — норма, `fetch is not defined` в jsdom — тоже.
 - **Скрипты стендов инициализируются ~1 секунду** даже в jsdom: ждать `body.ui-ready`, а не фиксированные 300 мс.
+- **Одно свойство — один слой.** Если простое правило повторяет свойство из `base.css` с другим
+  значением, правка базового слоя не работает: `scripts/test-css-layers.js` это ловит.
 - **Справка по оформлению — контракт, а не эссе.** Названный в `DESIGN_SYSTEM.md` класс обязан
   существовать в CSS: `scripts/test-design-doc.js` падает и на описании несуществующего компонента.
 - **Числа на главной не вписывают руками.** Их считает `scripts/lib/site-stats.js`, а `scripts/test-stats.js`
