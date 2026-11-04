@@ -146,9 +146,14 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.kn-goal').count(), 1, 'у темы есть блок цели');
     assert(await page.locator('.kn-code').count() > 0, 'у темы есть блок кода');
     await page.goto(base + '/blog.html', { waitUntil: 'load' });
-    assert.equal(await page.locator('[data-catalog-list] .kn-card').count(), 67, 'один список из заметок и материалов');
-    assert.equal(await page.locator('[data-catalog-list] a[href^="/blog/materials/"]').count(), 24, 'в общей ленте 24 учебные темы');
-    assert.equal(await page.locator('[data-catalog-list] a[href^="/blog/kn-"]').count(), 43, 'в общей ленте 43 заметки');
+    /* Числа берём из данных, а не из литералов: каждая новая тема ломала
+       проверку, хотя лента собиралась правильно. */
+    const materialTotal = await page.locator('[data-catalog-list] a[href^="/blog/materials/"]').count();
+    const noteTotal = await page.locator('[data-catalog-list] a[href^="/blog/kn-"]').count();
+    assert.equal(await page.locator('[data-catalog-list] .kn-card').count(), materialTotal + noteTotal,
+      'один список из заметок и материалов');
+    assert(materialTotal >= 24, 'в общей ленте все учебные темы: ' + materialTotal);
+    assert(noteTotal >= 43, 'в общей ленте все заметки: ' + noteTotal);
     await page.locator('#note-query').fill('VLAN');
     assert(await page.locator('[data-catalog-list] a[href^="/blog/materials/"]:visible').count() > 0, 'поиск находит материалы');
     assert(await page.locator('[data-catalog-list] a[href^="/blog/kn-"]:visible').count() > 0, 'поиск находит заметки');
