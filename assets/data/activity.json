@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T09:38:10.809Z",
+  "generated": "2026-11-04T09:46:29.477Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 228,
+  "total": 227,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-26",
-      "count": 5
+      "count": 3
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 14
+      "count": 15
     }
   ],
   "commits": [
+    {
+      "sha": "03781b9",
+      "title": "feat(og): карточки в языке сайта и сборка в CI",
+      "date": "2026-11-04T09:40:46Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/03781b9ffcc4d25485c3e10ca0c75431f5a99b2a"
+    },
     {
       "sha": "78a09b4",
       "title": "docs(design): свести справку о дизайн-системе и движение с кодом",
@@ -481,12 +487,6 @@
       "title": "Fix activity accuracy and offline cache behavior",
       "date": "2026-11-01T21:28:18Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6ac888377a9a011ec084020eb0b5f797894c0509"
-    },
-    {
-      "sha": "9498fc3",
-      "title": "Connect change feed to real GitHub commits",
-      "date": "2026-11-01T21:26:04Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9498fc39bda02128559b1e8912e71fa8c3289834"
     }
   ]
 }
