@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>BGP: политика вместо метрики · itsliventsev</title>
-<meta name="description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+<meta name="description" content="BGP не выбирает самый быстрый путь — он выбирает приемлемый по политике; сессия живёт на TCP 179, keepalive раз в 60 секунд, hold — 180.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="bgp,маршрутизация,диагностика">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="BGP: политика вместо метрики · itsliventsev">
-  <meta property="og:description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+  <meta property="og:description" content="BGP не выбирает самый быстрый путь — он выбирает приемлемый по политике; сессия живёт на TCP 179, keepalive раз в 60 секунд, hold — 180.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-bgp.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="диагностика">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BGP: политика вместо метрики · itsliventsev">
-  <meta name="twitter:description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+  <meta name="twitter:description" content="BGP не выбирает самый быстрый путь — он выбирает приемлемый по политике; сессия живёт на TCP 179, keepalive раз в 60 секунд, hold — 180.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"BGP: политика вместо метрики","description":"BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.","url":"https://itsliventsev.github.io/blog/kn-bgp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-bgp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"bgp, маршрутизация, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"BGP: политика вместо метрики","description":"BGP не выбирает самый быстрый путь — он выбирает приемлемый по политике; сессия живёт на TCP 179, keepalive раз в 60 секунд, hold — 180.","url":"https://itsliventsev.github.io/blog/kn-bgp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-bgp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"bgp, маршрутизация, диагностика"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"BGP: политика вместо метрики","item":"https://itsliventsev.github.io/blog/kn-bgp.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>BGP: политика вместо метрики</h1>
-        <p class="kn-def">BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.</p>
+        <p class="kn-def">BGP не выбирает самый быстрый путь — он выбирает приемлемый по политике; сессия живёт на TCP 179, keepalive раз в 60 секунд, hold — 180.</p>
       </header>
 
       <div class="kn-note-body">
@@ -589,8 +589,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
           <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
-          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
         
       </section>
@@ -604,7 +604,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-cron.html">Планировщик: cron, systemd timers и тихие сбои →</a><a href="/blog/kn-bash.html">← Конвейер: одна строка вместо цикла</a></span>
+        <span><a href="/blog/kn-cron.html">Планировщик: cron, таймеры и тихие сбои →</a><a href="/blog/kn-bash.html">← Конвейер: одна строка вместо цикла</a></span>
       </nav>
     </div>
 

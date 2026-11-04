@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>STP: почему коммутатор сам выключил порт · itsliventsev</title>
-<meta name="description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+<meta name="description" content="STP убирает петли, временно блокируя порты: корневой мост выбирают по приоритету и MAC, а PortFast и BPDU Guard отделяют доступ от магистрали.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="vlan,vlan,диагностика">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="STP: почему коммутатор сам выключил порт · itsliventsev">
-  <meta property="og:description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+  <meta property="og:description" content="STP убирает петли, временно блокируя порты: корневой мост выбирают по приоритету и MAC, а PortFast и BPDU Guard отделяют доступ от магистрали.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-stp.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="диагностика">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="STP: почему коммутатор сам выключил порт · itsliventsev">
-  <meta name="twitter:description" content="Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.">
+  <meta name="twitter:description" content="STP убирает петли, временно блокируя порты: корневой мост выбирают по приоритету и MAC, а PortFast и BPDU Guard отделяют доступ от магистрали.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"STP: почему коммутатор сам выключил порт","description":"Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.","url":"https://itsliventsev.github.io/blog/kn-stp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-stp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, vlan, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"STP: почему коммутатор сам выключил порт","description":"STP убирает петли, временно блокируя порты: корневой мост выбирают по приоритету и MAC, а PortFast и BPDU Guard отделяют доступ от магистрали.","url":"https://itsliventsev.github.io/blog/kn-stp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-stp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, vlan, диагностика"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"STP: почему коммутатор сам выключил порт","item":"https://itsliventsev.github.io/blog/kn-stp.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>STP: почему коммутатор сам выключил порт</h1>
-        <p class="kn-def">Кольцо на втором уровне не затухает само — широковещательный кадр ходит по кругу, пока не займёт весь линк. STP ломает кольцо, выбирая корневой мост и блокируя лишние порты; вся арифметика держится на трёх числах — 2, 20 и 15 секунд.</p>
+        <p class="kn-def">STP убирает петли, временно блокируя порты: корневой мост выбирают по приоритету и MAC, а PortFast и BPDU Guard отделяют доступ от магистрали.</p>
       </header>
 
       <div class="kn-note-body">
@@ -588,9 +588,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
           <li><a href="/blog/kn-lacp.html"><strong>LACP: два кабеля, один адрес</strong><span>active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
         <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-lacp.html">LACP: два кабеля, один адрес</a> — ссылается на эту заметку</li></ul></div>
       </section>

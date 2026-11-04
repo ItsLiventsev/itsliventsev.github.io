@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>DNS: кеш, TTL и два резолвера · itsliventsev</title>
-<meta name="description" content="DNS отвечает за перевод имени в адрес и почти все «сеть пропала» начинаются с него; ключевые параметры — TTL записи, поведение резолвера и то, кто именно отвечает клиенту.">
+<meta name="description" content="DNS переводит имя в адрес, и почти все «сеть пропала» начинаются с него: важны TTL записи, поведение резолвера и кто именно отвечает клиенту.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="dns,диагностика,dhcp">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="DNS: кеш, TTL и два резолвера · itsliventsev">
-  <meta property="og:description" content="DNS отвечает за перевод имени в адрес и почти все «сеть пропала» начинаются с него; ключевые параметры — TTL записи, поведение резолвера и то, кто именно отвечает клиенту.">
+  <meta property="og:description" content="DNS переводит имя в адрес, и почти все «сеть пропала» начинаются с него: важны TTL записи, поведение резолвера и кто именно отвечает клиенту.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-dns.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="dhcp">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DNS: кеш, TTL и два резолвера · itsliventsev">
-  <meta name="twitter:description" content="DNS отвечает за перевод имени в адрес и почти все «сеть пропала» начинаются с него; ключевые параметры — TTL записи, поведение резолвера и то, кто именно отвечает клиенту.">
+  <meta name="twitter:description" content="DNS переводит имя в адрес, и почти все «сеть пропала» начинаются с него: важны TTL записи, поведение резолвера и кто именно отвечает клиенту.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DNS: кеш, TTL и два резолвера","description":"DNS отвечает за перевод имени в адрес и почти все «сеть пропала» начинаются с него; ключевые параметры — TTL записи, поведение резолвера и то, кто именно отвечает клиенту.","url":"https://itsliventsev.github.io/blog/kn-dns.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-dns.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"dns, диагностика, dhcp"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"DNS: кеш, TTL и два резолвера","description":"DNS переводит имя в адрес, и почти все «сеть пропала» начинаются с него: важны TTL записи, поведение резолвера и кто именно отвечает клиенту.","url":"https://itsliventsev.github.io/blog/kn-dns.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-dns.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"dns, диагностика, dhcp"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"DNS: кеш, TTL и два резолвера","item":"https://itsliventsev.github.io/blog/kn-dns.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>DNS: кеш, TTL и два резолвера</h1>
-        <p class="kn-def">DNS отвечает за перевод имени в адрес и почти все «сеть пропала» начинаются с него; ключевые параметры — TTL записи, поведение резолвера и то, кто именно отвечает клиенту.</p>
+        <p class="kn-def">DNS переводит имя в адрес, и почти все «сеть пропала» начинаются с него: важны TTL записи, поведение резолвера и кто именно отвечает клиенту.</p>
       </header>
 
       <div class="kn-note-body">
@@ -598,10 +598,10 @@ resolvectl status                        # какие резолверы реа�
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
           <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
-          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-dhcp.html">DHCP: аренда адреса на четыре шага</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-dhcp.html">DHCP: аренда адреса на четыре шага</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета и одна минута</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">

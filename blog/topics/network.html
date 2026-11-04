@@ -78,8 +78,8 @@
       <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-gre.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
-          <span class="kn-card-title">Туннель и MTU: 24 байта, которые ломают передачу</span>
-          <span class="kn-card-excerpt">Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span>
+          <span class="kn-card-title">Туннель и MTU: 24 байта, ломающие передачу</span>
+          <span class="kn-card-excerpt">Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя полностью блокировать проходящий ICMP.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
@@ -94,8 +94,8 @@
       <a class="kn-card kn-card--half" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-ipsec.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
-          <span class="kn-card-title">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</span>
-          <span class="kn-card-excerpt">IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</span>
+          <span class="kn-card-title">IPsec: две фазы и пустой туннель</span>
+          <span class="kn-card-excerpt">IKEv2, ESP и AH, порты 500 и 4500, селекторы трафика и почему MTU тоннеля надо уменьшать примерно на 50 байт на каждом конце.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
@@ -110,7 +110,7 @@
       <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-mtu.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
-          <span class="kn-card-title">MTU и PMTU: почему ping идёт, а скачивание нет</span>
+          <span class="kn-card-title">MTU и PMTU: ping идёт, скачивание нет</span>
           <span class="kn-card-excerpt">Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
@@ -150,7 +150,7 @@
       <a class="kn-card kn-card--wide" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-tcp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
-          <span class="kn-card-title">TCP: три пакета, четыре состояния и одна минута</span>
+          <span class="kn-card-title">TCP: три пакета и одна минута</span>
           <span class="kn-card-excerpt">Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
@@ -159,7 +159,7 @@
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Диагностика сети: снизу вверх, а не наугад</span>
-          <span class="kn-card-excerpt">Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span>
+          <span class="kn-card-excerpt">Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
@@ -167,7 +167,7 @@
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">VLAN и 802.1Q: один провод, много сетей</span>
-          <span class="kn-card-excerpt">Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span>
+          <span class="kn-card-excerpt">Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>

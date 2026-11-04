@@ -3337,3 +3337,140 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
   .rel-go { display: none; }
 }
 /* RELATED CSS:END */
+
+/* ==========================================================================
+   Режим чтения учебной работы (scripts/build-lab-static.js)
+
+   Теория, задачи и тест каждой работы свёрстаны статически: их читает робот и
+   человек без профиля. Когда профиль есть, движок рисует интерактив в
+   #lab-root / #ops-root / #office-root и дублировать текст нельзя — поэтому
+   статический блок прячется сразу после старта движка. Без JS он остаётся
+   видимым: страница читается и с выключенным JavaScript.
+   ========================================================================== */
+.lab-static { margin-block: var(--u-s5); }
+.lab-static-head { margin-block-end: var(--u-s4); }
+.lab-static-head h2 { margin: 0 0 var(--u-s2); font-family: var(--u-font-display); font-size: var(--u-fs-xl); }
+.lab-static-meta {
+  margin: 0 0 var(--u-s2);
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+  text-transform: lowercase;
+}
+.lab-static-lead { max-width: 62ch; margin: 0; color: var(--u-ink-2); font-size: var(--u-fs-md); line-height: 1.55; }
+.lab-static-who { margin-block-end: var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
+.lab-static-section .lp-body > p { max-width: 68ch; line-height: 1.6; }
+.lab-static-tasks, .lab-static-reflection { padding-inline-start: 1.2em; }
+.lab-static-tasks li, .lab-static-reflection li { margin-block-end: var(--u-s2); line-height: 1.55; }
+
+/* Таблицы шпаргалки: свои классы, потому что course.css не подключает
+   knowledge.css, а .kn-table живёт именно там. */
+.lab-static-tablewrap {
+  margin-block: var(--u-s4);
+  overflow-x: auto;
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.lab-static-table { width: 100%; border-collapse: collapse; font-family: var(--u-font-ui); font-size: var(--u-fs-sm); line-height: 1.45; }
+.lab-static-table caption { padding: var(--u-s3) var(--u-s4); color: var(--u-muted); font-size: var(--u-fs-xs); text-align: start; caption-side: bottom; }
+.lab-static-table th, .lab-static-table td { padding: 10px var(--u-s4); border-block-end: 1px solid var(--u-line); text-align: start; vertical-align: top; }
+.lab-static-table thead th {
+  color: var(--u-ink-2);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--u-ls-mono);
+  white-space: nowrap;
+}
+.lab-static-table tbody tr:nth-child(even) { background: var(--u-surface-sunk); }
+
+/* Контрольный тест в статике: вопрос виден, ответ раскрывается. */
+.lab-static-quiz {
+  margin-block-end: var(--u-s3);
+  padding: var(--u-s3) var(--u-s4);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+}
+.lab-static-quiz summary { cursor: pointer; font-weight: 600; }
+.lab-static-quiz summary::marker { color: var(--u-muted); }
+.lab-static-quiz ul { margin-block: var(--u-s2); padding-inline-start: 1.2em; }
+.lab-static-quiz li { margin-block-end: var(--u-s1); }
+
+/* Плашка «режим чтения»: показывается движком только без профиля. */
+.lab-static-note {
+  margin-block: var(--u-s4);
+  padding: var(--u-s3) var(--u-s4);
+  border-inline-start: 3px solid var(--u-accent);
+  border-radius: var(--u-r-sm);
+  background: var(--u-accent-soft);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-sm);
+  line-height: 1.5;
+}
+.lab-static-note a { color: inherit; text-decoration: underline; }
+
+/* Движок отрисовал интерактив — статический дубль уходит с экрана. */
+[data-lab-static][hidden] { display: none; }
+
+/* ==========================================================================
+   Статический список работ в каталогах (scripts/build-stand-catalog.js)
+
+   Дополняет интерактивный роадмап: каждая работа доступна по обычной ссылке
+   без JavaScript. Список стоит последним блоком страницы, поэтому первый
+   экран и привычный сценарий «войти → выбрать спринт» не меняются.
+   ========================================================================== */
+.stand-catalog {
+  margin-block: var(--u-s6) var(--u-s5);
+  padding: var(--u-card-pad);
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+.stand-catalog-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--u-s3);
+  margin-block-end: var(--u-s4);
+  padding-block-end: var(--u-s3);
+  border-bottom: 1px solid var(--u-line);
+}
+.stand-catalog-head h2 { margin: 0; font-family: var(--u-font-display); font-size: var(--u-fs-lg); }
+.stand-catalog-meta { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+.stand-catalog-group { margin-block-end: var(--u-s4); }
+.stand-catalog-group h3 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--u-s2);
+  margin: 0 0 var(--u-s2);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+  font-weight: 600;
+}
+.stand-catalog-num { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
+.stand-catalog-count {
+  padding: 0 6px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface-sunk);
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 400;
+}
+.stand-catalog-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.stand-catalog-list li { margin: 0; }
+.stand-catalog-list a {
+  display: block;
+  padding: 6px var(--u-s3);
+  border-radius: var(--u-r-sm);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-sm);
+  line-height: 1.45;
+  text-decoration: none;
+}
+.stand-catalog-list a:hover, .stand-catalog-list a:focus-visible { background: var(--u-surface-sunk); color: var(--u-ink); }
+.stand-catalog-note { margin: var(--u-s3) 0 0; color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }

@@ -7,7 +7,7 @@
     <language>ru-RU</language>
     <atom:link href="https://itsliventsev.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Ansible: плейбук, который можно запускать дважды</title>
+      <title>Ansible: плейбук, который не боится повтора</title>
       <link>https://itsliventsev.github.io/blog/kn-ansible.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ansible.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -47,7 +47,7 @@
       <description>Зачем нужен eBGP и iBGP, как читается AS_PATH, что решает local preference и почему медитация над «BGP не поднялся» начинается с TCP-сессии.</description>
     </item>
     <item>
-      <title>Планировщик: cron, systemd timers и тихие сбои</title>
+      <title>Планировщик: cron, таймеры и тихие сбои</title>
       <link>https://itsliventsev.github.io/blog/kn-cron.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-cron.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -87,7 +87,7 @@
       <description>Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.</description>
     </item>
     <item>
-      <title>Документация и регламенты: то, что спасает в три ночи</title>
+      <title>Документация и регламенты: что спасает ночью</title>
       <link>https://itsliventsev.github.io/blog/kn-documentation.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-documentation.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -97,7 +97,7 @@
       <description>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</description>
     </item>
     <item>
-      <title>Git в работе администратора: ветка, откат, конфиг</title>
+      <title>Git администратора: ветка, откат, конфиг</title>
       <link>https://itsliventsev.github.io/blog/kn-git.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-git.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -107,17 +107,17 @@
       <description>Рабочее дерево, индекс и коммит, ветка как указатель, revert против reset, конфликт и его разбор, а также конфигурация, которая экономит время каждый день.</description>
     </item>
     <item>
-      <title>Туннель и MTU: 24 байта, которые ломают передачу</title>
+      <title>Туннель и MTU: 24 байта, ломающие передачу</title>
       <link>https://itsliventsev.github.io/blog/kn-gre.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-gre.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>туннели</category>
       <category>mtu</category>
       <category>диагностика</category>
-      <description>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</description>
+      <description>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя полностью блокировать проходящий ICMP.</description>
     </item>
     <item>
-      <title>Разбор инцидента: от «всё лежит» до списка действий</title>
+      <title>Разбор инцидента: от «всё лежит» к делу</title>
       <link>https://itsliventsev.github.io/blog/kn-incident.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-incident.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -134,7 +134,7 @@
       <category>индексы</category>
       <category>postgresql</category>
       <category>транзакции</category>
-      <description>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</description>
+      <description>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым планировщик СУБД не использует индекс.</description>
     </item>
     <item>
       <title>План адресации: сеть начинается с таблицы</title>
@@ -147,14 +147,14 @@
       <description>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</description>
     </item>
     <item>
-      <title>IPsec: две фазы и одна причина «туннель поднят, трафика нет»</title>
+      <title>IPsec: две фазы и пустой туннель</title>
       <link>https://itsliventsev.github.io/blog/kn-ipsec.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ipsec.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>vpn</category>
       <category>туннели</category>
       <category>mtu</category>
-      <description>IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</description>
+      <description>IKEv2, ESP и AH, порты 500 и 4500, селекторы трафика и почему MTU тоннеля надо уменьшать примерно на 50 байт на каждом конце.</description>
     </item>
     <item>
       <title>LACP: два кабеля, один адрес</title>
@@ -187,7 +187,7 @@
       <description>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</description>
     </item>
     <item>
-      <title>Диски: разделы, LVM и что делать, когда место кончилось</title>
+      <title>Диски: разделы, LVM и кончившееся место</title>
       <link>https://itsliventsev.github.io/blog/kn-lvm.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-lvm.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -197,7 +197,7 @@
       <description>PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</description>
     </item>
     <item>
-      <title>Мониторинг: метрика, симптом и алерт, который не будит зря</title>
+      <title>Мониторинг: метрика, симптом и алерт</title>
       <link>https://itsliventsev.github.io/blog/kn-monitoring.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-monitoring.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -207,7 +207,7 @@
       <description>Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.</description>
     </item>
     <item>
-      <title>MTU и PMTU: почему ping идёт, а скачивание нет</title>
+      <title>MTU и PMTU: ping идёт, скачивание нет</title>
       <link>https://itsliventsev.github.io/blog/kn-mtu.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-mtu.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -217,14 +217,14 @@
       <description>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</description>
     </item>
     <item>
-      <title>MySQL: InnoDB, кеш запросов и почему он мешает</title>
+      <title>MySQL: InnoDB, кеш запросов и вред кеша</title>
       <link>https://itsliventsev.github.io/blog/kn-mysql.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-mysql.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>mysql</category>
       <category>индексы</category>
       <category>транзакции</category>
-      <description>Буферный пул и его размер, redo log вместо кеша запросов, уровни изоляции по умолчанию, разница между REPEATABLE READ у MySQL и PostgreSQL, медленный журнал и EXPLAIN.</description>
+      <description>Буферный пул и его размер, redo log вместо кеша запросов, уровни изоляции по умолчанию, медленный журнал запросов и EXPLAIN.</description>
     </item>
     <item>
       <title>Файрвол в Linux: nftables и порядок правил</title>
@@ -237,7 +237,7 @@
       <description>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</description>
     </item>
     <item>
-      <title>nginx как reverse proxy: что важно кроме proxy_pass</title>
+      <title>nginx как reverse proxy: не только proxy_pass</title>
       <link>https://itsliventsev.github.io/blog/kn-nginx.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-nginx.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -247,7 +247,7 @@
       <description>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</description>
     </item>
     <item>
-      <title>Время в сети: NTP и почему 30 секунд ломают всё</title>
+      <title>Время в сети: NTP и 30 секунд</title>
       <link>https://itsliventsev.github.io/blog/kn-ntp.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ntp.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -267,7 +267,7 @@
       <description>Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</description>
     </item>
     <item>
-      <title>PostgreSQL: версии строк, VACUUM и заворот XID</title>
+      <title>PostgreSQL: версии строк и VACUUM</title>
       <link>https://itsliventsev.github.io/blog/kn-postgres.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-postgres.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -277,7 +277,7 @@
       <description>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</description>
     </item>
     <item>
-      <title>Практикоориентированное обучение: навык проверяют на стенде</title>
+      <title>Практикоориентированность: проверка на стенде</title>
       <link>https://itsliventsev.github.io/blog/kn-practice.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-practice.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -287,7 +287,7 @@
       <description>Три уровня освоения, чем демонстрационный экзамен отличается от зачёта, зачем нужна воспроизводимость стенда и как разбирать ошибки после защиты.</description>
     </item>
     <item>
-      <title>Проект как кейс: навигация корпуса и киберспорт</title>
+      <title>Проект как кейс: корпус и киберспорт</title>
       <link>https://itsliventsev.github.io/blog/kn-project.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-project.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -297,14 +297,14 @@
       <description>Семь типов знаков в коридоре, 108 часов программы, критерий приёмки, который пришлось формулировать самому, и честный разбор того, что не получилось.</description>
     </item>
     <item>
-      <title>Prometheus: четыре типа метрик и один хороший алерт</title>
+      <title>Prometheus: четыре метрики и алерт</title>
       <link>https://itsliventsev.github.io/blog/kn-prometheus.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-prometheus.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>мониторинг</category>
       <category>журналы</category>
       <category>автоматизация</category>
-      <description>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
+      <description>rate и histogram_quantile, почему CPU выше 80% — плохой алерт, что даёт `for: 5m` и как не утонуть в потоке уведомлений.</description>
     </item>
     <item>
       <title>RAID: паритет — это арифметика, а не магия</title>
@@ -377,7 +377,7 @@
       <description>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</description>
     </item>
     <item>
-      <title>TCP: три пакета, четыре состояния и одна минута</title>
+      <title>TCP: три пакета и одна минута</title>
       <link>https://itsliventsev.github.io/blog/kn-tcp.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-tcp.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
@@ -387,14 +387,14 @@
       <description>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</description>
     </item>
     <item>
-      <title>Сертификаты и TLS 1.3: одна поездка вместо двух</title>
+      <title>Сертификаты и TLS 1.3: одна поездка</title>
       <link>https://itsliventsev.github.io/blog/kn-tls.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-tls.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>tls</category>
       <category>безопасность</category>
       <category>nginx</category>
-      <description>Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».</description>
+      <description>Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, forward secrecy в TLS 1.3 и что смотреть в ошибке.</description>
     </item>
     <item>
       <title>Диагностика сети: снизу вверх, а не наугад</title>
@@ -404,7 +404,7 @@
       <category>диагностика</category>
       <category>маршрутизация</category>
       <category>dns</category>
-      <description>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</description>
+      <description>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</description>
     </item>
     <item>
       <title>Транзакции: уровни изоляции и три аномалии</title>
@@ -424,10 +424,10 @@
       <category>vlan</category>
       <category>маршрутизация</category>
       <category>диагностика</category>
-      <description>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</description>
+      <description>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</description>
     </item>
     <item>
-      <title>ZFS: контрольные суммы, которые ловят тихие ошибки</title>
+      <title>ZFS: контрольные суммы тихих ошибок</title>
       <link>https://itsliventsev.github.io/blog/kn-zfs.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-zfs.html</guid>
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>

@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev</title>
-<meta name="description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+<title>Сертификаты и TLS 1.3: одна поездка · itsliventsev</title>
+<meta name="description" content="Сертификат связывает имя и ключ, а цепочка доверия ведёт к корню; проверяют SAN, срок и цепочку — иначе браузер скажет «недействителен».">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="tls,безопасность,nginx">
 <meta name="post-readtime" content="9 мин">
-<meta name="post-excerpt" content="Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».">
+<meta name="post-excerpt" content="Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, forward secrecy в TLS 1.3 и что смотреть в ошибке.">
 <meta name="kn-zone" content="linux">
 <meta name="kn-ai" content="machine-assisted">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev">
-  <meta property="og:description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+  <meta property="og:title" content="Сертификаты и TLS 1.3: одна поездка · itsliventsev">
+  <meta property="og:description" content="Сертификат связывает имя и ключ, а цепочка доверия ведёт к корню; проверяют SAN, срок и цепочку — иначе браузер скажет «недействителен».">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tls.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="безопасность">
   <meta property="article:tag" content="nginx">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Сертификаты и TLS 1.3: одна поездка вместо двух · itsliventsev">
-  <meta name="twitter:description" content="TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.">
+  <meta name="twitter:title" content="Сертификаты и TLS 1.3: одна поездка · itsliventsev">
+  <meta name="twitter:description" content="Сертификат связывает имя и ключ, а цепочка доверия ведёт к корню; проверяют SAN, срок и цепочку — иначе браузер скажет «недействителен».">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Сертификаты и TLS 1.3: одна поездка вместо двух","description":"TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.","url":"https://itsliventsev.github.io/blog/kn-tls.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tls.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tls, безопасность, nginx"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Сертификаты и TLS 1.3: одна поездка вместо двух","item":"https://itsliventsev.github.io/blog/kn-tls.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Сертификаты и TLS 1.3: одна поездка","description":"Сертификат связывает имя и ключ, а цепочка доверия ведёт к корню; проверяют SAN, срок и цепочку — иначе браузер скажет «недействителен».","url":"https://itsliventsev.github.io/blog/kn-tls.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tls.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tls, безопасность, nginx"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Сертификаты и TLS 1.3: одна поездка","item":"https://itsliventsev.github.io/blog/kn-tls.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>9 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>Сертификаты и TLS 1.3: одна поездка вместо двух</h1>
-        <p class="kn-def">TLS 1.3 сократил рукопожатие до одного круга, убрал статический обмен ключами по RSA и шифрует сертификат. Понимание цепочки доверия и сроков — обязательная часть работы: сертификат ломает доступ чаще, чем любая атака.</p>
+        <h1>Сертификаты и TLS 1.3: одна поездка</h1>
+        <p class="kn-def">Сертификат связывает имя и ключ, а цепочка доверия ведёт к корню; проверяют SAN, срок и цепочку — иначе браузер скажет «недействителен».</p>
       </header>
 
       <div class="kn-note-body">
@@ -588,11 +588,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: что важно кроме proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
+          <li><a href="/blog/kn-nginx.html"><strong>nginx как reverse proxy: не только proxy_pass</strong><span>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span></a></li>
           <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
           <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-nginx.html">nginx как reverse proxy: что важно кроме proxy_pass</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-nginx.html">nginx как reverse proxy: не только proxy_pass</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -612,7 +612,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
       <!-- RELATED:END -->
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
-        <span><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад →</a><a href="/blog/kn-tcp.html">← TCP: три пакета, четыре состояния и одна минута</a></span>
+        <span><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад →</a><a href="/blog/kn-tcp.html">← TCP: три пакета и одна минута</a></span>
       </nav>
     </div>
 

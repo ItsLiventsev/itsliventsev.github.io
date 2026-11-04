@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev</title>
-<meta name="description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+<title>MTU и PMTU: ping идёт, скачивание нет · itsliventsev</title>
+<meta name="description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор вернёт ICMP, а без него передача зависнет.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="mtu,туннели,диагностика">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev">
-  <meta property="og:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+  <meta property="og:title" content="MTU и PMTU: ping идёт, скачивание нет · itsliventsev">
+  <meta property="og:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор вернёт ICMP, а без него передача зависнет.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-mtu.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="туннели">
   <meta property="article:tag" content="диагностика">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MTU и PMTU: почему ping идёт, а скачивание нет · itsliventsev">
-  <meta name="twitter:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.">
+  <meta name="twitter:title" content="MTU и PMTU: ping идёт, скачивание нет · itsliventsev">
+  <meta name="twitter:description" content="MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор вернёт ICMP, а без него передача зависнет.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MTU и PMTU: почему ping идёт, а скачивание нет","description":"MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.","url":"https://itsliventsev.github.io/blog/kn-mtu.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-mtu.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"mtu, туннели, диагностика"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"MTU и PMTU: почему ping идёт, а скачивание нет","item":"https://itsliventsev.github.io/blog/kn-mtu.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"MTU и PMTU: ping идёт, скачивание нет","description":"MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор вернёт ICMP, а без него передача зависнет.","url":"https://itsliventsev.github.io/blog/kn-mtu.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-mtu.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"mtu, туннели, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"MTU и PMTU: ping идёт, скачивание нет","item":"https://itsliventsev.github.io/blog/kn-mtu.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>7 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>MTU и PMTU: почему ping идёт, а скачивание нет</h1>
-        <p class="kn-def">MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор обязан вернуть ICMP, а при заблокированном ICMP передача просто зависает.</p>
+        <h1>MTU и PMTU: ping идёт, скачивание нет</h1>
+        <p class="kn-def">MTU — максимальный размер полезной части кадра; если пакет больше MTU пути и стоит флаг DF, маршрутизатор вернёт ICMP, а без него передача зависнет.</p>
       </header>
 
       <div class="kn-note-body">
@@ -594,11 +594,11 @@ nft add rule inet filter forward tcp flags syn tcp option maxseg size set rt mtu
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, которые ломают передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span></a></li>
-          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, ломающие передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя полностью блокировать проходящий ICMP.</span></a></li>
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, которые ломают передачу</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета, четыре состояния и одна минута</a> — ссылается на эту заметку</li><li><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, ломающие передачу</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ipsec.html">IPsec: две фазы и пустой туннель</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tcp.html">TCP: три пакета и одна минута</a> — ссылается на эту заметку</li><li><a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -610,7 +610,7 @@ nft add rule inet filter forward tcp flags syn tcp option maxseg size set rt mtu
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и почему он мешает →</a><a href="/blog/kn-monitoring.html">← Мониторинг: метрика, симптом и алерт, который не будит зря</a></span>
+        <span><a href="/blog/kn-mysql.html">MySQL: InnoDB, кеш запросов и вред кеша →</a><a href="/blog/kn-monitoring.html">← Мониторинг: метрика, симптом и алерт</a></span>
       </nav>
     </div>
 

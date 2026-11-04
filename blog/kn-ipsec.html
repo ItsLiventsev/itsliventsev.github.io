@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>IPsec: две фазы и одна причина «туннель поднят, трафика нет» · itsliventsev</title>
-<meta name="description" content="IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.">
+<title>IPsec: две фазы и пустой туннель · itsliventsev</title>
+<meta name="description" content="IPsec договаривается о защите в две фазы — IKE, затем ESP — и чаще ломается не на шифровании, а на несовпадении селекторов трафика.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="vpn,туннели,mtu">
 <meta name="post-readtime" content="8 мин">
-<meta name="post-excerpt" content="IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.">
+<meta name="post-excerpt" content="IKEv2, ESP и AH, порты 500 и 4500, селекторы трафика и почему MTU тоннеля надо уменьшать примерно на 50 байт на каждом конце.">
 <meta name="kn-zone" content="network">
 <meta name="kn-ai" content="machine-assisted">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="IPsec: две фазы и одна причина «туннель поднят, трафика нет» · itsliventsev">
-  <meta property="og:description" content="IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.">
+  <meta property="og:title" content="IPsec: две фазы и пустой туннель · itsliventsev">
+  <meta property="og:description" content="IPsec договаривается о защите в две фазы — IKE, затем ESP — и чаще ломается не на шифровании, а на несовпадении селекторов трафика.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-ipsec.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="туннели">
   <meta property="article:tag" content="mtu">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="IPsec: две фазы и одна причина «туннель поднят, трафика нет» · itsliventsev">
-  <meta name="twitter:description" content="IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.">
+  <meta name="twitter:title" content="IPsec: две фазы и пустой туннель · itsliventsev">
+  <meta name="twitter:description" content="IPsec договаривается о защите в две фазы — IKE, затем ESP — и чаще ломается не на шифровании, а на несовпадении селекторов трафика.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"IPsec: две фазы и одна причина «туннель поднят, трафика нет»","description":"IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.","url":"https://itsliventsev.github.io/blog/kn-ipsec.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ipsec.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vpn, туннели, mtu"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"IPsec: две фазы и одна причина «туннель поднят, трафика нет»","item":"https://itsliventsev.github.io/blog/kn-ipsec.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"IPsec: две фазы и пустой туннель","description":"IPsec договаривается о защите в две фазы — IKE, затем ESP — и чаще ломается не на шифровании, а на несовпадении селекторов трафика.","url":"https://itsliventsev.github.io/blog/kn-ipsec.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ipsec.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vpn, туннели, mtu"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"IPsec: две фазы и пустой туннель","item":"https://itsliventsev.github.io/blog/kn-ipsec.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>IPsec: две фазы и одна причина «туннель поднят, трафика нет»</h1>
-        <p class="kn-def">IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.</p>
+        <h1>IPsec: две фазы и пустой туннель</h1>
+        <p class="kn-def">IPsec договаривается о защите в две фазы — IKE, затем ESP — и чаще ломается не на шифровании, а на несовпадении селекторов трафика.</p>
       </header>
 
       <div class="kn-note-body">
@@ -594,11 +594,11 @@ tcpdump -ni any esp  # идёт ли ESP вообще</code></pre>
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, которые ломают передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span></a></li>
-          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: почему ping идёт, а скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-gre.html"><strong>Туннель и MTU: 24 байта, ломающие передачу</strong><span>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя полностью блокировать проходящий ICMP.</span></a></li>
+          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: ping идёт, скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, которые ломают передачу</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-gre.html">Туннель и MTU: 24 байта, ломающие передачу</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">

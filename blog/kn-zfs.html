@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>ZFS: контрольные суммы, которые ловят тихие ошибки · itsliventsev</title>
-<meta name="description" content="Обычный RAID замечает отказ диска, но не замечает, что диск вернул правильный по форме, но неверный по содержанию блок. ZFS хранит контрольную сумму для каждого блока и проверяет её при каждом чтении — поэтому битый сектор превращается в ошибку, а не в тихую порчу данных.">
+<title>ZFS: контрольные суммы тихих ошибок · itsliventsev</title>
+<meta name="description" content="Обычный RAID замечает отказ диска, но не подмену содержимого: ZFS хранит контрольную сумму каждого блока и проверяет её при каждом чтении.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="zfs,хранение,raid">
@@ -527,8 +527,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="ZFS: контрольные суммы, которые ловят тихие ошибки · itsliventsev">
-  <meta property="og:description" content="Обычный RAID замечает отказ диска, но не замечает, что диск вернул правильный по форме, но неверный по содержанию блок. ZFS хранит контрольную сумму для каждого блока и проверяет её при каждом чтении — поэтому битый сектор превращается в ошибку, а не в тихую порчу данных.">
+  <meta property="og:title" content="ZFS: контрольные суммы тихих ошибок · itsliventsev">
+  <meta property="og:description" content="Обычный RAID замечает отказ диска, но не подмену содержимого: ZFS хранит контрольную сумму каждого блока и проверяет её при каждом чтении.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-zfs.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="хранение">
   <meta property="article:tag" content="raid">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ZFS: контрольные суммы, которые ловят тихие ошибки · itsliventsev">
-  <meta name="twitter:description" content="Обычный RAID замечает отказ диска, но не замечает, что диск вернул правильный по форме, но неверный по содержанию блок. ZFS хранит контрольную сумму для каждого блока и проверяет её при каждом чтении — поэтому битый сектор превращается в ошибку, а не в тихую порчу данных.">
+  <meta name="twitter:title" content="ZFS: контрольные суммы тихих ошибок · itsliventsev">
+  <meta name="twitter:description" content="Обычный RAID замечает отказ диска, но не подмену содержимого: ZFS хранит контрольную сумму каждого блока и проверяет её при каждом чтении.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ZFS: контрольные суммы, которые ловят тихие ошибки","description":"Обычный RAID замечает отказ диска, но не замечает, что диск вернул правильный по форме, но неверный по содержанию блок. ZFS хранит контрольную сумму для каждого блока и проверяет её при каждом чтении — поэтому битый сектор превращается в ошибку, а не в тихую порчу данных.","url":"https://itsliventsev.github.io/blog/kn-zfs.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-zfs.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"zfs, хранение, raid"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"ZFS: контрольные суммы, которые ловят тихие ошибки","item":"https://itsliventsev.github.io/blog/kn-zfs.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ZFS: контрольные суммы тихих ошибок","description":"Обычный RAID замечает отказ диска, но не подмену содержимого: ZFS хранит контрольную сумму каждого блока и проверяет её при каждом чтении.","url":"https://itsliventsev.github.io/blog/kn-zfs.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-zfs.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"zfs, хранение, raid"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"ZFS: контрольные суммы тихих ошибок","item":"https://itsliventsev.github.io/blog/kn-zfs.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,8 +561,8 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>9 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>ZFS: контрольные суммы, которые ловят тихие ошибки</h1>
-        <p class="kn-def">Обычный RAID замечает отказ диска, но не замечает, что диск вернул правильный по форме, но неверный по содержанию блок. ZFS хранит контрольную сумму для каждого блока и проверяет её при каждом чтении — поэтому битый сектор превращается в ошибку, а не в тихую порчу данных.</p>
+        <h1>ZFS: контрольные суммы тихих ошибок</h1>
+        <p class="kn-def">Обычный RAID замечает отказ диска, но не подмену содержимого: ZFS хранит контрольную сумму каждого блока и проверяет её при каждом чтении.</p>
       </header>
 
       <div class="kn-note-body">
@@ -591,10 +591,10 @@ zfs list -o space    # занятое место с учётом снимков<
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
           <li><a href="/blog/kn-raid.html"><strong>RAID: паритет — это арифметика, а не магия</strong><span>Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</span></a></li>
-          <li><a href="/blog/kn-lvm.html"><strong>Диски: разделы, LVM и что делать, когда место кончилось</strong><span>PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</span></a></li>
+          <li><a href="/blog/kn-lvm.html"><strong>Диски: разделы, LVM и кончившееся место</strong><span>PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</span></a></li>
           <li><a href="/blog/kn-backups.html"><strong>Бэкап: 3-2-1, RPO и проверка восстановлением</strong><span>Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-lvm.html">Диски: разделы, LVM и что делать, когда место кончилось</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-lvm.html">Диски: разделы, LVM и кончившееся место</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">

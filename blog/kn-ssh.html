@@ -7,7 +7,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>SSH: ключ вместо пароля и что закрыть в sshd · itsliventsev</title>
-<meta name="description" content="Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.">
+<meta name="description" content="Вход по ключу убирает из логов поток подбора пароля, а три директивы sshd — root, пароли и список пользователей — закрывают большую часть атаки.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
 <meta name="post-tags" content="ssh,диагностика,автоматизация">
@@ -528,7 +528,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="SSH: ключ вместо пароля и что закрыть в sshd · itsliventsev">
-  <meta property="og:description" content="Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.">
+  <meta property="og:description" content="Вход по ключу убирает из логов поток подбора пароля, а три директивы sshd — root, пароли и список пользователей — закрывают большую часть атаки.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-ssh.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -540,9 +540,9 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="автоматизация">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SSH: ключ вместо пароля и что закрыть в sshd · itsliventsev">
-  <meta name="twitter:description" content="Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.">
+  <meta name="twitter:description" content="Вход по ключу убирает из логов поток подбора пароля, а три директивы sshd — root, пароли и список пользователей — закрывают большую часть атаки.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SSH: ключ вместо пароля и что закрыть в sshd","description":"Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.","url":"https://itsliventsev.github.io/blog/kn-ssh.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ssh.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"ssh, диагностика, автоматизация"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SSH: ключ вместо пароля и что закрыть в sshd","description":"Вход по ключу убирает из логов поток подбора пароля, а три директивы sshd — root, пароли и список пользователей — закрывают большую часть атаки.","url":"https://itsliventsev.github.io/blog/kn-ssh.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-ssh.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"ssh, диагностика, автоматизация"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"SSH: ключ вместо пароля и что закрыть в sshd","item":"https://itsliventsev.github.io/blog/kn-ssh.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -562,7 +562,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
         <h1>SSH: ключ вместо пароля и что закрыть в sshd</h1>
-        <p class="kn-def">Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.</p>
+        <p class="kn-def">Вход по ключу убирает из логов поток подбора пароля, а три директивы sshd — root, пароли и список пользователей — закрывают большую часть атаки.</p>
       </header>
 
       <div class="kn-note-body">
@@ -597,10 +597,10 @@ PermitTunnel no</code></pre>
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
           <li><a href="/blog/kn-systemd.html"><strong>systemd: юниты, цели и порядок загрузки</strong><span>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span></a></li>
-          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который можно запускать дважды</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+          <li><a href="/blog/kn-ansible.html"><strong>Ansible: плейбук, который не боится повтора</strong><span>Модуль вместо shell, inventory и группы, --check и --diff, шаблоны Jinja2 и почему отчёт changed=0 важнее успешного вывода.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который можно запускать дважды</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ntp.html">Время в сети: NTP и почему 30 секунд ломают всё</a> — ссылается на эту заметку</li><li><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-ansible.html">Ansible: плейбук, который не боится повтора</a> — ссылается на эту заметку</li><li><a href="/blog/kn-ntp.html">Время в сети: NTP и 30 секунд</a> — ссылается на эту заметку</li><li><a href="/blog/kn-systemd.html">systemd: юниты, цели и порядок загрузки</a> — ссылается на эту заметку</li><li><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">

@@ -802,11 +802,12 @@ function graphPage(notes, registry, stands, bridge) {
   const linkWord = (count) => count + ' ' + plural(count, 'связь', 'связи', 'связей');
   return `${head({
     title: 'Граф связей · itsliventsev',
-    description: 'Живой граф связей сайта: '
+    /* Описание уходит в сниппет, где помещается ~160 символов: числа
+       оставляем, а перечисление слоёв графа — это уже текст страницы. */
+    description: 'Граф связей сайта: '
       + notes.length + ' ' + plural(notes.length, 'заметка', 'заметки', 'заметок')
-      + ' базы знаний и ' + stands.length + ' ' + plural(stands.length, 'учебный стенд', 'учебных стенда', 'учебных стендов')
-      + ' связаны ' + linkWord(allEdges.length) + ' — перекрёстные ссылки заметок и мост «теория ↔ практика».'
-      + ' Ядро — хабы, пояс — рубрики и стенды, орбита — листья.',
+      + ' базы знаний и ' + stands.length + ' ' + plural(stands.length, 'стенд', 'стенда', 'стендов')
+      + ' связаны ' + linkWord(allEdges.length) + ' — перекрёстные ссылки заметок и мост «теория ↔ практика».',
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
   })}
 <body>

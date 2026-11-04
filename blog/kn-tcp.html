@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
-<title>TCP: три пакета, четыре состояния и одна минута · itsliventsev</title>
+<title>TCP: три пакета и одна минута · itsliventsev</title>
 <meta name="description" content="TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.">
 <meta name="post-date" content="2026-11-04">
 <meta name="post-type" content="note">
@@ -527,7 +527,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="itsliventsev">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="TCP: три пакета, четыре состояния и одна минута · itsliventsev">
+  <meta property="og:title" content="TCP: три пакета и одна минута · itsliventsev">
   <meta property="og:description" content="TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-tcp.html">
   <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
@@ -539,11 +539,11 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
   <meta property="article:tag" content="диагностика">
   <meta property="article:tag" content="mtu">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TCP: три пакета, четыре состояния и одна минута · itsliventsev">
+  <meta name="twitter:title" content="TCP: три пакета и одна минута · itsliventsev">
   <meta name="twitter:description" content="TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.">
   <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"TCP: три пакета, четыре состояния и одна минута","description":"TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.","url":"https://itsliventsev.github.io/blog/kn-tcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tcp, диагностика, mtu"}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"TCP: три пакета, четыре состояния и одна минута","item":"https://itsliventsev.github.io/blog/kn-tcp.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"TCP: три пакета и одна минута","description":"TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.","url":"https://itsliventsev.github.io/blog/kn-tcp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-tcp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"tcp, диагностика, mtu"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"TCP: три пакета и одна минута","item":"https://itsliventsev.github.io/blog/kn-tcp.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
 <body>
@@ -561,7 +561,7 @@ body { --u-area: var(--u-accent); --u-area-soft: var(--u-accent-soft); }
           <span>8 мин</span>
           <span class="kn-ai">текст структурирован с помощью ИИ</span>
         </div>
-        <h1>TCP: три пакета, четыре состояния и одна минута</h1>
+        <h1>TCP: три пакета и одна минута</h1>
         <p class="kn-def">TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.</p>
       </header>
 
@@ -596,11 +596,11 @@ tcpdump -ni any &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-rst) != 0&#39;</code></pre
       <section class="kn-section" aria-labelledby="related-title">
         <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
         <ul class="kn-related">
-          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
-          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: почему ping идёт, а скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
+          <li><a href="/blog/kn-mtu.html"><strong>MTU и PMTU: ping идёт, скачивание нет</strong><span>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span></a></li>
           <li><a href="/blog/kn-dns.html"><strong>DNS: кеш, TTL и два резолвера</strong><span>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-bgp.html">BGP: политика вместо метрики</a> — ссылается на эту заметку</li><li><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: почему ping идёт, а скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a> — ссылается на эту заметку</li><li><a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-bgp.html">BGP: политика вместо метрики</a> — ссылается на эту заметку</li><li><a href="/blog/kn-dns.html">DNS: кеш, TTL и два резолвера</a> — ссылается на эту заметку</li><li><a href="/blog/kn-mtu.html">MTU и PMTU: ping идёт, скачивание нет</a> — ссылается на эту заметку</li><li><a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a> — ссылается на эту заметку</li><li><a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать</a> — ссылается на эту заметку</li><li><a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -612,7 +612,7 @@ tcpdump -ni any &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-rst) != 0&#39;</code></pre
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
-        <span><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка вместо двух →</a><a href="/blog/kn-systemd.html">← systemd: юниты, цели и порядок загрузки</a></span>
+        <span><a href="/blog/kn-tls.html">Сертификаты и TLS 1.3: одна поездка →</a><a href="/blog/kn-systemd.html">← systemd: юниты, цели и порядок загрузки</a></span>
       </nav>
     </div>
 
