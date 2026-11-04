@@ -14,9 +14,15 @@ const numbers = stats();
 /* 1. Плитки героя: четыре числа и их подписи */
 const index = read('index.html');
 const tilesBlock = index.slice(index.indexOf('<ul class="home-stats">'), index.indexOf('</ul>', index.indexOf('<ul class="home-stats">')));
-const tiles = [...tilesBlock.matchAll(/<li><b>(\d+)<\/b><span>([^<]+)<\/span><\/li>/g)]
-  .map(match => ({ value: Number(match[1]), label: match[2].trim() }));
-assert.equal(tiles.length, 4, 'в герое должно остаться четыре плитки, получено ' + tiles.length);
+const tiles = [...tilesBlock.matchAll(/<li><a href="([^"]+)"><b>(\d+)<\/b><span>([^<]+)<\/span><\/a><\/li>/g)]
+  .map(match => ({ href: match[1], value: Number(match[2]), label: match[3].trim() }));
+assert.equal(tiles.length, 5, 'в герое ровно пять плиток: числа практики и база знаний, получено ' + tiles.length);
+assert.deepEqual(tiles.map(item => item.href).sort(), [...new Set(tiles.map(item => item.href))].sort(),
+  'каждая плитка ведёт на свою страницу, без дублей');
+for (const item of tiles) {
+  assert(item.href.startsWith('/') && item.href.endsWith('.html'), 'плитка «' + item.label + '» должна вести на страницу сайта, а не ' + item.href);
+  assert(fs.existsSync(path.join(ROOT, item.href)), 'плитка «' + item.label + '» ведёт на несуществующую страницу ' + item.href);
+}
 
 const tile = keyword => {
   const found = tiles.filter(item => item.label.startsWith(keyword));
@@ -27,6 +33,7 @@ assert.equal(tile('пространств').value, numbers.universes, 'плит�
 assert.equal(tile('работ').value, numbers.works, 'плитка «работы» должна совпадать со страницами-заданиями');
 assert.equal(tile('маршрут').value, numbers.routes, 'плитка «маршруты» должна совпадать со страницами стендов');
 assert.equal(tile('термин').value, numbers.terms, 'плитка «термины» должна совпадать со словарём');
+assert.equal(tile('заметк').value, numbers.notes, 'плитка «заметки» должна совпадать с базой знаний');
 
 /* 2. Те же числа в текстах рядом: лид практики и ссылка на все маршруты */
 const lede = index.match(/(\d+) работ[аы] в трёх направлениях/);
@@ -50,6 +57,9 @@ const doc = flatReferences.match(/(\d+) пространства, (\d+) рабо
 assert(doc, 'в REFERENCES.md должны быть перечислены все четыре числа');
 assert.deepEqual(doc.slice(1).map(Number), [numbers.universes, numbers.works, numbers.routes, numbers.terms],
   'REFERENCES.md разошёлся с реальным счётом');
+const notesMention = flatReferences.match(/(\d+) заметки/);
+assert(notesMention, 'REFERENCES.md должен называть число заметок');
+assert.equal(Number(notesMention[1]), numbers.notes, 'REFERENCES.md расходится с числом заметок');
 assert(references.includes('scripts/lib/site-stats.js'), 'REFERENCES.md должен называть модуль, который считает числа');
 
 /* 5. Следов старых чисел не осталось ни на сайте, ни в справке */
@@ -61,4 +71,4 @@ assert.deepEqual(stale, [], 'остались старые числа: ' + stale
 
 console.log('Stats: ' + numbers.universes + ' пространства, ' + numbers.works + ' работы, '
   + numbers.routes + ' маршрута, ' + numbers.terms + ' термина — разметка совпадает со скриптом');
-console.log('Stats (notes): ' + numbers.notes + ' заметки в базе знаний не заявлены на главной — кандидат на пятую плитку');
+console.log('Stats (notes): ' + numbers.notes + ' заметки ведут с главной на /blog.html');

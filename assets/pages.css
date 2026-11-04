@@ -43,17 +43,28 @@
 .home-actions .ui-btn { min-height: 46px; padding-inline: var(--u-s6); }
 
 /* Numbers-first strip: the reference puts facts before adjectives */
+/* Numbers-first strip: each number links to the page that proves it.
+   Колонки задают только медиазапросы (≥1081 — столбик фактов, ≤1080 — две
+   колонки), поэтому базового repeat(4) здесь нет: он не срабатывал никогда. */
 .home-stats {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: var(--u-s2) 0 0;
   padding: var(--u-s5) 0 0;
   border-top: 1px solid var(--u-line);
   list-style: none;
 }
-.home-stats li { display: grid; gap: 4px; align-content: start; padding-inline: var(--u-s5); border-inline-start: 1px solid var(--u-line); }
+.home-stats li { display: grid; align-content: start; padding-inline: var(--u-s5); border-inline-start: 1px solid var(--u-line); }
 .home-stats li:first-child { padding-inline-start: 0; border-inline-start: 0; }
+.home-stats a {
+  display: grid;
+  gap: 4px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--u-r-sm);
+}
+.home-stats a:hover b, .home-stats a:focus-visible b { color: var(--u-accent); }
+.home-stats a:focus-visible { outline: 2px solid var(--u-accent); outline-offset: 6px; }
 .home-stats b {
   font-family: var(--u-font-display);
   font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -728,9 +739,9 @@
   .esp-hero { grid-template-columns: minmax(0, 1fr); padding: var(--u-s6); gap: var(--u-s5); }
   .esp-hero > *:first-child, .esp-hero .case-facts { grid-column: 1 / -1; }
   .sign-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home-stats { grid-column: 1 / -1; }
   .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--u-s4) 0; }
-  .home-stats li:nth-child(3) { padding-inline-start: 0; border-inline-start: 0; }
+  .home-stats li:nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; }
+  .home-stats li:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .home-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bento-panel--wide, .bento-panel--narrow { grid-column: span 12; }
   .feed { grid-template-columns: minmax(0, 1fr); }
