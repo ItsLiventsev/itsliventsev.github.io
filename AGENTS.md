@@ -136,7 +136,7 @@
 | **C** | Вселенные | `stands/`, `assets/course.css`, `assets/stands.js`, `assets/league*.js`, `assets/{office,ops}-*.js`, `assets/lab-kit.js`, `assets/mascots.js`, `assets/submissions.js` | кабинеты, роадмапы, стенды, проверки |
 | **D** | Данные и поиск | `assets/search-index.json`, `assets/feed.js`, `assets/home-reading.js`, `assets/data/`, `scripts/lib/site-stats.js`, `scripts/build-*.{js,py}`, `scripts/build-search-index.py` | индекс, лента активности, счётчики, числа главной |
 | **E** | Качество и CI | `scripts/*` (кроме `build-*`), `.github/workflows/`, `feed.xml`, `site.webmanifest` | проверки, регрессии, axe, оффлайн |
-| **F** | Документация и система | `DESIGN_SYSTEM.md`, `docs/`, `AGENTS.md`, `QA_REPORT.md`, `REFERENCES.md` | описание системы, правила, отчёты |
+| **F** | Документация и система | `DESIGN_SYSTEM.md`, `docs/`, `AGENTS.md`, `QA_REPORT.md`, `REFERENCES.md`, `scripts/test-design-doc.js` | описание системы, правила, отчёты |
 
 `admin.html`, `assets/admin*.js`, `assets/admin-config.js` — полоса **C** (панель преподавателя относится к стендам).
 
@@ -184,7 +184,7 @@
 | Команда | Что проверяет | Ориентир |
 |---|---|---|
 | `python3 scripts/audit-html.py` | структура 140 страниц, один `h1`, битые ссылки, дубли `id` | 0 ошибок, 0 битых ссылок |
-| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте, лента итераций и журнал (инверсия, токены панели, 9×2 строки, крючки), один сценарий мобильной навигации | число passing не уменьшается (сейчас 3876) |
+| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте, лента итераций и журнал (инверсия, токены панели, 9×2 строки, крючки), один сценарий мобильной навигации | число passing не уменьшается (сейчас 3877) |
 | `node scripts/build-knowledge.js --check` | заметки: связи, рубрики, источники, сборка страниц | `ошибок нет` |
 | `node scripts/build-related.js --check` | блоки «теория ↔ практика» совпадают с `topics.json` | 62 страницы, 45 связей |
 | `python3 scripts/build-search-index.py --check` | поисковый индекс совпадает с разметкой | 122 записи |
@@ -193,6 +193,7 @@
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
 | `node scripts/build-og.js --check` | OG-карточки совпадают с шаблоном (нужны зависимости: см. `docs/seo.md`) | `5 карточек совпадают` |
 | `node scripts/test-stats.js` | числа главной считает `scripts/lib/site-stats.js`, а тест сверяет их с плитками, лидом практики, каталогом проектов и `REFERENCES.md` | `Stats: …` |
+| `node scripts/test-design-doc.js` | справка по оформлению — контракт: каждый названный в `DESIGN_SYSTEM.md` класс существует в CSS, удалённые компоненты не возвращаются, ключевые компоненты описаны | `Design doc: …` |
 | `node scripts/test-tabbar.js` | таббар един на всех страницах: пять пунктов, ровно одна активная метка, ссылки подбара стендов приходят в меню группой «Раздел стендов» | `Tabbar: …` |
 | `node scripts/test-iter-strip.js` | лента итераций в jsdom: шаги сменяются, время шага измеряется, счётчики растут, пауза замирает, при `reduce` список статичен | `Iter strip: …` |
 | `node scripts/test-graph.js` | граф связей: 26 стендов из `topics.json`, фильтр «стенды», стенд держится за видимую тему | `Graph: …` |
@@ -287,6 +288,8 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-20 | B | ✅ Журнал изменений на главной — вторая инверсная панель: внутри `.journal` токены темы переопределены на инверсную пару, поэтому лента коммитов, счётчик, график и чипы вывернуты сами; активный чип и hover ссылки — глиняные, иначе чёрная пилюля растворялась в подложке | `index.html`, `assets/pages.css`, `scripts/regression-static.js`, `scripts/browser-smoke.js` | — |
 | U-21 | D | ✅ Числа главной перестали быть вписанными руками: один модуль `scripts/lib/site-stats.js` (3 пространства, 42 работы, 52 маршрута, 74 термина), `scripts/test-stats.js` сверяет плитки, лид практики, каталог проектов и `REFERENCES.md` | `scripts/lib/site-stats.js`, `scripts/test-stats.js`, `index.html`, `projects.html` | — |
 | U-22 | B | ✅ Убраны мёртвые правила CSS: утилиты без потребителей, легаси-пилюли, `.catalog-stat`, варианты карточек `--lead/--tall`, поля формы, `notice-rose`; возврат запрещён ассертами | `assets/{base,pages,course}.css`, `scripts/regression-static.js` | — |
+| U-28 | F | ✅ `DESIGN_SYSTEM.md` сверяется с кодом: `scripts/test-design-doc.js` проверяет 82 класса, ловит описания несуществующих компонентов (`.kn-card-cover`, `--lead`, обложки 960×540), требует упоминания ключевых компонентов; заодно `.ui-callout` сведён в одно определение, дубль из `pages.css` убран | `DESIGN_SYSTEM.md`, `scripts/test-design-doc.js`, `assets/{base,pages}.css` | — |
+| U-29 | F | 🔜 Аудит дублей между слоями: найти остальные классы, объявленные и в `base.css`, и в `pages.css`/`course.css`, свести каждый к одному владельцу (`test-design-doc` знает только справку) | `assets/*.css`, `scripts/test-design-doc.js` | P2 |
 | U-23 | B | 🔜 Пятая плитка «43 заметки» на главной: число уже считает `scripts/lib/site-stats.js`, нужен ряд из пяти плиток и проверка переноса на 360 px | `index.html`, `assets/pages.css`, `scripts/test-stats.js` | P2 |
 | U-24 | A | 🔜 Критический CSS: разложить `base.css` на каркас и остальное, откладывать `pages.css`/`course.css` по типу страницы, измерить LCP в `browser-smoke` | `assets/*.css`, `index.html`, `scripts/browser-smoke.js` | P2 |
 | U-25 | A | 🔜 Кэш без полного сброса: `sw.js` держит версии в URL (`?v=`) и обновляет файлы stale-while-revalidate вместо удаления всего кэша | `sw.js`, `scripts/test-service-worker.js` | P2 |
@@ -306,6 +309,8 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 - **jsdom не грузит относительные `link`/`script`.** Тестировать через `JSDOM.fromURL` на локальном сервере.
   «Not implemented: navigation» на страницах-редиректах — норма, `fetch is not defined` в jsdom — тоже.
 - **Скрипты стендов инициализируются ~1 секунду** даже в jsdom: ждать `body.ui-ready`, а не фиксированные 300 мс.
+- **Справка по оформлению — контракт, а не эссе.** Названный в `DESIGN_SYSTEM.md` класс обязан
+  существовать в CSS: `scripts/test-design-doc.js` падает и на описании несуществующего компонента.
 - **Числа на главной не вписывают руками.** Их считает `scripts/lib/site-stats.js`, а `scripts/test-stats.js`
   сверяет с разметкой; «41 работа» когда-то разошлась с сайтом именно потому, что жила в трёх местах.
 - **Лента итераций живёт в одном файле.** `assets/iter-strip.js` сам ведёт паузу, секундомер и очередь шагов;

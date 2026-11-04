@@ -630,18 +630,25 @@ th {
 }
 tbody tr:last-child td { border-bottom: 0; }
 
-/* Notices / callouts */
+/* Notices / callouts: одна плашка на весь сайт.
+   Раньше .ui-callout был объявлен дважды — здесь и в pages.css, — и страницы
+   спорили со слоем: карточка из pages.css плюс полоса из base.css. Теперь
+   окончательный вид живёт только тут, полоса тона — единственный маркер. */
 .ui-callout {
-  margin-block: var(--u-s6);
+  display: grid;
+  gap: 4px;
+  margin-block: var(--u-s4) var(--u-s6);
   padding: var(--u-s4) var(--u-s5);
   border-inline-start: 3px solid var(--u-area);
+  border-radius: var(--u-r-lg);
   background: var(--u-surface);
-  border-radius: 0 var(--u-r-sm) var(--u-r-sm) 0;
+  box-shadow: var(--u-shadow-1);
   color: var(--u-ink-2);
+  font-size: var(--u-fs-sm);
+  line-height: 1.55;
 }
 .ui-callout strong { color: var(--u-ink); }
-.notice, .callout { /* legacy hook kept for existing content */ }
-.notice:not([data-ui-decorated]), .callout:not([data-ui-decorated]) {
+.notice, .callout {
   margin-block: var(--u-s6);
   padding: var(--u-s4) var(--u-s5);
   border: 1px solid var(--u-line);
