@@ -71,8 +71,11 @@
 7. **Каталоги на одном контракте.** «Проекты», «Статьи» и «Заметки» показывают списки одинаково:
    чипы `data-catalog-filter` (значение = тег, `all` — без фильтра), элементы `data-catalog-tags`
    (теги через пробел), контейнер `data-catalog-list`, строка состояния `data-catalog-status`,
-   заглушка `data-catalog-empty`. Логику держит `assets/catalog.js`; страница объявляет данные,
-   а не поведение. Свой фильтр в странице или в движке — регресс, это ловит `regression-static`.
+   заглушка `data-catalog-empty`, раздел вокруг части списка `data-catalog-group` (из него фильтр
+   вымел всё — раздел сворачивается вместе с заголовком). Логику держит `assets/catalog.js`;
+   страница объявляет данные, а не поведение. Обработчики висят на документе: «Статьи» рисуют
+   и строки, и чипы после загрузки, и привязка «к найденным узлам» уже давала мёртвые чипы в CI.
+   Свой фильтр в странице или в движке — регресс, это ловит `regression-static`.
 8. **Ноль зависимостей в рантайме.** jsdom, playwright, axe — только для проверок в `scripts/`.
 9. **Работа без JS.** Любая навигация и контент доступны без скриптов; `shell.js` только достраивает
    шапку. `.st-*`-классы в стендах — это осознанный no-JS фолбэк, удалять их нельзя.
@@ -163,14 +166,14 @@
 | Команда | Что проверяет | Ориентир |
 |---|---|---|
 | `python3 scripts/audit-html.py` | структура 140 страниц, один `h1`, битые ссылки, дубли `id` | 0 ошибок, 0 битых ссылок |
-| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте | число passing не уменьшается (сейчас 3646) |
+| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте | число passing не уменьшается (сейчас 3655) |
 | `node scripts/build-knowledge.js --check` | заметки: связи, рубрики, источники, сборка страниц | `ошибок нет` |
 | `node scripts/build-related.js --check` | блоки «теория ↔ практика» совпадают с `topics.json` | 62 страницы, 45 связей |
 | `python3 scripts/build-search-index.py --check` | поисковый индекс совпадает с разметкой | 122 записи |
 | `node scripts/runtime-smoke.js` | синтаксис и базовое поведение JS | `RUNTIME SMOKE OK` |
 | `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция | `OK` |
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
-| `node scripts/test-{activity,search,reading,catalog,theme}.js` | лента, поиск, полка, каталог (поиск + фильтр + сброс), тема от системы | `OK` |
+| `node scripts/test-{activity,search,reading,catalog,theme}.js` | лента, поиск, полка, каталог (поиск, чипы, сочетание, пустой результат, сворачивание раздела, разметка после загрузки), тема от системы | `OK` |
 | `node scripts/browser-a11y.js` | axe (WCAG 2.0/2.1/2.2 A+AA, включая контраст) на всех контентных страницах и на 17 в тёмной теме | 0 блокирующих |
 | `AUDIT_STRICT=1 node scripts/audit-classes.js` | классы в DOM vs CSS на 13 страницах стендов | без «сирот» |
 | `node scripts/browser-{smoke,reading,faq,offline}.js` | Chromium: переполнение 360/390, диалог поиска, drawer, тема, axe | `OK` |
@@ -256,7 +259,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-13 | B | 🔜 Кейсы `projects/*`: единый шаблон (герой, факты, итоги) для киберспорта и навигации | `projects/*.html`, `pages.css` | P2 |
 | U-14 | F | 🔜 Свести `DESIGN_SYSTEM.md`, `docs/design-system.md` и `docs/motion.md` без расхождений | `docs/`, `DESIGN_SYSTEM.md` | P2 |
 | U-17 | D | 🔜 Граф связей по всему сайту: стенды как узлы рядом с заметками (сейчас 43 узла только из базы знаний) | `blog/graph.html`, `assets/knowledge.js`, `scripts/build-knowledge.js` | P2 |
-| U-18 | B | ✅ Один контракт каталога: чипы `data-catalog-filter`, теги `data-catalog-tags`, статус и заглушка общие; фильтр ленты ушёл из `knowledge.js` в `catalog.js` | `assets/catalog.js`, `assets/knowledge.js`, `scripts/build-knowledge.js`, `blog.html`, `articles.html`, `projects.html` | — |
+| U-18 | B | ✅ Один контракт каталога: чипы `data-catalog-filter`, теги `data-catalog-tags`, статус, заглушка и сворачивание раздела общие; обработчики делегированы документу; фильтр ленты ушёл из `knowledge.js` в `catalog.js` | `assets/catalog.js`, `assets/knowledge.js`, `scripts/build-knowledge.js`, `blog.html`, `articles.html`, `projects.html` | — |
 | U-15 | 🧭 | Решить: добавлять ли мобильный таббар в стенды (сейчас он в оболочке, у стендов своя шапка) | `shell.js`, `course.css` | — |
 
 Правило очереди: берём **не больше двух** задач одной полосы в параллель, разные полосы — свободно.

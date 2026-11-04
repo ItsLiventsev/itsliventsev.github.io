@@ -67,25 +67,44 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.notEqual(await page.locator('[data-activity-count]').innerText(), '—');
 
     /* Каталог: фильтр, поиск и сброс работают на одной разметке во всех витринах.
-       Статьи — единственная витрина, которая рисует список из JSON уже после
-       загрузки, поэтому проверяем именно здесь: чипы должны видеть новые строки. */
+       Статьи — единственная витрина, которая рисует и строки, и чипы из JSON уже
+       после загрузки: здесь проверяется, что контракт видит новую разметку. */
     await page.goto(base + '/articles.html', { waitUntil: 'load' });
+    await page.waitForFunction(() => document.querySelector('[data-catalog-search]')?.hidden === false);
     const articleRows = page.locator('#pub-list .catalog-row');
     await articleRows.first().waitFor();
     const articleTotal = await articleRows.count();
     const articleChips = page.locator('#pub-filters [data-catalog-filter]');
+    const articleStatus = page.locator('[data-catalog-status]');
     if (await articleChips.count() > 1) {
       await articleChips.nth(1).click();
       const narrowed = await page.locator('#pub-list .catalog-row:visible').count();
       assert(narrowed >= 1 && narrowed <= articleTotal, 'фильтр статей сужает список');
-      assert.match(await page.locator('[data-catalog-status]').innerText(), /Найдено:/);
+      assert.match(await articleStatus.innerText(), /Найдено: \d+/, 'чип, нарисованный скриптом, обновляет статус');
+      assert.equal(await articleChips.nth(1).getAttribute('aria-pressed'), 'true', 'выбранный чип нажат');
+      assert.equal(await articleChips.first().getAttribute('aria-pressed'), 'false');
       await articleChips.first().click();
       assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), articleTotal, 'сброс возвращает все статьи');
-      await page.locator('[data-catalog-search] input').fill('нет такой статьи');
-      assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), 0, 'поиск по статьям находит пусто');
-      await page.locator('[data-catalog-clear]').click();
-      assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), articleTotal, 'очистка возвращает список');
+      assert.equal(await articleStatus.innerText(), '', 'без фильтра статус пуст');
     }
+    await page.locator('[data-catalog-search] input').fill('нет такой статьи');
+    assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), 0, 'поиск по статьям находит пусто');
+    assert.match(await articleStatus.innerText(), /Ничего не найдено/, 'пустой результат объяснён');
+    assert.equal(await page.locator('[data-catalog-empty]').isVisible(), true, 'заглушка видна на пустом результате');
+    await page.locator('[data-catalog-clear]').click();
+    assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), articleTotal, 'очистка возвращает список');
+    assert.equal(await page.locator('[data-catalog-empty]').isVisible(), false, 'заглушка снова спрятана');
+
+    /* Проекты: два раздела, фильтр по типу, пустой раздел сворачивается. */
+    await page.goto(base + '/projects.html', { waitUntil: 'load' });
+    const projectRows = page.locator('.catalog-row');
+    const projectTotal = await projectRows.count();
+    await page.locator('[data-catalog-filter="case"]').click();
+    assert(await page.locator('.catalog-row:visible').count() < projectTotal, 'фильтр проектов сужает список');
+    assert.equal(await page.locator('[data-catalog-group]:not([hidden])').count(), 1, 'пустой раздел сворачивается');
+    await page.locator('[data-catalog-filter="all"]').click();
+    assert.equal(await page.locator('.catalog-row:visible').count(), projectTotal, 'сброс возвращает все проекты');
+    assert.equal(await page.locator('[data-catalog-group]:not([hidden])').count(), 2);
 
     for (const path of ['/', '/projects.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
