@@ -66,6 +66,27 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.match(await page.locator('.feed-item h3').first().innerText(), /контраст/);
     assert.notEqual(await page.locator('[data-activity-count]').innerText(), '—');
 
+    /* Каталог: фильтр, поиск и сброс работают на одной разметке во всех витринах.
+       Статьи — единственная витрина, которая рисует список из JSON уже после
+       загрузки, поэтому проверяем именно здесь: чипы должны видеть новые строки. */
+    await page.goto(base + '/articles.html', { waitUntil: 'load' });
+    const articleRows = page.locator('#pub-list .catalog-row');
+    await articleRows.first().waitFor();
+    const articleTotal = await articleRows.count();
+    const articleChips = page.locator('#pub-filters [data-catalog-filter]');
+    if (await articleChips.count() > 1) {
+      await articleChips.nth(1).click();
+      const narrowed = await page.locator('#pub-list .catalog-row:visible').count();
+      assert(narrowed >= 1 && narrowed <= articleTotal, 'фильтр статей сужает список');
+      assert.match(await page.locator('[data-catalog-status]').innerText(), /Найдено:/);
+      await articleChips.first().click();
+      assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), articleTotal, 'сброс возвращает все статьи');
+      await page.locator('[data-catalog-search] input').fill('нет такой статьи');
+      assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), 0, 'поиск по статьям находит пусто');
+      await page.locator('[data-catalog-clear]').click();
+      assert.equal(await page.locator('#pub-list .catalog-row:visible').count(), articleTotal, 'очистка возвращает список');
+    }
+
     for (const path of ['/', '/projects.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(base + path, { waitUntil: 'load' });

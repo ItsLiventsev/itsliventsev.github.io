@@ -57,28 +57,33 @@
       </div>
       <button type="button" data-catalog-clear hidden>Очистить</button>
     </div>
+    <div class="catalog-filters" role="group" aria-label="Тип материала">
+      <button class="catalog-filter" type="button" aria-pressed="true" data-catalog-filter="all">Все</button>
+      <button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="practice">учебные материалы</button>
+      <button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="case">кейсы</button>
+    </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
 
   <section class="ui-section" aria-labelledby="practice-title">
     <div class="ui-section-head"><div><p class="ui-eyebrow">материалы для студентов</p><h2 id="practice-title">Учебный процесс</h2></div><span class="ui-kicker">открываются в браузере</span></div>
     <div class="catalog" data-catalog-list>
-      <a class="catalog-row" href="stands/glossary.html">
+      <a class="catalog-row" data-catalog-tags="practice" href="stands/glossary.html">
         <span class="catalog-index">01</span>
         <span><span class="catalog-title">Словарь практик</span><span class="catalog-desc">Единый словарь терминов трёх пространств: команды и роли, сети, документы и данные, геймификация. Поиск, фильтры по вселенным и пометки новых терминов.</span><span class="catalog-meta"><span>сети</span><span aria-hidden="true">·</span><span>офис</span><span aria-hidden="true">·</span><span>данные</span></span></span>
         <span class="catalog-side"><span class="ui-tag ui-tag--ok">готово</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>
       </a>
-      <a class="catalog-row" href="https://itsliventsev.github.io/netsys_trainer/" target="_blank" rel="noopener">
+      <a class="catalog-row" data-catalog-tags="practice" href="https://itsliventsev.github.io/netsys_trainer/" target="_blank" rel="noopener">
         <span class="catalog-index">02</span>
         <span><span class="catalog-title">Тренажёры по сетевым технологиям</span><span class="catalog-desc">Обжим витой пары и монтаж розеток: семь этапов, режимы тренировки и экзамена, автоматический отчёт и 100-балльная шкала.</span><span class="catalog-meta"><span>практика</span><span aria-hidden="true">·</span><span>витая пара</span></span></span>
         <span class="catalog-side"><span class="ui-tag ui-tag--info">интерактив</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>
       </a>
-      <a class="catalog-row" href="stands/index.html">
+      <a class="catalog-row" data-catalog-tags="practice" href="stands/index.html">
         <span class="catalog-index">03</span>
         <span><span class="catalog-title">Виртуальные пространства</span><span class="catalog-desc">СетьПолис — сеть, ОфисПолис — цифровое рабочее место, ДатаПолис — эксплуатация и дежурства. Профили, автосохранение, симуляторы и автопроверка.</span><span class="catalog-meta"><span>3 пространства</span><span aria-hidden="true">·</span><span>41 работа</span></span></span>
         <span class="catalog-side"><span class="ui-tag ui-tag--ok">готово</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>
       </a>
-      <a class="catalog-row" href="archive.html">
+      <a class="catalog-row" data-catalog-tags="practice" href="archive.html">
         <span class="catalog-index">04</span>
         <span><span class="catalog-title">Компьютерные сети</span><span class="catalog-desc">LAN, MAN, WAN, линии связи и сетевое оборудование. Ситуационная задача «Проектирование сети цеха» с расчётом бюджета.</span><span class="catalog-meta"><span>топология</span><span aria-hidden="true">·</span><span>архив</span></span></span>
         <span class="catalog-side"><span class="ui-tag">архив</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>
@@ -89,12 +94,12 @@
   <section class="ui-section" aria-labelledby="cases-title">
     <div class="ui-section-head"><div><p class="ui-eyebrow">портфолио</p><h2 id="cases-title">Завершённые кейсы</h2><p>Истории с результатом: что было сделано, кем принято и что осталось после проекта.</p></div><span class="ui-kicker">2020–2025</span></div>
     <div class="catalog" data-catalog-list>
-      <a class="catalog-row" href="projects/esports.html">
+      <a class="catalog-row" data-catalog-tags="case" href="projects/esports.html">
         <span class="catalog-index">05</span>
         <span><span class="catalog-title">Киберспортивное направление в образовании</span><span class="catalog-desc">С нуля собрал программу и сборные колледжа: пять дисциплин, городские лиги МСКЛ и МШКЛ, внутренние чемпионаты и бронза Main Stage по CS:GO. Кейс фиксирует весь путь — включая смену места работы.</span><span class="catalog-meta"><span>2020–2025</span><span aria-hidden="true">·</span><span>5 дисциплин</span><span aria-hidden="true">·</span><span>завершён</span></span></span>
         <span class="catalog-side"><span class="ui-tag">кейс</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>
       </a>
-      <a class="catalog-row" href="projects/navigation.html">
+      <a class="catalog-row" data-catalog-tags="case" href="projects/navigation.html">
         <span class="catalog-index">06</span>
         <span><span class="catalog-title">Оформление навигации отделения колледжа</span><span class="catalog-desc">Система поэтажных и дверных указателей: три цвета, два шрифта, семь типов табличек. Знаки приняли, напечатали и смонтировали.</span><span class="catalog-meta"><span>2023–2024</span><span aria-hidden="true">·</span><span>графический дизайн</span><span aria-hidden="true">·</span><span>внедрено</span></span></span>
         <span class="catalog-side"><span class="ui-tag">кейс</span><span class="catalog-arrow" aria-hidden="true">↗</span></span>

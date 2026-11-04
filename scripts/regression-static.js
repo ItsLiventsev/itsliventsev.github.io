@@ -209,7 +209,22 @@ for (const behavior of ['data-reading-shelf', 'data-reading-list', 'data-reading
 }
 ok(reading.includes("const sources = ['blog', 'articles']") && reading.includes("/^[a-z0-9][a-z0-9-]*\\.html$/i"), 'home-reading.js должен валидировать источник и имя файла');
 const catalog = read('assets/catalog.js');
-ok(catalog.includes('.catalog-row') && catalog.includes('card.hidden'), 'catalog.js не соответствует разметке каталога');
+
+/* ── один контракт каталога на «Проектах», «Статьях» и «Заметках» ──
+   Раньше фильтры жили в трёх реализациях: поиск в catalog.js, тип публикации —
+   инлайновым скриптом статей, рубрика — кодом ленты в knowledge.js. Теперь
+   разметка объявляет данные (чипы, теги, списки), а показывает их один файл. */
+for (const hook of ['[data-catalog-search]', '[data-catalog-filter]', '[data-catalog-list]', '[data-catalog-tags]', '[data-catalog-status]', '[data-catalog-empty]']) {
+  ok(catalog.includes(hook), 'catalog.js: нет хука контракта ' + hook);
+}
+for (const file of ['projects.html', 'articles.html', 'blog.html']) {
+  const source = read(file);
+  ok(source.includes('data-catalog-filter'), file + ': нет чипов фильтра каталога');
+  ok(source.includes('data-catalog-tags'), file + ': у элементов каталога нет тегов');
+  ok(source.includes('data-catalog-list'), file + ': нет списка каталога');
+}
+ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/knowledge.js').includes('data-kn-stream'),
+  'knowledge.js: фильтр ленты должен жить в catalog.js, а не в базе знаний');
 
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {

@@ -58,7 +58,7 @@
       <button type="button" data-catalog-clear hidden>Очистить</button>
     </div>
     <div class="catalog-filters" id="pub-filters" role="group" aria-label="Тип публикации">
-      <button class="catalog-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>
+      <button class="catalog-filter" type="button" aria-pressed="true" data-catalog-filter="all">Все</button>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
@@ -83,14 +83,14 @@
   var posts=[];
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
   var date=function(s){if(!s)return '';if(/^\d{4}$/.test(s))return s;var d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});};
-  function render(type){
-    var items=type==='all'?posts:posts.filter(function(p){return p.type===type;});
+  function render(){
+    var items=posts;
     list.innerHTML=items.length?items.map(function(p,i){
       var meta=[];
       if(p.date)meta.push(esc(date(p.date)));
       if(p.readtime)meta.push('≈ '+esc(p.readtime));
       if(p.source)meta.push(esc(p.source));
-      return '<a class="catalog-row" href="articles/'+esc(p.file)+'">'
+      return '<a class="catalog-row" data-catalog-tags="'+esc(p.type||'')+'" href="articles/'+esc(p.file)+'">'
         +'<span class="catalog-index">'+String(i+1).padStart(2,'0')+'</span>'
         +'<span><span class="catalog-title">'+esc(p.title)+'</span>'
         +(p.excerpt?'<span class="catalog-desc">'+esc(p.excerpt)+'</span>':'')
@@ -99,11 +99,6 @@
         +'<span class="catalog-side"><span class="ui-tag">'+esc(labels[p.type]||p.type)+'</span><span class="catalog-arrow" aria-hidden="true">↗</span></span></a>';
     }).join(''):'<div class="catalog-empty">В этой категории пока нет публикаций.</div>';
   }
-  filters.addEventListener('click',function(e){
-    var b=e.target.closest('[data-type-filter]'); if(!b)return;
-    filters.querySelectorAll('.catalog-filter').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
-    render(b.dataset.typeFilter);
-  });
   fetch('articles/posts.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json();}).then(function(data){
     posts=Array.isArray(data)?data.filter(function(p){return p&&p.status!=='draft';}):[];
     document.getElementById('stat-articles').textContent=posts.length+' '+(posts.length===1?'публикация':'публикации');
@@ -116,8 +111,8 @@
     var since=document.getElementById('stat-since');
     if (since) since.textContent=years.length?'с '+Math.min.apply(null,years)+' года':'';
     var types=Array.from(new Set(posts.map(function(p){return p.type;})));
-    filters.innerHTML='<button class="catalog-filter" type="button" aria-pressed="true" data-type-filter="all">Все</button>'+types.map(function(t){return '<button class="catalog-filter" type="button" aria-pressed="false" data-type-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>';}).join('');
-    render('all');
+    filters.innerHTML='<button class="catalog-filter" type="button" aria-pressed="true" data-catalog-filter="all">Все</button>'+types.map(function(t){return '<button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="'+esc(t)+'">'+esc(labels[t]||t)+'</button>';}).join('');
+    render();
   }).catch(function(){
     list.innerHTML='<div class="catalog-empty">Не удалось загрузить список. <a href="sitemap.html">Открыть карту сайта</a>.</div>';
   });
