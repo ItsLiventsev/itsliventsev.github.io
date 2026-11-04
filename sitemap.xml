@@ -334,11 +334,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://itsliventsev.github.io/blog/materials.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://itsliventsev.github.io/blog/materials/acl-i-firewall.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>

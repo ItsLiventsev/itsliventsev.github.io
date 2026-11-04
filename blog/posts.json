@@ -688,18 +688,6 @@
     "status": "published"
   },
   {
-    "slug": "materials",
-    "file": "materials.html",
-    "title": "Учебные материалы",
-    "excerpt": "Учебные материалы по сетям, системам, виртуализации, безопасности и проектированию: 24 темы с теорией, практикумами и разбором задач.",
-    "date": "",
-    "type": "note",
-    "tags": [],
-    "readtime": "",
-    "source": "",
-    "status": "published"
-  },
-  {
     "slug": "topics",
     "file": "topics.html",
     "title": "Рубрики заметок",

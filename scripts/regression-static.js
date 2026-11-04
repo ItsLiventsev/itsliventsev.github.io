@@ -265,6 +265,14 @@ ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/kno
   ok(ids.length >= 20, 'материалы: в дереве должно быть не меньше 20 активных тем');
   for (const id of ids) ok(exists('blog/materials/' + id + '.html'), 'материалы: нет страницы темы ' + id);
   ok(exists('blog/materials.html'), 'материалы: нет индексной страницы раздела');
+  const notesPage = read('blog.html');
+  ok(notesPage.includes('class="kn-wiki-layout kn-unified-layout"'), 'заметки: нет общей сетки с деревом');
+  ok(notesPage.includes('id="materials"') && notesPage.includes('Учебные материалы теперь здесь'), 'заметки: нет объединённого списка и пояснения');
+  ok(!notesPage.includes('href="/blog/materials.html"'), 'заметки: отдельный вход в материалы должен исчезнуть');
+  ok(read('blog/materials.html').includes('url=/blog.html#materials'), 'старый адрес материалов должен вести в заметки');
+  for (const id of ids) ok(notesPage.includes('/blog/materials/' + id + '.html'), 'заметки: в общем указателе нет темы ' + id);
+  const process = read('stands/setpolis.html');
+  ok(process.includes('class="st-process"') && (process.match(/class="st-process-card"/g) || []).length === 4, 'СетьПолис: четыре этапа работы должны быть карточками');
   /* Ссылка без текста — дефект доступности (axe: link-name): {{tema}} берёт
      подпись из meta темы, и молчаливая потеря заголовка ломала её. */
   for (const id of ids) {

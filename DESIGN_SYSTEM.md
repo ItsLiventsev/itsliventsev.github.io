@@ -389,7 +389,8 @@ localStorage) → системная настройка (`prefers-color-scheme`)
 | `.kn-terms`, `.kn-facts` | карточки терминов и паспорт фактов (`dl`) |
 | `.kn-kanban`, `.kn-lane`, `.kn-tile` | канбан на CSS Grid; статусы — `data-state="done" / "blocked"` |
 | `.case-study`, `.esp-hero`, `.esp-hero-main`, `.case-facts`, `.case-fact`, `.verdict-col`, `.case-outcome` | шаблон кейса: герой с фактами, разделы, «Честный разбор» в три колонки, итоговая плашка |
-| `.kn-wiki-layout`, `.kn-wiki`, `.kn-wiki-tree`, `.kn-wiki-section` | учебные материалы: сетка 280 px + текст, липкое дерево на `<details>`, активная тема — `aria-current="page"` |
+| `.kn-wiki-layout`, `.kn-wiki`, `.kn-wiki-tree`, `.kn-wiki-section` | общие заметки и материалы: рельс 260 px + текст, дерево на `<details>` в карточке; на узком экране раскрывается по запросу, активная тема — `aria-current="page"` |
+| `.st-process`, `.st-process-card`, `.st-process-num` | четыре последовательных этапа стенда: карточки с номером, заголовком и пояснением; сетка 4 → 2 → 1 |
 | `.kn-crumbs`, `.kn-goal`, `.kn-code`, `.kn-mat-*` | страница темы: крошки, цель, блок кода, список тем на индексе раздела |
 | `.kn-topic-list`, `.kn-topic-row`, `.kn-tagcloud` | указатель рубрик и облако тегов |
 

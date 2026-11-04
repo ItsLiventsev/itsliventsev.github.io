@@ -25,6 +25,7 @@ const fs = require('fs');
 const path = require('path');
 const related = require('./lib/related');
 const critical = require('./lib/critical-knowledge');
+const materials = require('./build-materials');
 
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, 'assets/data/knowledge');
@@ -417,7 +418,7 @@ ${canonical || '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->'}
 function footer(label) {
   return `<footer class="ui-footer">
     <span>© ${YEAR} itsliventsev · ${esc(label)}</span>
-    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog.html#materials">Материалы в заметках</a><a href="/feed.xml">RSS</a></nav>
     <time data-footer-updated></time>
   </footer>`;
 }
@@ -620,7 +621,7 @@ function topicsIndex(notes, counts) {
     <p class="ui-eyebrow">база знаний · указатель</p>
     <h1>Рубрики</h1>
     <p>Шесть постоянных рубрик: у каждой свой вопрос, на который она отвечает. Заметка попадает ровно в одну рубрику — так каталог остаётся каталогом, а не свалкой тегов.</p>
-    <div class="ui-pagehead-meta"><span>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}</span><span>${TAXONOMY.zones.length} рубрик</span><span><a href="/blog/materials.html">учебные материалы</a></span></div>
+    <div class="ui-pagehead-meta"><span>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}</span><span>${TAXONOMY.zones.length} рубрик</span><span><a href="/blog.html#materials">материалы в заметках</a></span></div>
   </header>
 
   <ul class="kn-topic-list">
@@ -662,7 +663,7 @@ function zonePage(zone, notes) {
     <p class="ui-eyebrow">рубрика ${esc(zone.num)} · заметки</p>
     <h1>${esc(zone.title)}</h1>
     <p class="kn-head-lede">${esc(zone.about)}</p>
-    <div class="ui-pagehead-meta"><span>${items.length} ${plural(items.length, 'заметка', 'заметки', 'заметок')}</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/materials.html">учебные материалы</a></span></div>
+    <div class="ui-pagehead-meta"><span>${items.length} ${plural(items.length, 'заметка', 'заметки', 'заметок')}</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog.html#materials">материалы в заметках</a></span></div>
   </header>
 
   <div class="kn-stream">
@@ -690,6 +691,7 @@ function orderForStream(notes, registry) {
 }
 
 function streamMarkup(notes, registry, counts) {
+  const { tree: materialTree } = materials.loadTree();
   const sorted = orderForStream(notes, registry);
   const latestUpdated = sorted.reduce((best, note) => (String(note.updated || note.date) > String(best.updated || best.date) ? note : best), sorted[0]);
   const sizes = packSizes(sorted.length);
@@ -706,10 +708,13 @@ function streamMarkup(notes, registry, counts) {
     + '<span><strong>' + esc(note.title) + '</strong><small>' + esc(note.excerpt) + '</small></span></a>').join('\n        ');
 
   return `<!-- KN:AUTO:START · сборка scripts/build-knowledge.js -->
+  <div class="kn-wiki-layout kn-unified-layout">
+    ${materials.wikiNav(materialTree, '')}
+    <div class="kn-wiki-doc kn-unified-content">
   <div class="kn-head">
     <p class="ui-eyebrow">база знаний · лента</p>
     <h1>Заметки</h1>
-    <p class="kn-head-lede">Рабочий блокнот сетевого администратора: как устроены протоколы и службы, что показывает диагностика, как ведут себя базы данных и что делать, когда что-то отказывает. Каждая заметка ссылается на соседние — из связей собирается база знаний, а не архив страниц.</p>
+    <p class="kn-head-lede">Заметки и учебные материалы собраны вместе. Рабочий блокнот сетевого администратора: как устроены протоколы и службы, что показывает диагностика, как ведут себя базы данных и что делать, когда что-то отказывает. Каждая заметка ссылается на соседние — из связей собирается база знаний, а не архив страниц.</p>
     <div class="ui-pagehead-meta">
       <span><b>${notes.length}</b> ${plural(notes.length, 'заметка', 'заметки', 'заметок')}</span>
       <span>${TAXONOMY.zones.length} рубрик</span>
@@ -717,6 +722,7 @@ function streamMarkup(notes, registry, counts) {
       <span>обновлено ${shortDate(String(latestUpdated.updated || latestUpdated.date))}</span>
     </div>
   </div>
+  <div class="ui-callout kn-unified-notice"><strong>Учебные материалы теперь здесь.</strong> Теория, практикумы и заметки объединены в базе знаний. Выбирайте тему в дереве или <a href="#materials">откройте список материалов</a>.</div>
 
     <div class="kn-group-head"><h2>Все записи</h2><span>от новых к старым · ${sorted.length} ${plural(sorted.length, 'заметка', 'заметки', 'заметок')}</span></div>
 
@@ -731,7 +737,7 @@ function streamMarkup(notes, registry, counts) {
     </div>
     <div class="kn-rail-row">
       <div class="kn-filterbar" data-catalog-filters role="group" aria-label="Рубрика">${filters}</div>
-      <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/blog/materials.html">учебные материалы</a><a href="/feed.xml">RSS</a></nav>
+      <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/feed.xml">RSS</a></nav>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
@@ -744,6 +750,13 @@ function streamMarkup(notes, registry, counts) {
   <p class="kn-empty" data-catalog-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
 
   <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот администратора: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
+  <section class="kn-materials-index" id="materials" aria-labelledby="materials-title">
+    <div class="kn-group-head"><h2 id="materials-title">Учебные материалы</h2><span>${materialTree.topicCount} тем · ${materialTree.sections.length} разделов</span></div>
+    <p class="kn-mat-about">Теория, практические задания и разборы: продолжение заметок по темам базы знаний.</p>
+    ${materials.materialSections(materialTree)}
+  </section>
+    </div>
+  </div>
   <!-- KN:AUTO:END -->`;
 }
 

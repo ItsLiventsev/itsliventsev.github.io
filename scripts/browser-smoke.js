@@ -128,30 +128,59 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.catalog-row:visible').count(), projectTotal, 'сброс возвращает все проекты');
     assert.equal(await page.locator('[data-catalog-group]:not([hidden])').count(), 2);
 
-    /* Учебные материалы: левое wiki-дерево, активная тема и переход по дереву.
-       Графа связей больше нет — blog/graph.html остался редиректом, поэтому
-       живой проверкой стал раздел материалов. */
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(base + '/blog/materials.html', { waitUntil: 'load' });
-    const treeLinks = page.locator('.kn-wiki-tree a');
-    assert(await treeLinks.count() >= 20, 'в wiki-дереве мало тем: ' + await treeLinks.count());
-    await page.goto(base + '/blog/materials/vlan-i-trunk.html', { waitUntil: 'load' });
+    /* Единая база знаний: wiki не перекрывает ленту и темы на десктопе,
+       на мобильном её можно раскрыть. Проверяем и старый адрес. */
+    for (const width of [1440, 1100]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['/blog.html', '/blog/materials/vlan-i-trunk.html']) {
+        await page.goto(base + route, { waitUntil: 'load' });
+        const nav = page.locator('.kn-wiki'), content = page.locator('.kn-wiki-doc').first();
+        assert(await nav.isVisible(), route + ': дерево видно');
+        assert(await page.locator('.kn-wiki-tree a').count() >= 20, route + ': дерево должно содержать все темы');
+        const left = await nav.boundingBox(), right = await content.boundingBox();
+        assert(left.x + left.width <= right.x + 1, width + ' ' + route + ': дерево не должно перекрывать контент');
+        assert(right.width >= 250 && await noOverflow(page), width + ' ' + route + ': контент не должен сжиматься или вылезать');
+      }
+    }
     assert.equal(await page.locator('.kn-wiki-tree a[aria-current="page"]').count(), 1, 'в дереве ровно одна активная тема');
     assert.equal(await page.locator('.kn-goal').count(), 1, 'у темы есть блок цели');
     assert(await page.locator('.kn-code').count() > 0, 'у темы есть блок кода');
-    await page.locator('.kn-wiki-tree a[aria-current="page"]').first().focus();
-    /* Заглушка blog/graph.html: браузер уводит на материалы мета-редиректом
-       (мета-тег проверяет regression-static), а человеку остаётся ссылка.
-       Ждём переход терпеливо: при медленной сети страница успевает отрисоваться. */
+    await page.goto(base + '/blog.html', { waitUntil: 'load' });
+    assert.equal(await page.locator('#materials .kn-mat-list a').count(), 24, 'в заметках 24 учебные темы');
+    assert.equal(await page.locator('.kn-unified-notice').count(), 1, 'плашка об объединении');
+    await page.goto(base + '/blog/materials.html#networks', { waitUntil: 'domcontentloaded' });
+    await page.waitForURL('**/blog.html#networks');
     await page.goto(base + '/blog/graph.html', { waitUntil: 'domcontentloaded' });
-    const redirected = await page.waitForURL('**/blog/materials.html', { timeout: 5000 })
-      .then(() => true).catch(() => false);
-    if (!redirected) {
-      await page.locator('main a[href="/blog/materials.html"]').first().click();
-      await page.waitForURL('**/blog/materials.html');
-    }
+    await page.waitForURL('**/blog.html#materials');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(base + '/blog.html', { waitUntil: 'load' });
+    assert.equal(await page.locator('.kn-wiki-disclosure').getAttribute('open'), null, 'на телефоне меню изначально свёрнуто');
+    await page.locator('.kn-wiki-home').click();
+    assert.notEqual(await page.locator('.kn-wiki-disclosure').getAttribute('open'), null, 'дерево открывается на телефоне');
+    assert(await noOverflow(page), 'дерево не вызывает горизонтальную прокрутку');
 
-    for (const path of ['/', '/projects.html', '/blog/materials.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
+    const noJs = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false });
+    try {
+      const plain = await noJs.newPage();
+      await plain.goto(base + '/blog.html', { waitUntil: 'load' });
+      assert(await plain.locator('.kn-wiki-tree a').count() >= 20, 'навигация существует без JS');
+      await plain.locator('.kn-wiki-home').click();
+      await plain.locator('.kn-wiki-home').click();
+      assert(await plain.locator('.kn-wiki-disclosure').evaluate(el => el.open), 'дерево открывается без JS');
+      assert(await noOverflow(plain), 'без JS дерево не создаёт горизонтальную прокрутку');
+    } finally { await noJs.close(); }
+
+    await page.goto(base + '/stands/setpolis.html', { waitUntil: 'load' });
+    const processCards = page.locator('.st-process-card');
+    assert.equal(await processCards.count(), 4, 'четыре этапа работы');
+    for (let i = 0; i < 4; i++) {
+      const card = processCards.nth(i);
+      assert.equal(await card.evaluate(el => getComputedStyle(el).display), 'grid');
+      assert((await card.boundingBox()).width > 240, 'карточка этапа читаема на телефоне');
+    }
+    assert(await noOverflow(page), 'этапы работы без горизонтальной прокрутки');
+
+    for (const path of ['/', '/projects.html', '/blog.html', '/blog/materials/vlan-i-trunk.html', '/stands/setpolis.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(base + path, { waitUntil: 'load' });
       assert(await noOverflow(page), 'горизонтальная прокрутка на 360px: ' + path);
