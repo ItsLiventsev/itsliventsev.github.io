@@ -53,7 +53,8 @@
    с таббаром. До 820 px подбар скрыт: те же ссылки shell.js повторяет в меню
    группой «Раздел стендов», и навигация всюду одна — шапка, таббар, меню. */
 @media (max-width: 820px) {
-  .ui-subbar { display: none; }
+  .ui-subbar,
+  .ui-subbar.ui-subbar-nav { display: none; }
 }
 .ui-crumbs a { color: var(--u-muted); }
 
