@@ -171,14 +171,24 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     } finally { await noJs.close(); }
 
     await page.goto(base + '/stands/setpolis.html', { waitUntil: 'load' });
+    await page.locator('#p-name').fill('Тестовый участник');
+    await page.locator('#p-group').fill('ТЕСТ-1');
+    await page.locator('#profile-form button[type="submit"]').click();
+    await page.locator('#cab-dashboard').waitFor({ state: 'visible' });
+    if (await page.locator('#tour-skip').isVisible()) await page.locator('#tour-skip').click();
     const processCards = page.locator('.st-process-card');
     assert.equal(await processCards.count(), 4, 'четыре этапа работы');
     for (let i = 0; i < 4; i++) {
       const card = processCards.nth(i);
       assert.equal(await card.evaluate(el => getComputedStyle(el).display), 'grid');
-      assert((await card.boundingBox()).width > 240, 'карточка этапа читаема на телефоне');
+      const box = await card.boundingBox();
+      assert(box && box.width > 240, 'карточка этапа читаема на телефоне');
     }
     assert(await noOverflow(page), 'этапы работы без горизонтальной прокрутки');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const boxes = await Promise.all([0, 1, 2, 3].map(i => processCards.nth(i).boundingBox()));
+    assert(boxes.every(box => box && box.width > 150), 'карточки видимы и читаемы на десктопе');
+    assert(boxes.every((box, i) => i === 0 || boxes[i - 1].x + boxes[i - 1].width <= box.x + 1), 'карточки не перекрываются');
 
     for (const path of ['/', '/projects.html', '/blog.html', '/blog/materials/vlan-i-trunk.html', '/stands/setpolis.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
