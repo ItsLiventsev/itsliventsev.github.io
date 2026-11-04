@@ -8,6 +8,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
 const baseline = process.env.BASELINE_URL;
 const args = process.env.BROWSER_ARGS ? JSON.parse(process.env.BROWSER_ARGS) : ['--no-sandbox'];
 const median = values => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
+const report = line => { console.log(line); if (process.env.GITHUB_ACTIONS === 'true') console.log('::notice title=LCP::' + line); };
 
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN, args, headless: true });
@@ -49,14 +50,14 @@ const median = values => [...values].sort((a, b) => a - b)[Math.floor(values.len
             (label === 'before' ? before : after).push((await sample(origin, viewport, '/')).time);
           }
         }
-        console.log(`LCP ${viewport.width}px / baseline ms [${before.map(Math.round).join(', ')}], current ms [${after.map(Math.round).join(', ')}]; median ${Math.round(median(before))} → ${Math.round(median(after))} ms`);
+        report(`LCP ${viewport.width}px / baseline ms [${before.map(Math.round).join(', ')}], current ms [${after.map(Math.round).join(', ')}]; median ${Math.round(median(before))} → ${Math.round(median(after))} ms`);
       } else {
         const value = await sample(base, viewport, '/');
-        console.log(`LCP ${viewport.width}px / current: ${Math.round(value.time)} ms (${value.element}), no baseline`);
+        report(`LCP ${viewport.width}px / current: ${Math.round(value.time)} ms (${value.element}), no baseline`);
       }
       for (const route of ['/blog/kn-dns.html', '/stands/lab-vlan-cisco.html', '/projects/esports.html']) {
         const value = await sample(base, viewport, route);
-        console.log(`LCP ${viewport.width}px ${route}: ${Math.round(value.time)} ms (${value.element})`);
+        report(`LCP ${viewport.width}px ${route}: ${Math.round(value.time)} ms (${value.element})`);
       }
     }
   } finally { await browser.close(); }
