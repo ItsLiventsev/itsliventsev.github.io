@@ -19,6 +19,8 @@ on:
       - 'scripts/build-post-index.js'
       - 'scripts/build-search-index.py'
       - 'scripts/build-seo.js'
+      - 'scripts/build-og.js'
+      - 'assets/og*.svg'
       - '.github/workflows/post-index.yml'
   workflow_dispatch:
 
@@ -52,12 +54,32 @@ jobs:
       - name: Build SEO artifacts (sitemap, RSS, meta blocks)
         run: node scripts/build-seo.js
 
+      # OG-карточки 1200×630: SVG и PNG собираются одним шаблоном, поэтому
+      # картинки в соцсетях не отстают от заголовков и чисел на страницах.
+      # Зависимости живут вне репозитория (.ogbuild/ в .gitignore).
+      - name: Install OG renderer outside the repository
+        run: |
+          npm install --prefix "$RUNNER_TEMP/og" --no-audit --no-fund \
+            @resvg/resvg-js@2.6.2 \
+            @expo-google-fonts/golos-text@0.4.2 \
+            @expo-google-fonts/literata@0.4.3 \
+            @expo-google-fonts/jetbrains-mono
+
+      - name: Build OG cards
+        env:
+          OG_DEPS: ${{ runner.temp }}/og
+          OG_FONTS: ${{ runner.temp }}/og/node_modules/@expo-google-fonts
+        run: node scripts/build-og.js
+
       - name: Commit updated manifests and SEO artifacts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add blog/posts.json articles/posts.json feed-counts.json sitemap.xml feed.xml assets/search-index.json
           git add assets/data/knowledge/registry.json
+          git add assets/og.svg assets/og.png assets/og-notes.svg assets/og-notes.png
+          git add assets/og-stands.svg assets/og-stands.png assets/og-ops.svg assets/og-ops.png
+          git add assets/og-office.svg assets/og-office.png
           git add '*.html' 'blog/*.html' 'blog/topics/*.html' 'articles/*.html' 'projects/*.html' 'archive/*.html'
           if git diff --staged --quiet; then
             echo "Изменений для коммита нет"

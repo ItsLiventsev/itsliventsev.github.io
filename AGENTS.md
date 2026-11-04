@@ -184,13 +184,14 @@
 | Команда | Что проверяет | Ориентир |
 |---|---|---|
 | `python3 scripts/audit-html.py` | структура 140 страниц, один `h1`, битые ссылки, дубли `id` | 0 ошибок, 0 битых ссылок |
-| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте | число passing не уменьшается (сейчас 3754) |
+| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте | число passing не уменьшается (сейчас 3788) |
 | `node scripts/build-knowledge.js --check` | заметки: связи, рубрики, источники, сборка страниц | `ошибок нет` |
 | `node scripts/build-related.js --check` | блоки «теория ↔ практика» совпадают с `topics.json` | 62 страницы, 45 связей |
 | `python3 scripts/build-search-index.py --check` | поисковый индекс совпадает с разметкой | 122 записи |
 | `node scripts/runtime-smoke.js` | синтаксис и базовое поведение JS | `RUNTIME SMOKE OK` |
 | `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция | `OK` |
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
+| `node scripts/build-og.js --check` | OG-карточки совпадают с шаблоном (нужны зависимости: см. `docs/seo.md`) | `5 карточек совпадают` |
 | `node scripts/test-graph.js` | граф связей: 26 стендов из `topics.json`, фильтр «стенды», стенд держится за видимую тему | `Graph: …` |
 | `node scripts/test-{activity,search,reading,catalog,theme}.js` | лента, поиск, полка, каталог (поиск, чипы, сочетание, пустой результат, сворачивание раздела, разметка после загрузки), тема от системы | `OK` |
 | `node scripts/browser-a11y.js` | axe (WCAG 2.0/2.1/2.2 A+AA, включая контраст) на всех контентных страницах и на 17 в тёмной теме | 0 блокирующих |
@@ -274,7 +275,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-16 | D | ✅ Мост «теория ↔ практика»: 45 связей заметка ↔ стенд, блоки на обеих сторонах собирает `scripts/lib/related.js`, `--check` в CI | `assets/data/topics.json`, `scripts/lib/related.js`, `scripts/build-related.js`, `scripts/build-knowledge.js`, `pages.css` | — |
 | U-10 | E | ✅ axe на всех 125 контентных страницах: светлая тема везде + тёмная на выборке из 17; `serious`/`critical` валят CI, остальное — отчёт | `scripts/browser-a11y.js`, `site-checks.yml` | — |
 | U-11 | E | ✅ Отдельные assert-ы: инлайн-стили в HTML **и** в `assets/*.js`, `setAttribute("style")`, `backdrop-filter` во всех CSS | `scripts/regression-static.js` | — |
-| U-12 | D | 🔜 `assets/og.png`/OG-картинки генерировать в CI по шаблону кейса | `scripts/build-og.js` | P2 |
+| U-12 | D | ✅ OG-карточки 1200×630 по шаблону кейса: пять штук вместо пяти разных, числа из `registry.json`/`topics.json`, сборка в CI (`post-index.yml`), `--check` для дрейфа | `scripts/build-og.js`, `assets/og*.svg` | — |
 | U-13 | B | ✅ Кейсы `projects/*` по одному шаблону: герой с бейджами и четырьмя фактами → разделы → «Честный разбор» в три колонки → итог `case-outcome`; контракт проверяет `regression-static` | `projects/*.html`, `pages.css` | — |
 | U-14 | F | ✅ `DESIGN_SYSTEM.md`, `docs/design-system.md` и `docs/motion.md` сведены с кодом: токены и тайминги сверяет тест, reveal описан как `IntersectionObserver`, разделы `pages.css` пронумерованы §1–18 | `docs/`, `DESIGN_SYSTEM.md` | — |
 | U-17 | D | ✅ Граф связей по всему сайту: 43 заметки + 26 стендов, 187 связей; стенд — квадратный узел `data-kind="stand"`, кнопка «стенды», колонка стендов в таблице; узлы-стенды сверяются с `topics.json` | `blog/graph.html`, `assets/knowledge.js`, `scripts/build-knowledge.js` | P2 |

@@ -1,115 +1,240 @@
 /* ==========================================================================
-   build-og.js — сборка OG-картинок 1200×630 (PNG) из SVG через @resvg/resvg-js.
-   Запуск: node scripts/build-og.js
-   TTF-шрифты берутся из .ogbuild/node_modules (@expo-google-fonts/*, dev-only);
-   resvg не умеет woff/woff2, поэтому именно TTF. Кириллица обязательна.
+   build-og.js — OG-карточки 1200×630 (SVG + PNG) в языке сайта.
+
+   Раньше карточки рисовались в старом тёмно-синем языке стендов и собирались
+   руками на машине разработчика: пять PNG лежали в assets, а скрипт умел три.
+   Теперь шаблон один и повторяет герой страницы-кейса — бумажная подложка,
+   чернильный заголовок Golos, глиняный акцент и карточка фактов справа, —
+   а число на карточке берётся из данных репозитория, а не пишется руками.
+
+   Запуск:            node scripts/build-og.js
+   Только проверка:   node scripts/build-og.js --check   (ненулевой код при дрейфе)
+
+   Зависимости — только для сборки, в репозитории их нет (`.ogbuild/` в .gitignore):
+     npm install --prefix .ogbuild @resvg/resvg-js @expo-google-fonts/golos-text \
+                 @expo-google-fonts/literata @expo-google-fonts/jetbrains-mono
+   Пути можно переопределить: OG_DEPS (каталог с node_modules), OG_FONTS (каталог
+   с пакетами @expo-google-fonts). Именно так карточки собирает CI.
+   resvg не читает woff/woff2, поэтому берутся TTF из npm-пакетов.
    ========================================================================== */
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { Resvg } = require(path.join(__dirname, '..', '.ogbuild', 'node_modules', '@resvg', 'resvg-js'));
 
 const ROOT = path.join(__dirname, '..');
 const ASSETS = path.join(ROOT, 'assets');
-const F = path.join(ROOT, '.ogbuild', 'node_modules', '@expo-google-fonts');
+const CHECK = process.argv.includes('--check');
+const DEPS = process.env.OG_DEPS || path.join(ROOT, '.ogbuild');
+const FONTS = process.env.OG_FONTS || path.join(DEPS, 'node_modules', '@expo-google-fonts');
+const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
+
+let Resvg;
+try {
+  ({ Resvg } = require(path.join(DEPS, 'node_modules', '@resvg', 'resvg-js')));
+} catch (error) {
+  console.error('build-og: нет @resvg/resvg-js в ' + DEPS);
+  console.error('  npm install --prefix ' + path.relative(ROOT, DEPS) + ' @resvg/resvg-js @expo-google-fonts/golos-text @expo-google-fonts/literata @expo-google-fonts/jetbrains-mono');
+  process.exit(1);
+}
+
+const font = (pkg, file) => path.join(FONTS, pkg, file);
 const FONT_FILES = [
-  path.join(F, 'inter', '400Regular', 'Inter_400Regular.ttf'),
-  path.join(F, 'inter', '500Medium', 'Inter_500Medium.ttf'),
-  path.join(F, 'inter', '800ExtraBold', 'Inter_800ExtraBold.ttf'),
-  path.join(F, 'jetbrains-mono', '400Regular', 'JetBrainsMono_400Regular.ttf'),
-  path.join(F, 'jetbrains-mono', '500Medium', 'JetBrainsMono_500Medium.ttf'),
-  path.join(F, 'jetbrains-mono', '700Bold', 'JetBrainsMono_700Bold.ttf'),
+  font('golos-text', '400Regular/GolosText_400Regular.ttf'),
+  font('golos-text', '500Medium/GolosText_500Medium.ttf'),
+  font('golos-text', '700Bold/GolosText_700Bold.ttf'),
+  font('literata', '400Regular/Literata_400Regular.ttf'),
+  font('jetbrains-mono', '500Medium/JetBrainsMono_500Medium.ttf'),
 ];
-FONT_FILES.forEach((f) => { if (!fs.existsSync(f)) throw new Error('нет шрифта: ' + f); });
+FONT_FILES.forEach((file) => { if (!fs.existsSync(file)) throw new Error('build-og: нет шрифта ' + file); });
 
-const INK = '#f5f7fa';
-const BG = '#0b0e11';
-const LINE = '#232b34';
-const ACCENT = '#5b9dff';
-const ACCENT_2 = '#86b6ff';
-const MUTED = '#8a95a1';
-const FAINT = '#5f6b79';
+/* Палитра — ровно токены из assets/tokens.css: карточки не должны жить
+   в отдельной вселенной, иначе пост в соцсети выглядит как другой сайт. */
+const TOKENS = {
+  paper: '#efeee9',
+  surface: '#ffffff',
+  ink: '#14130e',
+  ink2: '#35332c',
+  muted: '#5d5a52',
+  faint: '#6f6c63',
+  line: '#e5e3dc',
+  lineStrong: '#d2cfc6',
+  accent: '#a8391d',
+  accentHover: '#872c14',
+};
+const W = 1200;
+const H = 630;
+const PAD = 88;
+const esc = (text) => String(text).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
-/* Плоский OG в языке стендов: тёмный фон, 1px сетка, моно-глифы. */
-function flatOg(o) {
-  const accent = o.accent || ACCENT;
-  const accent2 = o.accent2 || ACCENT_2;
-  const glyphs = o.glyphs.map((g) =>
-    `<text x="${g.x}" y="${g.y}" font-family="'JetBrains Mono',monospace" font-size="${g.s}" font-weight="700" fill="${g.c || accent}" opacity="${g.o}">${g.t}</text>`
+/* Сколько чего на сайте — из самих данных. Карточка «43 заметки» не должна
+   пережить появление сорок четвёртой. */
+function facts() {
+  const registry = JSON.parse(read('assets/data/knowledge/registry.json'));
+  const topics = JSON.parse(read('assets/data/topics.json'));
+  const sitemap = read('sitemap.xml');
+  return {
+    notes: registry.notes,
+    edges: registry.edges.length,
+    stands: new Set((topics.pairs || []).map((pair) => pair.practice)).size,
+    bridges: (topics.pairs || []).length,
+    pages: (sitemap.match(/<loc>/g) || []).length,
+  };
+}
+
+/* Шаблон повторяет герой страницы-кейса: слева заголовок и лид, справа
+   карточка фактов (`aside.case-facts`), внизу — мета и адрес. */
+function card(o) {
+  const t = TOKENS;
+  const size = o.size || 66;
+  const TITLE_Y = 232;
+  const TITLE_STEP = Math.round(size * 1.08);
+  const titleLines = o.title.map((line, index) =>
+    `<text x="${PAD}" y="${TITLE_Y + index * TITLE_STEP}" font-family="Golos Text" font-size="${size}" font-weight="700" fill="${t.ink}" letter-spacing="-1.8">${esc(line)}</text>`
   ).join('\n  ');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs>
-    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
-      <path d="M36 0H0V36" fill="none" stroke="${LINE}" stroke-width="1" opacity="0.55"/>
-    </pattern>
-  </defs>
-  <rect width="1200" height="630" fill="${BG}"/>
-  <rect width="1200" height="630" fill="url(#grid)"/>
-  ${glyphs}
-  <rect x="96" y="176" width="132" height="132" rx="0" fill="none" stroke="${accent}" stroke-width="2"/>
-  <path d="M128 218l22 24-22 24" fill="none" stroke="${accent}" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
-  <line x1="162" y1="266" x2="202" y2="266" stroke="${INK}" stroke-width="8" stroke-linecap="square"/>
-  <text x="262" y="248" font-family="Inter,system-ui,sans-serif" font-size="86" font-weight="800" fill="${INK}">${o.title}</text>
-  <text x="264" y="296" font-family="'JetBrains Mono',monospace" font-size="27" font-weight="500" fill="${accent2}">${o.kicker}</text>
-  <rect x="96" y="430" width="1008" height="2" fill="${LINE}"/>
-  <text x="96" y="492" font-family="'JetBrains Mono',monospace" font-size="26" font-weight="500" fill="${MUTED}">${o.tags}</text>
-  <text x="96" y="536" font-family="'JetBrains Mono',monospace" font-size="21" font-weight="400" fill="${FAINT}">itsliventsev.github.io${o.url}</text>
+  const ledeY = TITLE_Y + (o.title.length - 1) * TITLE_STEP + 58;
+  const lede = (o.lede || []).map((line, index) =>
+    `<text x="${PAD}" y="${ledeY + index * 36}" font-family="Literata" font-size="25" fill="${t.ink2}">${esc(line)}</text>`
+  ).join('\n  ');
+  const metaY = 482;
+  const factRows = o.facts.slice(0, 3).map((fact, index) => {
+    const top = 128 + index * 132;
+    /* Длинное значение («VLAN · NAT») не должно вылезать из карточки:
+       кегль уменьшается, а базовая линия остаётся на месте. */
+    const valueSize = fact.value.length > 6 ? 32 : 46;
+    return `<line x1="756" y1="${top}" x2="1112" y2="${top}" stroke="${t.line}" stroke-width="1"/>
+  <text x="792" y="${top + 58}" font-family="Golos Text" font-size="${valueSize}" font-weight="700" fill="${t.accent}">${esc(fact.value)}</text>
+  <text x="792" y="${top + 96}" font-family="'JetBrains Mono'" font-size="16" fill="${t.muted}" letter-spacing="1.6">${esc(fact.label.toUpperCase())}</text>`;
+  }).join('\n  ');
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <rect width="${W}" height="${H}" fill="${t.paper}"/>
+
+  <text x="${PAD}" y="74" font-family="Golos Text" font-size="26" font-weight="700" fill="${t.ink}">itsliventsev<tspan fill="${t.accent}">.</tspan></text>
+  <text x="${PAD + 196}" y="74" font-family="'JetBrains Mono'" font-size="15" fill="${t.faint}" letter-spacing="2.4">СЕТИ · СИСТЕМЫ · ПРАКТИКА</text>
+  <line x1="${PAD}" y1="104" x2="${W - PAD}" y2="104" stroke="${t.lineStrong}" stroke-width="1"/>
+
+  <text x="${PAD}" y="170" font-family="'JetBrains Mono'" font-size="15" fill="${t.accent}" letter-spacing="3">${esc(o.eyebrow.toUpperCase())}</text>
+  ${titleLines}
+  ${lede}
+
+  <line x1="${PAD}" y1="${metaY - 34}" x2="700" y2="${metaY - 34}" stroke="${t.lineStrong}" stroke-width="1"/>
+  <text x="${PAD}" y="${metaY}" font-family="'JetBrains Mono'" font-size="18" fill="${t.muted}" letter-spacing="0.8">${esc(o.meta)}</text>
+  <text x="${PAD}" y="${H - 56}" font-family="'JetBrains Mono'" font-size="17" fill="${t.faint}">itsliventsev.github.io${esc(o.path)}</text>
+
+  <rect x="756" y="128" width="356" height="396" rx="22" fill="${t.surface}" stroke="${t.line}" stroke-width="1"/>
+  ${factRows}
 </svg>`;
 }
 
-const AMBER = '#fbbf24';
-const AMBER_2 = '#fcd34d';
-
+const counts = facts();
 const variants = [
   {
-    svg: 'og-office.svg', png: 'og-office.png',
-    markup: flatOg({
-      title: 'ОфисПолис',
-      kicker: '// бюро оператора ЭВМ · документы, таблицы, презентации',
-      tags: 'Writer · Calc · Impress · Base · OCR · мониторинг · сайт · 10 работ',
-      url: '/stands/office',
-      glyphs: [
-        { t: '@', x: 880, y: 340, s: 420, o: 0.10, c: AMBER },
-        { t: '#', x: 640, y: 560, s: 300, o: 0.07, c: AMBER },
-        { t: '¶', x: 1060, y: 150, s: 170, o: 0.10, c: AMBER_2 },
+    svg: 'og.svg', png: 'og.png',
+    card: {
+      eyebrow: 'портфолио · учебная платформа',
+      title: ['Портфолио', 'и учебная платформа'],
+      size: 56,
+      lede: ['Сети, системы и практика:', 'заметки, стенды и разбор кейсов.'],
+      meta: 'заметки · стенды · кейсы · статьи',
+      path: '/',
+      facts: [
+        { value: String(counts.notes), label: 'заметки базы знаний' },
+        { value: String(counts.stands), label: 'учебных стендов' },
+        { value: String(counts.bridges), label: 'связей: теория и практика' },
       ],
-      accent: AMBER, accent2: AMBER_2,
-    }),
+    },
+  },
+  {
+    svg: 'og-notes.svg', png: 'og-notes.png',
+    card: {
+      eyebrow: 'база знаний · заметки',
+      title: ['База знаний', 'по сетям и системам'],
+      size: 62,
+      lede: ['Короткие заметки с источниками:', 'от VLAN до бэкапов и мониторинга.'],
+      meta: 'заметки · рубрики · граф связей',
+      path: '/blog.html',
+      facts: [
+        { value: String(counts.notes), label: 'заметки' },
+        { value: '6', label: 'рубрик' },
+        { value: String(counts.edges), label: 'связей на графе' },
+      ],
+    },
   },
   {
     svg: 'og-stands.svg', png: 'og-stands.png',
-    markup: flatOg({
-      title: 'СетьПолис',
-      kicker: '// учебная вселенная · настройка сетевой инфраструктуры',
-      tags: 'терминал · VLAN · маршрутизация · NAT · 5 спринтов · 15 работ',
-      url: '/stands',
-      glyphs: [
-        { t: '/', x: 905, y: 330, s: 430, o: 0.10 },
-        { t: '#', x: 640, y: 560, s: 300, o: 0.07 },
-        { t: '{ }', x: 1080, y: 150, s: 170, o: 0.08, c: ACCENT_2 },
+    card: {
+      eyebrow: 'учебная вселенная · СетьПолис',
+      title: ['СетьПолис', 'инфраструктура'],
+      lede: ['Пятнадцать работ: VLAN, маршрутизация,', 'NAT, диагностика и защита.'],
+      meta: 'терминал · VLAN · NAT · 15 работ',
+      path: '/stands/',
+      facts: [
+        { value: '15', label: 'работ' },
+        { value: '5', label: 'спринтов' },
+        { value: 'VLAN · NAT', label: 'темы стендов' },
       ],
-    }),
+    },
   },
   {
     svg: 'og-ops.svg', png: 'og-ops.png',
-    markup: flatOg({
-      title: 'ДатаПолис',
-      kicker: '// сервисный центр · эксплуатация и администрирование',
-      tags: 'SLA · инциденты · изменения · дежурства · 5 спринтов · 16 работ',
-      url: '/stands/ops',
-      glyphs: [
-        { t: '$', x: 905, y: 330, s: 400, o: 0.10 },
-        { t: '#', x: 640, y: 560, s: 300, o: 0.07 },
-        { t: '>_', x: 1060, y: 150, s: 150, o: 0.08, c: ACCENT_2 },
+    card: {
+      eyebrow: 'учебная вселенная · ДатаПолис',
+      title: ['ДатаПолис', 'эксплуатация'],
+      lede: ['Шестнадцать работ сервисного центра:', 'SLA, инциденты, изменения.'],
+      meta: 'SLA · инциденты · изменения · 16 работ',
+      path: '/stands/ops/',
+      facts: [
+        { value: '16', label: 'работ' },
+        { value: '5', label: 'спринтов' },
+        { value: 'SLA', label: 'дежурства и разбор' },
       ],
-    }),
+    },
+  },
+  {
+    svg: 'og-office.svg', png: 'og-office.png',
+    card: {
+      eyebrow: 'учебная вселенная · ОфисПолис',
+      title: ['ОфисПолис', 'документы и таблицы'],
+      size: 62,
+      lede: ['Десять работ бюро оператора ЭВМ:', 'Writer, Calc, Impress и Base.'],
+      meta: 'Writer · Calc · Impress · Base · 10 работ',
+      path: '/stands/office/',
+      facts: [
+        { value: '10', label: 'работ' },
+        { value: '5', label: 'спринтов' },
+        { value: '4', label: 'редактора пакета' },
+      ],
+    },
   },
 ];
 
-for (const v of variants) {
-  fs.writeFileSync(path.join(ASSETS, v.svg), v.markup);
-  const r = new Resvg(v.markup, { font: { fontFiles: FONT_FILES, loadSystemFonts: false } });
-  const png = r.render().asPng();
-  fs.writeFileSync(path.join(ASSETS, v.png), png);
-  console.log(v.png + ' — ' + png.length + ' байт');
+const render = (svg) => new Resvg(svg, {
+  font: { fontFiles: FONT_FILES, loadSystemFonts: false, defaultFontFamily: 'Golos Text' },
+}).render().asPng();
+
+let drift = 0;
+for (const variant of variants) {
+  const svg = card(variant.card);
+  const png = render(svg);
+  for (const [file, next] of [[variant.svg, Buffer.from(svg)], [variant.png, Buffer.from(png)]]) {
+    const target = path.join(ASSETS, file);
+    const current = fs.existsSync(target) ? fs.readFileSync(target) : null;
+    const same = current && current.equals(next);
+    if (same) continue;
+    if (CHECK) {
+      drift++;
+      console.log('✗ ' + file + (current ? ' — устарел' : ' — отсутствует'));
+    } else {
+      fs.writeFileSync(target, next);
+      console.log(file + ' — ' + next.length + ' байт');
+    }
+  }
+}
+
+if (CHECK) {
+  if (drift) {
+    console.log('build-og --check: ' + drift + ' файлов расходятся. Пересоберите: node scripts/build-og.js');
+    process.exit(1);
+  }
+  console.log('build-og --check: ' + variants.length + ' карточек совпадают с шаблоном');
 }

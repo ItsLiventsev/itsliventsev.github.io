@@ -334,6 +334,40 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   }
 }
 
+/* ── OG-карточки: один шаблон, честные размеры, живая картинка в каждой странице ──
+   Пять PNG рисовались руками в старом тёмно-синем языке, а скрипт умел три.
+   Теперь шаблон один (герой кейса: бумага, чернила, глина), собирает его CI,
+   а здесь проверяется то, что видно без resvg: формат, размер и ссылки. */
+{
+  const cards = ['og.png', 'og-notes.png', 'og-stands.png', 'og-ops.png', 'og-office.png'];
+  for (const file of cards) {
+    const target = path.join(ROOT, 'assets', file);
+    ok(fs.existsSync(target), 'OG-карточка отсутствует: ' + file);
+    if (!fs.existsSync(target)) continue;
+    const buf = fs.readFileSync(target);
+    ok(buf.slice(1, 4).toString('latin1') === 'PNG', file + ': это не PNG');
+    ok(buf.readUInt32BE(16) === 1200 && buf.readUInt32BE(20) === 630, file + ': размер не 1200×630');
+    ok(buf.length > 20000, file + ': карточка подозрительно пустая');
+    ok(exists('assets/' + file.replace(/\.png$/, '.svg')), file + ': нет SVG-источника рядом с PNG');
+  }
+  const og = read('scripts/build-og.js');
+  ok(og.includes('--check'), 'build-og.js: нет режима --check для сверки карточек');
+  ok(og.includes('registry.json') && og.includes('topics.json'),
+    'build-og.js: числа на карточках должны приходить из данных, а не быть вписаны руками');
+  ok(read('.github/workflows/post-index.yml').includes('scripts/build-og.js'),
+    'post-index.yml: OG-карточки должны собираться в CI');
+  /* Ссылки og:image в разметке обязаны вести на существующий файл: молча
+     битая картинка в соцсетях — это пустая карточка при репосте. */
+  const referenced = new Set();
+  for (const file of contentPages) {
+    for (const match of read(file).matchAll(/property="og:image"\s+content="https:\/\/itsliventsev\.github\.io(\/assets\/[^"]+)"/g)) referenced.add(match[1]);
+  }
+  for (const url of referenced) {
+    ok(exists(url.slice(1)), 'og:image ведёт на несуществующий файл: ' + url);
+  }
+  ok(referenced.size >= 4, 'og:image: используется меньше четырёх карточек — шаблон разъехался');
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);
