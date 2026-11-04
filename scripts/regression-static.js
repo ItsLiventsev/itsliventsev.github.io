@@ -255,6 +255,26 @@ ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/kno
     'граф связей: у стендов нет своего класса узла');
 }
 
+/* ── страницы-кейсы собраны по одному шаблону ──
+   Раньше два кейса выглядели по-разному: у одного в герое бейджи и разбор в две
+   колонки, у другого пилюли и безымянная <section> перед подвалом. Шаблон один:
+   герой с фактами → разделы → «Честный разбор» в три колонки → итог. */
+for (const file of ['projects/esports.html', 'projects/navigation.html']) {
+  const source = read(file);
+  ok(source.includes('class="editorial case-study"'), file + ': нет обёртки кейса');
+  ok(source.includes('class="esp-hero"'), file + ': нет героя кейса');
+  ok(source.includes('esp-hero-main'), file + ': герой без .esp-hero-main');
+  ok((source.match(/class="case-fact"/g) || []).length === 4, file + ': в фактах кейса не четыре пункта');
+  ok((source.match(/<section class="esp-section/g) || []).length >= 4, file + ': меньше четырёх разделов кейса');
+  ok(source.includes('id="verdict"'), file + ': нет раздела «Честный разбор»');
+  ok((source.match(/class="verdict-col/g) || []).length === 3, file + ': разбор должен быть в три колонки');
+  ok(/class="verdict-col">[\s\S]*class="verdict-col is-growth">[\s\S]*class="verdict-col is-future">/.test(source),
+    file + ': колонки разбора должны идти в порядке «получилось → слабо → куда»');
+  ok(source.includes('class="case-outcome"'), file + ': нет итоговой плашки');
+  ok(source.includes('class="mono is-info">итог'), file + ': в итоговой плашке нет подписи «итог»');
+  ok(!/<section>/.test(source), file + ': безымянная <section> без класса');
+}
+
 /* ── счётчик раздела считается по публикациям, а не по файлам ──
    В blog/ лежат редирект-заглушки переехавших заметок; подсчёт по файлам
    давал 59 вместо 45 и менял число в навигации на каждой сборке. */
