@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T14:55:29.138Z",
+  "generated": "2026-11-04T15:03:55.876Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 209,
+  "total": 207,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 4
+      "count": 1
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 34
+      "count": 35
     }
   ],
   "commits": [
+    {
+      "sha": "99773a9",
+      "title": "feat(glossary): тренажёр «проверь себя» и вынос фильтра из инлайна",
+      "date": "2026-11-04T14:59:44Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/99773a950b9c2327890216839ccc27f1624642e4"
+    },
     {
       "sha": "98edf22",
       "title": "perf(css): слой базы знаний вынесен в knowledge.css",
@@ -481,12 +487,6 @@
       "title": "Unify editorial catalogs and add local search",
       "date": "2026-11-02T19:05:21Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/763f4b80f9e0aa8ab7c26f7e4a5047e4449d6bb2"
-    },
-    {
-      "sha": "1d2afa6",
-      "title": "Refine homepage editorial hierarchy",
-      "date": "2026-11-02T19:01:03Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1d2afa6de75d5cf05d21502117687ee3eb4b4658"
     }
   ]
 }
