@@ -35,6 +35,19 @@ function meta(html, name) {
   return (m ? (m[1] || m[2]) : '').trim();
 }
 
+/* meta-теги в HTML экранированы («&gt;», «&laquo;»), а манифест читают
+   скрипты, которые вставляют текст через textContent: без раскрытия сущностей
+   читатель видел «CPU &gt; 80%». Раскрываем один уровень. */
+const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', laquo: '«', raquo: '»', mdash: '—', ndash: '–', hellip: '…' };
+const unentity = (value) => String(value).replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, name) => {
+  if (name[0] === '#') {
+    const code = name[1] === 'x' || name[1] === 'X' ? parseInt(name.slice(2), 16) : parseInt(name.slice(1), 10);
+    return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+  }
+  const key = name.toLowerCase();
+  return Object.prototype.hasOwnProperty.call(ENTITIES, key) ? ENTITIES[key] : match;
+});
+
 function collect(sectionDir) {
   if (!fs.existsSync(sectionDir)) return [];
   return fs.readdirSync(sectionDir)
@@ -42,25 +55,32 @@ function collect(sectionDir) {
     .map((file) => {
       const html = fs.readFileSync(path.join(sectionDir, file), 'utf8');
       const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
-      const title = (titleMatch ? titleMatch[1] : file.replace(/\.html$/, ''))
+      const title = unentity((titleMatch ? titleMatch[1] : file.replace(/\.html$/, ''))
         .replace(/\s*[·•|]\s*itsliventsev\s*$/i, '')
-        .trim();
+        .trim());
+      const redirect = /http-equiv="refresh"/i.test(html);
       const tags = meta(html, 'post-tags')
         .split(',').map((t) => t.trim()).filter(Boolean);
       return {
         slug: file.replace(/\.html$/, ''),
         file,
         title,
-        excerpt: meta(html, 'post-excerpt') || meta(html, 'description'),
+        excerpt: unentity(meta(html, 'post-excerpt') || meta(html, 'description')),
         date: meta(html, 'post-date'),
         type: meta(html, 'post-type') || 'note',
         tags,
         readtime: meta(html, 'post-readtime'),
         source: meta(html, 'post-source'),
         status: meta(html, 'post-status') || 'published',
+        redirect,
       };
     })
-    .filter((p) => p.status !== 'draft')
+    /* Редирект-заглушка (meta http-equiv="refresh" на /blog.html) — не
+       публикация: её файл нужен, чтобы старый URL не отдавал 404, но в ленте
+       ей места нет. Без этого фильтра бот возвращал в blog/posts.json
+       заглушки, вычищенные при пересборке базы знаний. */
+    .filter((p) => p.status !== 'draft' && !p.redirect)
+    .map(({ redirect, ...post }) => post)
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
 

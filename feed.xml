@@ -451,14 +451,12 @@
       <title>Граф заметок</title>
       <link>https://itsliventsev.github.io/blog/graph.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/graph.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.</description>
+      <description>Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Ядро — хабы, пояс — рубрики, орбита — листья.</description>
     </item>
     <item>
       <title>Рубрики заметок</title>
       <link>https://itsliventsev.github.io/blog/topics.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/topics.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
       <description>Шесть рубрик базы знаний: сети, Linux и службы, базы данных, хранение, эксплуатация и практика обучения. Каждая рубрика собирает заметки по одной теме.</description>
     </item>
   </channel>

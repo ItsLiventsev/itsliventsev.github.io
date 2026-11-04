@@ -35,6 +35,29 @@ ok(contentPages.length === 74 + knowledgePages.length, 'ожидалось ' + (
 ok(stands.length === 52, 'ожидалось 52 учебных маршрута, получено ' + stands.length);
 ok(exists('assets/offline.html'), 'нет автономной страницы для офлайн-перехода');
 
+/* Лента не должна показывать редирект-заглушки: их файлы живут, чтобы старый
+   URL не отдавал 404, но в манифесте это не публикации. Регрессия уже
+   случалась — бот build-post-index.js возвращал их после пересборки. */
+/* RSS: в feed.xml не должно быть «undefined»/NaN в датах и двойного
+   экранирования сущностей («&amp;gt;») — оба случая уже выходили на сайт. */
+{
+  const feed = read('feed.xml');
+  ok(!/undefined|NaN/.test(feed), 'feed.xml: в ленте литерал undefined или NaN');
+  ok(!/&amp;(amp|lt|gt|quot|#39);/.test(feed), 'feed.xml: двойное экранирование сущностей');
+  ok((feed.match(/<item>/g) || []).length > 0, 'feed.xml: лента пуста');
+}
+
+for (const manifest of ['blog/posts.json', 'articles/posts.json']) {
+  if (!exists(manifest)) continue;
+  const posts = JSON.parse(read(manifest));
+  const stubs = posts.filter((post) => {
+    const file = path.join(manifest.split('/')[0], post.file || '');
+    return exists(file) && /http-equiv="refresh"/i.test(read(file));
+  });
+  ok(stubs.length === 0, manifest + ': в ленте редирект-заглушки — '
+    + stubs.map((post) => post.slug).join(', '));
+}
+
 /* ── каждая страница: один shell, одни токены, никакого legacy ── */
 for (const file of contentPages) {
   const source = read(file);
