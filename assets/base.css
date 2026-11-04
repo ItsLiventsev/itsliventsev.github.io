@@ -192,8 +192,6 @@ svg.ui-icon,
   box-shadow: var(--u-shadow-2);
 }
 .ui-btn--primary:hover { background: var(--u-accent); border-color: var(--u-accent); color: var(--u-accent-ink); }
-.ui-btn--ghost { background: transparent; box-shadow: none; padding-inline: var(--u-s2); }
-.ui-btn--ghost:hover { background: var(--u-surface-sunk); border-color: transparent; }
 .ui-btn--sm { min-height: 30px; padding-inline: var(--u-s3); font-size: var(--u-fs-sm); }
 .ui-iconbtn { width: 38px; min-height: 38px; padding: 0; border-radius: 50%; }
 .ui-iconbtn svg { width: 17px; height: 17px; }
@@ -544,15 +542,6 @@ svg.ui-icon,
   white-space: nowrap;
   border: 0;
 }
-.ui-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--u-s2) var(--u-s4);
-  color: var(--u-muted);
-  font-size: var(--u-fs-xs);
-}
-.ui-hairline { border: 0; border-top: 1px solid var(--u-line); margin: 0; }
 .ui-section {
   padding-block-start: var(--u-s6);
   margin-block-start: var(--u-s5);
@@ -572,9 +561,6 @@ svg.ui-icon,
   letter-spacing: var(--u-ls-display);
 }
 .ui-section-head p { margin: var(--u-s2) 0 0; max-width: 56ch; color: var(--u-muted); }
-.ui-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--u-s6); }
-.ui-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--u-s5); }
-.ui-stack { display: grid; gap: var(--u-s4); }
 
 /* Content page heading used by catalogs and static pages */
 .ui-pagehead { padding-block: var(--u-s7) var(--u-s6); max-width: 68ch; }
@@ -605,16 +591,10 @@ svg.ui-icon,
   white-space: nowrap;
 }
 
-/* Forms */
-.ui-field { display: grid; gap: var(--u-s2); }
-.ui-field > span, .ui-label {
-  font-family: var(--u-font-mono);
-  font-size: var(--u-fs-2xs);
-  letter-spacing: var(--u-ls-mono);
-  text-transform: uppercase;
-  color: var(--u-muted);
-}
-.ui-input, .ui-select, .ui-textarea, .ui-search-field input {
+/* Forms: единственное текстовое поле сайта живёт в палитре поиска.
+   Отдельные классы полей (input/select/textarea/field) были объявлены, но
+   нигде не использовались — страницы панели стилизуют свои поля сами. */
+.ui-search-field input {
   width: 100%;
   min-height: 40px;
   padding: var(--u-s2) var(--u-s3);
@@ -624,8 +604,7 @@ svg.ui-icon,
   color: var(--u-ink);
   font-size: var(--u-fs-base);
 }
-.ui-input::placeholder, .ui-search-field input::placeholder { color: var(--u-faint); }
-.ui-input:hover, .ui-select:hover { border-color: var(--u-ink-2); }
+.ui-search-field input::placeholder { color: var(--u-faint); }
 
 /* Tables (wrapped by shell.js for horizontal scrolling) */
 [data-ui-table-wrap] {
@@ -709,7 +688,6 @@ tbody tr:last-child td { border-bottom: 0; }
     padding-block-end: calc(var(--u-s10) + var(--u-tabbar));
     margin-block-start: var(--u-s8);
   }
-  .ui-grid-2, .ui-grid-3 { grid-template-columns: minmax(0, 1fr); }
   .ui-to-top { inset-block-end: calc(var(--u-tabbar) + var(--u-s3)); inset-inline-end: var(--u-s4); }
   /* Tab bar: five destinations, thumb-reachable, always visible on phones */
   .ui-tabbar {

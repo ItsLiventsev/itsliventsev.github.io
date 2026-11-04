@@ -825,7 +825,6 @@ pre, .term-screen {
 }
 .mat-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--u-line-strong); }
 .mat-dot.is-done { background: var(--u-ok); }
-.mat-dot.is-now { background: var(--u-accent); }
 .submit-channels {
   display: grid;
   gap: var(--u-s2);
@@ -2115,7 +2114,6 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 }
 .flat-field { display: grid; gap: 4px; }
 .flat-input { min-height: 38px; }
-.flat-btn--block { width: 100%; justify-content: center; }
 .flat-caption--mt { margin-block-start: var(--u-s2); }
 .list-lead { font-size: var(--u-fs-sm); line-height: 1.6; color: var(--u-ink-2); }
 .table-empty {
@@ -3086,7 +3084,6 @@ details[open] .skills-summary-chevron { transform: rotate(90deg); }
 .dot-amber { background: var(--u-warn); }
 .dot-red { background: var(--u-danger); }
 .editorial .notice.notice-warn, .prose .notice.notice-warn, .notice.notice-warn { border-inline-start-color: var(--u-warn); }
-.editorial .notice.notice-rose, .prose .notice.notice-rose, .notice.notice-rose { border-inline-start-color: var(--u-danger); }
 .editorial .callout.callout-warn, .prose .callout.callout-warn, .callout.callout-warn { border-inline-start-color: var(--u-warn); }
 .editorial .callout.callout-idea, .prose .callout.callout-idea, .callout.callout-idea { border-inline-start-color: var(--u-accent); }
 .author-chip .avatar-verm { background: var(--u-danger-soft); color: var(--u-danger); }

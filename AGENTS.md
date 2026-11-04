@@ -134,7 +134,7 @@
 | **A** | Ядро и оболочка | `assets/tokens.css`, `assets/base.css`, `assets/shell.js`, `sw.js`, `scripts/test-service-worker.js` | шапка и таббар, фокус, тема, движение каркаса, кеш |
 | **B** | Витрина и контент | `index.html`, `assets/pages.css`, `projects.html`, `projects/`, `articles*`, `blog*`, `archive*`, `faq.html`, `sitemap.html` | главная, кейсы, публикации, справка |
 | **C** | Вселенные | `stands/`, `assets/course.css`, `assets/stands.js`, `assets/league*.js`, `assets/{office,ops}-*.js`, `assets/lab-kit.js`, `assets/mascots.js`, `assets/submissions.js` | кабинеты, роадмапы, стенды, проверки |
-| **D** | Данные и поиск | `assets/search-index.json`, `assets/feed.js`, `assets/home-reading.js`, `assets/data/`, `scripts/build-*.{js,py}`, `scripts/build-search-index.py` | индекс, лента активности, счётчики |
+| **D** | Данные и поиск | `assets/search-index.json`, `assets/feed.js`, `assets/home-reading.js`, `assets/data/`, `scripts/lib/site-stats.js`, `scripts/build-*.{js,py}`, `scripts/build-search-index.py` | индекс, лента активности, счётчики, числа главной |
 | **E** | Качество и CI | `scripts/*` (кроме `build-*`), `.github/workflows/`, `feed.xml`, `site.webmanifest` | проверки, регрессии, axe, оффлайн |
 | **F** | Документация и система | `DESIGN_SYSTEM.md`, `docs/`, `AGENTS.md`, `QA_REPORT.md`, `REFERENCES.md` | описание системы, правила, отчёты |
 
@@ -184,7 +184,7 @@
 | Команда | Что проверяет | Ориентир |
 |---|---|---|
 | `python3 scripts/audit-html.py` | структура 140 страниц, один `h1`, битые ссылки, дубли `id` | 0 ошибок, 0 битых ссылок |
-| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте, лента итераций и журнал (инверсия, токены панели, 9×2 строки, крючки), один сценарий мобильной навигации | число passing не уменьшается (сейчас 3849) |
+| `node scripts/regression-static.js` | контракты: токены, инлайн-стили в HTML и JS, блюр, системная тема, кеш, поисковый индекс, мост «теория ↔ практика», каталоги на одном контракте, лента итераций и журнал (инверсия, токены панели, 9×2 строки, крючки), один сценарий мобильной навигации | число passing не уменьшается (сейчас 3876) |
 | `node scripts/build-knowledge.js --check` | заметки: связи, рубрики, источники, сборка страниц | `ошибок нет` |
 | `node scripts/build-related.js --check` | блоки «теория ↔ практика» совпадают с `topics.json` | 62 страницы, 45 связей |
 | `python3 scripts/build-search-index.py --check` | поисковый индекс совпадает с разметкой | 122 записи |
@@ -192,6 +192,7 @@
 | `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция | `OK` |
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
 | `node scripts/build-og.js --check` | OG-карточки совпадают с шаблоном (нужны зависимости: см. `docs/seo.md`) | `5 карточек совпадают` |
+| `node scripts/test-stats.js` | числа главной считает `scripts/lib/site-stats.js`, а тест сверяет их с плитками, лидом практики, каталогом проектов и `REFERENCES.md` | `Stats: …` |
 | `node scripts/test-tabbar.js` | таббар един на всех страницах: пять пунктов, ровно одна активная метка, ссылки подбара стендов приходят в меню группой «Раздел стендов» | `Tabbar: …` |
 | `node scripts/test-iter-strip.js` | лента итераций в jsdom: шаги сменяются, время шага измеряется, счётчики растут, пауза замирает, при `reduce` список статичен | `Iter strip: …` |
 | `node scripts/test-graph.js` | граф связей: 26 стендов из `topics.json`, фильтр «стенды», стенд держится за видимую тему | `Graph: …` |
@@ -284,6 +285,13 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-18 | B | ✅ Один контракт каталога: чипы `data-catalog-filter`, теги `data-catalog-tags`, статус, заглушка и сворачивание раздела общие; обработчики делегированы документу; фильтр ленты ушёл из `knowledge.js` в `catalog.js` | `assets/catalog.js`, `assets/knowledge.js`, `scripts/build-knowledge.js`, `blog.html`, `articles.html`, `projects.html` | — |
 | U-19 | B | ✅ Лента итераций на главной стала инверсной консолью: тёмная подложка на светлом листе (в тёмной теме — наоборот), пульс «работа идёт», секундомер, счётчики итераций и проверок, у каждого шага своё измеренное время, 14 действий в очереди, бегущая строка ускорена с 26 до 16 с, живой режим в `assets/iter-strip.js` | `index.html`, `assets/pages.css`, `assets/tokens.css`, `assets/iter-strip.js`, `assets/shell.js` | — |
 | U-20 | B | ✅ Журнал изменений на главной — вторая инверсная панель: внутри `.journal` токены темы переопределены на инверсную пару, поэтому лента коммитов, счётчик, график и чипы вывернуты сами; активный чип и hover ссылки — глиняные, иначе чёрная пилюля растворялась в подложке | `index.html`, `assets/pages.css`, `scripts/regression-static.js`, `scripts/browser-smoke.js` | — |
+| U-21 | D | ✅ Числа главной перестали быть вписанными руками: один модуль `scripts/lib/site-stats.js` (3 пространства, 42 работы, 52 маршрута, 74 термина), `scripts/test-stats.js` сверяет плитки, лид практики, каталог проектов и `REFERENCES.md` | `scripts/lib/site-stats.js`, `scripts/test-stats.js`, `index.html`, `projects.html` | — |
+| U-22 | B | ✅ Убраны мёртвые правила CSS: утилиты без потребителей, легаси-пилюли, `.catalog-stat`, варианты карточек `--lead/--tall`, поля формы, `notice-rose`; возврат запрещён ассертами | `assets/{base,pages,course}.css`, `scripts/regression-static.js` | — |
+| U-23 | B | 🔜 Пятая плитка «43 заметки» на главной: число уже считает `scripts/lib/site-stats.js`, нужен ряд из пяти плиток и проверка переноса на 360 px | `index.html`, `assets/pages.css`, `scripts/test-stats.js` | P2 |
+| U-24 | A | 🔜 Критический CSS: разложить `base.css` на каркас и остальное, откладывать `pages.css`/`course.css` по типу страницы, измерить LCP в `browser-smoke` | `assets/*.css`, `index.html`, `scripts/browser-smoke.js` | P2 |
+| U-25 | A | 🔜 Кэш без полного сброса: `sw.js` держит версии в URL (`?v=`) и обновляет файлы stale-while-revalidate вместо удаления всего кэша | `sw.js`, `scripts/test-service-worker.js` | P2 |
+| U-26 | E | 🔜 axe на всех страницах в тёмной теме: сейчас выборка 17 из 125, расширить до полного прогона и следить за временем шага | `scripts/browser-a11y.js`, `site-checks.yml` | P2 |
+| U-27 | D | 🔜 Поиск прощает опечатки: словарь синонимов и редакционное расстояние для запросов короче 12 символов, честное «возможно, вы имели в виду» | `scripts/build-search-index.py`, `assets/shell.js`, `scripts/test-search.js` | P3 |
 | U-15 | B | ✅ Один сценарий мобильной навигации: на стендах тот же таббар из `shell.js` (пять пунктов, «Ещё» активно и на страницах из меню), подбар раздела до 820 px скрыт, а его ссылки уходят в меню группой «Раздел стендов»; собственная шапка стендов осталась запасной навигацией без JS | `shell.js`, `course.css`, `index.html`-шаблоны | — |
 
 Правило очереди: берём **не больше двух** задач одной полосы в параллель, разные полосы — свободно.
@@ -298,6 +306,8 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 - **jsdom не грузит относительные `link`/`script`.** Тестировать через `JSDOM.fromURL` на локальном сервере.
   «Not implemented: navigation» на страницах-редиректах — норма, `fetch is not defined` в jsdom — тоже.
 - **Скрипты стендов инициализируются ~1 секунду** даже в jsdom: ждать `body.ui-ready`, а не фиксированные 300 мс.
+- **Числа на главной не вписывают руками.** Их считает `scripts/lib/site-stats.js`, а `scripts/test-stats.js`
+  сверяет с разметкой; «41 работа» когда-то разошлась с сайтом именно потому, что жила в трёх местах.
 - **Лента итераций живёт в одном файле.** `assets/iter-strip.js` сам ведёт паузу, секундомер и очередь шагов;
   второй обработчик в `shell.js` давал двойное переключение `aria-pressed` — так уже было.
 - **`html { overflow-x: clip }` маскирует переполнение.** Проверять ширину элементов, а не `scrollWidth`.
