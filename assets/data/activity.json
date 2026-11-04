@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T16:50:16.230Z",
+  "generated": "2026-11-04T18:23:31.753Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 205,
+  "total": 204,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 22
+      "count": 18
     },
     {
       "date": "2026-10-29",
@@ -124,10 +124,28 @@
     },
     {
       "date": "2026-11-04",
-      "count": 41
+      "count": 44
     }
   ],
   "commits": [
+    {
+      "sha": "ecd5d8e",
+      "title": "fix(build): сделать три вставки на стендах идемпотентными",
+      "date": "2026-11-04T18:13:24Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ecd5d8e1ec15f0e5006754d5f6605cf1739df9dc"
+    },
+    {
+      "sha": "df8e1b5",
+      "title": "feat(seo): статический текст работ, режим чтения и метаданные в пределах сниппета",
+      "date": "2026-11-04T18:05:32Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/df8e1b547382285fb10185cb9ac1b23f31f68110"
+    },
+    {
+      "sha": "0e228cc",
+      "title": "seo: аудит, .nojekyll, валидность JSON-LD и внутренние nofollow",
+      "date": "2026-11-04T17:49:49Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/0e228cc40d6da6af6ce0654bb4bf43d722c7be42"
+    },
     {
       "sha": "862a062",
       "title": "chore: синхронизировать рабочие изменения PR",
@@ -469,24 +487,6 @@
       "title": "ci(activity): не терять снимок, когда post-index коммитит первым",
       "date": "2026-11-03T13:27:55Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/07e5da309fa815c960a0d7999c4fa44fb1541228"
-    },
-    {
-      "sha": "f57c2cf",
-      "title": "fix(faq): ответы в справке, поиск по вопросам и деплинки",
-      "date": "2026-11-03T13:21:41Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f57c2cf71c18ce4b5e7975cce6f1f508134956a7"
-    },
-    {
-      "sha": "79431f4",
-      "title": "feat(site): три вселенные со схемами, рабочий журнал коммитов и единый текстовый слой",
-      "date": "2026-11-02T22:30:20Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/79431f48c6737c08738d89ac72bbf8a6e1f807cb"
-    },
-    {
-      "sha": "bd22a5d",
-      "title": "feat(design): v13 «Витрина» — язык референсов вместо тёплой «Мастерской»",
-      "date": "2026-11-02T21:52:45Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bd22a5d8d1faf965cef7bbfa6b3e6a9b7231d964"
     }
   ]
 }
