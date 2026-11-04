@@ -140,14 +140,16 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.kn-goal').count(), 1, 'у темы есть блок цели');
     assert(await page.locator('.kn-code').count() > 0, 'у темы есть блок кода');
     await page.locator('.kn-wiki-tree a[aria-current="page"]').first().focus();
-    /* Редирект мета-тегом срабатывает не мгновенно, поэтому проверяем сам
-       механизм: meta refresh на материалы и рабочую ссылку для человека. */
-    await page.goto(base + '/blog/graph.html', { waitUntil: 'load' });
-    const refresh = await page.locator('meta[http-equiv="refresh"]').getAttribute('content');
-    assert(/url=\/blog\/materials\.html/.test(refresh || ''), 'blog/graph.html: нет редиректа на материалы');
-    assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex, follow', 'заглушка должна закрывать страницу от индекса');
-    await page.locator('main a[href="/blog/materials.html"]').first().click();
-    await page.waitForURL('**/blog/materials.html');
+    /* Заглушка blog/graph.html: браузер уводит на материалы мета-редиректом
+       (мета-тег проверяет regression-static), а человеку остаётся ссылка.
+       Ждём переход терпеливо: при медленной сети страница успевает отрисоваться. */
+    await page.goto(base + '/blog/graph.html', { waitUntil: 'domcontentloaded' });
+    const redirected = await page.waitForURL('**/blog/materials.html', { timeout: 5000 })
+      .then(() => true).catch(() => false);
+    if (!redirected) {
+      await page.locator('main a[href="/blog/materials.html"]').first().click();
+      await page.waitForURL('**/blog/materials.html');
+    }
 
     for (const path of ['/', '/projects.html', '/blog/materials.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
