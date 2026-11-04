@@ -10,7 +10,7 @@ const path = require('node:path');
 const ROOT = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 
-const LAYERS = ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/course.css'];
+const LAYERS = ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css'];
 const css = LAYERS.map(read).join('\n');
 const doc = read('DESIGN_SYSTEM.md');
 

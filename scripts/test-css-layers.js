@@ -13,7 +13,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
-const LAYERS = ['assets/base.css', 'assets/pages.css', 'assets/course.css'];
+const LAYERS = ['assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css'];
 
 function parse(file) {
   const source = fs.readFileSync(path.join(ROOT, file), 'utf8')

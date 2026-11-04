@@ -1,0 +1,609 @@
+/* ==========================================================================
+   База знаний: слой kn-* — лента заметок, страница заметки, живой граф, рубрики.
+   Файл подключается только там, где есть kn-классы (лента, заметки, граф,
+   темы): остальным страницам 34 КБ этого слоя не нужны. Правила каталога,
+   карточек и прозы остаются в pages.css — слой только добавляет новые классы.
+   Порядок: tokens → base → pages → knowledge (→ course).
+   ========================================================================== */
+   и прозы не меняются. Все значения — токены --u-*; второй акцент не вводится,
+   поэтому рубрики различаются номером, кеглем и плотностью, а не цветом.
+   ========================================================================== */
+
+/* ——— Шапка базы знаний: заголовок, счётчики, поиск по терминам ——— */
+.kn-head { display: grid; gap: var(--u-s4); padding-block: var(--u-s7) var(--u-s5); }
+.kn-head h1 {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--u-font-display);
+  font-size: var(--u-fs-page-title);
+  font-weight: 700;
+  line-height: var(--u-lh-tight);
+  letter-spacing: var(--u-ls-display);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.kn-head-lede { margin: 0; max-width: 62ch; color: var(--u-ink-2); font-size: var(--u-fs-md); line-height: 1.55; }
+/* ——— Поток заметок: сетка из 12 колонок, карточки разных размеров ——— */
+.kn-stream {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--u-card-gap);
+  align-items: stretch;
+}
+.kn-card {
+  grid-column: span 4;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  color: var(--u-ink);
+  text-decoration: none;
+}
+.kn-card--wide { grid-column: span 8; }
+.kn-card--half { grid-column: span 6; }
+.kn-card--flat { grid-column: span 12; }
+.kn-card-body { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--u-s2); padding: var(--u-s5); }
+.kn-card-zone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-card-zone::before { content: ""; width: 6px; height: 6px; border-radius: 2px; background: var(--u-accent); }
+.kn-card-title {
+  margin: 0;
+  font-family: var(--u-font-display);
+  font-size: var(--u-fs-lg);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  overflow-wrap: anywhere;
+}
+.kn-card--wide .kn-card-title { font-size: var(--u-fs-xl); }
+.kn-card-excerpt {
+  margin: 0;
+  color: var(--u-muted);
+  font-size: var(--u-fs-sm);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.kn-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-block-start: var(--u-s2);
+  padding-block-start: var(--u-s3);
+  border-block-start: 1px solid var(--u-line);
+  color: var(--u-muted);
+  font-size: var(--u-fs-xs);
+}
+.kn-card:hover { box-shadow: var(--u-shadow-2); }
+.kn-card[hidden] { display: none; }
+.kn-card:hover .kn-card-title { color: var(--u-accent); }
+
+/* ——— Плашка машинного текста: обязательна на каждой такой заметке ——— */
+.kn-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--u-s2);
+  min-height: 26px;
+  padding: 3px 10px;
+  border: 1px dashed var(--u-line-strong);
+  border-radius: var(--u-r-pill);
+  color: var(--u-muted);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+.kn-ai::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--u-accent); }
+.kn-ai-note {
+  display: grid;
+  gap: var(--u-s1);
+  margin-block: var(--u-s4);
+  padding: var(--u-s3) var(--u-s4);
+  border: 1px dashed var(--u-line-strong);
+  border-radius: var(--u-r-md);
+  color: var(--u-muted);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-xs);
+  line-height: 1.5;
+}
+.kn-ai-note strong { color: var(--u-ink-2); font-weight: 600; }
+
+/* ——— Страница заметки: тело в мере 68ch + рельс со связями ——— */
+.kn-note {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--u-s6);
+  align-items: start;
+}
+.kn-note-head { display: grid; gap: var(--u-s3); padding-block: var(--u-s6) var(--u-s5); }
+.kn-note-head h1 {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--u-font-display);
+  font-size: clamp(1.9rem, 4vw, 2.875rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.kn-note-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2); color: var(--u-muted); font-size: var(--u-fs-xs); }
+.kn-def {
+  margin: 0;
+  max-width: 56ch;
+  padding-inline-start: var(--u-s4);
+  border-inline-start: 2px solid var(--u-accent);
+  color: var(--u-ink);
+  font-family: var(--u-font-serif);
+  font-size: var(--u-fs-md);
+  line-height: 1.55;
+}
+.kn-note-body { max-width: var(--u-max-read); font-family: var(--u-font-serif); font-size: var(--u-fs-read); line-height: var(--u-lh-read); color: var(--u-ink); }
+.kn-note-body > * + * { margin-block-start: var(--u-s4); }
+.kn-note-body h2 {
+  margin: var(--u-s9) 0 var(--u-s3);
+  font-family: var(--u-font-ui);
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  scroll-margin-top: calc(var(--u-masthead) + var(--u-s6));
+}
+.kn-note-body h3 { margin: var(--u-s7) 0 var(--u-s2); font-family: var(--u-font-ui); font-size: 1.1875rem; font-weight: 700; letter-spacing: -0.015em; }
+.kn-note-body p, .kn-note-body li { color: var(--u-ink-2); }
+.kn-note-body ul, .kn-note-body ol { padding-inline-start: var(--u-s5); }
+.kn-note-body li + li { margin-block-start: var(--u-s2); }
+.kn-note-body li::marker { color: var(--u-accent); }
+.kn-note-body a { color: var(--u-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.kn-note-body code { padding: 1px 6px; border-radius: 5px; background: var(--u-surface-sunk); font-family: var(--u-font-mono); font-size: 0.82em; }
+.kn-note-body strong { color: var(--u-ink); font-weight: 600; }
+
+/* Связь с другой заметкой: пунктир и стрелка отличают её от внешней ссылки */
+.kn-ref { font-family: var(--u-font-ui); font-size: 0.92em; text-decoration-style: dotted; white-space: nowrap; }
+.kn-ref::after { content: "↗"; margin-inline-start: 2px; font-size: 0.8em; }
+
+/* ——— Визуальные блоки внутри заметки ——— */
+
+.kn-facts {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: var(--u-s2) var(--u-s5);
+  margin: var(--u-s5) 0;
+  padding: var(--u-s4) var(--u-s5);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+  line-height: 1.45;
+}
+.kn-facts dt { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); align-self: center; }
+.kn-facts dd { margin: 0; color: var(--u-ink-2); }
+
+.kn-table-wrap { margin: var(--u-s5) 0; overflow-x: auto; border-radius: var(--u-r-md); background: var(--u-surface); box-shadow: var(--u-shadow-1); }
+.kn-table { width: 100%; border-collapse: collapse; font-family: var(--u-font-ui); font-size: var(--u-fs-sm); line-height: 1.45; }
+.kn-table caption { padding: var(--u-s3) var(--u-s4); color: var(--u-muted); font-size: var(--u-fs-xs); text-align: start; caption-side: bottom; }
+.kn-table th, .kn-table td { padding: 10px var(--u-s4); border-block-end: 1px solid var(--u-line); text-align: start; vertical-align: top; }
+.kn-table thead th { color: var(--u-ink-2); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-weight: 500; letter-spacing: var(--u-ls-mono); white-space: nowrap; }
+.kn-table tbody tr:nth-child(even) { background: var(--u-surface-sunk); }
+.kn-table tbody tr:last-child th, .kn-table tbody tr:last-child td { border-block-end: 0; }
+.kn-table th[scope="row"] { color: var(--u-ink); font-weight: 600; }
+
+.kn-terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--u-s3); margin: var(--u-s5) 0; }
+.kn-term { display: grid; gap: var(--u-s1); padding: var(--u-s4); border-radius: var(--u-r-md); background: var(--u-surface); box-shadow: var(--u-shadow-1); font-family: var(--u-font-ui); }
+.kn-term dt, .kn-term strong { color: var(--u-ink); font-size: var(--u-fs-sm); font-weight: 600; }
+.kn-term dd, .kn-term span { margin: 0; color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }
+
+.kn-kanban { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--u-s3); margin: var(--u-s5) 0; font-family: var(--u-font-ui); }
+.kn-lane { display: grid; gap: var(--u-s2); align-content: start; padding: var(--u-s3); border-radius: var(--u-r-md); background: var(--u-surface-sunk); }
+.kn-lane-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--u-s2); color: var(--u-ink-2); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+.kn-lane-head em { color: var(--u-muted); font-style: normal; font-variant-numeric: tabular-nums; }
+.kn-tile { padding: var(--u-s3); border-radius: var(--u-r-sm); background: var(--u-surface); box-shadow: var(--u-shadow-1); color: var(--u-ink-2); font-size: var(--u-fs-xs); line-height: 1.45; }
+.kn-tile strong { display: block; margin-block-end: 2px; color: var(--u-ink); font-size: var(--u-fs-sm); font-weight: 600; }
+.kn-tile[data-state="done"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-ok) 35%, var(--u-line)); }
+.kn-tile[data-state="blocked"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--u-warn) 35%, var(--u-line)); }
+
+
+/* ——— Служебная строка заметки: соседние записи и выход из рубрики ——— */
+.kn-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u-s2) var(--u-s4);
+  margin-block-start: var(--u-s7);
+  padding-block-start: var(--u-s4);
+  border-block-start: 1px solid var(--u-line);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-sm);
+}
+.kn-pager a { color: var(--u-ink-2); text-decoration: none; }
+.kn-pager a:hover { color: var(--u-accent); }
+.kn-pager > span { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); }
+.kn-section { display: block; margin-block-start: var(--u-s8); }
+.kn-section .kn-group-head { margin-block-start: 0; }
+.kn-note-body + .kn-section { margin-block-start: var(--u-s9); }
+
+/* ——— Рельс заметки: связи, источники, служебное ——— */
+.kn-rail { display: grid; gap: var(--u-card-gap); align-content: start; }
+.kn-rail-card { display: grid; gap: var(--u-s3); padding: var(--u-s5); border-radius: var(--u-r-lg); background: var(--u-surface); box-shadow: var(--u-shadow-1); }
+.kn-rail-card h2 {
+  margin: 0;
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-rail-card p { margin: 0; color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.5; }
+.kn-rail-list { display: grid; gap: var(--u-s2); margin: 0; padding: 0; list-style: none; }
+.kn-rail-list a { display: grid; gap: 2px; color: var(--u-ink); font-size: var(--u-fs-sm); line-height: 1.35; text-decoration: none; }
+.kn-rail-list a span { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+.kn-rail-list a:hover { color: var(--u-accent); }
+
+/* ——— Связанные заметки и источники в теле ——— */
+.kn-related { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--u-s3); margin: var(--u-s4) 0 0; padding: 0; list-style: none; font-family: var(--u-font-ui); }
+.kn-related a { display: grid; gap: var(--u-s1); height: 100%; padding: var(--u-s4); border-radius: var(--u-r-md); background: var(--u-surface); box-shadow: var(--u-shadow-1); color: var(--u-ink); text-decoration: none; }
+.kn-related a:hover { box-shadow: var(--u-shadow-2); }
+.kn-related strong { font-size: var(--u-fs-sm); font-weight: 600; line-height: 1.35; }
+.kn-related span { color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.45; }
+.kn-sources { display: grid; gap: var(--u-s2); margin: var(--u-s3) 0 0; padding-inline-start: var(--u-s5); font-family: var(--u-font-ui); font-size: var(--u-fs-sm); line-height: 1.5; }
+.kn-sources li::marker { color: var(--u-faint); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
+.kn-sources small { display: block; color: var(--u-muted); font-size: var(--u-fs-2xs); }
+.kn-backlinks { margin-block-start: var(--u-s6); padding: var(--u-s4) var(--u-s5); border: 1px solid var(--u-line); border-radius: var(--u-r-md); font-family: var(--u-font-ui); font-size: var(--u-fs-sm); }
+.kn-backlinks p { margin: 0 0 var(--u-s2); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+.kn-backlinks ul { display: grid; gap: 6px; margin: 0; padding-inline-start: var(--u-s5); }
+.kn-backlinks li { color: var(--u-ink-2); }
+
+/* ——— Граф связей: SVG-рёбра + узлы, раскладку считает knowledge.js ——— */
+.kn-graph-stage {
+  position: relative;
+  margin-block: var(--u-s5);
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  border-radius: var(--u-r-lg);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  overflow: hidden;
+}
+.kn-graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.kn-graph-svg line { stroke: var(--u-line-strong); stroke-width: 1; }
+.kn-graph-svg line[data-active="true"] { stroke: var(--u-accent); stroke-width: 1.5; }
+.kn-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 152px;
+  padding: 8px 10px;
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1), inset 0 0 0 1px var(--u-line);
+  color: var(--u-ink);
+  font-family: var(--u-font-ui);
+  font-size: var(--u-fs-2xs);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  transform: translate(-50%, -50%);
+}
+.kn-node:hover, .kn-node:focus-visible { box-shadow: var(--u-shadow-2), inset 0 0 0 1.5px var(--u-accent); color: var(--u-accent); z-index: 2; }
+.kn-graph-legend { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+
+/* ——— Рубрики и теги ——— */
+.kn-topic-list { display: grid; gap: var(--u-s2); margin-block: var(--u-s4); padding: 0; list-style: none; }
+.kn-topic-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--u-s4);
+  padding: var(--u-s4) var(--u-s5);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  color: var(--u-ink);
+  text-decoration: none;
+}
+.kn-topic-row:hover { box-shadow: var(--u-shadow-2); }
+.kn-topic-row:hover strong { color: var(--u-accent); }
+.kn-topic-row strong { display: block; font-size: var(--u-fs-base); font-weight: 600; }
+.kn-topic-row small { display: block; margin-block-start: 2px; color: var(--u-muted); font-size: var(--u-fs-xs); line-height: 1.45; }
+/* Номер рубрики: та же плашка, что у индексов каталога, но внутри строки-ссылки. */
+.kn-zone-num {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--u-r-sm);
+  background: var(--u-surface-sunk);
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+}
+.kn-topic-row .kn-zone-count { white-space: nowrap; color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); }
+.kn-tagcloud { display: flex; flex-wrap: wrap; gap: 6px; margin-block: var(--u-s3); padding: 0; list-style: none; }
+.kn-tagcloud a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 30px;
+  padding: 3px 12px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-xs);
+  text-decoration: none;
+}
+.kn-tagcloud a:hover { color: var(--u-accent); }
+.kn-tagcloud em { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); font-style: normal; }
+.kn-filterbar { display: flex; flex-wrap: wrap; gap: 6px; margin-block: var(--u-s3) var(--u-s2); }
+.kn-filterbar { flex: 1 1 320px; }
+.kn-filterbar .catalog-filter[aria-pressed="true"] { background: var(--u-inverse); color: var(--u-inverse-ink); }
+.kn-rail-row { display: flex; flex: 1 1 100%; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--u-s2) var(--u-s4); }
+.kn-mini { display: flex; flex-wrap: wrap; gap: var(--u-s3); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+.kn-mini a { color: var(--u-muted); text-decoration: none; }
+.kn-mini a:hover { color: var(--u-accent); }
+.kn-empty { padding: var(--u-s6); border-radius: var(--u-r-lg); background: var(--u-surface); color: var(--u-muted); }
+.kn-group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--u-s2) var(--u-s4); margin-block: var(--u-s7) var(--u-s3); }
+.kn-group-head h2 { margin: 0; font-family: var(--u-font-display); font-size: var(--u-fs-xl); font-weight: 700; letter-spacing: -0.025em; }
+.kn-group-head span { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+
+/* ——— Адаптив: 12 → 6 → одна колонка, рельс встаёт под текст ——— */
+@media (min-width: 1081px) {
+  .kn-note { grid-template-columns: minmax(0, 1fr) 296px; gap: var(--u-s8); }
+  .kn-rail { position: sticky; inset-block-start: calc(var(--u-masthead) + var(--u-s6)); }
+}
+@media (max-width: 1080px) {
+  .kn-card { grid-column: span 6; }
+  .kn-card--wide { grid-column: span 12; }
+}
+@media (max-width: 720px) {
+  .kn-card, .kn-card--wide { grid-column: span 12; }
+  .kn-graph-stage { aspect-ratio: auto; min-height: 260px; }
+  .kn-node { width: 118px; font-size: 10px; }
+  .kn-facts { grid-template-columns: minmax(0, 1fr); gap: var(--u-s1); }
+  .kn-facts dd + dt { margin-block-start: var(--u-s2); }
+  .kn-topic-row { grid-template-columns: 32px minmax(0, 1fr); }
+  .kn-topic-row .kn-zone-count { grid-column: 2; }
+}
+
+/* ——— Движение: только тень и картинка, всё под reduced-motion ——— */
+@media (prefers-reduced-motion: no-preference) {
+  .kn-card,
+  .kn-topic-row,
+  .kn-related a {
+    transition: box-shadow var(--u-dur-2) var(--u-ease), transform var(--u-dur-2) var(--u-ease);
+  }
+  .kn-card:hover,
+  .kn-topic-row:hover { transform: translateY(-2px); }
+  .kn-node { transition: box-shadow var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
+}
+@media print {
+  .kn-rail, .kn-filterbar, .kn-graph-stage { display: none; }
+}
+
+/* ——— Карточка заметки без обложки: номер рубрики вместо картинки ———
+   Обложки убраны совсем: лента читается как типографский указатель,
+   а не как галерея. Номер рубрики работает якорем для глаза (он же
+   стоит на странице рубрики), поэтому карточки различаются по номеру,
+   а не по цвету — второго акцента в системе нет. */
+.kn-card-num {
+  min-width: 2.2em;
+  color: var(--u-ink);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.kn-card--wide .kn-card-excerpt { -webkit-line-clamp: 2; }
+
+/* ——— Граф 2: живое поле связей ———
+   Узел стал точкой с подписью: точка показывает ранг связности, подпись
+   читается глазом и остаётся доступной без скриптов. Рубрики разнесены по
+   секторам на этапе сборки, скрипт только добавляет движение. Второй акцент
+   не вводится: активное состояние — тот же глиняный --u-accent, приглушённое —
+   --u-faint, поэтому в тёмной теме всё остаётся в палитре сайта. */
+.kn-graph-shell { display: grid; gap: var(--u-s3); margin-block-start: var(--u-s6); }
+.kn-graph-title {
+  margin: 0;
+  color: var(--u-muted);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-graph-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u-s2) var(--u-s3); }
+.kn-graph-actions { display: flex; flex-wrap: wrap; gap: var(--u-s2); }
+.kn-graph-toolbar .catalog-status { flex: 1 1 100%; min-height: 1.2em; margin: 0; }
+.kn-graph-stage { aspect-ratio: 3 / 2; min-height: 480px; background: var(--u-surface-sunk); }
+.kn-graph-field { position: absolute; inset: 0; }
+.kn-graph-svg line { stroke: var(--u-line-strong); stroke-width: 1; transition: stroke var(--u-dur-1) var(--u-ease); }
+.kn-graph-svg line[data-muted="true"] { stroke: var(--u-line); }
+.kn-graph-svg line[data-hidden="true"] { stroke: var(--u-line); opacity: 0.4; }
+.kn-node {
+  width: auto;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--u-ink-2);
+  font-weight: 500;
+  gap: 4px;
+  touch-action: none;
+  cursor: grab;
+}
+.kn-node-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--u-r-pill);
+  background: var(--u-surface);
+  box-shadow: inset 0 0 0 1.5px var(--u-line-strong);
+  transition: box-shadow var(--u-dur-1) var(--u-ease), transform var(--u-dur-1) var(--u-ease);
+}
+.kn-node[data-rank="link"] .kn-node-dot { width: 14px; height: 14px; }
+.kn-node[data-rank="hub"] .kn-node-dot { width: 20px; height: 20px; box-shadow: inset 0 0 0 2px var(--u-muted); background: var(--u-accent-soft); }
+.kn-node-label {
+  max-width: 132px;
+  color: var(--u-muted);
+  font-family: var(--u-font-ui);
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+  transition: color var(--u-dur-1) var(--u-ease);
+}
+.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; color: var(--u-ink); font-size: var(--u-fs-2xs); font-weight: 600; }
+.kn-node[data-dim="true"] { opacity: 0.32; }
+.kn-node[data-active="true"] .kn-node-dot { background: var(--u-accent); box-shadow: inset 0 0 0 2px var(--u-accent), 0 0 0 6px var(--u-accent-soft); }
+.kn-node[data-active="true"] .kn-node-label { color: var(--u-accent); font-weight: 600; }
+.kn-node[data-dragging="true"] { cursor: grabbing; z-index: 3; }
+/* Стенд — квадрат на том же поле. Форма, а не второй цвет: палитра остаётся
+   двухцветной, а «мост теория ↔ практика» видно даже на статической картинке. */
+.kn-node--stand .kn-node-dot { border-radius: 2px; transform: rotate(45deg); }
+.kn-node[data-dragging="true"] .kn-node-dot { background: var(--u-accent); }
+.kn-node:focus-visible { outline: none; box-shadow: var(--u-focus); border-radius: var(--u-r-sm); }
+.kn-node:focus-visible .kn-node-label { color: var(--u-accent); }
+.kn-node[hidden] { display: none; }
+.kn-graph-stage[data-motion="on"] .kn-node { will-change: left, top; }
+.kn-graph-stage[data-filter="all"] .kn-node-label { opacity: 1; }
+.kn-graph-legend { display: flex; flex-wrap: wrap; gap: var(--u-s2) var(--u-s4); }
+@media (max-width: 900px) {
+  .kn-graph-stage { aspect-ratio: auto; min-height: 420px; }
+  .kn-node-label { max-width: 92px; font-size: 9px; }
+  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
+}
+@media (max-width: 560px) {
+  .kn-node[data-rank="link"] .kn-node-label { display: none; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kn-node-dot { transition: none; }
+  .kn-node-label { transition: none; }
+  .kn-graph-svg line { transition: none; }
+}
+@media print {
+  .kn-graph-toolbar { display: none; }
+}
+
+/* ——— Конспект в рельсе заметки ———
+   Вместо служебного «паспорта» — оглавление по разделам текста. Якоря
+   строит генератор из заголовков h2, поэтому список всегда совпадает с
+   содержанием: перепутать его с текстом нельзя. */
+.kn-minitoc { display: grid; gap: var(--u-s2); margin: 0; padding: 0; list-style: none; counter-reset: toc; }
+.kn-minitoc li { counter-increment: toc; }
+.kn-minitoc a {
+  display: grid;
+  grid-template-columns: 1.9em minmax(0, 1fr);
+  gap: var(--u-s2);
+  color: var(--u-ink-2);
+  font-size: var(--u-fs-xs);
+  line-height: 1.4;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.kn-minitoc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--u-faint);
+  font-family: var(--u-font-mono);
+  font-size: var(--u-fs-2xs);
+  letter-spacing: var(--u-ls-mono);
+}
+.kn-minitoc a:hover { color: var(--u-accent); }
+.kn-minitoc a:hover::before { color: var(--u-accent); }
+.kn-rail-summary { position: relative; }
+@media (min-width: 1081px) {
+  .kn-rail-summary { position: sticky; inset-block-start: calc(var(--u-masthead) + var(--u-s6)); }
+}
+
+/* ——— Граф: снятие старых рамок с узла ———
+   Прежний узел был карточкой и на hover получал внутреннюю обводку. Теперь
+   узел — точка с подписью, поэтому кольцо рисует только сама точка, а
+   рамка вокруг текста убирается. Здесь же нейтрализуются фиксированные
+   ширины узла из медиазапросов первой версии. */
+.kn-node:hover, .kn-node:focus-visible { box-shadow: none; color: var(--u-ink-2); }
+.kn-node:hover .kn-node-label { color: var(--u-accent); }
+.kn-graph-stage[data-motion="off"] .kn-node { will-change: auto; }
+@media (max-width: 1080px) {
+  .kn-node { width: auto; font-size: var(--u-fs-2xs); }
+}
+@media (max-width: 560px) {
+  .kn-graph-stage { min-height: 380px; }
+}
+
+/* ——— Граф: подписи по требованию ———
+   Сорок три подписи одновременно превращают поле в кашу. Хабы и связующие
+   узлы подписаны всегда (по ним читается структура), листья показывают
+   подпись при наведении, фокусе и в режиме фильтра, когда узлов на поле
+   остаётся немного. Подпись есть в разметке всегда — скрипт ничего не
+   дописывает, поисковик и скринридер видят её без движения. */
+.kn-node[data-rank="leaf"] .kn-node-label { opacity: 0; }
+.kn-node[data-rank="leaf"]:hover .kn-node-label,
+.kn-node[data-rank="leaf"]:focus-visible .kn-node-label,
+.kn-node[data-rank="leaf"][data-active="true"] .kn-node-label { opacity: 1; }
+.kn-graph-stage:not([data-filter="all"]) .kn-node[data-kind="note"] .kn-node-label { opacity: 1; }
+/* Стенд — квадрат без постоянной подписи: 26 заголовков поверх 43 заметок
+   не помещаются ни в одной раскладке. Заголовок проявляется на наведении,
+   фокусе и в фокусе окружения; полный список — в таблице связей.
+   Подпись вынесена из потока: у заметки она держит ширину узла, а у стенда
+   занимала бы 96 px прозрачного места и перехватывала наведение у соседей. */
+.kn-node--stand .kn-node-label {
+  position: absolute;
+  inset-block-start: calc(100% + 5px);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  max-width: 96px;
+  font-size: 9px;
+  line-height: 1.15;
+  opacity: 0;
+  pointer-events: none;
+}
+.kn-node--stand:hover .kn-node-label,
+.kn-node--stand:focus-visible .kn-node-label,
+.kn-node--stand[data-active="true"] .kn-node-label { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .kn-node-label { transition: opacity var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
+}
+
+
+/* ——— Граф 3: ядро, пояс, орбита ———
+   Первая версия графа читалась плохо: карточки-плашки лежали друг на друге,
+   подписи срезались, «движение» не было видно. Теперь узел — точка, подпись
+   ограничена по ширине и переносится, у листьев подпись появляется только
+   при наведении, а поле выше: сорока трём заметкам нужно место.
+
+   Ширины подписей (148 / 136 / 96 и медиазапросы 96 / 84) обязаны совпадать
+   с widthOf() в assets/knowledge.js: по ним считается разведение рамок. */
+.kn-graph-stage { aspect-ratio: 16 / 10; min-height: 560px; }
+.kn-node { max-width: 158px; }
+.kn-node-label { max-width: 96px; font-size: 11px; line-height: 1.25; }
+.kn-node[data-rank="link"] .kn-node-label { max-width: 136px; }
+.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; font-size: var(--u-fs-xs); }
+.kn-node[data-rank="hub"] .kn-node-dot { width: 22px; height: 22px; }
+.kn-node[data-rank="link"] .kn-node-dot { width: 15px; height: 15px; }
+.kn-node[data-rank="leaf"] .kn-node-dot { width: 9px; height: 9px; }
+.kn-graph-svg line[data-mutual="true"] { stroke-width: 1.6; }
+.kn-graph-svg line[data-active="true"] { stroke-width: 2; }
+.kn-graph-shell { margin-block-start: var(--u-s7); }
+.kn-graph-toolbar .kn-filterbar { flex: 1 1 auto; }
+@media (max-width: 900px) {
+  .kn-graph-stage { aspect-ratio: auto; min-height: 460px; }
+  .kn-node[data-rank="link"] .kn-node-label { display: none; }
+  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 96px; }
+}
+@media (max-width: 560px) {
+  .kn-graph-stage { min-height: 400px; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; font-size: 10px; }
+}
