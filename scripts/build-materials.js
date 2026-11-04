@@ -36,6 +36,16 @@ const CHECK_ONLY = process.argv.includes('--check');
 const problems = [];
 
 /* ─────────────────────────── утилиты ─────────────────────────── */
+/* Описание попадает в <meta name="description"> и в JSON-LD: длиннее 165
+   символов поисковик обрезает сам, поэтому режем по границе слова заранее. */
+function clamp(text, limit) {
+  const value = String(text || '').trim();
+  if (value.length <= limit) return value;
+  const cut = value.slice(0, limit);
+  const space = cut.lastIndexOf(' ');
+  return (space > limit - 30 ? cut.slice(0, space) : cut).replace(/[\s,;:.—-]+$/, '') + '…';
+}
+
 const esc = (value) => String(value == null ? '' : value)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -241,9 +251,9 @@ function head({ title, description }) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f6f2e9">
+<meta name="theme-color" content="#efeee9">
 <meta name="color-scheme" content="light dark">
-<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
@@ -339,7 +349,7 @@ function topicPage(topic, tree) {
     ? '<p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>'
     : '';
 
-  return `${head({ title: note.title + ' · Учебные материалы · itsliventsev', description: note.summary })}
+  return `${head({ title: note.title + ' · itsliventsev', description: clamp(note.summary, 160) })}
 <body class="ui-page kn-page-material">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <main id="main-content" class="kn-wiki-layout">
