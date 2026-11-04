@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T09:24:03.431Z",
+  "generated": "2026-11-04T09:33:24.606Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 230,
+  "total": 228,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-26",
-      "count": 9
+      "count": 6
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 12
+      "count": 13
     }
   ],
   "commits": [
+    {
+      "sha": "8f03a8d",
+      "title": "feat(cases): один шаблон для страниц-кейсов",
+      "date": "2026-11-04T09:29:57Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8f03a8db8edb1d9f6d0c8b0df2d5e2272e66f2c5"
+    },
     {
       "sha": "e879ec4",
       "title": "feat(graph): стенды как узлы графа связей",
@@ -481,12 +487,6 @@
       "title": "Fix navigation highlight and activity initialization",
       "date": "2026-11-01T21:14:17Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3d825836b7ed45b2b2bf02b22c8fc60d3787e6c6"
-    },
-    {
-      "sha": "19ca7cd",
-      "title": "fix: цикл/лента/канбан, единый индикатор, анимация меню, оффлайн-toast, шрифты, DataPolis, пространства — полный аудит пространств",
-      "date": "2026-11-01T21:08:54Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/19ca7cd9c44e793914b4cee41536e3ca03fd0b91"
     }
   ]
 }
