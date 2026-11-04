@@ -290,7 +290,7 @@ localStorage) → системная настройка (`prefers-color-scheme`)
 | `.kn-table`, `.kn-table-wrap` | таблица сравнения: `caption` снизу, зебра только на поверхности |
 | `.kn-terms`, `.kn-facts` | карточки терминов и паспорт фактов (`dl`) |
 | `.kn-kanban`, `.kn-lane`, `.kn-tile` | канбан на CSS Grid; статусы — `data-state="done" / "blocked"` |
-| `.kn-graph-stage`, `.kn-node`, `.kn-graph-svg` | граф связей: абсолютные узлы, SVG-рёбра |
+| `.kn-graph-stage`, `.kn-node`, `.kn-node--stand`, `.kn-graph-svg` | граф связей: абсолютные узлы, SVG-рёбра; заметка — круг, стенд — квадрат без постоянной подписи (подпись по наведению) |
 | `.kn-topic-list`, `.kn-topic-row`, `.kn-tagcloud` | указатель рубрик и облако тегов |
 
 Правила слоя:

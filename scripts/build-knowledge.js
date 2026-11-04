@@ -545,7 +545,7 @@ function renderNotePage(note, notes, notesById, index, registry) {
   </article>
   ${footer('Заметки')}
 </main>
-<script src="/assets/knowledge.js?v=20261104r3" defer></script>
+<script src="/assets/knowledge.js?v=20261104r4" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
@@ -686,27 +686,63 @@ function zonePage(zone, notes) {
 
    Узел — точка + подпись, ранг задаётся числом связей, узел в фокусе
    подсвечивает окружение. Всё остальное — прогрессивное улучшение. */
-function graphPage(notes, registry) {
-  const positions = layoutGraph(notes, registry);
-  const stats = graphStats(notes, registry);
-  const nodes = notes.map((note) => {
-    const point = positions.get(note.id);
-    const info = stats.get(note.id);
-    return '<a class="kn-node" href="/blog/' + esc(note.id) + '.html" data-node="' + esc(note.id)
-      + '" data-zone="' + esc(note.zone) + '" data-degree="' + info.degree + '" data-rank="' + info.rank + '"'
+/* Стенды на графе — та же природа узла, что у заметки, но своя семья.
+   Список и пары берутся из assets/data/topics.json — того же файла, что кормит
+   блоки RELATED на страницах заметок и стендов. Пока источник один, граф не
+   может разойтись с мостом «теория ↔ практика»; `build-related --check` следит
+   за этим со своей стороны. */
+const STAND_ZONE = 'stands';
+const STAND_LABEL_MAX = 30;
+
+function collectStands(notes) {
+  const known = new Set(notes.map((note) => note.id));
+  return [...related.load().byPractice.entries()]
+    .map(([file, noteIds]) => {
+      const title = related.h1Of(file);
+      return {
+        id: 'st-' + file.replace(/^stands\//, '').replace(/\.html$/, '').replace(/\//g, '-'),
+        kind: 'stand',
+        zone: STAND_ZONE,
+        href: '/' + file,
+        title,
+        /* Подпись на поле короче заголовка страницы: 26 стендов рядом с 43
+           заметками иначе превращают граф в текст. Полный заголовок остаётся
+           в title= и в таблице связей. */
+        short: title.length > STAND_LABEL_MAX ? title.slice(0, STAND_LABEL_MAX - 1).trimEnd() + '…' : title,
+        area: related.areaOf(file),
+        notes: noteIds.filter((id) => known.has(id)),
+      };
+    })
+    .filter((stand) => stand.notes.length)
+    .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+}
+
+function graphPage(notes, registry, stands, bridge) {
+  const allNodes = notes.concat(stands);
+  const allEdges = registry.edges.concat(bridge);
+  const positions = layoutGraph(allNodes, allEdges);
+  const stats = graphStats(allNodes, allEdges);
+  const nodes = allNodes.map((item) => {
+    const point = positions.get(item.id);
+    const info = stats.get(item.id);
+    const isStand = item.kind === 'stand';
+    const href = isStand ? item.href : '/blog/' + item.id + '.html';
+    const label = isStand ? item.short : item.title;
+    return '<a class="kn-node' + (isStand ? ' kn-node--stand' : '') + '" href="' + esc(href) + '" data-node="' + esc(item.id)
+      + '" data-kind="' + (isStand ? 'stand' : 'note') + '" data-zone="' + esc(item.zone) + '" data-degree="' + info.degree + '" data-rank="' + info.rank + '"'
       + ' data-ring="' + info.ring + '"'
       + ' style-x="' + point.x.toFixed(2) + '" style-y="' + point.y.toFixed(2) + '"'
-      + ' title="' + esc(note.title) + ' (' + info.degree + ' ' + plural(info.degree, 'связь', 'связи', 'связей') + ')">'
+      + ' title="' + esc(item.title) + ' (' + info.degree + ' ' + plural(info.degree, 'связь', 'связи', 'связей') + ')">'
       + '<span class="kn-node-dot" aria-hidden="true"></span>'
-      + '<span class="kn-node-label">' + esc(note.title) + '</span></a>';
+      + '<span class="kn-node-label">' + esc(label) + '</span></a>';
   }).join('\n      ');
 
-  const zoneOf = new Map(notes.map((note) => [note.id, note.zone]));
+  const zoneOf = new Map(allNodes.map((note) => [note.id, note.zone]));
   /* Толщина линии зависит от силы связи: взаимные ссылки рисуются заметнее,
      чем односторонние. Это единственная «семантика» линии — никаких цветов
      по рубрикам, второго акцента в системе нет. */
-  const edgeKeys = new Set(registry.edges.map((edge) => edge.from + '>' + edge.to));
-  const edges = registry.edges.map((edge) => {
+  const edgeKeys = new Set(allEdges.map((edge) => edge.from + '>' + edge.to));
+  const edges = allEdges.map((edge) => {
     const from = positions.get(edge.from), to = positions.get(edge.to);
     if (!from || !to) return '';
     const mutual = edgeKeys.has(edge.to + '>' + edge.from);
@@ -718,41 +754,60 @@ function graphPage(notes, registry) {
   }).join('\n        ');
 
   const counts = new Map();
-  for (const note of notes) counts.set(note.zone, (counts.get(note.zone) || 0) + 1);
+  for (const item of allNodes) counts.set(item.zone, (counts.get(item.zone) || 0) + 1);
   const filters = ['<button class="catalog-filter" type="button" aria-pressed="true" data-graph-zone="all">Все</button>']
     .concat(TAXONOMY.zones.filter((zone) => counts.get(zone.id)).map((zone) =>
       '<button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="' + esc(zone.id) + '">'
-      + esc(zone.num) + ' ' + esc(zone.title) + '</button>')).join('');
+      + esc(zone.num) + ' ' + esc(zone.title) + '</button>'))
+    .concat(counts.get(STAND_ZONE)
+      ? ['<button class="catalog-filter" type="button" aria-pressed="false" data-graph-zone="' + STAND_ZONE + '">стенды · '
+        + counts.get(STAND_ZONE) + '</button>']
+      : []).join('');
 
+  /* Связи таблицей — текстовый дубль графа: те же рёбра, включая мост
+     «заметка ↔ стенд». Без скриптов страница остаётся полной. */
+  const standsOf = new Map();
+  for (const stand of stands) {
+    for (const noteId of stand.notes) {
+      if (!standsOf.has(noteId)) standsOf.set(noteId, []);
+      standsOf.get(noteId).push(stand);
+    }
+  }
+  const labels = (ids) => ids.map((id) => {
+    const target = notes.find((item) => item.id === id);
+    return target ? '<a href="/blog/' + id + '.html">' + esc(target.title) + '</a>' : id;
+  }).join(', ');
   const list = notes.map((note) => {
     const out = registry.edges.filter((edge) => edge.from === note.id).map((edge) => edge.to);
     const incoming = registry.edges.filter((edge) => edge.to === note.id).map((edge) => edge.from);
-    const labels = (ids) => ids.map((id) => {
-      const target = notes.find((item) => item.id === id);
-      return target ? '<a href="/blog/' + id + '.html">' + esc(target.title) + '</a>' : id;
-    }).join(', ');
+    const practice = (standsOf.get(note.id) || [])
+      .map((stand) => '<a href="' + esc(stand.href) + '">' + esc(stand.title) + '</a>').join(', ');
     return '<tr><th scope="row"><a href="/blog/' + esc(note.id) + '.html">' + esc(note.title) + '</a></th>'
       + '<td>' + esc(ZONES.get(note.zone).title) + '</td>'
       + '<td>' + (out.length ? labels(out) : '—') + '</td>'
-      + '<td>' + (incoming.length ? labels(incoming) : '—') + '</td></tr>';
+      + '<td>' + (incoming.length ? labels(incoming) : '—') + '</td>'
+      + '<td>' + (practice || '—') + '</td></tr>';
   }).join('\n          ');
 
+  const nodesWord = plural(allNodes.length, 'узел', 'узла', 'узлов');
+  const linkWord = (count) => count + ' ' + plural(count, 'связь', 'связи', 'связей');
   return `${head({
-    title: 'Граф заметок · itsliventsev',
-    description: 'Живой граф перекрёстных ссылок базы знаний: '
+    title: 'Граф связей · itsliventsev',
+    description: 'Живой граф связей сайта: '
       + notes.length + ' ' + plural(notes.length, 'заметка', 'заметки', 'заметок')
-      + ' о сетях, Linux, базах данных, хранении и эксплуатации связаны ' + registry.edges.length
-      + ' ' + plural(registry.edges.length, 'ребром', 'рёбрами', 'рёбрами') + '. Ядро — хабы, пояс — рубрики, орбита — листья.',
+      + ' базы знаний и ' + stands.length + ' ' + plural(stands.length, 'учебный стенд', 'учебных стенда', 'учебных стендов')
+      + ' связаны ' + linkWord(allEdges.length) + ' — перекрёстные ссылки заметок и мост «теория ↔ практика».'
+      + ' Ядро — хабы, пояс — рубрики и стенды, орбита — листья.',
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
   })}
 <body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
 <main id="main-content">
   <header class="ui-pagehead">
-    <p class="ui-eyebrow">база знаний · связи</p>
-    <h1>Граф заметок</h1>
-    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}, ${registry.edges.length} ${plural(registry.edges.length, 'связь', 'связи', 'связей')}. Ядро держат хабы, пояс разложен по рубрикам, на орбите — заметки с одной-двумя связями. Наведите курсор или нажмите Tab: окружение подсветится, остальное отойдёт на второй план.</p>
-    <div class="ui-pagehead-meta"><span data-graph-count>${notes.length} узлов</span><span>${registry.edges.length} рёбер</span><span><a href="/blog/topics.html">рубрики</a></span></div>
+    <p class="ui-eyebrow">база знаний · стенды · связи</p>
+    <h1>Граф связей</h1>
+    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')} и ${stands.length} ${plural(stands.length, 'стенд', 'стенда', 'стендов')} на одном поле: ${linkWord(allEdges.length)}. Заметки ссылаются друг на друга, стенды держатся за темы, которые объясняют. Ядро держат хабы, пояс разложен по рубрикам и практикам, на орбите — узлы с одной-двумя связями. Наведите курсор или нажмите Tab: окружение подсветится, остальное отойдёт на второй план.</p>
+    <div class="ui-pagehead-meta"><span data-graph-count>${allNodes.length} ${nodesWord}</span><span>${allEdges.length} ${plural(allEdges.length, 'ребро', 'ребра', 'рёбер')}</span><span><a href="/blog/topics.html">рубрики</a></span></div>
   </header>
 
   <section class="kn-graph-shell" aria-labelledby="graph-title">
@@ -775,16 +830,17 @@ function graphPage(notes, registry) {
       </div>
     </div>
 
-    <p class="kn-graph-legend"><span>точка — заметка, размер по числу связей</span><span>линия — ссылка, толще у взаимных</span><span>сектор — рубрика</span><span>узел можно перетащить</span></p>
+    <p class="kn-graph-legend"><span>круг — заметка, размер по числу связей</span><span>квадрат — учебный стенд</span><span>линия — связь, толще у взаимных</span><span>сектор — рубрика или практика</span><span>узел можно перетащить</span></p>
   </section>
 
-  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии, рубрики разнесены по секторам. Без скриптов нет движения и подсветки, но навигация и таблица связей ниже работают полностью.</p></noscript>
+  <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки на заметки и стенды, рёбра — линии, рубрики и практики разнесены по секторам. Без скриптов нет движения и подсветки, но навигация и таблица связей ниже работают полностью.</p></noscript>
 
   <section class="ui-section" aria-labelledby="edges-title">
     <div class="ui-section-head"><h2 id="edges-title">Связи таблицей</h2><span class="ui-kicker">та же структура, без графики</span></div>
+    <p class="catalog-note">Пятая колонка — мост «теория ↔ практика»: стенд, на котором тема отрабатывается руками. Все ${stands.length} стендов тоже стоят на графе отдельными узлами.</p>
     <div class="kn-table-wrap">
       <table class="kn-table">
-        <thead><tr><th scope="col">заметка</th><th scope="col">рубрика</th><th scope="col">ведёт к</th><th scope="col">ссылаются на неё</th></tr></thead>
+        <thead><tr><th scope="col">заметка</th><th scope="col">рубрика</th><th scope="col">ведёт к</th><th scope="col">ссылаются на неё</th><th scope="col">стенды</th></tr></thead>
         <tbody>
           ${list}
         </tbody>
@@ -793,7 +849,7 @@ function graphPage(notes, registry) {
   </section>
   ${footer('Заметки · граф')}
 </main>
-<script src="/assets/knowledge.js?v=20261104r3" defer></script>
+<script src="/assets/knowledge.js?v=20261104r4" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
@@ -802,11 +858,11 @@ function graphPage(notes, registry) {
 
 /* Степень, ранг и круг узла — одна функция на граф и на подпись в рельсе,
    чтобы «хаб» на схеме и «хаб» в тексте не разъехались. */
-function graphStats(notes, registry) {
+function graphStats(notes, edges) {
   const degree = new Map(notes.map((note) => [note.id, 0]));
   const mutual = new Map(notes.map((note) => [note.id, 0]));
-  const keys = new Set(registry.edges.map((edge) => edge.from + '>' + edge.to));
-  for (const edge of registry.edges) {
+  const keys = new Set(edges.map((edge) => edge.from + '>' + edge.to));
+  for (const edge of edges) {
     degree.set(edge.from, (degree.get(edge.from) || 0) + 1);
     degree.set(edge.to, (degree.get(edge.to) || 0) + 1);
     if (keys.has(edge.to + '>' + edge.from)) {
@@ -841,10 +897,13 @@ function graphStats(notes, registry) {
    в «пикселях» условного поля 1200×800, потому что проценты по осям имеют
    разную цену: 1 % по ширине — 12 px, по высоте — 8 px. Итерации фиксированы,
    узлы обходятся в стабильном порядке, поэтому результат воспроизводим. */
-function layoutGraph(notes, registry) {
-  const stats = graphStats(notes, registry);
+function layoutGraph(notes, edges) {
+  const stats = graphStats(notes, edges);
   const positions = new Map();
   const zones = TAXONOMY.zones.filter((zone) => notes.some((note) => note.zone === zone.id));
+  /* Стенды — седьмой сектор рядом с шестью рубриками: мост «теория ↔ практика»
+     иначе рассыпался по чужим секторам и читался как случайные точки. */
+  if (notes.some((note) => note.zone === STAND_ZONE)) zones.push({ id: STAND_ZONE });
   const sector = (Math.PI * 2) / Math.max(1, zones.length);
   const put = (id, angle, radius) => positions.set(id, {
     x: 50 + Math.cos(angle) * radius * 1.62,
@@ -915,13 +974,20 @@ function layoutGraph(notes, registry) {
         последовательно убирают вертикальное и горизонтальное перекрытие. */
   const FIELD_W = 1200, FIELD_H = 800;
   const BOX_W = { hub: 148, link: 136, leaf: 96 };
+  /* Стенд на поле — квадрат без постоянной подписи: 26 подписей поверх
+     43 заметок не помещаются ни в какой раскладке. Заголовок стенда живёт
+     в title=, появляется при наведении и фокусе (как у листьев) и полностью
+     продублирован в таблице связей. Значение обязано совпадать с
+     widthOf() в assets/knowledge.js. */
+  const BOX_W_STAND = 24;
   const BOX_H = 56;
   const points = notes.map((note) => {
     const home = positions.get(note.id);
     const rank = stats.get(note.id).rank;
     return {
       id: note.id,
-      w: BOX_W[rank] || BOX_W.leaf,
+      kind: note.kind || 'note',
+      w: note.kind === 'stand' ? BOX_W_STAND : (BOX_W[rank] || BOX_W.leaf),
       hx: home.x, hy: home.y, x: home.x, y: home.y,
     };
   });
@@ -975,8 +1041,8 @@ function layoutGraph(notes, registry) {
   /* Сначала «мягко» с возвратом к секторам, затем отдельно по вертикали и по
      горизонтали без возврата — так остатки не разбегаются обратно. */
   resolve(400, 0.002, 'both');
-  resolve(400, 0, 'y');
-  resolve(400, 0, 'x');
+  resolve(600, 0, 'y');
+  resolve(600, 0, 'x');
   const resolved = new Map();
   for (const point of points) resolved.set(point.id, { x: point.x, y: point.y });
   return resolved;
@@ -1096,11 +1162,14 @@ function updatePosts(notes) {
   return merged;
 }
 
-function updateFeedCounts() {
+/* Счётчик раздела — это число публикаций, а не файлов в папке: в blog/ лежат
+   ещё редирект-заглушки переехавших заметок, и подсчёт по файлам давал 59
+   вместо 45. Источник истины — тот же список, что попадает в posts.json
+   (scripts/build-post-index.js считает так же). */
+function updateFeedCounts(blogPosts) {
   const file = 'feed-counts.json';
   const counts = fs.existsSync(path.join(ROOT, file)) ? JSON.parse(read(file)) : {};
-  const blogNotes = fs.readdirSync(path.join(ROOT, 'blog')).filter((name) => name.endsWith('.html')).length;
-  const next = Object.assign({}, counts, { blog: blogNotes });
+  const next = Object.assign({}, counts, { blog: blogPosts });
   const json = JSON.stringify(next, null, 2) + '\n';
   const changed = read(file) !== json;
   if (changed) write(file, json);
@@ -1154,14 +1223,17 @@ function main() {
   });
   write('blog/topics.html', topicsIndex(sorted, counts));
   TAXONOMY.zones.forEach((zone) => write('blog/topics/' + zone.id + '.html', zonePage(zone, sorted)));
-  write('blog/graph.html', graphPage(sorted, registry));
+  const stands = collectStands(notes);
+  const bridge = stands.flatMap((stand) => stand.notes.map((noteId) => ({ from: noteId, to: stand.id, bridge: true })));
+  write('blog/graph.html', graphPage(sorted, registry, stands, bridge));
 
   const blogChanged = updateBlogPage(sorted, registry, counts);
   const posts = updatePosts(sorted);
-  const feed = updateFeedCounts();
+  const feed = updateFeedCounts(posts.length);
 
   console.log('build-knowledge: ' + sorted.length + ' заметок, ' + edges.length + ' связей, '
-    + sources + ' источников, ' + counts.size + ' рубрик');
+    + sources + ' источников, ' + counts.size + ' рубрик, ' + stands.length + ' стендов в графе ('
+    + bridge.length + ' мостов)');
   console.log('  blog.html: ' + (blogChanged ? 'лента пересобрана' : 'без изменений')
     + '; posts.json: ' + posts.length + ' записей; feed-counts.blog: ' + feed.blog);
   for (const note of sorted) {

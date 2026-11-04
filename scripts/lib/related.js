@@ -128,5 +128,5 @@ const withPracticeBlock = (source, file) => {
 
 module.exports = {
   CONFIG, START, END, ROOT,
-  load, h1Of, noteBlockMarkup, practiceBlockMarkup, stripBlock, withNoteBlock, withPracticeBlock,
+  load, h1Of, areaOf, noteBlockMarkup, practiceBlockMarkup, stripBlock, withNoteBlock, withPracticeBlock,
 };
