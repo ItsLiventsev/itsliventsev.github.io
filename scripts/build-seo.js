@@ -30,7 +30,14 @@ function isNoindex(html) {
 }
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
-const write = (p, s) => fs.writeFileSync(path.join(ROOT, p), s);
+/* --check ничего не пишет: собирает результат в память и сравнивает с диском.
+   Иначе sitemap.xml и feed.xml тихо отстают от контента — их никто не проверял. */
+const CHECK = process.argv.includes('--check');
+const pending = [];
+const write = (p, s) => {
+  if (CHECK) { pending.push([p, s]); return; }
+  fs.writeFileSync(path.join(ROOT, p), s);
+};
 const abs = (rel) => SITE_URL + '/' + rel.replace(/^index\.html$/, '');
 /* Описания в манифестах приходят из meta-тегов, где часть символов уже
    экранирована — поэтому сначала раскрываем известные сущности, а потом
@@ -243,7 +250,9 @@ for (const rel of pages) {
 }
 
 /* ---------- sitemap.xml ---------- */
-const today = new Date().toISOString().slice(0, 10);
+/* Последняя известная дата вместо «сегодня»: иначе sitemap менялся бы каждый
+   день сам по себе, а --check падал бы на ровном месте. */
+const newestDate = sitemapEntries.map((e) => e.date).filter(Boolean).sort().pop() || new Date().toISOString().slice(0, 10);
 // lastmod хаба = самая свежая дата среди его дочерних страниц
 const latestByDir = {};
 for (const e of sitemapEntries) {
@@ -257,7 +266,7 @@ const sitemap = ['<?xml version="1.0" encoding="UTF-8"?>',
     .sort((a, b) => (a.rel === 'index.html' ? -1 : b.rel === 'index.html' ? 1 : a.rel.localeCompare(b.rel)))
     .map((e) => {
       const lastmod = e.date || (e.rel.endsWith('.html') && !e.rel.includes('/')
-        ? (latestByDir[Object.keys(latestByDir).find((d) => e.rel.startsWith(d))] || today)
+        ? (latestByDir[Object.keys(latestByDir).find((d) => e.rel.startsWith(d))] || newestDate)
         : '');
       return [
         '  <url>',
@@ -325,4 +334,19 @@ const rss = ['<?xml version="1.0" encoding="UTF-8"?>',
   '</rss>', ''].join('\n');
 write('feed.xml', rss);
 
-console.log(`SEO: обработано страниц ${sitemapEntries.length}, sitemap.xml и feed.xml обновлены (${SITE_URL})`);
+if (CHECK) {
+  const stale = pending.filter(([file, body]) => {
+    const full = path.join(ROOT, file);
+    return !fs.existsSync(full) || fs.readFileSync(full, 'utf8') !== body;
+  }).map(([file]) => file);
+  if (stale.length) {
+    console.error('build-seo --check: отстали от контента (' + stale.length + '): ' + stale.slice(0, 10).join(', '));
+    console.error('Запустите: node scripts/build-all.js');
+    process.exit(1);
+  }
+  console.log('SEO --check: ' + (pending.length - 2) + ' страниц + sitemap.xml и feed.xml совпадают с контентом');
+}
+
+if (!CHECK) {
+  console.log(`SEO: обработано страниц ${sitemapEntries.length}, sitemap.xml и feed.xml обновлены (${SITE_URL})`);
+}
