@@ -269,6 +269,37 @@ ok(office.includes('prefers-color-scheme'), 'генератор ОфисПоли
 const sw = read('sw.js');
 ok(sw.includes('/assets/tokens.css') && sw.includes('/assets/shell.js') && !sw.includes('workspace'), 'service worker кэширует удалённые ассеты');
 
+/* ── мост «теория ↔ практика» ──
+   Связи хранятся в assets/data/topics.json, страницы собирает build-related.js.
+   Проверяем обе стороны: заметка ведёт на стенд, стенд — на заметку, и блоков
+   ровно столько, сколько страниц в таблице связей. */
+{
+  const topics = JSON.parse(read('assets/data/topics.json'));
+  ok(Array.isArray(topics.pairs) && topics.pairs.length >= 40, 'topics.json: слишком мало связей «заметка ↔ стенд»');
+  const linkedNotes = new Set(), linkedPractices = new Set();
+  for (const pair of topics.pairs) {
+    ok(exists('blog/' + pair.note + '.html'), 'topics.json: нет страницы заметки ' + pair.note);
+    ok(exists(pair.practice), 'topics.json: нет страницы стенда ' + pair.practice);
+    linkedNotes.add(pair.note);
+    linkedPractices.add(pair.practice);
+  }
+  for (const slug of linkedNotes) {
+    const source = read('blog/' + slug + '.html');
+    ok(source.includes('RELATED:START') && /class="rel-block"/.test(source), 'blog/' + slug + '.html: нет блока «Практика по теме»');
+    ok(source.includes('id="rel-practice"'), 'blog/' + slug + '.html: блок без заголовка для aria-labelledby');
+    ok(source.includes('href="/stands/'), 'blog/' + slug + '.html: блок не ведёт на стенд');
+  }
+  for (const file of linkedPractices) {
+    const source = read(file);
+    ok(source.includes('RELATED:START') && /class="rel-block"/.test(source), file + ': нет блока «Теория по теме»');
+    ok(source.includes('id="rel-theory"'), file + ': блок без заголовка для aria-labelledby');
+    ok(source.includes('href="/blog/kn-'), file + ': блок не ведёт на заметку');
+  }
+  const marked = contentPages.filter(file => read(file).includes('RELATED:START'));
+  ok(marked.length === linkedNotes.size + linkedPractices.size, 'мост стоит не на всех страницах: ' + marked.length + ' из ' + (linkedNotes.size + linkedPractices.size));
+  ok(pages.includes('.rel-block'), 'pages.css: нет стилей блока «теория ↔ практика»');
+}
+
 /* ── поисковый индекс не должен расходиться с сайтом ──
    Индекс поддерживается вручную, поэтому проверяем его целостность: битые url,
    пустые поля и страницы, которые вообще не попали в поиск. Редиректы-заглушки

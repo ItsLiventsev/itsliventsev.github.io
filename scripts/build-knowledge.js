@@ -24,6 +24,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const related = require('./lib/related');
 
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, 'assets/data/knowledge');
@@ -428,6 +429,13 @@ function backlinksOf(note, notes) {
 }
 
 function notePage(note, notes, notesById, index, registry) {
+  const page = renderNotePage(note, notes, notesById, index, registry);
+  /* Мост «теория ↔ практика»: блок ссылок на стенды вставляет общий модуль,
+     тот же, что собирает обратные ссылки на стендах (scripts/lib/related.js). */
+  return related.withNoteBlock(page, note.id);
+}
+
+function renderNotePage(note, notes, notesById, index, registry) {
   const body = renderBody(note.body, note, notesById);
   const related = (note.related || []).map((id) => notesById.get(id)).filter(Boolean);
   const backlinks = backlinksOf(note, notes).map((id) => notesById.get(id)).filter(Boolean);
