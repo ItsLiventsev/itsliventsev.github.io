@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T08:07:18.131Z",
+  "generated": "2026-11-04T08:17:31.690Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 236,
+  "total": 233,
   "truncated": true,
   "days": [
     {
@@ -84,7 +84,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 8
+      "count": 3
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,22 @@
     },
     {
       "date": "2026-11-04",
-      "count": 4
+      "count": 6
     }
   ],
   "commits": [
+    {
+      "sha": "ca1f49e",
+      "title": "chore: merge main, пересобрать манифесты и RSS",
+      "date": "2026-11-04T08:15:36Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ca1f49ecd66877a3fbd054a16f1744bc5418d0e0"
+    },
+    {
+      "sha": "fb43bb2",
+      "title": "fix(feed): вернуть редирект-заглушки из манифеста, поправить RSS и экранирование",
+      "date": "2026-11-04T08:11:00Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/fb43bb207024d645a2ed71e52c92c5211b62c897"
+    },
     {
       "sha": "270210b",
       "title": "fix(knowledge): убрать литерал undefined, развести подписи графа в пикселях поля",
@@ -475,18 +487,6 @@
       "title": "feat(autonomous-polish-v12): Aceternity 3D tilt + cmdk palette polish + cozy dark washes + axe expanded",
       "date": "2026-11-01T20:47:13Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5b38af44721f1f1a2b628f3aaf5a4e7b64721c78"
-    },
-    {
-      "sha": "f3bc825",
-      "title": "feat(orchestrator v11 MAX): hyper polish — inline→CSS, PWA v2, Bento equal, editorial Soft UI, nav hyper, tokens hyper, containment",
-      "date": "2026-11-01T20:42:46Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f3bc8256e52fe47b025380825129c3d96a99a31b"
-    },
-    {
-      "sha": "1cc8a7c",
-      "title": "feat(orchestrator v10): typography safety — fluid overview grid + frame containment",
-      "date": "2026-11-01T20:38:42Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1cc8a7cba5ceddbaad50d99c482d36d9002029b4"
     }
   ]
 }
