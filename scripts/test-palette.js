@@ -33,6 +33,15 @@ for (const [theme, palette] of [['light', values], ['dark', dark]]) {
     assert(ratio(palette[name], palette.surface) >= 4.5, `${theme}: ${name} на surface ниже 4.5:1`);
   }
 }
+// Инверсная подложка (лента итераций на главной): на тёмной карточке работают
+// светлые акценты, в тёмной теме карточка светлая — акценты глиняные и зелёные.
+for (const [theme, palette] of [['light', values], ['dark', dark]]) {
+  assert(palette.inverse && palette['inverse-ink'], `${theme}: нет inverse/inverse-ink`);
+  for (const name of ['inverse-ink', 'inverse-accent', 'inverse-ok', 'inverse-muted']) {
+    assert(palette[name], `${theme}: нет ${name}`);
+    assert(ratio(palette[name], palette.inverse) >= 4.5, `${theme}: ${name} на inverse ниже 4.5:1`);
+  }
+}
 const rgb = values['net'].match(/\w{2}/g).map(h => parseInt(h, 16));
 assert(!(rgb[2] > rgb[1] + 24 && rgb[0] > 40), 'сетевой акцент не должен уходить в фиолетово-синий');
-console.log('Palette: paper, clay accent and semantic washes meet 4.5:1 in both themes');
+console.log('Palette: paper, clay accent, semantic washes and inverse surface meet 4.5:1 in both themes');

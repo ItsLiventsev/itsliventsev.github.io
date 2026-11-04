@@ -132,8 +132,48 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
         .map(el => el.className || el.tagName));
       assert.deepEqual(smallTargets, [], 'слишком мелкие кнопки и навигационные цели на ' + path + ': ' + smallTargets.join(' | '));
     }
+    /* Живая лента итераций: отдельный контекст без reduced-motion, иначе
+       движок честно не запускается и проверять нечего. */
+    const liveContext = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    const livePage = await liveContext.newPage(), liveErrors = [];
+    livePage.on('pageerror', error => liveErrors.push(error.message));
+    await livePage.goto(base + '/', { waitUntil: 'load' });
+    await livePage.waitForSelector('.iter-strip.is-live');
+    assert.equal(await livePage.locator('.iter-strip [data-state="work"]').count(), 1, 'в ленте ровно один текущий шаг');
+    const firstScreen = await livePage.locator('.iter-strip-window').innerText();
+    await livePage.waitForTimeout(2800);
+    assert.notEqual(await livePage.locator('.iter-strip-window').innerText(), firstScreen, 'лента итераций обновляется сама');
+    assert.match(await livePage.locator('[data-iter-clock]').innerText(), /^00:0[1-9]$/, 'секундомер ленты считает время');
+    await livePage.locator('[data-iter-toggle]').click();
+    assert.equal(await livePage.locator('[data-iter-toggle]').getAttribute('aria-pressed'), 'true', 'пауза выставляется кнопкой');
+    assert.match(await livePage.locator('[data-iter-status]').innerText(), /на паузе/, 'статус меняется на «на паузе»');
+    const pausedScreen = await livePage.locator('.iter-strip-window').innerText();
+    await livePage.waitForTimeout(1800);
+    assert.equal(await livePage.locator('.iter-strip-window').innerText(), pausedScreen, 'на паузе лента стоит');
+    await livePage.locator('[data-iter-toggle]').click();
+    assert.equal(await livePage.locator('[data-iter-toggle]').getAttribute('aria-pressed'), 'false', 'продолжение снимает паузу');
+    const surface = await livePage.evaluate(() => {
+      const strip = getComputedStyle(document.querySelector('.iter-strip'));
+      const root = getComputedStyle(document.documentElement);
+      return { bg: strip.backgroundColor, ink: strip.color, paper: root.getPropertyValue('--u-paper').trim() };
+    });
+    assert.notEqual(surface.bg, surface.paper, 'лента должна быть инверсной, а не цвета бумаги');
+    assert.equal(surface.bg, 'rgb(20, 19, 14)', 'светлая тема: подложка ленты тёмная #14130e');
+    assert.equal(surface.ink, 'rgb(248, 247, 242)', 'текст на инверсной подложке — #f8f7f2');
+    await livePage.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
+    await livePage.waitForTimeout(150);
+    assert.equal(await livePage.evaluate(() => getComputedStyle(document.querySelector('.iter-strip')).backgroundColor),
+      'rgb(245, 242, 231)', 'тёмная тема: инверсная лента становится светлой');
+    await livePage.setViewportSize({ width: 360, height: 800 });
+    await livePage.waitForTimeout(150);
+    assert(await noOverflow(livePage), 'лента не даёт горизонтальной прокрутки на 360px');
+    const pauseBox = await livePage.locator('[data-iter-toggle]').boundingBox();
+    assert(pauseBox.height >= 27, 'кнопка паузы должна быть не меньше 27px: ' + pauseBox.height);
+    assert.deepEqual(liveErrors, [], 'в живой ленте нет ошибок в консоли');
+    await liveContext.close();
+
     await page.setViewportSize({ width: 1440, height: 900 });
     assert.deepEqual(errors, []);
-    console.log('Browser smoke: 360/390 overflow, search dialog, drawer, theme persistence, feed and targets OK');
+    console.log('Browser smoke: 360/390 overflow, search dialog, drawer, theme persistence, live iter strip, feed and targets OK');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

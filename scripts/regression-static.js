@@ -368,6 +368,54 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   ok(referenced.size >= 4, 'og:image: используется меньше четырёх карточек — шаблон разъехался');
 }
 
+/* ── Лента итераций на главной: инверсная консоль с живым счётчиком ── */
+{
+  const iterIndex = read('index.html');
+  const iterCss = read('assets/pages.css');
+  const iterJs = read('assets/iter-strip.js');
+  const iterSw = read('sw.js');
+  const stripStart = iterIndex.indexOf('<section class="iter-strip"');
+  const stripEnd = iterIndex.indexOf('<nav class="home-paths"');
+  ok(stripStart > 0 && stripEnd > stripStart, 'лента итераций не найдена на главной');
+  const strip = iterIndex.slice(stripStart, stripEnd);
+  ok(strip.length > 2000, 'лента итераций подозрительно короткая');
+  for (const hook of ['data-iter-strip', 'data-iter-track', 'data-iter-toggle', 'data-iter-clock',
+    'data-iter-status', 'data-iter-step', 'data-iter-checks']) {
+    ok(strip.includes(hook), 'лента: нет крючка ' + hook);
+  }
+  ok(/aria-labelledby="iter-title"/.test(strip) && strip.includes('id="iter-title"'),
+    'лента: блок должен ссылаться на свой заголовок');
+  ok(strip.includes('class="iter-pulse"'), 'лента: нет пульса «работа идёт»');
+  ok((strip.match(/<li class="iter-line"/g) || []).length === 18, 'лента: ожидалось 9 строк × 2 копии');
+  ok((strip.match(/data-iter-copy="1"/g) || []).length === 9, 'лента: вторая копия списка должна быть помечена data-iter-copy');
+  ok((strip.match(/data-state="work"/g) || []).length === 2, 'лента: в каждой копии ровно один текущий шаг');
+  ok((strip.match(/class="iter-bar"/g) || []).length === 2, 'лента: у текущего шага должна быть полоска прогресса');
+  ok((strip.match(/<time class="iter-time">/g) || []).length === 18, 'лента: у каждой строки своё время');
+  ok(strip.includes('121 страница') && strip.includes('122 записи') && strip.includes('45 связей'),
+    'лента: числа должны совпадать с картой сайта, индексом и графом');
+  ok(!/76 страниц|72 страниц|74 термина/.test(strip), 'лента: в текстах остались устаревшие числа');
+  ok(strip.includes('<p class="sr-only">'), 'лента: нужен sr-only пересказ для скринридеров');
+  ok(iterIndex.includes('<script src="/assets/iter-strip.js" defer></script>'), 'главная не подключает движок ленты');
+  ok(iterSw.includes("'/assets/iter-strip.js'"), 'service worker не кэширует движок ленты');
+  ok(/\.iter-strip \{[^}]*background: var\(--u-inverse\)/.test(iterCss), 'лента: подложка должна быть инверсной');
+  ok(/\.iter-strip \{[^}]*color: var\(--u-inverse-ink\)/.test(iterCss), 'лента: текст на инверсной подложке — inverse-ink');
+  ok(/--u-inverse-accent/.test(read('assets/tokens.css')), 'в токенах нет акцента для инверсной подложки');
+  ok(/animation: u-iter-scroll 16s linear infinite/.test(iterCss), 'лента: бегущая строка должна идти за 16 с, а не 26');
+  ok(/@keyframes u-iter-bar/.test(iterCss) && /@keyframes u-iter-pulse/.test(iterCss) && /@keyframes u-iter-ring/.test(iterCss),
+    'лента: нет кейфреймов прогресса, пульса и кольца');
+  ok(/\.iter-strip\.is-live \.iter-strip-track \{[^}]*animation: none/.test(iterCss),
+    'лента: живой режим должен отключать бегущую строку');
+  ok(/prefers-reduced-motion: reduce[\s\S]{0,400}iter-strip-toggle \{ display: none/.test(iterCss),
+    'лента: при reduced-motion кнопка паузы должна скрываться');
+  ok(!/innerHTML/.test(iterJs), 'движок ленты не должен собирать разметку через innerHTML');
+  ok(/matchMedia\('\(prefers-reduced-motion: reduce\)'\)/.test(iterJs), 'движок ленты должен уважать reduced-motion');
+  ok(/visibilitychange/.test(iterJs), 'движок ленты должен замирать в скрытой вкладке');
+  ok(/setAttribute\('aria-pressed'/.test(iterJs), 'кнопка паузы должна обновлять aria-pressed');
+  ok(iterJs.includes('на паузе') && iterJs.includes('продолжить'), 'кнопка паузы должна менять подпись и статус');
+  ok((iterJs.match(/\{ src: '/g) || []).length >= 12, 'в очереди ленты должно быть не меньше 12 действий');
+  ok(!/iterStrip/.test(read('assets/shell.js')), 'пауза ленты должна жить в одном месте — assets/iter-strip.js');
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);

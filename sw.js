@@ -1,11 +1,11 @@
 // Offline cache for the site. Keep cache names scoped to this application.
-const CACHE = 'itsliventsev-v33';
+const CACHE = 'itsliventsev-v34';
 const RUNTIME_CACHE = CACHE + '-runtime';
 const MAX_RUNTIME_ENTRIES = 120;
 const PRECACHE = [
   '/', '/index.html', '/assets/offline.html',
   '/assets/tokens.css', '/assets/base.css', '/assets/pages.css', '/assets/course.css',
-  '/assets/shell.js', '/assets/catalog.js', '/assets/feed.js', '/assets/home-reading.js',
+  '/assets/shell.js', '/assets/catalog.js', '/assets/feed.js', '/assets/home-reading.js', '/assets/iter-strip.js',
   '/assets/search-index.json', '/assets/data/activity.json', '/blog/posts.json', '/articles/posts.json',
   '/assets/fonts/literata-cyrillic-wght-normal.woff2', '/assets/fonts/literata-latin-wght-normal.woff2',
   '/assets/fonts/golos-text-cyrillic-wght-normal.woff2', '/assets/fonts/golos-text-latin-wght-normal.woff2',

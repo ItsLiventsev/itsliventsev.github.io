@@ -66,9 +66,15 @@
     </ul>
   </section>
 
-  <section class="iter-strip" aria-label="Лента итераций" data-iter-strip>
+  <section class="iter-strip" aria-labelledby="iter-title" data-iter-strip>
+    <div class="iter-strip-status" aria-hidden="true">
+      <span class="iter-pulse"></span>
+      <span class="iter-strip-state" data-iter-status>работа идёт</span>
+      <time class="iter-strip-clock" data-iter-clock>00:00</time>
+      <span class="iter-strip-meter"><span class="iter-step"><b data-iter-step>01</b> итерация</span><span class="iter-checks"><b data-iter-checks>7</b> проверок</span><span class="iter-errors"><b>0</b> ошибок</span></span>
+    </div>
     <div class="iter-strip-head">
-      <p class="ui-eyebrow">сайт собирается итерациями</p>
+      <p class="ui-eyebrow" id="iter-title">сайт собирается итерациями</p>
       <p class="iter-strip-lede">Машина листает страницы, сверяет разметку и контраст и передаёт правки на ревью — пока вы читаете.</p>
       <div class="iter-strip-controls">
         <a class="iter-strip-link" href="#activity">журнал изменений <span aria-hidden="true">→</span></a>
@@ -76,26 +82,28 @@
       </div>
     </div>
     <div class="iter-strip-window">
-      <ol class="iter-strip-track" aria-hidden="true">
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">76 страниц: заголовки, ссылки и id на месте</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span></li>
-        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 72 страницы и 74 термина</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">браузер</span><span class="iter-text">шапка не прыгает, кнопки держат фокус</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span></li>
-        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">дальше</span><span class="iter-text">в очереди — тренажёры по витой паре</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">76 страниц: заголовки, ссылки и id на месте</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span></li>
-        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 72 страницы и 74 термина</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">браузер</span><span class="iter-text">шапка не прыгает, кнопки держат фокус</span></li>
-        <li class="iter-line"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span></li>
-        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">дальше</span><span class="iter-text">в очереди — тренажёры по витой паре</span></li>
+      <ol class="iter-strip-track" aria-hidden="true" data-iter-track>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">121 страница: заголовки, ссылки и id на месте</span><time class="iter-time">1,2 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">ссылки</span><span class="iter-text">внутренние ссылки: битых нет</span><time class="iter-time">0,4 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span><time class="iter-time">0,8 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 122 записи</span><time class="iter-time">0,6 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стенды</span><span class="iter-text">26 стендов на месте, 45 связей в графе</span><time class="iter-time">0,5 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span><time class="iter-time">0,3 с</time></li>
+        <li class="iter-line" data-state="done"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span><time class="iter-time">0,7 с</time></li>
+        <li class="iter-line" data-state="work"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span><time class="iter-time"></time><span class="iter-bar" aria-hidden="true"></span></li>
+        <li class="iter-line" data-state="queue"><span class="iter-mark" aria-hidden="true">·</span><span class="iter-src">очередь</span><span class="iter-text">в очереди — таббар в стендах</span><time class="iter-time"></time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">разметка</span><span class="iter-text">121 страница: заголовки, ссылки и id на месте</span><time class="iter-time">1,2 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">ссылки</span><span class="iter-text">внутренние ссылки: битых нет</span><time class="iter-time">0,4 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">контраст</span><span class="iter-text">светлая и тёмная темы держат 4.5:1</span><time class="iter-time">0,8 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">поиск</span><span class="iter-text">индекс знает про 122 записи</span><time class="iter-time">0,6 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стенды</span><span class="iter-text">26 стендов на месте, 45 связей в графе</span><time class="iter-time">0,5 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">стили</span><span class="iter-text">course.css: один селектор — одно правило</span><time class="iter-time">0,3 с</time></li>
+        <li class="iter-line" data-state="done" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">✓</span><span class="iter-src">чистка</span><span class="iter-text">мёртвые правила удалены, а не спрятаны</span><time class="iter-time">0,7 с</time></li>
+        <li class="iter-line" data-state="work" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">→</span><span class="iter-src">ревью</span><span class="iter-text">правка ушла в ветку, CI собирает проверки</span><time class="iter-time"></time><span class="iter-bar" aria-hidden="true"></span></li>
+        <li class="iter-line" data-state="queue" data-iter-copy="1"><span class="iter-mark" aria-hidden="true">·</span><span class="iter-src">очередь</span><span class="iter-text">в очереди — таббар в стендах</span><time class="iter-time"></time></li>
       </ol>
     </div>
-    <p class="sr-only">Лента показывает шаги сборки сайта: прочитать страницы, проверить разметку и контраст, передать правку на ревью, обновить поисковый индекс. Полная история изменений — в разделе «Сайт собирается итерациями» ниже.</p>
+    <p class="sr-only">Лента показывает шаги сборки сайта: прочитать страницы, проверить разметку, ссылки и контраст, обновить поисковый индекс, собрать стенды и передать правку на ревью. У каждого шага своё время, счётчик проверок растёт по ходу работы, а кнопка «пауза» останавливает движение. Полная история изменений — в разделе «Сайт собирается итерациями» ниже.</p>
   </section>
 
   <nav class="home-paths" aria-label="С чего начать">
@@ -365,5 +373,6 @@
 <script src="/assets/feed.js" defer></script>
 <script src="/assets/home-reading.js" defer></script>
 <script src="/assets/shell.js" defer></script>
+<script src="/assets/iter-strip.js" defer></script>
 </body>
 </html>
