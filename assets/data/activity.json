@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T14:21:33.761Z",
+  "generated": "2026-11-04T14:25:50.820Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 212,
+  "total": 211,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 10
+      "count": 8
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 31
+      "count": 32
     }
   ],
   "commits": [
+    {
+      "sha": "6e8b3bf",
+      "title": "test(seo): build-seo --check — sitemap и лента не отстают от контента",
+      "date": "2026-11-04T14:21:51Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6e8b3bfab13b00a591775dadb7a28d7f73892469"
+    },
     {
       "sha": "dcb38df",
       "title": "build: версия статики — хэш содержимого, единый цвет оболочки и сборка через build-all",
@@ -481,12 +487,6 @@
       "title": "Build compact task directory and refine widgets",
       "date": "2026-11-02T18:45:42Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2a031e8c0328628561ab6d3781c720eb6a2ad10d"
-    },
-    {
-      "sha": "3773170",
-      "title": "Add warm editorial color accents",
-      "date": "2026-11-02T06:58:13Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3773170e15ffb1cbc5252bd135b452c5b4945fbc"
     }
   ]
 }
