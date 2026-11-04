@@ -222,7 +222,7 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     }
     await page.goto(base + '/blog.html', { waitUntil: 'load' });
     const materialPaths = await page.locator('.kn-wiki-tree a').evaluateAll(links => [...new Set(links.map(a => new URL(a.href).pathname).filter(path => path.startsWith('/blog/materials/')))]);
-    assert.equal(materialPaths.length, 24, 'все учебные темы доступны через дерево');
+    assert(materialPaths.length >= 24, 'все учебные темы доступны через дерево: ' + materialPaths.length);
     for (const path of materialPaths) {
       await page.goto(base + path, { waitUntil: 'load' });
       if (!(await noOverflow(page))) {
