@@ -38,6 +38,15 @@ function input(w, value) {
   assert.equal(doc.querySelectorAll('[data-cmd="go-projects"]').length, 1);
   input(w, '> nonsense тему');
   assert.equal(doc.querySelectorAll('[data-cmd]').length, 0);
+
+  /* Опечатка в слове не должна обнулять поиск: подсказка честная — видно,
+     что именно искали. «сети» с лишней буквой ведёт к тем же результатам. */
+  input(w, 'ссети');
+  assert.equal(doc.querySelectorAll('.ui-search-result').length >= 1, true, 'опечатка должна находить результат');
+  assert(/Возможно, вы имели в виду/.test(doc.querySelector('.ui-search-results').textContent), 'нужна подсказка об исправлении');
+  input(w, 'щщщщщ');
+  assert.equal(doc.querySelectorAll('.ui-search-result').length, 0, 'бессмыслица не должна находить ничего');
+  assert(/Ничего не найдено/.test(doc.querySelector('.ui-search-results').textContent));
   dom.window.close();
 
   let calls = 0;
@@ -48,5 +57,5 @@ function input(w, value) {
   input(w, '> toggle-theme');
   assert.equal(doc.querySelectorAll('[data-cmd="toggle-theme"]').length, 1);
   dom.window.close();
-  console.log('Search: open, results, commands, retry and index fallback OK');
+  console.log('Search: open, results, commands, retry, index fallback and typo tolerance OK');
 })().catch(error => { console.error(error, error.stack); process.exitCode = 1; });
