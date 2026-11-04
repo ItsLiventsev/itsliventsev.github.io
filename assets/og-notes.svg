@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#efeee9"/>
+
+  <text x="88" y="74" font-family="Golos Text" font-size="26" font-weight="700" fill="#14130e">itsliventsev<tspan fill="#a8391d">.</tspan></text>
+  <text x="284" y="74" font-family="'JetBrains Mono'" font-size="15" fill="#6f6c63" letter-spacing="2.4">СЕТИ · СИСТЕМЫ · ПРАКТИКА</text>
+  <line x1="88" y1="104" x2="1112" y2="104" stroke="#d2cfc6" stroke-width="1"/>
+
+  <text x="88" y="170" font-family="'JetBrains Mono'" font-size="15" fill="#a8391d" letter-spacing="3">БАЗА ЗНАНИЙ · ЗАМЕТКИ</text>
+  <text x="88" y="232" font-family="Golos Text" font-size="62" font-weight="700" fill="#14130e" letter-spacing="-1.8">База знаний</text>
+  <text x="88" y="299" font-family="Golos Text" font-size="62" font-weight="700" fill="#14130e" letter-spacing="-1.8">по сетям и системам</text>
+  <text x="88" y="357" font-family="Literata" font-size="25" fill="#35332c">Короткие заметки с источниками:</text>
+  <text x="88" y="393" font-family="Literata" font-size="25" fill="#35332c">от VLAN до бэкапов и мониторинга.</text>
+
+  <line x1="88" y1="448" x2="700" y2="448" stroke="#d2cfc6" stroke-width="1"/>
+  <text x="88" y="482" font-family="'JetBrains Mono'" font-size="18" fill="#5d5a52" letter-spacing="0.8">заметки · рубрики · граф связей</text>
+  <text x="88" y="574" font-family="'JetBrains Mono'" font-size="17" fill="#6f6c63">itsliventsev.github.io/blog.html</text>
+
+  <rect x="756" y="128" width="356" height="396" rx="22" fill="#ffffff" stroke="#e5e3dc" stroke-width="1"/>
+  <line x1="756" y1="128" x2="1112" y2="128" stroke="#e5e3dc" stroke-width="1"/>
+  <text x="792" y="186" font-family="Golos Text" font-size="46" font-weight="700" fill="#a8391d">43</text>
+  <text x="792" y="224" font-family="'JetBrains Mono'" font-size="16" fill="#5d5a52" letter-spacing="1.6">ЗАМЕТКИ</text>
+  <line x1="756" y1="260" x2="1112" y2="260" stroke="#e5e3dc" stroke-width="1"/>
+  <text x="792" y="318" font-family="Golos Text" font-size="46" font-weight="700" fill="#a8391d">6</text>
+  <text x="792" y="356" font-family="'JetBrains Mono'" font-size="16" fill="#5d5a52" letter-spacing="1.6">РУБРИК</text>
+  <line x1="756" y1="392" x2="1112" y2="392" stroke="#e5e3dc" stroke-width="1"/>
+  <text x="792" y="450" font-family="Golos Text" font-size="46" font-weight="700" fill="#a8391d">142</text>
+  <text x="792" y="488" font-family="'JetBrains Mono'" font-size="16" fill="#5d5a52" letter-spacing="1.6">СВЯЗЕЙ НА ГРАФЕ</text>
+</svg>

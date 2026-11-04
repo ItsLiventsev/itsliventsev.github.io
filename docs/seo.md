@@ -12,12 +12,12 @@
 
 | Артефакт | Что внутри |
 | --- | --- |
-| SEO-блок `<!-- SEO:AUTO -->` в `<head>` 19 индексируемых страниц | canonical, полный Open Graph (включая og:image 1200×630), Twitter `summary_large_image`, JSON-LD |
-| `sitemap.xml` | 19 URL, приоритеты, changefreq, lastmod из дат постов |
+| SEO-блок `<!-- SEO:AUTO -->` в `<head>` всех 121 индексируемых страниц | canonical, полный Open Graph (включая og:image 1200×630), Twitter `summary_large_image`, JSON-LD |
+| `sitemap.xml` | 121 URL, приоритеты, changefreq, lastmod из дат постов |
 | `feed.xml` | RSS 2.0 по материалам `blog/posts.json` и `articles/posts.json` |
 | `robots.txt` | закрыты admin-страницы, прописана директива `Sitemap` |
 | `site.webmanifest` + PNG-иконки 192/512, apple-touch-icon | PWA-минимум |
-| `assets/og.png` | общая OG-картинка в фирменном терминальном стиле |
+| `assets/og*.png` | пять OG-карточек 1200×630 (сайт, заметки, три вселенной) по шаблону кейса: бумага, чернильный Golos, глиняный акцент, карточка фактов. Числа на карточках берутся из `registry.json` и `topics.json`, собирает `scripts/build-og.js` в CI (`post-index.yml`) |
 
 JSON-LD по типам страниц:
 
@@ -27,6 +27,15 @@ JSON-LD по типам страниц:
 - `BreadcrumbList` — все вложенные страницы (главная → раздел → материал).
 
 Служебные `404.html` и `admin.html` помечены `noindex` и в карту не попадают.
+
+### OG-карточки
+
+`node scripts/build-og.js` пересобирает SVG и PNG; `--check` сверяет файлы с шаблоном и
+возвращает ненулевой код при дрейфе. Зависимости сборки (`@resvg/resvg-js` и TTF-шрифты
+из `@expo-google-fonts`) живут вне репозитория: `.ogbuild/` в `.gitignore`, в CI —
+`$RUNNER_TEMP/og`, пути задаются через `OG_DEPS` и `OG_FONTS`.
+Без них проверка в `site-checks` всё равно ловит главное: формат PNG, размер 1200×630
+и то, что каждая `og:image` ведёт на существующий файл (`regression-static`).
 
 ### Локальный запуск
 
