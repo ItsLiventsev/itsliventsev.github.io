@@ -67,6 +67,10 @@ async function request(url, mode = 'cors') {
   let response = await request('https://site.test/missing.js');
   assert.equal(response.status, 503); assert.match(response.headers.get('content-type'), /text\/plain/);
   response = await request('https://site.test/assets/base.css?v=1'); assert.equal(await response.text(), '/assets/base.css');
+  for (const sheet of ['home.css', 'cases.css']) {
+    response = await request('https://site.test/assets/' + sheet + '?v=hash');
+    assert.equal(await response.text(), '/assets/' + sheet, sheet + ': офлайн-слой должен быть в прекеше');
+  }
   response = await request('https://site.test/assets/base.css?v=1&other=2'); assert.equal(response.status, 503);
   response = await request('https://site.test/unknown', 'navigate'); assert.equal(await response.text(), '/assets/offline.html');
   assert.equal(await request('https://api.github.com/repos/example'), null);

@@ -11,12 +11,14 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const steps = [
+  ['стили моста', ['scripts/build-related-css.js']],
   ['заметки базы знаний', ['scripts/build-knowledge.js']],
   ['стенды ОфисПолис', ['scripts/build-office.js']],
   ['мост «теория ↔ практика»', ['scripts/build-related.js']],
   /* SEO-блок между маркерами SEO:AUTO генерируется из разметки: без этого шага
      свежесгенерированные страницы остаются с пустыми canonical/og/JSON-LD. */
   ['SEO-блоки, sitemap и лента', ['scripts/build-seo.js']],
+  ['критические стили главной', ['scripts/build-critical-css.js']],
   ['версии статики в разметке', ['scripts/build-asset-tokens.js', '--write']],
   ['поисковый индекс', ['scripts/build-search-index.py']]
 ];

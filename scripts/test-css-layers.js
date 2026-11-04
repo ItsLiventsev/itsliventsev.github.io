@@ -13,7 +13,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
-const LAYERS = ['assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css'];
+const { LAYERS } = require('./lib/css-layers');
 
 function parse(file) {
   const source = fs.readFileSync(path.join(ROOT, file), 'utf8')
@@ -58,7 +58,8 @@ const seen = new Map();
 for (const file of LAYERS) {
   for (const [selector, props] of layers.get(file)) {
     const signature = selector + '|' + JSON.stringify(Object.entries(props).sort());
-    if (seen.has(signature)) clones.push(selector + ' (' + path.basename(seen.get(signature)) + ' и ' + path.basename(file) + ')');
+    // Мост имеет один исходник и генерируется в два не совмещаемых на его страницах слоя.
+    if (seen.has(signature) && !(selector.includes('.rel-') && seen.get(signature) === 'assets/knowledge.css' && file === 'assets/course.css')) clones.push(selector + ' (' + path.basename(seen.get(signature)) + ' и ' + path.basename(file) + ')');
     else seen.set(signature, file);
   }
 }

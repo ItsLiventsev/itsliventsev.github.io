@@ -607,3 +607,50 @@
   .kn-graph-stage { min-height: 400px; }
   .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; font-size: 10px; }
 }
+
+/* RELATED CSS:START — generated from assets/related.css */
+/* Единый исходник моста: копии в knowledge.css и course.css генерируются. */
+
+.rel-block {
+  margin-block-start: var(--u-s6);
+  padding: var(--u-s4) var(--u-s5);
+  border: 1px solid var(--u-line);
+  border-inline-start: 3px solid var(--u-accent);
+  border-radius: var(--u-r-md);
+  background: var(--u-surface-sunk);
+  font-family: var(--u-font-ui);
+}
+
+.rel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--u-s2); margin-block-end: var(--u-s2); }
+
+.rel-head h2 { margin: 0; font-size: var(--u-fs-sm); font-weight: 700; letter-spacing: -0.01em; }
+
+.rel-head > span { color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); }
+
+.rel-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+
+.rel-item { display: flex; align-items: baseline; gap: var(--u-s3); padding-block: var(--u-s3); border-block-start: 1px solid color-mix(in srgb, var(--u-line) 65%, transparent); color: var(--u-ink); text-decoration: none; }
+
+.rel-list > li:first-child .rel-item { border-block-start: 0; padding-block-start: var(--u-s1); }
+
+.rel-list > li:last-child .rel-item { padding-block-end: var(--u-s1); }
+
+.rel-item:hover .rel-title, .rel-item:focus-visible .rel-title { color: var(--u-accent); text-decoration: underline; text-underline-offset: 3px; }
+
+.rel-area { flex: 0 0 auto; min-width: 7.5rem; color: var(--u-muted); font-size: var(--u-fs-2xs); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.rel-title { flex: 1 1 auto; font-size: var(--u-fs-sm); font-weight: 600; line-height: 1.4; text-wrap: pretty; }
+
+.rel-go { flex: 0 0 auto; color: var(--u-faint); font-family: var(--u-font-mono); font-size: var(--u-fs-xs); }
+
+@media (max-width: 640px) {
+  .rel-block { padding: var(--u-s4); }
+  .rel-item { flex-wrap: wrap; gap: 2px var(--u-s2); }
+  .rel-area { flex-basis: 100%; min-width: 0; }
+}
+
+@media print {
+  .rel-block { border: 0; padding: 0; background: none; }
+  .rel-go { display: none; }
+}
+/* RELATED CSS:END */
