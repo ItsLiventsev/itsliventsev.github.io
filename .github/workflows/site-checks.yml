@@ -45,7 +45,6 @@ jobs:
             if curl -fsS http://127.0.0.1:8000/ > /dev/null; then break; fi
             sleep 1
           done
-          AUDIT_STRICT=1 node scripts/audit-classes.js
           for test in browser-smoke browser-reading browser-faq; do
             if node "scripts/$test.js" > "$RUNNER_TEMP/$test.log" 2>&1; then
               cat "$RUNNER_TEMP/$test.log"
@@ -56,3 +55,13 @@ jobs:
               exit 1
             fi
           done
+          # Аудит классов по всем страницам идёт последним и с флагом строгости:
+          # без него падение здесь печатает отчёт, но не роняет шаг — именно
+          # так этот запуск и падал, не оставив в логе ни строчки причины.
+          AUDIT_STRICT=1 node scripts/audit-classes.js > "$RUNNER_TEMP/audit-classes.log" 2>&1 || {
+            cat "$RUNNER_TEMP/audit-classes.log"
+            detail=$(tail -20 "$RUNNER_TEMP/audit-classes.log" | tr '\n' ' ' | sed 's/%/%25/g;s/\r/%0D/g')
+            echo "::error::audit-classes failed: $detail"
+            exit 1
+          }
+          cat "$RUNNER_TEMP/audit-classes.log"
