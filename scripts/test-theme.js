@@ -24,14 +24,21 @@ function media({ dark, onChange }) {
 }
 
 /* ——— 1. первый заход: системная тема становится темой сайта ——— */
+/* Значения theme-color берём из токенов: раньше в тесте жили литералы #f6f2e9
+   и #131210, которые разъехались с палитрой (--u-paper #efeee9 / #121109). */
+const tokens = require('node:fs').readFileSync('assets/tokens.css', 'utf8');
+const darkAt = tokens.indexOf(':root[data-theme="dark"]');
+const paper = block => (block.match(/--u-paper:\s*(#[0-9a-fA-F]{6})/) || [])[1];
+const LIGHT_PAPER = paper(tokens.slice(0, darkAt));
+const DARK_PAPER = paper(tokens.slice(darkAt));
 for (const [dark, expected] of [[true, 'dark'], [false, undefined]]) {
   const dom = new JSDOM(
-    `<!doctype html><html lang="ru"><head><meta name="theme-color" content="#f6f2e9">${headScript[0]}</head><body></body></html>`,
+    `<!doctype html><html lang="ru"><head><meta name="theme-color" content="${LIGHT_PAPER}">${headScript[0]}</head><body></body></html>`,
     { url: 'https://site.test/', runScripts: 'dangerously', beforeParse(window) { window.matchMedia = media({ dark, onChange: [] }); } }
   );
   const theme = dom.window.document.documentElement.dataset.theme;
   assert.equal(theme, expected, `системная тема ${dark ? 'dark' : 'light'} не применилась: получено ${theme}`);
-  assert.equal(dom.window.document.querySelector('meta[name="theme-color"]').getAttribute('content'), dark ? '#131210' : '#f6f2e9', 'theme-color не совпадает с темой');
+  assert.equal(dom.window.document.querySelector('meta[name="theme-color"]').getAttribute('content'), dark ? DARK_PAPER : LIGHT_PAPER, 'theme-color не совпадает с темой');
   dom.window.close();
 }
 

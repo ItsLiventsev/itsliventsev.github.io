@@ -27,6 +27,17 @@ function head(source) {
   return end === -1 ? '' : source.slice(0, end);
 }
 
+/* Цвет оболочки браузера и порядок color-scheme сверяются с токенами:
+   на сайте жили три разных значения theme-color (два старых и одно «своё»
+   у офисных стендов) и перевёрнутый color-scheme «dark light» — браузер
+   красил статус-бар мимо палитры, а тёмные виджеты включал по ошибке. */
+const tokens = fs.readFileSync(path.join(ROOT, 'assets/tokens.css'), 'utf8');
+const darkAt = tokens.indexOf(':root[data-theme="dark"]');
+const paperOf = (block) => (block.match(/--u-paper:\s*(#[0-9a-fA-F]{6})/) || [])[1];
+const LIGHT_PAPER = paperOf(tokens.slice(0, darkAt));
+const DARK_PAPER = paperOf(tokens.slice(darkAt));
+assert(LIGHT_PAPER && DARK_PAPER, 'в tokens.css должны быть --u-paper для светлой и тёмной темы');
+
 const problems = [];
 let checked = 0;
 for (const file of pages()) {
@@ -66,10 +77,23 @@ for (const file of pages()) {
 
   /* Порядок: тема ставится инлайновым скриптом до таблиц стилей, иначе тёмная
      тема мигает светлой на первой отрисовке. */
+  const themeColor = headHtml.match(/name="theme-color" content="([^"]+)"/);
+  if (themeColor && themeColor[1].toLowerCase() !== LIGHT_PAPER.toLowerCase()) {
+    problems.push(file + ': theme-color ' + themeColor[1] + ' не совпадает с --u-paper ' + LIGHT_PAPER);
+  }
+  const scheme = headHtml.match(/name="color-scheme" content="([^"]+)"/);
+  if (scheme && scheme[1] !== 'light dark') {
+    problems.push(file + ': color-scheme должен быть «light dark», а не «' + scheme[1] + '»');
+  }
   const themeScript = headHtml.indexOf('itsliventsev-theme');
   const firstStyle = headHtml.indexOf('rel="stylesheet"');
   if (themeScript !== -1 && firstStyle !== -1 && themeScript > firstStyle) {
     problems.push(file + ': скрипт темы должен идти до таблиц стилей');
+  }
+  /* Скрипт темы перекрашивает статус-бар в тёмной теме — значение тоже из токенов. */
+  const darkLiteral = headHtml.match(/m\.setAttribute\("content",\s*"(#[0-9a-fA-F]{6})"\)/);
+  if (darkLiteral && darkLiteral[1].toLowerCase() !== DARK_PAPER.toLowerCase()) {
+    problems.push(file + ': тёмный theme-color ' + darkLiteral[1] + ' не совпадает с --u-paper ' + DARK_PAPER);
   }
 }
 

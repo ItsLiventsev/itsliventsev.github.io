@@ -10,9 +10,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const { stamp } = require('./lib/asset-version');
 const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'stands', 'office');
-const VERSION = '20261028ab';
 
 const SPRINT_TITLES = {
   1: 'Документы', 2: 'Таблицы и данные', 3: 'Презентации',
@@ -389,9 +389,9 @@ function shell(cfg, n) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f7">
-<meta name="color-scheme" content="dark light">
-<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
 <title>${cfg.title} · ОфисПолис · itsliventsev</title>
 <meta name="description" content="${cfg.lead}">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
@@ -404,9 +404,9 @@ function shell(cfg, n) {
   <!-- SEO:AUTO:START -->
   <!-- SEO:AUTO:END -->
 </head>
-<body class="flat-scope office-scope" data-accent="amber">
+<body class="flat-scope office-scope">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<noscript><div class="noscript-bar">// JavaScript отключён: практическая работа бюро работает только с включённым JavaScript.</div></noscript>
+<noscript><div class="noscript-bar">JavaScript отключён: практическая работа бюро работает только с включённым JavaScript.</div></noscript>
 
 <header class="st-topbar">
   <div class="st-topbar-in">
@@ -465,16 +465,16 @@ function shell(cfg, n) {
     <div id="office-root"></div>
   </main>
   <footer class="st-footer"><span>// © 2026 itsliventsev · ОфисПолис</span><span>lab: ${cfg.id} · autosave: on · storage: localStorage (office-*)</span>
-    <span class="st-footer-updated" data-footer-updated></span>
+    <time class="st-footer-updated" data-footer-updated></time>
   </footer>
 </div>
 
-<script src="../../assets/mascots.js?v=${VERSION}"></script>
-<script src="../../assets/office-engine.js?v=${VERSION}"></script>
-<script src="../../assets/dom-kit.js?v=${VERSION}"></script>
-<script src="../../assets/stands.js?v=${VERSION}"></script>
+<script src="/assets/mascots.js"></script>
+<script src="/assets/office-engine.js"></script>
+<script src="/assets/dom-kit.js"></script>
+<script src="/assets/stands.js"></script>
 <script type="application/json" id="office-data">${json}</script>
-<script src="../../assets/office-kit.js?v=20261102r1"></script>
+<script src="/assets/office-kit.js"></script>
 <script src="../../assets/shell.js" defer></script>
 </body>
 </html>
@@ -484,7 +484,7 @@ function shell(cfg, n) {
 fs.mkdirSync(OUT, { recursive: true });
 WORK.forEach((cfg, i) => {
   const fp = path.join(OUT, cfg.id + '.html');
-  fs.writeFileSync(fp, shell(cfg, i + 1));
+  fs.writeFileSync(fp, stamp(shell(cfg, i + 1)));
   console.log('→', path.relative(ROOT, fp));
 });
 console.log('ОфисПолис: сгенерировано работ —', WORK.length);
