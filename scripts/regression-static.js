@@ -267,7 +267,7 @@ ok(!read('assets/knowledge.js').includes('data-kn-filters') && !read('assets/kno
   ok(exists('blog/materials.html'), 'материалы: нет индексной страницы раздела');
   const notesPage = read('blog.html');
   ok(notesPage.includes('class="kn-wiki-layout kn-unified-layout"'), 'заметки: нет общей сетки с деревом');
-  ok(notesPage.includes('id="materials"') && notesPage.includes('Учебные материалы теперь здесь'), 'заметки: нет объединённого списка и пояснения');
+  ok(notesPage.includes('id="materials"') && notesPage.includes('Все записи') && !notesPage.includes('class="kn-materials-index"'), 'заметки: нет единого списка записей');
   ok(!notesPage.includes('href="/blog/materials.html"'), 'заметки: отдельный вход в материалы должен исчезнуть');
   ok(read('blog/materials.html').includes('url=/blog.html#materials'), 'старый адрес материалов должен вести в заметки');
   for (const id of ids) ok(notesPage.includes('/blog/materials/' + id + '.html'), 'заметки: в общем указателе нет темы ' + id);

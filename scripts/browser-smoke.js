@@ -146,8 +146,19 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.kn-goal').count(), 1, 'у темы есть блок цели');
     assert(await page.locator('.kn-code').count() > 0, 'у темы есть блок кода');
     await page.goto(base + '/blog.html', { waitUntil: 'load' });
-    assert.equal(await page.locator('#materials .kn-mat-list a').count(), 24, 'в заметках 24 учебные темы');
-    assert.equal(await page.locator('.kn-unified-notice').count(), 1, 'плашка об объединении');
+    assert.equal(await page.locator('[data-catalog-list] .kn-card').count(), 67, 'один список из заметок и материалов');
+    assert.equal(await page.locator('[data-catalog-list] a[href^="/blog/materials/"]').count(), 24, 'в общей ленте 24 учебные темы');
+    assert.equal(await page.locator('[data-catalog-list] a[href^="/blog/kn-"]').count(), 43, 'в общей ленте 43 заметки');
+    await page.locator('#note-query').fill('VLAN');
+    assert(await page.locator('[data-catalog-list] a[href^="/blog/materials/"]:visible').count() > 0, 'поиск находит материалы');
+    assert(await page.locator('[data-catalog-list] a[href^="/blog/kn-"]:visible').count() > 0, 'поиск находит заметки');
+    await page.locator('[data-catalog-filter="network"]').click();
+    assert(await page.locator('[data-catalog-list] a[href^="/blog/materials/"]:visible').count() > 0, 'фильтр и поиск работают вместе для материалов');
+    await page.locator('[data-catalog-filter="all"]').click();
+    await page.locator('[data-catalog-clear]').click();
+    await page.evaluate(() => window.scrollTo(0, document.querySelector('[data-catalog-list]').offsetTop + 800));
+    const pinned = await page.locator('.kn-wiki').boundingBox();
+    assert(pinned && pinned.y >= 0 && pinned.y < 220, 'дерево остаётся слева при прокрутке общей ленты');
     await page.goto(base + '/blog/materials.html#networks', { waitUntil: 'domcontentloaded' });
     await page.waitForURL('**/blog.html#networks');
     await page.goto(base + '/blog/graph.html', { waitUntil: 'domcontentloaded' });
@@ -205,7 +216,7 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
       assert.deepEqual(smallTargets, [], 'слишком мелкие кнопки и навигационные цели на ' + path + ': ' + smallTargets.join(' | '));
     }
     await page.goto(base + '/blog.html', { waitUntil: 'load' });
-    const materialPaths = await page.locator('.kn-wiki-tree a').evaluateAll(links => [...new Set(links.map(a => new URL(a.href).pathname))]);
+    const materialPaths = await page.locator('.kn-wiki-tree a').evaluateAll(links => [...new Set(links.map(a => new URL(a.href).pathname).filter(path => path.startsWith('/blog/materials/')))]);
     assert.equal(materialPaths.length, 24, 'все учебные темы доступны через дерево');
     for (const path of materialPaths) {
       await page.goto(base + path, { waitUntil: 'load' });

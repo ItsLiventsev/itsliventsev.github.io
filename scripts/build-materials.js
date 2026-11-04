@@ -315,11 +315,22 @@ function wikiNav(tree, activeId) {
       + '<ul>' + groups + '</ul></details></li>';
   }).join('');
 
+  const taxonomy = JSON.parse(read('assets/data/knowledge/taxonomy.json'));
+  const noteSections = taxonomy.zones.map(zone => {
+    const notes = [...tree.notesById.values()].filter(note => note.zone === zone.id)
+      .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+    if (!notes.length) return '';
+    return '<li class="kn-wiki-group"><details><summary>' + esc(zone.title) + '<span>' + notes.length + '</span></summary><ul>'
+      + notes.map(note => '<li><a href="/blog/' + esc(note.id) + '.html">' + esc(note.title) + '</a></li>').join('')
+      + '</ul></details></li>';
+  }).join('');
+  const noteTree = '<li class="kn-wiki-section"><details><summary>Рубрики заметок<span>' + tree.notesById.size + '</span></summary><ul>' + noteSections + '</ul></details></li>';
+
   return `<nav class="kn-wiki" aria-label="Навигация по базе знаний">
       <details class="kn-wiki-disclosure" open>
-        <summary class="kn-wiki-home">Темы и материалы <span>${tree.topicCount} ${plural(tree.topicCount, 'тема', 'темы', 'тем')}</span></summary>
+        <summary class="kn-wiki-home">Темы и материалы <span>${tree.topicCount + tree.notesById.size} ${plural(tree.topicCount + tree.notesById.size, 'запись', 'записи', 'записей')}</span></summary>
         <a class="kn-wiki-all" href="/blog.html">Все заметки и материалы <span aria-hidden="true">→</span></a>
-        <ul class="kn-wiki-tree">${sections}</ul>
+        <ul class="kn-wiki-tree">${sections}${noteTree}</ul>
       </details>
     </nav>`;
 }
