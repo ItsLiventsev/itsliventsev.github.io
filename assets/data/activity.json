@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T13:54:14.626Z",
+  "generated": "2026-11-04T13:58:44.049Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 217,
+  "total": 216,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 18
+      "count": 16
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 28
+      "count": 29
     }
   ],
   "commits": [
+    {
+      "sha": "6aced2c",
+      "title": "feat(search): поиск прощает одну опечатку",
+      "date": "2026-11-04T13:55:10Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6aced2cc45f96def5e4b00664287f25ab988c944"
+    },
     {
       "sha": "35043e2",
       "title": "fix(head): убрать дубли служебных ссылок и JSON-LD на главной + мёртвый .kn-card--text",
@@ -481,12 +487,6 @@
       "title": "Measure visible pathways when checking theme contrast",
       "date": "2026-11-02T06:52:09Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/63a172be96f9b17da8dafdc4eea5d11494299d8b"
-    },
-    {
-      "sha": "1b4fe55",
-      "title": "Expose axe node details in CI output",
-      "date": "2026-11-02T06:50:53Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1b4fe55c69878558d3b2d0c8aac41ad906c9d22e"
     }
   ]
 }
