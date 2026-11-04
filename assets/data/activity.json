@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T08:17:31.690Z",
+  "generated": "2026-11-04T08:31:25.293Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 233,
+  "total": 232,
   "truncated": true,
   "days": [
     {
@@ -84,7 +84,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 3
+      "count": 1
     },
     {
       "date": "2026-10-26",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 6
+      "count": 7
     }
   ],
   "commits": [
+    {
+      "sha": "2ed51ee",
+      "title": "feat(knowledge): мост «теория ↔ практика» между заметками и стендами",
+      "date": "2026-11-04T08:28:47Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/2ed51ee8c6e719f69d527362d562caf8ecf0e946"
+    },
     {
       "sha": "ca1f49e",
       "title": "chore: merge main, пересобрать манифесты и RSS",
@@ -481,12 +487,6 @@
       "title": "feat(autonomous-polish-v13): kanban drag-n-drop + offline banner + reveal stagger + SW dedupe + prefetch link",
       "date": "2026-11-01T20:49:28Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/709bd98f83e789c41b4ee45508b700ca283616c2"
-    },
-    {
-      "sha": "5b38af4",
-      "title": "feat(autonomous-polish-v12): Aceternity 3D tilt + cmdk palette polish + cozy dark washes + axe expanded",
-      "date": "2026-11-01T20:47:13Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5b38af44721f1f1a2b628f3aaf5a4e7b64721c78"
     }
   ]
 }
