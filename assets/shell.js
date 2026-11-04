@@ -380,6 +380,50 @@
   };
   const normalize = value => String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 
+  /* Поиск прощает опечатки: «во lan» находит VLAN, «комутатор» — коммутатор.
+     Сравнение идёт по словарю индекса, а не по всему тексту: расстояние
+     считается только для слов длиной от четырёх символов, поэтому ввод
+     не тормозит. Одна правка — вставка, удаление, замена или перестановка. */
+  const withinOneEdit = (a, b) => {
+    if (a === b) return true;
+    const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+    if (long.length - short.length > 1) return false;
+    let i = 0, j = 0, edits = 0;
+    while (i < short.length && j < long.length) {
+      if (short[i] === long[j]) { i += 1; j += 1; continue; }
+      edits += 1;
+      if (edits > 1) return false;
+      if (short.length === long.length) {
+        if (short[i + 1] === long[j + 1]) { i += 2; j += 2; continue; } // перестановка
+        i += 1; j += 1; continue;                                        // замена
+      }
+      j += 1;                                                            // вставка в длинном
+    }
+    return edits + (short.length - i) + (long.length - j) <= 1;
+  };
+  const vocabularyOf = items => {
+    const words = new Set();
+    items.forEach(item => {
+      [item.title, item.category, item.tags].forEach(source => {
+        if (!source) return;
+        normalize(Array.isArray(source) ? source.join(' ') : source).split(' ').forEach(word => {
+          if (word.length >= 4) words.add(word);
+        });
+      });
+    });
+    return [...words];
+  };
+  let vocabulary = null;
+  const suggestTerms = terms => {
+    if (!vocabulary) return terms;
+    return terms.map(term => {
+    if (term.length < 4) return term;
+    if (vocabulary.some(word => word === term || (word.startsWith(term) && word.length - term.length <= 1))) return term;
+    const close = vocabulary.find(word => Math.abs(word.length - term.length) <= 1 && withinOneEdit(term, word));
+    return close || term;
+    });
+  };
+
   function setActive(next) {
     const items = [...results.querySelectorAll('.ui-search-result')];
     if (!items.length) { active = -1; return; }
@@ -436,6 +480,41 @@
       .slice(0, 8);
     results.replaceChildren();
     if (!scored.length) {
+      /* Второй проход по словарю: одна опечатка в слове не должна превращать
+         поиск в «ничего не найдено». Подсказка честная — показываем, что искали. */
+      const fixed = vocabulary ? suggestTerms(terms) : terms;
+      const changed = fixed.some((term, i) => term !== terms[i]);
+      if (changed) {
+        const retry = index.map(item => {
+          const title = normalize(item.title), category = normalize(item.category), content = normalize(item.content + ' ' + item.description);
+          let score = 0;
+          fixed.forEach(term => {
+            if (title.includes(term)) score += 6;
+            else if (category.includes(term)) score += 3;
+            else if (content.includes(term)) score += 1;
+          });
+          return { item, score };
+        }).filter(entry => entry.score > 0)
+          .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'ru'))
+          .slice(0, 8);
+        if (retry.length) {
+          const note = doc.createElement('div');
+          note.className = 'ui-search-group-caption';
+          note.textContent = 'Возможно, вы имели в виду: ' + fixed.join(' ');
+          results.append(note);
+          retry.forEach(({ item }) => {
+            const link = doc.createElement('a');
+            link.className = 'ui-search-result';
+            link.href = localUrl(item.url);
+            link.setAttribute('role', 'option');
+            link.innerHTML = svg('arrow-right') + '<span><strong>' + esc(item.title) + '</strong><small>' + esc(item.category || '') + (item.description ? ' · ' + esc(item.description) : '') + '</small></span><span class="ui-search-result-meta">↵</span>';
+            results.append(link);
+          });
+          hint.textContent = 'Похоже на «' + fixed.join(' ') + '»';
+          setActive(0);
+          return;
+        }
+      }
       results.innerHTML = '<div class="ui-empty">Ничего не найдено. Попробуйте «сети», «документы» или команду <code>&gt; go-projects</code>.</div>';
       hint.textContent = 'Нет результатов';
       active = -1;
@@ -466,6 +545,7 @@
       .then(data => {
         const items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
         index = items.filter(item => item && typeof item.title === 'string' && localUrl(item.url));
+        vocabulary = vocabularyOf(index);
         loadingIndex = false;
         renderSearch(input.value);
       })
