@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T13:11:02.393Z",
+  "generated": "2026-11-04T13:15:57.163Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 224,
+  "total": 223,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 33
+      "count": 31
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 20
+      "count": 21
     }
   ],
   "commits": [
+    {
+      "sha": "aefe62e",
+      "title": "docs(design): справка сверяется с кодом, .ui-callout сведён в одно определение",
+      "date": "2026-11-04T13:12:44Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/aefe62ea37a5ef61651b8e79f6e0179ceddd5c99"
+    },
     {
       "sha": "4b64271",
       "title": "feat(stats): числа главной считает скрипт, мёртвые правила CSS убраны",
@@ -481,12 +487,6 @@
       "title": "Fix search interactions and keep its index current",
       "date": "2026-11-02T06:26:53Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6fa66b53b0d6f22e3633085d2e4b0041ed554f5d"
-    },
-    {
-      "sha": "d496417",
-      "title": "Keep generated post indexes on main",
-      "date": "2026-11-02T06:18:47Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d496417d2aac31525fa165e10b63e32a25f35510"
     }
   ]
 }
