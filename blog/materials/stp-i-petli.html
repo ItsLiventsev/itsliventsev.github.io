@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
+<title>STP: почему порт сам выключился · itsliventsev</title>
+<meta name="description" content="Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/stp-i-petli.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="STP: почему порт сам выключился · itsliventsev">
+  <meta property="og:description" content="Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/stp-i-petli.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="STP: почему порт сам выключился · itsliventsev">
+  <meta name="twitter:description" content="Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"STP: почему порт сам выключился","description":"Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.","url":"https://itsliventsev.github.io/blog/materials/stp-i-petli.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/stp-i-petli.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"STP: почему порт сам выключился","item":"https://itsliventsev.github.io/blog/materials/stp-i-petli.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html" aria-current="page">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Коммутация и VLAN</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Коммутация и VLAN</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>STP: почему порт сам выключился</h1>
+      <p class="kn-def">Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>объяснять, зачем нужен STP и почему петля убивает сеть;</li><li>назначать корневой мост осознанно, а не «как получилось»;</li><li>читать вывод show spanning-tree и находить блокирующий порт.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="chto-proishodit-bez-stp">Что происходит без STP</h2>
+        <p>Коммутаторы не имеют счётчика времени жизни кадра. Если между двумя коммутаторами два кабеля, кадр рассылается в оба, возвращается, снова рассылается — и так по кругу. Broadcast-кадры множатся лавинообразно: за секунды полоса оказывается занята, таблица MAC постоянно переучивается, сеть перестаёт передавать полезный трафик. Это не «тормоза», это отказ.</p>
+        <p>STP (Spanning Tree Protocol) решает задачу заранее: он строит из физической топологии дерево без колец и блокирует лишние порты. Порт заблокирован не «сломан» — он стоит в резерве и включится, если основной путь исчезнет.</p>
+        <h2 id="vybory-koren-stoimost-port">Выборы: корень, стоимость, порт</h2>
+        <p>Алгоритм состоит из трёх шагов.</p>
+        <ol><li><strong>Выбор корневого моста.</strong> Все коммутаторы обмениваются BPDU-кадрами с приоритетом (по умолчанию 32768) и MAC-адресом. Побеждает меньший приоритет, при равенстве — меньший MAC.</li><li><strong>Расчёт стоимости пути.</strong> У каждого линка есть стоимость, зависящая от скорости: 100 Мбит/с — 19, 1 Гбит/с — 4, 10 Гбит/с — 2. Коммутатор выбирает путь до корня с наименьшей суммой.</li><li><strong>Выбор портов.</strong> На каждом сегменте один порт становится назначенным (designated), остальные — блокирующими (alternate).</li></ol>
+        <p>В итоге активных путей ровно столько, сколько нужно для связности, а всё лишнее стоит в резерве.</p>
+        <h2 id="roli-i-sostoyaniya-portov">Роли и состояния портов</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Состояние</th><th scope="col">Что происходит</th><th scope="col">Трафик идёт</th></tr></thead><tbody><tr><th scope="row">Blocking / Discarding</th><td>порт слушает BPDU, но не передаёт</td><td>нет</td></tr><tr><th scope="row">Listening</th><td>ждёт 15 с, выбирает роль</td><td>нет</td></tr><tr><th scope="row">Learning</th><td>учит MAC, но не передаёт</td><td>нет</td></tr><tr><th scope="row">Forwarding</th><td>обычная работа</td><td>да</td></tr></tbody></table></div>
+        <p>Классический STP сходится 30–50 секунд. RSTP (802.1w) сокращает это до секунд, вводя роли Alternate и Backup и предложение по соседству. На современном оборудовании включён RSTP или MSTP, и в <code>show spanning-tree</code> видно <code>rstp</code>/<code>mst</code>.</p>
+        <h2 id="nastroyka">Настройка</h2>
+        <pre class="kn-code"><code>spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20 root primary
+spanning-tree vlan 30 root secondary
+interface gi0/5
+ spanning-tree portfast
+ spanning-tree bpduguard enable</code></pre>
+        <p>Смысл строк:</p>
+        <ul><li><strong>root primary</strong> — явно назначить корень. Корень должен быть в центре сети и быть самым мощным устройством, а не «тем, что включился первым».</li><li><strong>portfast</strong> — порт доступа переходит в Forwarding сразу. Нужен на портах к компьютерам, иначе после включения машина полминуты ждёт сеть.</li><li><strong>bpduguard</strong> — если на порту доступа появились BPDU, порт выключается. Именно эта настройка останавливает самое частое «я подключил свой коммутатор в розетку».</li></ul>
+        <h2 id="proverka">Проверка</h2>
+        <pre class="kn-code"><code>show spanning-tree
+show spanning-tree vlan 10
+show spanning-tree interface gi0/5
+show spanning-tree root</code></pre>
+        <p>В выводе ищите три вещи: кто корень (<code>This bridge is the root</code>), какая стоимость до корня (<code>Root cost</code>), какие порты в <code>Altn</code> (alternate, заблокированы). Если корнем оказался коммутатор в дальнем шкафу — это ошибка проектирования, а не «так получилось».</p>
+        <p>На Linux аналог — <code>mstpd</code> или <code>bridge</code> с включённым STP:</p>
+        <pre class="kn-code"><code>ip link set br0 type bridge stp_state 1
+bridge link show</code></pre>
+        <h2 id="oshibki-kotorye-vstrechayutsya-chasche-vsego">Ошибки, которые встречаются чаще всего</h2>
+        <ul><li><strong>Корень не назначен.</strong> Корнем стал случайный коммутатор, и весь трафик идёт через слабый линк.</li><li><strong>portfast на транке.</strong> На магистрали это прямой путь к петле на секунды.</li><li><strong>LACP и STP на одном линке.</strong> Агрегация работает как один логический линк — с ней надо настраивать STP на агрегированном интерфейсе, а не на физических портах.</li><li><strong>Отключён BPDU guard на доступе.</strong> Любой «самодельный» коммутатор в кабинете — потенциальная петля.</li></ul>
+        <h2 id="itog">Итог</h2>
+        <ul><li>STP строит дерево без колец и держит лишние порты в резерве.</li><li>Корень назначают явно, в центре сети.</li><li>portfast и BPDU guard — обязательная пара настроек на портах доступа.</li><li>Диагностика: <code>show spanning-tree</code>, смотреть корень, стоимость и заблокированные порты.</li></ul>
+        <p>Заметка по теме — <a href="/blog/kn-stp.html">STP: почему коммутатор сам выключил порт</a>, про агрегацию каналов — <a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-stp.html"><strong>STP: почему коммутатор сам выключил порт</strong><span>Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</span></a></li>
+        <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+        <li><a href="/blog/kn-lacp.html"><strong>LACP: два кабеля, один адрес</strong><span>active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.</span></a></li>
+        <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Коммутация и VLAN</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/kommutaciya-i-switch.html"><strong>Коммутация: как коммутатор находит получателя</strong><span>Коммутатор учит MAC-адреса по источнику кадра и передаёт его только в нужный порт; понимание этой механики объясняет и «сеть тормозит», и «порт заблокирован», и «петля положила офис».</span></a></li>
+        <li><a href="/blog/materials/vlan-i-trunk.html"><strong>VLAN и транки: один кабель, много сетей</strong><span>VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети не видят друг друга» объясняются тегом или его отсутствием.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://standards.ieee.org/ieee/802.1D/6077/" target="_blank" rel="noopener">IEEE 802.1D: MAC Bridges</a><small>IEEE</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://standards.ieee.org/ieee/802.1Q/10323/" target="_blank" rel="noopener">IEEE 802.1w / 802.1Q: Rapid Spanning Tree</a><small>IEEE</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз →</a><a href="/blog/materials/vlan-i-trunk.html">← VLAN и транки: один кабель, много сетей</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

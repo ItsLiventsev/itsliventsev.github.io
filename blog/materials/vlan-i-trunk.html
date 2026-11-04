@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
+<title>VLAN и транки: один кабель, много сетей · itsliventsev</title>
+<meta name="description" content="VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети…">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="VLAN и транки: один кабель, много сетей · itsliventsev">
+  <meta property="og:description" content="VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети…">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VLAN и транки: один кабель, много сетей · itsliventsev">
+  <meta name="twitter:description" content="VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети…">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"VLAN и транки: один кабель, много сетей","description":"VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети…","url":"https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"VLAN и транки: один кабель, много сетей","item":"https://itsliventsev.github.io/blog/materials/vlan-i-trunk.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html" aria-current="page">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Коммутация и VLAN</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Коммутация и VLAN</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>VLAN и транки: один кабель, много сетей</h1>
+      <p class="kn-def">VLAN режет один физический коммутатор на несколько независимых широковещательных доменов, а транк переносит их тегами 802.1Q по одному кабелю; почти все «сети не видят друг друга» объясняются тегом или его отсутствием.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>создавать VLAN и назначать порты access и trunk;</li><li>объяснять, куда девается тег и почему два VLAN не видят друг друга;</li><li>настраивать межвлановую маршрутизацию и проверять её.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="zadacha-kotoruyu-reshaet-vlan">Задача, которую решает VLAN</h2>
+        <p>В одном опенспейсе сидят бухгалтерия, отдел разработки и гости. Им нужен общий коммутатор, но не нужен общий широковещательный домен: гостевой ноутбук не должен видеть служебный трафик, а разработка не должна ловить широковещательные штормы бухгалтерии.</p>
+        <p>VLAN решает это логически: порты одного коммутатора группируются в виртуальные сети, и кадр из VLAN 10 физически не может попасть в VLAN 20. Коммутатор ведёт для каждого VLAN отдельную таблицу MAC-адресов, то есть внутри одного устройства работают как бы несколько независимых коммутаторов.</p>
+        <p>Номер VLAN — 12 бит в теге, значит допустимы значения 1–4094. VLAN 1 обычно остаётся служебным, и держать на нём пользователей не стоит: это удобная мишень и лишний широковещательный домен.</p>
+        <h2 id="access-i-trunk">Access и trunk</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Тип порта</th><th scope="col">Что происходит с кадром</th><th scope="col">Куда подключают</th></tr></thead><tbody><tr><th scope="row">Access</th><td>кадр принимается и отдаётся без тега, порт закреплён за одним VLAN</td><td>компьютер, принтер, камера</td></tr><tr><th scope="row">Trunk</th><td>кадры всех разрешённых VLAN идут с тегом 802.1Q</td><td>коммутатор — коммутатор, коммутатор — маршрутизатор</td></tr><tr><th scope="row">Hybrid</th><td>и тегированные, и нетегированные VLAN</td><td>встречается на части оборудования</td></tr></tbody></table></div>
+        <p>Тег 802.1Q — 4 байта: 2 байта TPID (<code>0x8100</code>) и 2 байта управления, где 12 бит — номер VLAN и 3 бита — приоритет (PCP). Именно эти 4 байта уменьшают полезную нагрузку кадра, и именно поэтому при расчёте MTU транка их учитывают.</p>
+        <p>Порт, к которому подключён компьютер, обязан быть access: если оставить trunk, компьютер получит тегированные кадры, которые не поймёт, — линк поднимется, обмена данными не будет.</p>
+        <h2 id="nastroyka-na-kommutatore">Настройка на коммутаторе</h2>
+        <pre class="kn-code"><code>vlan 10
+ name office
+vlan 20
+ name guests
+interface gi0/1
+ switchport mode access
+ switchport access vlan 10
+interface gi0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20</code></pre>
+        <p>Две строки в транке важнее остальных: <code>allowed vlan</code> ограничивает список, а <code>native vlan</code> задаёт VLAN для нетегированных кадров. Правило безопасности: нативный VLAN на транке меняют с 1 на любой неиспользуемый, иначе появляется способ протащить трафик «без тега» в служебный домен.</p>
+        <h2 id="proverka-posle-nastroyki">Проверка после настройки</h2>
+        <pre class="kn-code"><code>show vlan brief                  — какие порты в каких VLAN
+show interfaces trunk            — какие транки подняты и какие VLAN разрешены
+show interfaces switchport       — режим и VLAN конкретного порта</code></pre>
+        <p>В Linux VLAN навешивается на интерфейс:</p>
+        <pre class="kn-code"><code>ip link add link eth0 name eth0.10 type vlan id 10
+ip link set eth0.10 up
+ip -d link show eth0.10</code></pre>
+        <h2 id="mezhvlanovyy-obmen">Межвлановый обмен</h2>
+        <p>VLAN изолирует — значит, чтобы отделы общались, нужен маршрутизатор. Есть два способа:</p>
+        <p>``<code>text interface gi0/0.10 encapsulation dot1Q 10 ip address 192.168.10.1 255.255.255.0 </code>``</p>
+        <p>``<code>text interface vlan 10 ip address 192.168.10.1 255.255.255.0 ip routing </code>``</p>
+        <ol><li><strong>Router-on-a-stick.</strong> Один физический интерфейс в транке, на нём подынтерфейсы по VLAN.</li><li><strong>SVI на L3-коммутаторе.</strong> Виртуальный интерфейс на каждый VLAN, включённый <code>ip routing</code>.</li></ol>
+        <p>Второй способ быстрее и привычнее в современных сетях, первый остаётся в учебных задачах и на старом оборудовании.</p>
+        <h2 id="chastye-oshibki">Частые ошибки</h2>
+        <ul><li><strong>Транк вместо access на рабочем месте.</strong> Линк есть, данных нет.</li><li><strong>VLAN не разрешён в транке.</strong> Пинг через коммутатор не идёт, хотя локально всё работает.</li><li><strong>Разные VLAN на концах.</strong> Один порт в VLAN 10, второй в 20 — кадры уходят «в никуда».</li><li><strong>Нативный VLAN не совпадает.</strong> Часть кадров уходит без тега и попадает в служебный домен.</li><li><strong>Шлюз не настроен.</strong> VLAN работают, но между собой не общаются, потому что нет SVI или подынтерфейса.</li></ul>
+        <h2 id="itog">Итог</h2>
+        <ul><li>VLAN — это логическое деление коммутатора на домены, а не «настройка порта».</li><li>Access отдаёт кадр без тега, trunk переносит теги 802.1Q по списку разрешённых.</li><li>Связь между VLAN обеспечивает маршрутизатор или L3-коммутатор.</li><li>Три проверки после настройки: <code>show vlan brief</code>, <code>show interfaces trunk</code>, пинг между VLAN.</li></ul>
+        <p>Подробный разбор самой технологии — в заметке <a href="/blog/kn-vlan.html">VLAN и 802.1Q: один провод, много сетей</a>, защита от петель — в <a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+        <li><a href="/blog/kn-stp.html"><strong>STP: почему коммутатор сам выключил порт</strong><span>Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</span></a></li>
+        <li><a href="/blog/kn-dhcp.html"><strong>DHCP: аренда адреса на четыре шага</strong><span>Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span></a></li>
+        <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Коммутация и VLAN</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/kommutaciya-i-switch.html"><strong>Коммутация: как коммутатор находит получателя</strong><span>Коммутатор учит MAC-адреса по источнику кадра и передаёт его только в нужный порт; понимание этой механики объясняет и «сеть тормозит», и «порт заблокирован», и «петля положила офис».</span></a></li>
+        <li><a href="/blog/materials/stp-i-petli.html"><strong>STP: почему порт сам выключился</strong><span>Протокол покрывающего дерева находит петли в коммутации и блокирует лишние порты; без него один неверный кабель кладёт весь офис за секунды.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://standards.ieee.org/ieee/802.1Q/10323/" target="_blank" rel="noopener">IEEE 802.1Q: Bridges and Bridged Networks</a><small>IEEE</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc5517" target="_blank" rel="noopener">RFC 5517: Cisco Systems&#39; Private VLANs</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился →</a><a href="/blog/materials/kommutaciya-i-switch.html">← Коммутация: как коммутатор находит получателя</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

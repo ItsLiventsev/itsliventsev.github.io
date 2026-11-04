@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
+<title>Анализ трафика: что показывает сниффер · itsliventsev</title>
+<meta name="description" content="Анализатор трафика отвечает на вопросы, которые не решаются конфигурацией: идут ли пакеты, в каком порядке, с какими флагами и кто их отбрасывает.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/analiz-trafika.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Анализ трафика: что показывает сниффер · itsliventsev">
+  <meta property="og:description" content="Анализатор трафика отвечает на вопросы, которые не решаются конфигурацией: идут ли пакеты, в каком порядке, с какими флагами и кто их отбрасывает.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/analiz-trafika.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Анализ трафика: что показывает сниффер · itsliventsev">
+  <meta name="twitter:description" content="Анализатор трафика отвечает на вопросы, которые не решаются конфигурацией: идут ли пакеты, в каком порядке, с какими флагами и кто их отбрасывает.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Анализ трафика: что показывает сниффер","description":"Анализатор трафика отвечает на вопросы, которые не решаются конфигурацией: идут ли пакеты, в каком порядке, с какими флагами и кто их отбрасывает.","url":"https://itsliventsev.github.io/blog/materials/analiz-trafika.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/analiz-trafika.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Анализ трафика: что показывает сниффер","item":"https://itsliventsev.github.io/blog/materials/analiz-trafika.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details open><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html" aria-current="page">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#security">Безопасность</a><span aria-hidden="true">/</span><span aria-current="page">Трафик</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#security">04 Безопасность</a>
+        <span aria-hidden="true">·</span>
+        <span>Трафик</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Анализ трафика: что показывает сниффер</h1>
+      <p class="kn-def">Анализатор трафика отвечает на вопросы, которые не решаются конфигурацией: идут ли пакеты, в каком порядке, с какими флагами и кто их отбрасывает.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>снимать трафик с нужного интерфейса, не записывая лишнего;</li><li>читать установление TCP-соединения по флагам;</li><li>по одной сессии отличать «пакет не дошёл» от «ответ не пришёл».</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="zachem-snimat-trafik">Зачем снимать трафик</h2>
+        <p>Конфигурация показывает, что должно происходить. Сниффер — что происходит. Разница обнаруживается в трёх типичных случаях:</p>
+        <ul><li>пакеты уходят, но ответа нет (фильтр, маршрут, адрес назначения);</li><li>соединение устанавливается, но данные не идут (MTU, TLS, приложение);</li><li>трафик есть, но не тот (петля, широковещание, чужое устройство).</li></ul>
+        <h2 id="snyatie-i-chtenie">Снятие и чтение</h2>
+        <pre class="kn-code"><code>tcpdump -ni any host 192.168.10.20 and port 443
+tcpdump -ni eth0 &#39;tcp[tcpflags] &amp; (tcp-syn|tcp-fin) != 0&#39;
+tcpdump -ni any -w /tmp/cap.pcap port 80
+tcpdump -r /tmp/cap.pcap -nn | head -50</code></pre>
+        <p>Ключи, которые экономят время:</p>
+        <ul><li><code>-n</code> — не разрешать имена (быстрее и без лишних DNS-запросов);</li><li><code>-i any</code> — все интерфейсы сразу, удобно на сервере с несколькими сетями;</li><li><code>-s 0</code> — писать пакет целиком, а не первые байты;</li><li><code>-w</code> — писать в файл, чтобы читать в Wireshark;</li><li>фильтр в кавычках — синтаксис pcap, а не shell.</li></ul>
+        <h2 id="kak-chitat-tcp-po-flagam">Как читать TCP по флагам</h2>
+        <p>Три пакета установления соединения выглядят так:</p>
+        <pre class="kn-code"><code>client &gt; server: Flags [S]   seq 0
+server &gt; client: Flags [S.]  seq 0 ack 1
+client &gt; server: Flags [.]   ack 1</code></pre>
+        <p>Дальше полезно смотреть на четыре признака:</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Признак</th><th scope="col">Что значит</th></tr></thead><tbody><tr><th scope="row"><code>[S]</code> без ответа</th><td>пакет не дошёл или его отбросили</td></tr><tr><th scope="row"><code>[S]</code> → <code>[R]</code></th><td>порт закрыт или запрещён политикой</td></tr><tr><th scope="row"><code>[S]</code> повторяется</th><td>фильтр молча дропает, ответ не возвращается</td></tr><tr><th scope="row"><code>[.]</code> с нулевым окном</th><td>получатель просит подождать, приложение не читает</td></tr><tr><th scope="row"><code>[P.]</code> с большим seq и без ack</th><td>данные уходят, подтверждений нет</td></tr></tbody></table></div>
+        <p>Отличие <code>[R]</code> от молчания принципиально: отказ (reset) означает, что до хоста дошли и его отклонили; тишина — что до хоста не дошли, или ответ не вернулся.</p>
+        <h2 id="filtry-kotorye-prigodyatsya">Фильтры, которые пригодятся</h2>
+        <pre class="kn-code"><code># только установление соединения
+tcpdump -ni eth0 &#39;tcp[tcpflags] &amp; tcp-syn != 0 and tcp[tcpflags] &amp; tcp-ack == 0&#39;
+# DNS-запросы и ответы
+tcpdump -ni any port 53
+# DHCP-диалог
+tcpdump -ni eth0 port 67 or port 68
+# ICMP, включая «fragmentation needed»
+tcpdump -ni any icmp and icmp[icmptype] == 3</code></pre>
+        <p>Последний фильтр — прямой путь к разгадке «ping идёт, а сайт нет»: сообщение ICMP type 3 code 4 (fragmentation needed) показывает, кто и где требует уменьшить размер пакета.</p>
+        <h2 id="wireshark-chto-smotret-v-pervuyu-ochered">Wireshark: что смотреть в первую очередь</h2>
+        <ul><li><strong>Statistics → Conversations</strong> — кто с кем и сколько. Сразу видно «кто занял канал».</li><li><strong>Follow → TCP Stream</strong> — содержимое сессии в читаемом виде.</li><li><strong>Expert Information</strong> — автоматические замечания: повторные передачи, сбросы, ошибки контрольных сумм.</li></ul>
+        <p>Для быстрой оценки «сеть тормозит» достаточно первых двух: разговор на гигабайт от одного адреса виден сразу.</p>
+        <h2 id="pravila-prilichiya-i-bezopasnosti">Правила приличия и безопасности</h2>
+        <ul><li>Снимать только свою сеть и только по задаче; в учебном стенде — только трафик стенда.</li><li>Не сохранять персональные данные в дампах; если сняли — удалять после разбора.</li><li>Не запускать захват «на всякий случай» на весь день: файл растёт гигабайтами.</li><li>На управляемых коммутаторах порт-зеркало настраивается явно, «само» трафик не появится.</li></ul>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Сниффер показывает факты, конфигурация — намерения; полезно и то, и другое.</li><li><code>-n -i any</code> и pcap-фильтр — минимальный набор для работы.</li><li><code>[R]</code> — дошло и отклонили; тишина — не дошло.</li><li>ICMP type 3 code 4 объясняет большинство «странных» зависаний.</li></ul>
+        <p>Подробности по пакетам — <a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать</a>, про MTU — <a href="/blog/kn-mtu.html">MTU и PMTU: ping идёт, скачивание нет</a>.</p>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>4 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-packet.html"><strong>tcpdump: как читать пакет, а не гадать</strong><span>Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</span></a></li>
+        <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+        <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
+        <li><a href="/blog/kn-netfilter.html"><strong>Файрвол в Linux: nftables и порядок правил</strong><span>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener">tcpdump manual</a><small>The Tcpdump Group</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://www.wireshark.org/docs/dfref/" target="_blank" rel="noopener">Wireshark: display filter reference</a><small>Wireshark Foundation</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#security">раздел «Безопасность»</a>
+      <span><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён →</a><a href="/blog/materials/acl-i-firewall.html">← Фильтрация: списки доступа и файрвол</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

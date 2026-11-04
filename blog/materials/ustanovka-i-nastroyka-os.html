@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
+<title>Установка и базовая настройка ОС · itsliventsev</title>
+<meta name="description" content="Установка системы — это не «нажать далее», а разметка диска, выбор сети и первичная защита; ошибки на этих трёх шагах всплывают через месяцы.">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Установка и базовая настройка ОС · itsliventsev">
+  <meta property="og:description" content="Установка системы — это не «нажать далее», а разметка диска, выбор сети и первичная защита; ошибки на этих трёх шагах всплывают через месяцы.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Установка и базовая настройка ОС · itsliventsev">
+  <meta name="twitter:description" content="Установка системы — это не «нажать далее», а разметка диска, выбор сети и первичная защита; ошибки на этих трёх шагах всплывают через месяцы.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Установка и базовая настройка ОС","description":"Установка системы — это не «нажать далее», а разметка диска, выбор сети и первичная защита; ошибки на этих трёх шагах всплывают через месяцы.","url":"https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Установка и базовая настройка ОС","item":"https://itsliventsev.github.io/blog/materials/ustanovka-i-nastroyka-os.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details open><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html" aria-current="page">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#systems">Системы и серверы</a><span aria-hidden="true">/</span><span aria-current="page">Операционные системы</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#systems">02 Системы и серверы</a>
+        <span aria-hidden="true">·</span>
+        <span>Операционные системы</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>практика</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Установка и базовая настройка ОС</h1>
+      <p class="kn-def">Установка системы — это не «нажать далее», а разметка диска, выбор сети и первичная защита; ошибки на этих трёх шагах всплывают через месяцы.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>планировать разметку диска до начала установки;</li><li>настраивать сеть и учётную запись администратора без типовых ошибок;</li><li>выполнять первичную защиту сразу после установки.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="chto-reshit-do-ustanovki">Что решить до установки</h2>
+        <p>Установка занимает 20 минут, но три решения на ней определяют жизнь машины на годы. Их принимают на бумаге, а не в процессе.</p>
+        <ol><li><strong>Назначение машины.</strong> Рабочее место, сервер служб или стенд. От этого зависит разметка диска и набор пакетов.</li><li><strong>Разметка.</strong> Отдельный раздел под систему и отдельный под данные. Для сервера — LVM, чтобы расширять тома без переустановки.</li><li><strong>Сеть.</strong> Адрес статический или DHCP, есть ли домен, какое имя у машины.</li></ol>
+        <h2 id="razmetka-diska">Разметка диска</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Схема</th><th scope="col">Когда подходит</th><th scope="col">Минусы</th></tr></thead><tbody><tr><th scope="row">Один раздел <code>/</code></th><td>учебный стенд, виртуалка</td><td>данные не отделены от системы</td></tr><tr><th scope="row"><code>/</code> + <code>/home</code></th><td>рабочее место</td><td>для сервера неудобно</td></tr><tr><th scope="row"><code>/</code> + <code>/var</code> + <code>/srv</code></th><td>сервер служб</td><td>нужно сразу планировать размеры</td></tr><tr><th scope="row">LVM поверх раздела</th><td>сервер, который будет расти</td><td>сложнее восстановление</td></tr></tbody></table></div>
+        <p>Разумный минимум для сервера: 20–30 ГБ под систему, остальное — LVM-том под данные. Логи в <code>/var/log</code> растут непредсказуемо, и отдельный <code>/var</code> спасает корень от заполнения. Ротация логов — тема отдельной заметки <a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск</a>.</p>
+        <p>Для рабочего места проще: один раздел под систему и <code>/home</code> отдельно. Переустановка тогда не трогает файлы.</p>
+        <h2 id="uchetnye-zapisi">Учётные записи</h2>
+        <ul><li><strong>root</strong> — только для административных задач, вход по паролю отключён при возможности.</li><li><strong>Администратор</strong> — обычная учётная запись с правом <code>sudo</code> (<code>wheel</code> в ALT/Fedora, <code>sudo</code> в Debian/Ubuntu).</li><li><strong>Служебные учётные записи</strong> — под каждую службу своя, без права входа в систему.</li></ul>
+        <pre class="kn-code"><code>useradd -m -G wheel operator
+passwd operator
+usermod -aG wheel operator
+visudo            # проверить строку %wheel ALL=(ALL) ALL</code></pre>
+        <p>Пароль root и пароль администратора — разные. Совпадение означает, что компрометация одной записи даёт полный доступ.</p>
+        <h2 id="set-pri-ustanovke">Сеть при установке</h2>
+        <pre class="kn-code"><code>ip address show                 # проверить, получен ли адрес
+nmcli device status             # состояние интерфейсов (NetworkManager)
+nmcli con mod &quot;Wired&quot; ipv4.method manual ipv4.addresses 192.168.10.50/24 ipv4.gateway 192.168.10.1 ipv4.dns 192.168.10.10
+nmcli con up &quot;Wired&quot;</code></pre>
+        <p>Для сервера адрес всегда статический: DHCP-аренда на сервере — источник инцидентов «сервис недоступен после перезагрузки». Имя машины задаётся осознанно, в нижнем регистре, без пробелов:</p>
+        <pre class="kn-code"><code>hostnamectl set-hostname srv-files</code></pre>
+        <h2 id="pervichnaya-zaschita">Первичная защита</h2>
+        <p>Эти шаги делаются в первый час, а не «когда будет время»:</p>
+        <ol><li>Обновить пакеты и включить автоматические обновления безопасности.</li><li>Настроить SSH: запретить вход root, включить вход по ключу (<a href="/blog/kn-ssh.html">SSH: ключ вместо пароля и что закрыть в sshd</a>).</li><li>Включить межсетевой экран и оставить только нужные порты (<a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a>).</li><li>Настроить синхронизацию времени — без неё ломаются сертификаты и журналы.</li><li>Проверить, что резервное копирование настроено (<a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a>).</li></ol>
+        <pre class="kn-code"><code>apt update &amp;&amp; apt upgrade -y      # Debian/Ubuntu
+apt install -y nftables chrony
+systemctl enable --now chrony
+nft list ruleset</code></pre>
+        <h2 id="tipichnye-oshibki">Типичные ошибки</h2>
+        <ul><li><strong>Пароль root совпадает с паролем пользователя</strong> — одна утечка даёт всё.</li><li><strong>Сервер на DHCP</strong> — после перезагрузки он «пропал».</li><li><strong>Один раздел на всё</strong> — заполненные логи останавливают систему.</li><li><strong>SSH с паролем и root наружу</strong> — подбор начинается в первые сутки.</li><li><strong>Нет синхронизации времени</strong> — сертификаты «недействительны», логи не сопоставляются.</li></ul>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Решения о назначении, разметке и сети принимаются до установки.</li><li>Отдельный раздел под данные — минимальная страховка.</li><li>Администратор работает не под root и входит по ключу.</li><li>В первый час: обновления, SSH, файрвол, время, резервные копии.</li></ul>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-ssh.html"><strong>SSH: ключ вместо пароля и что закрыть в sshd</strong><span>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span></a></li>
+        <li><a href="/blog/kn-lvm.html"><strong>Диски: разделы, LVM и кончившееся место</strong><span>PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</span></a></li>
+        <li><a href="/blog/kn-backups.html"><strong>Бэкап: 3-2-1, RPO и проверка восстановлением</strong><span>Три копии, два носителя, одна вне площадки; чем RPO 15 минут отличается от ночного дампа и как выглядит настоящий тест восстановления.</span></a></li>
+      </ul>
+    </section>
+
+    
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>2 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.altlinux.org/" target="_blank" rel="noopener">ALT Linux: руководство администратора</a><small>ALT Linux</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://learn.microsoft.com/en-us/windows/deployment/" target="_blank" rel="noopener">Microsoft Learn: Windows deployment</a><small>Microsoft</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#systems">раздел «Системы и серверы»</a>
+      <span><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена →</a><a href="/blog/materials/dns.html">← DNS: имена, зоны и резолверы</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>

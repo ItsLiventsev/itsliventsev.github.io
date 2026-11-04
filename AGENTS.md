@@ -39,9 +39,13 @@
 - `assets/data/topics.json` — таблица связей «заметка ↔ стенд» (мост теория ↔ практика),
   из неё `scripts/lib/related.js` собирает блоки на обеих сторонах.
 - `assets/data/knowledge/` — база знаний заметок: `notes/*.md` (источник), `notes.json` (сборка),
-  `taxonomy.json` (рубрики и теги), `registry.json` (рёбра графа и обратные ссылки).
-  Страницы `blog/<id>.html`, `blog/topics/*.html`, `blog/graph.html` и лента в `blog.html`
-  генерируются `scripts/build-knowledge.js` — контракт в `docs/notes.md`.
+  `taxonomy.json` (рубрики и теги), `registry.json` (рёбра связей и обратные ссылки).
+  Страницы `blog/<id>.html`, `blog/topics/*.html` и лента в `blog.html` генерируются
+  `scripts/build-knowledge.js` — контракт в `docs/notes.md`.
+- `assets/data/knowledge/materials.json` + `materials/*.md` — учебные материалы: дерево разделов,
+  групп и тем. `blog/materials.html` и `blog/materials/<id>.html` генерирует
+  `scripts/build-materials.js` — контракт в `docs/materials.md`. `blog/graph.html` — заглушка-редирект,
+  графа связей на сайте нет.
 - `localStorage`: `stands-profile` (СетьПолис), `league-*`, `office-*`, `ops-*`. Контракты ключей менять нельзя.
 
 ---

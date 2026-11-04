@@ -25,6 +25,7 @@ jobs:
           node scripts/build-related-css.js --check
           node scripts/build-critical-css.js --check
           node scripts/test-critical-knowledge.js
+          node scripts/build-materials.js --check
           node scripts/regression-static.js
           node scripts/runtime-smoke.js
           node scripts/test-service-worker.js
@@ -54,7 +55,6 @@ jobs:
           node scripts/test-reading.js
           node scripts/test-catalog.js
           node scripts/test-glossary.js
-          node scripts/test-graph.js
           node scripts/test-theme.js
           node scripts/test-iter-strip.js
           node scripts/test-tabbar.js

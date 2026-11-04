@@ -389,7 +389,8 @@ localStorage) → системная настройка (`prefers-color-scheme`)
 | `.kn-terms`, `.kn-facts` | карточки терминов и паспорт фактов (`dl`) |
 | `.kn-kanban`, `.kn-lane`, `.kn-tile` | канбан на CSS Grid; статусы — `data-state="done" / "blocked"` |
 | `.case-study`, `.esp-hero`, `.esp-hero-main`, `.case-facts`, `.case-fact`, `.verdict-col`, `.case-outcome` | шаблон кейса: герой с фактами, разделы, «Честный разбор» в три колонки, итоговая плашка |
-| `.kn-graph-stage`, `.kn-node`, `.kn-node--stand`, `.kn-graph-svg` | граф связей: абсолютные узлы, SVG-рёбра; заметка — круг, стенд — квадрат без постоянной подписи (подпись по наведению) |
+| `.kn-wiki-layout`, `.kn-wiki`, `.kn-wiki-tree`, `.kn-wiki-section` | учебные материалы: сетка 280 px + текст, липкое дерево на `<details>`, активная тема — `aria-current="page"` |
+| `.kn-crumbs`, `.kn-goal`, `.kn-code`, `.kn-mat-*` | страница темы: крошки, цель, блок кода, список тем на индексе раздела |
 | `.kn-topic-list`, `.kn-topic-row`, `.kn-tagcloud` | указатель рубрик и облако тегов |
 
 Правила слоя:

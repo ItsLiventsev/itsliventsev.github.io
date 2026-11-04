@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#efeee9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#121109");}}catch(e){}})();</script>
+<title>Зачем нужна сеть и из чего она состоит · itsliventsev</title>
+<meta name="description" content="Компьютерная сеть — это соглашение о формате данных плюс среда передачи; всё остальное (коммутаторы, маршрутизаторы, службы) лишь реализует это соглашение на…">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css?v=d777ff20" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/tokens.css?v=d777ff20"></noscript>
+<link rel="stylesheet" href="/assets/base.css?v=4ddae2c8">
+<link rel="stylesheet" href="/assets/pages.css?v=35c5eaee" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/pages.css?v=35c5eaee"></noscript>
+<link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/assets/knowledge.css?v=4fe32abd"></noscript>
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/materials/osnovy-setey.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Зачем нужна сеть и из чего она состоит · itsliventsev">
+  <meta property="og:description" content="Компьютерная сеть — это соглашение о формате данных плюс среда передачи; всё остальное (коммутаторы, маршрутизаторы, службы) лишь реализует это соглашение на…">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/materials/osnovy-setey.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Зачем нужна сеть и из чего она состоит · itsliventsev">
+  <meta name="twitter:description" content="Компьютерная сеть — это соглашение о формате данных плюс среда передачи; всё остальное (коммутаторы, маршрутизаторы, службы) лишь реализует это соглашение на…">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Зачем нужна сеть и из чего она состоит","description":"Компьютерная сеть — это соглашение о формате данных плюс среда передачи; всё остальное (коммутаторы, маршрутизаторы, службы) лишь реализует это соглашение на…","url":"https://itsliventsev.github.io/blog/materials/osnovy-setey.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/materials/osnovy-setey.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Зачем нужна сеть и из чего она состоит","item":"https://itsliventsev.github.io/blog/materials/osnovy-setey.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body class="ui-page kn-page-material">
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content" class="kn-wiki-layout">
+  <nav class="kn-wiki" aria-label="Учебные материалы">
+      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>24 темы</span></a>
+      <ul class="kn-wiki-tree"><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">01</span>Сети и передача данных</summary><ul><li class="kn-wiki-group"><details open><summary>Основы сетей<span>3</span></summary><ul><li><a href="/blog/materials/osnovy-setey.html" aria-current="page">Зачем нужна сеть и из чего она состоит</a></li><li><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP</a></li><li><a href="/blog/materials/linii-svyazi-i-kabely.html">Кабели, разъёмы и линии связи</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Коммутация и VLAN<span>3</span></summary><ul><li><a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a></li><li><a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a></li><li><a href="/blog/materials/stp-i-petli.html">STP: почему порт сам выключился</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Адресация и маршрутизация<span>3</span></summary><ul><li><a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a></li><li><a href="/blog/materials/raschet-podsetey.html">Расчёт подсетей без калькулятора</a></li><li><a href="/blog/materials/staticheskaya-marshrutizaciya.html">Статическая маршрутизация и шлюз по умолчанию</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Службы сети<span>2</span></summary><ul><li><a href="/blog/materials/dhcp.html">DHCP: как устройство получает адрес</a></li><li><a href="/blog/materials/dns.html">DNS: имена, зоны и резолверы</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">02</span>Системы и серверы</summary><ul><li class="kn-wiki-group"><details><summary>Операционные системы<span>1</span></summary><ul><li><a href="/blog/materials/ustanovka-i-nastroyka-os.html">Установка и базовая настройка ОС</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Каталог и учётные записи<span>1</span></summary><ul><li><a href="/blog/materials/ad-ds.html">Доменные службы: контроллер домена</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Данные и печать<span>1</span></summary><ul><li><a href="/blog/materials/faylovye-sluzhby.html">Файловые службы и общие папки</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Эксплуатация<span>1</span></summary><ul><li><a href="/blog/materials/monitoring-infrastruktury.html">Мониторинг инфраструктуры</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">03</span>Виртуализация и контейнеры</summary><ul><li class="kn-wiki-group"><details><summary>Виртуальные машины<span>1</span></summary><ul><li><a href="/blog/materials/virtualizaciya-osnovy.html">Виртуализация: зачем нужен гипервизор</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Контейнеры<span>1</span></summary><ul><li><a href="/blog/materials/docker-osnovy.html">Docker: контейнер, образ и слой</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Kubernetes<span>1</span></summary><ul><li><a href="/blog/materials/kubernetes-osnovy.html">Kubernetes: зачем нужен оркестратор</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">04</span>Безопасность</summary><ul><li class="kn-wiki-group"><details><summary>Доступ и фильтрация<span>1</span></summary><ul><li><a href="/blog/materials/acl-i-firewall.html">Фильтрация: списки доступа и файрвол</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Трафик<span>1</span></summary><ul><li><a href="/blog/materials/analiz-trafika.html">Анализ трафика: что показывает сниффер</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Исследования<span>1</span></summary><ul><li><a href="/blog/materials/uyazvimost-ftp.html">Исследование протокола FTP: где он не защищён</a></li></ul></details></li></ul></details></li><li class="kn-wiki-section"><details open><summary><span class="kn-wiki-num">05</span>Проектирование и практика</summary><ul><li class="kn-wiki-group"><details><summary>Проектирование сети<span>1</span></summary><ul><li><a href="/blog/materials/proektirovanie-obshey-topologii.html">Проектирование топологии сети: с чего начать</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Практикумы<span>1</span></summary><ul><li><a href="/blog/materials/praktikum-obzhim-vitoy-pary.html">Практикум: обжим витой пары и проверка линка</a></li></ul></details></li><li class="kn-wiki-group"><details><summary>Кейсы и задачи<span>1</span></summary><ul><li><a href="/blog/materials/keys-set-ceha.html">Кейс: сеть производственного цеха</a></li></ul></details></li></ul></details></li></ul>
+    </nav>
+  <article class="kn-wiki-doc">
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#networks">Сети и передача данных</a><span aria-hidden="true">/</span><span aria-current="page">Основы сетей</span></nav>
+    <header class="kn-note-head">
+      <div class="kn-note-meta">
+        <a class="ui-tag" href="/blog/materials.html#networks">01 Сети и передача данных</a>
+        <span aria-hidden="true">·</span>
+        <span>Основы сетей</span>
+        <span aria-hidden="true">·</span>
+        <time datetime="2026-11-04">обновлено 4 ноября 2026</time>
+        <span aria-hidden="true">·</span><span>база</span>
+        <span class="kn-ai">текст структурирован с помощью ИИ</span>
+      </div>
+      <h1>Зачем нужна сеть и из чего она состоит</h1>
+      <p class="kn-def">Компьютерная сеть — это соглашение о формате данных плюс среда передачи; всё остальное (коммутаторы, маршрутизаторы, службы) лишь реализует это соглашение на разных участках пути.</p>
+    </header>
+
+    <div class="kn-goal"><h2>Что вы будете уметь</h2><ul><li>отличать сеть от набора кабелей: что именно делает связь возможной;</li><li>называть четыре класса сетей по масштабу и приводить пример каждого;</li><li>объяснять, зачем нужно каждое сетевое оборудование;</li><li>выбирать линию связи под задачу, а не по привычке.</li></ul></div>
+
+    <div class="kn-note-body">
+      <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и собран с помощью ИИ на основе материалов автора: структура и формулировки — ассистента, содержание и терминология — авторские. Проверяйте команды и значения на своём стенде.</p>
+      <h2 id="dva-usloviya-svyazi">Два условия связи</h2>
+        <p>Два устройства обмениваются данными, если выполнены ровно два условия. Первое — есть среда, по которой сигнал физически доходит от одного порта до другого. Второе — оба конца договорились, как этот сигнал понимать: с какой скоростью передавать, где начинается кадр, что означает каждый байт заголовка.</p>
+        <p>Второе условие незаметно, пока всё работает, и именно оно ломается чаще всего. Кабель цел, линк горит, а данные не идут, потому что один конец согласовал 100 Мбит/с в полный дуплекс, а второй — полудуплекс, или потому что на порту висит тег VLAN, которого не ждёт получатель. Отсюда рабочее правило: сначала проверяют физику, потом договорённости, и только потом «настройки где-то выше».</p>
+        <h2 id="klassy-setey-po-masshtabu">Классы сетей по масштабу</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Класс</th><th scope="col">Расшифровка</th><th scope="col">Размер</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">PAN</th><td>Personal Area Network</td><td>метры</td><td>телефон и наушники по Bluetooth</td></tr><tr><th scope="row">LAN</th><td>Local Area Network</td><td>здание, этаж, цех</td><td>офисная сеть, учебный класс</td></tr><tr><th scope="row">MAN</th><td>Metropolitan Area Network</td><td>город</td><td>филиалы одной компании в городе</td></tr><tr><th scope="row">WAN</th><td>Wide Area Network</td><td>страна, мир</td><td>интернет, каналы между городами</td></tr></tbody></table></div>
+        <p>Границы классов размыты, и это нормально: классификация нужна не для отчётности, а чтобы понимать, кто отвечает за участок. Внутри LAN администратор видит каждый порт; в WAN он получает от провайдера «канал» и разбирается с ним через заявку.</p>
+        <h2 id="linii-svyazi-chto-vybrat">Линии связи: что выбрать</h2>
+        <p>Выбор среды — компромисс между ценой, дальностью и помехоустойчивостью.</p>
+        <ul><li><strong>Витая пара (UTP/STP)</strong> — до 100 м на медном сегменте, дешевле всего, проста в монтаже. Основа офисных и цеховых сетей; категория кабеля задаёт скорость: Cat5e держит 1 Гбит/с, Cat6a — 10 Гбит/с на 100 м.</li><li><strong>Оптика</strong> — километры без повторителей, полная невосприимчивость к электромагнитным помехам, но дороже и требует аккуратной сварки. Магистрали между зданиями, длинные цеха, нагруженные сегменты.</li><li><strong>Коаксиальный кабель</strong> — в новых сетях почти не встречается, но жив в системах видеонаблюдения и старом промышленном оборудовании.</li><li><strong>Радиоканал</strong> — единственный вариант для мобильных устройств; в цехах его ставят там, где нельзя тянуть провод к подвижному узлу.</li></ul>
+        <p>Практическое правило для производственных площадок: если устройство критично для технологического процесса и стоит на месте — его подключают проводом. Беспроводное соединение оставляют мобильным панелям оператора и датчикам, у которых допустим разрыв связи.</p>
+        <h2 id="oborudovanie-i-ego-rol">Оборудование и его роль</h2>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Устройство</th><th scope="col">Что делает</th><th scope="col">Где встречается</th></tr></thead><tbody><tr><th scope="row">Сетевой адаптер (NIC)</th><td>передаёт и принимает кадры</td><td>любой компьютер, контроллер</td></tr><tr><th scope="row">Концентратор (hub)</th><td>повторяет сигнал во все порты</td><td>устарел, встречается как музейный экспонат</td></tr><tr><th scope="row">Коммутатор (switch)</th><td>пересылает кадр по MAC-адресу только нужному порту</td><td>основа любой LAN</td></tr><tr><th scope="row">Маршрутизатор (router)</th><td>соединяет разные сети и выбирает маршрут</td><td>граница офиса, выход в интернет</td></tr><tr><th scope="row">Точка доступа (AP)</th><td>создаёт беспроводной сегмент</td><td>офисы, склады</td></tr><tr><th scope="row">Межсетевой экран</th><td>фильтрует трафик между зонами</td><td>между LAN и интернетом</td></tr></tbody></table></div>
+        <p>Концентратор и коммутатор отличаются не «умом», а объёмом широковещательного домена: концентратор отдаёт кадр всем портам, поэтому устройства делят одну среду и одну полосу. Коммутатор ведёт таблицу MAC-адресов и передаёт кадр туда, где находится получатель, — на этом построена вся современная локальная сеть. Подробнее — в теме <a href="/blog/materials/kommutaciya-i-switch.html">Коммутация: как коммутатор находит получателя</a>.</p>
+        <h2 id="tri-termina-kotorymi-pridetsya-polzovatsya">Три термина, которыми придётся пользоваться</h2>
+        <ul><li><strong>Широковещательный домен</strong> — область, куда доходит кадр с адресом назначения <code>ff:ff:ff:ff:ff:ff</code>. Каждый коммутатор по умолчанию передаёт такой кадр во все порты своей сети.</li><li><strong>Домен коллизий</strong> — историческое понятие для полудуплексных сред; в современной коммутации каждый порт является отдельным доменом.</li><li><strong>Точка выхода</strong> — маршрутизатор или L3-коммутатор, который соединяет сегменты и не пропускает широковещание дальше.</li></ul>
+        <p>Широковещательный домен — важное ограничение. Чем он больше, тем больше фонового служебного трафика и тем хуже предсказуемость сети. Разрезать его на части умеют <a href="/blog/materials/vlan-i-trunk.html">VLAN и транки: один кабель, много сетей</a> на втором уровне и <a href="/blog/materials/ip-adresaciya.html">IP-адресация: адрес, маска, шлюз</a> на третьем.</p>
+        <h2 id="chto-delat-kogda-set-ne-rabotaet">Что делать, когда «сеть не работает»</h2>
+        <p>Порядок разбора не зависит от технологии:</p>
+        <ol><li><strong>Линк.</strong> Горит ли индикатор, видит ли система интерфейс: <code>ip link show</code>, <code>ethtool eth0</code>.</li><li><strong>Адрес.</strong> Есть ли IP и маска, совпадает ли подсеть со шлюзом: <code>ip address show</code>.</li><li><strong>Шлюз.</strong> Пингуется ли ближайший маршрутизатор: <code>ip route</code>, <code>ping &lt;шлюз&gt;</code>.</li><li><strong>Дальше шлюза.</strong> Идёт ли трафик за пределы сегмента: <code>traceroute</code>.</li><li><strong>Имя.</strong> Разрешается ли имя в адрес: <code>dig &lt;домен&gt;</code>.</li></ol>
+        <p>Этот порядок — от физики к службам — экономит время, потому что каждая следующая проверка опирается на предыдущую. Бессмысленно искать проблему в DNS, если хост не получил адрес, и бессмысленно проверять маршруты, если линк в состоянии <code>DOWN</code>. Полный разбор — в заметке <a href="/blog/kn-troubleshoot.html">Диагностика сети: снизу вверх, а не наугад</a>.</p>
+        <h2 id="itog">Итог</h2>
+        <ul><li>Сеть — это среда передачи плюс договорённость о формате.</li><li>Класс сети (PAN/LAN/MAN/WAN) определяет, кто отвечает за участок.</li><li>Каждое оборудование решает одну задачу: сигнал, кадр, маршрут, политика.</li><li>Диагностика идёт снизу вверх: линк → адрес → шлюз → маршрут → имя.</li></ul>
+    </div>
+
+    <section class="kn-section" aria-labelledby="materials-notes">
+      <div class="kn-group-head"><h2 id="materials-notes">Заметки по теме</h2><span>3 заметки</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть при агрегации каналов.</span></a></li>
+        <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+        <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика и не поиск причины.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-siblings">
+      <div class="kn-group-head"><h2 id="materials-siblings">Рядом в разделе</h2><span>Основы сетей</span></div>
+      <ul class="kn-related">
+        <li><a href="/blog/materials/model-osi.html"><strong>Модель OSI и стек TCP/IP</strong><span>Семь уровней OSI — это язык, на котором договариваются о зоне ответственности, а работают программы по четырёхуровневому стеку TCP/IP; путать эти две вещи не нужно.</span></a></li>
+        <li><a href="/blog/materials/linii-svyazi-i-kabely.html"><strong>Кабели, разъёмы и линии связи</strong><span>Скорость сети определяется не только коммутатором: категория витой пары, схема обжима, качество оптического коннектора и расстояние ограничивают её жёстче, чем порт.</span></a></li>
+      </ul>
+    </section>
+
+    <section class="kn-section" aria-labelledby="materials-sources">
+      <div class="kn-group-head"><h2 id="materials-sources">Источники</h2><span>3 источника</span></div>
+      <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc1122" target="_blank" rel="noopener">RFC 1122: Requirements for Internet Hosts — Communication Layers</a><small>IETF</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://standards.ieee.org/ieee/802.3/7071/" target="_blank" rel="noopener">IEEE 802.3: Ethernet</a><small>IEEE</small><small>обращение: 4 ноября 2026</small></li>
+          <li><a href="https://itsliventsev.yonote.ru/share/548e46da-9cc5-41a8-9f77-0d4c7134ca73/doc/kompyuternye-seti-lokalnaya-set-adresaciya-5C7rejLd7Y" target="_blank" rel="noopener">Материалы автора: компьютерные сети, локальная сеть, адресация</a><small>материалы автора</small><small>обращение: 4 ноября 2026</small></li>
+      </ol>
+    </section>
+
+    <nav class="kn-pager" aria-label="Соседние темы">
+      <a href="/blog/materials.html#networks">раздел «Сети и передача данных»</a>
+      <span><a href="/blog/materials/model-osi.html">Модель OSI и стек TCP/IP →</a></span>
+    </nav>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Учебные материалы</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/shell.js?v=d874024f" defer></script>
+</body>
+</html>
