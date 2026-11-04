@@ -49,6 +49,28 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     await page.waitForURL('**/stands/index.html');
     assert(await noOverflow(page), 'каталог пространств без прокрутки на 390px');
 
+    /* Один сценарий навигации: на стендах тот же таббар, что и на всём сайте,
+       а собственная шапка раздела не добавляет вторую строку — её ссылки
+       приходят в меню группой «Раздел стендов». */
+    await page.goto(base + '/stands/lab-vlan-cisco.html', { waitUntil: 'load' });
+    assert(await page.locator('.ui-tabbar').isVisible(), 'на стендах должен быть общий таббар');
+    assert.equal(await page.locator('.ui-tabbar a').count(), 5, 'в таббаре пять пунктов и на стенде');
+    assert.equal((await page.locator('.ui-tabbar a[aria-current="page"]').innerText()).trim(), 'Практика',
+      'на стенде активен пункт «Практика»');
+    assert.equal(await page.locator('.ui-subbar').count(), 1, 'подбар раздела должен остаться в разметке');
+    assert(!(await page.locator('.ui-subbar').isVisible()), 'на телефоне подбар скрыт — навигация одна');
+    const tabbarBox = await page.locator('.ui-tabbar').boundingBox();
+    assert(tabbarBox.height >= 44, 'таббар должен быть не ниже 44px: ' + tabbarBox.height);
+    await page.locator('.ui-tabbar a[href="#ui-menu"]').click();
+    await page.waitForFunction(() => document.querySelector('.ui-drawer')?.dataset.open === 'true');
+    assert.equal(await page.locator('.ui-drawer-caption', { hasText: 'Раздел стендов' }).count(), 1,
+      'в меню должна быть группа «Раздел стендов»');
+    assert(await page.locator('.ui-drawer a', { hasText: 'каталог' }).count() > 0,
+      'ссылки раздела должны быть доступны из меню');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.querySelector('.ui-drawer')?.dataset.open === 'false');
+    assert(await noOverflow(page), 'стенд без прокрутки на 390px');
+
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(base + '/', { waitUntil: 'load' });
     const toggle = page.locator('[data-ui-theme-toggle]').first();

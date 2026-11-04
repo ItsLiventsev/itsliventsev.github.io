@@ -436,6 +436,25 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
     && journalIndex.includes('data-activity-count'), 'журнал: хуки данных должны остаться на месте');
 }
 
+/* ── Один сценарий мобильной навигации: таббар одинаковый, подбар уходит в меню ── */
+{
+  const navShell = read('assets/shell.js');
+  const navCourse = read('assets/course.css');
+  ok(/const tabs = \[[\s\S]{0,700}'#ui-menu'/.test(navShell), 'таббар должен собираться в shell.js');
+  ok((navShell.match(/\['[^']*', '[a-z]+', '[^']+', /g) || []).length === 5, 'в таббаре должно остаться ровно пять пунктов');
+  ok(navShell.includes("'#ui-menu', 'menu', 'Ещё'"), 'пятый пункт — «Ещё»');
+  ok(/morePaths = \['\/faq\.html', '\/sitemap\.html', '\/archive\.html', '\/admin\.html'\]/.test(navShell),
+    'на страницах из меню активным должно быть «Ещё», иначе таббар молчит');
+  ok(navShell.includes("'Раздел стендов'"), 'ссылки собственной шапки стендов должны попадать в меню');
+  ok(/legacyNav\.dataset\.uiSubbar = ''/.test(navShell), 'подбар раздела должен быть помечен data-ui-subbar');
+  ok(/@media \(max-width: 820px\) \{\s*\.ui-subbar,[\s\S]{0,80}display: none;/.test(navCourse),
+    'на телефоне подбар должен скрываться — иначе две навигации');
+  ok(/\.ui-subbar\.ui-subbar-nav \{ display: none; \}/.test(navCourse),
+    'подбар — это <nav> с двумя классами: без составного селектора правило не сработает');
+  ok(!html.some(file => read(file).includes('class="ui-tabbar"')), 'таббар не должен быть захардкожен в разметке страниц');
+  ok(read('DESIGN_SYSTEM.md').includes('### 3.11 Мобильный таббар'), 'в дизайн-системе должен быть раздел про таббар');
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);
