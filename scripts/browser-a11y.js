@@ -9,7 +9,7 @@
  *   1. обходит все контентные страницы (редиректы-заглушки пропускает);
  *   2. ждёт, пока оболочка и движки стендов дорисуют разметку (body.ui-ready);
  *   3. прогоняет axe по WCAG 2.0/2.1/2.2 A и AA;
- *   4. повторяет прогон в тёмной теме на выборке страниц — палитра вторая, и
+ *   4. повторяет прогон в тёмной теме на всех страницах — палитра вторая, и
  *      контраст в ней проверяется отдельно.
  *
  * Гейт: `serious` и `critical` валят сборку. `moderate` и `minor` печатаются
@@ -60,16 +60,6 @@ function contentPages() {
   })('.');
   return pages.sort();
 }
-
-/* Тёмная тема — не только «другая палитра»: проверяем и системную тему,
-   которую shell.js включает по prefers-color-scheme. */
-const DARK_SAMPLE = [
-  '/', '/blog.html', '/blog/kn-vlan.html', '/blog/graph.html', '/projects.html',
-  '/articles.html', '/archive.html', '/faq.html', '/sitemap.html',
-  '/stands/index.html', '/stands/setpolis.html', '/stands/league.html',
-  '/stands/lab-vlan-cisco.html', '/stands/office/index.html', '/stands/ops/index.html',
-  '/stands/ops/ops-web.html', '/stands/glossary.html',
-];
 
 async function scan(page, path, theme) {
   await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
@@ -130,7 +120,10 @@ async function scanWithRetry(page, route, theme, report) {
     for (const route of list) {
       report.push({ route, theme: 'light', violations: await scanWithRetry(page, route, 'light', retried) });
     }
-    const darkRoutes = only ? [] : DARK_SAMPLE.filter(route => pages.includes(route));
+    /* Тёмная тема — на всех страницах: палитра вторая, и «читаемо в светлой»
+       больше не значит «читаемо в тёмной». Раньше выборка оставляла больше
+       сотни маршрутов вообще без проверки контраста. */
+    const darkRoutes = only ? [] : pages.slice();
     for (const route of darkRoutes) {
       report.push({ route, theme: 'dark', violations: await scanWithRetry(page, route, 'dark', retried) });
     }
