@@ -128,24 +128,22 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     assert.equal(await page.locator('.catalog-row:visible').count(), projectTotal, 'сброс возвращает все проекты');
     assert.equal(await page.locator('[data-catalog-group]:not([hidden])').count(), 2);
 
-    /* Граф связей: стенды — такие же узлы, как заметки. Проверяем, что кнопка
-       «стенды» оставляет ровно их, а рубрика не выкидывает практику своей темы. */
+    /* Учебные материалы: левое wiki-дерево, активная тема и переход по дереву.
+       Графа связей больше нет — blog/graph.html остался редиректом, поэтому
+       живой проверкой стал раздел материалов. */
     await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(base + '/blog/materials.html', { waitUntil: 'load' });
+    const treeLinks = page.locator('.kn-wiki-tree a');
+    assert(await treeLinks.count() >= 20, 'в wiki-дереве мало тем: ' + await treeLinks.count());
+    await page.goto(base + '/blog/materials/vlan-i-trunk.html', { waitUntil: 'load' });
+    assert.equal(await page.locator('.kn-wiki-tree a[aria-current="page"]').count(), 1, 'в дереве ровно одна активная тема');
+    assert.equal(await page.locator('.kn-goal').count(), 1, 'у темы есть блок цели');
+    assert(await page.locator('.kn-code').count() > 0, 'у темы есть блок кода');
+    await page.locator('.kn-wiki-tree a[aria-current="page"]').first().focus();
     await page.goto(base + '/blog/graph.html', { waitUntil: 'load' });
-    const graphStands = page.locator('.kn-node--stand');
-    const standTotal = await graphStands.count();
-    assert(standTotal >= 20, 'на графе мало стендов: ' + standTotal);
-    assert(await page.locator('.kn-node').count() > standTotal, 'кроме стендов на графе должны быть заметки');
-    await page.locator('[data-graph-zone="stands"]').click();
-    assert.equal(await page.locator('.kn-node--stand:visible').count(), standTotal, 'кнопка «стенды» оставляет только стенды');
-    assert.equal(await page.locator('.kn-node[data-kind="note"]:visible').count(), 0, 'заметки при фильтре «стенды» скрыты');
-    assert.match(await page.locator('[data-graph-status]').innerText(), /Стенды/, 'статус объясняет фильтр стендов');
-    await page.locator('[data-graph-zone="linux"]').click();
-    assert(await page.locator('.kn-node[data-kind="note"]:visible').count() > 0, 'рубрика оставляет свои заметки');
-    assert(await page.locator('.kn-node--stand:visible').count() > 0, 'вместе с рубрикой остаются стенды её темы');
-    await page.locator('[data-graph-zone="all"]').click();
+    assert(page.url().endsWith('/blog/materials.html'), 'blog/graph.html должен уводить на материалы');
 
-    for (const path of ['/', '/projects.html', '/blog/graph.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
+    for (const path of ['/', '/projects.html', '/blog/materials.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(base + path, { waitUntil: 'load' });
       assert(await noOverflow(page), 'горизонтальная прокрутка на 360px: ' + path);
