@@ -18,9 +18,7 @@ const OPTIONAL = {
 };
 
 /* Слои, которые обязаны остаться в общем файле: мост нужен и заметкам, и стендам. */
-const SHARED = {
-  'assets/pages.css': ['rel-']
-};
+const SHARED = {}; // .rel-* теперь генерируется в knowledge.css и course.css.
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', '.arena']);
 
@@ -67,6 +65,37 @@ for (const [sheet, prefixes] of Object.entries(OPTIONAL)) {
   for (const prefix of prefixes) {
     if (new RegExp('^\\s*\\.' + prefix, 'm').test(shared)) problems.push('pages.css всё ещё содержит .' + prefix + '* — слой ' + path.basename(sheet) + ' не разделён');
   }
+}
+
+/* Мост на заметках и стендах: один исходник, две генерируемые копии. */
+for (const file of pages()) {
+  const html = read(file);
+  const uses = /class="[^"]*\brel-/.test(html);
+  if (uses && !html.includes('/assets/knowledge.css') && !html.includes('/assets/course.css')) problems.push(file + ': нет стилей моста');
+  if (uses && html.includes('/assets/knowledge.css') && html.includes('/assets/course.css')) problems.push(file + ': дублируются слои моста');
+}
+if (/^\s*\.rel-/m.test(read('assets/pages.css'))) problems.push('мост остался в общем слое');
+for (const sheet of ['assets/knowledge.css', 'assets/course.css']) {
+  if (!/\.rel-block\b/.test(read(sheet))) problems.push(sheet + ': нет стилей моста');
+}
+
+/* Семейные файлы: учитываем и DOM из JS, не только классы в HTML. */
+const { parse, classesOf, classUsers, routes } = require('./lib/css-split');
+for (const sheet of ['assets/home.css', 'assets/cases.css']) {
+  const classes = new Set(parse(read(sheet)).units.flatMap((unit) => [...classesOf(unit.selector)]));
+  const users = classUsers(ROOT, classes);
+  const audience = new Set();
+  for (const name of classes) for (const file of users.get(name) || []) audience.add(file);
+  for (const file of routes(ROOT)) {
+    const linked = read(file).includes('/' + sheet);
+    if (audience.has(file) && !linked) problems.push(file + ': нужны стили ' + sheet);
+    if (!audience.has(file) && linked) problems.push(file + ': лишний слой ' + sheet);
+  }
+}
+// Эти классы рождаются в скриптах хабов, а не в HTML главной.
+const shared = read('assets/pages.css');
+for (const name of ['feed-list', 'feed-note']) {
+  if (!new RegExp('\\.' + name + '\\b').test(shared)) problems.push('.' + name + ': нужен в общем слое для скриптов хабов');
 }
 
 assert.deepEqual(problems, [], 'разделение слоёв требует правки:\n  ' + problems.join('\n  '));

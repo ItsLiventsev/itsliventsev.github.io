@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -20,6 +22,8 @@ jobs:
           python3 scripts/audit-html.py
           python3 scripts/build-search-index.py --check
           node scripts/build-related.js --check
+          node scripts/build-related-css.js --check
+          node scripts/build-critical-css.js --check
           node scripts/regression-static.js
           node scripts/runtime-smoke.js
           node scripts/test-service-worker.js
@@ -51,15 +55,26 @@ jobs:
           node scripts/test-tabbar.js
           node scripts/browser-offline.js
       - name: Browser interaction checks
+        env:
+          BASELINE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           python3 -m http.server 8000 --bind 127.0.0.1 > "$RUNNER_TEMP/site-server.log" 2>&1 &
           server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          baseline_pid=""
+          trap 'kill "$server_pid" ${baseline_pid:+"$baseline_pid"} 2>/dev/null || true' EXIT
+          # Compare against the base commit without switching the checked-out branch.
+          if [[ "$BASELINE_SHA" =~ ^[0-9a-f]{40}$ ]] && [[ ! "$BASELINE_SHA" =~ ^0+$ ]] && git cat-file -e "$BASELINE_SHA^{commit}"; then
+            mkdir -p "$RUNNER_TEMP/site-baseline"
+            git archive "$BASELINE_SHA" | tar -x -C "$RUNNER_TEMP/site-baseline"
+            python3 -m http.server 8001 --bind 127.0.0.1 --directory "$RUNNER_TEMP/site-baseline" > "$RUNNER_TEMP/baseline-server.log" 2>&1 &
+            baseline_pid=$!
+            export BASELINE_URL=http://127.0.0.1:8001
+          fi
           for attempt in {1..30}; do
             if curl -fsS http://127.0.0.1:8000/ > /dev/null; then break; fi
             sleep 1
           done
-          for test in browser-smoke browser-reading browser-faq; do
+          for test in browser-critical browser-lcp browser-smoke browser-reading browser-faq; do
             if node "scripts/$test.js" > "$RUNNER_TEMP/$test.log" 2>&1; then
               cat "$RUNNER_TEMP/$test.log"
             else

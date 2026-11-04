@@ -4,6 +4,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { LAYERS } = require('./lib/css-layers');
 const ROOT = path.resolve(__dirname, '..');
 let pass = 0, fail = 0;
 const failures = [];
@@ -122,6 +123,10 @@ for (const [fg, bg] of [['--u-ink', '--u-paper'], ['--u-ink-2', '--u-paper'], ['
 /* ── слои CSS ── */
 const base = read('assets/base.css');
 const pages = read('assets/pages.css');
+/* Семейные слои: главная и кейсы вынесены из pages.css, контракты дизайн-системы
+   живут в них — проверять только общий файл теперь мало. */
+const homeCss = read('assets/home.css');
+const casesCss = read('assets/cases.css');
 
 /* ── CSS: правила без селекторов и висячие скобки ──
    Такой дефект уже случался: при вырезании блока комментарий остался, а
@@ -161,8 +166,9 @@ cssStructure(base, 'base.css');
 for (const contract of ['.ui-masthead', '.ui-navlink', '.ui-drawer', '.ui-tabbar', 'dialog.ui-search', '.ui-crumbs', '.ui-footer', '.ui-btn', '.skip-link', ':focus-visible']) {
   ok(base.includes(contract), 'base.css: отсутствует контракт ' + contract);
 }
+const familyCss = pages + '\n' + homeCss + '\n' + casesCss;
 for (const contract of ['.home-hero', '.bento', '.catalog-row', '.editorial', '.faq', '.map-grid', '.archive-cat', '.glossary-grid', '.case-facts', '.feed-item', '.ui-section']) {
-  ok(pages.includes(contract), 'pages.css: отсутствует контракт ' + contract);
+  ok(familyCss.includes(contract), 'слои страниц: отсутствует контракт ' + contract);
 }
 ok(!/!important/.test(base) || (base.match(/!important/g) || []).length < 12, 'в базовом слое слишком много !important');
 ok((base + pages).match(/backdrop-filter/g) === null, 'стеклянный блюр не должен использоваться');
@@ -374,7 +380,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
 /* ── Лента итераций на главной: инверсная консоль с живым счётчиком ── */
 {
   const iterIndex = read('index.html');
-  const iterCss = read('assets/pages.css');
+  const iterCss = pages + '\n' + homeCss;
   const iterJs = read('assets/iter-strip.js');
   const iterSw = read('sw.js');
   const stripStart = iterIndex.indexOf('<section class="iter-strip"');
@@ -423,7 +429,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
 /* ── Журнал изменений: та же инверсная подложка, что у ленты итераций ── */
 {
   const journalIndex = read('index.html');
-  const journalCss = read('assets/pages.css');
+  const journalCss = pages + '\n' + homeCss;
   ok(journalIndex.includes('<section class="ui-section journal" id="activity"'),
     'секция журнала должна быть инверсной панелью (класс journal)');
   ok(/\.journal \{[^}]*background: var\(--u-inverse\)/.test(journalCss), 'журнал: подложка должна быть инверсной');
@@ -463,7 +469,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
    Правила без единого потребителя в разметке и JS раздували CSS и путали
    аудит классов. Список зафиксирован, чтобы «на всякий случай» не отрастало. */
 {
-  const layers = ['assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css'].map(read).join('\n');
+  const layers = LAYERS.map(read).join('\n');
   for (const legacy of ['ui-btn--ghost', 'ui-meta-row', 'ui-hairline', 'ui-grid-2', 'ui-grid-3', 'ui-stack',
     'ui-field', 'ui-label', 'ui-input', 'ui-select', 'ui-textarea', 'catalog-stat', 'editorial-meta',
     'pill-rose', 'pill-red', 'pill-blue', 'pill-green', 'pill-amber', 'is-danger', 'fs-105',
@@ -559,7 +565,7 @@ ok(sw.includes('/assets/tokens.css') && sw.includes('/assets/shell.js') && !sw.i
   }
   const marked = contentPages.filter(file => read(file).includes('RELATED:START'));
   ok(marked.length === linkedNotes.size + linkedPractices.size, 'мост стоит не на всех страницах: ' + marked.length + ' из ' + (linkedNotes.size + linkedPractices.size));
-  ok(pages.includes('.rel-block'), 'pages.css: нет стилей блока «теория ↔ практика»');
+  ok(read('assets/course.css').includes('.rel-block') && read('assets/knowledge.css').includes('.rel-block') && !pages.includes('.rel-block'), 'стили моста должны находиться в course.css и knowledge.css, но не в общем слое');
 }
 
 /* ── поисковый индекс не должен расходиться с сайтом ──

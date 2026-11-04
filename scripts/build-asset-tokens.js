@@ -9,6 +9,7 @@
    отстала от файлов, поэтому «забыл поднять версию» видно сразу. */
 const fs = require('node:fs');
 const path = require('node:path');
+const { LAYERS } = require('./lib/css-layers');
 const { assetUrl, version, ROOT } = require('./lib/asset-version');
 
 const write = process.argv.includes('--write');
@@ -61,7 +62,7 @@ if (check) {
   console.log('Asset tokens: обновлено файлов ' + rewritten + ', ссылок ' + references);
 } else {
   console.log('Asset tokens: ссылок ' + references + ', отстают ' + stale.length + (stale.length ? ' — запустите --write' : ''));
-  for (const file of ['assets/shell.js', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css']) {
+  for (const file of ['assets/shell.js', ...LAYERS]) {
     console.log('  ' + file + ' → ' + version(file));
   }
 }
