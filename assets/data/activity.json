@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T13:15:57.163Z",
+  "generated": "2026-11-04T13:20:22.328Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 223,
+  "total": 221,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 31
+      "count": 28
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 21
+      "count": 22
     }
   ],
   "commits": [
+    {
+      "sha": "4f0b0b0",
+      "title": "feat(home): пять чисел героя, каждое ведёт на страницу-источник",
+      "date": "2026-11-04T13:17:02Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/4f0b0b03a466792971733e7cea5c84db4ccd0ace"
+    },
     {
       "sha": "aefe62e",
       "title": "docs(design): справка сверяется с кодом, .ui-callout сведён в одно определение",
@@ -481,12 +487,6 @@
       "title": "Exclude Python bytecode from the repository",
       "date": "2026-11-02T06:27:00Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/cdf9cdfb1a33b5b89cd9a4cc15fe071940a8d3a7"
-    },
-    {
-      "sha": "6fa66b5",
-      "title": "Fix search interactions and keep its index current",
-      "date": "2026-11-02T06:26:53Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/6fa66b53b0d6f22e3633085d2e4b0041ed554f5d"
     }
   ]
 }
