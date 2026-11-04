@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T20:32:35.877Z",
+  "generated": "2026-11-04T21:14:41.597Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 200,
+  "total": 199,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 4
+      "count": 0
     },
     {
       "date": "2026-10-29",
@@ -108,7 +108,7 @@
     },
     {
       "date": "2026-10-31",
-      "count": 53
+      "count": 52
     },
     {
       "date": "2026-11-01",
@@ -124,10 +124,34 @@
     },
     {
       "date": "2026-11-04",
-      "count": 54
+      "count": 58
     }
   ],
   "commits": [
+    {
+      "sha": "5e18322",
+      "title": "browser-smoke: порог тем в дереве вместо жёстких 24",
+      "date": "2026-11-04T21:00:19Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/5e18322b48f320d9ba5a5c61854ea5868ddc9b47"
+    },
+    {
+      "sha": "bda54b2",
+      "title": "browser-smoke: считать темы и заметки в ленте из данных, а не литералами",
+      "date": "2026-11-04T20:52:09Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bda54b2a16a2efc21f7c141c8374c80368b4d0f4"
+    },
+    {
+      "sha": "fbc314d",
+      "title": "Материалы: влить в общую ленту после объединения на main",
+      "date": "2026-11-04T20:46:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/fbc314d4bb41c6742633421c12864badf8537e50"
+    },
+    {
+      "sha": "f70cc53",
+      "title": "Материалы: +6 тем — практикумы монтажа и три кейса",
+      "date": "2026-11-04T20:39:14Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f70cc53f34a2db82db2f2966cc9526327eafa1ef"
+    },
     {
       "sha": "c22b683",
       "title": "feat: объединить заметки и материалы в одну ленту",
@@ -463,30 +487,6 @@
       "title": "feat(notes): база знаний сетевого администратора — 23 заметки со схемами",
       "date": "2026-11-03T21:28:50Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/66ca980835867b05a02026d913f649b59ad0ebd4"
-    },
-    {
-      "sha": "3a6ed47",
-      "title": "fix(css): вернуть ленте заметок сетку — снять висячие объявления в разделе 18",
-      "date": "2026-11-03T20:54:33Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3a6ed477238cd5d22d4982e64191560f14e83367"
-    },
-    {
-      "sha": "0717dd5",
-      "title": "test(offline): полка чтения сверяется с манифестами, а не с константой",
-      "date": "2026-11-03T20:44:10Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/0717dd579ca56dd9358118dbf049df607cb7df07"
-    },
-    {
-      "sha": "1395584",
-      "title": "feat(notes): база знаний заметок — связи, рубрики, граф и визуальные блоки",
-      "date": "2026-11-03T20:38:43Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1395584085540f0340b3990907e7578051b8e941"
-    },
-    {
-      "sha": "b51ca2c",
-      "title": "docs(agents): индекс собирается скриптом, нижняя граница 150 символов",
-      "date": "2026-11-03T20:08:50Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/b51ca2c572fae9391a9a44fd6d04a90e9b6f9468"
     }
   ]
 }
