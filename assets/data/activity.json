@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T20:18:47.922Z",
+  "generated": "2026-11-04T20:32:35.877Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 201,
+  "total": 200,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 6
+      "count": 4
     },
     {
       "date": "2026-10-29",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 53
+      "count": 54
     }
   ],
   "commits": [
+    {
+      "sha": "c22b683",
+      "title": "feat: объединить заметки и материалы в одну ленту",
+      "date": "2026-11-04T20:25:41Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/c22b68376f3452e66cd70e19c3680be02555352c"
+    },
     {
       "sha": "181d4c6",
       "title": "fix: ограничить ширину тем на узком экране",
@@ -481,12 +487,6 @@
       "title": "docs(agents): индекс собирается скриптом, нижняя граница 150 символов",
       "date": "2026-11-03T20:08:50Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/b51ca2c572fae9391a9a44fd6d04a90e9b6f9468"
-    },
-    {
-      "sha": "590414f",
-      "title": "feat(shell): системная тема, прогресс без инлайн-стилей, поиск из HTML",
-      "date": "2026-11-03T20:02:18Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/590414faa37db80afaabb381caeac7edd82a9fa1"
     }
   ]
 }
