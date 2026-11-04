@@ -54,6 +54,10 @@ const wait = () => new Promise(resolve => setTimeout(resolve, 80));
   assert.equal(doc.querySelectorAll('.feed-item').length, 3, 'лента показывает коммиты из снимка');
   assert(doc.querySelector('.feed-item h3').textContent.includes('новая навигация'));
   assert.equal(doc.querySelectorAll('[data-activity-chart] i').length, 14, 'график всегда 14 дней');
+  assert(doc.querySelector('#activity').classList.contains('journal'), 'журнал живёт на инверсной панели');
+  assert(doc.querySelector('#activity .feed-main') && doc.querySelector('#activity .feed-side'),
+    'обе карточки журнала внутри инверсной панели');
+  assert(doc.querySelectorAll('#activity .ui-tag').length >= 3, 'у коммитов есть теги и статус');
   assert.equal(doc.querySelector('[data-activity-count]').textContent, '3', 'счётчик показывает total из снимка');
   assert.equal(doc.querySelector('[data-activity-total]').textContent, '3', 'итог графика — сумма за 14 дней');
   assert.match(doc.querySelector('[data-activity-status]').textContent, /GitHub/);

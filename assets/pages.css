@@ -2317,6 +2317,51 @@ label.btn { cursor: pointer; }
   .iter-bar { display: none; }
 }
 
+/* ——— Журнал изменений: второй инверсный блок главной ———
+   Секция «Сайт собирается итерациями» вывернута той же подложкой, что и лента
+   под героем: это не карточка, а акцентная панель. Внутри неё токены темы
+   переопределены на инверсную пару, поэтому лента, счётчик, график и чипы
+   перекрашиваются сами и остаются читаемыми в обеих темах. */
+.journal {
+  --u-surface: color-mix(in srgb, var(--u-inverse-ink) 5%, var(--u-inverse));
+  --u-surface-sunk: color-mix(in srgb, var(--u-inverse-ink) 10%, var(--u-inverse));
+  --u-paper-deep: color-mix(in srgb, var(--u-inverse-ink) 14%, var(--u-inverse));
+  --u-ink: var(--u-inverse-ink);
+  --u-ink-2: color-mix(in srgb, var(--u-inverse-ink) 88%, var(--u-inverse));
+  --u-muted: var(--u-inverse-muted);
+  --u-faint: var(--u-inverse-muted);
+  --u-line: color-mix(in srgb, var(--u-inverse-ink) 16%, transparent);
+  --u-line-strong: color-mix(in srgb, var(--u-inverse-ink) 30%, transparent);
+  --u-accent: var(--u-inverse-accent);
+  --u-ok: var(--u-inverse-ok);
+  --u-ok-soft: color-mix(in srgb, var(--u-inverse-ok) 16%, var(--u-inverse));
+  --u-shadow-1: 0 0 0 1px color-mix(in srgb, var(--u-inverse-ink) 8%, transparent);
+  border-radius: var(--u-r-xl);
+  background: var(--u-inverse);
+  color: var(--u-inverse-ink);
+  box-shadow: var(--u-shadow-2);
+}
+.home .ui-section.journal {
+  margin-block-start: var(--u-s6);
+  padding: clamp(20px, 2.6vw, 32px);
+}
+.journal .ui-section-head {
+  margin-block-end: var(--u-s5);
+  padding-block-end: var(--u-s4);
+  border-block-end: 1px solid var(--u-line);
+}
+.journal .ui-section-head p { color: var(--u-inverse-muted); }
+.journal .ui-eyebrow { color: var(--u-inverse-muted); }
+.journal a:focus-visible,
+.journal button:focus-visible { outline: 3px solid var(--u-inverse-accent); outline-offset: 2px; }
+
+/* Вывернутые состояния: на тёмной панели активный чип — глиняный, а не чёрный,
+   иначе он растворяется в подложке. */
+.journal .ui-inline-link { background: transparent; box-shadow: inset 0 0 0 1px var(--u-line-strong); }
+.journal .feed-side { background: var(--u-surface-sunk); }
+.journal .feed-filter[aria-pressed="true"] { background: var(--u-inverse-accent); color: var(--u-inverse); }
+.journal .ui-inline-link:hover { background: var(--u-inverse-accent); color: var(--u-inverse); }
+
 /* ——— Скелетоны: заглушки на время сборки данных ——— */
 .u-skeleton { position: relative; overflow: hidden; }
 .u-skeleton::after {
