@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-04T09:33:24.606Z",
+  "generated": "2026-11-04T09:38:10.809Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-26",
-      "count": 6
+      "count": 5
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 13
+      "count": 14
     }
   ],
   "commits": [
+    {
+      "sha": "78a09b4",
+      "title": "docs(design): свести справку о дизайн-системе и движение с кодом",
+      "date": "2026-11-04T09:35:00Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/78a09b4fffd9b48ecf3f6439936b4eb3a50df68a"
+    },
     {
       "sha": "8f03a8d",
       "title": "feat(cases): один шаблон для страниц-кейсов",
@@ -481,12 +487,6 @@
       "title": "Connect change feed to real GitHub commits",
       "date": "2026-11-01T21:26:04Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9498fc39bda02128559b1e8912e71fa8c3289834"
-    },
-    {
-      "sha": "3d82583",
-      "title": "Fix navigation highlight and activity initialization",
-      "date": "2026-11-01T21:14:17Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3d825836b7ed45b2b2bf02b22c8fc60d3787e6c6"
     }
   ]
 }
