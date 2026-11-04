@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: PostgreSQL хранит несколько версий одной строки, поэтому UPDATE не перезаписывает данные, а создаёт новую версию; старые чистит VACUUM, а счётчик транзакций из 32 бит требует регулярного freezing.
 excerpt: xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.
 readtime: 8 мин
-cover: kn-postgres
 ai: true
 related: [kn-indexes, kn-tx, kn-backups]
 sources:

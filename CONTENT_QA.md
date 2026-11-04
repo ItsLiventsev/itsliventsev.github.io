@@ -5,12 +5,12 @@
 ## 1. Контент и метаданные
 
 - [x] У каждой заметки обязательные поля: `id`, `title`, `zone`, `date`, `summary`, `excerpt`, `readtime`, `tags`, `related`, `sources`, `ai`, `body`.
-      `node scripts/build-knowledge.js --check` → «13 заметок, ошибок нет».
+      `node scripts/build-knowledge.js --check` → «43 заметки, ошибок нет».
 - [x] Тегов 3–7 на заметку, все ключи есть в `assets/data/knowledge/taxonomy.json`.
 - [x] Рубрика ровно одна; страницы рубрик собираются без ручной правки.
 - [x] У каждой заметки 2+ внешних источника с датой обращения; ссылки открываются.
 - [x] Машинно-структурированные заметки помечены: плашка в шапке, блок-пояснение в теле, метка на карточке в ленте.
-- [x] Перекрёстные ссылки: 44 ребра на 13 заметок; блок «Связанные» и обратные ссылки собираются генератором.
+- [x] Перекрёстные ссылки: 142 ребра на 43 заметки; блок «Связанные» и обратные ссылки собираются генератором.
 - [x] Внутренние ссылки `[[id]]` не ведут в пустоту — это проверяет генератор, а не глаза.
 
 ## 2. Дизайн-система
@@ -20,7 +20,8 @@
 - [x] Нет `backdrop-filter`, нет инлайн-стилей в HTML (координаты графа переносятся скриптом в CSS-переменные, в разметке — `style-x`/`style-y`, а не `style`).
 - [x] Новые классы — с префиксом `kn-`; существующие правила каталога, карточек и прозы не изменены.
 - [x] `prefers-reduced-motion`: все переходы и hover-сдвиги выключены.
-- [x] Тёмная тема: обложки нейтральные, плашки и таблицы используют токены поверхностей.
+- [x] Тёмная тема: иллюстраций нет, карточки и таблицы используют токены поверхностей.
+- [x] Обложек нет совсем: карточка в ленте типографская, вместо картинки — номер рубрики и первый абзац.
 
 ## 3. Адаптив и вёрстка
 
@@ -45,16 +46,16 @@
 - [x] `blog/topics.html` — указатель рубрик, `blog/topics/<zone>.html` — шесть страниц.
 - [x] `blog/graph.html` — граф плюс таблица связей как текстовый дубль.
 - [x] RSS: новые записи в `feed.xml` с тегами в `<category>`; `sitemap.xml` пересобран.
-- [x] `assets/search-index.json`: 93 записи, ни одна не короче 200 символов, все url существуют.
+- [x] `assets/search-index.json`: 122 записи, ни одна не короче 200 символов, все url существуют.
 
 ## 6. Технические проверки (локально, 3 ноября 2026)
 
 ```text
 python3 scripts/audit-html.py          → 0 ошибок структуры, 0 битых ссылок
-node scripts/regression-static.js      → 2216 passed, 0 failed
-node scripts/build-knowledge.js --check→ 13 заметок, ошибок нет
-node scripts/build-seo.js              → 91 страница, sitemap и RSS обновлены
-python3 scripts/build-search-index.py  → 93 записи
+node scripts/regression-static.js      → 3208 passed, 0 failed
+node scripts/build-knowledge.js --check→ 43 заметки, ошибок нет
+node scripts/build-seo.js              → 121 страница, sitemap и RSS обновлены
+python3 scripts/build-search-index.py  → 122 записи
 NODE_PATH=… node scripts/test-search.js / test-catalog.js / test-reading.js
 node scripts/test-service-worker.js / test-palette.js / runtime-smoke.js → OK
 ```

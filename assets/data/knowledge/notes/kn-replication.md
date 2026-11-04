@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Реплика получает изменения из журнала и применяет их с задержкой; вопрос не «есть ли копия», а на сколько секунд она отстаёт и что именно приложение читает с неё.
 excerpt: Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.
 readtime: 8 мин
-cover: kn-replication
 ai: true
 related: [kn-tx, kn-backups, kn-prometheus]
 sources:

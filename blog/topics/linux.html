@@ -27,15 +27,15 @@ undefined
   <meta property="og:title" content="Linux и службы — заметки · itsliventsev">
   <meta property="og:description" content="Заметки о Linux-администрировании: вход по ключу и настройка sshd, юниты systemd, конвейеры bash, уровни и ротация журналов.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/topics/linux.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-notes.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Linux и службы — заметки · itsliventsev">
   <meta name="twitter:description" content="Заметки о Linux-администрировании: вход по ключу и настройка sshd, юниты systemd, конвейеры bash, уровни и ротация журналов.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux и службы — заметки","description":"Заметки о Linux-администрировании: вход по ключу и настройка sshd, юниты systemd, конвейеры bash, уровни и ротация журналов.","url":"https://itsliventsev.github.io/blog/topics/linux.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/linux.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-ssh.webp"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-notes.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux и службы — заметки","description":"Заметки о Linux-администрировании: вход по ключу и настройка sshd, юниты systemd, конвейеры bash, уровни и ротация журналов.","url":"https://itsliventsev.github.io/blog/topics/linux.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/linux.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-notes.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Linux и службы — заметки","item":"https://itsliventsev.github.io/blog/topics/linux.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -46,44 +46,96 @@ undefined
     <p class="ui-eyebrow">рубрика 02 · заметки</p>
     <h1>Linux и службы</h1>
     <p class="kn-head-lede">Ежедневные инструменты администратора: доступ, службы, конвейеры и журналы.</p>
-    <div class="ui-pagehead-meta"><span>4 заметки</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
+    <div class="ui-pagehead-meta"><span>11 заметок</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
   </header>
 
   <div class="kn-stream">
       <a class="kn-card kn-card--wide" data-kn-zone="linux" href="/blog/kn-bash.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-bash.webp" alt="схема: конвейер из пяти команд и опции оболочки" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Конвейер: одна строка вместо цикла</span>
           <span class="kn-card-excerpt">grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-logs.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-logs.webp" alt="схема: уровни журналирования и настройки ротации" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-cron.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">Планировщик: cron, systemd timers и тихие сбои</span>
+          <span class="kn-card-excerpt">Пять полей cron и почему их шесть, PATH в cron, лог выполнения, Persistent и RandomizedDelaySec у таймеров, а также проверка, что задание действительно выполнилось.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-docker.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">Контейнеры: образ, слой и том</span>
+          <span class="kn-card-excerpt">Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-logrotate.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">logrotate: почему журналы съели диск</span>
+          <span class="kn-card-excerpt">Порядок директив rotate, size и maxsize, copytruncate против postrotate, сжатие и delaycompress, а также journald и его собственные лимиты.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-logs.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Журналы: уровни, ротация и лимит на диск</span>
           <span class="kn-card-excerpt">Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="linux" href="/blog/kn-ssh.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ssh.webp" alt="схема: сравнение входа по паролю и по ключу с настройками sshd" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--half" data-kn-zone="linux" href="/blog/kn-lvm.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">Диски: разделы, LVM и что делать, когда место кончилось</span>
+          <span class="kn-card-excerpt">PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-nginx.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">nginx как reverse proxy: что важно кроме proxy_pass</span>
+          <span class="kn-card-excerpt">X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-ntp.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">Время в сети: NTP и почему 30 секунд ломают всё</span>
+          <span class="kn-card-excerpt">Страта, смещение, джиттер, почему нельзя вручную переводить часы на работающем сервере, chrony вместо ntpd и проверка синхронизации без иллюзий.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-ssh.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">SSH: ключ вместо пароля и что закрыть в sshd</span>
           <span class="kn-card-excerpt">ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
       <a class="kn-card" data-kn-zone="linux" href="/blog/kn-systemd.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-systemd.webp" alt="схема: цель загрузки и три юнита с командами управления" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Linux и службы</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">systemd: юниты, цели и порядок загрузки</span>
           <span class="kn-card-excerpt">unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-tls.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
+          <span class="kn-card-title">Сертификаты и TLS 1.3: одна поездка вместо двух</span>
+          <span class="kn-card-excerpt">Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
   </div>

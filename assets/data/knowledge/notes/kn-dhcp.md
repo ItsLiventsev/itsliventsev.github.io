@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: DHCP выдаёт адрес во временное пользование: клиент проходит DORA, продлевает аренду на половине срока и на 87,5%, а сервер слушает UDP 67, клиент — UDP 68.
 excerpt: Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.
 readtime: 7 мин
-cover: kn-dhcp
 ai: true
 related: [kn-vlan, kn-dns, kn-troubleshoot]
 sources:

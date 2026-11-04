@@ -99,6 +99,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-bgp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-cron.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-dhcp.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
@@ -111,7 +123,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-docker.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-documentation.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-git.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-gre.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-incident.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
@@ -123,7 +159,25 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-ipam.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-ipsec.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-lacp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-logrotate.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
@@ -135,7 +189,49 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-lvm.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-monitoring.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-mtu.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-mysql.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-netfilter.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-nginx.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-ntp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-packet.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
@@ -171,6 +267,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-redis.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-replication.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
@@ -189,6 +291,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://itsliventsev.github.io/blog/kn-stp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://itsliventsev.github.io/blog/kn-systemd.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
@@ -196,6 +304,12 @@
   </url>
   <url>
     <loc>https://itsliventsev.github.io/blog/kn-tcp.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-tls.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
@@ -214,6 +328,12 @@
   </url>
   <url>
     <loc>https://itsliventsev.github.io/blog/kn-vlan.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://itsliventsev.github.io/blog/kn-zfs.html</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>

@@ -33,7 +33,7 @@
   <meta property="og:title" content="RAID: паритет — это арифметика, а не магия · itsliventsev">
   <meta property="og:description" content="RAID 5 переживает отказ одного диска, RAID 6 — двух, RAID 10 — до половины массива; паритет считается по XOR, а ёмкость и риск меняются вместе с уровнем.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-raid.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -44,8 +44,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="RAID: паритет — это арифметика, а не магия · itsliventsev">
   <meta name="twitter:description" content="RAID 5 переживает отказ одного диска, RAID 6 — двух, RAID 10 — до половины массива; паритет считается по XOR, а ёмкость и риск меняются вместе с уровнем.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-raid.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"RAID: паритет — это арифметика, а не магия","description":"RAID 5 переживает отказ одного диска, RAID 6 — двух, RAID 10 — до половины массива; паритет считается по XOR, а ёмкость и риск меняются вместе с уровнем.","url":"https://itsliventsev.github.io/blog/kn-raid.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-raid.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-raid.webp","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"raid, бэкапы, диагностика"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"RAID: паритет — это арифметика, а не магия","description":"RAID 5 переживает отказ одного диска, RAID 6 — двух, RAID 10 — до половины массива; паритет считается по XOR, а ёмкость и риск меняются вместе с уровнем.","url":"https://itsliventsev.github.io/blog/kn-raid.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-raid.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"raid, бэкапы, диагностика"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"RAID: паритет — это арифметика, а не магия","item":"https://itsliventsev.github.io/blog/kn-raid.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -102,7 +102,7 @@ echo check &gt; /sys/block/md0/md/sync_action   # scrub: сверка парит
           <li><a href="/blog/kn-postgres.html"><strong>PostgreSQL: версии строк, VACUUM и заворот XID</strong><span>xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span></a></li>
           <li><a href="/blog/kn-prometheus.html"><strong>Prometheus: четыре типа метрик и один хороший алерт</strong><span>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</span></a></li>
         </ul>
-        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li></ul></div>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-backups.html">Бэкап: 3-2-1, RPO и проверка восстановлением</a> — ссылается на эту заметку</li><li><a href="/blog/kn-zfs.html">ZFS: контрольные суммы, которые ловят тихие ошибки</a> — ссылается на эту заметку</li></ul></div>
       </section>
 
       <section class="kn-section" aria-labelledby="sources-title">
@@ -114,14 +114,14 @@ echo check &gt; /sys/block/md0/md/sync_action   # scrub: сверка парит
 
       <nav class="kn-pager" aria-label="Соседние заметки">
         <a href="/blog/topics/storage.html">все заметки рубрики «Хранение и отказоустойчивость»</a>
-        <span><a href="/blog/kn-replication.html">Репликация: копия отстаёт, и это нормально →</a><a href="/blog/kn-prometheus.html">← Prometheus: четыре типа метрик и один хороший алерт</a></span>
+        <span><a href="/blog/kn-redis.html">Redis: кеш, который умеет терять данные →</a><a href="/blog/kn-prometheus.html">← Prometheus: четыре типа метрик и один хороший алерт</a></span>
       </nav>
     </div>
 
     <aside class="kn-rail" aria-label="Паспорт заметки">
       <div class="kn-rail-card">
         <h2>Паспорт</h2>
-        <p>Рубрика: Хранение и отказоустойчивость. Запись 15 из 23.</p>
+        <p>Рубрика: Хранение и отказоустойчивость. Запись 31 из 43.</p>
         <ul class="kn-rail-list">
           <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
           <li><a href="/blog/graph.html#kn-raid"><span>граф</span>место в графе связей</a></li>
@@ -137,7 +137,7 @@ echo check &gt; /sys/block/md0/md/sync_action   # scrub: сверка парит
       <div class="kn-rail-card">
         <h2>Как читать связи</h2>
         <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 5 связей.</p>
       </div>
     </aside>
   </article>

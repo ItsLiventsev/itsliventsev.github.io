@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Файрвол в Linux: nftables и порядок правил · itsliventsev</title>
+<meta name="description" content="Файрвол — это список правил, который читается сверху вниз и останавливается на первом совпадении. Поэтому половина «файрвол не пускает» — это правило, стоящее выше нужного, а половина «файрвол не защищает» — отсутствие политики по умолчанию.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="файрвол,безопасность,tcp">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-netfilter.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Файрвол в Linux: nftables и порядок правил · itsliventsev">
+  <meta property="og:description" content="Файрвол — это список правил, который читается сверху вниз и останавливается на первом совпадении. Поэтому половина «файрвол не пускает» — это правило, стоящее выше нужного, а половина «файрвол не защищает» — отсутствие политики по умолчанию.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-netfilter.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="файрвол">
+  <meta property="article:tag" content="безопасность">
+  <meta property="article:tag" content="tcp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Файрвол в Linux: nftables и порядок правил · itsliventsev">
+  <meta name="twitter:description" content="Файрвол — это список правил, который читается сверху вниз и останавливается на первом совпадении. Поэтому половина «файрвол не пускает» — это правило, стоящее выше нужного, а половина «файрвол не защищает» — отсутствие политики по умолчанию.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Файрвол в Linux: nftables и порядок правил","description":"Файрвол — это список правил, который читается сверху вниз и останавливается на первом совпадении. Поэтому половина «файрвол не пускает» — это правило, стоящее выше нужного, а половина «файрвол не защищает» — отсутствие политики по умолчанию.","url":"https://itsliventsev.github.io/blog/kn-netfilter.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-netfilter.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"файрвол, безопасность, tcp"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Файрвол в Linux: nftables и порядок правил","item":"https://itsliventsev.github.io/blog/kn-netfilter.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Файрвол в Linux: nftables и порядок правил</h1>
+        <p class="kn-def">Файрвол — это список правил, который читается сверху вниз и останавливается на первом совпадении. Поэтому половина «файрвол не пускает» — это правило, стоящее выше нужного, а половина «файрвол не защищает» — отсутствие политики по умолчанию.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Файрвол в Linux — это не программа, а набор точек в сетевом стеке, где можно посмотреть на пакет и решить его судьбу. Точки называются хуками, а правила — цепочками. Понимание этой схемы снимает 90 % путаницы: люди ищут «где блокируется», не зная, что пакет может пройти через три разных хука и в каждом встретить свой вердикт.</p>
+        <h2>Пять хуков</h2>
+        <p>Пакет, пришедший на интерфейс, сначала попадает в <strong>prerouting</strong> — здесь ещё не известно, предназначен он этому хосту или будет перенаправлен. Дальше маршрутизация разводит его: себе — в <strong>input</strong>, дальше — в <strong>forward</strong>. Исходящий от процессов идёт через <strong>output</strong>, а покидающий хост — через <strong>postrouting</strong>.</p>
+        <p>{huki}</p>
+        <p>Практический вывод: правило для транзитного трафика бесполезно писать в input, а DNAT — в postrouting. Ошибка «правило есть, но не работает» почти всегда означает не тот хук.</p>
+        <h2>Порядок важнее содержания</h2>
+        <p>Правила читаются сверху вниз, и первое совпадение выносит вердикт. Значит, <code>accept</code> для доверенной сети должен стоять <strong>до</strong> общего <code>drop</code>, а не после — иначе он не сработает никогда. В nftables это ещё и решается наличием политики цепочки: <code>policy drop</code> означает «что не разрешено явно, то запрещено», и это единственный способ писать файрвол, который действительно защищает.</p>
+        <pre><code>nft list ruleset
+nft add table inet filter
+nft add chain inet filter input &#39;{ type filter hook input priority 0; policy drop; }&#39;
+nft add rule inet filter input ct state established,related accept
+nft add rule inet filter input iif lo accept
+nft add rule inet filter input tcp dport 22 accept</code></pre>
+        <h2>Conntrack: почему не нужен ответный порт</h2>
+        <p>Состояния соединений ведутся отдельно от правил. Разрешив <code>ct state established,related</code>, вы автоматически разрешаете ответные пакеты, не открывая при этом входящие порты. Это и есть причина, по которой не нужно (и вредно) писать парные правила «туда и обратно».</p>
+        <p>{sostoyanija}</p>
+        <p><code>INVALID</code> — отдельная строка: такие пакеты обычно отбрасывают с логом, потому что они означают либо асимметричную маршрутизацию, либо мусор от сканера. Если после настройки «ничего не работает», начните с <code>conntrack -S</code> и посмотрите, не растёт ли <code>insert_failed</code> — это верный признак того, что таблица переполнена и новые соединения молча отбрасываются.</p>
+        <h2>Три способа открыть лишнее</h2>
+        <ol><li><strong><code>-A INPUT -j ACCEPT</code> в конце.</strong> Одна такая строка отменяет всю предыдущую работу: политика больше не применяется.</li><li><strong>Открытый порт на все интерфейсы.</strong> <code>tcp dport 5432 accept</code> пускает базу откуда угодно. Нужно <code>iif eth0 ip saddr 10.20.30.0/24 tcp dport 5432 accept</code>.</li><li><strong>Правило без счётчика и без проверки.</strong> Правило, которое «вроде есть», может не совпадать по интерфейсу или семейству адресов. <code>iptables -L -n -v</code> показывает счётчики пакетов — именно они говорят, сработало правило или нет.</li></ol>
+        <h2>Как проверять</h2>
+        <p>Сначала — <code>nft list ruleset</code> или <code>iptables-save</code> и глазами: политика, порядок, интерфейсы. Потом — счётчики: у каждого правила видно, сколько пакетов оно пропустило. Если счётчик нулевой, правило не совпадает; если растёт на правиле <code>drop</code>, вы нашли, что блокирует.</p>
+        <p>Дальше — <code>tcpdump</code> на нужном интерфейсе: видно, доходит ли SYN и есть ли SYN-ACK. Это разделяет две разные проблемы — «пакет не дошёл» и «пакет дошёл, но ответ не прошёл». Подробнее в <a class="kn-ref" href="/blog/kn-packet.html">заметке про tcpdump</a> и в <a class="kn-ref" href="/blog/kn-tcp.html">разборе TCP</a>: если SYN уходит, а SYN-ACK не возвращается, файрвол — первый подозреваемый.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Хук</th><th scope="col">Когда срабатывает</th><th scope="col">Типовая задача</th></tr></thead><tbody><tr><th scope="row">prerouting</th><td>пакет пришёл на интерфейс</td><td>маршрут ещё не выбран</td><td>DNAT</td><td>защита от спуфинга</td></tr><tr><th scope="row">input</th><td>пакет адресован самому хосту</td><td>открытые порты</td><td>rate limit</td></tr><tr><th scope="row">forward</th><td>пакет проходит через хост</td><td>маршрутизатор</td><td>NAT-шлюз</td></tr><tr><th scope="row">output</th><td>пакет от локального процесса</td><td>ограничение исходящих</td></tr><tr><th scope="row">postrouting</th><td>пакет уходит с интерфейса</td><td>SNAT</td><td>masquerade</td></tr></tbody><caption>Хук выбирается по тому, кому адресован пакет, а не по тому, откуда он пришёл.</caption></table></div>
+        <dl class="kn-facts"><dt>NEW</dt><dd>первый пакет соединения, которое ещё не видели</dd><dt>ESTABLISHED</dt><dd>пакет принадлежит уже известному соединению</dd><dt>RELATED</dt><dd>связанное соединение, например ICMP-ошибка или FTP-данные</dd><dt>INVALID</dt><dd>пакет не принадлежит ни одному соединению — обычно мусор или атака</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-packet.html"><strong>tcpdump: как читать пакет, а не гадать</strong><span>Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-nginx.html">nginx как reverse proxy: что важно кроме proxy_pass</a> — ссылается на эту заметку</li><li><a href="/blog/kn-packet.html">tcpdump: как читать пакет, а не гадать</a> — ссылается на эту заметку</li><li><a href="/blog/kn-redis.html">Redis: кеш, который умеет терять данные</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://man7.org/linux/man-pages/man8/nft.8.html" target="_blank" rel="noopener">nft(8) — административное руководство по nftables</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man8/iptables.8.html" target="_blank" rel="noopener">iptables(8) — классический интерфейс netfilter</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://en.wikipedia.org/wiki/Netfilter" target="_blank" rel="noopener">Netfilter — архитектура и хуки</a><small>Wikipedia (сводка)</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-nginx.html">nginx как reverse proxy: что важно кроме proxy_pass →</a><a href="/blog/kn-mysql.html">← MySQL: InnoDB, кеш запросов и почему он мешает</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 23 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-netfilter"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#файрвол">файрвол</a></li><li><a href="/blog/topics.html#безопасность">безопасность</a></li><li><a href="/blog/topics.html#tcp">tcp</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 6 связей.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

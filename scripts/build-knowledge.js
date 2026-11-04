@@ -154,35 +154,10 @@ function collectFromMarkdown() {
 const ZONES = new Map(TAXONOMY.zones.map((zone) => [zone.id, zone]));
 const TAGS = new Set(Object.keys(TAXONOMY.tags));
 const REQUIRED = ['id', 'title', 'zone', 'date', 'summary', 'excerpt', 'readtime'];
-const COVER_DIR = 'assets/img/notes/';
-/* Обложки нейтральные, поэтому alt описывает не картинку, а тему записи:
-   «иллюстрация к заметке о…». Иначе скринридер читает бессмысленный набор. */
-const COVER_ALT = {
-  'kn-vlan': 'схема: магистральный порт с несколькими VLAN и три порта доступа',
-  'kn-routing': 'схема: узел с таблицей маршрутов и выбранным путём до сети',
-  'kn-gre': 'схема: пакет до и после инкапсуляции GRE с ростом на 24 байта',
-  'kn-tcp': 'схема: рукопожатие TCP и состояние TIME-WAIT между клиентом и сервером',
-  'kn-mtu': 'схема: четыре шага диагностики MTU от ping до смены размера',
-  'kn-dns': 'схема: цепочка от клиента через резолвер и корневые серверы к авторитетной зоне',
-  'kn-ssh': 'схема: сравнение входа по паролю и по ключу с настройками sshd',
-  'kn-systemd': 'схема: цель загрузки и три юнита с командами управления',
-  'kn-bash': 'схема: конвейер из пяти команд и опции оболочки',
-  'kn-logs': 'схема: уровни журналирования и настройки ротации',
-  'kn-raid': 'схема: раскладка блоков и паритета по пяти дискам RAID 5',
-  'kn-backups': 'схема: правило трёх копий, двух носителей и одной площадки',
-  'kn-postgres': 'схема: версии одной строки с номерами транзакций и порог заворота XID',
-  'kn-indexes': 'схема: дерево индекса с корнем и листьями, ведущими к строкам таблицы',
-  'kn-replication': 'схема: основной сервер, реплика с отставанием и два режима синхронизации',
-  'kn-prometheus': 'схема: четыре типа метрик и примеры хорошего и плохого алерта',
-  'kn-ansible': 'схема: два запуска плейбука с разным числом изменений и список модулей',
-  'kn-dhcp': 'схема: четыре шага DORA и таймеры продления аренды',
-  'kn-ipsec': 'схема: две фазы IPsec с протоколами и портами',
-  'kn-troubleshoot': 'схема: пять уровней диагностики от линка до приложения с командами',
-  'kn-tx': 'схема: аномалии чтения и четыре уровня изоляции транзакций',
-  'kn-practice': 'схема: три уровня освоения от знания к опыту и критерии практики',
-  'kn-project': 'схема: два проекта с их содержанием и критерием проверки',
-};
-const coverAlt = (cover) => COVER_ALT[cover] || '';
+/* Иллюстраций у заметок нет намеренно: обложка из генератора отвлекала от
+   текста и удваивала вес страницы. Карточка в ленте — типографская, поэтому
+   вместо картинки показывается крупный номер рубрики и первый абзац. */
+const CARD_NUM = new Map(TAXONOMY.zones.map((zone) => [zone.id, zone.num]));
 
 function validate(notes) {
   const ids = new Set(notes.map((note) => note.id));
@@ -223,18 +198,9 @@ function validate(notes) {
     const keys = (note.visuals || []).map((visual) => visual.key).filter(Boolean);
     const placed = new Set([...String(note.body || '').matchAll(/\{\{([a-z0-9-]+)\}\}/g)].map((match) => match[1]));
     for (const key of placed) if (!keys.includes(key)) problems.push(where + ': в тексте есть {{' + key + '}}, но такого визуального блока нет');
-    if (note.cover && !fs.existsSync(path.join(ROOT, COVER_DIR + note.cover + '.webp'))) {
-      problems.push(where + ': нет обложки ' + COVER_DIR + note.cover + '.webp');
-    }
-    if (note.cover && !COVER_ALT[note.cover]) {
-      problems.push(where + ': для обложки ' + note.cover + ' нет alt-текста в COVER_ALT');
-    }
     for (const visual of note.visuals || []) {
       if (!visual.type) problems.push(where + ': визуальный блок без type');
-      if (visual.type === 'figure' && !fs.existsSync(path.join(ROOT, COVER_DIR + String(visual.image).replace(/^.*\//, '')))) {
-        problems.push(where + ': нет картинки ' + visual.image);
-      }
-      if (!['table', 'terms', 'kanban', 'facts', 'figure'].includes(visual.type)) problems.push(where + ': неизвестный визуальный блок ' + visual.type);
+      if (!['table', 'terms', 'kanban', 'facts'].includes(visual.type)) problems.push(where + ': неизвестный визуальный блок ' + visual.type);
     }
     const linked = [...related];
     for (const match of String(note.body).matchAll(/\[\[([a-z0-9-]+)(?:\|[^\]]+)?\]\]/g)) linked.push(match[1]);
@@ -286,12 +252,6 @@ function renderVisual(visual, note) {
         + '<em>' + String((lane.items || []).length) + '</em></p>' + tiles + '</div>';
     }).join('');
     return '<div class="kn-kanban">' + lanes + '</div>';
-  }
-  if (visual.type === 'figure') {
-    const image = String(visual.image || '').replace(/^.*\//, '');
-    return '<figure class="kn-figure"><img src="/' + COVER_DIR + esc(image) + '" alt="' + esc(visual.alt || note.title)
-      + '" width="960" height="540" loading="lazy" decoding="async">'
-      + (visual.caption ? '<figcaption>' + esc(visual.caption) + '</figcaption>' : '') + '</figure>';
   }
   return '';
 }
@@ -458,9 +418,8 @@ function notePage(note, notes, notesById, index, registry) {
     + (source.publisher ? '<small>' + esc(source.publisher) + '</small>' : '')
     + '<small>обращение: ' + esc(humanDate(source.accessed)) + '</small></li>').join('');
 
-  const coverMeta = note.cover
-    ? '<meta property="og:image" content="' + SITE + '/' + COVER_DIR + esc(note.cover) + '.webp">'
-    : '';
+  /* Обложек нет — превью заметки в соцсетях собирает build-seo.js
+     из общей карточки сайта. */
 
   return `${head({
     title: note.title + ' · itsliventsev',
@@ -474,7 +433,6 @@ function notePage(note, notes, notesById, index, registry) {
       '<meta name="post-excerpt" content="' + esc(note.excerpt) + '">',
       '<meta name="kn-zone" content="' + esc(note.zone) + '">',
       '<meta name="kn-ai" content="' + (note.ai ? 'machine-assisted' : 'human') + '">',
-      coverMeta,
     ].filter(Boolean).join('\n'),
   })}
 <body>
@@ -585,9 +543,8 @@ function topicCard(note) {
     .filter((part) => part && part !== 'normal')
     .map((part) => ' kn-card--' + part).join('');
   return `<a class="kn-card${sizeClass}" data-kn-zone="${esc(note.zone)}" href="/blog/${esc(note.id)}.html">
-        ${note.cover ? '<span class="kn-card-cover"><img src="/' + COVER_DIR + esc(note.cover) + '.webp" alt="' + esc(coverAlt(note.cover)) + '" width="960" height="540" loading="lazy" decoding="async"></span>' : ''}
         <span class="kn-card-body">
-          <span class="kn-card-zone">${esc(ZONES.get(note.zone).title)}</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">${esc(CARD_NUM.get(note.zone) || '')}</span>${esc(ZONES.get(note.zone).title)}</span>
           <span class="kn-card-title">${esc(note.title)}</span>
           <span class="kn-card-excerpt">${esc(note.excerpt)}</span>
           <span class="kn-card-meta"><time datetime="${esc(note.date)}">${esc(shortDate(note.date))}</time><span aria-hidden="true">·</span><span>${esc(note.readtime)}</span>${note.ai ? '<span class="kn-ai">ии-структура</span>' : ''}</span>
@@ -835,7 +792,7 @@ function streamMarkup(notes, registry, counts) {
 
   <div class="kn-stream" data-kn-stream>
       ${sorted.map((note, index) => topicCard(Object.assign({}, note, {
-        size: note.cover ? sizes[index] : (sizes[index] === 'wide' || sizes[index] === 'half' ? sizes[index] + ' text' : 'text'),
+        size: sizes[index],
       }))).join('\n      ')}
   </div>
   <p class="kn-empty" data-kn-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>

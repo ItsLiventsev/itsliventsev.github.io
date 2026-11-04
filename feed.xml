@@ -37,6 +37,26 @@
       <description>grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</description>
     </item>
     <item>
+      <title>BGP: политика вместо метрики</title>
+      <link>https://itsliventsev.github.io/blog/kn-bgp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-bgp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>bgp</category>
+      <category>маршрутизация</category>
+      <category>диагностика</category>
+      <description>Зачем нужен eBGP и iBGP, как читается AS_PATH, что решает local preference и почему медитация над «BGP не поднялся» начинается с TCP-сессии.</description>
+    </item>
+    <item>
+      <title>Планировщик: cron, systemd timers и тихие сбои</title>
+      <link>https://itsliventsev.github.io/blog/kn-cron.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-cron.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>systemd</category>
+      <category>автоматизация</category>
+      <category>журналы</category>
+      <description>Пять полей cron и почему их шесть, PATH в cron, лог выполнения, Persistent и RandomizedDelaySec у таймеров, а также проверка, что задание действительно выполнилось.</description>
+    </item>
+    <item>
       <title>DHCP: аренда адреса на четыре шага</title>
       <link>https://itsliventsev.github.io/blog/kn-dhcp.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-dhcp.html</guid>
@@ -57,6 +77,36 @@
       <description>Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</description>
     </item>
     <item>
+      <title>Контейнеры: образ, слой и том</title>
+      <link>https://itsliventsev.github.io/blog/kn-docker.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-docker.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>контейнеры</category>
+      <category>виртуализация</category>
+      <category>автоматизация</category>
+      <description>Namespaces и cgroups вместо гипервизора, порядок слоёв и кеш сборки, multi-stage, почему latest — плохой тег и разница между volume и bind mount.</description>
+    </item>
+    <item>
+      <title>Документация и регламенты: то, что спасает в три ночи</title>
+      <link>https://itsliventsev.github.io/blog/kn-documentation.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-documentation.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>документация</category>
+      <category>инциденты</category>
+      <category>обучение</category>
+      <description>Минимальный набор документов на сеть, схема L1–L3, реестр адресов и портов, регламент дежурства, постмортем и правило «пиши сразу после инцидента».</description>
+    </item>
+    <item>
+      <title>Git в работе администратора: ветка, откат, конфиг</title>
+      <link>https://itsliventsev.github.io/blog/kn-git.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-git.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>автоматизация</category>
+      <category>документация</category>
+      <category>shell</category>
+      <description>Рабочее дерево, индекс и коммит, ветка как указатель, revert против reset, конфликт и его разбор, а также конфигурация, которая экономит время каждый день.</description>
+    </item>
+    <item>
       <title>Туннель и MTU: 24 байта, которые ломают передачу</title>
       <link>https://itsliventsev.github.io/blog/kn-gre.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-gre.html</guid>
@@ -65,6 +115,16 @@
       <category>mtu</category>
       <category>диагностика</category>
       <description>Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</description>
+    </item>
+    <item>
+      <title>Разбор инцидента: от «всё лежит» до списка действий</title>
+      <link>https://itsliventsev.github.io/blog/kn-incident.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-incident.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>инциденты</category>
+      <category>документация</category>
+      <category>мониторинг</category>
+      <description>Приоритет и коммуникация, «сначала стабилизируй, потом разбирайся», таймлайн, пять почему и постмортем с задачами, а не с выводами.</description>
     </item>
     <item>
       <title>Индексы и планы: почему запрос медленный</title>
@@ -77,6 +137,16 @@
       <description>B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</description>
     </item>
     <item>
+      <title>План адресации: сеть начинается с таблицы</title>
+      <link>https://itsliventsev.github.io/blog/kn-ipam.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ipam.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>маршрутизация</category>
+      <category>vlan</category>
+      <category>dhcp</category>
+      <description>RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</description>
+    </item>
+    <item>
       <title>IPsec: две фазы и одна причина «туннель поднят, трафика нет»</title>
       <link>https://itsliventsev.github.io/blog/kn-ipsec.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ipsec.html</guid>
@@ -85,6 +155,26 @@
       <category>туннели</category>
       <category>mtu</category>
       <description>IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</description>
+    </item>
+    <item>
+      <title>LACP: два кабеля, один адрес</title>
+      <link>https://itsliventsev.github.io/blog/kn-lacp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-lacp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>vlan</category>
+      <category>диагностика</category>
+      <category>отказоустойчивость</category>
+      <description>active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.</description>
+    </item>
+    <item>
+      <title>logrotate: почему журналы съели диск</title>
+      <link>https://itsliventsev.github.io/blog/kn-logrotate.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-logrotate.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>журналы</category>
+      <category>systemd</category>
+      <category>диагностика</category>
+      <description>Порядок директив rotate, size и maxsize, copytruncate против postrotate, сжатие и delaycompress, а также journald и его собственные лимиты.</description>
     </item>
     <item>
       <title>Журналы: уровни, ротация и лимит на диск</title>
@@ -97,6 +187,26 @@
       <description>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</description>
     </item>
     <item>
+      <title>Диски: разделы, LVM и что делать, когда место кончилось</title>
+      <link>https://itsliventsev.github.io/blog/kn-lvm.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-lvm.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>хранение</category>
+      <category>отказоустойчивость</category>
+      <category>диагностика</category>
+      <description>PV, VG и LV, расширение на живой системе, inode вместо байтов, удалённый но занятый файл и четыре команды, которые показывают правду о занятом месте.</description>
+    </item>
+    <item>
+      <title>Мониторинг: метрика, симптом и алерт, который не будит зря</title>
+      <link>https://itsliventsev.github.io/blog/kn-monitoring.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-monitoring.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>мониторинг</category>
+      <category>инциденты</category>
+      <category>производительность</category>
+      <description>Четыре золотых сигнала, USE и RED, пороги и окна, чем symptom-based алерты лучше cause-based, и почему дашборд без владельца умирает за месяц.</description>
+    </item>
+    <item>
       <title>MTU и PMTU: почему ping идёт, а скачивание нет</title>
       <link>https://itsliventsev.github.io/blog/kn-mtu.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-mtu.html</guid>
@@ -105,6 +215,56 @@
       <category>туннели</category>
       <category>диагностика</category>
       <description>Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</description>
+    </item>
+    <item>
+      <title>MySQL: InnoDB, кеш запросов и почему он мешает</title>
+      <link>https://itsliventsev.github.io/blog/kn-mysql.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-mysql.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>mysql</category>
+      <category>индексы</category>
+      <category>транзакции</category>
+      <description>Буферный пул и его размер, redo log вместо кеша запросов, уровни изоляции по умолчанию, разница между REPEATABLE READ у MySQL и PostgreSQL, медленный журнал и EXPLAIN.</description>
+    </item>
+    <item>
+      <title>Файрвол в Linux: nftables и порядок правил</title>
+      <link>https://itsliventsev.github.io/blog/kn-netfilter.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-netfilter.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>файрвол</category>
+      <category>безопасность</category>
+      <category>tcp</category>
+      <description>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</description>
+    </item>
+    <item>
+      <title>nginx как reverse proxy: что важно кроме proxy_pass</title>
+      <link>https://itsliventsev.github.io/blog/kn-nginx.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-nginx.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>nginx</category>
+      <category>tls</category>
+      <category>производительность</category>
+      <description>X-Forwarded-For и реальный адрес клиента, keepalive к бэкенду, таймауты по умолчанию 60 секунд, буферы и разбор кодов 499, 502, 504.</description>
+    </item>
+    <item>
+      <title>Время в сети: NTP и почему 30 секунд ломают всё</title>
+      <link>https://itsliventsev.github.io/blog/kn-ntp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-ntp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>время</category>
+      <category>systemd</category>
+      <category>диагностика</category>
+      <description>Страта, смещение, джиттер, почему нельзя вручную переводить часы на работающем сервере, chrony вместо ntpd и проверка синхронизации без иллюзий.</description>
+    </item>
+    <item>
+      <title>tcpdump: как читать пакет, а не гадать</title>
+      <link>https://itsliventsev.github.io/blog/kn-packet.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-packet.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>сеть</category>
+      <category>диагностика</category>
+      <category>tcp</category>
+      <description>Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</description>
     </item>
     <item>
       <title>PostgreSQL: версии строк, VACUUM и заворот XID</title>
@@ -133,7 +293,7 @@
       <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
       <category>проекты</category>
       <category>обучение</category>
-      <category>доступность</category>
+      <category>документация</category>
       <description>Семь типов знаков в коридоре, 108 часов программы, критерий приёмки, который пришлось формулировать самому, и честный разбор того, что не получилось.</description>
     </item>
     <item>
@@ -144,7 +304,7 @@
       <category>мониторинг</category>
       <category>журналы</category>
       <category>автоматизация</category>
-      <description>rate и histogram_quantile, почему CPU &amp;gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
+      <description>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
     </item>
     <item>
       <title>RAID: паритет — это арифметика, а не магия</title>
@@ -155,6 +315,16 @@
       <category>бэкапы</category>
       <category>диагностика</category>
       <description>Как паритет восстанавливает байт, почему большие массивы уходят в RAID 6, что такое URE на самом деле и почему RAID не заменяет бэкап.</description>
+    </item>
+    <item>
+      <title>Redis: кеш, который умеет терять данные</title>
+      <link>https://itsliventsev.github.io/blog/kn-redis.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-redis.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>redis</category>
+      <category>производительность</category>
+      <category>отказоустойчивость</category>
+      <description>Однопоточная модель и блокирующие команды, TTL и вытеснение, RDB и AOF с их ценой, реплика и Sentinel, а также три способа испортить кеш.</description>
     </item>
     <item>
       <title>Репликация: копия отстаёт, и это нормально</title>
@@ -187,6 +357,16 @@
       <description>ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.</description>
     </item>
     <item>
+      <title>STP: почему коммутатор сам выключил порт</title>
+      <link>https://itsliventsev.github.io/blog/kn-stp.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-stp.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>vlan</category>
+      <category>vlan</category>
+      <category>диагностика</category>
+      <description>Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</description>
+    </item>
+    <item>
       <title>systemd: юниты, цели и порядок загрузки</title>
       <link>https://itsliventsev.github.io/blog/kn-systemd.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-systemd.html</guid>
@@ -205,6 +385,16 @@
       <category>диагностика</category>
       <category>mtu</category>
       <description>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</description>
+    </item>
+    <item>
+      <title>Сертификаты и TLS 1.3: одна поездка вместо двух</title>
+      <link>https://itsliventsev.github.io/blog/kn-tls.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-tls.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>tls</category>
+      <category>безопасность</category>
+      <category>nginx</category>
+      <description>Цепочка от корневого к конечному, проверка имени по SAN, сроки и автопродление, почему TLS 1.3 всегда даёт forward secrecy и что проверять при «сертификат недействителен».</description>
     </item>
     <item>
       <title>Диагностика сети: снизу вверх, а не наугад</title>
@@ -237,6 +427,16 @@
       <description>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</description>
     </item>
     <item>
+      <title>ZFS: контрольные суммы, которые ловят тихие ошибки</title>
+      <link>https://itsliventsev.github.io/blog/kn-zfs.html</link>
+      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kn-zfs.html</guid>
+      <pubDate>Wed, 04 Nov 2026 12:00:00 GMT</pubDate>
+      <category>zfs</category>
+      <category>хранение</category>
+      <category>raid</category>
+      <description>Пул, vdev и dataset, RAIDZ и его честная ёмкость, scrub вместо «оно само», ashift и recordsize, а также почему ECC-память рекомендуют, но она не обязательна.</description>
+    </item>
+    <item>
       <title>Практикоориентированное формирование знаний</title>
       <link>https://itsliventsev.github.io/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html</guid>
@@ -248,109 +448,11 @@
       <description>Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.</description>
     </item>
     <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Первая заметка блога стала входной страницей базы знаний: связи между записями, рубрики, граф и источники с датой обращения.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/dve-garnitury.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dve-garnitury.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/dvizhenie-120-320.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dvizhenie-120-320.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
       <title>Граф заметок</title>
       <link>https://itsliventsev.github.io/blog/graph.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/graph.html</guid>
       <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
       <description>Граф перекрёстных ссылок базы знаний: как заметки о сетях, Linux, базах данных, хранении и эксплуатации ссылаются друг на друга.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/karta-temy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/karta-temy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/kontrast-aa.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kontrast-aa.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/merka-stroki.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/merka-stroki.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/setka-i-plotnost.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/setka-i-plotnost.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/shkala-otstupov.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/shkala-otstupov.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/srezy-i-razrezy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/srezy-i-razrezy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tablicy-kak-most.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablicy-kak-most.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tokeny-tsveta.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tokeny-tsveta.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
     </item>
     <item>
       <title>Рубрики заметок</title>

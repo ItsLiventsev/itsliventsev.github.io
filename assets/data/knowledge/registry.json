@@ -1,7 +1,7 @@
 {
   "generated": "2026-11-03",
-  "notes": 23,
-  "sources": 69,
+  "notes": 43,
+  "sources": 127,
   "edges": [
     {
       "from": "kn-ansible",
@@ -48,6 +48,30 @@
       "to": "kn-ansible"
     },
     {
+      "from": "kn-bgp",
+      "to": "kn-routing"
+    },
+    {
+      "from": "kn-bgp",
+      "to": "kn-tcp"
+    },
+    {
+      "from": "kn-bgp",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-cron",
+      "to": "kn-systemd"
+    },
+    {
+      "from": "kn-cron",
+      "to": "kn-bash"
+    },
+    {
+      "from": "kn-cron",
+      "to": "kn-logs"
+    },
+    {
       "from": "kn-dhcp",
       "to": "kn-vlan"
     },
@@ -72,6 +96,46 @@
       "to": "kn-troubleshoot"
     },
     {
+      "from": "kn-docker",
+      "to": "kn-nginx"
+    },
+    {
+      "from": "kn-docker",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-docker",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-documentation",
+      "to": "kn-git"
+    },
+    {
+      "from": "kn-documentation",
+      "to": "kn-ipam"
+    },
+    {
+      "from": "kn-documentation",
+      "to": "kn-incident"
+    },
+    {
+      "from": "kn-documentation",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-git",
+      "to": "kn-ansible"
+    },
+    {
+      "from": "kn-git",
+      "to": "kn-bash"
+    },
+    {
+      "from": "kn-git",
+      "to": "kn-documentation"
+    },
+    {
       "from": "kn-gre",
       "to": "kn-mtu"
     },
@@ -84,6 +148,22 @@
       "to": "kn-routing"
     },
     {
+      "from": "kn-incident",
+      "to": "kn-documentation"
+    },
+    {
+      "from": "kn-incident",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-incident",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-incident",
+      "to": "kn-monitoring"
+    },
+    {
       "from": "kn-indexes",
       "to": "kn-postgres"
     },
@@ -94,6 +174,18 @@
     {
       "from": "kn-indexes",
       "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-ipam",
+      "to": "kn-vlan"
+    },
+    {
+      "from": "kn-ipam",
+      "to": "kn-dhcp"
+    },
+    {
+      "from": "kn-ipam",
+      "to": "kn-routing"
     },
     {
       "from": "kn-ipsec",
@@ -110,6 +202,30 @@
     {
       "from": "kn-ipsec",
       "to": "kn-routing"
+    },
+    {
+      "from": "kn-lacp",
+      "to": "kn-stp"
+    },
+    {
+      "from": "kn-lacp",
+      "to": "kn-vlan"
+    },
+    {
+      "from": "kn-lacp",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-logrotate",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-logrotate",
+      "to": "kn-lvm"
+    },
+    {
+      "from": "kn-logrotate",
+      "to": "kn-systemd"
     },
     {
       "from": "kn-logs",
@@ -128,6 +244,30 @@
       "to": "kn-troubleshoot"
     },
     {
+      "from": "kn-lvm",
+      "to": "kn-zfs"
+    },
+    {
+      "from": "kn-lvm",
+      "to": "kn-backups"
+    },
+    {
+      "from": "kn-lvm",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-monitoring",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-monitoring",
+      "to": "kn-incident"
+    },
+    {
+      "from": "kn-monitoring",
+      "to": "kn-troubleshoot"
+    },
+    {
       "from": "kn-mtu",
       "to": "kn-gre"
     },
@@ -137,6 +277,66 @@
     },
     {
       "from": "kn-mtu",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-mysql",
+      "to": "kn-postgres"
+    },
+    {
+      "from": "kn-mysql",
+      "to": "kn-indexes"
+    },
+    {
+      "from": "kn-mysql",
+      "to": "kn-tx"
+    },
+    {
+      "from": "kn-netfilter",
+      "to": "kn-tcp"
+    },
+    {
+      "from": "kn-netfilter",
+      "to": "kn-packet"
+    },
+    {
+      "from": "kn-netfilter",
+      "to": "kn-troubleshoot"
+    },
+    {
+      "from": "kn-nginx",
+      "to": "kn-tls"
+    },
+    {
+      "from": "kn-nginx",
+      "to": "kn-netfilter"
+    },
+    {
+      "from": "kn-nginx",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-ntp",
+      "to": "kn-systemd"
+    },
+    {
+      "from": "kn-ntp",
+      "to": "kn-logs"
+    },
+    {
+      "from": "kn-ntp",
+      "to": "kn-ssh"
+    },
+    {
+      "from": "kn-packet",
+      "to": "kn-tcp"
+    },
+    {
+      "from": "kn-packet",
+      "to": "kn-netfilter"
+    },
+    {
+      "from": "kn-packet",
       "to": "kn-troubleshoot"
     },
     {
@@ -200,6 +400,22 @@
       "to": "kn-prometheus"
     },
     {
+      "from": "kn-redis",
+      "to": "kn-mysql"
+    },
+    {
+      "from": "kn-redis",
+      "to": "kn-prometheus"
+    },
+    {
+      "from": "kn-redis",
+      "to": "kn-nginx"
+    },
+    {
+      "from": "kn-redis",
+      "to": "kn-netfilter"
+    },
+    {
       "from": "kn-replication",
       "to": "kn-tx"
     },
@@ -236,6 +452,18 @@
       "to": "kn-troubleshoot"
     },
     {
+      "from": "kn-stp",
+      "to": "kn-vlan"
+    },
+    {
+      "from": "kn-stp",
+      "to": "kn-lacp"
+    },
+    {
+      "from": "kn-stp",
+      "to": "kn-troubleshoot"
+    },
+    {
       "from": "kn-systemd",
       "to": "kn-logs"
     },
@@ -266,6 +494,22 @@
     {
       "from": "kn-tcp",
       "to": "kn-gre"
+    },
+    {
+      "from": "kn-tls",
+      "to": "kn-nginx"
+    },
+    {
+      "from": "kn-tls",
+      "to": "kn-ssh"
+    },
+    {
+      "from": "kn-tls",
+      "to": "kn-dns"
+    },
+    {
+      "from": "kn-tls",
+      "to": "kn-prometheus"
     },
     {
       "from": "kn-troubleshoot",
@@ -314,11 +558,26 @@
     {
       "from": "kn-vlan",
       "to": "kn-mtu"
+    },
+    {
+      "from": "kn-zfs",
+      "to": "kn-raid"
+    },
+    {
+      "from": "kn-zfs",
+      "to": "kn-lvm"
+    },
+    {
+      "from": "kn-zfs",
+      "to": "kn-backups"
     }
   ],
   "backlinks": {
     "kn-ansible": [
       "kn-bash",
+      "kn-docker",
+      "kn-documentation",
+      "kn-git",
       "kn-practice",
       "kn-project",
       "kn-prometheus",
@@ -327,22 +586,38 @@
     ],
     "kn-backups": [
       "kn-ansible",
+      "kn-lvm",
       "kn-postgres",
       "kn-raid",
       "kn-replication",
-      "kn-systemd"
+      "kn-systemd",
+      "kn-zfs"
     ],
     "kn-bash": [
+      "kn-cron",
+      "kn-git",
       "kn-logs"
     ],
+    "kn-bgp": [],
+    "kn-cron": [],
     "kn-dhcp": [
       "kn-dns",
+      "kn-ipam",
       "kn-vlan"
     ],
     "kn-dns": [
       "kn-dhcp",
       "kn-tcp",
+      "kn-tls",
       "kn-troubleshoot"
+    ],
+    "kn-docker": [],
+    "kn-documentation": [
+      "kn-git",
+      "kn-incident"
+    ],
+    "kn-git": [
+      "kn-documentation"
     ],
     "kn-gre": [
       "kn-ipsec",
@@ -350,18 +625,41 @@
       "kn-routing",
       "kn-tcp"
     ],
+    "kn-incident": [
+      "kn-documentation",
+      "kn-monitoring"
+    ],
     "kn-indexes": [
+      "kn-mysql",
       "kn-postgres",
       "kn-tx"
+    ],
+    "kn-ipam": [
+      "kn-documentation"
     ],
     "kn-ipsec": [
       "kn-gre"
     ],
+    "kn-lacp": [
+      "kn-stp"
+    ],
+    "kn-logrotate": [],
     "kn-logs": [
       "kn-bash",
+      "kn-cron",
+      "kn-logrotate",
+      "kn-lvm",
+      "kn-ntp",
       "kn-prometheus",
       "kn-systemd",
       "kn-troubleshoot"
+    ],
+    "kn-lvm": [
+      "kn-logrotate",
+      "kn-zfs"
+    ],
+    "kn-monitoring": [
+      "kn-incident"
     ],
     "kn-mtu": [
       "kn-gre",
@@ -369,9 +667,27 @@
       "kn-tcp",
       "kn-vlan"
     ],
+    "kn-mysql": [
+      "kn-redis"
+    ],
+    "kn-netfilter": [
+      "kn-nginx",
+      "kn-packet",
+      "kn-redis"
+    ],
+    "kn-nginx": [
+      "kn-docker",
+      "kn-redis",
+      "kn-tls"
+    ],
+    "kn-ntp": [],
+    "kn-packet": [
+      "kn-netfilter"
+    ],
     "kn-postgres": [
       "kn-backups",
       "kn-indexes",
+      "kn-mysql",
       "kn-raid",
       "kn-tx"
     ],
@@ -384,62 +700,100 @@
     "kn-prometheus": [
       "kn-ansible",
       "kn-backups",
+      "kn-docker",
+      "kn-incident",
       "kn-indexes",
       "kn-logs",
+      "kn-monitoring",
+      "kn-nginx",
       "kn-raid",
-      "kn-replication"
+      "kn-redis",
+      "kn-replication",
+      "kn-tls"
     ],
     "kn-raid": [
-      "kn-backups"
+      "kn-backups",
+      "kn-zfs"
     ],
+    "kn-redis": [],
     "kn-replication": [
       "kn-prometheus",
       "kn-tx"
     ],
     "kn-routing": [
+      "kn-bgp",
       "kn-gre",
+      "kn-ipam",
       "kn-ipsec",
       "kn-troubleshoot",
       "kn-vlan"
     ],
     "kn-ssh": [
       "kn-ansible",
-      "kn-systemd"
+      "kn-ntp",
+      "kn-systemd",
+      "kn-tls"
+    ],
+    "kn-stp": [
+      "kn-lacp"
     ],
     "kn-systemd": [
       "kn-ansible",
       "kn-backups",
       "kn-bash",
+      "kn-cron",
+      "kn-logrotate",
       "kn-logs",
+      "kn-ntp",
       "kn-ssh"
     ],
     "kn-tcp": [
+      "kn-bgp",
       "kn-dns",
       "kn-mtu",
+      "kn-netfilter",
+      "kn-packet",
       "kn-troubleshoot"
     ],
+    "kn-tls": [
+      "kn-nginx"
+    ],
     "kn-troubleshoot": [
+      "kn-bgp",
       "kn-dhcp",
       "kn-dns",
+      "kn-incident",
       "kn-ipsec",
+      "kn-lacp",
       "kn-logs",
+      "kn-monitoring",
       "kn-mtu",
+      "kn-netfilter",
+      "kn-packet",
       "kn-practice",
       "kn-project",
       "kn-routing",
       "kn-ssh",
+      "kn-stp",
       "kn-tcp",
       "kn-vlan"
     ],
     "kn-tx": [
       "kn-indexes",
+      "kn-mysql",
       "kn-postgres",
       "kn-replication"
     ],
     "kn-vlan": [
       "kn-dhcp",
+      "kn-ipam",
+      "kn-lacp",
       "kn-routing",
+      "kn-stp",
       "kn-troubleshoot"
+    ],
+    "kn-zfs": [
+      "kn-lvm"
     ]
   }
 }

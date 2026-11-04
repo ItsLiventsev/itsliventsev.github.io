@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Вход по ключу убирает из логов основной поток попыток подбора пароля, а три директивы sshd — root, пароли, список пользователей — закрывают большую часть поверхности атаки.
 excerpt: ed25519 и passphrase, что именно проверять перед закрытием пароля, fail2ban как следствие, а не решение, и sftp без доступа к shell.
 readtime: 7 мин
-cover: kn-ssh
 ai: true
 related: [kn-systemd, kn-ansible, kn-troubleshoot]
 sources:

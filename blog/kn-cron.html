@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>Планировщик: cron, systemd timers и тихие сбои · itsliventsev</title>
+<meta name="description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="systemd,автоматизация,журналы">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="Пять полей cron и почему их шесть, PATH в cron, лог выполнения, Persistent и RandomizedDelaySec у таймеров, а также проверка, что задание действительно выполнилось.">
+<meta name="kn-zone" content="linux">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-cron.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Планировщик: cron, systemd timers и тихие сбои · itsliventsev">
+  <meta property="og:description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-cron.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="systemd">
+  <meta property="article:tag" content="автоматизация">
+  <meta property="article:tag" content="журналы">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Планировщик: cron, systemd timers и тихие сбои · itsliventsev">
+  <meta name="twitter:description" content="Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Планировщик: cron, systemd timers и тихие сбои","description":"Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.","url":"https://itsliventsev.github.io/blog/kn-cron.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-cron.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"systemd, автоматизация, журналы"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Планировщик: cron, systemd timers и тихие сбои","item":"https://itsliventsev.github.io/blog/kn-cron.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/linux.html">Linux и службы</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>Планировщик: cron, systemd timers и тихие сбои</h1>
+        <p class="kn-def">Задание, которое «работает на сервере вручную», но не работает по расписанию, почти всегда падает из-за окружения: другой PATH, нет tty, другой пользователь. Понимание этого различия снимает большинство проблем, а systemd timers дают то, чего у cron нет — журнал на каждую попытку.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Планировщик — самая обманчивая часть системы: он молчит, когда всё хорошо, и молчит, когда всё плохо. Задание может месяцами не выполняться, а вы узнаете об этом в момент, когда понадобился результат. Поэтому главное в работе с планировщиком — не синтаксис, а проверка того, что запуск действительно произошёл.</p>
+        <h2>Cron: пять полей и окружение</h2>
+        <pre><code>30 2 * * * /usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1</code></pre>
+        <p>Пять полей: минута, час, день месяца, месяц, день недели. <code>*/15</code> — каждые 15 минут, <code>1-5</code> — по будням. Дальше команда, и здесь начинаются отличия от интерактивной оболочки: у cron нет tty, PATH обычно <code>/usr/bin:/bin</code>, а переменные из <code>.bashrc</code> не подхватываются.</p>
+        <p>Отсюда классика: скрипт работает вручную и падает в cron. Причины — <code>python3</code> не в PATH, относительный путь считается от домашнего каталога, нужная переменная не задана. Лечение: полные пути к бинарникам, <code>cd</code> в начало скрипта, явный <code>PATH</code> в crontab.</p>
+        <dl class="kn-facts"><dt>Пять полей</dt><dd>минута, час, день месяца, месяц, день недели; шестое — команда</dd><dt>PATH</dt><dd>в cron обычно только /usr/bin:/bin — используйте полные пути или задайте PATH</dd><dt>Секунды</dt><dd>в cron нет секунд; для «раз в 30 секунд» нужен systemd timer</dd><dt>RandomizedDelaySec</dt><dd>разносит запуски, чтобы сотня машин не била в один сервис одновременно</dd></dl>
+        <p><strong>Логирование обязательно.</strong> Без <code>&gt;&gt; log 2&gt;&amp;1</code> весь вывод уходит в почту, которой на сервере обычно нет. Перенаправление в файл — минимум; лучше писать в journald через <code>systemd-cat</code> или запускать задачу таймером.</p>
+        <h2>Systemd timer: то же, но с журналом</h2>
+        <pre><code># /etc/systemd/system/backup.timer
+[Unit]
+Description=Ежедневный бэкап
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+Persistent=true
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target</code></pre>
+        <p>Пара <code>backup.service</code> + <code>backup.timer</code> даёт то, чего у cron нет: результат каждой попытки в журнале (<code>journalctl -u backup.service</code>), зависимости (<code>After=network-online.target</code>), ограничения ресурсов и автоматический догон пропущенного запуска при <code>Persistent=true</code>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Свойство</th><th scope="col">cron</th><th scope="col">systemd timer</th></tr></thead><tbody><tr><th scope="row">журнал</th><td>письмо на почту</td><td>часто никуда</td><td>journalctl -u unit — каждая попытка</td></tr><tr><th scope="row">окружение</th><td>минимальный PATH</td><td>без tty</td><td>задаётся явно в unit</td></tr><tr><th scope="row">пропущенный запуск</th><td>теряется</td><td>если машина выключена</td><td>Persistent=true догоняет</td></tr><tr><th scope="row">зависимости</th><td>нет</td><td>After</td><td>Requires</td><td>сеть и монтирования</td></tr></tbody><caption>Таймеры дают журнал и зависимости, cron — простоту и переносимость.</caption></table></div>
+        <h2>Как проверить, что задание выполняется</h2>
+        <ol><li><strong><code>systemctl list-timers</code></strong> — когда следующий запуск и когда был последний. Для cron — <code>grep CRON /var/log/syslog</code> или <code>journalctl -u cron</code>.</li><li><strong><code>systemctl status backup.service</code></strong> — код возврата и вывод последнего запуска. Ненулевой код — это провал, о котором никто не узнает, если не настроен алерт.</li><li><strong>Результат, а не факт запуска.</strong> «Задание выполнилось» и «бэкап создан» — разные утверждения. Проверяйте артефакт: размер файла, дату, успешное восстановление на тестовом стенде.</li><li><strong>Алерт на отсутствие.</strong> Самый надёжный способ: внешняя проверка «есть ли свежий результат». Если задание не запустилось, никто внутри сервера об этом не сообщит.</li></ol>
+        <h2>Чего избегать</h2>
+        <ul><li><strong>Секреты в командной строке</strong>: видны в <code>ps</code> всем пользователям. Используйте файлы с правами 600.</li><li><strong>Перекрывающиеся запуски</strong>: задание, которое идёт дольше интервала, наслаивается. Блокировка через <code>flock</code> — три слова и решает проблему.</li><li>**<code>0 0 * * *</code> на сотнях машин** одной инфраструктуры: одновременный удар по общему сервису. <code>RandomizedDelaySec</code> или разнесённые минуты решают это.</li></ul>
+        <p>Смежные темы: как писать сами скрипты — <a class="kn-ref" href="/blog/kn-bash.html">конвейер и сценарии</a>; как читать журналы запусков — <a class="kn-ref" href="/blog/kn-logs.html">журналы</a>; устройство юнитов и зависимостей — <a class="kn-ref" href="/blog/kn-systemd.html">systemd</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-systemd.html"><strong>systemd: юниты, цели и порядок загрузки</strong><span>unit, target и wants, enable против start, override через systemctl edit и три команды, которые отвечают почти на любой вопрос о службе.</span></a></li>
+          <li><a href="/blog/kn-bash.html"><strong>Конвейер: одна строка вместо цикла</strong><span>grep → awk → sort → uniq → head на живом логе, зачем pipefail, чем опасны неэкранированные переменные и когда xargs ускоряет в разы.</span></a></li>
+          <li><a href="/blog/kn-logs.html"><strong>Журналы: уровни, ротация и лимит на диск</strong><span>Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://man7.org/linux/man-pages/man5/crontab.5.html" target="_blank" rel="noopener">crontab(5) — формат таблицы расписания</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man5/systemd.timer.5.html" target="_blank" rel="noopener">systemd.timer(5) — таймеры и их директивы</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man5/systemd.exec.5.html" target="_blank" rel="noopener">systemd.exec(5) — окружение и пути исполнения юнитов</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/linux.html">все заметки рубрики «Linux и службы»</a>
+        <span><a href="/blog/kn-dhcp.html">DHCP: аренда адреса на четыре шага →</a><a href="/blog/kn-bgp.html">← BGP: политика вместо метрики</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Linux и службы. Запись 05 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-cron"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#systemd">systemd</a></li><li><a href="/blog/topics.html#автоматизация">автоматизация</a></li><li><a href="/blog/topics.html#журналы">журналы</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: TCP открывает соединение тремя пакетами, закрывает четырьмя и после закрытия держит порт в TIME-WAIT; актуальная спецификация — RFC 9293 (2022), заменившая RFC 793.
 excerpt: Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.
 readtime: 8 мин
-cover: kn-tcp
 ai: true
 related: [kn-troubleshoot, kn-mtu, kn-dns]
 sources:

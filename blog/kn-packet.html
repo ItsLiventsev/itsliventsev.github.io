@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>tcpdump: как читать пакет, а не гадать · itsliventsev</title>
+<meta name="description" content="Один tcpdump на нужном интерфейсе с правильным фильтром заменяет час догадок. Он отвечает на три вопроса, которые ping не задаёт: доходит ли пакет, кто отвечает и что именно приходит в ответ.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="сеть,диагностика,tcp">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-packet.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="tcpdump: как читать пакет, а не гадать · itsliventsev">
+  <meta property="og:description" content="Один tcpdump на нужном интерфейсе с правильным фильтром заменяет час догадок. Он отвечает на три вопроса, которые ping не задаёт: доходит ли пакет, кто отвечает и что именно приходит в ответ.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-packet.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="сеть">
+  <meta property="article:tag" content="диагностика">
+  <meta property="article:tag" content="tcp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="tcpdump: как читать пакет, а не гадать · itsliventsev">
+  <meta name="twitter:description" content="Один tcpdump на нужном интерфейсе с правильным фильтром заменяет час догадок. Он отвечает на три вопроса, которые ping не задаёт: доходит ли пакет, кто отвечает и что именно приходит в ответ.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"tcpdump: как читать пакет, а не гадать","description":"Один tcpdump на нужном интерфейсе с правильным фильтром заменяет час догадок. Он отвечает на три вопроса, которые ping не задаёт: доходит ли пакет, кто отвечает и что именно приходит в ответ.","url":"https://itsliventsev.github.io/blog/kn-packet.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-packet.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"сеть, диагностика, tcp"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"tcpdump: как читать пакет, а не гадать","item":"https://itsliventsev.github.io/blog/kn-packet.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>tcpdump: как читать пакет, а не гадать</h1>
+        <p class="kn-def">Один tcpdump на нужном интерфейсе с правильным фильтром заменяет час догадок. Он отвечает на три вопроса, которые ping не задаёт: доходит ли пакет, кто отвечает и что именно приходит в ответ.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p><code>ping</code> отвечает на один вопрос — ходит ли ICMP. Всё остальное он не показывает: на каком шаге теряется ответ, отвечает ли сервис, кто именно присылает RST. <code>tcpdump</code> отвечает на все три и при этом ничего не меняет в системе. Единственный его недостаток — объём вывода, и лечится он фильтром.</p>
+        <h2>Где ловить</h2>
+        <p>Сначала определите интерфейс: <code>ip -br a</code>. На сервере с несколькими интерфейсами и политикой маршрутизации пакет может прийти на один, а уйти с другого — тогда единственный способ увидеть картину целиком — <code>-i any</code>.</p>
+        <pre><code>tcpdump -i any -nn -tttt &#39;host 10.20.30.5 and port 443&#39;</code></pre>
+        <p>Флаги, которые стоит запомнить: <code>-nn</code> (не резолвить имена, иначе вывод встанет на DNS), <code>-tttt</code> (дата и время, а не секунды с эпохи), <code>-s 0</code> (полный пакет), <code>-c 50</code> (остановиться после 50 пакетов), <code>-w file.pcap</code> (сохранить и разбирать в Wireshark).</p>
+        <h2>Чтение строки</h2>
+        <pre><code>10:12:03.114582 IP 10.20.30.10.51422 &gt; 10.20.30.5.443: Flags [S], seq 3174059403, win 64240, options [mss 1460], length 0</code></pre>
+        <p>Источник с эфемерным портом, назначение, флаг SYN, начальный номер последовательности, размер окна. Номер последовательности и окно превращают набор строк в историю: по ним видно, сколько данных подтверждено и где отправитель ждёт.</p>
+        <dl class="kn-facts"><dt>S</dt><dd>SYN: попытка открыть соединение, указан начальный номер последовательности</dd><dt>S.</dt><dd>SYN-ACK: сервер подтверждает SYN и добавляет свой</dd><dt>P.</dt><dd>PSH-ACK: есть данные и подтверждение</dd><dt>F.</dt><dd>FIN: закрытие со стороны отправителя</dd><dt>R</dt><dd>RST: соединение сброшено — отказ или несовпадение состояния</dd></dl>
+        <p>Если SYN уходит и больше ничего нет — пакет не дошёл или ответ заблокирован. Если приходит RST — дошёл, но порт закрыт или его отбил файрвол с reject-политикой. Если приходит SYN-ACK, а дальше тишина — проблема на стороне клиента, чаще всего маршрут в обратную сторону.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Что нужно</th><th scope="col">Фильтр</th><th scope="col">Почему так</th></tr></thead><tbody><tr><th scope="row">только к серверу</th><td>host 10.20.30.5</td><td>обе стороны диалога одним выражением</td></tr><tr><th scope="row">конкретный сервис</th><td>port 443</td><td>берёт и tcp</td><td>и udp</td></tr><tr><th scope="row">попытки подключения</th><td>tcp[tcpflags] &amp; tcp-syn != 0</td><td>видно</td><td>доходит ли SYN</td></tr><tr><th scope="row">без служебного шума</th><td>not port 22</td><td>чтобы не мешал собственный ssh</td></tr><tr><th scope="row">целая подсеть</th><td>net 10.20.30.0/24</td><td>аккуратнее</td><td>чем хост за хостом</td></tr></tbody><caption>Фильтр — это язык, и он экономит время больше, чем любые флаги вывода.</caption></table></div>
+        <h2>Три сценария, которые решаются за минуту</h2>
+        <p><strong>«Сайт не открывается, но ping идёт».</strong> Фильтр <code>port 443</code> покажет SYN и отсутствие ответа — значит, вопрос не в маршруте, а в фильтрации или в самом сервисе. Дальше <code>ss -lntp</code> на сервере: слушает ли процесс.</p>
+        <p><strong>«Соединение есть, но данные не идут».</strong> Видно по нулевому <code>length</code> и повторяющимся ACK с одинаковым номером подтверждения. Это признак потери пакетов на пути или переполненного окна — то есть проблема не в приложении.</p>
+        <p><strong>«Иногда долго, иногда быстро».</strong> Смотрите не только TCP, но и время: паузы в 1, 3, 7 секунд в выводе — это ретрансмиссии по экспоненте. Так выглядит потеря одного-двух процентов пакетов, которую приложение ощущает как «интернет тормозит».</p>
+        <h2>Что делать с большим объёмом</h2>
+        <p>Запись в файл и разбор в Wireshark — правильный путь для сложных случаев: там есть графики потоков, времена ответов и содержимое. Правило одно: сохранять только нужное. Захват на гигабитном линке за минуту даст сотни мегабайт, поэтому используют ротацию (<code>-C 10 -W 5</code>) или кольцевой буфер.</p>
+        <p>И про права: для захвата нужен <code>CAP_NET_RAW</code> или root. Давать <code>tcpdump</code> целиком — плохая идея, он читает весь трафик; в проде используют <code>dumpcap</code> с ограничением по группам или сетевой TAP.</p>
+        <p>Дальше: что означают состояния и таймеры — <a class="kn-ref" href="/blog/kn-tcp.html">TCP</a>; кто может молча отбросить пакет — <a class="kn-ref" href="/blog/kn-netfilter.html">файрвол</a>; общая последовательность поиска — <a class="kn-ref" href="/blog/kn-troubleshoot.html">диагностика снизу вверх</a>.</p>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-netfilter.html"><strong>Файрвол в Linux: nftables и порядок правил</strong><span>Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-netfilter.html">Файрвол в Linux: nftables и порядок правил</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://man7.org/linux/man-pages/man7/pcap-filter.7.html" target="_blank" rel="noopener">pcap-filter(7) — синтаксис фильтров захвата</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://man7.org/linux/man-pages/man8/tcpdump.8.html" target="_blank" rel="noopener">tcpdump(8) — руководство</a><small>man7.org</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc9293" target="_blank" rel="noopener">RFC 9293 — Transmission Control Protocol (TCP)</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-postgres.html">PostgreSQL: версии строк, VACUUM и заворот XID →</a><a href="/blog/kn-ntp.html">← Время в сети: NTP и почему 30 секунд ломают всё</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 26 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-packet"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#сеть">сеть</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li><li><a href="/blog/topics.html#tcp">tcp</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

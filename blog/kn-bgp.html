@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>BGP: политика вместо метрики · itsliventsev</title>
+<meta name="description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="bgp,маршрутизация,диагностика">
+<meta name="post-readtime" content="9 мин">
+<meta name="post-excerpt" content="Зачем нужен eBGP и iBGP, как читается AS_PATH, что решает local preference и почему медитация над «BGP не поднялся» начинается с TCP-сессии.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-bgp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="BGP: политика вместо метрики · itsliventsev">
+  <meta property="og:description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-bgp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="bgp">
+  <meta property="article:tag" content="маршрутизация">
+  <meta property="article:tag" content="диагностика">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BGP: политика вместо метрики · itsliventsev">
+  <meta name="twitter:description" content="BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"BGP: политика вместо метрики","description":"BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.","url":"https://itsliventsev.github.io/blog/kn-bgp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-bgp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"bgp, маршрутизация, диагностика"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"BGP: политика вместо метрики","item":"https://itsliventsev.github.io/blog/kn-bgp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>9 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>BGP: политика вместо метрики</h1>
+        <p class="kn-def">BGP не выбирает самый быстрый путь — он выбирает самый приемлемый по политике. Сессия живёт на TCP 179, keepalive по умолчанию раз в 60 секунд, hold — 180, а решение принимается по списку атрибутов сверху вниз.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Маршрутизаторы внутри организации живут на OSPF: у него есть метрика стоимости, и она означает «столько-то условных единиц до сети». BGP так не умеет и не пытается. У него нет ни стоимости, ни задержки — он несёт <strong>политику</strong>: кому я готов отдать трафик, чей анонс считаю выгодным, что не пускать дальше своего края. Именно поэтому интернет работает на BGP, а не на «самом быстром» протоколе.</p>
+        <h2>Сессия живёт на TCP</h2>
+        <p>BGP — прикладной протокол поверх TCP, порт 179. Это значит, что прежде чем разбираться в атрибутах, надо убедиться, что сессия вообще установилась: <code>telnet 10.0.0.1 179</code> или <code>nc -vz</code>, и только потом смотреть состояния <code>Idle → Connect → Active → OpenSent → OpenConfirm → Established</code>. Состояние <code>Active</code> — самое обидное: оно не «работает», а «пытается», и чаще всего означает, что пакеты не доходят или их режет фильтр.</p>
+        <p>После установки сессии соседи обмениваются OPEN и договариваются о таймерах. Значения по умолчанию из RFC 4271: keepalive раз в 60 секунд, hold — 180. Пропустили три keepalive подряд — сессия рвётся, и все маршруты, полученные от неё, исчезают. При расхождении настроек берётся меньшее значение из двух, поэтому «у меня 30, у него 180» не спасает: будет 30.</p>
+        <h2>Атрибуты решают, а не байты</h2>
+        <p>Порядок принятия решения — это список сверху вниз, и первый пункт, который различил маршруты, останавливает весь разбор.</p>
+        <p>{porjadok}</p>
+        <p>Практический смысл: <strong>local preference</strong> — это «куда выходить из своей сети», его ставят на входе и он никогда не покидает AS. <strong>AS_PATH</strong> — это одновременно длина пути и защита от петель: если в анонсе встречается свой номер AS, маршрут отбрасывается, поэтому «заколько в AS_PATH» — не грубость, а распространённая (и не всегда плохая) практика. <strong>MED</strong> — просьба, а не приказ: сосед вправе её проигнорировать, особенно через несколько AS.</p>
+        <p>{sravnenie}</p>
+        <p>Внутри одной AS работает отдельная беда — iBGP split horizon: маршрут, полученный по iBGP, не передаётся другому iBGP-соседу. Отсюда либо полный меш соединений, либо route reflector, который снимает это ограничение и становится точкой, за которую надо отдельно следить.</p>
+        <h2>Что смотреть, когда «не работает»</h2>
+        <ol><li><strong>Сессия не поднялась</strong> — <code>show bgp summary</code>; если <code>Idle</code>, проверьте маршрут до соседа, ACL на 179 и <code>ebgp-multihop</code>, если сосед не на прямом линке.</li><li><strong>Сессия есть, префиксов нет</strong> — смотрите политику: <code>show bgp neighbor ... advertised-routes</code> и <code>received-routes</code>. Обычно виноват отсутствующий <code>route-map</code> в нужную сторону.</li><li><strong>Префикс есть, трафик идёт не туда</strong> — проверяйте порядок атрибутов, а не пингуйте дальше: <code>show bgp &lt;prefix&gt;</code> покажет выбранный путь и причину отбрасывания остальных.</li><li><strong>Флап каждые несколько минут</strong> — смотрите не BGP, а линк и загрузку: <code>hold</code> истекает по причине перегрузки, и в журнале это будет <code>Notification: hold timer expired</code>.</li></ol>
+        <p>Осторожность с фильтрами обязательна: BGP по умолчанию доверчив, и «принять всё, что пришло от пира» — это способ отдать свой трафик первому, кто анонсит ваш же префикс. Минимальный набор — bogon-фильтр, ограничение длины AS_PATH и явные префикс-листы на приём и на анонс.</p>
+        <p>Смежные темы: как вообще устроен выбор пути в <a class="kn-ref" href="/blog/kn-routing.html">таблице маршрутов</a> и почему <code>ping</code> не отвечает, когда TCP-сессия не встаёт — <a class="kn-ref" href="/blog/kn-tcp.html">разбор TCP</a>. Если нужен текстовый разбор по слоям, начните с <a class="kn-ref" href="/blog/kn-troubleshoot.html">диагностики снизу вверх</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Сессия</th><th scope="col">Между кем</th><th scope="col">Что несёт</th><th scope="col">Особенность</th></tr></thead><tbody><tr><th scope="row">eBGP</th><td>разные AS</td><td>префиксы и AS_PATH</td><td>TTL 1 по умолчанию</td><td>обычно на прямом линке</td></tr><tr><th scope="row">iBGP</th><td>роутеры одной AS</td><td>те же префиксы</td><td>AS_PATH не растёт</td><td>нужен полный меш или route reflector</td><td>иначе split horizon</td></tr><tr><th scope="row">магистральный провайдер</th><td>AS и клиент</td><td>десятки тысяч префиксов</td><td>политика по community</td><td>а не по метрике</td></tr></tbody><caption>Внутри AS и между AS задачи разные, поэтому и сессии разные.</caption></table></div>
+        <dl class="kn-facts"><dt>Локальный вес</dt><dd>выше — лучше; атрибут вендорский, наружу не уходит</dd><dt>Local preference</dt><dd>выше — лучше; выбирает выход из своей AS, по умолчанию 100</dd><dt>AS_PATH</dt><dd>короче — лучше; он же защищает от петель</dd><dt>Origin</dt><dd>IGP лучше EGP, EGP лучше incomplete</dd><dt>MED</dt><dd>ниже — лучше; подсказка соседней AS, обычно не транзитивна</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-routing.html"><strong>Таблица маршрутов: как пакет выбирает выход</strong><span>Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span></a></li>
+          <li><a href="/blog/kn-tcp.html"><strong>TCP: три пакета, четыре состояния и одна минута</strong><span>Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>3 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://www.rfc-editor.org/rfc/rfc4271" target="_blank" rel="noopener">RFC 4271 — A Border Gateway Protocol 4 (BGP-4)</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.rfc-editor.org/rfc/rfc6793" target="_blank" rel="noopener">RFC 6793 — BGP Support for Four-Octet AS Number Space</a><small>RFC Editor</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://en.wikipedia.org/wiki/Border_Gateway_Protocol" target="_blank" rel="noopener">BGP: маршрутизация между автономными системами</a><small>Wikipedia (сводка по RFC 4271)</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-cron.html">Планировщик: cron, systemd timers и тихие сбои →</a><a href="/blog/kn-bash.html">← Конвейер: одна строка вместо цикла</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 04 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-bgp"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#bgp">bgp</a></li><li><a href="/blog/topics.html#маршрутизация">маршрутизация</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 3 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

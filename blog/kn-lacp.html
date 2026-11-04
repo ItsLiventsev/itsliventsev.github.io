@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f2e9">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
+<title>LACP: два кабеля, один адрес · itsliventsev</title>
+<meta name="description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+<meta name="post-date" content="2026-11-04">
+<meta name="post-type" content="note">
+<meta name="post-tags" content="vlan,диагностика,отказоустойчивость">
+<meta name="post-readtime" content="8 мин">
+<meta name="post-excerpt" content="active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.">
+<meta name="kn-zone" content="network">
+<meta name="kn-ai" content="machine-assisted">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/tokens.css">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/pages.css">
+  <!-- SEO:AUTO:START -->
+  <link rel="canonical" href="https://itsliventsev.github.io/blog/kn-lacp.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://itsliventsev.github.io/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="https://itsliventsev.github.io/assets/apple-touch-icon.png">
+  <link rel="manifest" href="https://itsliventsev.github.io/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="itsliventsev · заметки и статьи" href="https://itsliventsev.github.io/feed.xml">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="itsliventsev">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="LACP: два кабеля, один адрес · itsliventsev">
+  <meta property="og:description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+  <meta property="og:url" content="https://itsliventsev.github.io/blog/kn-lacp.html">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:tag" content="vlan">
+  <meta property="article:tag" content="диагностика">
+  <meta property="article:tag" content="отказоустойчивость">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LACP: два кабеля, один адрес · itsliventsev">
+  <meta name="twitter:description" content="Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.">
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"LACP: два кабеля, один адрес","description":"Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.","url":"https://itsliventsev.github.io/blog/kn-lacp.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/kn-lacp.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og.png","datePublished":"2026-11-04","dateModified":"2026-11-04","keywords":"vlan, диагностика, отказоустойчивость"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"LACP: два кабеля, один адрес","item":"https://itsliventsev.github.io/blog/kn-lacp.html"}]}</script>
+  <!-- SEO:AUTO:END -->
+</head>
+<body>
+<a class="skip-link" href="#main-content">перейти к содержанию</a>
+<main id="main-content">
+  <article class="kn-note">
+    <div>
+      <header class="kn-note-head">
+        <div class="kn-note-meta">
+          <a class="ui-tag" href="/blog/topics/network.html">Сети</a>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-04">4 ноября 2026</time>
+          <span aria-hidden="true">·</span><span>обновлено 04.11.2026</span>
+          <span aria-hidden="true">·</span>
+          <span>8 мин</span>
+          <span class="kn-ai">текст структурирован с помощью ИИ</span>
+        </div>
+        <h1>LACP: два кабеля, один адрес</h1>
+        <p class="kn-def">Агрегация каналов даёт не «двойную скорость», а сумму по потокам: один TCP-поток всё равно едет по одному физическому линку. LACP договаривается о членах группы, а хеш раскидывает по ним потоки — и именно от хеша зависит, получите вы выигрыш или нет.</p>
+      </header>
+
+      <div class="kn-note-body">
+        <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
+        <p>Соблазн понятен: два гигабитных кабеля — значит два гигабита. На практике это верно только для суммы. Каждый отдельный поток — одна TCP-сессия, один бэкап, одна копия файла — выбирает <strong>один</strong> физический линк по хешу, и этот поток быстрее гигабита не поедет. Отсюда типичное разочарование: «сделали агрегацию, а scp всё равно 110 МБ/с».</p>
+        <h2>Что делает LACP</h2>
+        <p>LACP — это протокол согласования: обе стороны обмениваются LACPDU и подтверждают, что видят друг друга в одной группе. Без согласования легко получить ситуацию, когда коммутатор считает линки независимыми и половина трафика уходит в никуда, а при двух кабелях между одним и тем же оборудованием — петля и шторм.</p>
+        <p>Режимы: <strong>active</strong> инициативно шлёт LACPDU, <strong>passive</strong> ждёт. Две passive-стороны между собой не договорятся никогда — это частая причина «агрегация не поднялась» при формально правильной настройке.</p>
+        <p>{rezhimy}</p>
+        <h2>Хеш важнее ширины</h2>
+        <p>Коммутатор считает хеш от полей пакета: обычно пара MAC, пара IP и иногда порты. Все пакеты одного потока получают одинаковое значение и уходят в один линк. Значит, выигрыш зависит от количества потоков: сотня клиентов за прокси распределится хорошо, а один rsync с одним соединением не распределится вовсе.</p>
+        <p>Отсюда практическое правило: агрегацию делают ради <strong>резервирования и суммарной полосы для многих потоков</strong>, а не ради ускорения одного. Если нужен быстрый одиночный поток — это 10G, а не четыре по 1G. И если хеш считается только по MAC, а весь трафик идёт через один шлюз, все потоки получат один и тот же линк: настройка хеша по IP и портам здесь не роскошь.</p>
+        <p>{fakty}</p>
+        <h2>Настройка в Linux</h2>
+        <pre><code>ip link add bond0 type bond mode 802.3ad miimon 100 lacp_rate fast
+ip link set eth1 master bond0
+ip link set eth2 master bond0
+cat /proc/net/bonding/bond0     # состояние, активные порты, партнёр</code></pre>
+        <p><code>miimon 100</code> — проверка линка раз в 100 мс. Без неё отказ кабеля замечается только по таймауту LACP, и это десятки секунд тишины. <code>lacp_rate fast</code> ускоряет обмен до секунды — полезно на время ввода в эксплуатацию, потом можно вернуть slow: лишние кадры каждую секунду на сотнях портов никому не нужны.</p>
+        <h2>Диагностика по шагам</h2>
+        <ol><li><strong>Смотрим локально:</strong> <code>cat /proc/net/bonding/bond0</code> — все ли порты в состоянии up и виден ли партнёр. Пустой partner означает, что LACPDU не доходят.</li><li><strong>Смотрим на коммутаторе:</strong> <code>show etherchannel summary</code> — флаги <code>P</code> (в группе), <code>U</code> (используется), <code>s</code> (подвешен). Порт в <code>s</code> — чаще всего не совпали настройки или режим.</li><li><strong>Сверяем параметры:</strong> скорость, дуплекс, MTU, список VLAN. Один порт в группе с другим MTU ломает всю группу, а не только себя.</li><li><strong>Проверяем раскладку:</strong> несколько параллельных <code>iperf3 -P 4</code> покажут сумму, одиночный <code>iperf3</code> — потолок одного линка. Разница между этими двумя числами и есть ответ на вопрос «работает ли агрегация».</li></ol>
+        <p>Что важно не забыть: агрегация не отменяет STP. Если кабели воткнуты в разные коммутаторы, нужен либо стек, либо MSTP с правильными приоритетами, иначе часть портов будет заблокирована и ожидаемого выигрыша не будет. Об этом — <a class="kn-ref" href="/blog/kn-stp.html">заметка про STP</a>; про тегирование в агрегированном канале — <a class="kn-ref" href="/blog/kn-vlan.html">802.1Q</a>.</p>
+        <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Режим</th><th scope="col">Кто договаривается</th><th scope="col">Раскладка</th><th scope="col">Когда применять</th></tr></thead><tbody><tr><th scope="row">balance-rr</th><td>никто</td><td>нужен коммутатор вручную</td><td>по кругу</td><td>пакет за пакетом</td><td>почти никогда: переупорядочивание</td></tr><tr><th scope="row">active-backup</th><td>никто</td><td>один линк</td><td>второй ждёт</td><td>когда коммутатор не умеет LACP</td></tr><tr><th scope="row">802.3ad (LACP)</th><td>LACPDU между сторонами</td><td>по хешу потока</td><td>стандартный выбор</td></tr><tr><th scope="row">balance-xor</th><td>никто</td><td>по хешу</td><td>без проверки</td><td>когда LACP недоступен</td></tr></tbody><caption>Режимы различаются тем, кто договаривается о группе и как раскладываются потоки.</caption></table></div>
+        <dl class="kn-facts"><dt>LACPDU</dt><dd>кадр на 01:80:c2:00:00:02, fast — раз в секунду, slow — раз в 30</dd><dt>Согласование</dt><dd>active сам ищет партнёра, passive только отвечает; active+passive — рабочий вариант</dd><dt>Требование</dt><dd>одинаковые скорость, дуплекс, MTU и набор VLAN на обоих концах</dd><dt>Ёмкость</dt><dd>сумма по потокам; один поток ограничен скоростью одного линка</dd></dl>
+      </div>
+
+      <section class="kn-section" aria-labelledby="related-title">
+        <div class="kn-group-head"><h2 id="related-title">Связанные заметки</h2><span>3 связи</span></div>
+        <ul class="kn-related">
+          <li><a href="/blog/kn-stp.html"><strong>STP: почему коммутатор сам выключил порт</strong><span>Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</span></a></li>
+          <li><a href="/blog/kn-vlan.html"><strong>VLAN и 802.1Q: один провод, много сетей</strong><span>Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span></a></li>
+          <li><a href="/blog/kn-troubleshoot.html"><strong>Диагностика сети: снизу вверх, а не наугад</strong><span>Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span></a></li>
+        </ul>
+        <div class="kn-backlinks"><p>Обратные ссылки</p><ul><li><a href="/blog/kn-stp.html">STP: почему коммутатор сам выключил порт</a> — ссылается на эту заметку</li></ul></div>
+      </section>
+
+      <section class="kn-section" aria-labelledby="sources-title">
+        <div class="kn-group-head"><h2 id="sources-title">Источники</h2><span>2 источника</span></div>
+        <ol class="kn-sources">
+          <li><a href="https://en.wikipedia.org/wiki/Link_aggregation" target="_blank" rel="noopener">IEEE 802.1AX — Link Aggregation (ранее 802.3ad)</a><small>Wikipedia (сводка по IEEE 802.1AX)</small><small>обращение: 4 ноября 2026</small></li><li><a href="https://www.kernel.org/doc/Documentation/networking/bonding.txt" target="_blank" rel="noopener">bonding.txt — агрегация каналов в Linux</a><small>kernel.org</small><small>обращение: 4 ноября 2026</small></li>
+        </ol>
+      </section>
+
+      <nav class="kn-pager" aria-label="Соседние заметки">
+        <a href="/blog/topics/network.html">все заметки рубрики «Сети»</a>
+        <span><a href="/blog/kn-logrotate.html">logrotate: почему журналы съели диск →</a><a href="/blog/kn-ipsec.html">← IPsec: две фазы и одна причина «туннель поднят, трафика нет»</a></span>
+      </nav>
+    </div>
+
+    <aside class="kn-rail" aria-label="Паспорт заметки">
+      <div class="kn-rail-card">
+        <h2>Паспорт</h2>
+        <p>Рубрика: Сети. Запись 16 из 43.</p>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-lacp"><span>граф</span>место в графе связей</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Теги</h2>
+        <ul class="kn-tagcloud">
+          <li><a href="/blog/topics.html#vlan">vlan</a></li><li><a href="/blog/topics.html#диагностика">диагностика</a></li><li><a href="/blog/topics.html#отказоустойчивость">отказоустойчивость</a></li>
+        </ul>
+      </div>
+      <div class="kn-rail-card">
+        <h2>Как читать связи</h2>
+        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
+        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+      </div>
+    </aside>
+  </article>
+  <footer class="ui-footer">
+    <span>© 2026 itsliventsev · Заметки</span>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/graph.html">Граф</a><a href="/feed.xml">RSS</a></nav>
+    <time data-footer-updated></time>
+  </footer>
+</main>
+<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>

@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: IPsec договаривается о защите в две фазы — сначала IKE, затем ESP, — и чаще всего ломается не на шифровании, а на несовпадении селекторов трафика.
 excerpt: IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.
 readtime: 8 мин
-cover: kn-ipsec
 ai: true
 related: [kn-gre, kn-mtu, kn-troubleshoot]
 sources:

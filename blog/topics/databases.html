@@ -27,15 +27,15 @@ undefined
   <meta property="og:title" content="Базы данных — заметки · itsliventsev">
   <meta property="og:description" content="Заметки о базах данных: MVCC и VACUUM в PostgreSQL, индексы и планы запросов, уровни изоляции, репликация и отставание.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/topics/databases.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-notes.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Базы данных — заметки · itsliventsev">
   <meta name="twitter:description" content="Заметки о базах данных: MVCC и VACUUM в PostgreSQL, индексы и планы запросов, уровни изоляции, репликация и отставание.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Базы данных — заметки","description":"Заметки о базах данных: MVCC и VACUUM в PostgreSQL, индексы и планы запросов, уровни изоляции, репликация и отставание.","url":"https://itsliventsev.github.io/blog/topics/databases.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/databases.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-postgres.webp"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-notes.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Базы данных — заметки","description":"Заметки о базах данных: MVCC и VACUUM в PostgreSQL, индексы и планы запросов, уровни изоляции, репликация и отставание.","url":"https://itsliventsev.github.io/blog/topics/databases.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/databases.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-notes.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Базы данных — заметки","item":"https://itsliventsev.github.io/blog/topics/databases.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -46,41 +46,53 @@ undefined
     <p class="ui-eyebrow">рубрика 03 · заметки</p>
     <h1>Базы данных</h1>
     <p class="kn-head-lede">Как СУБД хранит версии строк, выбирает план и держит копию данных живой.</p>
-    <div class="ui-pagehead-meta"><span>4 заметки</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
+    <div class="ui-pagehead-meta"><span>6 заметок</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
   </header>
 
   <div class="kn-stream">
       <a class="kn-card kn-card--wide" data-kn-zone="databases" href="/blog/kn-indexes.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-indexes.webp" alt="схема: дерево индекса с корнем и листьями, ведущими к строкам таблицы" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Индексы и планы: почему запрос медленный</span>
           <span class="kn-card-excerpt">B-дерево на пальцах, селективность, EXPLAIN ANALYZE и три причины, по которым индекс не используется.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-postgres.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-postgres.webp" alt="схема: версии одной строки с номерами транзакций и порог заворота XID" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-mysql.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
+          <span class="kn-card-title">MySQL: InnoDB, кеш запросов и почему он мешает</span>
+          <span class="kn-card-excerpt">Буферный пул и его размер, redo log вместо кеша запросов, уровни изоляции по умолчанию, разница между REPEATABLE READ у MySQL и PostgreSQL, медленный журнал и EXPLAIN.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-postgres.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">PostgreSQL: версии строк, VACUUM и заворот XID</span>
           <span class="kn-card-excerpt">xmin и xmax, мёртвые кортежи и bloat, autovacuum_freeze_max_age и почему долгая транзакция может привести базу в read-only.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="databases" href="/blog/kn-replication.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-replication.webp" alt="схема: основной сервер, реплика с отставанием и два режима синхронизации" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-redis.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
+          <span class="kn-card-title">Redis: кеш, который умеет терять данные</span>
+          <span class="kn-card-excerpt">Однопоточная модель и блокирующие команды, TTL и вытеснение, RDB и AOF с их ценой, реплика и Sentinel, а также три способа испортить кеш.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-replication.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Репликация: копия отстаёт, и это нормально</span>
           <span class="kn-card-excerpt">Синхронный и асинхронный режимы, lag как метрика, зачем нужен кворум при failover и почему split-brain страшнее простоя.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-tx.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-tx.webp" alt="схема: аномалии чтения и четыре уровня изоляции транзакций" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--flat" data-kn-zone="databases" href="/blog/kn-tx.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Базы данных</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Транзакции: уровни изоляции и три аномалии</span>
           <span class="kn-card-excerpt">Грязное чтение, неповторяющееся чтение и фантомы, что реально делает read committed и почему «проверить и записать» требует блокировки.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>

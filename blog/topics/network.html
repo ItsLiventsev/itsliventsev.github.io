@@ -27,15 +27,15 @@ undefined
   <meta property="og:title" content="Сети — заметки · itsliventsev">
   <meta property="og:description" content="Заметки о сетях: VLAN и 802.1Q, таблицы маршрутизации, туннели GRE и MTU, TCP, DNS, DHCP, IPsec и порядок диагностики.">
   <meta property="og:url" content="https://itsliventsev.github.io/blog/topics/network.html">
-  <meta property="og:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
+  <meta property="og:image" content="https://itsliventsev.github.io/assets/og-notes.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Сети — заметки · itsliventsev">
   <meta name="twitter:description" content="Заметки о сетях: VLAN и 802.1Q, таблицы маршрутизации, туннели GRE и MTU, TCP, DNS, DHCP, IPsec и порядок диагностики.">
-  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Сети — заметки","description":"Заметки о сетях: VLAN и 802.1Q, таблицы маршрутизации, туннели GRE и MTU, TCP, DNS, DHCP, IPsec и порядок диагностики.","url":"https://itsliventsev.github.io/blog/topics/network.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/network.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/img/notes/kn-vlan.webp"}</script>
+  <meta name="twitter:image" content="https://itsliventsev.github.io/assets/og-notes.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Сети — заметки","description":"Заметки о сетях: VLAN и 802.1Q, таблицы маршрутизации, туннели GRE и MTU, TCP, DNS, DHCP, IPsec и порядок диагностики.","url":"https://itsliventsev.github.io/blog/topics/network.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://itsliventsev.github.io/blog/topics/network.html"},"inLanguage":"ru-RU","author":{"@type":"Person","name":"itsliventsev","url":"https://itsliventsev.github.io/","sameAs":["https://github.com/ItsLiventsev"]},"publisher":{"@type":"Person","name":"itsliventsev"},"image":"https://itsliventsev.github.io/assets/og-notes.png"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"главная","item":"https://itsliventsev.github.io/"},{"@type":"ListItem","position":2,"name":"заметки","item":"https://itsliventsev.github.io/blog.html"},{"@type":"ListItem","position":3,"name":"Сети — заметки","item":"https://itsliventsev.github.io/blog/topics/network.html"}]}</script>
   <!-- SEO:AUTO:END -->
 </head>
@@ -46,86 +46,125 @@ undefined
     <p class="ui-eyebrow">рубрика 01 · заметки</p>
     <h1>Сети</h1>
     <p class="kn-head-lede">Пакет, кадр и маршрут: как устроена передача данных и где именно она ломается.</p>
-    <div class="ui-pagehead-meta"><span>9 заметок</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
+    <div class="ui-pagehead-meta"><span>15 заметок</span><span><a href="/blog/topics.html">все рубрики</a></span><span><a href="/blog/graph.html">граф связей</a></span></div>
   </header>
 
   <div class="kn-stream">
-      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-dhcp.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-dhcp.webp" alt="схема: четыре шага DORA и таймеры продления аренды" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-bgp.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">BGP: политика вместо метрики</span>
+          <span class="kn-card-excerpt">Зачем нужен eBGP и iBGP, как читается AS_PATH, что решает local preference и почему медитация над «BGP не поднялся» начинается с TCP-сессии.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-dhcp.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">DHCP: аренда адреса на четыре шага</span>
           <span class="kn-card-excerpt">Discover → Offer → Request → ACK, таймеры T1 и T2, relay между VLAN и почему чужой DHCP в сегменте опаснее, чем кажется.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
       <a class="kn-card" data-kn-zone="network" href="/blog/kn-dns.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-dns.webp" alt="схема: цепочка от клиента через резолвер и корневые серверы к авторитетной зоне" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">DNS: кеш, TTL и два резолвера</span>
           <span class="kn-card-excerpt">Путь запроса от stub-резолвера до авторитетной зоны, почему смена A-записи доходит неравномерно и как читать dig вместо «не работает».</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
       <a class="kn-card" data-kn-zone="network" href="/blog/kn-gre.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-gre.webp" alt="схема: пакет до и после инкапсуляции GRE с ростом на 24 байта" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Туннель и MTU: 24 байта, которые ломают передачу</span>
           <span class="kn-card-excerpt">Сколько байт забирают GRE, IPIP, IPsec и VXLAN, зачем нужен clamp-mss и почему нельзя блокировать ICMP.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-ipsec.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-ipsec.webp" alt="схема: две фазы IPsec с протоколами и портами" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-ipam.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">План адресации: сеть начинается с таблицы</span>
+          <span class="kn-card-excerpt">RFC 1918 и служебные диапазоны, арифметика размера подсети, VLSM, /31 на point-to-point и почему таблица в Excel перестаёт работать после двухсот подсетей.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--half" data-kn-zone="network" href="/blog/kn-ipsec.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</span>
           <span class="kn-card-excerpt">IKEv2, ESP и AH, порты 500 и 4500, что такое селекторы и почему MTU тоннеля надо уменьшать на ~50 байт.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-mtu.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-mtu.webp" alt="схема: четыре шага диагностики MTU от ping до смены размера" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-lacp.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">LACP: два кабеля, один адрес</span>
+          <span class="kn-card-excerpt">active и passive, зачем нужен LACPDU, почему скорость одного потока не растёт, откуда взялся cut-through и как не получить петлю из двух кабелей.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-mtu.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">MTU и PMTU: почему ping идёт, а скачивание нет</span>
           <span class="kn-card-excerpt">Арифметика 1500, 1472 и 1460, команда ping -M do, ловушка black hole и почему clamp-mss решает проблему без правки приложений.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--half" data-kn-zone="network" href="/blog/kn-routing.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-routing.webp" alt="схема: узел с таблицей маршрутов и выбранным путём до сети" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-netfilter.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">Файрвол в Linux: nftables и порядок правил</span>
+          <span class="kn-card-excerpt">Пять хуков, четыре состояния conntrack, разница между iptables и nftables, счётчики как главный инструмент и три ошибки, которые открывают порт всему интернету.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-packet.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">tcpdump: как читать пакет, а не гадать</span>
+          <span class="kn-card-excerpt">Фильтры по хосту, порту и флагам, чтение порядковых номеров и окон, разница между «не дошло» и «дошло, но отброшено», и как не утонуть в выводе.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card" data-kn-zone="network" href="/blog/kn-routing.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Таблица маршрутов: как пакет выбирает выход</span>
           <span class="kn-card-excerpt">Самый длинный префикс, метрика и административное расстояние, policy routing и один вопрос, который снимает половину проблем: ip route get.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-tcp.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-tcp.webp" alt="схема: рукопожатие TCP и состояние TIME-WAIT между клиентом и сервером" width="960" height="540" loading="lazy" decoding="async"></span>
+      <a class="kn-card kn-card--flat" data-kn-zone="network" href="/blog/kn-stp.html">
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
+          <span class="kn-card-title">STP: почему коммутатор сам выключил порт</span>
+          <span class="kn-card-excerpt">Корневой мост по наименьшему идентификатору, роли и состояния портов, RSTP вместо ожидания по 30 секунд и три защиты, без которых STP опасен.</span>
+          <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
+        </span>
+      </a>
+      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-tcp.html">
+        <span class="kn-card-body">
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">TCP: три пакета, четыре состояния и одна минута</span>
           <span class="kn-card-excerpt">Рукопожатие, состояния FIN и TIME-WAIT, почему «слишком много TIME-WAIT» — не проблема, и что действительно стоит крутить в sysctl.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
       <a class="kn-card" data-kn-zone="network" href="/blog/kn-troubleshoot.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-troubleshoot.webp" alt="схема: пять уровней диагностики от линка до приложения с командами" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Диагностика сети: снизу вверх, а не наугад</span>
           <span class="kn-card-excerpt">Пять шагов от ip link до curl -v, что означает каждый результат и почему перезагрузка — это не диагностика.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
       <a class="kn-card kn-card--flat" data-kn-zone="network" href="/blog/kn-vlan.html">
-        <span class="kn-card-cover"><img src="/assets/img/notes/kn-vlan.webp" alt="схема: магистральный порт с несколькими VLAN и три порта доступа" width="960" height="540" loading="lazy" decoding="async"></span>
         <span class="kn-card-body">
-          <span class="kn-card-zone">Сети</span>
+          <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">VLAN и 802.1Q: один провод, много сетей</span>
           <span class="kn-card-excerpt">Разбор тега 802.1Q по полям, access и trunk, native VLAN и почему двойной тег уводит кадр в чужую сеть.</span>
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>

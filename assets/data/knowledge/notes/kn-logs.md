@@ -8,7 +8,6 @@ updated: 2026-11-04
 summary: Логи — это расходуемый ресурс: без уровней они шумят, без ротации занимают диск, а без лимита journald однажды заполняют раздел и останавливают службу.
 excerpt: Четыре уровня и как их выбирать, logrotate против journald, фильтры journalctl вместо grep и что писать в лог, чтобы им можно было пользоваться.
 readtime: 6 мин
-cover: kn-logs
 ai: true
 related: [kn-systemd, kn-bash, kn-prometheus]
 sources:
