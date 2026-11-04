@@ -463,7 +463,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   for (const legacy of ['ui-btn--ghost', 'ui-meta-row', 'ui-hairline', 'ui-grid-2', 'ui-grid-3', 'ui-stack',
     'ui-field', 'ui-label', 'ui-input', 'ui-select', 'ui-textarea', 'catalog-stat', 'editorial-meta',
     'pill-rose', 'pill-red', 'pill-blue', 'pill-green', 'pill-amber', 'is-danger', 'fs-105',
-    'kn-graph-fallback', 'kn-card--lead', 'kn-card--tall', 'is-now', 'flat-btn--block', 'notice-rose']) {
+    'kn-graph-fallback', 'kn-card--lead', 'kn-card--tall', 'kn-card--text', 'is-now', 'flat-btn--block', 'notice-rose']) {
     ok(!new RegExp('\\.' + legacy.replace(/-/g, '\\-') + '\\b').test(layers), 'мёртвый класс .' + legacy + ' вернулся в CSS');
   }
   ok(read('assets/base.css').includes('.ui-search-field input'), 'поле поиска должно остаться единственным стилизованным input');
