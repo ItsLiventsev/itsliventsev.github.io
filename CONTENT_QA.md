@@ -89,5 +89,5 @@ node scripts/test-service-worker.js / test-palette.js / runtime-smoke.js → OK
 - `scripts/browser-offline.js` проверял ровно две строки полки чтения на главной. После появления
   базы знаний полка показывает четыре последние публикации, поэтому тест сверяет число строк
   с манифестами (`blog/posts.json` + `articles/posts.json`), а не с константой.
-- `sw.js` поднят до `itsliventsev-v26`: изменились `assets/knowledge.js` и `assets/pages.css`, старая версия кэша отдавала бы прежний граф.
+- `sw.js` поднят на следующую версию кэша: изменились `assets/knowledge.js` и `assets/pages.css`, старая версия кэша отдавала бы прежний граф.
 - Плотность ленты на 1080–1280 px — в бэклоге `CONTENT_AUDIT.md` (P2, п. 15).

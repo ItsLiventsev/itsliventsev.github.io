@@ -55,8 +55,10 @@
    запрещены: их перезапишут `scripts/build-seo.js` и `scripts/build-og.js`.
 3. **Хранилище.** Ключи и поля `localStorage`, JSON-бандлы, коды обмена (`ITS-LAB1…`, `ITS-REV1…`) —
    обратная совместимость. Старые профили должны открываться новым кодом.
-4. **Service worker меняется парой.** `sw.js` (константа `CACHE = 'itsliventsev-vNN'` и `PRECACHE`)
-   и `scripts/test-service-worker.js` (ожидаемая версия и список удаляемых кешей) правятся в одном коммите.
+4. **Service worker меняется в одном файле.** Версию кэша и `PRECACHE` правим только в `sw.js`:
+   `scripts/test-service-worker.js` выводит текущую версию и список удаляемых кешей из самого файла,
+   а номер в документации фиксировать запрещено — иначе отчёты тихо отстают (так в `QA_REPORT.md`
+   стоял v19 при действующем v42).
 5. **Поисковый индекс только собирается.** Руками `assets/search-index.json` не правят:
    `python3 scripts/build-search-index.py` берёт h1, meta description и текст страницы (кроме
    `script`, `style`, `noscript`, `svg`, `header`, `footer`; `nav` берётся — иначе карта сайта
@@ -189,7 +191,7 @@
 | `node scripts/build-related.js --check` | блоки «теория ↔ практика» совпадают с `topics.json` | 62 страницы, 45 связей |
 | `python3 scripts/build-search-index.py --check` | поисковый индекс совпадает с разметкой | 122 записи |
 | `node scripts/runtime-smoke.js` | синтаксис и базовое поведение JS | `RUNTIME SMOKE OK` |
-| `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция | `OK` |
+| `node scripts/test-service-worker.js` | кеш, offline-шелл, изоляция; версия и старые кэши выводятся из `sw.js`, документы не смеют фиксировать номер | `OK (vNN)` |
 | `node scripts/test-palette.js` | контраст палитры в двух темах (4.5:1) | `OK` |
 | `node scripts/build-og.js --check` | OG-карточки совпадают с шаблоном (нужны зависимости: см. `docs/seo.md`) | `5 карточек совпадают` |
 | `node scripts/test-stats.js` | числа главной считает `scripts/lib/site-stats.js`, а тест сверяет их с плитками, лидом практики, каталогом проектов и `REFERENCES.md` | `Stats: …` |
@@ -293,6 +295,7 @@ python3 -m http.server 8000 --bind 0.0.0.0 &   # тесты ходят на http
 | U-28 | F | ✅ `DESIGN_SYSTEM.md` сверяется с кодом: `scripts/test-design-doc.js` проверяет 82 класса, ловит описания несуществующих компонентов (`.kn-card-cover`, `--lead`, обложки 960×540), требует упоминания ключевых компонентов; заодно `.ui-callout` сведён в одно определение, дубль из `pages.css` убран | `DESIGN_SYSTEM.md`, `scripts/test-design-doc.js`, `assets/{base,pages}.css` | — |
 | U-29 | A | ✅ Аудит слоёв: единственный настоящий конфликт — `.ui-section-head` (его `gap` и `h2` перекрывал `pages.css`), значения перенесены в `base.css`, дубль удалён; новый `scripts/test-css-layers.js` держит правило «одно свойство — один слой» и ловит полные дубли правил | `assets/{base,pages}.css`, `scripts/test-css-layers.js` | — |
 | U-33 | D | 🔜 Версия у CSS в разметке: JS-файлы носят `?v=`, а `tokens/base/pages/course` подключаются без версии и живут за кэшем SW; нужен генератор хэша и `--check`, чтобы токен совпадал с содержимым файла | `scripts/build-assets-version.js`, `assets/*.css`, все `*.html` | P2 |
+| U-34 | A | ✅ Номер кэша живёт только в `sw.js`: тест выводит версию и список старых кэшей из файла (было 40 имён в фикстуре и 60 ассертов ручного списка), а документы, фиксирующие номер, валят проверку — `QA_REPORT.md` стоял на v19 при действующем v42 | `scripts/test-service-worker.js`, `QA_REPORT.md`, `REFERENCES.md`, `DESIGN_SYSTEM.md`, `CONTENT_QA.md` | — |
 | U-30 | E | ✅ `<head>` без дублей: на главной жили два набора служебных ссылок и два набора JSON-LD (ручной блок + сгенерированный `SEO:AUTO`); дубль удалён, `scripts/test-head.js` проверяет 124 страницы | `index.html\`, `scripts/test-head.js` | — |
 | U-31 | B | ✅ Убран мёртвый класс `.kn-card--text`: упаковщик выпускает только 8/6/12 колонок, правило на 4 колонки не срабатывало никогда; справка и запрет возврата обновлены | `assets/pages.css`, `scripts/build-knowledge.js`, `DESIGN_SYSTEM.md`, `scripts/regression-static.js` | — |
 | U-23 | B | ✅ Пятая плитка «43 заметки» и ссылки у всех чисел героя: каждая плитка ведёт на страницу, которая это число доказывает (проекты, практика, карта, словарь, лента), раскладка 1 → 2 колонки без сироты, `test-stats` проверяет адреса и уникальность | `index.html`, `assets/pages.css`, `scripts/test-stats.js` | — |
