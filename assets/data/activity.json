@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T19:28:26.460Z",
+  "generated": "2026-11-04T20:32:35.877Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 203,
+  "total": 200,
   "truncated": true,
   "days": [
     {
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-28",
-      "count": 11
+      "count": 4
     },
     {
       "date": "2026-10-29",
@@ -124,10 +124,34 @@
     },
     {
       "date": "2026-11-04",
-      "count": 50
+      "count": 54
     }
   ],
   "commits": [
+    {
+      "sha": "c22b683",
+      "title": "feat: объединить заметки и материалы в одну ленту",
+      "date": "2026-11-04T20:25:41Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/c22b68376f3452e66cd70e19c3680be02555352c"
+    },
+    {
+      "sha": "181d4c6",
+      "title": "fix: ограничить ширину тем на узком экране",
+      "date": "2026-11-04T20:05:18Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/181d4c6bd1aafc635aa72b98af9eddf0238105d0"
+    },
+    {
+      "sha": "d5c97e7",
+      "title": "test: проверять этапы после входа в кабинет",
+      "date": "2026-11-04T19:52:44Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d5c97e70ff53b9063bfb9b49fab80b931becb4a3"
+    },
+    {
+      "sha": "3ac02a2",
+      "title": "feat(knowledge): объединить материалы и заметки",
+      "date": "2026-11-04T19:48:19Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3ac02a2f261e2190b8a57c122161b4bee5f6ebb9"
+    },
     {
       "sha": "4fd9317",
       "title": "материалы: подписи {{tema}} из заголовка темы, проверка ссылок без текста",
@@ -463,30 +487,6 @@
       "title": "docs(agents): индекс собирается скриптом, нижняя граница 150 символов",
       "date": "2026-11-03T20:08:50Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/b51ca2c572fae9391a9a44fd6d04a90e9b6f9468"
-    },
-    {
-      "sha": "590414f",
-      "title": "feat(shell): системная тема, прогресс без инлайн-стилей, поиск из HTML",
-      "date": "2026-11-03T20:02:18Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/590414faa37db80afaabb381caeac7edd82a9fa1"
-    },
-    {
-      "sha": "95f595b",
-      "title": "feat(stands): очередь U-04…U-06 — узкий кабинет, роадмап с форматом, порядок разделов",
-      "date": "2026-11-03T19:47:00Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/95f595b26d9498f5f36b43f85a35d2bfa78401e0"
-    },
-    {
-      "sha": "5455634",
-      "title": "feat(stands): единый пропуск, метрики и роадмап во всех трёх вселенных",
-      "date": "2026-11-03T19:25:17Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/54556346a21ff7e8264725ee1dbb6e2ee64b9b02"
-    },
-    {
-      "sha": "e90b45c",
-      "title": "feat(ui): пульс маркера ленты итераций, пока строки едут",
-      "date": "2026-11-03T19:00:33Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/e90b45ce3ef78d75d690c57deca5b370894d43a9"
     }
   ]
 }

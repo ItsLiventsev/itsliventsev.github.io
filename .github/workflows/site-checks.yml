@@ -54,6 +54,7 @@ jobs:
           node scripts/test-search.js
           node scripts/test-reading.js
           node scripts/test-catalog.js
+          node scripts/test-materials-unified.js
           node scripts/test-glossary.js
           node scripts/test-theme.js
           node scripts/test-iter-strip.js

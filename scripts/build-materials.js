@@ -259,10 +259,10 @@ function head({ title, description }) {
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-${critical.stylesheet('tokens', true)}
+${critical.stylesheet('tokens', false)}
 ${critical.stylesheet('base', false)}
-${critical.stylesheet('pages', true)}
-${critical.stylesheet('knowledge', true)}
+${critical.stylesheet('pages', false)}
+${critical.stylesheet('knowledge', false)}
 <!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->
 </head>`;
 }
@@ -270,7 +270,7 @@ ${critical.stylesheet('knowledge', true)}
 function footer() {
   return `<footer class="ui-footer">
     <span>© ${YEAR} itsliventsev · Учебные материалы</span>
-    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/blog/materials.html">Материалы</a><a href="/feed.xml">RSS</a></nav>
+    <nav aria-label="Служебная навигация"><a href="/index.html">Главная</a><a href="/blog.html">Заметки</a><a href="/blog/topics.html">Рубрики</a><a href="/feed.xml">RSS</a></nav>
     <time data-footer-updated></time>
   </footer>`;
 }
@@ -297,7 +297,7 @@ function flatten(sections) {
 function wikiNav(tree, activeId) {
   const sections = tree.sections.map((section) => {
     const groups = section.groups.map((group) => {
-      const open = group.items.includes(activeId) || !activeId;
+      const open = group.items.includes(activeId);
       const items = group.items.map((id) => {
         const item = tree.topicMeta.get(id);
         if (!item) return '';
@@ -310,14 +310,28 @@ function wikiNav(tree, activeId) {
         + '<ul>' + items + '</ul></details></li>';
     }).join('');
     if (!groups) return '';
-    return '<li class="kn-wiki-section"><details open>'
+    return '<li class="kn-wiki-section"><details' + (section.groups.some(group => group.items.includes(activeId)) || (!activeId && section === tree.sections[0]) ? ' open' : '') + '>'
       + '<summary><span class="kn-wiki-num">' + esc(section.num) + '</span>' + esc(section.title) + '</summary>'
       + '<ul>' + groups + '</ul></details></li>';
   }).join('');
 
-  return `<nav class="kn-wiki" aria-label="Учебные материалы">
-      <a class="kn-wiki-home" href="/blog/materials.html">Учебные материалы<span>${tree.topicCount} ${plural(tree.topicCount, 'тема', 'темы', 'тем')}</span></a>
-      <ul class="kn-wiki-tree">${sections}</ul>
+  const taxonomy = JSON.parse(read('assets/data/knowledge/taxonomy.json'));
+  const noteSections = taxonomy.zones.map(zone => {
+    const notes = [...tree.notesById.values()].filter(note => note.zone === zone.id)
+      .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+    if (!notes.length) return '';
+    return '<li class="kn-wiki-group"><details><summary>' + esc(zone.title) + '<span>' + notes.length + '</span></summary><ul>'
+      + notes.map(note => '<li><a href="/blog/' + esc(note.id) + '.html">' + esc(note.title) + '</a></li>').join('')
+      + '</ul></details></li>';
+  }).join('');
+  const noteTree = '<li class="kn-wiki-section"><details><summary>Рубрики заметок<span>' + tree.notesById.size + '</span></summary><ul>' + noteSections + '</ul></details></li>';
+
+  return `<nav class="kn-wiki" aria-label="Навигация по базе знаний">
+      <details class="kn-wiki-disclosure" open>
+        <summary class="kn-wiki-home">Темы и материалы <span>${tree.topicCount + tree.notesById.size} ${plural(tree.topicCount + tree.notesById.size, 'запись', 'записи', 'записей')}</span></summary>
+        <a class="kn-wiki-all" href="/blog.html">Все заметки и материалы <span aria-hidden="true">→</span></a>
+        <ul class="kn-wiki-tree">${sections}${noteTree}</ul>
+      </details>
     </nav>`;
 }
 
@@ -352,13 +366,14 @@ function topicPage(topic, tree) {
   return `${head({ title: note.title + ' · itsliventsev', description: clamp(note.summary, 160) })}
 <body class="ui-page kn-page-material">
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<main id="main-content" class="kn-wiki-layout">
+<main id="main-content">
+  <div class="kn-wiki-layout">
   ${wikiNav(tree, topic.id)}
   <article class="kn-wiki-doc">
-    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog/materials.html">Материалы</a><span aria-hidden="true">/</span><a href="/blog/materials.html#${esc(topic.section.id)}">${esc(topic.section.title)}</a><span aria-hidden="true">/</span><span aria-current="page">${esc(topic.group.title)}</span></nav>
+    <nav class="kn-crumbs" aria-label="Хлебные крошки"><a href="/blog.html#materials">Материалы в заметках</a><span aria-hidden="true">/</span><a href="/blog.html#${esc(topic.section.id)}">${esc(topic.section.title)}</a><span aria-hidden="true">/</span><span aria-current="page">${esc(topic.group.title)}</span></nav>
     <header class="kn-note-head">
       <div class="kn-note-meta">
-        <a class="ui-tag" href="/blog/materials.html#${esc(topic.section.id)}">${esc(topic.section.num)} ${esc(topic.section.title)}</a>
+        <a class="ui-tag" href="/blog.html#${esc(topic.section.id)}">${esc(topic.section.num)} ${esc(topic.section.title)}</a>
         <span aria-hidden="true">·</span>
         <span>${esc(topic.group.title)}</span>
         <span aria-hidden="true">·</span>
@@ -399,10 +414,11 @@ function topicPage(topic, tree) {
     </section>` : ''}
 
     <nav class="kn-pager" aria-label="Соседние темы">
-      <a href="/blog/materials.html#${esc(topic.section.id)}">раздел «${esc(topic.section.title)}»</a>
+      <a href="/blog.html#${esc(topic.section.id)}">раздел «${esc(topic.section.title)}»</a>
       <span>${next ? '<a href="/blog/materials/' + esc(next.id) + '.html">' + esc(next.title) + ' →</a>' : ''}${prev ? '<a href="/blog/materials/' + esc(prev.id) + '.html">← ' + esc(prev.title) + '</a>' : ''}</span>
     </nav>
   </article>
+  </div>
   ${footer()}
 </main>
 <script src="/assets/shell.js" defer></script>
@@ -414,13 +430,13 @@ function topicPage(topic, tree) {
 /* Указатель: разделы карточками, внутри — группы и темы. Это и есть вход в
    раздел; левое меню на этой странице тоже есть, поэтому переход в тему
    возможен с любого уровня. */
-function indexPage(tree) {
-  const sections = tree.sections.map((section) => {
+function materialSections(tree) {
+  return tree.sections.map((section) => {
     const groups = section.groups.map((group) => {
       const items = group.items.map((id) => tree.topicMeta.get(id)).filter(Boolean);
       if (!items.length) return '';
       return `<div class="kn-mat-group">
-          <h3>${esc(group.title)}</h3>
+          <h4>${esc(group.title)}</h4>
           <ul class="kn-mat-list">
             ${items.map((item) => '<li><a href="/blog/materials/' + esc(item.id) + '.html"><strong>' + esc(item.title) + '</strong><span>' + esc(item.summary) + '</span></a></li>').join('\n            ')}
           </ul>
@@ -429,36 +445,25 @@ function indexPage(tree) {
     const count = section.groups.reduce((sum, group) => sum + group.items.length, 0);
     return `<section class="kn-mat-section" id="${esc(section.id)}" aria-labelledby="mat-${esc(section.id)}">
       <div class="kn-group-head">
-        <h2 id="mat-${esc(section.id)}"><span class="kn-wiki-num">${esc(section.num)}</span>${esc(section.title)}</h2>
+        <h3 id="mat-${esc(section.id)}"><span class="kn-wiki-num">${esc(section.num)}</span>${esc(section.title)}</h3>
         <span>${count} ${plural(count, 'тема', 'темы', 'тем')} · ${esc(section.short)}</span>
       </div>
       <p class="kn-mat-about">${esc(section.about)}</p>
       ${groups}
     </section>`;
   }).join('\n    ');
+}
 
-  return `${head({
-    title: 'Учебные материалы · itsliventsev',
-    description: 'Учебные материалы по сетям, системам, виртуализации, безопасности и проектированию: ' + tree.topicCount + ' ' + plural(tree.topicCount, 'тема', 'темы', 'тем') + ' с теорией, практикумами и разбором задач.',
-  })}
-<body class="ui-page kn-page-material">
+/* Старый адрес остаётся рабочим и ведёт к объединённому указателю. */
+function indexPage() {
+  return `${head({ title: 'Материалы переехали · Заметки', description: 'Учебные материалы теперь собраны вместе с заметками.' }).replace(critical.stylesheet('knowledge', false) + '\n', '').replace('</head>', '<meta name="robots" content="noindex, follow">\n<meta http-equiv="refresh" content="0; url=/blog.html#materials">\n<script>if(location.hash) location.replace("/blog.html" + location.hash);</script>\n</head>')}
+<body>
 <a class="skip-link" href="#main-content">перейти к содержанию</a>
-<main id="main-content" class="kn-wiki-layout">
-  ${wikiNav(tree, '')}
-  <div class="kn-wiki-doc">
-    <header class="ui-pagehead">
-      <p class="ui-eyebrow">учебные материалы</p>
-      <h1>Материалы</h1>
-      <p>Рабочие конспекты по сетям, системам, виртуализации, безопасности и проектированию: теория с командами и значениями, практикумы по шагам и ситуационные задачи с разбором. Слева — дерево разделов: тема открывается в один клик, меню остаётся на месте.</p>
-      <div class="ui-pagehead-meta">
-        <span>${tree.topicCount} ${plural(tree.topicCount, 'тема', 'темы', 'тем')}</span>
-        <span>${tree.sections.length} разделов</span>
-        <span>${tree.groupCount} ${plural(tree.groupCount, 'группа', 'группы', 'групп')}</span>
-        <span><a href="/blog.html">заметки</a></span>
-      </div>
-    </header>
-    ${sections}
-  </div>
+<main id="main-content">
+  <header class="ui-pagehead"><h1>Материалы теперь в заметках</h1>
+    <p>Учебные материалы и заметки объединены в одной базе знаний.</p>
+    <p><a class="ui-btn ui-btn--primary" href="/blog.html#materials">Открыть заметки и материалы</a></p>
+  </header>
   ${footer()}
 </main>
 <script src="/assets/shell.js" defer></script>
@@ -509,7 +514,7 @@ function validate(tree, notes) {
 }
 
 /* ─────────────────────────── main ─────────────────────────── */
-function main() {
+function loadTree() {
   const notes = fs.existsSync(NOTES_JSON) ? JSON.parse(read('assets/data/knowledge/notes.json')).notes : [];
   const notesById = new Map(notes.map((note) => [note.id, note]));
   const { topics, order } = flatten(TREE.sections);
@@ -543,6 +548,12 @@ function main() {
     groupCount: TREE.sections.reduce((sum, section) => sum + section.groups.length, 0),
   };
 
+  return { tree, notes };
+}
+
+function main() {
+  const { tree, notes } = loadTree();
+  const { topics, order, topicMeta } = tree;
   validate(tree, notes);
   if (problems.length) {
     console.error('build-materials: ' + problems.length + ' ошибок');
@@ -569,4 +580,5 @@ function main() {
   }
 }
 
-main();
+if (require.main === module) main();
+module.exports = { loadTree, wikiNav, materialSections };
