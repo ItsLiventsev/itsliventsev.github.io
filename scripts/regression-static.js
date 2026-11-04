@@ -284,6 +284,56 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   ok(counts.blog === posts.length, 'feed-counts.blog=' + counts.blog + ', а публикаций в blog/posts.json ' + posts.length);
 }
 
+/* ── документация не расходится с кодом ──
+   DESIGN_SYSTEM.md, docs/design-system.md и docs/motion.md описывают токены и
+   тайминги словами, и уже разъезжались: в справке была шкала «11–64» при
+   максимальном кегле 52, тайминги 120–240 ms при токенах 120/200/320 и
+   `animation-timeline: view()` для reveal, которого в CSS нет вовсе. */
+{
+  const tokens = read('assets/tokens.css');
+  const defined = new Set([...tokens.matchAll(/(--u-[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
+  for (const file of ['DESIGN_SYSTEM.md', 'docs/design-system.md', 'docs/motion.md']) {
+    const doc = read(file);
+    const referenced = new Set([...doc.matchAll(/--u-[a-z0-9-]+/g)].map((m) => m[0]));
+    /* `--u-lh-` в тексте — это семейство (`--u-lh-tight` и т. д.), а не имя токена. */
+    for (const raw of referenced) {
+      const name = raw.replace(/-+$/, '');
+      const found = raw.endsWith('-')
+        ? [...defined].some((token) => token.startsWith(name + '-'))
+        : defined.has(name);
+      ok(found, file + ': упомянут токен ' + name + ', которого нет в tokens.css');
+    }
+  }
+  /* Reveal сделан на IntersectionObserver, а не на animation-timeline: если
+     в документации снова появится второе объяснение, оно разойдётся с кодом. */
+  for (const file of ['DESIGN_SYSTEM.md', 'docs/motion.md', 'docs/design-system.md']) {
+    ok(!read(file).includes('animation-timeline'), file + ': описан animation-timeline, которого нет в CSS');
+  }
+  ok(read('assets/shell.js').includes('IntersectionObserver'), 'shell.js: scroll-reveal должен идти через IntersectionObserver');
+  /* Каждое число «N ms» из motion.md обязано существовать в коде: либо токеном,
+     либо литералом, либо параметром счётной анимации в JS. */
+  const motionDoc = read('docs/motion.md');
+  const codeTimes = new Set();
+  for (const file of ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/course.css', 'assets/shell.js', 'assets/feed.js']) {
+    const source = read(file);
+    for (const match of source.matchAll(/(\d+(?:\.\d+)?)ms\b/g)) codeTimes.add(Number(match[1]));
+    for (const match of source.matchAll(/(?:duration|delay):\s*(\d+)\b/g)) codeTimes.add(Number(match[1]));
+    /* Счётные анимации задают темп арифметикой: `(now - start) / 700` в shell.js,
+       `delay: index * 24` в feed.js. */
+    for (const match of source.matchAll(/[\/,{;]\s*(\d{2,4})\s*[)}]/g)) codeTimes.add(Number(match[1]));
+    for (const match of source.matchAll(/\*\s*(\d{1,4})\b/g)) codeTimes.add(Number(match[1]));
+  }
+  codeTimes.add(120); codeTimes.add(200); codeTimes.add(320); // --u-dur-1…3
+  for (const match of motionDoc.matchAll(/(\d+)\s*ms/g)) {
+    ok(codeTimes.has(Number(match[1])), 'docs/motion.md: ' + match[1] + ' ms нет ни в CSS, ни в счётных анимациях');
+  }
+  /* Токены времени не переименовывались: значения держим в одном месте. */
+  for (const value of ['120ms', '200ms', '320ms']) {
+    ok(tokens.includes('--u-dur-' + (['120ms', '200ms', '320ms'].indexOf(value) + 1) + ': ' + value),
+      'tokens.css: сломана шкала --u-dur (ожидалось ' + value + ')');
+  }
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);
