@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T14:12:38.357Z",
+  "generated": "2026-11-04T14:21:33.761Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 214,
+  "total": 212,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 13
+      "count": 10
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 30
+      "count": 31
     }
   ],
   "commits": [
+    {
+      "sha": "dcb38df",
+      "title": "build: версия статики — хэш содержимого, единый цвет оболочки и сборка через build-all",
+      "date": "2026-11-04T14:18:04Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/dcb38df9facfec2b0e1596dfae128b613ba4a1ef"
+    },
     {
       "sha": "01dea58",
       "title": "test(sw): версия кэша выводится из sw.js, документация не фиксирует номер",
@@ -481,12 +487,6 @@
       "title": "Add warm editorial color accents",
       "date": "2026-11-02T06:58:13Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/3773170e15ffb1cbc5252bd135b452c5b4945fbc"
-    },
-    {
-      "sha": "64a4f5e",
-      "title": "Check each theme on a fresh rendered page",
-      "date": "2026-11-02T06:53:24Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/64a4f5eae1510bf777386e86fa8c0a674f8a9c45"
     }
   ]
 }
