@@ -398,14 +398,14 @@ function head({ title, description, canonical, extraMeta }) {
 <script>(function(){try{var s=localStorage.getItem("itsliventsev-theme"),t=s==="dark"||s==="light"?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark"){document.documentElement.setAttribute("data-theme","dark");var m=document.querySelector("meta[name=theme-color]");if(m)m.setAttribute("content","#131210");}}catch(e){}})();</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-${extraMeta}
+${extraMeta || ''}
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="preload" href="/assets/fonts/literata-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/base.css">
 <link rel="stylesheet" href="/assets/pages.css">
-${canonical}
+${canonical || '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->'}
 </head>`;
 }
 
@@ -537,7 +537,7 @@ function notePage(note, notes, notesById, index, registry) {
   </article>
   ${footer('Заметки')}
 </main>
-<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/knowledge.js?v=20261104r3" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
@@ -664,34 +664,48 @@ function zonePage(zone, notes) {
 `;
 }
 
-/* Граф — «живая» схема: узлы и рёбра отрисованы статически (работает без
-   скриптов), а knowledge.js запускает поверх физику: притяжение к своей
-   рубрике, отталкивание соседей, пружины по связям. Позиции из разметки —
-   детерминированные, поэтому при отключённых скриптах схема не дёргается. */
+/* Граф — «живая» схема связей, в духе графа Obsidian.
+
+   Разметка отдаёт три вещи: узлы с детерминированными координатами из
+   layoutGraph, рёбра между ними и служебную таблицу связей. Скрипт поверх
+   этого запускает физику. Без скриптов узлы стоят на местах и остаются
+   ссылками, поэтому навигация и таблица ниже работают всегда.
+
+   Три круга вместо одного:
+   · ядро     — узлы с наибольшим числом связей, у центра;
+   · пояс     — каждая рубрика стягивает свои заметки в свой сектор;
+   · орбита   — листья, которые ссылаются на хабы, но имеют мало связей.
+
+   Узел — точка + подпись, ранг задаётся числом связей, узел в фокусе
+   подсвечивает окружение. Всё остальное — прогрессивное улучшение. */
 function graphPage(notes, registry) {
   const positions = layoutGraph(notes, registry);
-  const degree = new Map(notes.map((note) => [note.id, 0]));
-  for (const edge of registry.edges) {
-    degree.set(edge.from, (degree.get(edge.from) || 0) + 1);
-    degree.set(edge.to, (degree.get(edge.to) || 0) + 1);
-  }
-  const rank = (value) => (value >= 10 ? 'hub' : value >= 6 ? 'link' : 'leaf');
+  const stats = graphStats(notes, registry);
   const nodes = notes.map((note) => {
     const point = positions.get(note.id);
-    const deg = degree.get(note.id) || 0;
+    const info = stats.get(note.id);
     return '<a class="kn-node" href="/blog/' + esc(note.id) + '.html" data-node="' + esc(note.id)
-      + '" data-zone="' + esc(note.zone) + '" data-degree="' + deg + '" data-rank="' + rank(deg) + '"'
+      + '" data-zone="' + esc(note.zone) + '" data-degree="' + info.degree + '" data-rank="' + info.rank + '"'
+      + ' data-ring="' + info.ring + '"'
       + ' style-x="' + point.x.toFixed(2) + '" style-y="' + point.y.toFixed(2) + '"'
-      + ' title="' + esc(note.title) + '">'
+      + ' title="' + esc(note.title) + ' (' + info.degree + ' ' + plural(info.degree, 'связь', 'связи', 'связей') + ')">'
       + '<span class="kn-node-dot" aria-hidden="true"></span>'
       + '<span class="kn-node-label">' + esc(note.title) + '</span></a>';
   }).join('\n      ');
+
+  const zoneOf = new Map(notes.map((note) => [note.id, note.zone]));
+  /* Толщина линии зависит от силы связи: взаимные ссылки рисуются заметнее,
+     чем односторонние. Это единственная «семантика» линии — никаких цветов
+     по рубрикам, второго акцента в системе нет. */
+  const edgeKeys = new Set(registry.edges.map((edge) => edge.from + '>' + edge.to));
   const edges = registry.edges.map((edge) => {
     const from = positions.get(edge.from), to = positions.get(edge.to);
     if (!from || !to) return '';
+    const mutual = edgeKeys.has(edge.to + '>' + edge.from);
     return '<line data-from="' + esc(edge.from) + '" data-to="' + esc(edge.to) + '"'
-      + ' data-from-zone="' + esc((notes.find((n) => n.id === edge.from) || {}).zone || '') + '"'
-      + ' data-to-zone="' + esc((notes.find((n) => n.id === edge.to) || {}).zone || '') + '"'
+      + ' data-from-zone="' + esc(zoneOf.get(edge.from) || '') + '"'
+      + ' data-to-zone="' + esc(zoneOf.get(edge.to) || '') + '"'
+      + (mutual ? ' data-mutual="true"' : '')
       + ' x1="' + from.x.toFixed(2) + '" y1="' + from.y.toFixed(2) + '" x2="' + to.x.toFixed(2) + '" y2="' + to.y.toFixed(2) + '"></line>';
   }).join('\n        ');
 
@@ -717,7 +731,7 @@ function graphPage(notes, registry) {
 
   return `${head({
     title: 'Граф заметок · itsliventsev',
-    description: 'Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.',
+    description: 'Живой граф перекрёстных ссылок базы знаний: ' + notes.length + ' заметок о сетях, Linux, базах данных, хранении и эксплуатации связаны ' + registry.edges.length + ' рёбрами. Ядро — хабы, пояс — рубрики, орбита — листья.',
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
   })}
 <body>
@@ -726,7 +740,7 @@ function graphPage(notes, registry) {
   <header class="ui-pagehead">
     <p class="ui-eyebrow">база знаний · связи</p>
     <h1>Граф заметок</h1>
-    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}, ${registry.edges.length} ${plural(registry.edges.length, 'связь', 'связи', 'связей')}. Каждая рубрика стягивает свои узлы к своему сектору, связи работают как пружины. Наведите курсор или перейдите по Tab — окружение подсветится, остальное отойдёт на второй план.</p>
+    <p>${notes.length} ${plural(notes.length, 'заметка', 'заметки', 'заметок')}, ${registry.edges.length} ${plural(registry.edges.length, 'связь', 'связи', 'связей')}. Ядро держат хабы, пояс разложен по рубрикам, на орбите — заметки с одной-двумя связями. Наведите курсор или нажмите Tab: окружение подсветится, остальное отойдёт на второй план.</p>
     <div class="ui-pagehead-meta"><span data-graph-count>${notes.length} узлов</span><span>${registry.edges.length} рёбер</span><span><a href="/blog/topics.html">рубрики</a></span></div>
   </header>
 
@@ -741,7 +755,7 @@ function graphPage(notes, registry) {
       <p class="catalog-status" data-graph-status role="status" aria-live="polite"></p>
     </div>
 
-    <div class="kn-graph-stage" data-kn-graph>
+    <div class="kn-graph-stage" data-kn-graph data-motion="off">
       <svg class="kn-graph-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         ${edges}
       </svg>
@@ -750,7 +764,7 @@ function graphPage(notes, registry) {
       </div>
     </div>
 
-    <p class="kn-graph-legend"><span>точка — заметка, размер по числу связей</span><span>линия — перекрёстная ссылка</span><span>сектор — рубрика</span><span>узел можно перетащить</span></p>
+    <p class="kn-graph-legend"><span>точка — заметка, размер по числу связей</span><span>линия — ссылка, толще у взаимных</span><span>сектор — рубрика</span><span>узел можно перетащить</span></p>
   </section>
 
   <noscript><p class="kn-empty">Граф нарисован статически: узлы — ссылки, рёбра — линии, рубрики разнесены по секторам. Без скриптов нет движения и подсветки, но навигация и таблица связей ниже работают полностью.</p></noscript>
@@ -768,50 +782,193 @@ function graphPage(notes, registry) {
   </section>
   ${footer('Заметки · граф')}
 </main>
-<script src="/assets/knowledge.js" defer></script>
+<script src="/assets/knowledge.js?v=20261104r3" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>
 </html>
 `;
 }
 
-/* Домашние координаты узлов. Рубрика получает сектор (по часовой стрелке от
-   верха), внутри сектора заметки стоят по рангу связности: чем больше связей,
-   тем ближе к центру. Случайных чисел нет — при пересборке граф не «прыгает»,
-   а смена данных проявляется сдвигом, а не новой картинкой. */
-function layoutGraph(notes, registry) {
-  const positions = new Map();
+/* Степень, ранг и круг узла — одна функция на граф и на подпись в рельсе,
+   чтобы «хаб» на схеме и «хаб» в тексте не разъехались. */
+function graphStats(notes, registry) {
   const degree = new Map(notes.map((note) => [note.id, 0]));
+  const mutual = new Map(notes.map((note) => [note.id, 0]));
+  const keys = new Set(registry.edges.map((edge) => edge.from + '>' + edge.to));
   for (const edge of registry.edges) {
     degree.set(edge.from, (degree.get(edge.from) || 0) + 1);
     degree.set(edge.to, (degree.get(edge.to) || 0) + 1);
+    if (keys.has(edge.to + '>' + edge.from)) {
+      mutual.set(edge.from, (mutual.get(edge.from) || 0) + 1);
+      mutual.set(edge.to, (mutual.get(edge.to) || 0) + 1);
+    }
   }
+  const values = [...degree.values()].sort((a, b) => b - a);
+  const hubCut = values[Math.max(0, Math.round(values.length * 0.18) - 1)] || 0;
+  const linkCut = values[Math.max(0, Math.round(values.length * 0.5) - 1)] || 0;
+  const stats = new Map();
+  for (const note of notes) {
+    const value = degree.get(note.id) || 0;
+    const rank = value >= Math.max(10, hubCut) ? 'hub' : value >= Math.max(5, linkCut) ? 'link' : 'leaf';
+    stats.set(note.id, {
+      degree: value,
+      mutual: mutual.get(note.id) || 0,
+      rank,
+      ring: rank === 'hub' ? 'core' : rank === 'link' ? 'belt' : 'orbit',
+    });
+  }
+  return stats;
+}
+
+/* Домашние координаты узлов: детерминированные, без случайных чисел — граф
+   не «прыгает» между сборками, а смена данных видна сдвигом, а не новой
+   картинкой. Ядро (хабы) стоит у центра, вокруг — секторы рубрик, листья
+   уходят на внешнюю орбиту.
+
+   После расстановки по секторам идёт разгон столкновений: подписи не должны
+   наезжать друг на друга (именно это и было видно в первом варианте). Считаем
+   в «пикселях» условного поля 1200×800, потому что проценты по осям имеют
+   разную цену: 1 % по ширине — 12 px, по высоте — 8 px. Итерации фиксированы,
+   узлы обходятся в стабильном порядке, поэтому результат воспроизводим. */
+function layoutGraph(notes, registry) {
+  const stats = graphStats(notes, registry);
+  const positions = new Map();
   const zones = TAXONOMY.zones.filter((zone) => notes.some((note) => note.zone === zone.id));
   const sector = (Math.PI * 2) / Math.max(1, zones.length);
+  const put = (id, angle, radius) => positions.set(id, {
+    x: 50 + Math.cos(angle) * radius * 1.62,
+    y: 50 + Math.sin(angle) * radius,
+  });
+
+  /* 1. Ядро: самые связанные узлы, по одному от рубрики — ни одна тема
+        не становится «лицом» всего графа. */
+  const ranked = notes.slice().sort((a, b) => (stats.get(b.id).degree - stats.get(a.id).degree) || a.id.localeCompare(b.id));
+  const core = [];
+  const usedZones = new Set();
+  for (const note of ranked) {
+    if (core.length >= Math.min(9, zones.length)) break;
+    if (usedZones.has(note.zone)) continue;
+    usedZones.add(note.zone);
+    core.push(note);
+  }
+  /* Ядро: восемь узлов на кольце радиуса 24 — при 13 они стояли вплотную
+     (156 px по ширине на восемь подписей), и никакое разведение не помогало. */
+  core.forEach((note, index) => put(note.id, (index / Math.max(1, core.length)) * Math.PI * 2 - Math.PI / 2, 24));
+
+  /* 2. Пояс и орбита: остальные узлы — в сектор своей рубрики. Связующие
+        ближе к центру, листья — на внешней дуге двумя рядами. */
   zones.forEach((zone, zoneIndex) => {
-    const own = notes.filter((note) => note.zone === zone.id)
-      .sort((a, b) => (degree.get(b.id) || 0) - (degree.get(a.id) || 0) || a.id.localeCompare(b.id));
-    const start = zoneIndex * sector - Math.PI / 2 + sector / 2;
-    own.forEach((note, index) => {
-      /* Два кольца: хабы ближе к центру сектора, остальные — по дуге снаружи.
-         Так ядро рубрики читается без подписей. */
-      const inner = index < Math.ceil(own.length / 3);
-      const ring = inner ? 17 + index * 1.8 : 33 + (index % 2) * 3.5;
-      const spread = inner ? sector * 0.5 : sector * 0.86;
-      const offset = own.length > 1 ? (index / (own.length - 1) - 0.5) * spread : 0;
-      const angle = start + (inner ? offset * 0.6 : offset);
-      const radiusX = ring * 1.55, radiusY = ring;
-      positions.set(note.id, {
-        x: 50 + Math.cos(angle) * radiusX,
-        y: 50 + Math.sin(angle) * radiusY,
-      });
+    const own = notes.filter((note) => note.zone === zone.id && !positions.has(note.id))
+      .sort((a, b) => (stats.get(b.id).degree - stats.get(a.id).degree) || a.id.localeCompare(b.id));
+    const center = zoneIndex * sector - Math.PI / 2 + sector / 2;
+    const belt = own.filter((note) => stats.get(note.id).rank === 'link');
+    const orbit = own.filter((note) => stats.get(note.id).rank !== 'link');
+    belt.forEach((note, index) => put(note.id, center + (belt.length > 1 ? (index / (belt.length - 1) - 0.5) * sector * 0.66 : 0), 30));
+    orbit.forEach((note, index) => {
+      const row = index % 2;
+      const step = orbit.length > 1 ? (index / (orbit.length - 1) - 0.5) : 0;
+      put(note.id, center + step * sector * 0.94, 42 + row * 5);
     });
   });
-  /* Жёсткие границы: узел не должен упираться в край поля. */
-  for (const [id, point] of positions) {
-    positions.set(id, { x: Math.min(92, Math.max(8, point.x)), y: Math.min(92, Math.max(8, point.y)) });
+  notes.filter((note) => !positions.has(note.id)).forEach((note, index, rest) => {
+    put(note.id, (index / Math.max(1, rest.length)) * Math.PI * 2, 46);
+  });
+
+  /* 2б. Нормализация: эллипс с коэффициентом 1,62 по ширине выносил крайние
+        узлы за поле, и clamp сваливал их в столбик у края — именно поэтому
+        подписи наезжали друг на друга, сколько бы раундов ни считалось.
+        Теперь облако целиком вписывается в отступы, форма сохраняется. */
+  const FIT = { x0: 13, x1: 87, y0: 13, y1: 87 };
+  const raw = [...positions.entries()].map(([id, point]) => ({ id, x: point.x, y: point.y }));
+  const minX = Math.min(...raw.map((p) => p.x)), maxX = Math.max(...raw.map((p) => p.x));
+  const minY = Math.min(...raw.map((p) => p.y)), maxY = Math.max(...raw.map((p) => p.y));
+  const scaleX = (FIT.x1 - FIT.x0) / Math.max(1, maxX - minX);
+  const scaleY = (FIT.y1 - FIT.y0) / Math.max(1, maxY - minY);
+  for (const point of raw) {
+    positions.set(point.id, {
+      x: FIT.x0 + (point.x - minX) * scaleX,
+      y: FIT.y0 + (point.y - minY) * scaleY,
+    });
   }
-  return positions;
+
+  /* 3. Разгон по реальным пикселям поля.
+
+        Поле 100×100 — не квадрат: 1 % по ширине ≈ 12 px, по высоте ≈ 8 px.
+        Поэтому физика считается в пикселях условного поля 1200×800, а в
+        проценты переводится только результат. Коробка узла — подпись на две
+        строки (hub 148, link 136, leaf 96 px) плюс точка.
+
+        Почему прежние версии не сходились: узлы стояли не «сами по себе», а
+        толпой в секторе, и ограничение по X + возврат к дому с силой 0.002–0.03
+        съедали разведение быстрее, чем оно происходило. Здесь три круга
+        последовательно убирают вертикальное и горизонтальное перекрытие. */
+  const FIELD_W = 1200, FIELD_H = 800;
+  const BOX_W = { hub: 148, link: 136, leaf: 96 };
+  const BOX_H = 56;
+  const points = notes.map((note) => {
+    const home = positions.get(note.id);
+    const rank = stats.get(note.id).rank;
+    return {
+      id: note.id,
+      w: BOX_W[rank] || BOX_W.leaf,
+      hx: home.x, hy: home.y, x: home.x, y: home.y,
+    };
+  });
+  const order = points.slice().sort((a, b) => a.id.localeCompare(b.id));
+  const clamp = (point) => {
+    point.x = Math.min(94, Math.max(6, point.x));
+    point.y = Math.min(94, Math.max(6, point.y));
+  };
+  const overlaps = (a, b) => {
+    const dx = Math.abs(b.x - a.x) / 100 * FIELD_W;
+    const dy = Math.abs(b.y - a.y) / 100 * FIELD_H;
+    return {
+      dx, dy,
+      needX: (a.w + b.w) / 2 + 12,
+      needY: BOX_H + 10,
+      get bad() { return this.dx < this.needX && this.dy < this.needY; },
+    };
+  };
+  const resolve = (rounds, pull, axis) => {
+    for (let round = 0; round < rounds; round++) {
+      let moved = 0;
+      for (let i = 0; i < order.length; i++) {
+        for (let j = i + 1; j < order.length; j++) {
+          const a = order[i], b = order[j];
+          const o = overlaps(a, b);
+          if (!o.bad) continue;
+          const signX = b.x === a.x ? (i % 2 ? 1 : -1) : Math.sign(b.x - a.x);
+          const signY = b.y === a.y ? ((i + j) % 2 ? 1 : -1) : Math.sign(b.y - a.y);
+          const gapX = o.needX - o.dx, gapY = o.needY - o.dy;
+          const verticalFirst = axis === 'y' ? true : axis === 'x' ? false : gapY <= gapX;
+          if (verticalFirst) {
+            const shift = Math.min(gapY / 2 + 1, 14) / FIELD_H * 100;
+            a.y -= signY * shift; b.y += signY * shift;
+          } else {
+            const shift = Math.min(gapX / 2 + 1, 18) / FIELD_W * 100;
+            a.x -= signX * shift; b.x += signX * shift;
+          }
+          moved++;
+        }
+      }
+      for (const point of order) {
+        if (pull) {
+          point.x += (point.hx - point.x) * pull;
+          point.y += (point.hy - point.y) * pull;
+        }
+        clamp(point);
+      }
+      if (!moved) break;
+    }
+  };
+  /* Сначала «мягко» с возвратом к секторам, затем отдельно по вертикали и по
+     горизонтали без возврата — так остатки не разбегаются обратно. */
+  resolve(400, 0.002, 'both');
+  resolve(400, 0, 'y');
+  resolve(400, 0, 'x');
+  const resolved = new Map();
+  for (const point of points) resolved.set(point.id, { x: point.x, y: point.y });
+  return resolved;
 }
 
 /* ─────────────────────────── лента blog.html ─────────────────────────── */

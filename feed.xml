@@ -304,7 +304,7 @@
       <category>мониторинг</category>
       <category>журналы</category>
       <category>автоматизация</category>
-      <description>rate и histogram_quantile, почему CPU &amp;gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
+      <description>rate и histogram_quantile, почему CPU &gt; 80% — плохой алерт, что такое for: 5m и как не утонуть в уведомлениях.</description>
     </item>
     <item>
       <title>RAID: паритет — это арифметика, а не магия</title>
@@ -448,109 +448,11 @@
       <description>Статья о практикоориентированности в системе СПО и её влиянии на трудоустройство выпускников: стандарты 2023–2024, статистика и прогнозы.</description>
     </item>
     <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/2026-10-26-kak-ustroen-etot-blog.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Первая заметка блога стала входной страницей базы знаний: связи между записями, рубрики, граф и источники с датой обращения.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/dve-garnitury.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dve-garnitury.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/dvizhenie-120-320.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/dvizhenie-120-320.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/fokus-i-klaviatura.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
       <title>Граф заметок</title>
       <link>https://itsliventsev.github.io/blog/graph.html</link>
       <guid isPermaLink="true">https://itsliventsev.github.io/blog/graph.html</guid>
       <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
       <description>Живой граф перекрёстных ссылок базы знаний: 43 заметки о сетях, Linux, базах данных, хранении и эксплуатации связаны 142 рёбрами. Узлы собираются по рубрикам, связи пружинят, курсор подсвечивает окружение.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kak-ustroena-baza-znaniy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/karta-temy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/karta-temy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/kontrast-aa.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/kontrast-aa.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/merka-stroki.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/merka-stroki.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/setka-i-plotnost.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/setka-i-plotnost.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/shkala-otstupov.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/shkala-otstupov.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/srezy-i-razrezy.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/srezy-i-razrezy.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablica-i-eho-zebra.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tablicy-kak-most.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tablicy-kak-most.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
-    </item>
-    <item>
-      <title>Заметка переехала</title>
-      <link>https://itsliventsev.github.io/blog/tokeny-tsveta.html</link>
-      <guid isPermaLink="true">https://itsliventsev.github.io/blog/tokeny-tsveta.html</guid>
-      <pubDate>undefined, NaN undefined NaN 12:00:00 GMT</pubDate>
-      <description>Заметка переехала: раздел «Заметки» пересобран вокруг сетевого администрирования, Linux, баз данных и эксплуатации.</description>
     </item>
     <item>
       <title>Рубрики заметок</title>

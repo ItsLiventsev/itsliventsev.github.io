@@ -42,6 +42,9 @@ for (const file of contentPages) {
   ok(source.includes('/assets/base.css'), file + ': не подключён базовый слой');
   ok(source.includes('/assets/pages.css'), file + ': не подключён слой страниц');
   ok(source.includes('/assets/shell.js'), file + ': не подключён общий shell');
+  /* Литерал undefined в разметке — всегда баг сборки: шаблон получил
+     отсутствующее значение и напечатал его. Ловится здесь, а не глазами. */
+  ok(!/undefined/.test(source.replace(/<script[\\s\\S]*?<\/script>/g, '')), file + ': в разметке литерал «undefined»');
   ok((source.match(/<main\b/g) || []).length === 1, file + ': ожидался ровно один main');
   ok((source.match(/<h1\b/g) || []).length === 1, file + ': ожидался ровно один H1');
   ok(source.includes('lang="ru"'), file + ': не задан язык документа');
