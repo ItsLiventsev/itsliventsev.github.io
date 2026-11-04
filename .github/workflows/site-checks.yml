@@ -19,6 +19,7 @@ jobs:
         run: |
           python3 scripts/audit-html.py
           python3 scripts/build-search-index.py --check
+          node scripts/build-related.js --check
           node scripts/regression-static.js
           node scripts/runtime-smoke.js
           node scripts/test-service-worker.js
