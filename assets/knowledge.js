@@ -15,53 +15,6 @@
   const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (ch) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
-  /* ——— фильтр ленты по рубрике ——— */
-  function initFilters() {
-    const filters = document.querySelector('[data-kn-filters]');
-    const stream = document.querySelector('[data-kn-stream]');
-    if (!filters || !stream) return;
-    const buttons = [...filters.querySelectorAll('[data-kn-zone]')];
-    const cards = [...stream.querySelectorAll('[data-kn-zone]')];
-    const empty = document.querySelector('[data-kn-empty]');
-    const status = document.querySelector('[data-catalog-status]');
-    const input = document.querySelector('[data-kn-search]');
-
-    function apply() {
-      const zone = (buttons.find((button) => button.getAttribute('aria-pressed') === 'true') || buttons[0]).dataset.knZone;
-      const query = input ? input.value.toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').trim() : '';
-      let shown = 0;
-      cards.forEach((card) => {
-        const zoneOk = zone === 'all' || card.dataset.knZone === zone;
-        const textOk = !query || card.textContent.toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').includes(query);
-        const visible = zoneOk && textOk;
-        card.hidden = !visible;
-        if (visible) shown++;
-      });
-      if (empty) empty.hidden = shown > 0;
-      if (status) {
-        status.textContent = (zone === 'all' && !query)
-          ? 'Показаны все заметки.'
-          : (shown ? 'Найдено: ' + shown : 'Ничего не найдено. Попробуйте другой запрос.');
-      }
-    }
-
-    buttons.forEach((button) => button.addEventListener('click', () => {
-      buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
-      apply();
-    }));
-    if (input) {
-      input.addEventListener('input', apply);
-      const panel = input.closest('[data-catalog-search]');
-      if (panel) panel.hidden = false;
-      const clear = document.querySelector('[data-catalog-clear]');
-      if (clear) {
-        clear.hidden = false;
-        clear.addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
-      }
-    }
-    apply();
-  }
-
   /* ——— граф: живая схема связей ———
      Разметка приносит детерминированные «домашние» координаты (style-x/style-y)
      и готовые линии. Скрипт переносит узлы в абсолютные координаты поля,
@@ -460,6 +413,5 @@
     });
   }
 
-  initFilters();
   initGraph();
 })();

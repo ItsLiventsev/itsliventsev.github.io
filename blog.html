@@ -61,19 +61,19 @@
       <label for="note-query">Поиск по заметкам</label>
       <div class="ui-search-field">
         <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#search"></use></svg>
-        <input id="note-query" type="search" placeholder="Слово, тема или тег" autocomplete="off" data-kn-search>
+        <input id="note-query" type="search" placeholder="Слово, тема или тег" autocomplete="off">
       </div>
       <button type="button" data-catalog-clear hidden>Очистить</button>
     </div>
     <div class="kn-rail-row">
-      <div class="kn-filterbar" data-kn-filters role="group" aria-label="Рубрика"><button class="catalog-filter" type="button" aria-pressed="true" data-kn-zone="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="network">Сети</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="linux">Linux и службы</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="databases">Базы данных</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="storage">Хранение и отказоустойчивость</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="ops">Эксплуатация</button><button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="practice">Практика и обучение</button></div>
+      <div class="kn-filterbar" data-catalog-filters role="group" aria-label="Рубрика"><button class="catalog-filter" type="button" aria-pressed="true" data-catalog-filter="all">Все</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="network">Сети</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="linux">Linux и службы</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="databases">Базы данных</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="storage">Хранение и отказоустойчивость</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="ops">Эксплуатация</button><button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="practice">Практика и обучение</button></div>
       <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/blog/graph.html">граф связей</a><a href="/feed.xml">RSS</a></nav>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
 
-  <div class="kn-stream" data-kn-stream>
-      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-troubleshoot.html">
+  <div class="kn-stream" data-kn-stream data-catalog-list>
+      <a class="kn-card kn-card--wide" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-troubleshoot.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Диагностика сети: снизу вверх, а не наугад</span>
@@ -81,7 +81,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-ansible.html">
+      <a class="kn-card" data-kn-zone="ops" data-catalog-tags="ops" href="/blog/kn-ansible.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
           <span class="kn-card-title">Ansible: плейбук, который можно запускать дважды</span>
@@ -89,7 +89,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-backups.html">
+      <a class="kn-card" data-kn-zone="storage" data-catalog-tags="storage" href="/blog/kn-backups.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">04</span>Хранение и отказоустойчивость</span>
           <span class="kn-card-title">Бэкап: 3-2-1, RPO и проверка восстановлением</span>
@@ -97,7 +97,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-bash.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-bash.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Конвейер: одна строка вместо цикла</span>
@@ -105,7 +105,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-bgp.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-bgp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">BGP: политика вместо метрики</span>
@@ -113,7 +113,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--half" data-kn-zone="linux" href="/blog/kn-cron.html">
+      <a class="kn-card kn-card--half" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-cron.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Планировщик: cron, systemd timers и тихие сбои</span>
@@ -121,7 +121,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-dhcp.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-dhcp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">DHCP: аренда адреса на четыре шага</span>
@@ -129,7 +129,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-dns.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-dns.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">DNS: кеш, TTL и два резолвера</span>
@@ -137,7 +137,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-docker.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-docker.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Контейнеры: образ, слой и том</span>
@@ -145,7 +145,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="practice" href="/blog/kn-documentation.html">
+      <a class="kn-card" data-kn-zone="practice" data-catalog-tags="practice" href="/blog/kn-documentation.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">06</span>Практика и обучение</span>
           <span class="kn-card-title">Документация и регламенты: то, что спасает в три ночи</span>
@@ -153,7 +153,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="practice" href="/blog/kn-git.html">
+      <a class="kn-card" data-kn-zone="practice" data-catalog-tags="practice" href="/blog/kn-git.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">06</span>Практика и обучение</span>
           <span class="kn-card-title">Git в работе администратора: ветка, откат, конфиг</span>
@@ -161,7 +161,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--flat" data-kn-zone="network" href="/blog/kn-gre.html">
+      <a class="kn-card kn-card--flat" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-gre.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Туннель и MTU: 24 байта, которые ломают передачу</span>
@@ -169,7 +169,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="practice" href="/blog/kn-incident.html">
+      <a class="kn-card kn-card--wide" data-kn-zone="practice" data-catalog-tags="practice" href="/blog/kn-incident.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">06</span>Практика и обучение</span>
           <span class="kn-card-title">Разбор инцидента: от «всё лежит» до списка действий</span>
@@ -177,7 +177,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-indexes.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-indexes.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Индексы и планы: почему запрос медленный</span>
@@ -185,7 +185,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-ipam.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-ipam.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">План адресации: сеть начинается с таблицы</span>
@@ -193,7 +193,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-ipsec.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-ipsec.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">IPsec: две фазы и одна причина «туннель поднят, трафика нет»</span>
@@ -201,7 +201,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-lacp.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-lacp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">LACP: два кабеля, один адрес</span>
@@ -209,7 +209,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--half" data-kn-zone="linux" href="/blog/kn-logrotate.html">
+      <a class="kn-card kn-card--half" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-logrotate.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">logrotate: почему журналы съели диск</span>
@@ -217,7 +217,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-logs.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-logs.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Журналы: уровни, ротация и лимит на диск</span>
@@ -225,7 +225,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>6 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-lvm.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-lvm.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Диски: разделы, LVM и что делать, когда место кончилось</span>
@@ -233,7 +233,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-monitoring.html">
+      <a class="kn-card" data-kn-zone="ops" data-catalog-tags="ops" href="/blog/kn-monitoring.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
           <span class="kn-card-title">Мониторинг: метрика, симптом и алерт, который не будит зря</span>
@@ -241,7 +241,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-mtu.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-mtu.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">MTU и PMTU: почему ping идёт, а скачивание нет</span>
@@ -249,7 +249,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-mysql.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-mysql.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">MySQL: InnoDB, кеш запросов и почему он мешает</span>
@@ -257,7 +257,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--flat" data-kn-zone="network" href="/blog/kn-netfilter.html">
+      <a class="kn-card kn-card--flat" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-netfilter.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Файрвол в Linux: nftables и порядок правил</span>
@@ -265,7 +265,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="linux" href="/blog/kn-nginx.html">
+      <a class="kn-card kn-card--wide" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-nginx.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">nginx как reverse proxy: что важно кроме proxy_pass</span>
@@ -273,7 +273,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-ntp.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-ntp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Время в сети: NTP и почему 30 секунд ломают всё</span>
@@ -281,7 +281,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-packet.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-packet.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">tcpdump: как читать пакет, а не гадать</span>
@@ -289,7 +289,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-postgres.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-postgres.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">PostgreSQL: версии строк, VACUUM и заворот XID</span>
@@ -297,7 +297,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="practice" href="/blog/kn-practice.html">
+      <a class="kn-card" data-kn-zone="practice" data-catalog-tags="practice" href="/blog/kn-practice.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">06</span>Практика и обучение</span>
           <span class="kn-card-title">Практикоориентированное обучение: навык проверяют на стенде</span>
@@ -305,7 +305,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--half" data-kn-zone="practice" href="/blog/kn-project.html">
+      <a class="kn-card kn-card--half" data-kn-zone="practice" data-catalog-tags="practice" href="/blog/kn-project.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">06</span>Практика и обучение</span>
           <span class="kn-card-title">Проект как кейс: навигация корпуса и киберспорт</span>
@@ -313,7 +313,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="ops" href="/blog/kn-prometheus.html">
+      <a class="kn-card" data-kn-zone="ops" data-catalog-tags="ops" href="/blog/kn-prometheus.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">05</span>Эксплуатация</span>
           <span class="kn-card-title">Prometheus: четыре типа метрик и один хороший алерт</span>
@@ -321,7 +321,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-raid.html">
+      <a class="kn-card" data-kn-zone="storage" data-catalog-tags="storage" href="/blog/kn-raid.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">04</span>Хранение и отказоустойчивость</span>
           <span class="kn-card-title">RAID: паритет — это арифметика, а не магия</span>
@@ -329,7 +329,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-redis.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-redis.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Redis: кеш, который умеет терять данные</span>
@@ -337,7 +337,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-replication.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-replication.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Репликация: копия отстаёт, и это нормально</span>
@@ -345,7 +345,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-routing.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-routing.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">Таблица маршрутов: как пакет выбирает выход</span>
@@ -353,7 +353,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--flat" data-kn-zone="linux" href="/blog/kn-ssh.html">
+      <a class="kn-card kn-card--flat" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-ssh.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">SSH: ключ вместо пароля и что закрыть в sshd</span>
@@ -361,7 +361,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-stp.html">
+      <a class="kn-card kn-card--wide" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-stp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">STP: почему коммутатор сам выключил порт</span>
@@ -369,7 +369,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-systemd.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-systemd.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">systemd: юниты, цели и порядок загрузки</span>
@@ -377,7 +377,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="network" href="/blog/kn-tcp.html">
+      <a class="kn-card" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-tcp.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">TCP: три пакета, четыре состояния и одна минута</span>
@@ -385,7 +385,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="linux" href="/blog/kn-tls.html">
+      <a class="kn-card" data-kn-zone="linux" data-catalog-tags="linux" href="/blog/kn-tls.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">02</span>Linux и службы</span>
           <span class="kn-card-title">Сертификаты и TLS 1.3: одна поездка вместо двух</span>
@@ -393,7 +393,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>9 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="databases" href="/blog/kn-tx.html">
+      <a class="kn-card" data-kn-zone="databases" data-catalog-tags="databases" href="/blog/kn-tx.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">03</span>Базы данных</span>
           <span class="kn-card-title">Транзакции: уровни изоляции и три аномалии</span>
@@ -401,7 +401,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>7 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card kn-card--wide" data-kn-zone="network" href="/blog/kn-vlan.html">
+      <a class="kn-card kn-card--wide" data-kn-zone="network" data-catalog-tags="network" href="/blog/kn-vlan.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">01</span>Сети</span>
           <span class="kn-card-title">VLAN и 802.1Q: один провод, много сетей</span>
@@ -409,7 +409,7 @@
           <span class="kn-card-meta"><time datetime="2026-11-04">04.11.2026</time><span aria-hidden="true">·</span><span>8 мин</span><span class="kn-ai">ии-структура</span></span>
         </span>
       </a>
-      <a class="kn-card" data-kn-zone="storage" href="/blog/kn-zfs.html">
+      <a class="kn-card" data-kn-zone="storage" data-catalog-tags="storage" href="/blog/kn-zfs.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">04</span>Хранение и отказоустойчивость</span>
           <span class="kn-card-title">ZFS: контрольные суммы, которые ловят тихие ошибки</span>
@@ -418,7 +418,7 @@
         </span>
       </a>
   </div>
-  <p class="kn-empty" data-kn-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
+  <p class="kn-empty" data-catalog-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
 
   <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот администратора: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
   <!-- KN:AUTO:END -->
@@ -440,6 +440,7 @@
     <time data-footer-updated></time>
   </footer>
 </main>
+<script src="/assets/catalog.js" defer></script>
 <script src="assets/knowledge.js" defer></script>
 <script src="/assets/shell.js" defer></script>
 </body>

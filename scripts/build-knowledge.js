@@ -580,7 +580,7 @@ function topicCard(note) {
   const sizeClass = String(note.size || '').split(' ')
     .filter((part) => part && part !== 'normal')
     .map((part) => ' kn-card--' + part).join('');
-  return `<a class="kn-card${sizeClass}" data-kn-zone="${esc(note.zone)}" href="/blog/${esc(note.id)}.html">
+  return `<a class="kn-card${sizeClass}" data-kn-zone="${esc(note.zone)}" data-catalog-tags="${esc(note.zone)}" href="/blog/${esc(note.id)}.html">
         <span class="kn-card-body">
           <span class="kn-card-zone"><span class="kn-card-num" aria-hidden="true">${esc(CARD_NUM.get(note.zone) || '')}</span>${esc(ZONES.get(note.zone).title)}</span>
           <span class="kn-card-title">${esc(note.title)}</span>
@@ -998,9 +998,10 @@ function streamMarkup(notes, registry, counts) {
   const sizes = packSizes(sorted.length);
   const tagCount = new Map();
   for (const note of notes) for (const tag of note.tags || []) tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
-  const filters = ['<button class="catalog-filter" type="button" aria-pressed="true" data-kn-zone="all">Все</button>']
+  /* Фильтр ленты — общий контракт каталога (assets/catalog.js), а не свой код. */
+  const filters = ['<button class="catalog-filter" type="button" aria-pressed="true" data-catalog-filter="all">Все</button>']
     .concat(TAXONOMY.zones.filter((zone) => counts.get(zone.id)).map((zone) =>
-      '<button class="catalog-filter" type="button" aria-pressed="false" data-kn-zone="' + esc(zone.id) + '">'
+      '<button class="catalog-filter" type="button" aria-pressed="false" data-catalog-filter="' + esc(zone.id) + '">'
       + esc(zone.title) + '</button>')).join('');
 
   const side = sorted.slice(0, 4).map((note) => '<a class="kn-side-item" href="/blog/' + esc(note.id) + '.html">'
@@ -1027,23 +1028,23 @@ function streamMarkup(notes, registry, counts) {
       <label for="note-query">Поиск по заметкам</label>
       <div class="ui-search-field">
         <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#search"></use></svg>
-        <input id="note-query" type="search" placeholder="Слово, тема или тег" autocomplete="off" data-kn-search>
+        <input id="note-query" type="search" placeholder="Слово, тема или тег" autocomplete="off">
       </div>
       <button type="button" data-catalog-clear hidden>Очистить</button>
     </div>
     <div class="kn-rail-row">
-      <div class="kn-filterbar" data-kn-filters role="group" aria-label="Рубрика">${filters}</div>
+      <div class="kn-filterbar" data-catalog-filters role="group" aria-label="Рубрика">${filters}</div>
       <nav class="kn-mini" aria-label="Карта базы знаний"><a href="/blog/topics.html">рубрики</a><a href="/blog/graph.html">граф связей</a><a href="/feed.xml">RSS</a></nav>
     </div>
     <p class="catalog-status" data-catalog-status role="status" aria-live="polite"></p>
   </div>
 
-  <div class="kn-stream" data-kn-stream>
+  <div class="kn-stream" data-kn-stream data-catalog-list>
       ${sorted.map((note, index) => topicCard(Object.assign({}, note, {
         size: sizes[index],
       }))).join('\n      ')}
   </div>
-  <p class="kn-empty" data-kn-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
+  <p class="kn-empty" data-catalog-empty hidden>По этому фильтру заметок нет. <a href="/blog/topics.html">Открыть рубрики</a>.</p>
 
   <div class="ui-callout"><strong>Зачем отдельная лента.</strong> Заметка — это рабочий блокнот администратора: короткое наблюдение, проверенное на практике, со ссылкой на источники. Статья — вычитанный текст с методической рамкой. Смешивать их в одном списке значит терять оба жанра. Раскладку ленты собирает <code>scripts/build-knowledge.js</code>: размеры карточек чередуются, чтобы лента читалась как журнал, а не как таблица.</div>
   <!-- KN:AUTO:END -->`;
