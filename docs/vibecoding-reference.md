@@ -40,7 +40,7 @@
 |---|---|
 | Плотная липкая шапка, URL-логотип в пилюле | `.ui-masthead`, `.ui-brand` в `assets/base.css`, разметка — `assets/shell.js` |
 | Белые карточки с большими радиусами и мягкой тенью на нейтральной подложке | `--u-paper #efeee9`, `--u-surface #fff`, `--u-r-lg/xl`, `--u-shadow-1/2` |
-| Число вперёд (даты, счётчики, метрики) | `.home-stat`, `.catalog-stat`, `.case-fact`, `.trophy-card` в `assets/pages.css` |
+| Число вперёд (даты, счётчики, метрики) | `.home-stats`, `.case-fact`, `.trophy-card` в `assets/pages.css` |
 | Один вход в текст на первом экране | `.home-hero` в `assets/pages.css` §1, разметка `index.html` |
 | Иконочные ряды вместо сетки коробок | `.home-paths`, `.home-space`, §1 `assets/pages.css` |
 | Плавающий таббар с активным пунктом в акценте | `.ui-tabbar` в `assets/base.css` |

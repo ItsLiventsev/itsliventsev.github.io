@@ -455,6 +455,20 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
   ok(read('DESIGN_SYSTEM.md').includes('### 3.11 Мобильный таббар'), 'в дизайн-системе должен быть раздел про таббар');
 }
 
+/* ── Мёртвые классы: удалены, но не должны вернуться ──
+   Правила без единого потребителя в разметке и JS раздували CSS и путали
+   аудит классов. Список зафиксирован, чтобы «на всякий случай» не отрастало. */
+{
+  const layers = ['assets/base.css', 'assets/pages.css', 'assets/course.css'].map(read).join('\n');
+  for (const legacy of ['ui-btn--ghost', 'ui-meta-row', 'ui-hairline', 'ui-grid-2', 'ui-grid-3', 'ui-stack',
+    'ui-field', 'ui-label', 'ui-input', 'ui-select', 'ui-textarea', 'catalog-stat', 'editorial-meta',
+    'pill-rose', 'pill-red', 'pill-blue', 'pill-green', 'pill-amber', 'is-danger', 'fs-105',
+    'kn-graph-fallback', 'kn-card--lead', 'kn-card--tall', 'is-now', 'flat-btn--block', 'notice-rose']) {
+    ok(!new RegExp('\\.' + legacy.replace(/-/g, '\\-') + '\\b').test(layers), 'мёртвый класс .' + legacy + ' вернулся в CSS');
+  }
+  ok(read('assets/base.css').includes('.ui-search-field input'), 'поле поиска должно остаться единственным стилизованным input');
+}
+
 /* ── удалённые ассеты не должны существовать ── */
 for (const dead of ['assets/workspace.css', 'assets/workspace-tokens.css', 'assets/workspace-home.css', 'assets/workspace-learning.css', 'assets/catalog.css', 'assets/shared-chrome.js', 'assets/site.js', 'assets/home-activity.js', 'assets/workspace.js', 'assets/i18n.js']) {
   ok(!exists(dead), 'удалённый ассет всё ещё в репозитории: ' + dead);
