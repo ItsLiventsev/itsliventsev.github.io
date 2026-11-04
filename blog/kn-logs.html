@@ -71,18 +71,18 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Журнал отличается от метрики тем, что отвечает на вопрос «почему», а не «как часто». Метрика скажет, что выросла доля ошибок, журнал — что конкретно произошло в 14:03.</p>
-        <h2>Уровни: не «побольше логов на всякий случай»</h2>
+        <h2 id="urovni-ne-pobolshe-logov-na-vsyakiy-sluchay">Уровни: не «побольше логов на всякий случай»</h2>
         <p>Проблема не в объёме диска (хотя и в нём), а в отношении сигнал/шум. Если в журнале 90% строк уровня <code>debug</code>, то при аварии вы будете читать их глазами, а не фильтром.</p>
         <p>Практика: в продакшене — <code>info</code> и выше, включение <code>debug</code> — точечно и на время. Хороший журнал содержит: время, источник, идентификатор запроса, уровень, событие и ключевые поля (кто, откуда, что). <code>Connection failed</code> — плохо. <code>db connect failed host=10.0.0.5 port=5432 user=app timeout=5s</code> — хорошо.</p>
         <dl class="kn-facts"><dt>debug</dt><dd>для разработки; в продакшене выключен, иначе объём растёт в десятки раз</dd><dt>info</dt><dd>«что произошло» — старт, подключение, выполненная операция</dd><dt>warn</dt><dd>«почти сломалось» — ретрай, таймаут, отказ авторизации</dd><dt>error</dt><dd>«уже сломалось», требует действия человека</dd></dl>
-        <h2>Две системы: syslog-файлы и journald</h2>
+        <h2 id="dve-sistemy-syslog-fayly-i-journald">Две системы: syslog-файлы и journald</h2>
         <p>В большинстве современных дистрибутивов журнал собирает systemd-journald, а файлы в <code>/var/log</code> — либо остаток старых приложений, либо rsyslog, который читает journald.</p>
         <pre><code>journalctl -u nginx --since &quot;1 hour ago&quot;
 journalctl -p err -b                 # ошибки с момента загрузки
 journalctl -u postgresql -o json-pretty | head
 journalctl --disk-usage</code></pre>
         <p><code>journalctl</code> умеет то, чего не умеет <code>grep</code>: фильтр по юниту, уровню, времени и загрузке. Это экономит минуты на каждом инциденте.</p>
-        <h2>Лимит обязателен</h2>
+        <h2 id="limit-obyazatelen">Лимит обязателен</h2>
         <p>По умолчанию journald может занять до 10% файловой системы. На сервере с базой это неприемлемо: раздел <code>/var</code> кончится раньше, чем вы заметите, и остановятся службы.</p>
         <pre><code># /etc/systemd/journald.conf
 [Journal]
@@ -99,10 +99,10 @@ MaxRetentionSec=1month</code></pre>
     copytruncate
 }</code></pre>
         <p><code>copytruncate</code> нужен, если приложение не умеет переоткрывать файл по сигналу: logrotate копирует содержимое и обнуляет исходный файл. Минус — между копированием и обнулением можно потерять несколько строк. Правильнее — <code>postrotate</code> с сигналом HUP, если приложение это поддерживает.</p>
-        <h2>Цена логов</h2>
+        <h2 id="cena-logov">Цена логов</h2>
         <p>Логирование — не бесплатно: каждая строка это запись на диск, а <code>fsync</code> на каждую строку может убить производительность. На нагруженном сервисе логи буферизуют и пишут пачками. Если приложение пишет в журнал в цикле — это часто причина «тормозит под нагрузкой», а не сеть.</p>
         <p>Ещё одна категория — персональные данные. Если в лог попадают логины, адреса, тела запросов — это персональные данные, и к ним применяются те же правила, что к базе: срок хранения, ограничение доступа, маскирование. Проще не писать, чем потом вычищать.</p>
-        <h2>Что делать в первый час инцидента</h2>
+        <h2 id="chto-delat-v-pervyy-chas-incidenta">Что делать в первый час инцидента</h2>
         <ol><li><code>journalctl --since &quot;30 min ago&quot; -p warning</code> — что уже предупреждало.</li><li><code>journalctl -u &lt;сервис&gt; -n 200</code> — конкретная служба.</li><li><code>df -h /var</code> — не кончилось ли место (частая причина «всё сломалось сразу»).</li><li><code>dmesg -T | tail -50</code> — ядро: OOM-killer, ошибки диска, сбросы линка.</li></ol>
         <p>Дальше — метрики: <a class="kn-ref" href="/blog/kn-prometheus.html">что считать и когда кричать</a>. А если непонятно, куда смотреть вообще, начните с <a class="kn-ref" href="/blog/kn-troubleshoot.html">порядка диагностики</a>. Для быстрых выборок из журнала пригодится <a class="kn-ref" href="/blog/kn-bash.html">конвейер</a>.</p>
       </div>
@@ -130,15 +130,17 @@ MaxRetentionSec=1month</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 18 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-logs"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Linux и службы · 18 из 43 · 6 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#urovni-ne-pobolshe-logov-na-vsyakiy-sluchay">Уровни: не «побольше логов на всякий случай»</a></li>
+          <li><a href="#dve-sistemy-syslog-fayly-i-journald">Две системы: syslog-файлы и journald</a></li>
+          <li><a href="#limit-obyazatelen">Лимит обязателен</a></li>
+          <li><a href="#cena-logov">Цена логов</a></li>
+          <li><a href="#chto-delat-v-pervyy-chas-incidenta">Что делать в первый час инцидента</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -147,9 +149,12 @@ MaxRetentionSec=1month</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 12 связей.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-logs"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

@@ -1340,6 +1340,7 @@ pre, .term-screen {
   background: var(--u-surface);
 }
 .ach-card.is-locked { background: var(--u-surface-sunk); color: var(--u-muted); }
+.ach-card.is-unlocked { border-color: var(--u-line-strong); }
 .ach-card h4 {
   margin: 0 0 2px;
   font-family: var(--u-font-ui);

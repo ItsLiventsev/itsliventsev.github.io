@@ -71,33 +71,33 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>«Почему сервис не поднялся после перезагрузки» — вопрос, который systemd решает лучше старых init-скриптов, но и путаницы добавляет больше. Причина в том, что порядок задаётся не файлом, а графом.</p>
-        <h2>Юнит, цель и зависимости</h2>
+        <h2 id="yunit-cel-i-zavisimosti">Юнит, цель и зависимости</h2>
         <p>Юнит — это файл с секциями <code>[Unit]</code>, <code>[Service]</code>, <code>[Install]</code>. Цель (target) — именованная точка, к которой система стремится при загрузке: <code>multi-user.target</code> — обычный сервер без графики, <code>graphical.target</code> — с ним.</p>
         <p>Зависимости бывают двух видов, и их постоянно путают:</p>
         <ul><li><code>Wants=</code> — «было бы хорошо». Если зависимость не стартует, всё равно продолжаем.</li><li><code>Requires=</code> — «без этого нельзя». Зависимость упала — юнит не запускается.</li><li><code>After=</code> — только порядок. Само по себе ничего не гарантирует: если юнит не в списке зависимостей, <code>After</code> может быть проигнорирован.</li></ul>
         <p>Практический пример: сервису нужен настроенный адрес на интерфейсе. В юните пишут <code>After=network.target</code> — и получают падение при загрузке, потому что <code>network.target</code> означает «сетевая подсистема инициализирована», а не «адрес назначен». Правильно — <code>network-online.target</code> плюс <code>Wants=network-online.target</code>.</p>
-        <h2>enable не равно start</h2>
+        <h2 id="enable-ne-ravno-start">enable не равно start</h2>
         <ul><li><code>systemctl start nginx</code> — запустить сейчас.</li><li><code>systemctl enable nginx</code> — включить автозапуск при загрузке (создаёт симлинк в <code>wants/</code> целевого юнита).</li><li><code>systemctl enable --now nginx</code> — и то, и другое.</li></ul>
         <p>Ошибка «включил, а после перезагрузки не работает» почти всегда означает, что сделан только <code>start</code> (или только <code>enable</code>, а сервис падает при старте — тогда смотреть <code>journalctl</code>).</p>
-        <h2>Как переопределить юнит, не ломая пакет</h2>
+        <h2 id="kak-pereopredelit-yunit-ne-lomaya-paket">Как переопределить юнит, не ломая пакет</h2>
         <p>Правка файлов в <code>/usr/lib/systemd/system</code> — плохая идея: обновление пакета перезапишет изменения. Правильно — drop-in:</p>
         <pre><code>systemctl edit nginx          # создаёт /etc/systemd/system/nginx.service.d/override.conf
 systemctl daemon-reload       # обязательно после любой правки
 systemctl restart nginx</code></pre>
         <p><code>daemon-reload</code> — самая забываемая команда. Без неё systemd продолжает работать со старым описанием: вы правите лимиты памяти, а сервис их не видит.</p>
-        <h2>Три команды, которые отвечают почти всегда</h2>
+        <h2 id="tri-komandy-kotorye-otvechayut-pochti-vsegda">Три команды, которые отвечают почти всегда</h2>
         <pre><code>systemctl status nginx --no-pager -l    # состояние, последние строки, код выхода
 journalctl -u nginx -n 100 --no-pager   # её журнал
 systemd-analyze blame                   # кто тормозил загрузку</code></pre>
         <p><code>systemctl status</code> показывает и причину падения: <code>status=203/EXEC</code> — нет файла или прав, <code>status=1/FAILURE</code> — упало само приложение, <code>start-limit-hit</code> — слишком много рестартов за короткое время (помогает <code>systemctl reset-failed</code>).</p>
-        <h2>Таймеры вместо cron</h2>
+        <h2 id="taymery-vmesto-cron">Таймеры вместо cron</h2>
         <p>Таймер systemd умеет то, чего не умеет cron: не запускать задачу, если прошлая ещё идёт, писать в журнал, повторять при неудаче. Описание состоит из двух юнитов — <code>.service</code> с самой задачей и <code>.timer</code> с расписанием:</p>
         <pre><code># backup.timer
 [Timer]
 OnCalendar=daily
 Persistent=true</code></pre>
         <p><code>Persistent=true</code> означает «если машина была выключена в момент запуска, выполнить при следующем включении» — важная деталь для бэкапов, о которых <a class="kn-ref" href="/blog/kn-backups.html">отдельная заметка</a>.</p>
-        <h2>Что помнить</h2>
+        <h2 id="chto-pomnit">Что помнить</h2>
         <ol><li>После любой правки — <code>daemon-reload</code>.</li><li><code>After</code> без <code>Wants</code>/<code>Requires</code> часто не работает так, как ожидают.</li><li>Порядок в файле не имеет значения: важны только директивы.</li><li>Логи службы — в journald; про уровни и ротацию — в <a class="kn-ref" href="/blog/kn-logs.html">заметке про журналы</a>.</li><li>Автоматизировать управление службами лучше модулем <code>ansible.builtin.service</code>, а не <code>shell</code> — см. <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>.</li></ol>
         <dl class="kn-terms"><div class="kn-term"><dt>unit</dt><dd>описание объекта — службы, точки монтирования, таймера, сокета</dd></div><div class="kn-term"><dt>target</dt><dd>группа юнитов, аналог уровня выполнения; multi-user.target — обычная загрузка</dd></div><div class="kn-term"><dt>Wants</dt><dd>мягкая зависимость: если юнит не поднялся, загрузка продолжается</dd></div><div class="kn-term"><dt>Requires</dt><dd>жёсткая зависимость: без него юнит не стартует</dd></div><div class="kn-term"><dt>After</dt><dd>только порядок, без зависимости: «запускай после», но не «требуй»</dd></div></dl>
       </div>
@@ -125,15 +125,18 @@ Persistent=true</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Linux и службы. Запись 37 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-systemd"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Linux и службы · 37 из 43 · 7 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#yunit-cel-i-zavisimosti">Юнит, цель и зависимости</a></li>
+          <li><a href="#enable-ne-ravno-start">enable не равно start</a></li>
+          <li><a href="#kak-pereopredelit-yunit-ne-lomaya-paket">Как переопределить юнит, не ломая пакет</a></li>
+          <li><a href="#tri-komandy-kotorye-otvechayut-pochti-vsegda">Три команды, которые отвечают почти всегда</a></li>
+          <li><a href="#taymery-vmesto-cron">Таймеры вместо cron</a></li>
+          <li><a href="#chto-pomnit">Что помнить</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -142,9 +145,12 @@ Persistent=true</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 12 связей.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-systemd"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

@@ -71,22 +71,22 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Конфигурация сервера, лежащая в Git, отвечает на вопрос «кто и когда это сломал» за секунды. Конфигурация, лежащая в голове и в <code>/etc</code>, отвечает на него в лучшем случае через час. Это не про модность инструмента, а про то, что история изменений — часть инфраструктуры.</p>
-        <h2>Три области, а не одна</h2>
+        <h2 id="tri-oblasti-a-ne-odna">Три области, а не одна</h2>
         <p>Git хранит изменения в трёх местах: рабочее дерево (ваши файлы), индекс (то, что попадёт в следующий коммит) и репозиторий (уже сохранённые коммиты). Понимание этой схемы объясняет всё остальное: <code>git add</code> переносит из дерева в индекс, <code>git commit</code> — из индекса в репозиторий, <code>git diff --staged</code> показывает разницу между индексом и последним коммитом.</p>
         <dl class="kn-facts"><dt>Три области</dt><dd>рабочее дерево (файлы), индекс (staging), репозиторий (коммиты)</dd><dt>HEAD</dt><dd>указатель на текущий коммит; ветка — это просто указатель на коммит</dd><dt>revert</dt><dd>создаёт новый коммит, отменяющий изменения; безопасно в общей истории</dd><dt>reset --hard</dt><dd>переписывает историю и уничтожает незакоммиченное — только локально</dd></dl>
         <p><code>git add -p</code> — самая недооценённая команда: она позволяет принять изменения по кускам, а не файлом целиком. Это и есть способ делать осмысленные коммиты, когда в одном файле смешаны две правки.</p>
-        <h2>Ветка — это указатель</h2>
+        <h2 id="vetka-eto-ukazatel">Ветка — это указатель</h2>
         <p>Ветка в Git — не копия каталога, а имя, указывающее на коммит. Создание ветки мгновенно, переключение почти мгновенно, и это меняет подход: любую правку можно делать отдельно, не боясь сломать рабочее состояние.</p>
         <pre><code>git switch -c fix/nginx-timeout
 # ... правки ...
 git commit -am &quot;nginx: увеличить proxy_read_timeout для отчётов&quot;
 git switch main
 git merge --no-ff fix/nginx-timeout</code></pre>
-        <h2>Откат: revert, а не reset</h2>
+        <h2 id="otkat-revert-a-ne-reset">Откат: revert, а не reset</h2>
         <p><code>git revert</code> создаёт новый коммит, который отменяет изменения указанного. История остаётся линейной и честной, и это безопасно, если репозиторий уже разошёлся по другим машинам. <code>git reset --hard</code> переписывает историю и стирает незакоммиченные изменения — допустимо только локально и только когда вы точно знаете, что делаете.</p>
         <p>Если нужно вернуть один файл к состоянию из коммита: <code>git checkout &lt;sha&gt; -- path/to/file</code> (в новых версиях — <code>git restore --source=&lt;sha&gt; path</code>). Это точечная операция, которая не трогает остальное.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Задача</th><th scope="col">Команда</th><th scope="col">Что делает</th></tr></thead><tbody><tr><th scope="row">что изменил</th><td>git status -s и git diff</td><td>список файлов и построчные изменения</td></tr><tr><th scope="row">сохранить</th><td>git add -p и git commit -m</td><td>индекс и коммит (p — по кускам)</td></tr><tr><th scope="row">отменить коммит</th><td>git revert &lt;sha&gt;</td><td>новый коммит с обратными изменениями</td></tr><tr><th scope="row">найти изменение</th><td>git log -S &quot;строка&quot; -p</td><td>когда и кем появилась строка</td></tr><tr><th scope="row">спастись</th><td>git stash и git stash pop</td><td>временно убрать изменения</td></tr></tbody><caption>Набор, который покрывает почти всю ежедневную работу.</caption></table></div>
-        <h2>Конфликт — это не поломка</h2>
+        <h2 id="konflikt-eto-ne-polomka">Конфликт — это не поломка</h2>
         <p>Конфликт возникает, когда две ветки изменили одни и те же строки. Git не может выбрать за вас и оставляет маркеры:</p>
         <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 proxy_read_timeout 60s;
@@ -94,14 +94,14 @@ proxy_read_timeout 60s;
 proxy_read_timeout 300s;
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; fix/nginx-timeout</code></pre>
         <p>Правка простая: оставить нужный вариант, удалить маркеры, <code>git add</code> файл, <code>git commit</code>. Важное правило — не «разрешать конфликт», а <strong>понимать, какой вариант правильный</strong>: второй раз эта строка может конфликтовать больнее.</p>
-        <h2>Конфигурация, которая экономит время</h2>
+        <h2 id="konfiguraciya-kotoraya-ekonomit-vremya">Конфигурация, которая экономит время</h2>
         <pre><code>git config --global user.name &quot;Имя&quot;
 git config --global init.defaultBranch main
 git config --global pull.rebase true
 git config --global core.pager &quot;less -FRX&quot;
 git config --global alias.lg &quot;log --oneline --graph --decorate -20&quot;</code></pre>
         <p><code>pull.rebase true</code> избавляет от лишних merge-коммитов при работе в одиночку. <code>core.pager</code> не оставляет пустой экран при коротком выводе. Алиас <code>lg</code> — компактная история, которую видно с первого взгляда.</p>
-        <h2>Что хранить в репозитории</h2>
+        <h2 id="chto-hranit-v-repozitorii">Что хранить в репозитории</h2>
         <p>Конфигурации сервисов, плейбуки, скрипты, документацию, схемы — да. Секреты, пароли, приватные ключи, дампы баз — нет, никогда. Даже в приватном репозитории секрет остаётся в истории, и «удалить коммитом» его не убирает: нужен <code>git filter-repo</code> и смена самого секрета.</p>
         <p>Смежные темы: плейбуки в репозитории — <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>; как устроена документация рядом с кодом — <a class="kn-ref" href="/blog/kn-documentation.html">документация и регламенты</a>; сценарии в репозитории — <a class="kn-ref" href="/blog/kn-bash.html">bash</a>.</p>
       </div>
@@ -129,15 +129,18 @@ git config --global alias.lg &quot;log --oneline --graph --decorate -20&quot;</c
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Практика и обучение. Запись 10 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-git"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Практика и обучение · 10 из 43 · 8 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#tri-oblasti-a-ne-odna">Три области, а не одна</a></li>
+          <li><a href="#vetka-eto-ukazatel">Ветка — это указатель</a></li>
+          <li><a href="#otkat-revert-a-ne-reset">Откат: revert, а не reset</a></li>
+          <li><a href="#konflikt-eto-ne-polomka">Конфликт — это не поломка</a></li>
+          <li><a href="#konfiguraciya-kotoraya-ekonomit-vremya">Конфигурация, которая экономит время</a></li>
+          <li><a href="#chto-hranit-v-repozitorii">Что хранить в репозитории</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -146,9 +149,12 @@ git config --global alias.lg &quot;log --oneline --graph --decorate -20&quot;</c
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 4 связи.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-git"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

@@ -71,24 +71,24 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Мониторинг отвечает на два разных вопроса: «что происходит сейчас» (дашборд) и «надо ли кого-то будить» (алерт). Смешивать их — главная ошибка: дашборд с сорока графиками и алерт на каждый график гарантируют, что через месяц уведомления будут игнорировать.</p>
-        <h2>Четыре типа метрик</h2>
+        <h2 id="chetyre-tipa-metrik">Четыре типа метрик</h2>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Тип</th><th scope="col">Что хранит</th><th scope="col">Функция</th><th scope="col">Пример</th></tr></thead><tbody><tr><th scope="row">counter</th><td>сумму событий</td><td>rate()</td><td>http_requests_total</td></tr><tr><th scope="row">gauge</th><td>текущее значение</td><td>avg_over_time()</td><td>memory_used_bytes</td></tr><tr><th scope="row">histogram</th><td>распределение по бакетам</td><td>histogram_quantile()</td><td>request_duration_seconds</td></tr><tr><th scope="row">summary</th><td>квантили посчитаны клиентом</td><td>нельзя агрегировать между экземплярами</td><td>rpc_duration</td></tr></tbody><caption>Тип метрики определяется вопросом, на который она отвечает, и от него зависит, какие функции применимы.</caption></table></div>
         <p>Разница между histogram и summary практична: гистограмму можно складывать между экземплярами (<code>sum(rate(...))</code> по всем подам), а summary — нет, у него квантили посчитаны на клиенте и не складываются. Поэтому для сервисов с несколькими репликами почти всегда берут histogram.</p>
-        <h2>Что считать</h2>
+        <h2 id="chto-schitat">Что считать</h2>
         <p>Начинать надо не с «какие метрики есть», а с «что чувствует пользователь». Четыре золотых сигнала из практики SRE:</p>
         <ol><li><strong>Задержка</strong> — сколько ждёт пользователь.</li><li><strong>Трафик</strong> — сколько запросов приходит.</li><li><strong>Ошибки</strong> — какая доля неуспешна.</li><li><strong>Насыщение</strong> — насколько заполнен ресурс.</li></ol>
         <p>CPU и память — это насыщение, то есть самое косвенное из четырёх. Поэтому «CPU &gt; 80%» — плохой алерт: сервис может прекрасно работать на 95% CPU и падать на 20%, если упёрся в диск.</p>
         <p>Плохой алерт: <code>CPU &gt; 80%</code> пятнадцать минут. Хороший: <code>95-й перцентиль времени ответа &gt; 2 c и доля 5xx &gt; 1%</code> в течение пяти минут.</p>
-        <h2>PromQL, которого достаточно</h2>
+        <h2 id="promql-kotorogo-dostatochno">PromQL, которого достаточно</h2>
         <pre><code>rate(http_requests_total[5m])                          # запросов в секунду
 sum(rate(http_requests_total{status=~&quot;5..&quot;}[5m]))
   / sum(rate(http_requests_total[5m]))                 # доля ошибок
 histogram_quantile(0.95, sum(rate(request_duration_seconds_bucket[5m])) by (le))
 up == 0                                                # цель недоступна</code></pre>
         <p>Правила: <code>rate</code> — только для counter; окно должно быть не меньше двух интервалов scrape; <code>by (le)</code> обязателен для <code>histogram_quantile</code>.</p>
-        <h2>Алерты, которые не игнорируют</h2>
+        <h2 id="alerty-kotorye-ne-ignoriruyut">Алерты, которые не игнорируют</h2>
         <ul><li><strong><code>for</code></strong>: условие должно держаться N минут. Один скачок — не авария.</li><li><strong>Симптом, а не причина</strong>: «сайт отвечает 5xx» лучше, чем «температура диска 45 °C».</li><li><strong>Действие</strong>: у каждого алерта должно быть написано, что делать. Если действия нет — это не алерт, а наблюдение.</li><li><strong>Дежурство</strong>: алерты, которые не требуют немедленной реакции, идут в почту или чат, а не в телефон.</li></ul>
-        <h2>Где это живёт</h2>
+        <h2 id="gde-eto-zhivet">Где это живёт</h2>
         <p>Prometheus собирает метрики сам, вытягивая их по HTTP (pull-модель) с интервалом, обычно 15–60 секунд. Grafana показывает графики, Alertmanager группирует и маршрутизирует уведомления. Для сбора с хостов — node_exporter, для приложений — клиентские библиотеки, для баз — экспортёры.</p>
         <p>Логи и метрики дополняют друг друга: метрика говорит «стало плохо», журнал — «почему» (см. <a class="kn-ref" href="/blog/kn-logs.html">журналы</a>). А развёртывание экспортёров и правил на десятке хостов лучше делать плейбуком: <a class="kn-ref" href="/blog/kn-ansible.html">Ansible</a>.</p>
       </div>
@@ -116,15 +116,17 @@ up == 0                                                # цель недосту
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Эксплуатация. Запись 30 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-prometheus"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Эксплуатация · 30 из 43 · 8 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#chetyre-tipa-metrik">Четыре типа метрик</a></li>
+          <li><a href="#chto-schitat">Что считать</a></li>
+          <li><a href="#promql-kotorogo-dostatochno">PromQL, которого достаточно</a></li>
+          <li><a href="#alerty-kotorye-ne-ignoriruyut">Алерты, которые не игнорируют</a></li>
+          <li><a href="#gde-eto-zhivet">Где это живёт</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -133,9 +135,12 @@ up == 0                                                # цель недосту
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 15 связей.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-prometheus"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>

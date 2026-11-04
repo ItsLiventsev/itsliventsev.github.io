@@ -71,7 +71,7 @@
       <div class="kn-note-body">
         <p class="kn-ai-note"><strong>Машинная обработка.</strong> Текст структурирован и оптимизирован с помощью ИИ: структура, формулировки и визуальные блоки собраны ассистентом, источники и наблюдения — авторские. Даты обращения к источникам указаны.</p>
         <p>Опытный администратор отличается не знанием команд, а порядком действий. Новичок сразу открывает <code>tcpdump</code>; опытный сначала смотрит линк — потому что в трети случаев проблема там, и tcpdump только подтвердит очевидное через десять минут.</p>
-        <h2>Почему снизу вверх</h2>
+        <h2 id="pochemu-snizu-vverh">Почему снизу вверх</h2>
         <p>Каждый слой зависит от предыдущего. Если нет линка, бессмысленно проверять маршрут. Если нет адреса, бессмысленно проверять порт. Двигаясь снизу, вы гарантированно находите <strong>первый</strong> сломанный уровень, а не последствия.</p>
         <div class="kn-table-wrap"><table class="kn-table"><thead><tr><th scope="col">Слой</th><th scope="col">Команда</th><th scope="col">Что считаем нормой</th></tr></thead><tbody><tr><th scope="row">L1</th><td>ip -br link</td><td>up и нет роста ошибок</td></tr><tr><th scope="row">L2</th><td>ip -br addr</td><td>ожидаемый адрес и маска</td></tr><tr><th scope="row">L2</th><td>ip neigh</td><td>сосед в состоянии REACHABLE</td></tr><tr><th scope="row">L3</th><td>ip route get 1.1.1.1</td><td>правильный next-hop и интерфейс</td></tr><tr><th scope="row">L4</th><td>ss -ltnp</td><td>порт слушается нужным процессом</td></tr><tr><th scope="row">L7</th><td>curl -vI https://host</td><td>код 200 или понятная ошибка</td></tr></tbody><caption>Пока шаг не подтверждён командой с ожидаемым выводом, переходить к следующему бессмысленно.</caption></table></div>
         <pre><code>ip -br link                          # состояние интерфейсов
@@ -80,15 +80,15 @@ ip neigh show 192.0.2.1              # разрешился ли next-hop
 ip route get 8.8.8.8                 # какой выход выберет ядро
 ss -ltnp                             # кто и что слушает
 curl -vI https://example.org         # L7 целиком</code></pre>
-        <h2>Формулировка симптома</h2>
+        <h2 id="formulirovka-simptoma">Формулировка симптома</h2>
         <p>«Интернет не работает» — бесполезно. Полезно так:</p>
         <ul><li>«<code>ping 8.8.8.8</code> идёт, <code>ping ya.ru</code> — нет» → проблема в DNS, не в канале.</li><li>«<code>ping</code> идёт, <code>curl</code> висит» → файрвол или MTU.</li><li>«Браузер открывает сайт, но не грузит картинки» → MTU/PMTU или прокси.</li><li>«Из одной подсети работает, из другой нет» → маршрут или ACL между сегментами.</li></ul>
         <p>Каждая формулировка сразу очерчивает круг подозреваемых. Это и есть основная работа.</p>
-        <h2>Ловушки, в которые попадают все</h2>
+        <h2 id="lovushki-v-kotorye-popadayut-vse">Ловушки, в которые попадают все</h2>
         <ul><li><strong>Перезагрузка.</strong> Сбрасывает состояние и уничтожает улики. После неё проблема может «исчезнуть» и вернуться через неделю.</li><li><strong>Правка нескольких вещей сразу.</strong> Нельзя понять, что помогло. Одно изменение — одна проверка.</li><li><strong>Доверие к пингу.</strong> ICMP могут блокировать, и тогда «не пингуется» ≠ «не работает». Проверяйте сервисным запросом.</li><li><strong>Забытый кеш.</strong> DNS, ARP, браузерный кеш, кеш CDN — половина «исправил, а не помогло» объясняется кешем.</li><li><strong>Асимметрия.</strong> Пакет уходит по одному пути, возвращается по другому; stateful-файрвол это дропает. Смотреть <code>tcpdump</code> с обеих сторон и сравнивать.</li></ul>
-        <h2>Журнал диагностики</h2>
+        <h2 id="zhurnal-diagnostiki">Журнал диагностики</h2>
         <p>Пишите, что проверили и с каким результатом. Через час вы забудете, смотрели ли <code>ip route get</code> для нужного адреса или для шлюза. Запись в три строки экономит время и делает разбор повторяемым — а повторяемость и есть то, что отличает инженера от угадывающего.</p>
-        <h2>Инструменты по уровням</h2>
+        <h2 id="instrumenty-po-urovnyam">Инструменты по уровням</h2>
         <ul><li>L1–L2: <code>ethtool</code>, <code>ip -s link</code> (ошибки, дропы), <code>bridge vlan show</code> для <a class="kn-ref" href="/blog/kn-vlan.html">VLAN</a>.</li><li>L3: <code>ip route</code>, <code>traceroute</code>, <code>mtr</code>; про выбор маршрута — <a class="kn-ref" href="/blog/kn-routing.html">таблица маршрутов</a>.</li><li>L4: <code>ss</code>, <code>tcpdump</code>, <code>nc -vz</code>; про состояния — <a class="kn-ref" href="/blog/kn-tcp.html">TCP</a>.</li><li>L7: <code>curl -v</code>, <code>dig</code> (см. <a class="kn-ref" href="/blog/kn-dns.html">DNS</a>), журналы приложения (см. <a class="kn-ref" href="/blog/kn-logs.html">журналы</a>).</li></ul>
         <p>Финальное правило: если после пяти проверок причина не найдена, значит, симптом был сформулирован недостаточно точно. Вернитесь к формулировке, а не к пятой перезагрузке.</p>
       </div>
@@ -116,15 +116,17 @@ curl -vI https://example.org         # L7 целиком</code></pre>
       </nav>
     </div>
 
-    <aside class="kn-rail" aria-label="Паспорт заметки">
-      <div class="kn-rail-card">
-        <h2>Паспорт</h2>
-        <p>Рубрика: Сети. Запись 40 из 43.</p>
-        <ul class="kn-rail-list">
-          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
-          <li><a href="/blog/graph.html#kn-troubleshoot"><span>граф</span>место в графе связей</a></li>
-          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
-        </ul>
+    <aside class="kn-rail" aria-label="Конспект заметки">
+      <div class="kn-rail-card kn-rail-summary">
+        <h2>Конспект</h2>
+        <p>Сети · 40 из 43 · 8 мин</p>
+        <ol class="kn-minitoc">
+          <li><a href="#pochemu-snizu-vverh">Почему снизу вверх</a></li>
+          <li><a href="#formulirovka-simptoma">Формулировка симптома</a></li>
+          <li><a href="#lovushki-v-kotorye-popadayut-vse">Ловушки, в которые попадают все</a></li>
+          <li><a href="#zhurnal-diagnostiki">Журнал диагностики</a></li>
+          <li><a href="#instrumenty-po-urovnyam">Инструменты по уровням</a></li>
+        </ol>
       </div>
       <div class="kn-rail-card">
         <h2>Теги</h2>
@@ -133,9 +135,12 @@ curl -vI https://example.org         # L7 целиком</code></pre>
         </ul>
       </div>
       <div class="kn-rail-card">
-        <h2>Как читать связи</h2>
-        <p>Ссылки с пунктиром ведут на другую заметку базы: так одна тема раскрывается через соседнюю. Обратные ссылки собираются автоматически.</p>
-        <p>Добавлено 04.11.2026, обновлено 04.11.2026. В графе 23 связи.</p>
+        <h2>Куда дальше</h2>
+        <ul class="kn-rail-list">
+          <li><a href="/blog/topics.html"><span>каталог</span>все рубрики</a></li>
+          <li><a href="/blog/graph.html#kn-troubleshoot"><span>граф связей</span>эта заметка в графе</a></li>
+          <li><a href="/blog.html"><span>лента</span>все заметки</a></li>
+        </ul>
       </div>
     </aside>
   </article>
