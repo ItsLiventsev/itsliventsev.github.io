@@ -123,6 +123,11 @@
     '  </div>',
     '</div>'
   ].join('');
+  /* Ссылка «перейти к содержанию» — часть баннера, а не «контент вне ориентиров»:
+     переносим её в шапку (она там же первая в порядке обхода) и только потом
+     ставим шапку в начало документа. */
+  const skipLink = body.querySelector('.skip-link');
+  if (skipLink) masthead.prepend(skipLink);
   body.prepend(masthead);
 
   /* ——— breadcrumbs for nested routes ——— */
@@ -208,18 +213,18 @@
   page.append(root);
 
   /* ——— contextual sub navigation of a universe ——— */
+  /* Полоса раздела вселенной берётся из запасной шапки страницы: сам <nav>
+     становится подбаром. Раньше он заворачивался в новый <nav> с тем же именем
+     — два одинаковых ориентира навигации на страницу (landmark-unique). */
   const legacyBar = doc.querySelector('.st-topbar');
   if (legacyBar) {
     const legacyNav = legacyBar.querySelector('nav');
-    const subbar = doc.createElement('nav');
-    subbar.className = 'ui-subbar';
-    subbar.setAttribute('aria-label', legacyNav?.getAttribute('aria-label') || 'Навигация раздела');
     if (legacyNav) {
-      legacyNav.classList.add('ui-subbar-nav');
+      legacyNav.classList.add('ui-subbar', 'ui-subbar-nav');
+      if (!legacyNav.getAttribute('aria-label')) legacyNav.setAttribute('aria-label', 'Навигация раздела');
       legacyNav.querySelectorAll('.theme-toggle, .icon-moon, .icon-sun, .st-nav-admin').forEach(node => node.remove());
-      subbar.append(legacyNav);
+      page.insertBefore(legacyNav, root);
     }
-    page.insertBefore(subbar, root);
     legacyBar.remove();
   }
   // Old duplicated breadcrumb bars: the shell builds one trail per page.
