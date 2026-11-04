@@ -2830,3 +2830,35 @@ html.u-theme-switch *::after {
 @media (prefers-reduced-motion: no-preference) {
   .kn-node-label { transition: opacity var(--u-dur-1) var(--u-ease), color var(--u-dur-1) var(--u-ease); }
 }
+
+
+/* ——— Граф 3: ядро, пояс, орбита ———
+   Первая версия графа читалась плохо: карточки-плашки лежали друг на друге,
+   подписи срезались, «движение» не было видно. Теперь узел — точка, подпись
+   ограничена по ширине и переносится, у листьев подпись появляется только
+   при наведении, а поле выше: сорока трём заметкам нужно место.
+
+   Ширины подписей (148 / 136 / 96 и медиазапросы 96 / 84) обязаны совпадать
+   с widthOf() в assets/knowledge.js: по ним считается разведение рамок. */
+.kn-graph-stage { aspect-ratio: 16 / 10; min-height: 560px; }
+.kn-node { max-width: 158px; }
+.kn-node-label { max-width: 96px; font-size: 11px; line-height: 1.25; }
+.kn-node[data-rank="link"] .kn-node-label { max-width: 136px; }
+.kn-node[data-rank="hub"] .kn-node-label { max-width: 148px; font-size: var(--u-fs-xs); }
+.kn-node[data-rank="hub"] .kn-node-dot { width: 22px; height: 22px; }
+.kn-node[data-rank="link"] .kn-node-dot { width: 15px; height: 15px; }
+.kn-node[data-rank="leaf"] .kn-node-dot { width: 9px; height: 9px; }
+.kn-graph-svg line[data-mutual="true"] { stroke-width: 1.6; }
+.kn-graph-svg line[data-active="true"] { stroke-width: 2; }
+.kn-graph-shell { margin-block-start: var(--u-s7); }
+.kn-graph-toolbar .kn-filterbar { flex: 1 1 auto; }
+@media (max-width: 900px) {
+  .kn-graph-stage { aspect-ratio: auto; min-height: 460px; }
+  .kn-node[data-rank="link"] .kn-node-label { display: none; }
+  .kn-node[data-rank="leaf"] .kn-node-label { display: none; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 96px; }
+}
+@media (max-width: 560px) {
+  .kn-graph-stage { min-height: 400px; }
+  .kn-node[data-rank="hub"] .kn-node-label { max-width: 84px; font-size: 10px; }
+}

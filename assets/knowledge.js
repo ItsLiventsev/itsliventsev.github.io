@@ -98,6 +98,11 @@
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let width = stage.clientWidth || 800;
     let height = stage.clientHeight || 450;
+    /* Сколько пикселей поля приходится на 1 % ширины и высоты: подпись в px
+       занимает разную долю на 1200 px и на 390 px, и одно и то же число
+       процентов означает разные расстояния. */
+    const pxPerX = () => (stage.clientWidth || width || 800) / 100;
+    const pxPerY = () => (stage.clientHeight || height || 450) / 100;
 
     /* Состояние узла — в процентах поля, чтобы переживать ресайз без пересчёта. */
     const bodies = nodes.map((node) => {
@@ -118,6 +123,9 @@
     const byBody = new Map(bodies.map((body) => [body.id, body]));
     const pairs = links.map((link) => ({ a: byBody.get(link.a.dataset.node), b: byBody.get(link.b.dataset.node), line: link.line }))
       .filter((pair) => pair.a && pair.b);
+    /* Порядок обхода фиксирован: разведение должно быть детерминированным,
+       иначе после перезагрузки раскладка прыгает. */
+    const order = bodies.slice().sort((a, b) => a.id.localeCompare(b.id));
 
     const place = () => {
       bodies.forEach((body) => {
@@ -131,6 +139,84 @@
         pair.line.setAttribute('y2', pair.b.y.toFixed(2));
       });
     };
+
+    /* ——— разведение подписей в пикселях поля ———
+       Сборщик раскладывает узлы для условного поля 1200×800, а живое поле
+       другое: на 1440 px это 1200×800, на 900 px — 860×420, на телефоне —
+       390×420. В процентах подпись hub на телефоне шире половины поля, и
+       наезды неизбежны. Поэтому один раз после загрузки — детерминированный
+       проход по парам: если рамки подписей пересекаются, узлы расходятся
+       по той оси, где зазор меньше. Дальше физика работает поверх. */
+    const declutter = () => {
+      const spanX = stage.clientWidth || width || 800;
+      const spanY = stage.clientHeight || height || 450;
+      /* px = процент × (ширина / 100); процент = px × 100 / ширина. */
+      const PER_X = spanX / 100;
+      const PER_Y = spanY / 100;
+      const X_PER_PX = 100 / spanX;
+      const Y_PER_PX = 100 / spanY;
+      /* Ширина подписи — по фактической рамке; если узел скрыт фильтром или
+         подпись не отрисована, берем запас по рангу. */
+      /* Ширины подписей повторяют CSS-правила для .kn-node-label: на узком
+         экране подписи листьев и пояса скрыты, и место под них не резервируется.
+         Значения обязаны совпадать с assets/pages.css (блок «Граф 3»). */
+      const widthOf = (rank) => {
+        if (spanX <= 560) return rank === 'hub' ? 84 : 0;
+        if (spanX <= 900) return rank === 'hub' ? 96 : 0;
+        return rank === 'hub' ? 148 : rank === 'link' ? 136 : 96;
+      };
+      const box = order.map((body) => {
+        const labelW = widthOf(body.node.dataset.rank || 'leaf');
+        return { body, w: labelW ? labelW + 10 : 22, h: labelW ? 58 : 30 };
+      });
+      const boxes = new Map(box.map((item) => [item.body.id, item]));
+      const need = (a, b) => ({ x: (a.w + b.w) / 2 + 10, y: (a.h + b.h) / 2 + 8 });
+      const collide = (a, b) => {
+        const limit = need(a, b);
+        const dx = Math.abs(a.body.x - b.body.x) * PER_X;
+        const dy = Math.abs(a.body.y - b.body.y) * PER_Y;
+        return { bad: dx < limit.x && dy < limit.y, dx, dy, limit };
+      };
+      const clampBody = (body) => {
+        const halfX = boxes.get(body.id).w / 2 * X_PER_PX;
+        body.x = Math.min(100 - halfX - 1, Math.max(halfX + 1, body.x));
+        body.y = Math.min(96, Math.max(4, body.y));
+      };
+      const rounds = 220;
+      for (let round = 0; round < rounds; round++) {
+        let moved = 0;
+        for (let i = 0; i < order.length; i++) {
+          for (let j = i + 1; j < order.length; j++) {
+            const a = boxes.get(order[i].id), b = boxes.get(order[j].id);
+            const hit = collide(a, b);
+            if (!hit.bad) continue;
+            const gapX = hit.limit.x - hit.dx;
+            const gapY = hit.limit.y - hit.dy;
+            const signX = b.body.x === a.body.x ? (i % 2 ? 1 : -1) : Math.sign(b.body.x - a.body.x);
+            const signY = b.body.y === a.body.y ? ((i + j) % 2 ? 1 : -1) : Math.sign(b.body.y - a.body.y);
+            if (gapY <= gapX) {
+              const shift = Math.min(gapY / 2 + 0.5, 12) * Y_PER_PX;
+              a.body.y -= signY * shift; b.body.y += signY * shift;
+            } else {
+              const shift = Math.min(gapX / 2 + 0.5, 16) * X_PER_PX;
+              a.body.x -= signX * shift; b.body.x += signX * shift;
+            }
+            moved++;
+          }
+        }
+        order.forEach((body) => clampBody(body));
+        if (!moved) break;
+      }
+      /* Домашние координаты — тоже разведённые: физика и «собрать заново»
+         должны возвращать узел туда, где подпись не наезжает. */
+      bodies.forEach((body) => {
+        body.baseX = body.x; body.baseY = body.y;
+        body.homeX = body.x; body.homeY = body.y;
+        body.vx = 0; body.vy = 0;
+      });
+    };
+    declutter();
+    place();
     /* ——— подсветка окружения ——— */
     let activeId = null;
     const highlight = (id) => {
@@ -203,7 +289,6 @@
     const start = () => { if (raf || !running) return; raf = requestAnimationFrame(tick); };
     const stop = () => { if (raf) cancelAnimationFrame(raf); raf = null; };
 
-    place();
     if (running) start();
     stage.dataset.motion = running ? 'on' : 'off';
 
@@ -348,8 +433,26 @@
 
     /* Ресайз: проценты остаются, пиксельные линии пересчитывать не нужно,
        но при смене размеров поля узлы не должны «выпрыгивать» — place() хватает. */
+    /* Ресайз: проценты остаются, но ширина подписи в пикселях — нет: после
+       поворота телефона узлы пересобирают раскладку заново, иначе наезды
+       возвращаются. Порог в 4 % гасит дребезг от подгрузки шрифтов. */
     if (window.ResizeObserver) {
-      new ResizeObserver(() => { width = stage.clientWidth || width; height = stage.clientHeight || height; place(); }).observe(stage);
+      let lastW = stage.clientWidth || width;
+      let lastH = stage.clientHeight || height;
+      let pending = null;
+      new ResizeObserver(() => {
+        width = stage.clientWidth || width;
+        height = stage.clientHeight || height;
+        const changed = Math.abs(width - lastW) > Math.max(8, lastW * 0.04) || Math.abs(height - lastH) > Math.max(8, lastH * 0.04);
+        if (!changed) { place(); return; }
+        lastW = width; lastH = height;
+        clearTimeout(pending);
+        pending = setTimeout(() => {
+          order.forEach((body) => { body.x = body.baseX; body.y = body.baseY; body.vx = 0; body.vy = 0; });
+          declutter();
+          place();
+        }, 120);
+      }).observe(stage);
     }
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
