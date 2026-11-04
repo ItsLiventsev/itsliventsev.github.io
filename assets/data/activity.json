@@ -1,15 +1,11 @@
 {
-  "generated": "2026-11-03T21:36:11.118Z",
+  "generated": "2026-11-04T06:47:03.549Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 244,
+  "total": 241,
   "truncated": true,
   "days": [
-    {
-      "date": "2026-10-05",
-      "count": 0
-    },
     {
       "date": "2026-10-06",
       "count": 0
@@ -88,7 +84,7 @@
     },
     {
       "date": "2026-10-25",
-      "count": 21
+      "count": 17
     },
     {
       "date": "2026-10-26",
@@ -124,10 +120,20 @@
     },
     {
       "date": "2026-11-03",
-      "count": 16
+      "count": 17
+    },
+    {
+      "date": "2026-11-04",
+      "count": 0
     }
   ],
   "commits": [
+    {
+      "sha": "7d54ba1",
+      "title": "feat(notes): убрать обложки и добавить 20 заметок по администрированию",
+      "date": "2026-11-03T21:50:43Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7d54ba12b80d13b7ec10d3963a4946a8f01c7f1d"
+    },
     {
       "sha": "66ca980",
       "title": "feat(notes): база знаний сетевого администратора — 23 заметки со схемами",
@@ -481,12 +487,6 @@
       "title": "feat(orchestrator v7): autonomous polish — view-transitions + grain + Soft UI 18px + staggered + UI_KNOWLEDGE_BASE",
       "date": "2026-11-01T20:26:37Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/f1b7a7131139bd453727ff2ec2da4628c46b8411"
-    },
-    {
-      "sha": "bfa07fe",
-      "title": "feat(orchestrator v6): smooth filter FLIP, no badge, cozy cycle, dense about, no empty",
-      "date": "2026-11-01T20:21:14Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/bfa07fe874ce1435f43399b0a78c21ff23f1e615"
     }
   ]
 }
