@@ -391,7 +391,7 @@ localStorage) → системная настройка (`prefers-color-scheme`)
 | `.case-study`, `.esp-hero`, `.esp-hero-main`, `.case-facts`, `.case-fact`, `.verdict-col`, `.case-outcome` | шаблон кейса: герой с фактами, разделы, «Честный разбор» в три колонки, итоговая плашка |
 | `.kn-wiki-layout`, `.kn-wiki`, `.kn-wiki-tree`, `.kn-wiki-section` | общие заметки и материалы: рельс 260 px + текст, дерево на `<details>` в карточке; на узком экране раскрывается по запросу, активная тема — `aria-current="page"` |
 | `.st-process`, `.st-process-card`, `.st-process-num` | четыре последовательных этапа стенда: карточки с номером, заголовком и пояснением; сетка 4 → 2 → 1 |
-| `.kn-crumbs`, `.kn-goal`, `.kn-code`, `.kn-mat-*` | страница темы: крошки, цель, блок кода, список тем на индексе раздела |
+| `.kn-crumbs`, `.kn-goal`, `.kn-code`, `.kn-mat-*` | страница темы: крошки, цель, блок кода; `.kn-mat-*` — прежние стили тематического указателя |
 | `.kn-topic-list`, `.kn-topic-row`, `.kn-tagcloud` | указатель рубрик и облако тегов |
 
 Правила слоя:

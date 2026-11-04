@@ -222,7 +222,7 @@
 | `node scripts/build-asset-tokens.js --check` | версия у каждой ссылкина JS/CSS — хэш содержимого файла (`scripts/lib/asset-version.js`); разметка, отставшая от файлов, валит проверку | `Asset tokens: …` |
 | `node scripts/test-head.js` | в `<head>` каждой страницы ровно один `title`, `description`, `viewport`, `charset` и `canonical`, без дублей `<link>` и JSON-LD, скрипт темы идёт до стилей | `Head: …` |
 | `node scripts/test-css-split.js` | опциональные слои подключаются там, где нужны: страница с `kn-*` ссылается на `knowledge.css`, страница без них — нет; `pages.css` не содержит `kn-*` и `.rel-*`; мост собирается в два слоя из одного исходника | `CSS split: …` |
-| `node scripts/test-materials-unified.js` | дерево и список тем в `blog.html`, дерево каждой темы и совместимость старого адреса | `Unified materials: …` |
+| `node scripts/test-materials-unified.js` | единый список заметок и тем, дерево, поиск и фильтры в jsdom, совместимость старого адреса | `Unified materials: …` |
 | `node scripts/test-css-layers.js` | каскад без споров: простой селектор базового слоя не перекрывается поздним слоем, полные дубли правил запрещены | `CSS layers: …` |
 | `node scripts/test-design-doc.js` | справка по оформлению — контракт: каждый названный в `DESIGN_SYSTEM.md` класс существует в CSS, удалённые компоненты не возвращаются, ключевые компоненты описаны | `Design doc: …` |
 | `node scripts/test-tabbar.js` | таббар един на всех страницах: пять пунктов, ровно одна активная метка, ссылки подбара стендов приходят в меню группой «Раздел стендов» | `Tabbar: …` |
