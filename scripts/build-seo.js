@@ -32,7 +32,11 @@ function isNoindex(html) {
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const write = (p, s) => fs.writeFileSync(path.join(ROOT, p), s);
 const abs = (rel) => SITE_URL + '/' + rel.replace(/^index\.html$/, '');
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+/* Описания в манифестах приходят из meta-тегов, где часть символов уже
+   экранирована — поэтому сначала раскрываем известные сущности, а потом
+   экранируем один раз, иначе в RSS появляется «&amp;gt;». */
+const unentity = (s) => s.replace(/&(amp|lt|gt|quot|#39);/g, (m, name) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" }[name]));
+const esc = (s) => unentity(String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
 function walk(dir) {
@@ -269,7 +273,13 @@ write('sitemap.xml', sitemap);
 
 /* ---------- feed.xml (RSS 2.0) ---------- */
 function rfc822(d) {
-  const dt = new Date(d.length === 4 ? d + '-01-01T00:00:00Z' : d + 'T12:00:00Z');
+  const raw = String(d || '');
+  /* Служебные страницы (graph, topics) живут в манифесте без даты: пустая
+     строка давала в RSS «undefined, NaN undefined NaN». Для них дата не
+     печатается вовсе — элемент pubDate опускается. */
+  if (!/^\d{4}(-\d{2}(-\d{2})?)?$/.test(raw)) return '';
+  const dt = new Date(raw.length === 4 ? raw + '-01-01T00:00:00Z' : raw + 'T12:00:00Z');
+  if (Number.isNaN(dt.getTime())) return '';
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   return `${days[dt.getUTCDay()]}, ${String(dt.getUTCDate()).padStart(2, '0')} ${months[dt.getUTCMonth()]} ${dt.getUTCFullYear()} 12:00:00 GMT`;
@@ -306,7 +316,7 @@ const rss = ['<?xml version="1.0" encoding="UTF-8"?>',
     `      <title>${esc(i.title)}</title>`,
     `      <link>${esc(i.url)}</link>`,
     `      <guid isPermaLink="true">${esc(i.url)}</guid>`,
-    `      <pubDate>${rfc822(i.date)}</pubDate>`,
+    ...(rfc822(i.date) ? [`      <pubDate>${rfc822(i.date)}</pubDate>`] : []),
     ...i.categories.map((tag) => `      <category>${esc(tag)}</category>`),
     `      <description>${esc(i.desc)}</description>`,
     '    </item>',

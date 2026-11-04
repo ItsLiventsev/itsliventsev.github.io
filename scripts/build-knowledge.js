@@ -731,7 +731,10 @@ function graphPage(notes, registry) {
 
   return `${head({
     title: 'Граф заметок · itsliventsev',
-    description: 'Живой граф перекрёстных ссылок базы знаний: ' + notes.length + ' заметок о сетях, Linux, базах данных, хранении и эксплуатации связаны ' + registry.edges.length + ' рёбрами. Ядро — хабы, пояс — рубрики, орбита — листья.',
+    description: 'Живой граф перекрёстных ссылок базы знаний: '
+      + notes.length + ' ' + plural(notes.length, 'заметка', 'заметки', 'заметок')
+      + ' о сетях, Linux, базах данных, хранении и эксплуатации связаны ' + registry.edges.length
+      + ' ' + plural(registry.edges.length, 'ребром', 'рёбрами', 'рёбрами') + '. Ядро — хабы, пояс — рубрики, орбита — листья.',
     canonical: '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->',
   })}
 <body>
