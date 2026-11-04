@@ -450,7 +450,7 @@
 /* ——— Учебные материалы: левое wiki-меню и страница темы ———
    Дерево живёт на <details> и работает без скриптов; активная тема
    помечена aria-current="page" и подсвечивается тем же глиняным
-   акцентом, что и остальная навигация. Сетка — 280px + контент,
+   акцентом, что и остальная навигация. Сетка — 260px + контент,
    ниже 1081px меню уезжает наверх и раскрывается одним блоком. */
 .kn-wiki-layout {
   display: grid;
@@ -545,7 +545,7 @@
 .kn-wiki-tree a[aria-current="page"] { background: var(--u-accent-soft); color: var(--u-ink); font-weight: 600; }
 
 /* ——— Документ темы: крошки, цель, код ——— */
-.kn-wiki-doc { display: grid; gap: var(--u-s4); min-width: 0; }
+.kn-wiki-doc { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--u-s4); min-width: 0; }
 .kn-crumbs { display: flex; flex-wrap: wrap; gap: var(--u-s1) var(--u-s2); margin: 0; padding: 0; color: var(--u-muted); font-family: var(--u-font-mono); font-size: var(--u-fs-2xs); letter-spacing: var(--u-ls-mono); list-style: none; }
 .kn-crumbs li + li::before { content: "/"; margin-inline-end: var(--u-s2); color: var(--u-faint); }
 .kn-crumbs a { color: var(--u-muted); text-decoration: none; }

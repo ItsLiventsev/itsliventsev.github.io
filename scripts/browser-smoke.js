@@ -193,11 +193,28 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
     for (const path of ['/', '/projects.html', '/blog.html', '/blog/materials/vlan-i-trunk.html', '/stands/setpolis.html', '/stands/glossary.html', '/stands/net/net-web.html', '/archive.html', '/faq.html', '/articles/praktiko-orientirovannoe-obuchenie-i-trudoustroystvo-vypusknikov.html', '/projects/esports.html']) {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(base + path, { waitUntil: 'load' });
-      assert(await noOverflow(page), 'горизонтальная прокрутка на 360px: ' + path);
+      if (!(await noOverflow(page))) {
+        const outliers = await page.evaluate(() => [...document.querySelectorAll('body *')]
+          .filter(el => { const r = el.getBoundingClientRect(); return r.width && r.right > innerWidth + 1 && getComputedStyle(el).position !== 'fixed'; })
+          .slice(0, 12).map(el => el.tagName + '.' + el.className + ' (' + Math.round(el.getBoundingClientRect().right) + ')'));
+        assert.fail('горизонтальная прокрутка на 360px: ' + path + ': ' + outliers.join(' | '));
+      }
       const smallTargets = await page.evaluate(() => [...document.querySelectorAll('.ui-btn, button, .ui-navlink, .ui-tabbar a, .ui-search-open')]
         .filter(el => el.offsetParent && el.getBoundingClientRect().height < 27)
         .map(el => el.className || el.tagName));
       assert.deepEqual(smallTargets, [], 'слишком мелкие кнопки и навигационные цели на ' + path + ': ' + smallTargets.join(' | '));
+    }
+    await page.goto(base + '/blog.html', { waitUntil: 'load' });
+    const materialPaths = await page.locator('.kn-wiki-tree a').evaluateAll(links => [...new Set(links.map(a => new URL(a.href).pathname))]);
+    assert.equal(materialPaths.length, 24, 'все учебные темы доступны через дерево');
+    for (const path of materialPaths) {
+      await page.goto(base + path, { waitUntil: 'load' });
+      if (!(await noOverflow(page))) {
+        const outliers = await page.evaluate(() => [...document.querySelectorAll('body *')]
+          .filter(el => { const r = el.getBoundingClientRect(); return r.width && r.right > innerWidth + 1 && getComputedStyle(el).position !== 'fixed'; })
+          .slice(0, 12).map(el => el.tagName + '.' + el.className + ' (' + Math.round(el.getBoundingClientRect().right) + ')'));
+        assert.fail('горизонтальная прокрутка учебной темы на 360px: ' + path + ': ' + outliers.join(' | '));
+      }
     }
     /* Живая лента итераций: отдельный контекст без reduced-motion, иначе
        движок честно не запускается и проверять нечего. */
