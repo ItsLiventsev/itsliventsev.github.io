@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T08:46:15.023Z",
+  "generated": "2026-11-04T09:13:34.935Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 232,
+  "total": 231,
   "truncated": true,
   "days": [
     {
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-10-26",
-      "count": 14
+      "count": 11
     },
     {
       "date": "2026-10-27",
@@ -124,10 +124,22 @@
     },
     {
       "date": "2026-11-04",
-      "count": 9
+      "count": 11
     }
   ],
   "commits": [
+    {
+      "sha": "b658b2f",
+      "title": "fix(catalog): чипы, нарисованные скриптом, снова работают",
+      "date": "2026-11-04T09:10:33Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/b658b2f71a90b3002088a833c4f804c7286f7951"
+    },
+    {
+      "sha": "9317e72",
+      "title": "refactor(catalog): один контракт фильтра и поиска на трёх витринах",
+      "date": "2026-11-04T09:02:23Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/9317e72210770561ae1d8bb41d50f4778c572478"
+    },
     {
       "sha": "6732df0",
       "title": "test(a11y): гейт падает, если список страниц пуст или подозрительно мал",
@@ -475,18 +487,6 @@
       "title": "feat(agent-plan execution v17): inline→CSS utilities for all key pages, kanban/view-toggle, agent badges, cozy washes",
       "date": "2026-11-01T20:57:51Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/d3009df23fed34a979125a6e80c2e188a3f58136"
-    },
-    {
-      "sha": "fcd3d05",
-      "title": "feat(autonomous-polish-v16): container queries + editorial callouts + skeleton + recent cmdk + view-transition",
-      "date": "2026-11-01T20:55:28Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/fcd3d05729e302b8cba605cddc3c1a2eb9dd2a58"
-    },
-    {
-      "sha": "8646e02",
-      "title": "feat(autonomous-polish-v15): reading progress + scroll-spy + copy pre + lightbox + print",
-      "date": "2026-11-01T20:51:33Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/8646e02f0a0f83bc0a33121e2618c2ffa1f630fe"
     }
   ]
 }
