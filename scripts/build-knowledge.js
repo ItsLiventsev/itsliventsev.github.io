@@ -409,6 +409,7 @@ ${extraMeta || ''}
 <link rel="stylesheet" href="/assets/tokens.css">
 <link rel="stylesheet" href="/assets/base.css">
 <link rel="stylesheet" href="/assets/pages.css">
+<link rel="stylesheet" href="/assets/knowledge.css">
 ${canonical || '<!-- SEO:AUTO:START --><!-- SEO:AUTO:END -->'}
 </head>`;
 }

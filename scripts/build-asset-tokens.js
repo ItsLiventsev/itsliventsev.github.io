@@ -61,7 +61,7 @@ if (check) {
   console.log('Asset tokens: обновлено файлов ' + rewritten + ', ссылок ' + references);
 } else {
   console.log('Asset tokens: ссылок ' + references + ', отстают ' + stale.length + (stale.length ? ' — запустите --write' : ''));
-  for (const file of ['assets/shell.js', 'assets/pages.css', 'assets/course.css']) {
+  for (const file of ['assets/shell.js', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css']) {
     console.log('  ' + file + ' → ' + version(file));
   }
 }

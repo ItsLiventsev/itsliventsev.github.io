@@ -27,6 +27,7 @@ jobs:
           node scripts/test-stats.js
           node scripts/test-design-doc.js
           node scripts/test-css-layers.js
+          node scripts/test-css-split.js
           node scripts/test-head.js
           node scripts/build-asset-tokens.js --check
           node scripts/build-knowledge.js --check

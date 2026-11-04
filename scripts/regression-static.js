@@ -317,7 +317,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
      либо литералом, либо параметром счётной анимации в JS. */
   const motionDoc = read('docs/motion.md');
   const codeTimes = new Set();
-  for (const file of ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/course.css', 'assets/shell.js', 'assets/feed.js']) {
+  for (const file of ['assets/tokens.css', 'assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css', 'assets/shell.js', 'assets/feed.js']) {
     const source = read(file);
     for (const match of source.matchAll(/(\d+(?:\.\d+)?)ms\b/g)) codeTimes.add(Number(match[1]));
     for (const match of source.matchAll(/(?:duration|delay):\s*(\d+)\b/g)) codeTimes.add(Number(match[1]));
@@ -463,7 +463,7 @@ for (const file of ['projects/esports.html', 'projects/navigation.html']) {
    Правила без единого потребителя в разметке и JS раздували CSS и путали
    аудит классов. Список зафиксирован, чтобы «на всякий случай» не отрастало. */
 {
-  const layers = ['assets/base.css', 'assets/pages.css', 'assets/course.css'].map(read).join('\n');
+  const layers = ['assets/base.css', 'assets/pages.css', 'assets/knowledge.css', 'assets/course.css'].map(read).join('\n');
   for (const legacy of ['ui-btn--ghost', 'ui-meta-row', 'ui-hairline', 'ui-grid-2', 'ui-grid-3', 'ui-stack',
     'ui-field', 'ui-label', 'ui-input', 'ui-select', 'ui-textarea', 'catalog-stat', 'editorial-meta',
     'pill-rose', 'pill-red', 'pill-blue', 'pill-green', 'pill-amber', 'is-danger', 'fs-105',
