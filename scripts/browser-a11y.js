@@ -122,9 +122,14 @@ async function scan(page, path, theme) {
   const byRule = new Map();
   for (const item of report.flatMap(entry => entry.violations.map(violation => ({ ...violation, theme: entry.theme })))) {
     const key = item.id + ' · ' + item.impact;
-    if (!byRule.has(key)) byRule.set(key, { nodes: 0, pages: new Set(), help: item.help });
+    if (!byRule.has(key)) byRule.set(key, { nodes: 0, help: item.help });
     byRule.get(key).nodes += item.count;
-    byRule.get(key).pages.add(item.id);
+  }
+
+  /* Полный отчёт кладём рядом с логом: аннотация CI обрезает узлы, а разбираться
+     с контрастом нужно по конкретному селектору и цвету. */
+  if (!asJson) {
+    fs.writeFileSync(path.join(ROOT, 'a11y-report.json'), JSON.stringify({ pages: list.length, blocking, advisory }, null, 1));
   }
 
   if (asJson) {

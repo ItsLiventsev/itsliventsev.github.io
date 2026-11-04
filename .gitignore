@@ -5,3 +5,4 @@ node_modules/
 # Python bytecode caches
 __pycache__/
 *.py[cod]
+a11y-report.json
