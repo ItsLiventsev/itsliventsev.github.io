@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-04T14:40:29.897Z",
+  "generated": "2026-11-04T14:55:29.138Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 210,
+  "total": 209,
   "truncated": true,
   "days": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "date": "2026-10-27",
-      "count": 6
+      "count": 4
     },
     {
       "date": "2026-10-28",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-04",
-      "count": 33
+      "count": 34
     }
   ],
   "commits": [
+    {
+      "sha": "98edf22",
+      "title": "perf(css): слой базы знаний вынесен в knowledge.css",
+      "date": "2026-11-04T14:51:15Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/98edf22cb127d76cfd0812a0873dfd4dc4b6115a"
+    },
     {
       "sha": "840652c",
       "title": "test(seo): карта сайта и лента проверяются на живые адреса",
@@ -481,12 +487,6 @@
       "title": "Refine homepage editorial hierarchy",
       "date": "2026-11-02T19:01:03Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/1d2afa6de75d5cf05d21502117687ee3eb4b4658"
-    },
-    {
-      "sha": "7ac4413",
-      "title": "Reorganize homepage and make activity feed compact",
-      "date": "2026-11-02T18:51:39Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7ac44137e9aa102eaec827c6d44cbad956affa23"
     }
   ]
 }
