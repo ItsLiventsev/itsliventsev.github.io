@@ -217,12 +217,22 @@
      становится подбаром. Раньше он заворачивался в новый <nav> с тем же именем
      — два одинаковых ориентира навигации на страницу (landmark-unique). */
   const legacyBar = doc.querySelector('.st-topbar');
+  /* Ссылки раздела стендов повторяются в меню: на телефоне подбар скрыт
+     (course.css, ≤820 px), чтобы у всех страниц был один сценарий — шапка,
+     таббар и меню, — а разделы вселенной остаются доступны из «Ещё». */
+  let standLinks = [];
   if (legacyBar) {
     const legacyNav = legacyBar.querySelector('nav');
     if (legacyNav) {
       legacyNav.classList.add('ui-subbar', 'ui-subbar-nav');
+      legacyNav.dataset.uiSubbar = '';
       if (!legacyNav.getAttribute('aria-label')) legacyNav.setAttribute('aria-label', 'Навигация раздела');
       legacyNav.querySelectorAll('.theme-toggle, .icon-moon, .icon-sun, .st-nav-admin').forEach(node => node.remove());
+      standLinks = [...legacyNav.querySelectorAll('a[href]')].map(link => [
+        clean(link.textContent),
+        link.getAttribute('href'),
+        link.getAttribute('aria-current') === 'page'
+      ]);
       page.insertBefore(legacyNav, root);
     }
     legacyBar.remove();
@@ -255,6 +265,7 @@
   drawer.dataset.open = 'false';
   drawer.setAttribute('aria-label', 'Меню сайта');
   const drawerGroups = [
+    ...(standLinks.length ? [['Раздел стендов', standLinks]] : []),
     ['Разделы', navItems.map(item => [item.label, item.href, isCurrent(item.test)])],
     ['Практика', universes.map(item => [item.label, item.href, path.startsWith(item.href.replace(/\/index\.html$/, ''))])],
     ['Ещё', [['Карта сайта', '/sitemap.html', path === '/sitemap.html'], ['RSS-лента', '/feed.xml', false], ['Панель преподавателя', '/admin.html', path === '/admin.html']]]
@@ -273,12 +284,16 @@
   const tabbar = doc.createElement('nav');
   tabbar.className = 'ui-tabbar';
   tabbar.setAttribute('aria-label', 'Быстрая навигация');
+  /* Пять пунктов — один сценарий на всех страницах: ровно один активный.
+     То, что живёт только в меню (справка, карта, архив, панель), помечает
+     активным «Ещё» — иначе на этих страницах таббар «молчит». */
+  const morePaths = ['/faq.html', '/sitemap.html', '/archive.html', '/admin.html'];
   const tabs = [
     ['/', 'home', 'Обзор', p => p === '/' || p === '/index.html'],
     ['/stands/index.html', 'network', 'Практика', p => p.startsWith('/stands/')],
     ['/articles.html', 'document', 'Статьи', p => p.startsWith('/articles') || p === '/blog.html' || p.startsWith('/blog/')],
     ['/projects.html', 'projects', 'Проекты', p => p === '/projects.html' || p.startsWith('/projects/')],
-    ['#ui-menu', 'menu', 'Ещё', () => false]
+    ['#ui-menu', 'menu', 'Ещё', p => morePaths.includes(p)]
   ];
   tabbar.innerHTML = tabs.map(([href, icon, label, test]) => '<a href="' + href + '"' + (isCurrent(test) ? ' aria-current="page"' : '') + '>' + svg(icon) + '<span>' + label + '</span></a>').join('');
   body.append(tabbar);

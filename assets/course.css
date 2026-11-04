@@ -48,6 +48,13 @@
 }
 .ui-subbar a:hover, .st-topnav a:hover { background: var(--u-surface-sunk); color: var(--u-ink); }
 .ui-subbar a[aria-current="page"], .st-topnav a[aria-current="page"] { background: var(--u-ink); color: var(--u-inverse-ink); }
+/* ——— Телефон: один сценарий навигации ———
+   Своя шапка стендов превращалась в подбар — вторую строку ссылок рядом
+   с таббаром. До 820 px подбар скрыт: те же ссылки shell.js повторяет в меню
+   группой «Раздел стендов», и навигация всюду одна — шапка, таббар, меню. */
+@media (max-width: 820px) {
+  .ui-subbar { display: none; }
+}
 .ui-crumbs a { color: var(--u-muted); }
 
 /* ——— Запасная шапка стендов без JS ———
