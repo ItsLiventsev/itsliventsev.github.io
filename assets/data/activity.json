@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-05T18:59:30.022Z",
+  "generated": "2026-11-05T19:00:21.275Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 197,
+  "total": 196,
   "truncated": true,
   "days": [
     {
@@ -104,7 +104,7 @@
     },
     {
       "date": "2026-10-31",
-      "count": 49
+      "count": 47
     },
     {
       "date": "2026-11-01",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-05",
-      "count": 1
+      "count": 2
     }
   ],
   "commits": [
+    {
+      "sha": "0b12787",
+      "title": "Add files via upload",
+      "date": "2026-11-05T19:00:08Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/0b127877d8f8a20739ff5b04f3cb22e28a9c413a"
+    },
     {
       "sha": "ae6ea18",
       "title": "Add files via upload",
@@ -481,12 +487,6 @@
       "title": "feat(notes): конспект вместо паспорта, живой граф связей",
       "date": "2026-11-04T06:59:22Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/62d863f5d91c99a38ae5a85e54d16fff031e6cac"
-    },
-    {
-      "sha": "7d54ba1",
-      "title": "feat(notes): убрать обложки и добавить 20 заметок по администрированию",
-      "date": "2026-11-03T21:50:43Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7d54ba12b80d13b7ec10d3963a4946a8f01c7f1d"
     }
   ]
 }
