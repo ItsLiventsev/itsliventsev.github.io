@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-05T10:56:42.588Z",
+  "generated": "2026-11-05T18:59:30.022Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 198,
+  "total": 197,
   "truncated": true,
   "days": [
     {
@@ -104,7 +104,7 @@
     },
     {
       "date": "2026-10-31",
-      "count": 51
+      "count": 49
     },
     {
       "date": "2026-11-01",
@@ -124,10 +124,16 @@
     },
     {
       "date": "2026-11-05",
-      "count": 0
+      "count": 1
     }
   ],
   "commits": [
+    {
+      "sha": "ae6ea18",
+      "title": "Add files via upload",
+      "date": "2026-11-05T18:58:58Z",
+      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/ae6ea18ff9c5cd7cb62c2736173d623d24fe791f"
+    },
     {
       "sha": "5e18322",
       "title": "browser-smoke: порог тем в дереве вместо жёстких 24",
@@ -481,12 +487,6 @@
       "title": "feat(notes): убрать обложки и добавить 20 заметок по администрированию",
       "date": "2026-11-03T21:50:43Z",
       "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/7d54ba12b80d13b7ec10d3963a4946a8f01c7f1d"
-    },
-    {
-      "sha": "66ca980",
-      "title": "feat(notes): база знаний сетевого администратора — 23 заметки со схемами",
-      "date": "2026-11-03T21:28:50Z",
-      "url": "https://github.com/ItsLiventsev/itsliventsev.github.io/commit/66ca980835867b05a02026d913f649b59ad0ebd4"
     }
   ]
 }
