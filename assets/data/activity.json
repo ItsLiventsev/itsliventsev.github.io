@@ -1,15 +1,11 @@
 {
-  "generated": "2026-11-13T10:59:14.030Z",
+  "generated": "2026-11-14T10:26:25.813Z",
   "repo": "ItsLiventsev/itsliventsev.github.io",
   "branch": "main",
   "window": 30,
-  "total": 189,
+  "total": 188,
   "truncated": true,
   "days": [
-    {
-      "date": "2026-10-15",
-      "count": 0
-    },
     {
       "date": "2026-10-16",
       "count": 0
@@ -72,7 +68,7 @@
     },
     {
       "date": "2026-10-31",
-      "count": 40
+      "count": 39
     },
     {
       "date": "2026-11-01",
@@ -124,6 +120,10 @@
     },
     {
       "date": "2026-11-13",
+      "count": 0
+    },
+    {
+      "date": "2026-11-14",
       "count": 0
     }
   ],
